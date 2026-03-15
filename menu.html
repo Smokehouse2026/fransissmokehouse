@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Francis Smokehouse · St. Francisville, LA – Menu</title>
+  <meta name="description" content="BBQ plates, burgers, po-boys, boudin, and daily specials. Slow-smoked meats and Southern sides at The Francis Smokehouse in St. Francisville.">
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ---------- ROOT VARIABLES (from smokehouse design) ---------- */
+    :root {
+      --smoke-dark: #0b0a0a;
+      --smoke-charcoal: #1e1b1b;
+      --ember-red: #b44b3c;
+      --ember-glow: #d97c5a;
+      --grain-gold: #c39a6a;
+      --grain-light: #e5d3b5;
+      --paper-cream: #f8f1e4;
+      --font-serif: 'Playfair Display', serif;
+      --font-sans: 'Montserrat', sans-serif;
+      --shadow-heavy: 0 20px 35px -8px rgba(0,0,0,0.7);
+      --shadow-soft: 0 10px 25px -5px rgba(0,0,0,0.4);
+      --border-smoke: 1px solid rgba(255,255,240,0.1);
+    }
+
+    /* ---------- RESET / BASE ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: var(--smoke-dark);
+      color: var(--paper-cream);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      overflow-x: hidden;
+      padding-bottom: 90px; /* space for bottom button */
+    }
+    a { text-decoration: none; color: inherit; }
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ---------- PAGE HEADER ---------- */
+    .page-header {
+      position: relative;
+      background: #0b0a0a;
+      padding: 4rem 0 2rem;
+      text-align: center;
+      border-bottom: 2px solid var(--ember-red);
+    }
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at 30% 30%, rgba(180,75,60,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-header h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: transparent;
+      -webkit-text-stroke: 2px var(--ember-red);
+      text-shadow: 0 0 30px rgba(180,75,60,0.5);
+      margin-bottom: 0.5rem;
+    }
+    .page-header p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* ---------- MENU SECTION ---------- */
+    .menu-section {
+      padding: 4rem 0;
+      border-bottom: 1px solid rgba(255,255,240,0.1);
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--grain-light);
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--ember-red), var(--ember-glow));
+      border-radius: 4px;
+    }
+
+    /* menu grid */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .menu-item {
+      background: rgba(30,27,27,0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(199,147,105,0.2);
+      border-radius: 20px;
+      padding: 1.5rem;
+      transition: transform 0.2s ease, border-color 0.2s;
+    }
+    .menu-item:hover {
+      transform: translateY(-5px);
+      border-color: var(--ember-red);
+    }
+    .menu-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .menu-item-name {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--grain-gold);
+    }
+    .menu-item-price {
+      font-weight: 700;
+      color: var(--ember-glow);
+    }
+    .menu-item-desc {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    /* two-column layout for categories with many items */
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* featured specials board (like the chalkboard from report) */
+    .specials-board {
+      background: #1e1b1b;
+      border: 2px solid var(--ember-red);
+      border-radius: 30px;
+      padding: 2rem;
+      margin-top: 3rem;
+      box-shadow: var(--shadow-heavy);
+      background-image: radial-gradient(circle at 20% 30%, rgba(180,75,60,0.1) 0%, transparent 50%);
+    }
+    .specials-title {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      color: var(--grain-gold);
+      border-bottom: 1px dashed var(--ember-red);
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .specials-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .special-item {
+      border-left: 3px solid var(--ember-red);
+      padding-left: 1rem;
+    }
+    .special-name {
+      font-weight: 700;
+      color: var(--grain-light);
+    }
+    .special-price {
+      color: var(--ember-glow);
+      font-weight: 700;
+    }
+
+    /* ---------- FOOTER (minimal, from smokehouse) ---------- */
+    .footer {
+      background: #0f0d0b;
+      border-top: 2px solid var(--ember-red);
+      padding: 3rem 0 2rem;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+    .footer-logo span {
+      display: block;
+      font-size: 0.8rem;
+      font-family: var(--font-sans);
+      letter-spacing: 4px;
+      color: var(--grain-gold);
+    }
+    .footer-contact {
+      margin: 1.5rem 0;
+    }
+    .footer-contact a {
+      color: var(--grain-light);
+      transition: color 0.2s;
+    }
+    .footer-contact a:hover {
+      color: var(--ember-red);
+    }
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 1.5rem 0;
+    }
+    .footer-social a {
+      font-size: 1.5rem;
+      color: var(--grain-gold);
+      transition: 0.2s;
+    }
+    .footer-social a:hover {
+      color: var(--ember-red);
+      transform: scale(1.1);
+    }
+    .footer-copy {
+      opacity: 0.7;
+      font-size: 0.9rem;
+    }
+
+    /* ==================== CIRCULAR NAVIGATION (from smokehouse) ==================== */
+    .nav-btn {
+      position: fixed;
+      z-index: 1000;
+      background: #1e1b1b;
+      border: 2px solid var(--ember-red);
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(180,75,60,0.5);
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+    .nav-btn:hover {
+      transform: scale(1.05);
+      border-color: var(--ember-glow);
+      box-shadow: 0 0 35px var(--ember-red);
+    }
+    .btn-icon {
+      font-size: 1.8rem;
+      color: var(--ember-red);
+    }
+    .btn-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .btn-text .main {
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.92);
+    }
+    .btn-text .sub {
+      font-size: 0.65rem;
+      opacity: 0.7;
+      color: rgba(255,255,255,0.7);
+      text-transform: uppercase;
+    }
+
+    /* left-center button - VERTICAL */
+    .nav-btn.left-center {
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: column;
+      padding: 1rem 0.5rem;
+      gap: 8px;
+    }
+    .nav-btn.left-center .btn-text {
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      margin: 0;
+      line-height: 1.2;
+    }
+    .nav-btn.left-center .btn-text .main {
+      font-size: 0.9rem;
+      letter-spacing: normal;
+    }
+    .nav-btn.left-center .btn-text .sub {
+      font-size: 0.6rem;
+      margin-top: 4px;
+    }
+
+    /* bottom-center button - HORIZONTAL */
+    .nav-btn.bottom-center {
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      flex-direction: row;
+      padding: 0.8rem 1.8rem;
+    }
+
+    /* circular menu overlay */
+    .circ-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      background: rgba(0,0,0,0.7);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(8px);
+    }
+    .circ-menu-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .circular-menu {
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: transparent;
+      border: 2px solid var(--ember-red);
+      box-shadow: 0 0 40px rgba(180,75,60,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transform: scale(0.3);
+      transition: transform 0.3s ease;
+    }
+    .circ-menu-overlay.open .circular-menu {
+      transform: scale(1);
+    }
+    .center-home {
+      width: 70px;
+      height: 70px;
+      background: var(--grain-gold);
+      border: 3px solid var(--ember-red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: var(--smoke-dark);
+      box-shadow: 0 0 30px var(--ember-red);
+      cursor: pointer;
+      transition: 0.2s;
+      z-index: 1001;
+    }
+    .center-home:hover {
+      background: var(--ember-red);
+      color: white;
+      transform: scale(1.05);
+    }
+    .menu-item {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: var(--smoke-charcoal);
+      border: 2px solid var(--ember-red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--paper-cream);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0,0,0,0.7);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-130px) rotate(calc(var(--angle) * -1deg));
+      font-family: var(--font-sans);
+      letter-spacing: 1px;
+      backdrop-filter: blur(4px);
+    }
+    .menu-item:hover {
+      background: var(--ember-red);
+      color: black;
+      border-color: var(--grain-gold);
+      transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-140px) rotate(calc(var(--angle) * -1deg));
+      width: 65px;
+      height: 65px;
+    }
+    @media (max-width: 600px) {
+      .nav-btn.left-center { left: 10px; padding: 0.8rem 0.3rem; }
+      .nav-btn.left-center .btn-icon { font-size: 1.5rem; }
+      .nav-btn.left-center .btn-text .main { font-size: 0.8rem; }
+      .nav-btn.left-center .btn-text .sub { font-size: 0.5rem; }
+      .nav-btn.bottom-center { bottom: 20px; padding: 0.6rem 1.2rem; }
+      .circular-menu { width: 280px; height: 280px; }
+      .menu-item { width: 50px; height: 50px; font-size: 0.7rem; transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-100px) rotate(calc(var(--angle) * -1deg)); }
+      .menu-item:hover { transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-110px) rotate(calc(var(--angle) * -1deg)); width: 55px; height: 55px; }
+      .center-home { width: 60px; height: 60px; font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== CIRCULAR NAVIGATION BUTTONS ===== -->
+  <div class="nav-btn left-center" id="navBtnLeft">
+    <i class="fas fa-utensils btn-icon"></i>
+    <div class="btn-text">
+      <span class="main">NAVIGATION</span>
+      <span class="sub">explore</span>
+    </div>
+  </div>
+  <div class="nav-btn bottom-center" id="navBtnBottom">
+    <i class="fas fa-utensils btn-icon"></i>
+    <div class="btn-text">
+      <span class="main">NAVIGATION</span>
+      <span class="sub">explore</span>
+    </div>
+  </div>
+
+  <!-- CIRCULAR MENU OVERLAY (5 items evenly spaced at 72°) -->
+  <div class="circ-menu-overlay" id="circMenuOverlay">
+    <div class="circular-menu">
+      <div class="center-home" id="homeCenter" data-link="index.html"><i class="fas fa-home"></i></div>
+      <div class="menu-item" style="--angle:0;" data-link="menu.html">Menu</div>
+      <div class="menu-item" style="--angle:72;" data-link="about.html">About</div>
+      <div class="menu-item" style="--angle:144;" data-link="contact.html">Contact</div>
+      <div class="menu-item" style="--angle:216;" data-link="catering.html">Cater</div>
+      <div class="menu-item" style="--angle:288;" data-action="share">Share</div>
+    </div>
+  </div>
+
+  <!-- PAGE HEADER -->
+  <section class="page-header">
+    <div class="container">
+      <h1>OUR MENU</h1>
+      <p>Slow-smoked meats, Southern sides, and daily specials – all made from scratch.</p>
+    </div>
+  </section>
+
+  <!-- MAIN MENU CONTENT -->
+  <main class="container">
+
+    <!-- BBQ PLATES -->
+    <section class="menu-section">
+      <h2 class="section-title">BBQ PLATES</h2>
+      <p class="menu-note" style="margin-bottom:1.5rem; opacity:0.8;">Served with two sides</p>
+      <div class="menu-grid">
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Full rack of ribs</span><span class="menu-item-price">$19.99</span></div><div class="menu-item-desc">Tender, smoky, fall-off-the-bone.</div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">½ rack of ribs</span><span class="menu-item-price">$11.99</span></div><div class="menu-item-desc">Perfect for a lighter appetite.</div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Pulled pork plate</span><span class="menu-item-price">$9.99</span></div><div class="menu-item-desc">Hand-pulled, seasoned with our signature rub.</div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Brisket plate</span><span class="menu-item-price">$10.99</span></div><div class="menu-item-desc">12-hour smoked, melt-in-your-mouth tender.</div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">½ chicken plate</span><span class="menu-item-price">$9.99</span></div><div class="menu-item-desc">Juicy, smoky, with crispy skin.</div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Smoked wings (6)</span><span class="menu-item-price">$7.99</span></div><div class="menu-item-desc">Dry-rubbed, smoked to perfection.</div></div>
+      </div>
+    </section>
+
+    <!-- BURGERS & SANDWICHES -->
+    <section class="menu-section">
+      <h2 class="section-title">BURGERS & SANDWICHES</h2>
+      <p class="menu-note" style="margin-bottom:1.5rem; opacity:0.8;">All served with one side. Dressed with lettuce & tomato.</p>
+      <div class="menu-grid">
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Hamburger</span><span class="menu-item-price">$6.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Cheeseburger</span><span class="menu-item-price">$7.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Bacon cheeseburger</span><span class="menu-item-price">$8.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Pulled pork sandwich</span><span class="menu-item-price">$7.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Brisket sandwich</span><span class="menu-item-price">$8.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Ribeye po-boy</span><span class="menu-item-price">$10.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Chicken sandwich</span><span class="menu-item-price">$7.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Shrimp po-boy</span><span class="menu-item-price">$8.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Crawfish po-boy</span><span class="menu-item-price">$10.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Catfish po-boy</span><span class="menu-item-price">$8.99</span></div></div>
+      </div>
+    </section>
+
+    <!-- SIDES -->
+    <section class="menu-section">
+      <h2 class="section-title">SIDES</h2>
+      <p class="menu-note" style="margin-bottom:1.5rem; opacity:0.8;">Small $2.75 • Large $6.99</p>
+      <div class="two-col">
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Baked beans</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Corn pudding</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Potato salad</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Cole slaw</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">French fries</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Sweet potato waffle fries</span></div></div>
+      </div>
+    </section>
+
+    <!-- FEATURED ITEMS (boudin, etc.) -->
+    <section class="menu-section">
+      <h2 class="section-title">FEATURED</h2>
+      <div class="menu-grid">
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Steamed boudin links</span><span class="menu-item-price">MP</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Boudin balls (3)</span><span class="menu-item-price">$6.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Pepper jack boudin balls (3)</span><span class="menu-item-price">$7.49</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Boudin egg rolls (2)</span><span class="menu-item-price">$8.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Meat pies</span><span class="menu-item-price">$4.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Crawfish pies</span><span class="menu-item-price">$5.99</span></div></div>
+      </div>
+    </section>
+
+    <!-- DESSERTS -->
+    <section class="menu-section">
+      <h2 class="section-title">THE SWEET</h2>
+      <div class="menu-grid">
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Homemade bread pudding</span><span class="menu-item-price">$7.00</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Creole cream cheesecake</span><span class="menu-item-price">$7.50</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Chocolate cake</span><span class="menu-item-price">$6.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Carrot cake</span><span class="menu-item-price">$6.99</span></div></div>
+        <div class="menu-item"><div class="menu-item-header"><span class="menu-item-name">Strawberry shortcake</span><span class="menu-item-price">$7.50</span></div></div>
+      </div>
+    </section>
+
+    <!-- DAILY SPECIALS BOARD -->
+    <section class="specials-board">
+      <h3 class="specials-title">🔥 DAILY SPECIALS 🔥</h3>
+      <div class="specials-list">
+        <div class="special-item"><span class="special-name">Sweet Thai chili wings</span> <span class="special-price">$16</span></div>
+        <div class="special-item"><span class="special-name">Eggplant pirogue w/ seafood stuffing</span> <span class="special-price">$26</span></div>
+        <div class="special-item"><span class="special-name">Blackened lemon fish + cream spinach + grilled crawfish tails</span> <span class="special-price">$28</span></div>
+        <div class="special-item"><span class="special-name">Jack Daniel’s BBQ shrimp + 14oz bone-in pork chop + mac & cheese + green beans</span> <span class="special-price">$26</span></div>
+        <div class="special-item"><span class="special-name">Grilled salmon w/ crabmeat + avocado cream sauce + sides</span> <span class="special-price">$28</span></div>
+        <div class="special-item"><span class="special-name">Miss Mud Pie</span> <span class="special-price">$7</span></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-logo">THE FRANCIS <span>SMOKEHOUSE & MEATS</span></div>
+      <div class="footer-contact">
+        <p>6779 US Highway 61, St. Francisville, LA 70775</p>
+        <p><a href="tel:2252455046">(225) 245-5046</a> · <a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></p>
+        <p>Mon–Sat 10am–6pm · Sun 10am–3pm</p>
+      </div>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-tripadvisor"></i></a>
+      </div>
+      <div class="footer-copy">© 2025 The Francis Smokehouse. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Circular menu toggle
+    (function() {
+      const overlay = document.getElementById('circMenuOverlay');
+      const leftBtn = document.getElementById('navBtnLeft');
+      const bottomBtn = document.getElementById('navBtnBottom');
+      const homeCenter = document.getElementById('homeCenter');
+      const menuItems = document.querySelectorAll('.menu-item');
+
+      function toggleMenu() { overlay.classList.toggle('open'); }
+
+      leftBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+      bottomBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+      // Share function (optional)
+      async function sharePage() {
+        const shareData = { title: document.title, text: 'Check out The Francis Smokehouse menu!', url: window.location.href };
+        try {
+          if (navigator.share) await navigator.share(shareData);
+          else if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(window.location.href);
+            alert('Link copied to clipboard!');
+          } else {
+            prompt('Copy this link:', window.location.href);
+          }
+        } catch(e) { console.log('Share failed', e); }
+      }
+
+      function navigate(link) { if (link) window.location.href = link; }
+
+      homeCenter.addEventListener('click', () => { overlay.classList.remove('open'); navigate(homeCenter.dataset.link); });
+
+      menuItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+          overlay.classList.remove('open');
+          const link = item.dataset.link;
+          const action = item.dataset.action;
+          if (action === 'share') sharePage();
+          else if (link) navigate(link);
+        });
+      });
+      document.querySelector('.circular-menu').addEventListener('click', e => e.stopPropagation());
+    })();
+  </script>
+</body>
+</html>
