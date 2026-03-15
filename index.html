@@ -292,7 +292,6 @@
       background: #1e1b1b;
       border: 2px solid var(--ember-red);
       border-radius: 50px;
-      padding: 0.8rem 1.8rem;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -333,27 +332,31 @@
       text-transform: uppercase;
     }
 
-    /* left-center button - VERTICAL (up/down) */
+    /* left-center button - VERTICAL text (top-to-bottom) */
     .nav-btn.left-center {
       left: 30px;
       top: 50%;
       transform: translateY(-50%);
       flex-direction: column;  /* stack icon above text */
-      padding: 1.2rem 0.8rem;  /* adjust padding for vertical */
-      gap: 6px;
-      text-align: center;
+      padding: 1rem 0.5rem;    /* narrow width, tall height */
+      gap: 8px;
     }
 
-    .nav-btn.left-center .btn-icon {
-      margin-bottom: 4px;
+    .nav-btn.left-center .btn-text {
+      writing-mode: vertical-rl;       /* text flows top to bottom */
+      text-orientation: upright;       /* characters remain upright (not sideways) */
+      margin: 0;
+      line-height: 1.2;
     }
 
     .nav-btn.left-center .btn-text .main {
-      font-size: 0.9rem;  /* slightly smaller to fit vertical */
+      font-size: 0.9rem;
+      letter-spacing: normal;    /* no extra spacing for vertical */
     }
 
     .nav-btn.left-center .btn-text .sub {
       font-size: 0.6rem;
+      margin-top: 4px;           /* small gap between main and sub */
     }
 
     /* bottom-center button - remains HORIZONTAL */
@@ -369,17 +372,20 @@
     @media (max-width: 600px) {
       .nav-btn.left-center {
         left: 10px;
-        padding: 1rem 0.6rem;
+        padding: 0.8rem 0.3rem;
       }
-      .nav-btn.bottom-center {
-        bottom: 20px;
-        padding: 0.6rem 1.2rem;
-      }
-      .btn-icon {
+      .nav-btn.left-center .btn-icon {
         font-size: 1.5rem;
       }
       .nav-btn.left-center .btn-text .main {
         font-size: 0.8rem;
+      }
+      .nav-btn.left-center .btn-text .sub {
+        font-size: 0.5rem;
+      }
+      .nav-btn.bottom-center {
+        bottom: 20px;
+        padding: 0.6rem 1.2rem;
       }
     }
 
@@ -699,7 +705,7 @@
     </div>
   </header>
 
-  <!-- TWO NAVIGATION BUTTONS: left (vertical) and bottom (horizontal) -->
+  <!-- TWO NAVIGATION BUTTONS: left (vertical text) and bottom (horizontal) -->
   <div class="nav-btn left-center" id="navBtnLeft">
     <i class="fas fa-compass btn-icon"></i>
     <div class="btn-text">
