@@ -182,9 +182,9 @@
     .cube-face h3 { font-family:var(--serif); font-size:2rem; line-height:1; z-index:1; }
     .cube-face p { z-index:1; color:var(--paper-soft); font-size:.88rem; line-height:1.55; }
     .face-list { z-index:1; display:grid; align-content:start; gap:10px; overflow:auto; padding-right:4px; }
-    .face-item { display:flex; justify-content:space-between; gap:12px; align-items:center; border-radius:16px; padding:10px 12px; background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.045); min-height:48px; }
+    .face-item { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; border-radius:16px; padding:10px 12px; background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.045); min-height:48px; }
     .face-item-name { font-weight:600; font-size:.92rem; }
-    .face-item-price { color:var(--gold-2); font-weight:700; white-space:nowrap; font-size:.88rem; }
+    .face-item-price { color:var(--gold-2); font-weight:700; white-space:normal; text-align:right; font-size:.82rem; line-height:1.15; display:flex; justify-content:flex-end; align-items:center; min-width:84px; max-width:92px; flex:0 0 92px; }
     .face-front { transform: rotateY(0deg) translateZ(calc(var(--cube-size) / 2)); }
     .face-right { transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2)); }
     .face-back { transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2)); }
@@ -215,18 +215,18 @@
     .menu-tags { display:flex; gap:8px; flex-wrap:wrap; }
     .menu-tag { display:inline-flex; align-items:center; padding:6px 10px; border-radius:999px; border:1px solid var(--line-strong); font-size:.72rem; color:var(--paper-soft); background:rgba(255,255,255,0.025); }
     .menu-card-bottom { margin-top:auto; display:flex; justify-content:space-between; gap:12px; align-items:center; }
-    .price { font-weight:800; color:var(--gold-2); letter-spacing:.02em; }
-    .add-btn { appearance:none; border:1px solid rgba(229,122,82,0.42); background:linear-gradient(135deg, rgba(182,76,50,0.24), rgba(199,154,103,0.10)); color:var(--paper); border-radius:14px; padding:11px 14px; min-height:42px; cursor:pointer; transition:transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease); box-shadow:var(--shadow-0); }
+    .price { font-weight:800; color:var(--gold-2); letter-spacing:.02em; text-align:right; white-space:normal; line-height:1.1; min-width:88px; max-width:108px; flex:0 0 108px; font-size:.88rem; }
+    .add-btn { appearance:none; border:1px solid rgba(229,122,82,0.42); background:linear-gradient(135deg, rgba(182,76,50,0.24), rgba(199,154,103,0.10)); color:var(--paper); border-radius:14px; padding:11px 14px; min-height:42px; min-width:72px; cursor:pointer; transition:transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease); box-shadow:var(--shadow-0); flex:0 0 auto; }
     .add-btn:hover, .add-btn:focus-visible { transform:translateY(-1px); filter:brightness(1.08); outline:none; }
     .builder-wrap { display:grid; gap:16px; }
     .builder-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
     .builder-bank { display:grid; gap:12px; align-content:start; }
     .bank-items { display:grid; gap:10px; max-height:560px; overflow:auto; padding-right:4px; }
-    .bank-item { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 14px; border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,0.03); cursor:grab; user-select:none; min-height:52px; }
+    .bank-item { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; padding:12px 14px; border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,0.03); cursor:grab; user-select:none; min-height:52px; }
     .bank-item.dragging { opacity:.45; cursor:grabbing; }
-    .bank-left { display:grid; gap:3px; }
+    .bank-left { display:grid; gap:3px; min-width:0; flex:1 1 auto; }
     .bank-name { font-weight:700; font-size:.92rem; }
-    .bank-meta { color:var(--paper-soft); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; }
+    .bank-meta { color:var(--paper-soft); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; line-height:1.3; word-break:break-word; }
     .builder-plate-card { display:grid; gap:12px; align-content:start; }
     .drop-zone {
       position:relative; min-height:560px; border-radius:34px; padding:18px; border:1px dashed rgba(199,154,103,0.34);
@@ -2893,6 +2893,17 @@
     .duration-1225 { animation-duration: 1225ms; transition-duration: 1225ms; }
     .delay-1250 { animation-delay: 1250ms; transition-delay: 1250ms; }
     .duration-1250 { animation-duration: 1250ms; transition-duration: 1250ms; }
+
+    @media (max-width: 760px) {
+      .face-item { gap: 10px; }
+      .face-item-price { min-width: 76px; max-width: 84px; flex-basis: 84px; font-size: .76rem; }
+      .menu-card-top { gap: 10px; }
+      .price { min-width: 74px; max-width: 88px; flex-basis: 88px; font-size: .8rem; }
+      .bank-item { gap: 10px; }
+      .bank-name { font-size: .86rem; }
+      .bank-meta { font-size: .67rem; }
+    }
+
   </style>
 </head>
 <body>
@@ -3450,7 +3461,11 @@ const state = {
         startX: 0,
         startY: 0,
         baseX: -18,
-        baseY: -28
+        baseY: -28,
+        autoSpin: true,
+        spinVelocity: 0.18,
+        spinFrame: null,
+        lastInteractionAt: 0
       }
     };
 
@@ -3487,7 +3502,7 @@ const state = {
       jumpCategoryButtons: document.querySelectorAll("[data-jump-category]")
     };
 
-    function priceLabel(value) { return typeof value === "number" ? `$${value.toFixed(2)}` : "Market / in-store"; }
+    function priceLabel(value) { return typeof value === "number" ? `$${value.toFixed(2)}` : "In-store"; }
     function clamp(value, min, max) { return Math.min(Math.max(value, min), max); }
     function round(value, precision = 2) { const multiplier = 10 ** precision; return Math.round(value * multiplier) / multiplier; }
     function slugify(value) { return String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
@@ -3649,14 +3664,35 @@ const state = {
       reset:  { x: -18, y: -28, z: 1 }
     };
     function paintCube() { refs.cube.style.transform = `rotateX(${state.cube.rotX}deg) rotateY(${state.cube.rotY}deg) scale(${state.cube.zoom})`; }
+    function markCubeInteraction() { state.cube.lastInteractionAt = performance.now(); }
+    function startCubeAutoSpin() {
+      stopCubeAutoSpin();
+      const loop = now => {
+        if (state.cube.autoSpin && !state.cube.dragging) {
+          const idleFor = now - (state.cube.lastInteractionAt || 0);
+          if (idleFor > 1200) {
+            state.cube.rotY += state.cube.spinVelocity;
+            paintCube();
+          }
+        }
+        state.cube.spinFrame = requestAnimationFrame(loop);
+      };
+      state.cube.spinFrame = requestAnimationFrame(loop);
+    }
+    function stopCubeAutoSpin() {
+      if (state.cube.spinFrame) {
+        cancelAnimationFrame(state.cube.spinFrame);
+        state.cube.spinFrame = null;
+      }
+    }
     function setCubeView(name) {
       const preset = VIEW_PRESETS[name] || VIEW_PRESETS.reset;
-      state.cube.rotX = preset.x; state.cube.rotY = preset.y; state.cube.zoom = preset.z; paintCube();
+      state.cube.rotX = preset.x; state.cube.rotY = preset.y; state.cube.zoom = preset.z; markCubeInteraction(); paintCube();
     }
     function onCubePointerDown(event) {
       if (event.pointerType === "mouse" && event.button !== 0) return;
       state.cube.dragging = true; state.cube.pointerId = event.pointerId; state.cube.startX = event.clientX; state.cube.startY = event.clientY; state.cube.baseX = state.cube.rotX; state.cube.baseY = state.cube.rotY;
-      refs.cube.classList.add("dragging"); refs.cubeViewport.setPointerCapture(event.pointerId);
+      refs.cube.classList.add("dragging"); markCubeInteraction(); refs.cubeViewport.setPointerCapture(event.pointerId);
     }
     function onCubePointerMove(event) {
       if (!state.cube.dragging || event.pointerId !== state.cube.pointerId) return;
@@ -3664,15 +3700,16 @@ const state = {
       const deltaY = event.clientY - state.cube.startY;
       state.cube.rotY = state.cube.baseY + deltaX * 0.45;
       state.cube.rotX = clamp(state.cube.baseX - deltaY * 0.40, -125, 125);
+      markCubeInteraction();
       paintCube();
     }
     function onCubePointerUp(event) {
       if (event.pointerId !== state.cube.pointerId) return;
       state.cube.dragging = false; refs.cube.classList.remove("dragging");
       try { refs.cubeViewport.releasePointerCapture(event.pointerId); } catch (error) {}
-      state.cube.pointerId = null;
+      state.cube.pointerId = null; markCubeInteraction();
     }
-    function onCubeWheel(event) { event.preventDefault(); state.cube.zoom = clamp(state.cube.zoom + (event.deltaY < 0 ? 0.05 : -0.05), 0.72, 1.38); state.cube.zoom = round(state.cube.zoom, 2); paintCube(); }
+    function onCubeWheel(event) { event.preventDefault(); state.cube.zoom = clamp(state.cube.zoom + (event.deltaY < 0 ? 0.05 : -0.05), 0.72, 1.38); state.cube.zoom = round(state.cube.zoom, 2); markCubeInteraction(); paintCube(); }
     let pinchStartDistance = 0;
     let pinchStartZoom = 1;
     function getTouchDistance(touches) { const [a, b] = touches; if (!a || !b) return 0; return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); }
@@ -3684,6 +3721,7 @@ const state = {
         if (!pinchStartDistance) return;
         const ratio = distance / pinchStartDistance;
         state.cube.zoom = clamp(round(pinchStartZoom * ratio, 2), 0.72, 1.38);
+        markCubeInteraction();
         paintCube();
       }
     }
@@ -3743,10 +3781,10 @@ const state = {
       refs.cubeViewport.addEventListener("touchmove", handleTouchMove, { passive: false });
       window.addEventListener("keydown", event => {
         if (event.key === "Escape") closeDrawer();
-        if (event.key === "ArrowLeft") { state.cube.rotY -= 8; paintCube(); }
-        if (event.key === "ArrowRight") { state.cube.rotY += 8; paintCube(); }
-        if (event.key === "ArrowUp") { state.cube.rotX = clamp(state.cube.rotX - 8, -125, 125); paintCube(); }
-        if (event.key === "ArrowDown") { state.cube.rotX = clamp(state.cube.rotX + 8, -125, 125); paintCube(); }
+        if (event.key === "ArrowLeft") { state.cube.rotY -= 8; markCubeInteraction(); paintCube(); }
+        if (event.key === "ArrowRight") { state.cube.rotY += 8; markCubeInteraction(); paintCube(); }
+        if (event.key === "ArrowUp") { state.cube.rotX = clamp(state.cube.rotX - 8, -125, 125); markCubeInteraction(); paintCube(); }
+        if (event.key === "ArrowDown") { state.cube.rotX = clamp(state.cube.rotX + 8, -125, 125); markCubeInteraction(); paintCube(); }
       });
       document.addEventListener("click", event => {
         const addName = event.target.closest("[data-add-name]")?.dataset.addName;
@@ -3758,7 +3796,7 @@ const state = {
     }
 
     function init() {
-      renderTabs(); highlightPills(); renderCubeFaces(); renderBankOverview(); renderBuilderCategoryItems(); renderMenuCards(); renderPlate(); renderDrawer(); paintCube(); wireDropZone(); bindEvents(); loadPlateSnapshot();
+      renderTabs(); highlightPills(); renderCubeFaces(); renderBankOverview(); renderBuilderCategoryItems(); renderMenuCards(); renderPlate(); renderDrawer(); paintCube(); wireDropZone(); bindEvents(); loadPlateSnapshot(); startCubeAutoSpin();
     }
     init();
     function helper_count_bbq_plates() {
@@ -5842,6 +5880,17 @@ const state = {
     .basis-1480 { flex-basis: 1480px; }
     .basis-1490 { flex-basis: 1490px; }
     .basis-1500 { flex-basis: 1500px; }
+
+    @media (max-width: 760px) {
+      .face-item { gap: 10px; }
+      .face-item-price { min-width: 76px; max-width: 84px; flex-basis: 84px; font-size: .76rem; }
+      .menu-card-top { gap: 10px; }
+      .price { min-width: 74px; max-width: 88px; flex-basis: 88px; font-size: .8rem; }
+      .bank-item { gap: 10px; }
+      .bank-name { font-size: .86rem; }
+      .bank-meta { font-size: .67rem; }
+    }
+
   </style>
   <script>
     const TAG_INDEX = {};
