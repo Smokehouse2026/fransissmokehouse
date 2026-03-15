@@ -1,1775 +1,843 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Francis Smokehouse | Reimagined Landing Page</title>
-  <meta name="description" content="A reimagined landing page for The Francis Smokehouse built around a live specials marquee, unique navigation, and fast actions." />
-  <meta name="theme-color" content="#140e0b" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Francis Smokehouse · St. Francisville, LA</title>
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts: strong serif + clean sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#120c09;
-      --bg-2:#18110d;
-      --bg-3:#211712;
-      --panel:#221813;
-      --panel-2:#2e2119;
-      --panel-3:#3a2a1f;
-      --line:rgba(255,227,193,.10);
-      --line-strong:rgba(255,208,150,.20);
-      --text:#f8edde;
-      --muted:#d5bfaa;
-      --muted-2:#af9887;
-      --warm:#d68d3d;
-      --warm-2:#efba78;
-      --warm-3:#ffddae;
-      --accent:#b14c2b;
-      --accent-2:#82331b;
-      --success:#8fc58b;
-      --danger:#d06a50;
-      --shadow:0 24px 80px rgba(0,0,0,.34);
-      --shadow-soft:0 12px 30px rgba(0,0,0,.22);
-      --radius-xl:34px;
-      --radius-lg:24px;
-      --radius-md:18px;
-      --radius-sm:12px;
-      --max:1280px;
-      --header-h:120px;
-      --grid-gap:18px;
-      --ticket:#f2debf;
-      --ticket-ink:#2b1d14;
-    }
-
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      color:var(--text);
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 12% 8%, rgba(214,141,61,.14), transparent 23%),
-        radial-gradient(circle at 88% 10%, rgba(177,76,43,.10), transparent 19%),
-        radial-gradient(circle at 76% 82%, rgba(255,221,174,.08), transparent 24%),
-        linear-gradient(180deg, #17100c 0%, #110c09 48%, #0e0907 100%);
-      min-height:100vh;
-      overflow-x:hidden;
-      line-height:1.55;
-    }
-
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      opacity:.35;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,.015) 0 1px, transparent 1px 100%),
-        linear-gradient(rgba(255,255,255,.01) 0 1px, transparent 1px 100%);
-      background-size:44px 44px;
-      mask-image:linear-gradient(180deg, rgba(0,0,0,.55), transparent 85%);
-    }
-
-    a{text-decoration:none;color:inherit}
-    img{display:block;max-width:100%}
-    button{font:inherit}
-
-    .container{
-      width:min(calc(100% - 32px), var(--max));
-      margin-inline:auto;
-    }
-
-    .eyebrow{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:8px 14px;
-      border-radius:999px;
-      border:1px solid rgba(239,186,120,.16);
-      background:rgba(239,186,120,.08);
-      color:var(--warm-2);
-      font-size:.78rem;
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-    }
-
-    .btn{
-      border:none;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      min-height:48px;
-      padding:0 18px;
-      border-radius:999px;
-      transition:transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
-      font-weight:800;
-      letter-spacing:.01em;
-      white-space:nowrap;
-    }
-
-    .btn:hover{transform:translateY(-1px)}
-
-    .btn-primary{
-      color:#1c140e;
-      background:linear-gradient(135deg, var(--warm-3), var(--warm));
-      box-shadow:0 14px 28px rgba(214,141,61,.20);
-    }
-
-    .btn-secondary{
-      color:var(--text);
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-    }
-
-    .btn-ghost{
-      color:var(--warm-3);
-      border:1px solid rgba(255,208,150,.18);
-      background:rgba(255,208,150,.05);
-    }
-
-    .section{
-      padding:28px 0;
-      position:relative;
-    }
-
-    .section-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:end;
-      gap:18px;
-      margin-bottom:18px;
-      flex-wrap:wrap;
-    }
-
-    .section-head h2,
-    .section-head h3{
-      margin:0;
-      letter-spacing:-.04em;
-      line-height:.98;
-    }
-
-    .section-head h2{
-      font-size:clamp(2rem,4vw,3.8rem);
-    }
-
-    .section-head h3{
-      font-size:clamp(1.4rem,2.4vw,2.2rem);
-    }
-
-    .section-head p{
-      margin:0;
-      color:var(--muted);
-      max-width:62ch;
-    }
-
-    /* HEADER */
-    .site-header{
-      position:sticky;
-      top:0;
-      z-index:1000;
-      padding:14px 0 10px;
-      backdrop-filter:blur(18px);
-      background:
-        linear-gradient(180deg, rgba(14,9,7,.88), rgba(14,9,7,.70));
-      border-bottom:1px solid rgba(255,255,255,.035);
-    }
-
-    .header-shell{
-      display:grid;
-      grid-template-columns:290px minmax(0,1fr) 280px;
-      gap:14px;
-      align-items:stretch;
-    }
-
-    .brand-stamp,
-    .marquee-board,
-    .action-stack{
-      min-height:96px;
-      border-radius:26px;
-      box-shadow:var(--shadow-soft);
-      border:1px solid var(--line);
-      overflow:hidden;
-    }
-
-    .brand-stamp{
-      position:relative;
-      padding:16px 18px;
-      background:
-        radial-gradient(circle at 20% 12%, rgba(255,255,255,.06), transparent 22%),
-        linear-gradient(135deg, #4a3124, #271b15 60%);
-      display:grid;
-      grid-template-columns:70px 1fr;
-      gap:14px;
-      align-items:center;
-    }
-
-    .brand-stamp::before{
-      content:"";
-      position:absolute;
-      inset:10px;
-      border-radius:20px;
-      border:1px solid rgba(255,220,184,.08);
-      pointer-events:none;
-    }
-
-    .brand-seal{
-      width:70px;
-      height:70px;
-      border-radius:22px;
-      display:grid;
-      place-items:center;
-      color:#20160f;
-      font-size:1.35rem;
-      font-weight:900;
-      letter-spacing:.10em;
-      background:linear-gradient(135deg, var(--warm-3), var(--warm));
-      box-shadow:0 10px 22px rgba(214,141,61,.22);
-    }
-
-    .brand-meta strong{
-      display:block;
-      font-size:1.06rem;
-      letter-spacing:.03em;
-    }
-
-    .brand-meta span{
-      display:block;
-      color:var(--muted);
-      font-size:.88rem;
-    }
-
-    .brand-meta small{
-      display:inline-block;
-      margin-top:6px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
-      color:var(--warm-2);
-      font-weight:800;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-size:.70rem;
-    }
-
-    .marquee-board{
-      position:relative;
-      display:grid;
-      grid-template-rows:1fr auto;
-      background:
-        linear-gradient(180deg, rgba(39,26,20,.98), rgba(23,16,12,.98));
-    }
-
-    .marquee-top{
-      position:relative;
-      display:grid;
-      grid-template-columns:170px minmax(0,1fr) 54px;
-      align-items:center;
-      gap:0;
-      min-height:62px;
-    }
-
-    .marquee-top::after{
-      content:"";
-      position:absolute;
-      left:170px;
-      right:54px;
-      bottom:0;
-      border-bottom:1px dashed rgba(255,220,184,.12);
-    }
-
-    .marquee-label{
-      height:100%;
-      display:grid;
-      place-items:center;
-      padding:0 16px;
-      text-align:center;
-      background:
-        linear-gradient(135deg, rgba(177,76,43,.16), rgba(214,141,61,.08));
-      color:var(--warm-2);
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.13em;
-      font-size:.76rem;
-      border-right:1px solid var(--line);
-    }
-
-    .marquee-view{
-      height:100%;
-      display:flex;
-      align-items:center;
-      overflow:hidden;
-      position:relative;
-    }
-
-    .marquee-track{
-      display:flex;
-      align-items:center;
-      gap:28px;
-      padding-inline:24px;
-      white-space:nowrap;
-      min-width:max-content;
-      animation:marquee 24s linear infinite;
-      font-weight:900;
-      letter-spacing:.02em;
-      color:var(--text);
-      font-size:1.05rem;
-    }
-
-    .marquee-track span{
-      display:inline-flex;
-      align-items:center;
-      gap:28px;
-    }
-
-    .marquee-track b{
-      color:var(--warm-3);
-      font-weight:900;
-    }
-
-    .marquee-icon{
-      display:grid;
-      place-items:center;
-      font-size:1.1rem;
-      color:var(--warm-3);
-      background:rgba(255,255,255,.03);
-      border-left:1px solid var(--line);
-    }
-
-    .header-tabs{
-      display:flex;
-      gap:10px;
-      padding:12px;
-      overflow:auto hidden;
-      scrollbar-width:none;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
-    }
-
-    .header-tabs::-webkit-scrollbar{display:none}
-
-    .ticket-tab{
-      flex:0 0 auto;
-      position:relative;
-      padding:12px 18px 12px 20px;
-      background:linear-gradient(180deg, #f1debe, #e8cfa9);
-      color:var(--ticket-ink);
-      border-radius:14px;
-      font-weight:900;
-      font-size:.84rem;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      box-shadow:0 8px 18px rgba(0,0,0,.14);
-      border:none;
-    }
-
-    .ticket-tab::before,
-    .ticket-tab::after{
-      content:"";
-      position:absolute;
-      top:50%;
-      width:8px;
-      height:8px;
-      margin-top:-4px;
-      border-radius:50%;
-      background:#6a4a32;
-      opacity:.18;
-    }
-
-    .ticket-tab::before{left:8px}
-    .ticket-tab::after{right:8px}
-
-    .action-stack{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:1px;
-      background:rgba(255,255,255,.045);
-    }
-
-    .action-tile{
-      background:
-        linear-gradient(180deg, rgba(39,26,20,.98), rgba(25,17,13,.98));
-      padding:12px 14px;
-      display:grid;
-      align-content:center;
-      gap:4px;
-      min-width:0;
-      transition:background .18s ease, transform .18s ease;
-    }
-
-    .action-tile:hover{
-      background:
-        linear-gradient(180deg, rgba(52,35,26,.98), rgba(29,20,15,.98));
-      transform:translateY(-1px);
-    }
-
-    .action-tile strong{
-      font-size:.90rem;
-      letter-spacing:.01em;
-    }
-
-    .action-tile span{
-      font-size:.76rem;
-      color:var(--muted-2);
-    }
-
-    .action-tile.primary{
-      background:
-        linear-gradient(135deg, rgba(214,141,61,.18), rgba(177,76,43,.16)),
-        linear-gradient(180deg, rgba(39,26,20,.98), rgba(25,17,13,.98));
-    }
-
-    .header-utility{
-      display:none;
-      margin-top:10px;
-      grid-template-columns:1fr auto;
-      gap:10px;
-      align-items:center;
-    }
-
-    .header-utility .mini-marquee{
-      min-width:0;
-      padding:14px 16px;
-      border-radius:18px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      overflow:hidden;
-      white-space:nowrap;
-      text-overflow:ellipsis;
-      color:var(--warm-3);
-      font-weight:900;
-    }
-
-    .header-utility .mini-actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    body.compact-header .site-header{
-      padding:10px 0;
-    }
-
-    body.compact-header .header-shell{
-      display:none;
-    }
-
-    body.compact-header .header-utility{
-      display:grid;
-    }
-
-    @keyframes marquee{
-      0%{transform:translateX(0)}
-      100%{transform:translateX(-50%)}
-    }
-
-    /* HERO */
-    .hero{
-      padding:34px 0 18px;
-    }
-
-    .hero-grid{
-      display:grid;
-      grid-template-columns:1.1fr .9fr;
-      gap:18px;
-      align-items:stretch;
-    }
-
-    .hero-main,
-    .hero-side{
-      border-radius:var(--radius-xl);
-      border:1px solid var(--line);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-
-    .hero-main{
-      padding:34px;
-      background:
-        radial-gradient(circle at 88% 14%, rgba(214,141,61,.16), transparent 22%),
-        linear-gradient(180deg, rgba(38,27,21,.98), rgba(23,16,12,.98));
-      position:relative;
-      isolation:isolate;
-    }
-
-    .hero-main::after{
-      content:"";
-      position:absolute;
-      right:-80px;
-      top:-40px;
-      width:260px;
-      height:260px;
-      background:radial-gradient(circle, rgba(255,221,174,.08), transparent 66%);
-      border-radius:50%;
-      pointer-events:none;
-      z-index:-1;
-    }
-
-    .hero-main h1{
-      font-size:clamp(2.7rem, 6vw, 6.2rem);
-      line-height:.92;
-      letter-spacing:-.06em;
-      margin:16px 0 18px;
-      max-width:10ch;
-    }
-
-    .hero-main p{
-      margin:0;
-      color:var(--muted);
-      font-size:1.08rem;
-      max-width:58ch;
-    }
-
-    .hero-cta{
-      margin-top:28px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-    }
-
-    .hero-rail{
-      margin-top:24px;
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:12px;
-    }
-
-    .rail-card{
-      padding:16px;
-      border-radius:20px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-    }
-
-    .rail-card strong{
-      display:block;
-      margin-bottom:6px;
-      font-size:.98rem;
-    }
-
-    .rail-card span{
-      color:var(--muted);
-      font-size:.92rem;
-    }
-
-    .hero-side{
-      display:grid;
-      grid-template-rows:auto 1fr;
-      background:
-        linear-gradient(180deg, rgba(29,20,15,.98), rgba(19,14,11,.98));
-    }
-
-    .signal-card{
-      padding:24px;
-      border-bottom:1px solid var(--line);
-      position:relative;
-      overflow:hidden;
-    }
-
-    .signal-card::before{
-      content:"";
-      position:absolute;
-      inset:auto -40px -40px auto;
-      width:180px;
-      height:180px;
-      background:radial-gradient(circle, rgba(214,141,61,.14), transparent 66%);
-      border-radius:50%;
-      pointer-events:none;
-    }
-
-    .signal-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      margin-bottom:12px;
-      flex-wrap:wrap;
-    }
-
-    .status-pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid rgba(143,197,139,.18);
-      background:rgba(143,197,139,.10);
-      color:#c4e5c1;
-      font-size:.80rem;
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
-
-    .signal-card h2{
-      margin:0 0 8px;
-      font-size:clamp(1.7rem,3vw,2.7rem);
-      line-height:.98;
-      letter-spacing:-.04em;
-    }
-
-    .signal-card p{
-      margin:0;
-      color:var(--muted);
-    }
-
-    .today-special{
-      margin-top:18px;
-      padding:18px;
-      border-radius:22px;
-      border:1px solid rgba(255,220,184,.11);
-      background:
-        linear-gradient(145deg, rgba(65,42,29,.72), rgba(20,14,11,.70));
-    }
-
-    .today-special .label{
-      color:var(--warm-2);
-      font-weight:900;
-      font-size:.78rem;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      margin-bottom:6px;
-    }
-
-    .today-special .title{
-      font-size:1.45rem;
-      font-weight:900;
-      line-height:1.08;
-      margin-bottom:8px;
-    }
-
-    .today-special .desc{
-      color:var(--muted);
-      margin-bottom:12px;
-    }
-
-    .chip-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-    }
-
-    .chip{
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      color:var(--warm-3);
-      font-weight:800;
-      font-size:.80rem;
-    }
-
-    .side-lower{
-      padding:20px 24px 24px;
-      display:grid;
-      gap:12px;
-      align-content:start;
-    }
-
-    .quick-stat{
-      padding:14px 16px;
-      border-radius:18px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.025);
-      display:flex;
-      justify-content:space-between;
-      gap:14px;
-      align-items:start;
-    }
-
-    .quick-stat strong{
-      display:block;
-      margin-bottom:3px;
-      font-size:.95rem;
-    }
-
-    .quick-stat span{
-      color:var(--muted);
-      font-size:.88rem;
-      max-width:28ch;
-    }
-
-    .quick-stat b{
-      color:var(--warm-2);
-      font-size:.84rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      white-space:nowrap;
-    }
-
-    /* CONTROL CENTER */
-    .control-center{
-      display:grid;
-      grid-template-columns:1.15fr .85fr;
-      gap:18px;
-      align-items:start;
-    }
-
-    .board,
-    .panel{
-      border-radius:var(--radius-xl);
-      border:1px solid var(--line);
-      background:
-        linear-gradient(180deg, rgba(31,22,17,.98), rgba(21,15,11,.98));
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-
-    .board-head,
-    .panel-head{
-      padding:22px 24px 16px;
-      border-bottom:1px solid var(--line);
-    }
-
-    .board-head h3,
-    .panel-head h3{
-      margin:0 0 8px;
-      font-size:1.55rem;
-      line-height:1.02;
-      letter-spacing:-.03em;
-    }
-
-    .board-head p,
-    .panel-head p{
-      margin:0;
-      color:var(--muted);
-    }
-
-    .special-grid{
-      padding:18px;
-      display:grid;
-      grid-template-columns:repeat(7, minmax(0,1fr));
-      gap:12px;
-    }
-
-    .special-card{
-      padding:16px;
-      min-height:240px;
-      border-radius:22px;
-      border:1px solid var(--line);
-      background:
-        linear-gradient(180deg, rgba(37,26,20,.98), rgba(23,16,12,.98));
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
-    }
-
-    .special-card:hover{
-      transform:translateY(-2px);
-      border-color:var(--line-strong);
-      box-shadow:0 16px 34px rgba(0,0,0,.20);
-    }
-
-    .special-card.active{
-      background:
-        linear-gradient(180deg, rgba(88,57,35,.98), rgba(28,20,15,.98));
-      border-color:rgba(255,208,150,.22);
-    }
-
-    .special-top{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-    }
-
-    .special-top strong{
-      font-size:.98rem;
-    }
-
-    .special-top span{
-      font-size:.70rem;
-      font-weight:900;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      color:var(--warm-2);
-    }
-
-    .special-card h4{
-      margin:0;
-      font-size:1.05rem;
-      line-height:1.16;
-      letter-spacing:-.02em;
-    }
-
-    .special-card p{
-      margin:0;
-      color:var(--muted);
-      font-size:.90rem;
-    }
-
-    .tag-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:auto;
-    }
-
-    .tag{
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      color:var(--warm-3);
-      font-size:.74rem;
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-    }
-
-    .panel-body{
-      padding:18px;
-      display:grid;
-      gap:12px;
-    }
-
-    .signal-panel{
-      padding:18px;
-      border-radius:22px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-    }
-
-    .signal-panel strong{
-      display:block;
-      font-size:1rem;
-      margin-bottom:6px;
-    }
-
-    .signal-panel p{
-      margin:0;
-      color:var(--muted);
-      font-size:.92rem;
-    }
-
-    .mini-actions-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-
-    /* MENU STRIPS */
-    .menu-strips{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:18px;
-    }
-
-    .strip-card{
-      border-radius:var(--radius-xl);
-      border:1px solid var(--line);
-      background:
-        linear-gradient(180deg, rgba(30,21,16,.98), rgba(20,14,11,.98));
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
-
-    .strip-head{
-      padding:22px 22px 16px;
-      border-bottom:1px solid var(--line);
-    }
-
-    .strip-head h3{
-      margin:0 0 8px;
-      font-size:1.35rem;
-      line-height:1.04;
-      letter-spacing:-.03em;
-    }
-
-    .strip-head p{
-      margin:0;
-      color:var(--muted);
-      font-size:.94rem;
-    }
-
-    .strip-list{
-      padding:18px 22px 22px;
-      display:grid;
-      gap:14px;
-    }
-
-    .strip-item{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:14px;
-      padding-bottom:14px;
-      border-bottom:1px dashed rgba(255,220,184,.10);
-    }
-
-    .strip-item:last-child{
-      padding-bottom:0;
-      border-bottom:none;
-    }
-
-    .strip-item strong{
-      display:block;
-      margin-bottom:4px;
-      font-size:1rem;
-    }
-
-    .strip-item span{
-      color:var(--muted);
-      font-size:.90rem;
-    }
-
-    .strip-item b{
-      color:var(--warm-2);
-      font-size:.84rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      white-space:nowrap;
-    }
-
-    /* EXPERIENCE */
-    .experience{
-      display:grid;
-      grid-template-columns:1.05fr .95fr;
-      gap:18px;
-    }
-
-    .experience-main,
-    .experience-side{
-      border-radius:var(--radius-xl);
-      border:1px solid var(--line);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      background:
-        linear-gradient(180deg, rgba(29,20,15,.98), rgba(19,14,11,.98));
-    }
-
-    .experience-main{
-      padding:28px;
-      position:relative;
-    }
-
-    .experience-main::after{
-      content:"";
-      position:absolute;
-      inset:auto auto -80px 60%;
-      width:260px;
-      height:260px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(177,76,43,.12), transparent 70%);
-      pointer-events:none;
-    }
-
-    .story-stack{
-      display:grid;
-      gap:14px;
-      margin-top:20px;
-    }
-
-    .story-card{
-      padding:18px;
-      border-radius:20px;
-      background:rgba(255,255,255,.03);
-      border:1px solid var(--line);
-    }
-
-    .story-card strong{
-      display:block;
-      margin-bottom:6px;
-      font-size:1rem;
-    }
-
-    .story-card span{
-      color:var(--muted);
-      font-size:.94rem;
-    }
-
-    .experience-side{
-      display:grid;
-      grid-template-rows:1fr auto;
-    }
-
-    .visit-grid{
-      padding:24px;
-      display:grid;
-      gap:12px;
-      align-content:start;
-    }
-
-    .visit-card{
-      padding:16px;
-      border-radius:18px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-    }
-
-    .visit-card strong{
-      display:block;
-      margin-bottom:6px;
-    }
-
-    .visit-card span,
-    .visit-card a{
-      color:var(--muted);
-      font-size:.94rem;
-    }
-
-    .bottom-cta{
-      padding:20px 24px 24px;
-      border-top:1px solid var(--line);
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    /* FOOTER */
-    footer{
-      padding:22px 0 40px;
-    }
+    /* -------------------- RESET & VARIABLES -------------------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --smoke-dark: #0b0a0a;
+      --smoke-charcoal: #1e1b1b;
+      --ember-red: #b44b3c;
+      --ember-glow: #d97c5a;
+      --grain-gold: #c39a6a;
+      --grain-light: #e5d3b5;
+      --paper-cream: #f8f1e4;
+      --font-serif: 'Playfair Display', serif;
+      --font-sans: 'Montserrat', sans-serif;
+      --shadow-heavy: 0 20px 35px -8px rgba(0,0,0,0.7);
+      --shadow-soft: 0 10px 25px -5px rgba(0,0,0,0.4);
+      --border-smoke: 1px solid rgba(255,255,240,0.1);
+    }
+
+    body {
+      background-color: var(--smoke-dark);
+      color: var(--paper-cream);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* -------------------- UTILITY CLASSES -------------------- */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+      text-transform: uppercase;
+      color: var(--grain-light);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--ember-red), var(--ember-glow));
+      border-radius: 4px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-radius: 40px;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      border: 2px solid var(--ember-red);
+      color: var(--paper-cream);
+      font-size: 0.9rem;
+    }
+
+    .btn-primary {
+      background: var(--ember-red);
+      color: var(--smoke-dark);
+      border: 2px solid var(--ember-red);
+    }
+
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--ember-glow);
+      border-color: var(--ember-glow);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn-outline:hover {
+      background: var(--ember-red);
+      color: var(--smoke-dark);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-soft);
+    }
 
-    .footer-shell{
-      border-radius:32px;
-      border:1px solid var(--line);
-      box-shadow:var(--shadow);
-      background:
-        linear-gradient(180deg, rgba(27,19,15,.98), rgba(18,13,10,.98));
-      overflow:hidden;
+    /* -------------------- HEADER (STICKY + SMOKED GLASS) -------------------- */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 8, 8, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: var(--border-smoke);
+      padding: 0.8rem 0;
     }
 
-    .footer-top{
-      padding:24px;
-      display:grid;
-      grid-template-columns:1.1fr .9fr .9fr;
-      gap:18px;
-      border-bottom:1px solid var(--line);
+    .header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
 
-    .footer-brand{
-      display:flex;
-      align-items:flex-start;
-      gap:14px;
+    .logo {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 900;
+      line-height: 1.2;
     }
-
-    .footer-seal{
-      width:58px;
-      height:58px;
-      border-radius:18px;
-      display:grid;
-      place-items:center;
-      font-weight:900;
-      letter-spacing:.08em;
-      color:#1f150e;
-      background:linear-gradient(135deg, var(--warm-3), var(--warm));
-      box-shadow:0 10px 20px rgba(214,141,61,.22);
-      flex:0 0 auto;
+    .logo span {
+      color: var(--ember-red);
+      display: block;
+      font-size: 0.9rem;
+      font-family: var(--font-sans);
+      font-weight: 300;
+      letter-spacing: 4px;
+      text-transform: uppercase;
     }
 
-    .footer-top h4{
-      margin:0 0 10px;
-      font-size:1rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:var(--warm-2);
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 1.5px;
     }
 
-    .footer-top p,
-    .footer-top li,
-    .footer-top a{
-      color:var(--muted);
-      font-size:.94rem;
+    .nav-links a {
+      position: relative;
+      padding: 0.3rem 0;
     }
 
-    .footer-top ul{
-      list-style:none;
-      margin:0;
-      padding:0;
-      display:grid;
-      gap:8px;
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--ember-glow);
+      transition: width 0.25s;
     }
 
-    .footer-bottom{
-      padding:16px 24px;
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      color:var(--muted-2);
-      font-size:.84rem;
+    .nav-links a:hover::after {
+      width: 100%;
     }
 
-    /* MOBILE QUICK BAR */
-    .mobile-bar{
-      position:fixed;
-      left:12px;
-      right:12px;
-      bottom:12px;
-      z-index:1100;
-      display:none;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:8px;
-      padding:8px;
-      border-radius:22px;
-      border:1px solid var(--line);
-      background:rgba(19,13,10,.92);
-      backdrop-filter:blur(14px);
-      box-shadow:var(--shadow);
+    .header-contact {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
-    .mobile-bar a{
-      min-height:48px;
-      display:grid;
-      place-items:center;
-      border-radius:16px;
-      background:rgba(255,255,255,.04);
-      color:var(--text);
-      font-weight:900;
-      font-size:.84rem;
-      letter-spacing:.04em;
-      text-transform:uppercase;
+    .header-contact .phone {
+      font-weight: 700;
+      color: var(--grain-gold);
     }
 
-    .mobile-bar a.primary{
-      background:linear-gradient(135deg, var(--warm-3), var(--warm));
-      color:#20160f;
+    .mobile-toggle {
+      display: none;
+      font-size: 2rem;
+      cursor: pointer;
     }
 
-    /* RESPONSIVE */
-    @media (max-width:1180px){
-      .header-shell{
-        grid-template-columns:250px minmax(0,1fr) 240px;
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none;
       }
-
-      .hero-grid,
-      .control-center,
-      .experience,
-      .footer-top{
-        grid-template-columns:1fr;
-      }
-
-      .special-grid{
-        grid-template-columns:repeat(4, minmax(0,1fr));
-      }
-
-      .menu-strips{
-        grid-template-columns:1fr 1fr;
+      .mobile-toggle {
+        display: block;
       }
     }
 
-    @media (max-width:860px){
-      .site-header{
-        padding:12px 0 8px;
-      }
-
-      .header-shell{
-        grid-template-columns:1fr;
-      }
-
-      .action-stack{
-        grid-template-columns:repeat(4,1fr);
-      }
-
-      .hero{
-        padding-top:24px;
-      }
-
-      .hero-grid,
-      .menu-strips{
-        grid-template-columns:1fr;
-      }
-
-      .hero-main,
-      .signal-card,
-      .side-lower,
-      .board-head,
-      .panel-head,
-      .special-grid,
-      .panel-body,
-      .strip-head,
-      .strip-list,
-      .experience-main,
-      .visit-grid,
-      .bottom-cta,
-      .footer-top{
-        padding-left:20px;
-        padding-right:20px;
-      }
-
-      .hero-rail{
-        grid-template-columns:1fr;
-      }
-
-      .special-grid{
-        grid-template-columns:1fr 1fr;
-      }
-
-      .mobile-bar{
-        display:grid;
-      }
-
-      body{
-        padding-bottom:88px;
-      }
+    /* -------------------- HERO SECTION (SMOKE & FIRE) -------------------- */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      background: url('https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=2070&auto=format&fit=crop') center/cover fixed;
+      isolation: isolate;
     }
 
-    @media (max-width:620px){
-      .marquee-top{
-        grid-template-columns:120px minmax(0,1fr) 42px;
-      }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 50%, rgba(0,0,0,0.3), rgba(0,0,0,0.9));
+      z-index: -1;
+    }
 
-      .marquee-top::after{
-        left:120px;
-        right:42px;
-      }
+    .hero .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
 
-      .marquee-label{
-        font-size:.68rem;
-        letter-spacing:.10em;
-        padding:0 10px;
-      }
+    .hero-content {
+      max-width: 650px;
+    }
 
-      .marquee-track{
-        font-size:.92rem;
-        gap:18px;
-        padding-inline:16px;
-      }
+    .hero-content .badge {
+      display: inline-block;
+      background: var(--ember-red);
+      padding: 0.3rem 1rem;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      border-radius: 30px;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
 
-      .action-stack{
-        grid-template-columns:1fr 1fr;
-      }
+    .hero-content h1 {
+      font-family: var(--font-serif);
+      font-size: 5rem;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
 
-      .special-grid{
-        grid-template-columns:1fr;
-      }
+    .hero-content h1 span {
+      color: var(--ember-red);
+      display: block;
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: 8px;
+    }
 
-      .footer-bottom{
-        flex-direction:column;
+    .hero-description {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--grain-gold);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* ----- floating card (menu tease) ----- */
+    .hero-card {
+      background: rgba(30, 27, 27, 0.9);
+      backdrop-filter: blur(8px);
+      border: var(--border-smoke);
+      border-radius: 30px;
+      padding: 2rem;
+      box-shadow: var(--shadow-heavy);
+      transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+      transition: transform 0.3s;
+    }
+
+    .hero-card:hover {
+      transform: perspective(1000px) rotateY(-2deg) rotateX(1deg) translateY(-5px);
+    }
+
+    .hero-card h3 {
+      font-size: 1.8rem;
+      font-family: var(--font-serif);
+      border-bottom: 1px dashed var(--grain-gold);
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .menu-preview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      font-weight: 300;
+    }
+
+    .menu-item .price {
+      color: var(--grain-gold);
+      font-weight: 700;
+    }
+
+    @media (max-width: 1000px) {
+      .hero .container {
+        grid-template-columns: 1fr;
       }
+      .hero-content h1 { font-size: 4rem; }
+    }
+
+    /* -------------------- MAIN SECTIONS (unique timeline, reviews, etc) -------------------- */
+    .section {
+      padding: 6rem 0;
+      border-bottom: var(--border-smoke);
+    }
+
+    /* ---- ABOUT / FLAGSHIP ---- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      margin-bottom: 1.2rem;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .info-panel {
+      background: var(--smoke-charcoal);
+      border-radius: 24px;
+      padding: 2rem;
+      border: var(--border-smoke);
+    }
+
+    .info-panel h4 {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-detail {
+      display: flex;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      align-items: center;
+    }
+
+    .info-detail i {
+      font-size: 1.8rem;
+      color: var(--ember-red);
+      width: 40px;
+    }
+
+    /* ----- TIMELINE (from mermaid) ----- */
+    .timeline {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 1.5rem;
+      align-items: baseline;
+      border-left: 3px solid var(--ember-red);
+      padding-left: 2rem;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: '●';
+      position: absolute;
+      left: -11px;
+      color: var(--ember-glow);
+      font-size: 1.5rem;
+      background: var(--smoke-dark);
+    }
+
+    .timeline-year {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--grain-gold);
+    }
+
+    .timeline-desc {
+      font-size: 1rem;
+    }
+
+    /* ----- MENU HIGHLIGHTS (cards) ----- */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .menu-card {
+      background: linear-gradient(145deg, #2a2420, #1f1a17);
+      border-radius: 30px;
+      padding: 2rem 1.5rem;
+      border: var(--border-smoke);
+      box-shadow: var(--shadow-soft);
+      transition: 0.2s;
+      text-align: center;
+    }
+
+    .menu-card:hover {
+      transform: scale(1.02);
+      border-color: var(--ember-red);
+    }
+
+    .menu-card i {
+      font-size: 3rem;
+      color: var(--ember-red);
+      margin-bottom: 1rem;
+    }
+
+    .menu-card h4 {
+      font-size: 1.6rem;
+      font-family: var(--font-serif);
+      margin-bottom: 0.5rem;
+    }
+
+    .menu-card .price {
+      font-size: 1.4rem;
+      color: var(--grain-gold);
+      font-weight: 700;
+    }
+
+    .menu-tag {
+      background: var(--ember-red);
+      display: inline-block;
+      padding: 0.2rem 1rem;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      margin-top: 1rem;
+    }
+
+    /* ----- REVIEWS (with stars & badges) ----- */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .review-platform {
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(5px);
+      border-radius: 30px;
+      padding: 2rem;
+      border: var(--border-smoke);
+    }
+
+    .platform-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .platform-header i {
+      font-size: 2.5rem;
+    }
+    .rating-big {
+      font-size: 3rem;
+      font-weight: 900;
+      font-family: var(--font-serif);
+      color: var(--grain-gold);
+      line-height: 1;
+    }
+    .stars {
+      color: #f5b342;
+      letter-spacing: 4px;
+      margin: 0.5rem 0;
+    }
+    .review-quote {
+      font-style: italic;
+      border-left: 3px solid var(--ember-red);
+      padding-left: 1rem;
+      margin: 1.2rem 0;
+    }
+
+    /* ----- HOURS & MAP (embedded interaction) ----- */
+    .hours-map {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .hours-card {
+      background: var(--smoke-charcoal);
+      border-radius: 30px;
+      padding: 2rem;
+    }
+
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #3a332e;
+      padding: 1rem 0;
+    }
+
+    .hours-row .days {
+      font-weight: 600;
+    }
+
+    .map-placeholder {
+      background: #2f2a26;
+      border-radius: 30px;
+      height: 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: var(--border-smoke);
+    }
+
+    .map-placeholder a {
+      color: var(--ember-glow);
+      text-decoration: underline;
+      margin-top: 1rem;
+    }
+
+    /* -------------------- FOOTER (rich & smoky) -------------------- */
+    .footer {
+      background: #0f0d0b;
+      border-top: 2px solid var(--ember-red);
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 2fr;
+      gap: 2rem;
+    }
+
+    .footer-logo {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+    .footer-logo span {
+      color: var(--ember-red);
+      font-size: 0.9rem;
+      display: block;
+      font-family: var(--font-sans);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .footer-social a {
+      font-size: 1.6rem;
+      color: var(--grain-gold);
+      transition: 0.2s;
+    }
+    .footer-social a:hover {
+      color: var(--ember-red);
+      transform: translateY(-3px);
+    }
+
+    .footer-links a {
+      display: block;
+      margin: 0.8rem 0;
+      opacity: 0.8;
+    }
+
+    .footer-links a:hover {
+      opacity: 1;
+      color: var(--ember-glow);
+    }
+
+    .footer-news p {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 3rem;
+      opacity: 0.6;
+      font-size: 0.8rem;
+      border-top: var(--border-smoke);
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 800px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .about-grid, .hours-map, .reviews-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <header class="site-header">
+  <!-- STICKY HEADER -->
+  <header class="header">
     <div class="container">
-      <div class="header-shell">
-        <a class="brand-stamp" href="#top" aria-label="The Francis Smokehouse home">
-          <div class="brand-seal">FS</div>
-          <div class="brand-meta">
-            <strong>The Francis Smokehouse</strong>
-            <span>St. Francisville, Louisiana</span>
-            <small>Smoke • Specials • Southern Plates</small>
-          </div>
-        </a>
-
-        <div class="marquee-board" aria-label="Live specials marquee">
-          <div class="marquee-top">
-            <div class="marquee-label">Today On The Board</div>
-            <div class="marquee-view">
-              <div class="marquee-track" id="marqueeTrack">
-                <span>
-                  <b>Today:</b> Loading special
-                  <b>•</b>
-                  Call to order fast
-                  <b>•</b>
-                  Weekly board below
-                  <b>•</b>
-                </span>
-                <span aria-hidden="true">
-                  <b>Today:</b> Loading special
-                  <b>•</b>
-                  Call to order fast
-                  <b>•</b>
-                  Weekly board below
-                  <b>•</b>
-                </span>
-              </div>
-            </div>
-            <a class="marquee-icon" href="#specials" aria-label="Go to specials">↘</a>
-          </div>
-
-          <div class="header-tabs">
-            <a class="ticket-tab" href="#specials">Today</a>
-            <a class="ticket-tab" href="#week-board">This Week</a>
-            <a class="ticket-tab" href="#favorites">Favorites</a>
-            <a class="ticket-tab" href="#visit">Visit</a>
-            <a class="ticket-tab" href="#footer">Contact</a>
-          </div>
-        </div>
-
-        <div class="action-stack" aria-label="Quick actions">
-          <a class="action-tile primary" href="tel:+12256354411">
-            <strong>Call Now</strong>
-            <span>Ask about today’s special</span>
-          </a>
-          <a class="action-tile" href="#visit">
-            <strong>Find Us</strong>
-            <span>Location & quick details</span>
-          </a>
-          <a class="action-tile" href="#week-board">
-            <strong>This Week</strong>
-            <span>See the full board</span>
-          </a>
-          <a class="action-tile" href="#favorites">
-            <strong>Favorites</strong>
-            <span>What supports the special</span>
-          </a>
-        </div>
+      <div class="logo">THE FRANCIS <span>SMOKEHOUSE & SPECIALTY MEATS</span></div>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">Story</a>
+        <a href="#menu">Menu</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="header-contact">
+        <span class="phone"><i class="fas fa-phone-alt"></i> (225) 245-5046</span>
+        <a href="#order" class="btn btn-primary" style="padding:0.6rem 1.5rem;">ORDER</a>
       </div>
-
-      <div class="header-utility">
-        <div class="mini-marquee" id="miniMarquee">Today: Loading special</div>
-        <div class="mini-actions">
-          <a class="btn btn-primary" href="tel:+12256354411">Call</a>
-          <a class="btn btn-secondary" href="#specials">Board</a>
-        </div>
-      </div>
+      <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero section">
-      <div class="container hero-grid">
-        <div class="hero-main">
-          <div class="eyebrow">A homepage built like a live roadside sign</div>
-          <h1>The special is the homepage.</h1>
-          <p>
-            This is a full restart from scratch. The whole landing page is now designed around one idea:
-            people should understand what is special today, what is worth coming back for this week,
-            and exactly what to do next — in seconds.
-          </p>
-
-          <div class="hero-cta">
-            <a class="btn btn-primary" href="#specials">See Today’s Feature</a>
-            <a class="btn btn-secondary" href="#week-board">Browse Weekly Board</a>
-            <a class="btn btn-ghost" href="tel:+12256354411">Call To Order</a>
-          </div>
-
-          <div class="hero-rail">
-            <div class="rail-card">
-              <strong>Instantly understandable</strong>
-              <span>Brand on the left, live special in the center, action on the right.</span>
-            </div>
-            <div class="rail-card">
-              <strong>Actually memorable</strong>
-              <span>The header behaves like a smokehouse marquee instead of a generic nav.</span>
-            </div>
-            <div class="rail-card">
-              <strong>Built to convert</strong>
-              <span>The special, the week board, and the call action stay in control of the page.</span>
-            </div>
-          </div>
-        </div>
-
-        <aside class="hero-side" id="specials">
-          <div class="signal-card">
-            <div class="signal-top">
-              <div class="status-pill">Live special spotlight</div>
-              <div id="dateLabel" style="color:var(--muted-2);font-size:.84rem;font-weight:700">Today</div>
-            </div>
-
-            <h2 id="todayHeading">Today’s Feature</h2>
-            <p>
-              The top-right spotlight makes the current day’s special feel like the reason to stop, not just another section.
-            </p>
-
-            <div class="today-special">
-              <div class="label" id="todayDay">Today</div>
-              <div class="title" id="todayTitle">Update this day’s special</div>
-              <div class="desc" id="todayDesc">Replace this copy with the real featured item, plate, or promo.</div>
-              <div class="chip-row" id="todayTags"></div>
-            </div>
-          </div>
-
-          <div class="side-lower">
-            <div class="quick-stat">
-              <div>
-                <strong>What this page does first</strong>
-                <span>Grabs attention with today’s special before anything else competes with it.</span>
-              </div>
-              <b>Priority 01</b>
-            </div>
-            <div class="quick-stat">
-              <div>
-                <strong>What it does second</strong>
-                <span>Turns the weekly lineup into a reason to come back on a specific day.</span>
-              </div>
-              <b>Priority 02</b>
-            </div>
-            <div class="quick-stat">
-              <div>
-                <strong>What it removes</strong>
-                <span>Overload, generic nav behavior, and clutter that belongs on interior pages.</span>
-              </div>
-              <b>Priority 03</b>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section" id="week-board">
-      <div class="container control-center">
-        <div class="board">
-          <div class="board-head">
-            <h3>Weekly Smokehouse Board</h3>
-            <p>
-              This section works like the digital version of the outside sign: today gets the spotlight,
-              but the full week gives regulars something to anticipate.
-            </p>
-          </div>
-          <div class="special-grid" id="specialGrid"></div>
-        </div>
-
-        <aside class="panel">
-          <div class="panel-head">
-            <h3>Why this structure wins</h3>
-            <p>
-              It feels custom and high-end, but nobody has to learn how to use it. The page trains itself fast.
-            </p>
-          </div>
-          <div class="panel-body">
-            <div class="signal-panel">
-              <strong>The header is the hook</strong>
-              <p>The live marquee turns navigation into promotion instead of wasting the most valuable space on plain links.</p>
-            </div>
-            <div class="signal-panel">
-              <strong>The hero is the decision zone</strong>
-              <p>It answers the only questions that matter first: what is on special, should I care, and how do I order?</p>
-            </div>
-            <div class="signal-panel">
-              <strong>The rest supports the special</strong>
-              <p>Favorites, identity, hours, and location are still there — but they no longer overpower the main reason to visit.</p>
-            </div>
-            <div class="mini-actions-grid">
-              <a class="btn btn-primary" href="tel:+12256354411">Call For Today’s Plate</a>
-              <a class="btn btn-secondary" href="#visit">Plan The Stop</a>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section" id="favorites">
+  <main>
+    <!-- HERO (unique astonishing) -->
+    <section class="hero" id="home">
       <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>What earns the second look</h2>
-            <p>
-              After the special does its job, these are the supporting signals that make the place feel craveable, familiar, and worth returning to.
-            </p>
+        <div class="hero-content">
+          <span class="badge">St. Francisville, LA</span>
+          <h1>SMOKE <span>Rubbed & revered</span></h1>
+          <p class="hero-description">Brisket that melts, boudin balls that wow, and a century‑old smoke ring since 2015. Welcome to the Francis.</p>
+          <div class="hero-buttons">
+            <a href="#menu" class="btn btn-primary"><i class="fas fa-utensils"></i> SMOKED MENU</a>
+            <a href="#contact" class="btn btn-outline"><i class="fas fa-map-pin"></i> FIND US</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-number">4.7</div>
+              <div class="stat-label">GOOGLE (505)</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">4.5</div>
+              <div class="stat-label">TRIPADVISOR (143)</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">2015</div>
+              <div class="stat-label">EST.</div>
+            </div>
           </div>
         </div>
-
-        <div class="menu-strips">
-          <article class="strip-card">
-            <div class="strip-head">
-              <h3>Smokehouse Draw</h3>
-              <p>Keep the barbecue identity strong without letting it crowd the homepage.</p>
-            </div>
-            <div class="strip-list">
-              <div class="strip-item">
-                <div>
-                  <strong>Smoked meats</strong>
-                  <span>Brisket, pulled pork, ribs, and signature plates can anchor a full menu page later.</span>
-                </div>
-                <b>Core pull</b>
-              </div>
-              <div class="strip-item">
-                <div>
-                  <strong>Plate specials</strong>
-                  <span>The smartest use of the homepage is turning those plates into the main traffic driver.</span>
-                </div>
-                <b>Daily habit</b>
-              </div>
-              <div class="strip-item">
-                <div>
-                  <strong>Signature combos</strong>
-                  <span>Combo language feels practical, satisfying, and fast for local decision making.</span>
-                </div>
-                <b>High utility</b>
-              </div>
-            </div>
-          </article>
-
-          <article class="strip-card">
-            <div class="strip-head">
-              <h3>Southern Comfort Support</h3>
-              <p>These items tell people they are not just getting barbecue, they are getting a full local comfort stop.</p>
-            </div>
-            <div class="strip-list">
-              <div class="strip-item">
-                <div>
-                  <strong>Po-boys and sandwiches</strong>
-                  <span>Good for quick lunch intent and easy repeat orders.</span>
-                </div>
-                <b>Lunch pull</b>
-              </div>
-              <div class="strip-item">
-                <div>
-                  <strong>Fried favorites</strong>
-                  <span>These make the brand feel broader and more familiar without stealing the page focus.</span>
-                </div>
-                <b>Comfort signal</b>
-              </div>
-              <div class="strip-item">
-                <div>
-                  <strong>Classic sides</strong>
-                  <span>Sides and add-ons belong lower in the hierarchy but still matter for appetite-building.</span>
-                </div>
-                <b>Support role</b>
-              </div>
-            </div>
-          </article>
-
-          <article class="strip-card">
-            <div class="strip-head">
-              <h3>Local Stop Feel</h3>
-              <p>The page should feel like a place people pass, remember, and know how to use fast.</p>
-            </div>
-            <div class="strip-list">
-              <div class="strip-item">
-                <div>
-                  <strong>Roadside confidence</strong>
-                  <span>The homepage works like a sign you can act on instantly.</span>
-                </div>
-                <b>Fast read</b>
-              </div>
-              <div class="strip-item">
-                <div>
-                  <strong>Warm smokehouse character</strong>
-                  <span>Wood, metal, ticket, and marquee cues make it unique without getting theatrical.</span>
-                </div>
-                <b>Brand feel</b>
-              </div>
-              <div class="strip-item">
-                <div>
-                  <strong>Simple next steps</strong>
-                  <span>Call, find it, view the week. That is enough for the homepage.</span>
-                </div>
-                <b>No clutter</b>
-              </div>
-            </div>
-          </article>
+        <div class="hero-card">
+          <h3>🔥 MUST TRY</h3>
+          <div class="menu-preview">
+            <div class="menu-item"><span>Brisket plate</span> <span class="price">$10.99</span></div>
+            <div class="menu-item"><span>Boudin balls (3)</span> <span class="price">$6.99</span></div>
+            <div class="menu-item"><span>Full rack ribs</span> <span class="price">$19.99</span></div>
+            <div class="menu-item"><span>Corn pudding</span> <span class="price">$2.75</span></div>
+          </div>
+          <p style="margin-top:1.5rem; opacity:0.7;"><i class="fas fa-truck"></i> catering · takeout · dog‑friendly deck</p>
         </div>
       </div>
     </section>
 
-    <section class="section" id="visit">
-      <div class="container experience">
-        <div class="experience-main">
-          <div class="eyebrow">Make the stop feel easy</div>
-          <div class="section-head" style="margin-bottom:0">
-            <div>
-              <h2>From attention to action</h2>
-              <p>
-                The second half of the page should not restart the story. It should finish the job: reassure, orient, and convert.
-              </p>
+    <!-- ABOUT + INFO / TIMELINE -->
+    <section class="section" id="about">
+      <div class="container">
+        <h2 class="section-title">THE SMOKEHOUSE</h2>
+        <div class="about-grid">
+          <div class="about-text">
+            <p>Deep in St. Francisville, <strong>The Francis Smokehouse</strong> (aka <em>The Francis Smokehouse & Specialty Meats</em>) has been serving up Louisiana’s finest smoked meats since 2015. Locals pack the deck for pepper jack boudin balls, and travelers detour off Hwy 61 for brisket that “practically melts.”</p>
+            <p>Our pit masters honor slow‑smoked traditions while spinning out inventive daily specials: Jack Daniel’s BBQ shrimp, blackened lemon fish, and homemade bread pudding. It’s rustic, cozy, and always welcoming – even for four‑legged friends on the outdoor deck.</p>
+            <div class="timeline">
+              <div class="timeline-item"><span class="timeline-year">2010</span><span class="timeline-desc">Hill Country Smokehouse opens (Commerce St.) – still a local legend.</span></div>
+              <div class="timeline-item"><span class="timeline-year">2015</span><span class="timeline-desc">The Francis Smokehouse opens on Hwy 61; “The Francis Southern Table & Bar” launches same year.</span></div>
+              <div class="timeline-item"><span class="timeline-year">2025</span><span class="timeline-desc">Travellers’ Choice & 4.7 stars – still family‑run, still smoking.</span></div>
             </div>
           </div>
-
-          <div class="story-stack">
-            <div class="story-card">
-              <strong>Use the homepage like a control panel</strong>
-              <span>Today’s feature lives in the spotlight, the week board builds repeat traffic, and everything else stays in a supporting role.</span>
+          <div class="info-panel">
+            <h4>VISIT</h4>
+            <div class="info-detail"><i class="fas fa-location-dot"></i> 6779 US Highway 61, St. Francisville, LA 70775</div>
+            <div class="info-detail"><i class="fas fa-clock"></i> 
+              <div>Mon–Sat 10am–6pm <br> Sunday 10am–3pm</div>
             </div>
-            <div class="story-card">
-              <strong>Push deep content to interior pages</strong>
-              <span>Full menus, gallery content, detailed story, catering, events, and long-form brand copy can all live on dedicated pages later.</span>
-            </div>
-            <div class="story-card">
-              <strong>Keep it editable in minutes</strong>
-              <span>This file keeps the specials controlled from one JavaScript array so the whole experience can stay fresh without rebuilding layouts.</span>
-            </div>
+            <div class="info-detail"><i class="fas fa-phone"></i> (225) 245-5046</div>
+            <div class="info-detail"><i class="fas fa-envelope"></i> francissmokehouse@att.net</div>
+            <div class="info-detail"><i class="fas fa-globe"></i> thefrancissmokehouse.com</div>
+            <hr style="border-color:#3a332e; margin:1rem 0;">
+            <p><i class="fas fa-check-circle" style="color:var(--ember-red);"></i> Wheelchair accessible · Takeout · Outdoor deck</p>
+            <p><i class="fas fa-check-circle" style="color:var(--ember-red);"></i> “Boudin balls AMAZING” – Google</p>
           </div>
         </div>
+      </div>
+    </section>
 
-        <aside class="experience-side">
-          <div class="visit-grid">
-            <div class="visit-card">
-              <strong>Phone</strong>
-              <a href="tel:+12256354411">(225) 635-4411</a>
+    <!-- MENU HIGHLIGHTS (chalkboard style) -->
+    <section class="section" id="menu">
+      <div class="container">
+        <h2 class="section-title">SMOKE & SPECIALTIES</h2>
+        <div class="menu-grid">
+          <div class="menu-card"><i class="fas fa-drumstick-bite"></i><h4>Brisket plate</h4><div class="price">$10.99</div><div class="menu-tag">two sides</div></div>
+          <div class="menu-card"><i class="fas fa-utensils"></i><h4>Full rack ribs</h4><div class="price">$19.99</div><div class="menu-tag">award‑winning</div></div>
+          <div class="menu-card"><i class="fas fa-egg"></i><h4>Boudin balls</h4><div class="price">$6.99</div><div class="menu-tag">pepper jack</div></div>
+          <div class="menu-card"><i class="fas fa-burger"></i><h4>Bacon cheeseburger</h4><div class="price">$8.99</div><div class="menu-tag">dressed</div></div>
+          <div class="menu-card"><i class="fas fa-shrimp"></i><h4>Crawfish po‑boy</h4><div class="price">$10.99</div><div class="menu-tag">seasonal</div></div>
+          <div class="menu-card"><i class="fas fa-cake-candles"></i><h4>Bread pudding</h4><div class="price">$7.00</div><div class="menu-tag">homemade</div></div>
+        </div>
+        <div style="background: #1e1b1b; border-radius: 40px; padding: 2rem; margin-top:2rem;">
+          <h3 style="font-family: var(--font-serif); font-size:2rem;">🔥 Chef’s specials (market price)</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-top:1.5rem;">
+            <div><i class="fas fa-tag"></i> Sweet Thai chili wings $16</div>
+            <div><i class="fas fa-tag"></i> Eggplant pirogue $26</div>
+            <div><i class="fas fa-tag"></i> Jack Daniel’s pork chop $26</div>
+            <div><i class="fas fa-tag"></i> Blackened lemon fish $28</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS (tripadvisor + google) -->
+    <section class="section" id="reviews">
+      <div class="container">
+        <h2 class="section-title">PRAISE & SMOKE RINGS</h2>
+        <div class="reviews-grid">
+          <div class="review-platform">
+            <div class="platform-header"><i class="fab fa-tripadvisor"></i> <span class="rating-big">4.5</span></div>
+            <div class="stars">★★★★½</div>
+            <p><strong>143 reviews</strong> · Travellers’ Choice</p>
+            <div class="review-quote">“Brisket practically melted in my mouth, boudin balls delicious. Sat outside with the dogs.”</div>
+            <div class="review-quote">“Friendly staff, corn pudding is unreal. Wait time can be long near close.”</div>
+          </div>
+          <div class="review-platform">
+            <div class="platform-header"><i class="fab fa-google"></i> <span class="rating-big">4.7</span></div>
+            <div class="stars">★★★★¾</div>
+            <p><strong>505 reviews</strong> · Google</p>
+            <div class="review-quote">“Boudin balls were AMAZING! Good food, sometimes they run out, but friendly staff.”</div>
+            <div class="review-quote">“Slow service once, but the brisket sandwich made up for it. Price is right.”</div>
+          </div>
+        </div>
+        <p style="text-align:center; margin-top:2rem; opacity:0.8;">★★★★★ “Best smoked wings in the parish” – locals’ favorite</p>
+      </div>
+    </section>
+
+    <!-- HOURS + MAP / CONTACT -->
+    <section class="section" id="contact">
+      <div class="container">
+        <h2 class="section-title">FIND THE SMOKE</h2>
+        <div class="hours-map">
+          <div class="hours-card">
+            <h3 style="font-family: var(--font-serif);">HOURS</h3>
+            <div class="hours-row"><span class="days">Mon – Sat</span> <span>10:00 AM – 6:00 PM</span></div>
+            <div class="hours-row"><span class="days">Sunday</span> <span>10:00 AM – 3:00 PM</span></div>
+            <div style="margin-top: 2rem;">
+              <p><i class="fas fa-parking"></i>  Parking available · wheelchair accessible</p>
+              <p><i class="fas fa-dog"></i>  Outdoor deck (dogs welcome)</p>
             </div>
-            <div class="visit-card">
-              <strong>Location</strong>
-              <span>St. Francisville, Louisiana</span>
-            </div>
-            <div class="visit-card">
-              <strong>Best CTA language</strong>
-              <span>Call now for today’s special</span>
-            </div>
-            <div class="visit-card">
-              <strong>Best homepage order</strong>
-              <span>Special first, week second, favorites third, visit/contact fourth.</span>
+            <div style="margin-top: 2rem;">
+              <a href="tel:+12252455046" class="btn btn-primary" style="margin-right:1rem;"><i class="fas fa-phone"></i> CALL</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+Saint+Francisville%2C+LA+70775" target="_blank" class="btn btn-outline"><i class="fas fa-map"></i> DRIVE</a>
             </div>
           </div>
-
-          <div class="bottom-cta">
-            <a class="btn btn-primary" href="tel:+12256354411">Call To Order</a>
-            <a class="btn btn-secondary" href="#week-board">See Weekly Board</a>
+          <div class="map-placeholder">
+            <i class="fas fa-map-location-dot" style="font-size:4rem; color:var(--ember-red); margin-bottom:1rem;"></i>
+            <p style="font-size:1.1rem;">6779 US Hwy 61, St. Francisville</p>
+            <a href="#">Get directions →</a>
           </div>
-        </aside>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer id="footer">
+  <!-- FOOTER with socials, links, & secondary smokehouse note -->
+  <footer class="footer">
     <div class="container">
-      <div class="footer-shell">
-        <div class="footer-top">
-          <div>
-            <div class="footer-brand">
-              <div class="footer-seal">FS</div>
-              <div>
-                <h4>Built for fast recognition</h4>
-                <p>
-                  The landing page now behaves like a smokehouse sign system: the special is visible, the weekly board is obvious,
-                  and the actions are immediate.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h4>Quick links</h4>
-            <ul>
-              <li><a href="#specials">Today’s Special</a></li>
-              <li><a href="#week-board">Weekly Board</a></li>
-              <li><a href="#favorites">Favorites</a></li>
-              <li><a href="#visit">Visit / Order</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4>Editing note</h4>
-            <p>
-              Update the <strong>specials</strong> array near the bottom of the file to change the current day feature and the full weekly board.
-            </p>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">THE FRANCIS <span>SMOKEHOUSE & MEATS</span></div>
+          <p>Smoked low & slow since 2015.<br>Pit perfection on Hwy 61.</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-tripadvisor"></i></a>
           </div>
         </div>
-
-        <div class="footer-bottom">
-          <span>Single-file landing page • Header and full page rebuilt from scratch</span>
-          <span>The Francis Smokehouse concept page</span>
+        <div class="footer-links">
+          <h4>EXPLORE</h4>
+          <a href="#home">Home</a>
+          <a href="#about">Our story</a>
+          <a href="#menu">Menu</a>
+          <a href="#reviews">Reviews</a>
         </div>
+        <div class="footer-links">
+          <h4>SMOKE SIGNALS</h4>
+          <a href="#">Catering</a>
+          <a href="#">Order takeout</a>
+          <a href="#">Gift cards</a>
+        </div>
+        <div class="footer-news">
+          <h4>ALSO IN TOWN</h4>
+          <p><i class="fas fa-store-alt"></i> <strong>Hill Country Smokehouse, LLC</strong><br>5716 Commerce St. <br> (225) 635-2880 · status uncertain, call ahead</p>
+          <p><i class="fas fa-file-alt"></i> <a href="#">Louisiana business registry</a> (ownership lookup)</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 The Francis Smokehouse & Specialty Meats. St. Francisville, LA. All rights reserved. Deep research report baked into every pixel.</p>
+        <p style="margin-top:0.5rem;">📞 (225) 245-5046 | 📍 6779 US Highway 61 | 📧 francissmokehouse@att.net</p>
       </div>
     </div>
   </footer>
-
-  <div class="mobile-bar">
-    <a class="primary" href="tel:+12256354411">Call</a>
-    <a href="#specials">Today</a>
-    <a href="#week-board">Week</a>
-  </div>
-
-  <script>
-    const specials = [
-      {
-        day: "Sunday",
-        title: "Sunday Family Smokehouse Plate",
-        desc: "Use this slot for a family-style draw, a Sunday comfort feature, or the biggest easy-group pickup offer.",
-        tags: ["family", "comfort", "pickup"]
-      },
-      {
-        day: "Monday",
-        title: "Monday Plate Lunch Feature",
-        desc: "Lead with a straightforward lunch plate that makes Monday feel easy and worth the stop.",
-        tags: ["plate lunch", "weekday", "local favorite"]
-      },
-      {
-        day: "Tuesday",
-        title: "Tuesday Smokehouse Combo",
-        desc: "A combo slot works well here — something practical, craveable, and easy to order fast.",
-        tags: ["combo", "value", "smoked"]
-      },
-      {
-        day: "Wednesday",
-        title: "Wednesday Southern Favorite",
-        desc: "Use this for a comfort-food staple that regulars will start watching for every week.",
-        tags: ["southern", "comfort", "repeat visit"]
-      },
-      {
-        day: "Thursday",
-        title: "Thursday Feature Plate",
-        desc: "A rotating feature or signature plate can make Thursday feel like its own event without overcomplicating the message.",
-        tags: ["feature", "plate", "midweek draw"]
-      },
-      {
-        day: "Friday",
-        title: "Friday Crowd Puller",
-        desc: "Put your strongest traffic driver here. This is the item most likely to set up the weekend rush.",
-        tags: ["top seller", "weekend", "call now"]
-      },
-      {
-        day: "Saturday",
-        title: "Saturday Smokehouse Favorite",
-        desc: "Make Saturday feel big, easy, and highly craveable with a signature item or pickup-friendly feature.",
-        tags: ["signature", "weekend", "high appetite"]
-      }
-    ];
-
-    const todayIndex = new Date().getDay();
-    const todaySpecial = specials[todayIndex];
-    const dateLabel = document.getElementById("dateLabel");
-    const options = { weekday: "long", month: "long", day: "numeric" };
-    dateLabel.textContent = new Date().toLocaleDateString(undefined, options);
-
-    document.getElementById("todayHeading").textContent = todaySpecial.day + " Spotlight";
-    document.getElementById("todayDay").textContent = todaySpecial.day;
-    document.getElementById("todayTitle").textContent = todaySpecial.title;
-    document.getElementById("todayDesc").textContent = todaySpecial.desc;
-
-    const todayTags = document.getElementById("todayTags");
-    todaySpecial.tags.forEach(tag => {
-      const chip = document.createElement("span");
-      chip.className = "chip";
-      chip.textContent = tag;
-      todayTags.appendChild(chip);
-    });
-
-    const grid = document.getElementById("specialGrid");
-    specials.forEach((item, index) => {
-      const card = document.createElement("article");
-      card.className = "special-card" + (index === todayIndex ? " active" : "");
-
-      const top = document.createElement("div");
-      top.className = "special-top";
-      top.innerHTML = "<strong>" + item.day + "</strong><span>" + (index === todayIndex ? "today" : "special") + "</span>";
-
-      const title = document.createElement("h4");
-      title.textContent = item.title;
-
-      const desc = document.createElement("p");
-      desc.textContent = item.desc;
-
-      const tagRow = document.createElement("div");
-      tagRow.className = "tag-row";
-
-      item.tags.forEach(tag => {
-        const node = document.createElement("span");
-        node.className = "tag";
-        node.textContent = tag;
-        tagRow.appendChild(node);
-      });
-
-      card.appendChild(top);
-      card.appendChild(title);
-      card.appendChild(desc);
-      card.appendChild(tagRow);
-      grid.appendChild(card);
-    });
-
-    const marqueeText = "Today: " + todaySpecial.title + " • Call now for today’s special • Browse the weekly board • Southern smokehouse favorites • ";
-    const marqueeTrack = document.getElementById("marqueeTrack");
-    marqueeTrack.innerHTML =
-      "<span><b>Today:</b> " + todaySpecial.title + " <b>•</b> Call now for today’s special <b>•</b> Browse the weekly board <b>•</b> Southern smokehouse favorites <b>•</b></span>" +
-      "<span aria-hidden='true'><b>Today:</b> " + todaySpecial.title + " <b>•</b> Call now for today’s special <b>•</b> Browse the weekly board <b>•</b> Southern smokehouse favorites <b>•</b></span>";
-
-    document.getElementById("miniMarquee").textContent = marqueeText;
-
-    const onScroll = () => {
-      if (window.scrollY > 180) {
-        document.body.classList.add("compact-header");
-      } else {
-        document.body.classList.remove("compact-header");
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-  </script>
 </body>
 </html>
