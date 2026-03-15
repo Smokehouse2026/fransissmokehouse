@@ -282,7 +282,7 @@
       color: var(--grain-gold);
     }
 
-    /* ==================== CIRCULAR NAVIGATION (unique, lightweight) ==================== */
+    /* ==================== CIRCULAR NAVIGATION (refined, centered home, even spacing) ==================== */
     .circ-nav-container {
       position: fixed;
       bottom: 30px;
@@ -319,13 +319,19 @@
       position: absolute;
       bottom: 0;
       right: 0;
-      width: 300px;
-      height: 300px;
+      width: 360px;
+      height: 360px;
       border-radius: 50%;
+      background: transparent;
+      border: 2px solid var(--ember-red); /* visible hollow ring */
+      box-shadow: 0 0 40px rgba(180,75,60,0.5);
       pointer-events: none;
       opacity: 0;
       transform: scale(0.3);
       transition: opacity 0.3s ease, transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .circular-menu.open {
@@ -334,11 +340,8 @@
       pointer-events: all;
     }
 
-    .circular-menu .center-home {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    /* home button perfectly centered */
+    .center-home {
       width: 70px;
       height: 70px;
       background: var(--grain-gold);
@@ -348,9 +351,9 @@
       align-items: center;
       justify-content: center;
       font-weight: 900;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       color: var(--smoke-dark);
-      box-shadow: 0 0 20px black;
+      box-shadow: 0 0 30px var(--ember-red);
       cursor: pointer;
       transition: 0.2s;
       z-index: 1001;
@@ -358,12 +361,14 @@
     .center-home:hover {
       background: var(--ember-red);
       color: white;
+      transform: scale(1.05);
     }
 
+    /* menu items positioned around the circle using transforms */
     .menu-item {
       position: absolute;
-      width: 55px;
-      height: 55px;
+      width: 60px;
+      height: 60px;
       background: var(--smoke-charcoal);
       border: 2px solid var(--ember-red);
       border-radius: 50%;
@@ -376,24 +381,28 @@
       text-transform: uppercase;
       transition: all 0.2s;
       cursor: pointer;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
-      transform-origin: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.7);
+      /* start at center then translate out */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-130px) rotate(calc(var(--angle) * -1deg));
     }
 
     .menu-item:hover {
       background: var(--ember-red);
       color: black;
       border-color: var(--grain-gold);
-      transform: scale(1.1);
+      transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-140px) rotate(calc(var(--angle) * -1deg));
+      width: 65px;
+      height: 65px;
     }
 
-    /* positions around the circle (using trigonometry approximation) */
-    .menu-item[data-index="0"] { bottom: 80px; right: 10px; }               /* Menu */
-    .menu-item[data-index="1"] { bottom: 130px; right: 60px; }             /* About */
-    .menu-item[data-index="2"] { bottom: 140px; right: 130px; }            /* Reviews */
-    .menu-item[data-index="3"] { bottom: 110px; right: 190px; }            /* Contact */
-    .menu-item[data-index="4"] { bottom: 50px; right: 210px; }             /* Order */
-    .menu-item[data-index="5"] { bottom: -10px; right: 180px; }            /* Catering */
+    /* style like header buttons */
+    .menu-item {
+      font-family: var(--font-sans);
+      letter-spacing: 1px;
+      backdrop-filter: blur(4px);
+    }
 
     /* ========== REST OF PAGE (standard sections) ========== */
     .section {
@@ -511,19 +520,20 @@
     </div>
   </header>
 
-  <!-- CIRCULAR NAVIGATION (unique, non-laggy) -->
+  <!-- CIRCULAR NAVIGATION (refined, with visible hollow ring and centered home) -->
   <div class="circ-nav-container">
     <div class="nav-toggle" id="navToggle">
       <i class="fas fa-bars"></i>
     </div>
     <div class="circular-menu" id="circularMenu">
       <div class="center-home" id="homeCenter"><i class="fas fa-home"></i></div>
-      <div class="menu-item" data-index="0" data-link="#menu">Menu</div>
-      <div class="menu-item" data-index="1" data-link="#about">About</div>
-      <div class="menu-item" data-index="2" data-link="#reviews">Reviews</div>
-      <div class="menu-item" data-index="3" data-link="#contact">Contact</div>
-      <div class="menu-item" data-index="4" data-link="#order">Order</div>
-      <div class="menu-item" data-index="5" data-link="#catering">Cater</div>
+      <!-- menu items with custom angles for even spacing -->
+      <div class="menu-item" style="--angle: 0;" data-link="#menu">Menu</div>
+      <div class="menu-item" style="--angle: 60;" data-link="#about">About</div>
+      <div class="menu-item" style="--angle: 120;" data-link="#reviews">Reviews</div>
+      <div class="menu-item" style="--angle: 180;" data-link="#contact">Contact</div>
+      <div class="menu-item" style="--angle: 240;" data-link="#order">Order</div>
+      <div class="menu-item" style="--angle: 300;" data-link="#cater">Cater</div>
     </div>
   </div>
 
@@ -628,26 +638,23 @@
       menu.classList.toggle('open');
     });
 
-    // Close menu when clicking on any menu item (optional)
+    // Close menu when clicking on any menu item and scroll
     const menuItems = document.querySelectorAll('.menu-item, .center-home');
     menuItems.forEach(item => {
       item.addEventListener('click', (e) => {
-        // if it's a menu link, you could navigate or just close
         menu.classList.remove('open');
-        // optionally scroll to section based on data-link
         const link = item.getAttribute('data-link');
         if (link) {
           const target = document.querySelector(link);
           if (target) target.scrollIntoView({ behavior: 'smooth' });
         }
-        // home center just scrolls to top
         if (item.id === 'homeCenter') {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       });
     });
 
-    // Close when clicking outside (optional)
+    // Close when clicking outside
     document.addEventListener('click', (e) => {
       if (!toggle.contains(e.target) && !menu.contains(e.target)) {
         menu.classList.remove('open');
