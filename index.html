@@ -51,29 +51,6 @@
       padding: 0 2rem;
     }
 
-    .section-title {
-      font-family: var(--font-serif);
-      font-size: 3rem;
-      font-weight: 900;
-      letter-spacing: 2px;
-      margin-bottom: 2rem;
-      position: relative;
-      display: inline-block;
-      text-transform: uppercase;
-      color: var(--grain-light);
-    }
-
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -12px;
-      left: 0;
-      width: 80px;
-      height: 4px;
-      background: linear-gradient(90deg, var(--ember-red), var(--ember-glow));
-      border-radius: 4px;
-    }
-
     .btn {
       display: inline-block;
       padding: 1rem 2.5rem;
@@ -332,34 +309,34 @@
       text-transform: uppercase;
     }
 
-    /* left-center button - VERTICAL text (top-to-bottom) */
+    /* left-center button - VERTICAL text */
     .nav-btn.left-center {
       left: 30px;
       top: 50%;
       transform: translateY(-50%);
-      flex-direction: column;  /* stack icon above text */
-      padding: 1rem 0.5rem;    /* narrow width, tall height */
+      flex-direction: column;
+      padding: 1rem 0.5rem;
       gap: 8px;
     }
 
     .nav-btn.left-center .btn-text {
-      writing-mode: vertical-rl;       /* text flows top to bottom */
-      text-orientation: upright;       /* characters remain upright (not sideways) */
+      writing-mode: vertical-rl;
+      text-orientation: upright;
       margin: 0;
       line-height: 1.2;
     }
 
     .nav-btn.left-center .btn-text .main {
       font-size: 0.9rem;
-      letter-spacing: normal;    /* no extra spacing for vertical */
+      letter-spacing: normal;
     }
 
     .nav-btn.left-center .btn-text .sub {
       font-size: 0.6rem;
-      margin-top: 4px;           /* small gap between main and sub */
+      margin-top: 4px;
     }
 
-    /* bottom-center button - remains HORIZONTAL */
+    /* bottom-center button - HORIZONTAL */
     .nav-btn.bottom-center {
       bottom: 30px;
       left: 50%;
@@ -389,7 +366,7 @@
       }
     }
 
-    /* ==================== CIRCULAR MENU (centered on screen) ==================== */
+    /* ==================== CIRCULAR MENU (centered overlay) ==================== */
     .circ-menu-overlay {
       position: fixed;
       top: 0;
@@ -511,107 +488,160 @@
       }
     }
 
-    /* ========== REST OF PAGE ========== */
-    .section {
-      padding: 6rem 0;
-      border-bottom: var(--border-smoke);
-    }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 3rem;
-    }
-    .info-panel {
-      background: var(--smoke-charcoal);
-      border-radius: 24px;
-      padding: 2rem;
-      border: var(--border-smoke);
-    }
-    .timeline-item {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 1.5rem;
-      border-left: 3px solid var(--ember-red);
-      padding-left: 2rem;
-      margin: 1rem 0;
-    }
-    .timeline-year {
-      font-family: var(--font-serif);
-      font-size: 1.8rem;
-      color: var(--grain-gold);
-    }
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-    .menu-card {
-      background: linear-gradient(145deg, #2a2420, #1f1a17);
-      border-radius: 30px;
-      padding: 2rem;
+    /* ==================== LANDING PAGE CONTENT (minimal, atmospheric) ==================== */
+    .welcome-section {
+      padding: 8rem 0;
+      background: linear-gradient(180deg, var(--smoke-dark) 0%, #1a1412 100%);
       text-align: center;
     }
-    .reviews-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-    }
-    .review-platform {
-      background: rgba(0,0,0,0.35);
-      backdrop-filter: blur(5px);
-      border-radius: 30px;
-      padding: 2rem;
-    }
-    .hours-map {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-    .footer {
-      background: #0f0d0b;
-      border-top: 2px solid var(--ember-red);
-      padding: 4rem 0 2rem;
-    }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 2fr;
-      gap: 2rem;
+
+    .welcome-title {
+      font-family: var(--font-serif);
+      font-size: 4rem;
+      font-weight: 900;
+      color: var(--grain-light);
+      margin-bottom: 1.5rem;
     }
 
-    /* Responsive */
-    @media (max-width: 1000px) {
-      .hero-title {
-        font-size: 5rem;
-      }
-      .hero-title .line2 {
-        font-size: 2.5rem;
-        letter-spacing: 8px;
-      }
-      .hero-title .line3 {
-        font-size: 1.5rem;
-      }
-      .hero-card-3d {
-        flex-basis: 300px;
-        margin-right: 2rem;
-      }
+    .welcome-title span {
+      color: var(--ember-red);
+    }
+
+    .welcome-sub {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      opacity: 0.8;
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .feature-card {
+      background: rgba(30,27,27,0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(199,147,105,0.2);
+      border-radius: 30px;
+      padding: 2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--ember-red);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      color: var(--ember-red);
+      margin-bottom: 1rem;
+    }
+
+    .feature-name {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-desc {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+
+    .feature-price {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--grain-gold);
+    }
+
+    .ambiance-section {
+      position: relative;
+      height: 500px;
+      background: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop') center/cover fixed;
+      isolation: isolate;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ambiance-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1;
+    }
+
+    .ambiance-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .ambiance-quote {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      max-width: 800px;
+      margin: 0 auto 2rem;
+      font-style: italic;
+      color: var(--grain-light);
+    }
+
+    .footer-minimal {
+      padding: 3rem 0;
+      background: #0f0d0b;
+      text-align: center;
+      border-top: 1px solid var(--ember-red);
+    }
+
+    .footer-minimal .social {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin: 1.5rem 0;
+      font-size: 1.5rem;
+    }
+
+    .footer-minimal .social a {
+      color: var(--grain-gold);
+      transition: 0.2s;
+    }
+
+    .footer-minimal .social a:hover {
+      color: var(--ember-red);
+      transform: scale(1.1);
+    }
+
+    .footer-minimal p {
+      opacity: 0.7;
+      font-size: 0.9rem;
     }
 
     @media (max-width: 800px) {
-      .header-content {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 1rem;
+      .featured-grid {
+        grid-template-columns: 1fr;
       }
-      .hero-text-block {
-        padding-left: 0;
-        margin-bottom: 2rem;
+      .welcome-title {
+        font-size: 3rem;
+      }
+      .ambiance-quote {
+        font-size: 1.8rem;
+        padding: 0 1rem;
+      }
+      .hero-title {
+        font-size: 4rem;
       }
       .hero-card-3d {
-        margin-right: 0;
-        width: 90%;
-        max-width: 380px;
+        display: none; /* hide card on smaller screens for simplicity */
+      }
+      .hero-text-block {
+        padding-left: 2rem;
+        text-align: center;
       }
       .header-stats {
         bottom: 1rem;
@@ -620,43 +650,6 @@
         gap: 1.5rem;
         padding: 0.8rem 1.5rem;
         font-size: 0.8rem;
-      }
-      .about-grid, .reviews-grid, .hours-map, .footer-grid {
-        grid-template-columns: 1fr;
-      }
-      .timeline-item {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-        padding-left: 1rem;
-      }
-      .footer-grid {
-        gap: 2rem;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .section-title {
-        font-size: 2.2rem;
-      }
-      .hero-title {
-        font-size: 3.5rem;
-      }
-      .hero-title .line2 {
-        font-size: 1.8rem;
-        letter-spacing: 5px;
-      }
-      .hero-title .line3 {
-        font-size: 1.2rem;
-        letter-spacing: 4px;
-      }
-      .header-top-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 1rem;
-      }
-      .header-top-right {
-        width: 100%;
-        justify-content: space-between;
       }
     }
   </style>
@@ -668,8 +661,8 @@
       <div class="logo-3d">THE FRANCIS <span>SMOKEHOUSE & MEATS</span></div>
       <div class="header-top-right">
         <span class="phone"><i class="fas fa-phone-alt"></i> (225) 245-5046</span>
-        <a href="#menu" class="btn btn-primary">SMOKE MENU</a>
-        <a href="#contact" class="btn btn-outline">FIND US</a>
+        <a href="#" class="btn btn-primary">SMOKE MENU</a>
+        <a href="#" class="btn btn-outline">FIND US</a>
       </div>
     </div>
 
@@ -705,7 +698,7 @@
     </div>
   </header>
 
-  <!-- TWO NAVIGATION BUTTONS: left (vertical text) and bottom (horizontal) -->
+  <!-- TWO NAVIGATION BUTTONS -->
   <div class="nav-btn left-center" id="navBtnLeft">
     <i class="fas fa-compass btn-icon"></i>
     <div class="btn-text">
@@ -722,7 +715,7 @@
     </div>
   </div>
 
-  <!-- CIRCULAR MENU (centered overlay) -->
+  <!-- CIRCULAR MENU (overlay) -->
   <div class="circ-menu-overlay" id="circMenuOverlay">
     <div class="circular-menu">
       <div class="center-home" id="homeCenter"><i class="fas fa-home"></i></div>
@@ -735,111 +728,69 @@
     </div>
   </div>
 
-  <!-- MAIN CONTENT -->
+  <!-- LANDING PAGE MAIN CONTENT (minimal, atmospheric) -->
   <main>
-    <section class="section" id="about">
+    <section class="welcome-section">
       <div class="container">
-        <h2 class="section-title">THE SMOKEHOUSE</h2>
-        <div class="about-grid">
-          <div class="about-text">
-            <p>Deep in St. Francisville, <strong>The Francis Smokehouse</strong> (aka <em>The Francis Smokehouse & Specialty Meats</em>) has been serving up Louisiana’s finest smoked meats since 2015. Locals pack the deck for pepper jack boudin balls, and travelers detour off Hwy 61 for brisket that “practically melts.”</p>
-            <p>Our pit masters honor slow‑smoked traditions while spinning out inventive daily specials: Jack Daniel’s BBQ shrimp, blackened lemon fish, and homemade bread pudding. It’s rustic, cozy, and always welcoming – even for four‑legged friends on the outdoor deck.</p>
-            <div class="timeline">
-              <div class="timeline-item"><span class="timeline-year">2010</span><span>Hill Country Smokehouse opens (Commerce St.) – still a local legend.</span></div>
-              <div class="timeline-item"><span class="timeline-year">2015</span><span>The Francis Smokehouse opens on Hwy 61; “The Francis Southern Table & Bar” launches same year.</span></div>
-              <div class="timeline-item"><span class="timeline-year">2025</span><span>Travellers’ Choice & 4.7 stars – still family‑run, still smoking.</span></div>
-            </div>
+        <h2 class="welcome-title">WHERE <span>SMOKE</span> TELLS A STORY</h2>
+        <p class="welcome-sub">Louisiana tradition, slow-smoked over hardwood. Come for the flavor, stay for the soul.</p>
+        
+        <div class="featured-grid">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-drumstick-bite"></i></div>
+            <h3 class="feature-name">Brisket</h3>
+            <p class="feature-desc">12 hours over post oak, rubbed with secret spices.</p>
+            <div class="feature-price">$10.99</div>
           </div>
-          <div class="info-panel">
-            <h4>VISIT</h4>
-            <div><i class="fas fa-location-dot"></i> 6779 US Highway 61, St. Francisville, LA 70775</div>
-            <div style="margin:1rem 0"><i class="fas fa-clock"></i> Mon–Sat 10am–6pm / Sun 10am–3pm</div>
-            <div><i class="fas fa-phone"></i> (225) 245-5046</div>
-            <div><i class="fas fa-envelope"></i> francissmokehouse@att.net</div>
-            <hr style="border-color:#3a332e; margin:1rem 0;">
-            <p><i class="fas fa-check-circle" style="color:var(--ember-red);"></i> Wheelchair accessible · Takeout · Outdoor deck</p>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-egg"></i></div>
+            <h3 class="feature-name">Boudin Balls</h3>
+            <p class="feature-desc">Crispy, creamy, with a kick of pepper jack.</p>
+            <div class="feature-price">$6.99</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-utensils"></i></div>
+            <h3 class="feature-name">Full Rack Ribs</h3>
+            <p class="feature-desc">Fall-off-the-bone, glazed with bourbon molasses.</p>
+            <div class="feature-price">$19.99</div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="menu">
-      <div class="container">
-        <h2 class="section-title">SMOKE & SPECIALTIES</h2>
-        <div class="menu-grid">
-          <div class="menu-card"><i class="fas fa-drumstick-bite"></i><h4>Brisket plate</h4><div class="price">$10.99</div></div>
-          <div class="menu-card"><i class="fas fa-utensils"></i><h4>Full rack ribs</h4><div class="price">$19.99</div></div>
-          <div class="menu-card"><i class="fas fa-egg"></i><h4>Boudin balls</h4><div class="price">$6.99</div></div>
-          <div class="menu-card"><i class="fas fa-burger"></i><h4>Bacon cheeseburger</h4><div class="price">$8.99</div></div>
-          <div class="menu-card"><i class="fas fa-shrimp"></i><h4>Crawfish po‑boy</h4><div class="price">$10.99</div></div>
-          <div class="menu-card"><i class="fas fa-cake-candles"></i><h4>Bread pudding</h4><div class="price">$7.00</div></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="reviews">
-      <div class="container">
-        <h2 class="section-title">PRAISE & SMOKE RINGS</h2>
-        <div class="reviews-grid">
-          <div class="review-platform">
-            <div><i class="fab fa-tripadvisor"></i> <strong>4.5</strong> (143 reviews · Travellers’ Choice)</div>
-            <div class="review-quote">“Brisket practically melted in my mouth, boudin balls delicious. Sat outside with the dogs.”</div>
-          </div>
-          <div class="review-platform">
-            <div><i class="fab fa-google"></i> <strong>4.7</strong> (505 reviews)</div>
-            <div class="review-quote">“Boudin balls were AMAZING! Good food, sometimes they run out, but friendly staff.”</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="contact">
-      <div class="container">
-        <h2 class="section-title">FIND THE SMOKE</h2>
-        <div class="hours-map">
-          <div class="hours-card">
-            <h3>HOURS</h3>
-            <div>Mon–Sat 10am–6pm</div>
-            <div>Sunday 10am–3pm</div>
-            <div style="margin-top:2rem;"><a href="tel:+12252455046" class="btn btn-primary">CALL</a> <a href="#" class="btn btn-outline">DIRECTIONS</a></div>
-          </div>
-          <div class="map-placeholder" style="background:#2f2a26; border-radius:30px; padding:2rem; text-align:center;">
-            <i class="fas fa-map-location-dot" style="font-size:4rem;"></i>
-            <p>6779 US Hwy 61, St. Francisville</p>
-          </div>
-        </div>
+    <section class="ambiance-section">
+      <div class="ambiance-content">
+        <div class="ambiance-quote">“A hidden gem where the smoke lingers and the welcome is warm.”</div>
+        <a href="#" class="btn btn-primary">DISCOVER OUR STORY</a>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
+  <footer class="footer-minimal">
     <div class="container">
-      <div class="footer-grid">
-        <div>
-          <div class="footer-logo">THE FRANCIS <span>SMOKEHOUSE</span></div>
-          <p>Smoked low & slow since 2015.</p>
-        </div>
-        <div><a href="#">Home</a><a href="#">Menu</a></div>
-        <div><a href="#">Contact</a><a href="#">Catering</a></div>
-        <div><p>© 2025 The Francis Smokehouse</p></div>
+      <div class="logo-3d" style="font-size: 1.8rem;">THE FRANCIS</div>
+      <div class="social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-tripadvisor"></i></a>
       </div>
+      <p>6779 US Highway 61, St. Francisville, LA 70775</p>
+      <p>© 2025 The Francis Smokehouse. All rights reserved.</p>
     </div>
   </footer>
 
   <script>
-    // Get elements
+    // Circular menu functionality
     const overlay = document.getElementById('circMenuOverlay');
     const leftBtn = document.getElementById('navBtnLeft');
     const bottomBtn = document.getElementById('navBtnBottom');
     const homeCenter = document.getElementById('homeCenter');
     const menuItems = document.querySelectorAll('.menu-item');
 
-    // Function to open/close menu
     function toggleMenu() {
       overlay.classList.toggle('open');
     }
 
-    // Open menu when either button is clicked
     leftBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       toggleMenu();
@@ -850,32 +801,25 @@
       toggleMenu();
     });
 
-    // Close menu when clicking on overlay background (but not on the menu itself)
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) {
         overlay.classList.remove('open');
       }
     });
 
-    // Handle home button click
     homeCenter.addEventListener('click', () => {
       overlay.classList.remove('open');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Handle menu item clicks
     menuItems.forEach(item => {
       item.addEventListener('click', (e) => {
         overlay.classList.remove('open');
-        const link = item.getAttribute('data-link');
-        if (link) {
-          const target = document.querySelector(link);
-          if (target) target.scrollIntoView({ behavior: 'smooth' });
-        }
+        // For demo, just scroll to top or you could navigate
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
 
-    // Prevent clicks inside menu from closing overlay
     document.querySelector('.circular-menu').addEventListener('click', (e) => {
       e.stopPropagation();
     });
