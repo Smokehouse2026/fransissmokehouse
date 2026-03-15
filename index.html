@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>The Francis Smokehouse · St. Francisville, LA</title>
+  <title>The Francis Smokehouse · immersive</title>
   <!-- Font Awesome 6 (free) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts: strong serif + clean sans -->
+  <!-- Google Fonts: bold serif + clean sans -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* -------------------- RESET & VARIABLES -------------------- */
+    /* -------------------- RESET & GLOBAL -------------------- */
     * {
       margin: 0;
       padding: 0;
@@ -26,9 +26,6 @@
       --paper-cream: #f8f1e4;
       --font-serif: 'Playfair Display', serif;
       --font-sans: 'Montserrat', sans-serif;
-      --shadow-heavy: 0 20px 35px -8px rgba(0,0,0,0.7);
-      --shadow-soft: 0 10px 25px -5px rgba(0,0,0,0.4);
-      --border-smoke: 1px solid rgba(255,255,240,0.1);
     }
 
     body {
@@ -36,17 +33,25 @@
       color: var(--paper-cream);
       font-family: var(--font-sans);
       line-height: 1.5;
+      overflow-x: hidden;
       scroll-behavior: smooth;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
+    /* hide scrollbars but keep functionality (optional) */
+    body::-webkit-scrollbar {
+      width: 6px;
+    }
+    body::-webkit-scrollbar-track {
+      background: var(--smoke-dark);
+    }
+    body::-webkit-scrollbar-thumb {
+      background: var(--ember-red);
+      border-radius: 10px;
     }
 
     /* -------------------- UTILITY CLASSES -------------------- */
     .container {
-      max-width: 1300px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 0 2rem;
     }
@@ -65,6 +70,7 @@
       border: 2px solid var(--ember-red);
       color: var(--paper-cream);
       font-size: 0.9rem;
+      backdrop-filter: blur(5px);
     }
 
     .btn-primary {
@@ -78,191 +84,122 @@
       color: var(--ember-glow);
       border-color: var(--ember-glow);
       transform: translateY(-5px);
-      box-shadow: var(--shadow-soft);
+      box-shadow: 0 0 30px rgba(180,75,60,0.5);
     }
 
     .btn-outline:hover {
       background: var(--ember-red);
       color: var(--smoke-dark);
       transform: translateY(-5px);
-      box-shadow: var(--shadow-soft);
+      box-shadow: 0 0 30px rgba(180,75,60,0.5);
     }
 
-    /* ==================== ASTONISHING HEADER ==================== */
-    .astonishing-header {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      min-height: 700px;
-      background: #0a0807 url('https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=2070&auto=format&fit=crop') center/cover fixed;
-      isolation: isolate;
-    }
-
-    .astonishing-header::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 30% 50%, rgba(180,75,60,0.2) 0%, rgba(10,8,7,0.95) 90%);
-      z-index: 1;
-    }
-
-    .header-top-bar {
-      position: absolute;
+    /* ==================== BACKGROUND SMOKE CANVAS (lightweight) ==================== */
+    #smoke-canvas {
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      z-index: 20;
-      padding: 1.5rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(200,140,100,0.25);
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .logo-3d {
-      font-family: var(--font-serif);
-      font-size: 2.2rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      line-height: 1;
-      text-shadow: 0 0 15px var(--ember-red);
-      background: linear-gradient(135deg, #fff0e0, #c9a887);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .logo-3d span {
-      display: block;
-      font-size: 0.8rem;
-      font-family: var(--font-sans);
-      letter-spacing: 6px;
-      color: var(--grain-gold);
-    }
-
-    .header-top-right {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .header-top-right .phone {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--grain-light);
-    }
-
-    .header-content {
-      position: relative;
-      z-index: 10;
       height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    /* ==================== IMMERSIVE HEADER (3D LAYERS) ==================== */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 800px;
       display: flex;
       align-items: center;
-      padding-top: 80px;
+      justify-content: center;
+      perspective: 2000px;
+      transform-style: preserve-3d;
     }
 
-    .hero-text-block {
-      flex: 1;
-      padding-left: 4rem;
+    .hero-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
     }
 
-    .hero-label {
-      display: inline-block;
-      background: rgba(180,75,60,0.3);
-      backdrop-filter: blur(5px);
-      border: 1px solid rgba(255,200,150,0.3);
-      padding: 0.5rem 2rem;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      letter-spacing: 4px;
-      margin-bottom: 2rem;
-      text-transform: uppercase;
+    .hero-layer-1 {
+      transform: translateZ(-200px) scale(1.2);
+      background: radial-gradient(circle at 30% 50%, rgba(180,75,60,0.2) 0%, transparent 60%);
+      filter: blur(30px);
+    }
+
+    .hero-layer-2 {
+      transform: translateZ(-100px) scale(1.1);
+    }
+
+    .hero-layer-3 {
+      transform: translateZ(0px) scale(1);
+    }
+
+    .hero-layer-4 {
+      transform: translateZ(100px) scale(0.9);
     }
 
     .hero-title {
       font-family: var(--font-serif);
-      font-size: 7rem;
+      font-size: 12vw;
       font-weight: 900;
-      line-height: 0.9;
       text-transform: uppercase;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7));
+      color: transparent;
+      -webkit-text-stroke: 2px var(--ember-red);
+      text-shadow: 0 0 50px rgba(180,75,60,0.5);
+      letter-spacing: 0.1em;
+      position: relative;
+      animation: drift 10s infinite alternate ease-in-out;
     }
-    .hero-title .line1 {
+
+    .hero-title span {
       display: block;
-      text-shadow: 0 0 30px var(--ember-red);
-      background: linear-gradient(135deg, #ffe5cc, #d9b382);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero-title .line2 {
-      display: block;
-      font-size: 3.5rem;
+      font-size: 4vw;
       font-weight: 300;
-      letter-spacing: 12px;
-      color: rgba(255,220,170,0.9);
-    }
-    .hero-title .line3 {
-      display: block;
-      font-size: 2rem;
-      font-weight: 400;
-      letter-spacing: 8px;
       color: var(--grain-gold);
-      margin-top: 0.5rem;
+      -webkit-text-stroke: 0;
+      text-shadow: 0 0 30px var(--ember-red);
+      letter-spacing: 0.3em;
     }
 
-    .hero-card-3d {
-      flex: 0 0 380px;
-      margin-right: 4rem;
+    @keyframes drift {
+      0% { transform: translateX(-2%) translateY(-1%) rotateX(2deg) rotateY(1deg); }
+      100% { transform: translateX(2%) translateY(1%) rotateX(-2deg) rotateY(-1deg); }
+    }
+
+    .floating-card {
+      position: absolute;
+      bottom: 20%;
+      right: 10%;
+      width: 300px;
+      padding: 2rem;
       background: rgba(30,27,27,0.7);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(15px);
       border: 1px solid rgba(199,147,105,0.3);
-      border-radius: 40px;
-      padding: 2.2rem;
+      border-radius: 30px;
+      transform: translateZ(80px) rotateY(5deg) rotateX(2deg);
       box-shadow: 0 30px 50px rgba(0,0,0,0.7);
-      transform: perspective(1200px) rotateY(-5deg) rotateX(2deg);
-      transition: transform 0.3s;
-    }
-    .hero-card-3d:hover {
-      transform: perspective(1200px) rotateY(-3deg) rotateX(1deg) translateY(-5px);
+      animation: float 6s infinite alternate;
     }
 
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px dashed var(--grain-gold);
-      padding-bottom: 1rem;
+    @keyframes float {
+      0% { transform: translateZ(80px) rotateY(5deg) rotateX(2deg) translateY(0); }
+      100% { transform: translateZ(80px) rotateY(5deg) rotateX(2deg) translateY(-20px); }
     }
-    .card-item {
-      display: flex;
-      justify-content: space-between;
-      margin: 1.2rem 0;
-    }
-    .card-price {
+
+    .floating-card .price {
       color: var(--grain-gold);
       font-weight: 700;
     }
 
-    .header-stats {
-      position: absolute;
-      bottom: 3rem;
-      left: 2rem;
-      z-index: 15;
-      display: flex;
-      gap: 3rem;
-      background: rgba(0,0,0,0.35);
-      backdrop-filter: blur(8px);
-      padding: 1rem 2.5rem;
-      border-radius: 60px;
-    }
-    .stat .number {
-      font-size: 2rem;
-      font-weight: 900;
-      color: var(--grain-gold);
-    }
-
-    /* ==================== NAVIGATION BUTTONS ==================== */
+    /* ==================== NAVIGATION BUTTONS (same as before) ==================== */
     .nav-btn {
       position: fixed;
       z-index: 1000;
@@ -309,7 +246,6 @@
       text-transform: uppercase;
     }
 
-    /* left-center button - VERTICAL text */
     .nav-btn.left-center {
       left: 30px;
       top: 50%;
@@ -336,34 +272,12 @@
       margin-top: 4px;
     }
 
-    /* bottom-center button - HORIZONTAL */
     .nav-btn.bottom-center {
       bottom: 30px;
       left: 50%;
       transform: translateX(-50%);
       flex-direction: row;
       padding: 0.8rem 1.8rem;
-    }
-
-    /* adjust for mobile */
-    @media (max-width: 600px) {
-      .nav-btn.left-center {
-        left: 10px;
-        padding: 0.8rem 0.3rem;
-      }
-      .nav-btn.left-center .btn-icon {
-        font-size: 1.5rem;
-      }
-      .nav-btn.left-center .btn-text .main {
-        font-size: 0.8rem;
-      }
-      .nav-btn.left-center .btn-text .sub {
-        font-size: 0.5rem;
-      }
-      .nav-btn.bottom-center {
-        bottom: 20px;
-        padding: 0.6rem 1.2rem;
-      }
     }
 
     /* ==================== CIRCULAR MENU (centered overlay) ==================== */
@@ -378,9 +292,10 @@
       align-items: center;
       justify-content: center;
       pointer-events: none;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.7);
       opacity: 0;
       transition: opacity 0.3s ease;
+      backdrop-filter: blur(5px);
     }
 
     .circ-menu-overlay.open {
@@ -464,241 +379,231 @@
       height: 65px;
     }
 
-    /* smaller on mobile */
-    @media (max-width: 600px) {
-      .circular-menu {
-        width: 280px;
-        height: 280px;
-      }
-      .menu-item {
-        width: 50px;
-        height: 50px;
-        font-size: 0.7rem;
-        transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-100px) rotate(calc(var(--angle) * -1deg));
-      }
-      .menu-item:hover {
-        transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-110px) rotate(calc(var(--angle) * -1deg));
-        width: 55px;
-        height: 55px;
-      }
-      .center-home {
-        width: 60px;
-        height: 60px;
-        font-size: 1.2rem;
-      }
-    }
-
-    /* ==================== LANDING PAGE CONTENT (minimal, atmospheric) ==================== */
-    .welcome-section {
+    /* ==================== MAIN CONTENT (mind-blowing sections) ==================== */
+    .section {
+      position: relative;
       padding: 8rem 0;
-      background: linear-gradient(180deg, var(--smoke-dark) 0%, #1a1412 100%);
+      z-index: 1;
+    }
+
+    /* ---- SMOKE RING QUOTE ---- */
+    .quote-ring {
       text-align: center;
-    }
-
-    .welcome-title {
+      font-size: 3rem;
       font-family: var(--font-serif);
-      font-size: 4rem;
       font-weight: 900;
-      color: var(--grain-light);
-      margin-bottom: 1.5rem;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--ember-red);
+      text-shadow: 0 0 80px rgba(180,75,60,0.3);
+      position: relative;
     }
 
-    .welcome-title span {
-      color: var(--ember-red);
-    }
-
-    .welcome-sub {
+    .quote-ring span {
+      display: block;
       font-size: 1.2rem;
-      max-width: 700px;
-      margin: 0 auto 3rem;
-      opacity: 0.8;
+      color: var(--grain-light);
+      -webkit-text-stroke: 0;
+      margin-top: 2rem;
+      letter-spacing: 8px;
     }
 
-    .featured-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      margin-top: 4rem;
+    /* ---- 3D MENU CAROUSEL (rotating dishes) ---- */
+    .carousel-3d {
+      position: relative;
+      height: 500px;
+      margin: 4rem 0;
+      transform-style: preserve-3d;
+      animation: rotateCarousel 30s infinite linear;
     }
 
-    .feature-card {
-      background: rgba(30,27,27,0.6);
+    @keyframes rotateCarousel {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+
+    .carousel-item {
+      position: absolute;
+      width: 250px;
+      height: 350px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotateY(calc(var(--i) * 60deg)) translateZ(400px);
+      background: rgba(30,27,27,0.8);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(199,147,105,0.2);
+      border: 1px solid var(--ember-red);
       border-radius: 30px;
       padding: 2rem;
-      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0 0 50px rgba(0,0,0,0.5);
+      backface-visibility: visible;
     }
 
-    .feature-card:hover {
-      transform: translateY(-10px);
-      border-color: var(--ember-red);
-    }
-
-    .feature-icon {
+    .carousel-item i {
       font-size: 3rem;
       color: var(--ember-red);
       margin-bottom: 1rem;
     }
 
-    .feature-name {
-      font-family: var(--font-serif);
+    .carousel-item h3 {
       font-size: 1.8rem;
+      font-family: var(--font-serif);
       margin-bottom: 0.5rem;
     }
 
-    .feature-desc {
-      font-size: 0.9rem;
-      opacity: 0.7;
-      margin-bottom: 1rem;
-    }
-
-    .feature-price {
-      font-size: 1.4rem;
-      font-weight: 700;
+    .carousel-item .price {
+      font-size: 1.5rem;
       color: var(--grain-gold);
     }
 
-    .ambiance-section {
-      position: relative;
-      height: 500px;
-      background: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop') center/cover fixed;
-      isolation: isolate;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    /* ---- PARALLAX SMOKE LAYER (scroll effect) ---- */
+    .parallax-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: repeating-linear-gradient(45deg, rgba(180,75,60,0.05) 0px, rgba(180,75,60,0.05) 2px, transparent 2px, transparent 10px);
+      mix-blend-mode: overlay;
+      z-index: -1;
     }
 
-    .ambiance-section::before {
+    /* ---- DUAL PANEL (story/visit) ---- */
+    .dual-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .panel-left {
+      transform: perspective(1000px) rotateY(5deg) rotateX(2deg);
+      padding: 3rem;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--ember-red);
+      border-radius: 60px;
+    }
+
+    .panel-left h2 {
+      font-size: 3rem;
+      font-family: var(--font-serif);
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-left p {
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+
+    .panel-right {
+      position: relative;
+      height: 400px;
+      background: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop') center/cover;
+      border-radius: 60px;
+      border: 2px solid var(--ember-red);
+      box-shadow: 0 0 50px rgba(180,75,60,0.3);
+      transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+      overflow: hidden;
+    }
+
+    .panel-right::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 1;
+      background: rgba(0,0,0,0.3);
     }
 
-    .ambiance-content {
-      position: relative;
+    .panel-right .address {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
       z-index: 2;
-      text-align: center;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      border: 1px solid var(--ember-red);
     }
 
-    .ambiance-quote {
-      font-family: var(--font-serif);
-      font-size: 2.5rem;
-      max-width: 800px;
-      margin: 0 auto 2rem;
-      font-style: italic;
-      color: var(--grain-light);
-    }
-
-    .footer-minimal {
-      padding: 3rem 0;
+    /* ---- FOOTER WITH SMOKE RINGS ---- */
+    .footer-smoke {
       background: #0f0d0b;
-      text-align: center;
-      border-top: 1px solid var(--ember-red);
+      border-top: 2px solid var(--ember-red);
+      padding: 4rem 0;
+      position: relative;
+      overflow: hidden;
     }
 
-    .footer-minimal .social {
+    .footer-smoke::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 200px;
+      background: radial-gradient(circle at 50% 100%, rgba(180,75,60,0.2), transparent 70%);
+      filter: blur(40px);
+    }
+
+    .footer-content {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
       gap: 2rem;
-      justify-content: center;
-      margin: 1.5rem 0;
-      font-size: 1.5rem;
     }
 
-    .footer-minimal .social a {
+    .footer-logo {
+      font-size: 2rem;
+      font-family: var(--font-serif);
+    }
+
+    .footer-social a {
+      font-size: 1.8rem;
+      margin: 0 1rem;
       color: var(--grain-gold);
       transition: 0.2s;
     }
 
-    .footer-minimal .social a:hover {
+    .footer-social a:hover {
       color: var(--ember-red);
-      transform: scale(1.1);
+      transform: scale(1.2);
     }
 
-    .footer-minimal p {
-      opacity: 0.7;
-      font-size: 0.9rem;
-    }
-
+    /* responsiveness */
     @media (max-width: 800px) {
-      .featured-grid {
-        grid-template-columns: 1fr;
-      }
-      .welcome-title {
-        font-size: 3rem;
-      }
-      .ambiance-quote {
-        font-size: 1.8rem;
-        padding: 0 1rem;
-      }
-      .hero-title {
-        font-size: 4rem;
-      }
-      .hero-card-3d {
-        display: none; /* hide card on smaller screens for simplicity */
-      }
-      .hero-text-block {
-        padding-left: 2rem;
-        text-align: center;
-      }
-      .header-stats {
-        bottom: 1rem;
-        left: 50%;
-        transform: translateX(-50%);
-        gap: 1.5rem;
-        padding: 0.8rem 1.5rem;
-        font-size: 0.8rem;
-      }
+      .hero-title { font-size: 15vw; }
+      .floating-card { display: none; }
+      .dual-panel { grid-template-columns: 1fr; }
+      .carousel-3d { transform: scale(0.7); }
+      .nav-btn.left-center { display: none; } /* hide left on mobile if needed */
     }
   </style>
 </head>
 <body>
-  <!-- ASTONISHING HEADER -->
-  <header class="astonishing-header">
-    <div class="header-top-bar">
-      <div class="logo-3d">THE FRANCIS <span>SMOKEHOUSE & MEATS</span></div>
-      <div class="header-top-right">
-        <span class="phone"><i class="fas fa-phone-alt"></i> (225) 245-5046</span>
-        <a href="#" class="btn btn-primary">SMOKE MENU</a>
-        <a href="#" class="btn btn-outline">FIND US</a>
-      </div>
-    </div>
+  <!-- Canvas for subtle particle smoke (lightweight) -->
+  <canvas id="smoke-canvas"></canvas>
 
-    <div class="header-content container">
-      <div class="hero-text-block">
-        <div class="hero-label"><i class="fas fa-fire-flame-curved"></i> ST. FRANCISVILLE EST. 2015</div>
-        <h1 class="hero-title">
-          <span class="line1">SMOKE</span>
-          <span class="line2">RUBBED & REVERED</span>
-          <span class="line3">LOW & SLOW</span>
-        </h1>
-        <p style="max-width:450px; margin-top:2rem;">“Brisket practically melted in my mouth” — Tripadvisor</p>
-      </div>
-      <div class="hero-card-3d">
-        <div class="card-header">
-          <i class="fas fa-smog"></i>
-          <span>HOT OFF THE SMOKER</span>
-        </div>
-        <div class="card-item"><span>Brisket plate (2 sides)</span> <span class="card-price">$10.99</span></div>
-        <div class="card-item"><span>Full rack ribs</span> <span class="card-price">$19.99</span></div>
-        <div class="card-item"><span>Boudin balls (jalapeño)</span> <span class="card-price">$6.99</span></div>
-        <div class="card-item"><span>Corn pudding · small</span> <span class="card-price">$2.75</span></div>
-        <div class="card-footer" style="margin-top:2rem;">
-          <a href="#" class="btn btn-primary" style="padding:0.6rem 1.2rem;">FULL MENU</a>
-        </div>
-      </div>
+  <!-- IMMERSIVE HEADER (3D layers) -->
+  <section class="hero">
+    <div class="hero-layer hero-layer-1"></div>
+    <div class="hero-layer hero-layer-2">
+      <div class="hero-title">SMOKE<span>LOW & SLOW</span></div>
     </div>
-
-    <div class="header-stats">
-      <div class="stat"><span class="number">4.7</span> <span>Google (505)</span></div>
-      <div class="stat"><span class="number">4.5</span> <span>Tripadvisor (143)</span></div>
-      <div class="stat"><span class="number">2015</span> <span>Founded</span></div>
+    <div class="hero-layer hero-layer-3"></div>
+    <div class="floating-card">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;"><span>🔥 BRISKET</span> <span class="price">$10.99</span></div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;"><span>🔥 BOUDIN BALLS</span> <span class="price">$6.99</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>🔥 FULL RACK</span> <span class="price">$19.99</span></div>
     </div>
-  </header>
+  </section>
 
-  <!-- TWO NAVIGATION BUTTONS -->
+  <!-- NAVIGATION BUTTONS (two) -->
   <div class="nav-btn left-center" id="navBtnLeft">
     <i class="fas fa-compass btn-icon"></i>
     <div class="btn-text">
@@ -706,7 +611,6 @@
       <span class="sub">explore pages</span>
     </div>
   </div>
-
   <div class="nav-btn bottom-center" id="navBtnBottom">
     <i class="fas fa-compass btn-icon"></i>
     <div class="btn-text">
@@ -728,59 +632,127 @@
     </div>
   </div>
 
-  <!-- LANDING PAGE MAIN CONTENT (minimal, atmospheric) -->
+  <!-- MAIN MIND-BLOWING CONTENT -->
   <main>
-    <section class="welcome-section">
+    <!-- Smoke ring quote -->
+    <section class="section">
       <div class="container">
-        <h2 class="welcome-title">WHERE <span>SMOKE</span> TELLS A STORY</h2>
-        <p class="welcome-sub">Louisiana tradition, slow-smoked over hardwood. Come for the flavor, stay for the soul.</p>
-        
-        <div class="featured-grid">
-          <div class="feature-card">
-            <div class="feature-icon"><i class="fas fa-drumstick-bite"></i></div>
-            <h3 class="feature-name">Brisket</h3>
-            <p class="feature-desc">12 hours over post oak, rubbed with secret spices.</p>
-            <div class="feature-price">$10.99</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon"><i class="fas fa-egg"></i></div>
-            <h3 class="feature-name">Boudin Balls</h3>
-            <p class="feature-desc">Crispy, creamy, with a kick of pepper jack.</p>
-            <div class="feature-price">$6.99</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon"><i class="fas fa-utensils"></i></div>
-            <h3 class="feature-name">Full Rack Ribs</h3>
-            <p class="feature-desc">Fall-off-the-bone, glazed with bourbon molasses.</p>
-            <div class="feature-price">$19.99</div>
-          </div>
+        <div class="quote-ring">
+          “WHERE THERE'S SMOKE, THERE'S FLAVOR”
+          <span>EST. 2015 · ST. FRANCISVILLE</span>
         </div>
       </div>
     </section>
 
-    <section class="ambiance-section">
-      <div class="ambiance-content">
-        <div class="ambiance-quote">“A hidden gem where the smoke lingers and the welcome is warm.”</div>
-        <a href="#" class="btn btn-primary">DISCOVER OUR STORY</a>
+    <!-- 3D rotating menu carousel -->
+    <section class="section" style="perspective: 2000px;">
+      <div class="container" style="position: relative; height: 500px;">
+        <div class="carousel-3d">
+          <div class="carousel-item" style="--i: 0;"><i class="fas fa-drumstick-bite"></i><h3>Brisket</h3><div class="price">$10.99</div></div>
+          <div class="carousel-item" style="--i: 1;"><i class="fas fa-egg"></i><h3>Boudin Balls</h3><div class="price">$6.99</div></div>
+          <div class="carousel-item" style="--i: 2;"><i class="fas fa-utensils"></i><h3>Full Ribs</h3><div class="price">$19.99</div></div>
+          <div class="carousel-item" style="--i: 3;"><i class="fas fa-burger"></i><h3>Burger</h3><div class="price">$8.99</div></div>
+          <div class="carousel-item" style="--i: 4;"><i class="fas fa-shrimp"></i><h3>Po-boy</h3><div class="price">$10.99</div></div>
+          <div class="carousel-item" style="--i: 5;"><i class="fas fa-cake-candles"></i><h3>Pudding</h3><div class="price">$7.00</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dual panel story + visit -->
+    <section class="section">
+      <div class="container dual-panel">
+        <div class="panel-left">
+          <h2>THE FRANCIS</h2>
+          <p>Since 2015, we've been slow-smoking the finest meats over post oak and pecan. Our brisket melts, our boudin balls are legendary, and our deck is always welcoming. Come taste the smoke.</p>
+          <a href="#" class="btn btn-primary" style="margin-top: 2rem;">READ OUR STORY</a>
+        </div>
+        <div class="panel-right">
+          <div class="address">
+            <i class="fas fa-map-pin"></i> 6779 US Hwy 61, St. Francisville, LA
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer-minimal">
-    <div class="container">
-      <div class="logo-3d" style="font-size: 1.8rem;">THE FRANCIS</div>
-      <div class="social">
+  <!-- FOOTER -->
+  <footer class="footer-smoke">
+    <div class="container footer-content">
+      <div class="footer-logo">THE FRANCIS <span style="display: block; font-size: 1rem; letter-spacing: 4px;">SMOKEHOUSE</span></div>
+      <div class="footer-social">
         <a href="#"><i class="fab fa-facebook-f"></i></a>
         <a href="#"><i class="fab fa-instagram"></i></a>
         <a href="#"><i class="fab fa-tripadvisor"></i></a>
       </div>
-      <p>6779 US Highway 61, St. Francisville, LA 70775</p>
-      <p>© 2025 The Francis Smokehouse. All rights reserved.</p>
+      <p>© 2025 · (225) 245-5046</p>
     </div>
   </footer>
 
   <script>
-    // Circular menu functionality
+    // --- SMOKE CANVAS (lightweight particle system) ---
+    const canvas = document.getElementById('smoke-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    function initParticles() {
+      const count = 50;
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random(),
+          y: Math.random(),
+          radius: 0.1 + Math.random() * 0.15,
+          speedX: (Math.random() - 0.5) * 0.0008,
+          speedY: (Math.random() - 0.8) * 0.0004,
+          opacity: 0.1 + Math.random() * 0.2,
+        });
+      }
+    }
+
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    function drawSmoke() {
+      ctx.clearRect(0, 0, width, height);
+      // background gradient
+      const gradient = ctx.createRadialGradient(width*0.5, height*0.5, 0, width*0.5, height*0.5, width*0.8);
+      gradient.addColorStop(0, 'rgba(30,20,15,0.2)');
+      gradient.addColorStop(1, 'rgba(10,8,7,0.4)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0,0,width,height);
+
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+        if (p.x < 0) p.x = 1;
+        if (p.x > 1) p.x = 0;
+        if (p.y < 0) p.y = 1;
+        if (p.y > 1) p.y = 0;
+
+        const xPos = p.x * width;
+        const yPos = p.y * height;
+        const radius = p.radius * Math.min(width, height) * 0.8;
+
+        ctx.beginPath();
+        ctx.arc(xPos, yPos, radius, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(160, 100, 70, ${p.opacity})`;
+        ctx.filter = 'blur(10px)';
+        ctx.fill();
+      });
+      ctx.filter = 'none';
+      requestAnimationFrame(drawSmoke);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    initParticles();
+    drawSmoke();
+
+    // --- CIRCULAR MENU LOGIC ---
     const overlay = document.getElementById('circMenuOverlay');
     const leftBtn = document.getElementById('navBtnLeft');
     const bottomBtn = document.getElementById('navBtnBottom');
@@ -815,7 +787,7 @@
     menuItems.forEach(item => {
       item.addEventListener('click', (e) => {
         overlay.classList.remove('open');
-        // For demo, just scroll to top or you could navigate
+        // smooth scroll to sections (just for demo, scroll to top)
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
@@ -823,6 +795,17 @@
     document.querySelector('.circular-menu').addEventListener('click', (e) => {
       e.stopPropagation();
     });
+
+    // --- 3D carousel pause on hover ---
+    const carousel = document.querySelector('.carousel-3d');
+    if (carousel) {
+      carousel.addEventListener('mouseenter', () => {
+        carousel.style.animationPlayState = 'paused';
+      });
+      carousel.addEventListener('mouseleave', () => {
+        carousel.style.animationPlayState = 'running';
+      });
+    }
   </script>
 </body>
 </html>
