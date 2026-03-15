@@ -111,50 +111,24 @@
       box-shadow: var(--shadow-soft);
     }
 
-    /* ==================== ASTONISHING HEADER ==================== */
-    /* concept: liquid smoke + floating 3D typography + interactive ember glow */
+    /* ==================== ASTONISHING HEADER (lighter, with static smoky bg) ==================== */
     .astonishing-header {
       position: relative;
       width: 100%;
-      height: 100vh; /* full viewport */
-      min-height: 750px;
-      background: #0a0807;
-      overflow: hidden;
+      height: 100vh;
+      min-height: 700px;
+      background: #0a0807 url('https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=2070&auto=format&fit=crop') center/cover fixed;
       isolation: isolate;
     }
 
-    /* 1. canvas for particle smoke (unique interactive background) */
-    #smoke-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      pointer-events: none; /* allow clicking through to content */
-      opacity: 0.7;
-    }
-
-    /* 2. deep smoky gradient overlay to blend canvas */
-    .header-overlay {
+    .astonishing-header::before {
+      content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 30% 50%, rgba(180,75,60,0.15) 0%, rgba(10,8,7,0.9) 80%);
-      z-index: 2;
+      background: radial-gradient(circle at 30% 50%, rgba(180,75,60,0.2) 0%, rgba(10,8,7,0.95) 90%);
+      z-index: 1;
     }
 
-    /* 3. main header content (floating, layered, 3D) */
-    .header-content {
-      position: relative;
-      z-index: 10;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      padding-top: 80px; /* space for top bar */
-      color: white;
-    }
-
-    /* top bar – reimagined as part of the smoke (semi-transparent, blur) */
     .header-top-bar {
       position: absolute;
       top: 0;
@@ -165,11 +139,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0,0,0,0.2);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(200,140,100,0.25);
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
     }
 
     .logo-3d {
@@ -178,23 +150,17 @@
       font-weight: 900;
       text-transform: uppercase;
       line-height: 1;
-      text-shadow: 0 0 15px var(--ember-red), 0 5px 20px rgba(0,0,0,0.9);
-      transform: perspective(800px) rotateY(2deg) rotateX(1deg);
-      display: inline-block;
+      text-shadow: 0 0 15px var(--ember-red);
       background: linear-gradient(135deg, #fff0e0, #c9a887);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
     .logo-3d span {
       display: block;
       font-size: 0.8rem;
       font-family: var(--font-sans);
-      font-weight: 300;
       letter-spacing: 6px;
       color: var(--grain-gold);
-      text-shadow: 0 0 8px var(--ember-red);
-      -webkit-text-fill-color: var(--grain-light);
     }
 
     .header-top-right {
@@ -202,25 +168,24 @@
       gap: 2rem;
       align-items: center;
     }
-
     .header-top-right .phone {
       font-size: 1.1rem;
       font-weight: 600;
       color: var(--grain-light);
-      text-shadow: 0 0 10px var(--ember-red);
-      letter-spacing: 2px;
     }
 
-    .header-top-right .btn {
-      padding: 0.5rem 2rem;
-      font-size: 0.8rem;
+    .header-content {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
     }
 
-    /* main hero text – split, twisted, with 3D feel */
     .hero-text-block {
       flex: 1;
       padding-left: 4rem;
-      transform: translateY(-2vh);
     }
 
     .hero-label {
@@ -234,7 +199,6 @@
       letter-spacing: 4px;
       margin-bottom: 2rem;
       text-transform: uppercase;
-      box-shadow: 0 0 30px rgba(180,75,60,0.5);
     }
 
     .hero-title {
@@ -244,114 +208,62 @@
       line-height: 0.9;
       text-transform: uppercase;
       filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7));
-      perspective: 1000px;
-      transform-style: preserve-3d;
     }
-
     .hero-title .line1 {
       display: block;
-      transform: translateZ(30px) scale(1.1);
-      text-shadow: 0 0 30px var(--ember-red), 0 10px 20px black;
+      text-shadow: 0 0 30px var(--ember-red);
       background: linear-gradient(135deg, #ffe5cc, #d9b382);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
-
     .hero-title .line2 {
       display: block;
       font-size: 3.5rem;
       font-weight: 300;
       letter-spacing: 12px;
-      transform: translateZ(10px) translateX(20px);
       color: rgba(255,220,170,0.9);
-      text-shadow: 0 0 20px #b44b3c;
-      -webkit-text-fill-color: #ecd6b8;
     }
-
     .hero-title .line3 {
       display: block;
       font-size: 2rem;
       font-weight: 400;
       letter-spacing: 8px;
-      transform: translateZ(5px);
       color: var(--grain-gold);
-      text-shadow: 0 0 15px black;
       margin-top: 0.5rem;
     }
 
-    /* right side floating 3D card – “ember card” */
     .hero-card-3d {
       flex: 0 0 380px;
       margin-right: 4rem;
-      background: rgba(30,27,27,0.65);
+      background: rgba(30,27,27,0.7);
       backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(199,147,105,0.3);
       border-radius: 40px;
       padding: 2.2rem;
-      box-shadow: 0 30px 50px rgba(0,0,0,0.7), 0 0 0 2px rgba(180,75,60,0.2) inset;
-      transform: perspective(1200px) rotateY(-8deg) rotateX(3deg) translateZ(30px);
-      transition: transform 0.4s ease;
-      animation: float-card 5s infinite alternate ease-in-out;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.7);
+      transform: perspective(1200px) rotateY(-5deg) rotateX(2deg);
+      transition: transform 0.3s;
     }
-
     .hero-card-3d:hover {
-      transform: perspective(1200px) rotateY(-4deg) rotateX(1deg) translateZ(50px);
-      border-color: var(--ember-red);
-    }
-
-    @keyframes float-card {
-      0% { transform: perspective(1200px) rotateY(-8deg) rotateX(3deg) translateY(0px) translateZ(30px); }
-      100% { transform: perspective(1200px) rotateY(-6deg) rotateX(2deg) translateY(-15px) translateZ(40px); }
+      transform: perspective(1200px) rotateY(-3deg) rotateX(1deg) translateY(-5px);
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       border-bottom: 1px dashed var(--grain-gold);
       padding-bottom: 1rem;
     }
-    .card-header i {
-      font-size: 2rem;
-      color: var(--ember-glow);
-      filter: drop-shadow(0 0 10px #b44b3c);
-    }
-    .card-header span {
-      font-size: 0.8rem;
-      background: var(--ember-red);
-      padding: 0.2rem 1rem;
-      border-radius: 30px;
-    }
-
     .card-item {
       display: flex;
       justify-content: space-between;
       margin: 1.2rem 0;
-      font-size: 1.1rem;
     }
     .card-price {
       color: var(--grain-gold);
       font-weight: 700;
     }
-    .card-desc {
-      font-size: 0.8rem;
-      opacity: 0.7;
-      margin-top: 1rem;
-    }
-    .card-footer {
-      margin-top: 2rem;
-      display: flex;
-      gap: 1rem;
-    }
-    .card-footer .btn {
-      padding: 0.6rem 1.2rem;
-      font-size: 0.7rem;
-      flex: 1;
-    }
 
-    /* small stats integrated in header */
     .header-stats {
       position: absolute;
       bottom: 3rem;
@@ -363,10 +275,6 @@
       backdrop-filter: blur(8px);
       padding: 1rem 2.5rem;
       border-radius: 60px;
-      border: var(--border-smoke);
-    }
-    .stat {
-      text-align: center;
     }
     .stat .number {
       font-size: 2rem;
@@ -374,20 +282,120 @@
       color: var(--grain-gold);
     }
 
-    /* small directional hint */
-    .scroll-hint {
-      position: absolute;
-      bottom: 3rem;
-      right: 2rem;
-      z-index: 15;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      font-size: 0.7rem;
-      letter-spacing: 4px;
-      opacity: 0.5;
+    /* ==================== CIRCULAR NAVIGATION (unique, lightweight) ==================== */
+    .circ-nav-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    /* ========== REST OF PAGE (identical to earlier, keeps continuity) ========= */
+    .nav-toggle {
+      width: 70px;
+      height: 70px;
+      background: var(--ember-red);
+      border: 3px solid var(--grain-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--smoke-dark);
+      cursor: pointer;
+      box-shadow: 0 0 30px var(--ember-red);
+      transition: all 0.2s ease;
+      z-index: 1000;
+    }
+
+    .nav-toggle:hover {
+      transform: scale(1.1);
+      background: var(--ember-glow);
+    }
+
+    .circular-menu {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      transform: scale(0.3);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .circular-menu.open {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: all;
+    }
+
+    .circular-menu .center-home {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px;
+      height: 70px;
+      background: var(--grain-gold);
+      border: 3px solid var(--ember-red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: var(--smoke-dark);
+      box-shadow: 0 0 20px black;
+      cursor: pointer;
+      transition: 0.2s;
+      z-index: 1001;
+    }
+    .center-home:hover {
+      background: var(--ember-red);
+      color: white;
+    }
+
+    .menu-item {
+      position: absolute;
+      width: 55px;
+      height: 55px;
+      background: var(--smoke-charcoal);
+      border: 2px solid var(--ember-red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--paper-cream);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      transform-origin: center;
+    }
+
+    .menu-item:hover {
+      background: var(--ember-red);
+      color: black;
+      border-color: var(--grain-gold);
+      transform: scale(1.1);
+    }
+
+    /* positions around the circle (using trigonometry approximation) */
+    .menu-item[data-index="0"] { bottom: 80px; right: 10px; }               /* Menu */
+    .menu-item[data-index="1"] { bottom: 130px; right: 60px; }             /* About */
+    .menu-item[data-index="2"] { bottom: 140px; right: 130px; }            /* Reviews */
+    .menu-item[data-index="3"] { bottom: 110px; right: 190px; }            /* Contact */
+    .menu-item[data-index="4"] { bottom: 50px; right: 210px; }             /* Order */
+    .menu-item[data-index="5"] { bottom: -10px; right: 180px; }            /* Catering */
+
+    /* ========== REST OF PAGE (standard sections) ========== */
     .section {
       padding: 6rem 0;
       border-bottom: var(--border-smoke);
@@ -460,12 +468,8 @@
   </style>
 </head>
 <body>
-  <!-- ASTONISHING HEADER (custom canvas + 3D elements) -->
+  <!-- ASTONISHING HEADER (lighter, static background) -->
   <header class="astonishing-header">
-    <canvas id="smoke-canvas"></canvas>
-    <div class="header-overlay"></div>
-
-    <!-- top bar (floating) -->
     <div class="header-top-bar">
       <div class="logo-3d">THE FRANCIS <span>SMOKEHOUSE & MEATS</span></div>
       <div class="header-top-right">
@@ -475,7 +479,6 @@
       </div>
     </div>
 
-    <!-- main content -->
     <div class="header-content container">
       <div class="hero-text-block">
         <div class="hero-label"><i class="fas fa-fire-flame-curved"></i> ST. FRANCISVILLE EST. 2015</div>
@@ -484,39 +487,48 @@
           <span class="line2">RUBBED & REVERED</span>
           <span class="line3">LOW & SLOW</span>
         </h1>
-        <!-- small inline quote -->
-        <p style="max-width:450px; margin-top:2rem; text-shadow: 0 0 15px black; font-size:1.2rem;">“Brisket practically melted in my mouth” — Tripadvisor</p>
+        <p style="max-width:450px; margin-top:2rem;">“Brisket practically melted in my mouth” — Tripadvisor</p>
       </div>
       <div class="hero-card-3d">
         <div class="card-header">
           <i class="fas fa-smog"></i>
           <span>HOT OFF THE SMOKER</span>
-          <i class="fas fa-pepper-hot"></i>
         </div>
         <div class="card-item"><span>Brisket plate (2 sides)</span> <span class="card-price">$10.99</span></div>
         <div class="card-item"><span>Full rack ribs</span> <span class="card-price">$19.99</span></div>
         <div class="card-item"><span>Boudin balls (jalapeño)</span> <span class="card-price">$6.99</span></div>
         <div class="card-item"><span>Corn pudding · small</span> <span class="card-price">$2.75</span></div>
-        <div class="card-desc">+ smoked wings, boudin egg rolls, & specials</div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary"><i class="fas fa-eye"></i> FULL MENU</a>
-          <a href="#" class="btn btn-outline"><i class="fas fa-truck"></i> CATERING</a>
+        <div class="card-footer" style="margin-top:2rem;">
+          <a href="#" class="btn btn-primary" style="padding:0.6rem 1.2rem;">FULL MENU</a>
         </div>
       </div>
     </div>
 
-    <!-- header stats (floating) -->
     <div class="header-stats">
       <div class="stat"><span class="number">4.7</span> <span>Google (505)</span></div>
       <div class="stat"><span class="number">4.5</span> <span>Tripadvisor (143)</span></div>
       <div class="stat"><span class="number">2015</span> <span>Founded</span></div>
     </div>
-    <div class="scroll-hint">✦ SCROLL FOR SMOKE ✦</div>
   </header>
 
-  <!-- rest of the page (identical to previous but keeping content consistent) -->
+  <!-- CIRCULAR NAVIGATION (unique, non-laggy) -->
+  <div class="circ-nav-container">
+    <div class="nav-toggle" id="navToggle">
+      <i class="fas fa-bars"></i>
+    </div>
+    <div class="circular-menu" id="circularMenu">
+      <div class="center-home" id="homeCenter"><i class="fas fa-home"></i></div>
+      <div class="menu-item" data-index="0" data-link="#menu">Menu</div>
+      <div class="menu-item" data-index="1" data-link="#about">About</div>
+      <div class="menu-item" data-index="2" data-link="#reviews">Reviews</div>
+      <div class="menu-item" data-index="3" data-link="#contact">Contact</div>
+      <div class="menu-item" data-index="4" data-link="#order">Order</div>
+      <div class="menu-item" data-index="5" data-link="#catering">Cater</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT (same as before) -->
   <main>
-    <!-- ABOUT / TIMELINE -->
     <section class="section" id="about">
       <div class="container">
         <h2 class="section-title">THE SMOKEHOUSE</h2>
@@ -543,7 +555,6 @@
       </div>
     </section>
 
-    <!-- MENU HIGHLIGHTS -->
     <section class="section" id="menu">
       <div class="container">
         <h2 class="section-title">SMOKE & SPECIALTIES</h2>
@@ -558,7 +569,6 @@
       </div>
     </section>
 
-    <!-- REVIEWS -->
     <section class="section" id="reviews">
       <div class="container">
         <h2 class="section-title">PRAISE & SMOKE RINGS</h2>
@@ -575,7 +585,6 @@
       </div>
     </section>
 
-    <!-- HOURS + MAP -->
     <section class="section" id="contact">
       <div class="container">
         <h2 class="section-title">FIND THE SMOKE</h2>
@@ -609,94 +618,41 @@
     </div>
   </footer>
 
-  <!-- canvas smoke script (astonishing effect) -->
   <script>
-    (function() {
-      const canvas = document.getElementById('smoke-canvas');
-      const ctx = canvas.getContext('2d');
-      let width, height;
-      let particles = [];
+    // Circular menu toggle
+    const toggle = document.getElementById('navToggle');
+    const menu = document.getElementById('circularMenu');
 
-      function initParticles() {
-        const particleCount = 70;
-        for (let i = 0; i < particleCount; i++) {
-          particles.push({
-            x: Math.random(),
-            y: Math.random(),
-            radius: 0.1 + Math.random() * 0.2,
-            speedX: (Math.random() - 0.5) * 0.0015,
-            speedY: (Math.random() - 0.8) * 0.0008, // upward drift
-            opacity: 0.2 + Math.random() * 0.4,
-            color: `rgba(200, 140, 100, ${0.1 + Math.random()*0.2})` // warm smoke
-          });
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.classList.toggle('open');
+    });
+
+    // Close menu when clicking on any menu item (optional)
+    const menuItems = document.querySelectorAll('.menu-item, .center-home');
+    menuItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        // if it's a menu link, you could navigate or just close
+        menu.classList.remove('open');
+        // optionally scroll to section based on data-link
+        const link = item.getAttribute('data-link');
+        if (link) {
+          const target = document.querySelector(link);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
         }
-      }
-
-      function resizeCanvas() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-      }
-
-      function drawSmoke() {
-        ctx.clearRect(0, 0, width, height);
-        // draw gradient base
-        const gradient = ctx.createRadialGradient(width*0.7, height*0.3, 50, width*0.5, height*0.5, width);
-        gradient.addColorStop(0, 'rgba(40,20,10,0.4)');
-        gradient.addColorStop(0.6, 'rgba(10,8,7,0.8)');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0,0,width,height);
-
-        // draw smoke blobs
-        particles.forEach(p => {
-          // update position
-          p.x += p.speedX;
-          p.y += p.speedY;
-
-          // wrap around / reset
-          if (p.x < 0) p.x = 1;
-          if (p.x > 1) p.x = 0;
-          if (p.y < 0) p.y = 1;
-          if (p.y > 1) p.y = 0;
-
-          const xPos = p.x * width;
-          const yPos = p.y * height;
-          const radius = p.radius * Math.min(width, height) * 0.6;
-
-          // multiple overlapping circles for soft smoke
-          ctx.beginPath();
-          for (let i = 0; i < 5; i++) {
-            const offsetX = (Math.random() - 0.5) * radius * 0.8;
-            const offsetY = (Math.random() - 0.5) * radius * 0.6;
-            ctx.arc(xPos + offsetX, yPos + offsetY, radius * (0.6 + Math.random()*0.5), 0, Math.PI*2);
-          }
-          ctx.fillStyle = `rgba(160, 100, 70, ${p.opacity * 0.7})`;
-          ctx.filter = 'blur(12px)';
-          ctx.fill();
-        });
-        ctx.filter = 'none';
-        requestAnimationFrame(drawSmoke);
-      }
-
-      window.addEventListener('resize', () => {
-        resizeCanvas();
+        // home center just scrolls to top
+        if (item.id === 'homeCenter') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       });
-      resizeCanvas();
-      initParticles();
-      drawSmoke();
+    });
 
-      // subtle mouse interaction (particles shift)
-      window.addEventListener('mousemove', (e) => {
-        const mouseX = e.clientX / width;
-        const mouseY = e.clientY / height;
-        particles.forEach(p => {
-          // slight attraction to mouse, but very gentle
-          p.speedX += (mouseX - p.x) * 0.00001;
-          p.speedY += (mouseY - p.y) * 0.000005;
-        });
-      });
-    })();
+    // Close when clicking outside (optional)
+    document.addEventListener('click', (e) => {
+      if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
   </script>
 </body>
 </html>
