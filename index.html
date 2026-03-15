@@ -1154,19 +1154,19 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
-      menuItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-          overlay.classList.remove('open');
-          const link = item.getAttribute('data-link');
-          if (link && link.startsWith('#')) {
-            const target = document.querySelector(link);
-            if (target) target.scrollIntoView({ behavior: 'smooth' });
-          } else {
-            // fallback scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
-        });
-      });
+      function navigate(link) { if (link) window.location.href = link; }
+
+homeCenter.addEventListener('click', () => { overlay.classList.remove('open'); navigate(homeCenter.dataset.link); });
+
+menuItems.forEach(item => {
+  item.addEventListener('click', (e) => {
+    overlay.classList.remove('open');
+    const link = item.dataset.link;
+    const action = item.dataset.action;
+    if (action === 'share') sharePage();
+    else if (link) navigate(link);
+  });
+});
 
       document.querySelector('.circular-menu').addEventListener('click', (e) => {
         e.stopPropagation();
