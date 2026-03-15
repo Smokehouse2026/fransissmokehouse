@@ -285,7 +285,7 @@
       color: var(--grain-gold);
     }
 
-    /* ==================== NAVIGATION BUTTONS (two: left-center & bottom-center) ==================== */
+    /* ==================== NAVIGATION BUTTONS ==================== */
     .nav-btn {
       position: fixed;
       z-index: 1000;
@@ -333,25 +333,43 @@
       text-transform: uppercase;
     }
 
-    /* left-center button */
+    /* left-center button - VERTICAL (up/down) */
     .nav-btn.left-center {
       left: 30px;
       top: 50%;
       transform: translateY(-50%);
+      flex-direction: column;  /* stack icon above text */
+      padding: 1.2rem 0.8rem;  /* adjust padding for vertical */
+      gap: 6px;
+      text-align: center;
     }
 
-    /* bottom-center button */
+    .nav-btn.left-center .btn-icon {
+      margin-bottom: 4px;
+    }
+
+    .nav-btn.left-center .btn-text .main {
+      font-size: 0.9rem;  /* slightly smaller to fit vertical */
+    }
+
+    .nav-btn.left-center .btn-text .sub {
+      font-size: 0.6rem;
+    }
+
+    /* bottom-center button - remains HORIZONTAL */
     .nav-btn.bottom-center {
       bottom: 30px;
       left: 50%;
       transform: translateX(-50%);
+      flex-direction: row;
+      padding: 0.8rem 1.8rem;
     }
 
     /* adjust for mobile */
     @media (max-width: 600px) {
       .nav-btn.left-center {
         left: 10px;
-        padding: 0.6rem 1.2rem;
+        padding: 1rem 0.6rem;
       }
       .nav-btn.bottom-center {
         bottom: 20px;
@@ -360,11 +378,8 @@
       .btn-icon {
         font-size: 1.5rem;
       }
-      .btn-text .main {
-        font-size: 0.9rem;
-      }
-      .btn-text .sub {
-        font-size: 0.55rem;
+      .nav-btn.left-center .btn-text .main {
+        font-size: 0.8rem;
       }
     }
 
@@ -684,7 +699,7 @@
     </div>
   </header>
 
-  <!-- TWO NAVIGATION BUTTONS (left-center and bottom-center) -->
+  <!-- TWO NAVIGATION BUTTONS: left (vertical) and bottom (horizontal) -->
   <div class="nav-btn left-center" id="navBtnLeft">
     <i class="fas fa-compass btn-icon"></i>
     <div class="btn-text">
