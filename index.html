@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>The Francis Smokehouse · St. Francisville, LA</title>
   <!-- Font Awesome 6 (free) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -111,7 +111,7 @@
       box-shadow: var(--shadow-soft);
     }
 
-    /* ==================== ASTONISHING HEADER (lighter, with static smoky bg) ==================== */
+    /* ==================== ASTONISHING HEADER (fully responsive) ==================== */
     .astonishing-header {
       position: relative;
       width: 100%;
@@ -142,6 +142,8 @@
       background: rgba(0,0,0,0.3);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(200,140,100,0.25);
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .logo-3d {
@@ -167,6 +169,7 @@
       display: flex;
       gap: 2rem;
       align-items: center;
+      flex-wrap: wrap;
     }
     .header-top-right .phone {
       font-size: 1.1rem;
@@ -282,7 +285,57 @@
       color: var(--grain-gold);
     }
 
-    /* ==================== CIRCULAR NAVIGATION (refined, centered home, even spacing) ==================== */
+    /* ==================== CUSTOM NAV BUTTON (like screenshot) ==================== */
+    .custom-nav-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      background: #1e1b1b;
+      border: 2px solid var(--ember-red);
+      border-radius: 50px;
+      padding: 0.8rem 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(180,75,60,0.5);
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .custom-nav-btn:hover {
+      transform: scale(1.05);
+      border-color: var(--ember-glow);
+      box-shadow: 0 0 35px var(--ember-red);
+    }
+
+    .btn-icon {
+      font-size: 1.8rem;
+      color: var(--ember-red);
+    }
+
+    .btn-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .btn-text .main {
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      color: var(--paper-cream);
+    }
+
+    .btn-text .sub {
+      font-size: 0.65rem;
+      opacity: 0.7;
+      color: var(--grain-light);
+      text-transform: uppercase;
+    }
+
+    /* ==================== CIRCULAR MENU (refined) ==================== */
     .circ-nav-container {
       position: fixed;
       bottom: 30px;
@@ -291,28 +344,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-
-    .nav-toggle {
-      width: 70px;
-      height: 70px;
-      background: var(--ember-red);
-      border: 3px solid var(--grain-gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      color: var(--smoke-dark);
-      cursor: pointer;
-      box-shadow: 0 0 30px var(--ember-red);
-      transition: all 0.2s ease;
-      z-index: 1000;
-    }
-
-    .nav-toggle:hover {
-      transform: scale(1.1);
-      background: var(--ember-glow);
+      pointer-events: none;
     }
 
     .circular-menu {
@@ -323,7 +355,7 @@
       height: 360px;
       border-radius: 50%;
       background: transparent;
-      border: 2px solid var(--ember-red); /* visible hollow ring */
+      border: 2px solid var(--ember-red);
       box-shadow: 0 0 40px rgba(180,75,60,0.5);
       pointer-events: none;
       opacity: 0;
@@ -340,7 +372,6 @@
       pointer-events: all;
     }
 
-    /* home button perfectly centered */
     .center-home {
       width: 70px;
       height: 70px;
@@ -364,7 +395,6 @@
       transform: scale(1.05);
     }
 
-    /* menu items positioned around the circle using transforms */
     .menu-item {
       position: absolute;
       width: 60px;
@@ -382,10 +412,12 @@
       transition: all 0.2s;
       cursor: pointer;
       box-shadow: 0 0 15px rgba(0,0,0,0.7);
-      /* start at center then translate out */
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-130px) rotate(calc(var(--angle) * -1deg));
+      font-family: var(--font-sans);
+      letter-spacing: 1px;
+      backdrop-filter: blur(4px);
     }
 
     .menu-item:hover {
@@ -397,14 +429,7 @@
       height: 65px;
     }
 
-    /* style like header buttons */
-    .menu-item {
-      font-family: var(--font-sans);
-      letter-spacing: 1px;
-      backdrop-filter: blur(4px);
-    }
-
-    /* ========== REST OF PAGE (standard sections) ========== */
+    /* ========== REST OF PAGE ========== */
     .section {
       padding: 6rem 0;
       border-bottom: var(--border-smoke);
@@ -470,14 +495,135 @@
       grid-template-columns: 2fr 1fr 1fr 2fr;
       gap: 2rem;
     }
+
+    /* ==================== RESPONSIVE DESIGN (mobile first) ==================== */
     @media (max-width: 1000px) {
-      .hero-title { font-size: 5rem; }
-      .hero-card-3d { flex-basis: 300px; }
+      .hero-title {
+        font-size: 5rem;
+      }
+      .hero-title .line2 {
+        font-size: 2.5rem;
+        letter-spacing: 8px;
+      }
+      .hero-title .line3 {
+        font-size: 1.5rem;
+      }
+      .hero-card-3d {
+        flex-basis: 300px;
+        margin-right: 2rem;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .header-content {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 1rem;
+      }
+      .hero-text-block {
+        padding-left: 0;
+        margin-bottom: 2rem;
+      }
+      .hero-card-3d {
+        margin-right: 0;
+        width: 90%;
+        max-width: 380px;
+      }
+      .header-stats {
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        gap: 1.5rem;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.8rem;
+      }
+      .about-grid, .reviews-grid, .hours-map, .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding-left: 1rem;
+      }
+      .footer-grid {
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .section-title {
+        font-size: 2.2rem;
+      }
+      .hero-title {
+        font-size: 3.5rem;
+      }
+      .hero-title .line2 {
+        font-size: 1.8rem;
+        letter-spacing: 5px;
+      }
+      .hero-title .line3 {
+        font-size: 1.2rem;
+        letter-spacing: 4px;
+      }
+      .header-top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+      }
+      .header-top-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .custom-nav-btn {
+        bottom: 20px;
+        right: 20px;
+        padding: 0.6rem 1.2rem;
+      }
+      .btn-icon {
+        font-size: 1.5rem;
+      }
+      .btn-text .main {
+        font-size: 0.9rem;
+      }
+      .btn-text .sub {
+        font-size: 0.55rem;
+      }
+      .circular-menu {
+        width: 280px;
+        height: 280px;
+      }
+      .menu-item {
+        width: 50px;
+        height: 50px;
+        font-size: 0.7rem;
+        transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-100px) rotate(calc(var(--angle) * -1deg));
+      }
+      .menu-item:hover {
+        transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-110px) rotate(calc(var(--angle) * -1deg));
+        width: 55px;
+        height: 55px;
+      }
+      .center-home {
+        width: 60px;
+        height: 60px;
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .hero-title {
+        font-size: 2.8rem;
+      }
+      .custom-nav-btn .btn-text .sub {
+        display: none; /* hide subtitle on very small screens */
+      }
     }
   </style>
 </head>
 <body>
-  <!-- ASTONISHING HEADER (lighter, static background) -->
+  <!-- ASTONISHING HEADER -->
   <header class="astonishing-header">
     <div class="header-top-bar">
       <div class="logo-3d">THE FRANCIS <span>SMOKEHOUSE & MEATS</span></div>
@@ -520,14 +666,19 @@
     </div>
   </header>
 
-  <!-- CIRCULAR NAVIGATION (refined, with visible hollow ring and centered home) -->
-  <div class="circ-nav-container">
-    <div class="nav-toggle" id="navToggle">
-      <i class="fas fa-bars"></i>
+  <!-- CUSTOM NAV BUTTON (like screenshot) -->
+  <div class="custom-nav-btn" id="customNavBtn">
+    <i class="fas fa-pencil-alt btn-icon"></i>
+    <div class="btn-text">
+      <span class="main">EDIT MENU</span>
+      <span class="sub">Owner only • Ctrl+Shift+M</span>
     </div>
+  </div>
+
+  <!-- CIRCULAR MENU (activated by button) -->
+  <div class="circ-nav-container">
     <div class="circular-menu" id="circularMenu">
       <div class="center-home" id="homeCenter"><i class="fas fa-home"></i></div>
-      <!-- menu items with custom angles for even spacing -->
       <div class="menu-item" style="--angle: 0;" data-link="#menu">Menu</div>
       <div class="menu-item" style="--angle: 60;" data-link="#about">About</div>
       <div class="menu-item" style="--angle: 120;" data-link="#reviews">Reviews</div>
@@ -537,7 +688,7 @@
     </div>
   </div>
 
-  <!-- MAIN CONTENT (same as before) -->
+  <!-- MAIN CONTENT -->
   <main>
     <section class="section" id="about">
       <div class="container">
@@ -629,11 +780,11 @@
   </footer>
 
   <script>
-    // Circular menu toggle
-    const toggle = document.getElementById('navToggle');
+    // Custom button toggles circular menu
+    const customBtn = document.getElementById('customNavBtn');
     const menu = document.getElementById('circularMenu');
 
-    toggle.addEventListener('click', (e) => {
+    customBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       menu.classList.toggle('open');
     });
@@ -656,7 +807,7 @@
 
     // Close when clicking outside
     document.addEventListener('click', (e) => {
-      if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+      if (!customBtn.contains(e.target) && !menu.contains(e.target)) {
         menu.classList.remove('open');
       }
     });
