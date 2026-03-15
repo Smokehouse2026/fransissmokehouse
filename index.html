@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>The Francis Smokehouse · immersive</title>
+  <title>The Francis Smokehouse · St. Francisville, LA</title>
   <!-- Font Awesome 6 (free) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts: bold serif + clean sans -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Playfair Display for headings, Montserrat for UI -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* -------------------- RESET & GLOBAL -------------------- */
     * {
@@ -19,6 +19,7 @@
     :root {
       --smoke-dark: #0b0a0a;
       --smoke-charcoal: #1e1b1b;
+      --smoke-light: #2a2522;
       --ember-red: #b44b3c;
       --ember-glow: #d97c5a;
       --grain-gold: #c39a6a;
@@ -26,34 +27,57 @@
       --paper-cream: #f8f1e4;
       --font-serif: 'Playfair Display', serif;
       --font-sans: 'Montserrat', sans-serif;
+      --shadow-heavy: 0 25px 50px -12px rgba(0,0,0,0.8);
+      --shadow-soft: 0 10px 30px -10px rgba(0,0,0,0.5);
+      --border-smoke: 1px solid rgba(255,255,240,0.1);
+      --glass-bg: rgba(30,27,27,0.7);
+      --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     body {
       background-color: var(--smoke-dark);
       color: var(--paper-cream);
       font-family: var(--font-sans);
-      line-height: 1.5;
+      line-height: 1.6;
       overflow-x: hidden;
-      scroll-behavior: smooth;
     }
 
-    /* hide scrollbars but keep functionality (optional) */
-    body::-webkit-scrollbar {
-      width: 6px;
-    }
-    body::-webkit-scrollbar-track {
-      background: var(--smoke-dark);
-    }
-    body::-webkit-scrollbar-thumb {
-      background: var(--ember-red);
-      border-radius: 10px;
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 
-    /* -------------------- UTILITY CLASSES -------------------- */
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
     .container {
-      max-width: 1400px;
+      max-width: 1300px;
       margin: 0 auto;
       padding: 0 2rem;
+    }
+
+    /* -------------------- TYPOGRAPHY & UTILITIES -------------------- */
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+      color: var(--grain-light);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--ember-red), var(--ember-glow));
+      border-radius: 4px;
     }
 
     .btn {
@@ -63,147 +87,262 @@
       text-transform: uppercase;
       letter-spacing: 2px;
       border-radius: 40px;
-      transition: all 0.3s ease;
-      border: none;
-      cursor: pointer;
-      background: transparent;
+      transition: var(--transition);
       border: 2px solid var(--ember-red);
+      background: transparent;
       color: var(--paper-cream);
       font-size: 0.9rem;
+      cursor: pointer;
       backdrop-filter: blur(5px);
     }
 
     .btn-primary {
       background: var(--ember-red);
       color: var(--smoke-dark);
-      border: 2px solid var(--ember-red);
+      border-color: var(--ember-red);
     }
 
     .btn-primary:hover {
       background: transparent;
       color: var(--ember-glow);
       border-color: var(--ember-glow);
-      transform: translateY(-5px);
-      box-shadow: 0 0 30px rgba(180,75,60,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 15px 30px -10px rgba(180,75,60,0.5);
     }
 
     .btn-outline:hover {
       background: var(--ember-red);
       color: var(--smoke-dark);
-      transform: translateY(-5px);
-      box-shadow: 0 0 30px rgba(180,75,60,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 15px 30px -10px rgba(180,75,60,0.5);
     }
 
-    /* ==================== BACKGROUND SMOKE CANVAS (lightweight) ==================== */
-    #smoke-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-      opacity: 0.4;
+    /* -------------------- CUSTOM SCROLLBAR -------------------- */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--smoke-dark);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--ember-red);
+      border-radius: 10px;
+      border: 2px solid var(--smoke-dark);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--ember-glow);
     }
 
-    /* ==================== IMMERSIVE HEADER (3D LAYERS) ==================== */
-    .hero {
+    /* ==================== HEADER ==================== */
+    .astonishing-header {
       position: relative;
       width: 100%;
       height: 100vh;
-      min-height: 800px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      perspective: 2000px;
-      transform-style: preserve-3d;
+      min-height: 750px;
+      background: url('https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=2070&auto=format&fit=crop') center/cover fixed;
+      isolation: isolate;
     }
 
-    .hero-layer {
+    .astonishing-header::before {
+      content: '';
       position: absolute;
       inset: 0;
+      background: radial-gradient(circle at 30% 50%, rgba(180,75,60,0.25) 0%, rgba(10,8,7,0.98) 80%);
+      z-index: 1;
+    }
+
+    /* top bar */
+    .header-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 20;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,140,100,0.2);
+    }
+
+    .logo-3d {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      font-weight: 900;
+      line-height: 1;
+      text-shadow: 0 0 20px var(--ember-red);
+      background: linear-gradient(135deg, #fff0e0, #c9a887);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .logo-3d span {
+      display: block;
+      font-size: 0.75rem;
+      font-family: var(--font-sans);
+      letter-spacing: 6px;
+      color: var(--grain-gold);
+      -webkit-text-fill-color: var(--grain-gold);
+    }
+
+    .header-top-right {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .header-top-right .phone {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--grain-light);
+    }
+
+    /* header content */
+    .header-content {
+      position: relative;
+      z-index: 10;
+      height: 100%;
       display: flex;
       align-items: center;
-      justify-content: center;
-      transform-style: preserve-3d;
+      padding-top: 80px;
     }
 
-    .hero-layer-1 {
-      transform: translateZ(-200px) scale(1.2);
-      background: radial-gradient(circle at 30% 50%, rgba(180,75,60,0.2) 0%, transparent 60%);
-      filter: blur(30px);
+    .hero-text-block {
+      flex: 1;
+      padding-left: 4rem;
+      transform: translateY(-5%);
     }
 
-    .hero-layer-2 {
-      transform: translateZ(-100px) scale(1.1);
-    }
-
-    .hero-layer-3 {
-      transform: translateZ(0px) scale(1);
-    }
-
-    .hero-layer-4 {
-      transform: translateZ(100px) scale(0.9);
+    .hero-label {
+      display: inline-block;
+      background: rgba(180,75,60,0.2);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,200,150,0.3);
+      padding: 0.5rem 2rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      letter-spacing: 4px;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
     }
 
     .hero-title {
       font-family: var(--font-serif);
-      font-size: 12vw;
+      font-size: clamp(4rem, 8vw, 7rem);
       font-weight: 900;
+      line-height: 0.9;
       text-transform: uppercase;
-      color: transparent;
-      -webkit-text-stroke: 2px var(--ember-red);
-      text-shadow: 0 0 50px rgba(180,75,60,0.5);
-      letter-spacing: 0.1em;
-      position: relative;
-      animation: drift 10s infinite alternate ease-in-out;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7));
     }
-
-    .hero-title span {
+    .hero-title .line1 {
       display: block;
-      font-size: 4vw;
-      font-weight: 300;
-      color: var(--grain-gold);
-      -webkit-text-stroke: 0;
       text-shadow: 0 0 30px var(--ember-red);
+      background: linear-gradient(135deg, #ffe5cc, #d9b382);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-title .line2 {
+      display: block;
+      font-size: 0.5em;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      color: rgba(255,220,170,0.9);
+    }
+    .hero-title .line3 {
+      display: block;
+      font-size: 0.35em;
+      font-weight: 400;
       letter-spacing: 0.3em;
+      color: var(--grain-gold);
+      margin-top: 0.5rem;
     }
 
-    @keyframes drift {
-      0% { transform: translateX(-2%) translateY(-1%) rotateX(2deg) rotateY(1deg); }
-      100% { transform: translateX(2%) translateY(1%) rotateX(-2deg) rotateY(-1deg); }
+    .hero-quote {
+      max-width: 450px;
+      margin-top: 2rem;
+      font-style: italic;
+      opacity: 0.8;
     }
 
-    .floating-card {
-      position: absolute;
-      bottom: 20%;
-      right: 10%;
-      width: 300px;
-      padding: 2rem;
-      background: rgba(30,27,27,0.7);
-      backdrop-filter: blur(15px);
+    /* 3D card */
+    .hero-card-3d {
+      flex: 0 0 380px;
+      margin-right: 4rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
       border: 1px solid rgba(199,147,105,0.3);
-      border-radius: 30px;
-      transform: translateZ(80px) rotateY(5deg) rotateX(2deg);
-      box-shadow: 0 30px 50px rgba(0,0,0,0.7);
-      animation: float 6s infinite alternate;
+      border-radius: 40px;
+      padding: 2.2rem;
+      box-shadow: var(--shadow-heavy);
+      transform: perspective(1200px) rotateY(-5deg) rotateX(2deg) translateZ(20px);
+      transition: transform 0.4s ease;
+    }
+    .hero-card-3d:hover {
+      transform: perspective(1200px) rotateY(-3deg) rotateX(1deg) translateZ(30px) translateY(-5px);
     }
 
-    @keyframes float {
-      0% { transform: translateZ(80px) rotateY(5deg) rotateX(2deg) translateY(0); }
-      100% { transform: translateZ(80px) rotateY(5deg) rotateX(2deg) translateY(-20px); }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed var(--grain-gold);
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
     }
-
-    .floating-card .price {
+    .card-header i {
+      font-size: 2rem;
+      color: var(--ember-red);
+    }
+    .card-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 1.2rem 0;
+      font-size: 1.1rem;
+    }
+    .card-price {
       color: var(--grain-gold);
       font-weight: 700;
     }
+    .card-footer {
+      margin-top: 2rem;
+    }
 
-    /* ==================== NAVIGATION BUTTONS (same as before) ==================== */
+    /* stats bar */
+    .header-stats {
+      position: absolute;
+      bottom: 3rem;
+      left: 2rem;
+      z-index: 15;
+      display: flex;
+      gap: 3rem;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(12px);
+      padding: 1rem 2.5rem;
+      border-radius: 60px;
+      border: var(--border-smoke);
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat .number {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--grain-gold);
+      line-height: 1;
+    }
+    .stat .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.8;
+    }
+
+    /* ==================== NAVIGATION BUTTONS (two) ==================== */
     .nav-btn {
       position: fixed;
       z-index: 1000;
-      background: #1e1b1b;
+      background: var(--smoke-charcoal);
       border: 2px solid var(--ember-red);
       border-radius: 50px;
       display: flex;
@@ -211,7 +350,7 @@
       gap: 12px;
       cursor: pointer;
       box-shadow: 0 0 25px rgba(180,75,60,0.5);
-      transition: all 0.2s ease;
+      transition: var(--transition);
       backdrop-filter: blur(8px);
     }
 
@@ -246,6 +385,7 @@
       text-transform: uppercase;
     }
 
+    /* left vertical button */
     .nav-btn.left-center {
       left: 30px;
       top: 50%;
@@ -254,24 +394,22 @@
       padding: 1rem 0.5rem;
       gap: 8px;
     }
-
     .nav-btn.left-center .btn-text {
       writing-mode: vertical-rl;
       text-orientation: upright;
       margin: 0;
       line-height: 1.2;
     }
-
     .nav-btn.left-center .btn-text .main {
       font-size: 0.9rem;
       letter-spacing: normal;
     }
-
     .nav-btn.left-center .btn-text .sub {
       font-size: 0.6rem;
       margin-top: 4px;
     }
 
+    /* bottom center button */
     .nav-btn.bottom-center {
       bottom: 30px;
       left: 50%;
@@ -280,7 +418,7 @@
       padding: 0.8rem 1.8rem;
     }
 
-    /* ==================== CIRCULAR MENU (centered overlay) ==================== */
+    /* ==================== CIRCULAR MENU OVERLAY ==================== */
     .circ-menu-overlay {
       position: fixed;
       top: 0;
@@ -295,7 +433,7 @@
       background: rgba(0,0,0,0.7);
       opacity: 0;
       transition: opacity 0.3s ease;
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(8px);
     }
 
     .circ-menu-overlay.open {
@@ -309,13 +447,13 @@
       border-radius: 50%;
       background: transparent;
       border: 2px solid var(--ember-red);
-      box-shadow: 0 0 40px rgba(180,75,60,0.5);
+      box-shadow: 0 0 50px rgba(180,75,60,0.6);
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       transform: scale(0.3);
-      transition: transform 0.3s ease;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .circ-menu-overlay.open .circular-menu {
@@ -359,7 +497,7 @@
       font-size: 0.8rem;
       font-weight: 600;
       text-transform: uppercase;
-      transition: all 0.2s;
+      transition: 0.2s;
       cursor: pointer;
       box-shadow: 0 0 15px rgba(0,0,0,0.7);
       top: 50%;
@@ -379,229 +517,425 @@
       height: 65px;
     }
 
-    /* ==================== MAIN CONTENT (mind-blowing sections) ==================== */
+    /* ==================== MAIN CONTENT SECTIONS ==================== */
     .section {
+      padding: 6rem 0;
       position: relative;
-      padding: 8rem 0;
-      z-index: 1;
     }
 
-    /* ---- SMOKE RING QUOTE ---- */
-    .quote-ring {
-      text-align: center;
-      font-size: 3rem;
+    .section-smoke {
+      background: linear-gradient(180deg, var(--smoke-dark) 0%, #16110f 100%);
+    }
+
+    /* welcome section */
+    .welcome-title {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
       font-family: var(--font-serif);
       font-weight: 900;
-      color: transparent;
-      -webkit-text-stroke: 1px var(--ember-red);
-      text-shadow: 0 0 80px rgba(180,75,60,0.3);
-      position: relative;
-    }
-
-    .quote-ring span {
-      display: block;
-      font-size: 1.2rem;
-      color: var(--grain-light);
-      -webkit-text-stroke: 0;
-      margin-top: 2rem;
-      letter-spacing: 8px;
-    }
-
-    /* ---- 3D MENU CAROUSEL (rotating dishes) ---- */
-    .carousel-3d {
-      position: relative;
-      height: 500px;
-      margin: 4rem 0;
-      transform-style: preserve-3d;
-      animation: rotateCarousel 30s infinite linear;
-    }
-
-    @keyframes rotateCarousel {
-      0% { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
-    }
-
-    .carousel-item {
-      position: absolute;
-      width: 250px;
-      height: 350px;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) rotateY(calc(var(--i) * 60deg)) translateZ(400px);
-      background: rgba(30,27,27,0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--ember-red);
-      border-radius: 30px;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       text-align: center;
-      box-shadow: 0 0 50px rgba(0,0,0,0.5);
-      backface-visibility: visible;
     }
-
-    .carousel-item i {
-      font-size: 3rem;
+    .welcome-title span {
       color: var(--ember-red);
-      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    .welcome-title span::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--ember-red), transparent);
+    }
+    .welcome-sub {
+      text-align: center;
+      max-width: 700px;
+      margin: 2rem auto 4rem;
+      font-size: 1.2rem;
+      opacity: 0.8;
     }
 
-    .carousel-item h3 {
-      font-size: 1.8rem;
-      font-family: var(--font-serif);
-      margin-bottom: 0.5rem;
+    /* featured grid */
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
     }
 
-    .carousel-item .price {
-      font-size: 1.5rem;
-      color: var(--grain-gold);
+    .feature-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(199,147,105,0.2);
+      border-radius: 40px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
     }
-
-    /* ---- PARALLAX SMOKE LAYER (scroll effect) ---- */
-    .parallax-layer {
+    .feature-card::before {
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none;
-      background: repeating-linear-gradient(45deg, rgba(180,75,60,0.05) 0px, rgba(180,75,60,0.05) 2px, transparent 2px, transparent 10px);
-      mix-blend-mode: overlay;
-      z-index: -1;
+      background: radial-gradient(circle at 50% 0%, rgba(180,75,60,0.2), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--ember-red);
+      box-shadow: 0 30px 40px -20px rgba(180,75,60,0.5);
+    }
+    .feature-card:hover::before {
+      opacity: 1;
     }
 
-    /* ---- DUAL PANEL (story/visit) ---- */
-    .dual-panel {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .panel-left {
-      transform: perspective(1000px) rotateY(5deg) rotateX(2deg);
-      padding: 3rem;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--ember-red);
-      border-radius: 60px;
-    }
-
-    .panel-left h2 {
+    .feature-icon {
       font-size: 3rem;
-      font-family: var(--font-serif);
+      color: var(--ember-red);
       margin-bottom: 1.5rem;
     }
-
-    .panel-left p {
-      font-size: 1.1rem;
-      opacity: 0.8;
+    .feature-card h3 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .feature-desc {
+      font-size: 0.95rem;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+    .feature-price {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--grain-gold);
     }
 
-    .panel-right {
+    /* story section with parallax */
+    .story-section {
       position: relative;
-      height: 400px;
-      background: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop') center/cover;
-      border-radius: 60px;
-      border: 2px solid var(--ember-red);
-      box-shadow: 0 0 50px rgba(180,75,60,0.3);
-      transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
-      overflow: hidden;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      background: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop') center/cover fixed;
+      isolation: isolate;
     }
-
-    .panel-right::after {
+    .story-section::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.3);
+      background: rgba(0,0,0,0.6);
+      z-index: 1;
+    }
+    .story-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .story-quote {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+    .story-author {
+      font-size: 1.2rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.7;
     }
 
-    .panel-right .address {
-      position: absolute;
-      bottom: 30px;
-      left: 30px;
-      z-index: 2;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(5px);
-      padding: 1rem 2rem;
-      border-radius: 50px;
+    /* reviews carousel (pure CSS) */
+    .reviews-carousel {
+      overflow: hidden;
+      padding: 2rem 0;
+      position: relative;
+    }
+    .carousel-track {
+      display: flex;
+      gap: 2rem;
+      animation: scrollReviews 25s linear infinite;
+      width: max-content;
+    }
+    .carousel-track:hover {
+      animation-play-state: paused;
+    }
+    @keyframes scrollReviews {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .review-card {
+      width: 350px;
+      background: rgba(30,27,27,0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--ember-red);
+      border-radius: 30px;
+      padding: 2rem;
+      flex-shrink: 0;
+      text-align: left;
+    }
+    .review-stars {
+      color: #f5b342;
+      margin-bottom: 1rem;
+    }
+    .review-text {
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .review-author {
+      font-weight: 700;
+      color: var(--grain-gold);
+    }
+    .review-platform {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    /* location & hours card */
+    .location-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(199,147,105,0.3);
+      border-radius: 60px;
+      padding: 3rem;
+      margin: 4rem 0;
+    }
+    .info-item {
+      display: flex;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      align-items: center;
+    }
+    .info-item i {
+      font-size: 2rem;
+      color: var(--ember-red);
+      width: 40px;
+    }
+    .hours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #3a332e;
+      padding: 0.5rem 0;
+    }
+    .map-placeholder {
+      background: #2f2a26;
+      border-radius: 40px;
+      height: 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       border: 1px solid var(--ember-red);
     }
 
-    /* ---- FOOTER WITH SMOKE RINGS ---- */
-    .footer-smoke {
+    /* footer */
+    .footer {
       background: #0f0d0b;
       border-top: 2px solid var(--ember-red);
-      padding: 4rem 0;
+      padding: 4rem 0 2rem;
       position: relative;
       overflow: hidden;
     }
-
-    .footer-smoke::before {
+    .footer::before {
       content: '';
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 200px;
+      height: 150px;
       background: radial-gradient(circle at 50% 100%, rgba(180,75,60,0.2), transparent 70%);
       filter: blur(40px);
     }
-
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 2rem;
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 2fr;
+      gap: 3rem;
+      position: relative;
+      z-index: 2;
     }
-
-    .footer-logo {
-      font-size: 2rem;
+    .footer-logo-sm {
       font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 900;
+      line-height: 1.2;
     }
-
+    .footer-logo-sm span {
+      color: var(--ember-red);
+      font-size: 0.8rem;
+      display: block;
+      font-family: var(--font-sans);
+      letter-spacing: 4px;
+    }
+    .footer-links a {
+      display: block;
+      margin: 0.8rem 0;
+      opacity: 0.8;
+      transition: 0.2s;
+    }
+    .footer-links a:hover {
+      opacity: 1;
+      color: var(--ember-glow);
+      transform: translateX(5px);
+    }
+    .footer-social {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
     .footer-social a {
       font-size: 1.8rem;
-      margin: 0 1rem;
       color: var(--grain-gold);
       transition: 0.2s;
     }
-
     .footer-social a:hover {
       color: var(--ember-red);
       transform: scale(1.2);
     }
+    .footer-bottom {
+      text-align: center;
+      padding-top: 3rem;
+      opacity: 0.6;
+      font-size: 0.8rem;
+      border-top: var(--border-smoke);
+      margin-top: 3rem;
+    }
 
-    /* responsiveness */
+    /* responsive */
+    @media (max-width: 1000px) {
+      .hero-card-3d {
+        flex-basis: 300px;
+        margin-right: 2rem;
+      }
+      .hero-title {
+        font-size: 5rem;
+      }
+      .hero-title .line2 {
+        font-size: 2.5rem;
+        letter-spacing: 8px;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
     @media (max-width: 800px) {
-      .hero-title { font-size: 15vw; }
-      .floating-card { display: none; }
-      .dual-panel { grid-template-columns: 1fr; }
-      .carousel-3d { transform: scale(0.7); }
-      .nav-btn.left-center { display: none; } /* hide left on mobile if needed */
+      .header-content {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding: 1rem;
+      }
+      .hero-text-block {
+        padding-left: 0;
+        margin-bottom: 2rem;
+      }
+      .hero-card-3d {
+        margin-right: 0;
+        width: 90%;
+        max-width: 380px;
+      }
+      .header-stats {
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        gap: 1.5rem;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.8rem;
+      }
+      .location-card {
+        grid-template-columns: 1fr;
+      }
+      .nav-btn.left-center {
+        display: none; /* hide left on mobile for simplicity */
+      }
+    }
+    @media (max-width: 600px) {
+      .hero-title {
+        font-size: 3.5rem;
+      }
+      .hero-title .line2 {
+        font-size: 1.8rem;
+        letter-spacing: 5px;
+      }
+      .hero-title .line3 {
+        font-size: 1.2rem;
+      }
+      .header-top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+      }
+      .header-top-right {
+        width: 100%;
+        justify-content: space-between;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Canvas for subtle particle smoke (lightweight) -->
-  <canvas id="smoke-canvas"></canvas>
+  <!-- HEADER -->
+  <header class="astonishing-header">
+    <div class="header-top-bar">
+      <div class="logo-3d">THE FRANCIS <span>SMOKEHOUSE & MEATS</span></div>
+      <div class="header-top-right">
+        <span class="phone"><i class="fas fa-phone-alt"></i> (225) 245-5046</span>
+        <a href="#" class="btn btn-primary">SMOKE MENU</a>
+        <a href="#" class="btn btn-outline">FIND US</a>
+      </div>
+    </div>
 
-  <!-- IMMERSIVE HEADER (3D layers) -->
-  <section class="hero">
-    <div class="hero-layer hero-layer-1"></div>
-    <div class="hero-layer hero-layer-2">
-      <div class="hero-title">SMOKE<span>LOW & SLOW</span></div>
+    <div class="header-content container">
+      <div class="hero-text-block">
+        <div class="hero-label"><i class="fas fa-fire"></i> ST. FRANCISVILLE EST. 2015</div>
+        <h1 class="hero-title">
+          <span class="line1">SMOKE</span>
+          <span class="line2">RUBBED & REVERED</span>
+          <span class="line3">LOW & SLOW</span>
+        </h1>
+        <p class="hero-quote">“Brisket practically melted in my mouth” — Tripadvisor</p>
+      </div>
+      <div class="hero-card-3d">
+        <div class="card-header">
+          <i class="fas fa-smog"></i>
+          <span>HOT OFF THE SMOKER</span>
+          <i class="fas fa-pepper-hot"></i>
+        </div>
+        <div class="card-item"><span>Brisket plate (2 sides)</span> <span class="card-price">$10.99</span></div>
+        <div class="card-item"><span>Full rack ribs</span> <span class="card-price">$19.99</span></div>
+        <div class="card-item"><span>Boudin balls (jalapeño)</span> <span class="card-price">$6.99</span></div>
+        <div class="card-item"><span>Corn pudding · small</span> <span class="card-price">$2.75</span></div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary" style="padding:0.6rem 1.2rem;">FULL MENU</a>
+        </div>
+      </div>
     </div>
-    <div class="hero-layer hero-layer-3"></div>
-    <div class="floating-card">
-      <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;"><span>🔥 BRISKET</span> <span class="price">$10.99</span></div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;"><span>🔥 BOUDIN BALLS</span> <span class="price">$6.99</span></div>
-      <div style="display: flex; justify-content: space-between;"><span>🔥 FULL RACK</span> <span class="price">$19.99</span></div>
+
+    <div class="header-stats">
+      <div class="stat"><span class="number">4.7</span> <div class="label">Google (505)</div></div>
+      <div class="stat"><span class="number">4.5</span> <div class="label">Tripadvisor (143)</div></div>
+      <div class="stat"><span class="number">2015</span> <div class="label">Founded</div></div>
     </div>
-  </section>
+  </header>
 
   <!-- NAVIGATION BUTTONS (two) -->
   <div class="nav-btn left-center" id="navBtnLeft">
@@ -619,7 +953,7 @@
     </div>
   </div>
 
-  <!-- CIRCULAR MENU (overlay) -->
+  <!-- CIRCULAR MENU OVERLAY -->
   <div class="circ-menu-overlay" id="circMenuOverlay">
     <div class="circular-menu">
       <div class="center-home" id="homeCenter"><i class="fas fa-home"></i></div>
@@ -632,43 +966,116 @@
     </div>
   </div>
 
-  <!-- MAIN MIND-BLOWING CONTENT -->
+  <!-- MAIN CONTENT -->
   <main>
-    <!-- Smoke ring quote -->
-    <section class="section">
+    <!-- WELCOME SECTION -->
+    <section class="section section-smoke">
       <div class="container">
-        <div class="quote-ring">
-          “WHERE THERE'S SMOKE, THERE'S FLAVOR”
-          <span>EST. 2015 · ST. FRANCISVILLE</span>
+        <h2 class="welcome-title">WHERE <span>SMOKE</span> MEETS SOUL</h2>
+        <p class="welcome-sub">Louisiana tradition, slow-smoked over pecan and oak. Every bite tells a story.</p>
+
+        <!-- FEATURED DISHES GRID -->
+        <div class="featured-grid">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-drumstick-bite"></i></div>
+            <h3>Brisket</h3>
+            <p class="feature-desc">12 hours over post oak, rubbed with our signature spice blend.</p>
+            <div class="feature-price">$10.99</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-egg"></i></div>
+            <h3>Boudin Balls</h3>
+            <p class="feature-desc">Crispy, creamy, with a hidden kick of pepper jack.</p>
+            <div class="feature-price">$6.99</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-utensils"></i></div>
+            <h3>Full Ribs</h3>
+            <p class="feature-desc">Fall-off-the-bone, glazed with bourbon molasses.</p>
+            <div class="feature-price">$19.99</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 3D rotating menu carousel -->
-    <section class="section" style="perspective: 2000px;">
-      <div class="container" style="position: relative; height: 500px;">
-        <div class="carousel-3d">
-          <div class="carousel-item" style="--i: 0;"><i class="fas fa-drumstick-bite"></i><h3>Brisket</h3><div class="price">$10.99</div></div>
-          <div class="carousel-item" style="--i: 1;"><i class="fas fa-egg"></i><h3>Boudin Balls</h3><div class="price">$6.99</div></div>
-          <div class="carousel-item" style="--i: 2;"><i class="fas fa-utensils"></i><h3>Full Ribs</h3><div class="price">$19.99</div></div>
-          <div class="carousel-item" style="--i: 3;"><i class="fas fa-burger"></i><h3>Burger</h3><div class="price">$8.99</div></div>
-          <div class="carousel-item" style="--i: 4;"><i class="fas fa-shrimp"></i><h3>Po-boy</h3><div class="price">$10.99</div></div>
-          <div class="carousel-item" style="--i: 5;"><i class="fas fa-cake-candles"></i><h3>Pudding</h3><div class="price">$7.00</div></div>
+    <!-- STORY SECTION WITH PARALLAX -->
+    <section class="story-section">
+      <div class="story-content">
+        <div class="story-quote">“We don't just smoke meat — we carry on a legacy.”</div>
+        <div class="story-author">— THE FRANCIS FAMILY</div>
+        <a href="#" class="btn btn-primary" style="margin-top: 2rem;">READ OUR STORY</a>
+      </div>
+    </section>
+
+    <!-- REVIEWS CAROUSEL -->
+    <section class="section" id="reviews">
+      <div class="container">
+        <h2 class="section-title">WHAT THEY'RE SAYING</h2>
+        <div class="reviews-carousel">
+          <div class="carousel-track">
+            <!-- duplicate for seamless scroll -->
+            <div class="review-card">
+              <div class="review-stars">★★★★★</div>
+              <div class="review-text">“Best brisket I've ever had. The corn pudding is to die for.”</div>
+              <div class="review-author">– Sarah M.</div>
+              <div class="review-platform"><i class="fab fa-google"></i> Google</div>
+            </div>
+            <div class="review-card">
+              <div class="review-stars">★★★★½</div>
+              <div class="review-text">“Incredible flavor, friendly staff. A hidden gem.”</div>
+              <div class="review-author">– John D.</div>
+              <div class="review-platform"><i class="fab fa-tripadvisor"></i> Tripadvisor</div>
+            </div>
+            <div class="review-card">
+              <div class="review-stars">★★★★★</div>
+              <div class="review-text">“Boudin balls are out of this world. Worth the drive.”</div>
+              <div class="review-author">– Lisa R.</div>
+              <div class="review-platform"><i class="fab fa-google"></i> Google</div>
+            </div>
+            <div class="review-card">
+              <div class="review-stars">★★★★★</div>
+              <div class="review-text">“The deck is dog-friendly and the ribs are perfect.”</div>
+              <div class="review-author">– Mike T.</div>
+              <div class="review-platform"><i class="fab fa-tripadvisor"></i> Tripadvisor</div>
+            </div>
+            <!-- duplicates -->
+            <div class="review-card">
+              <div class="review-stars">★★★★★</div>
+              <div class="review-text">“Best brisket I've ever had. The corn pudding is to die for.”</div>
+              <div class="review-author">– Sarah M.</div>
+              <div class="review-platform"><i class="fab fa-google"></i> Google</div>
+            </div>
+            <div class="review-card">
+              <div class="review-stars">★★★★½</div>
+              <div class="review-text">“Incredible flavor, friendly staff. A hidden gem.”</div>
+              <div class="review-author">– John D.</div>
+              <div class="review-platform"><i class="fab fa-tripadvisor"></i> Tripadvisor</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Dual panel story + visit -->
-    <section class="section">
-      <div class="container dual-panel">
-        <div class="panel-left">
-          <h2>THE FRANCIS</h2>
-          <p>Since 2015, we've been slow-smoking the finest meats over post oak and pecan. Our brisket melts, our boudin balls are legendary, and our deck is always welcoming. Come taste the smoke.</p>
-          <a href="#" class="btn btn-primary" style="margin-top: 2rem;">READ OUR STORY</a>
-        </div>
-        <div class="panel-right">
-          <div class="address">
-            <i class="fas fa-map-pin"></i> 6779 US Hwy 61, St. Francisville, LA
+    <!-- LOCATION & HOURS -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="location-card">
+          <div>
+            <h2 style="font-family: var(--font-serif); font-size: 2.5rem;">VISIT US</h2>
+            <div class="info-item"><i class="fas fa-location-dot"></i> 6779 US Highway 61, St. Francisville, LA 70775</div>
+            <div class="info-item"><i class="fas fa-clock"></i> 
+              <div>Mon–Sat 10am–6pm<br>Sunday 10am–3pm</div>
+            </div>
+            <div class="info-item"><i class="fas fa-phone"></i> (225) 245-5046</div>
+            <div class="info-item"><i class="fas fa-envelope"></i> francissmokehouse@att.net</div>
+            <div class="info-item"><i class="fas fa-wheelchair"></i> Wheelchair accessible · Takeout · Outdoor deck</div>
+          </div>
+          <div>
+            <div class="map-placeholder">
+              <i class="fas fa-map-location-dot" style="font-size: 4rem; color: var(--ember-red); margin-bottom: 1rem;"></i>
+              <p>6779 US Hwy 61<br>St. Francisville, LA</p>
+              <a href="#" class="btn btn-outline" style="margin-top: 1rem;">GET DIRECTIONS</a>
+            </div>
           </div>
         </div>
       </div>
@@ -676,136 +1083,109 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer-smoke">
-    <div class="container footer-content">
-      <div class="footer-logo">THE FRANCIS <span style="display: block; font-size: 1rem; letter-spacing: 4px;">SMOKEHOUSE</span></div>
-      <div class="footer-social">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-tripadvisor"></i></a>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo-sm">THE FRANCIS <span>SMOKEHOUSE</span></div>
+          <p style="margin: 1rem 0 2rem;">Smoked low & slow since 2015.</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-tripadvisor"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>EXPLORE</h4>
+          <a href="#">Menu</a>
+          <a href="#">Story</a>
+          <a href="#">Reviews</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="footer-links">
+          <h4>INFO</h4>
+          <a href="#">Catering</a>
+          <a href="#">Order Online</a>
+          <a href="#">Gift Cards</a>
+          <a href="#">Jobs</a>
+        </div>
+        <div>
+          <h4>HILL COUNTRY</h4>
+          <p style="opacity: 0.7;">5716 Commerce St.<br>(225) 635-2880<br>Call ahead – status uncertain</p>
+        </div>
       </div>
-      <p>© 2025 · (225) 245-5046</p>
+      <div class="footer-bottom">
+        <p>© 2025 The Francis Smokehouse & Specialty Meats. All rights reserved.</p>
+        <p style="margin-top: 0.5rem;">Designed with smoke and soul in St. Francisville, LA.</p>
+      </div>
     </div>
   </footer>
 
   <script>
-    // --- SMOKE CANVAS (lightweight particle system) ---
-    const canvas = document.getElementById('smoke-canvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    let particles = [];
+    (function() {
+      // CIRCULAR MENU TOGGLE
+      const overlay = document.getElementById('circMenuOverlay');
+      const leftBtn = document.getElementById('navBtnLeft');
+      const bottomBtn = document.getElementById('navBtnBottom');
+      const homeCenter = document.getElementById('homeCenter');
+      const menuItems = document.querySelectorAll('.menu-item');
 
-    function initParticles() {
-      const count = 50;
-      for (let i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random(),
-          y: Math.random(),
-          radius: 0.1 + Math.random() * 0.15,
-          speedX: (Math.random() - 0.5) * 0.0008,
-          speedY: (Math.random() - 0.8) * 0.0004,
-          opacity: 0.1 + Math.random() * 0.2,
-        });
+      function toggleMenu() {
+        overlay.classList.toggle('open');
       }
-    }
 
-    function resizeCanvas() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-    }
-
-    function drawSmoke() {
-      ctx.clearRect(0, 0, width, height);
-      // background gradient
-      const gradient = ctx.createRadialGradient(width*0.5, height*0.5, 0, width*0.5, height*0.5, width*0.8);
-      gradient.addColorStop(0, 'rgba(30,20,15,0.2)');
-      gradient.addColorStop(1, 'rgba(10,8,7,0.4)');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0,0,width,height);
-
-      particles.forEach(p => {
-        p.x += p.speedX;
-        p.y += p.speedY;
-        if (p.x < 0) p.x = 1;
-        if (p.x > 1) p.x = 0;
-        if (p.y < 0) p.y = 1;
-        if (p.y > 1) p.y = 0;
-
-        const xPos = p.x * width;
-        const yPos = p.y * height;
-        const radius = p.radius * Math.min(width, height) * 0.8;
-
-        ctx.beginPath();
-        ctx.arc(xPos, yPos, radius, 0, Math.PI*2);
-        ctx.fillStyle = `rgba(160, 100, 70, ${p.opacity})`;
-        ctx.filter = 'blur(10px)';
-        ctx.fill();
+      leftBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
       });
-      ctx.filter = 'none';
-      requestAnimationFrame(drawSmoke);
-    }
 
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    initParticles();
-    drawSmoke();
+      bottomBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
+      });
 
-    // --- CIRCULAR MENU LOGIC ---
-    const overlay = document.getElementById('circMenuOverlay');
-    const leftBtn = document.getElementById('navBtnLeft');
-    const bottomBtn = document.getElementById('navBtnBottom');
-    const homeCenter = document.getElementById('homeCenter');
-    const menuItems = document.querySelectorAll('.menu-item');
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.remove('open');
+        }
+      });
 
-    function toggleMenu() {
-      overlay.classList.toggle('open');
-    }
-
-    leftBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleMenu();
-    });
-
-    bottomBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleMenu();
-    });
-
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) {
+      homeCenter.addEventListener('click', () => {
         overlay.classList.remove('open');
-      }
-    });
-
-    homeCenter.addEventListener('click', () => {
-      overlay.classList.remove('open');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    menuItems.forEach(item => {
-      item.addEventListener('click', (e) => {
-        overlay.classList.remove('open');
-        // smooth scroll to sections (just for demo, scroll to top)
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
-    });
 
-    document.querySelector('.circular-menu').addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
+      menuItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+          overlay.classList.remove('open');
+          const link = item.getAttribute('data-link');
+          if (link && link.startsWith('#')) {
+            const target = document.querySelector(link);
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            // fallback scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
 
-    // --- 3D carousel pause on hover ---
-    const carousel = document.querySelector('.carousel-3d');
-    if (carousel) {
-      carousel.addEventListener('mouseenter', () => {
-        carousel.style.animationPlayState = 'paused';
+      document.querySelector('.circular-menu').addEventListener('click', (e) => {
+        e.stopPropagation();
       });
-      carousel.addEventListener('mouseleave', () => {
-        carousel.style.animationPlayState = 'running';
+
+      // SMOOTH SCROLL FOR ALL ANCHOR LINKS (optional)
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href === "#") return;
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
       });
-    }
+    })();
   </script>
 </body>
 </html>
