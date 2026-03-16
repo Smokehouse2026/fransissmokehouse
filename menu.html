@@ -182,9 +182,13 @@
     .cube-face h3 { font-family:var(--serif); font-size:2rem; line-height:1; z-index:1; }
     .cube-face p { z-index:1; color:var(--paper-soft); font-size:.88rem; line-height:1.55; }
     .face-list { z-index:1; display:grid; align-content:start; gap:10px; overflow:auto; padding-right:4px; }
-    .face-item { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; border-radius:16px; padding:10px 12px; background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.045); min-height:48px; }
-    .face-item-name { font-weight:600; font-size:.92rem; }
-    .face-item-price { color:var(--gold-2); font-weight:700; white-space:normal; text-align:right; font-size:.82rem; line-height:1.15; display:flex; justify-content:flex-end; align-items:center; min-width:84px; max-width:92px; flex:0 0 92px; }
+    .face-item { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; align-items:center; border-radius:16px; padding:10px 12px; background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.045); min-height:56px; }
+    .face-item-main { min-width:0; display:grid; gap:6px; }
+    .face-item-name { font-weight:600; font-size:.92rem; min-width:0; overflow-wrap:anywhere; }
+    .face-item-side { display:grid; justify-items:end; align-content:center; gap:8px; min-width:78px; max-width:96px; }
+    .face-item-price { color:var(--gold-2); font-weight:700; white-space:normal; text-align:right; font-size:.82rem; line-height:1.15; min-width:0; width:100%; overflow-wrap:anywhere; }
+    .cube-add-btn { appearance:none; border:1px solid rgba(229,122,82,0.42); background:linear-gradient(135deg, rgba(182,76,50,0.24), rgba(199,154,103,0.10)); color:var(--paper); border-radius:12px; padding:7px 10px; min-height:34px; min-width:64px; cursor:pointer; transition:transform .18s var(--ease), filter .18s var(--ease); font-size:.76rem; font-weight:700; line-height:1; }
+    .cube-add-btn:hover, .cube-add-btn:focus-visible { transform:translateY(-1px); filter:brightness(1.08); outline:none; }
     .face-front { transform: rotateY(0deg) translateZ(calc(var(--cube-size) / 2)); }
     .face-right { transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2)); }
     .face-back { transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2)); }
@@ -244,9 +248,9 @@
     .plate-empty { text-align:center; display:grid; gap:8px; color:var(--paper-soft); max-width:70%; }
     .plate-empty strong { color:var(--gold-2); font-family:var(--serif); font-size:1.5rem; font-weight:800; }
     .plate-list-wrap { width:100%; display:grid; gap:10px; align-content:start; max-height:100%; overflow:auto; padding-right:2px; }
-    .plate-row { display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center; padding:10px 12px; border-radius:16px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.05); min-height:48px; }
-    .plate-row-name { font-size:.88rem; font-weight:700; }
-    .plate-row-price { color:var(--gold-2); font-size:.84rem; font-weight:800; white-space:nowrap; }
+    .plate-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(54px, auto) auto; gap:8px; align-items:center; padding:10px 12px; border-radius:16px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.05); min-height:48px; width:100%; overflow:hidden; }
+    .plate-row-name { font-size:.88rem; font-weight:700; min-width:0; overflow-wrap:anywhere; }
+    .plate-row-price { color:var(--gold-2); font-size:.84rem; font-weight:800; white-space:normal; text-align:right; line-height:1.1; overflow-wrap:anywhere; }
     .remove-btn { appearance:none; width:34px; height:34px; border-radius:999px; border:1px solid rgba(229,122,82,0.4); background:rgba(182,76,50,0.16); color:var(--paper); cursor:pointer; font-size:1rem; line-height:1; }
     .builder-footer { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
     .plate-total { display:grid; gap:2px; }
@@ -265,7 +269,7 @@
     .drawer-foot { border-bottom:none; border-top:1px solid var(--line); }
     .drawer-body { padding:18px; overflow:auto; display:grid; gap:12px; align-content:start; }
     .mini-list { display:grid; gap:10px; }
-    .mini-row { display:flex; justify-content:space-between; gap:12px; padding:12px 14px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,0.03); }
+    .mini-row { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; gap:12px; padding:12px 14px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,0.03); } .mini-row span, .mini-row strong { min-width:0; overflow-wrap:anywhere; text-align:right; } .mini-row span { text-align:left; }
     .footer { padding:26px 0 40px; color:var(--paper-soft); }
     .footer-inner { display:flex; justify-content:space-between; gap:18px; align-items:center; flex-wrap:wrap; border-top:1px solid var(--line); padding-top:20px; }
     .hidden { display:none!important; }
@@ -2904,7 +2908,676 @@
       .bank-meta { font-size: .67rem; }
     }
 
-  </style>
+  
+/* === overflow fixes: burgers tab + builder + cube add buttons === */
+.builder-items,
+.builder-grid,
+.builder-panel,
+.builder-tab-panel,
+.category-panel,
+.tab-panel,
+.items-grid,
+.menu-items-grid {
+  min-width: 0 !important;
+}
+
+.builder-item,
+.menu-card-3d,
+.cube-face li,
+.plate-items li,
+.plate-row,
+.plate-item,
+.builder-chip,
+.builder-line-item,
+.item-card,
+.item-row {
+  min-width: 0 !important;
+}
+
+.builder-item,
+.item-card,
+.menu-card-3d {
+  overflow: hidden !important;
+}
+
+.builder-item,
+.item-card,
+.menu-card-3d,
+.cube-face li,
+.plate-items li,
+.plate-row,
+.plate-item {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  gap: 0.75rem !important;
+  align-items: center !important;
+}
+
+.builder-item .item-name,
+.item-card .item-name,
+.menu-card-3d .item-name,
+.cube-face .cube-item-name,
+.plate-items .plate-item-name,
+.plate-row .plate-item-name,
+.plate-item .plate-item-name {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  line-height: 1.15 !important;
+}
+
+.builder-item .item-price,
+.item-card .item-price,
+.menu-card-3d .item-price,
+.cube-face .cube-item-price,
+.market-price,
+.instore-price,
+.price-badge,
+.price-pill {
+  white-space: nowrap !important;
+  justify-self: end !important;
+  max-width: 100% !important;
+  font-size: clamp(0.72rem, 1.4vw, 0.92rem) !important;
+  padding: 0.35rem 0.6rem !important;
+  border-radius: 999px !important;
+  text-align: center !important;
+}
+
+.plate-items,
+#plateItems {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+.plate-items li,
+#plateItems li {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0.7rem 0.8rem !important;
+  border-radius: 14px !important;
+  background: rgba(255,255,255,0.05) !important;
+  margin-bottom: 0.55rem !important;
+}
+
+.plate-items li > span:first-child,
+#plateItems li > span:first-child {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+.plate-items li .remove-item,
+#plateItems li .remove-item {
+  margin-left: 0.5rem !important;
+  justify-self: end !important;
+}
+
+.cube-face ul {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+.cube-face li {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0.6rem 0 !important;
+}
+
+.cube-face li .cube-line-left,
+.cube-face li .cube-line-right {
+  min-width: 0 !important;
+}
+
+.cube-face li .cube-line-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  min-width: 0 !important;
+}
+
+.cube-face li .cube-add-btn {
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+}
+
+.cube-face li .cube-item-name {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+.burger-card,
+.burger-item,
+[data-category="burgers"] .builder-item,
+[data-category="burgers"] .item-card,
+[data-category="burgers"] .menu-card-3d,
+#burgersTab .builder-item,
+#burgersTab .item-card,
+#burgersTab .menu-card-3d,
+[data-tab="burgers"] .builder-item,
+[data-tab="burgers"] .item-card,
+[data-tab="burgers"] .menu-card-3d {
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: start !important;
+}
+
+[data-category="burgers"] .item-name,
+#burgersTab .item-name,
+[data-tab="burgers"] .item-name {
+  font-size: clamp(0.9rem, 1.6vw, 1rem) !important;
+}
+
+@media (max-width: 900px) {
+  .builder-item,
+  .item-card,
+  .menu-card-3d,
+  .cube-face li,
+  .plate-items li,
+  #plateItems li {
+    gap: 0.55rem !important;
+  }
+
+  .builder-item .item-price,
+  .item-card .item-price,
+  .menu-card-3d .item-price,
+  .cube-face .cube-item-price,
+  .market-price,
+  .instore-price,
+  .price-badge,
+  .price-pill {
+    font-size: 0.72rem !important;
+    padding: 0.28rem 0.45rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .builder-item,
+  .item-card,
+  .menu-card-3d,
+  .cube-face li,
+  .plate-items li,
+  #plateItems li {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+
+  .plate-items li,
+  #plateItems li {
+    padding: 0.65rem 0.65rem !important;
+  }
+
+  .cube-face li .cube-add-btn {
+    font-size: 0.68rem !important;
+    padding: 0.28rem 0.42rem !important;
+  }
+}
+
+
+/* === comprehensive layout hardening pass === */
+:root {
+  --cube-size: min(78vw, 360px);
+}
+
+.panel,
+.cube-wrap,
+.menu-card,
+.bank-item,
+.face-item,
+.drop-zone,
+.drop-plate,
+.plate-row,
+.drawer-panel,
+.hero-panel,
+.hero-plate {
+  box-sizing: border-box !important;
+}
+
+.cube-wrap {
+  min-height: 620px !important;
+  padding: 20px !important;
+}
+
+.cube-viewport {
+  min-height: 520px !important;
+  overflow: hidden !important;
+}
+
+.menu-cube {
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+.cube-face {
+  padding: 22px 22px 20px !important;
+  gap: 10px !important;
+  overflow: hidden !important;
+}
+
+.face-list {
+  gap: 12px !important;
+  overflow: auto !important;
+  min-width: 0 !important;
+}
+
+.face-item {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(112px, 128px) !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-height: 68px !important;
+  padding: 12px 14px !important;
+  overflow: hidden !important;
+}
+
+.face-item-main,
+.face-item-side {
+  min-width: 0 !important;
+}
+
+.face-item-side {
+  width: 100% !important;
+  min-width: 112px !important;
+  max-width: 128px !important;
+  justify-items: stretch !important;
+  align-content: center !important;
+  gap: 8px !important;
+}
+
+.face-item-name {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  line-height: 1.2 !important;
+}
+
+.face-item-price {
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  text-align: right !important;
+  font-size: 0.8rem !important;
+  line-height: 1 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.cube-add-btn {
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 8px 10px !important;
+  min-height: 36px !important;
+  font-size: 0.74rem !important;
+  line-height: 1 !important;
+  text-align: center !important;
+}
+
+.toolbar,
+.menu-card-top,
+.menu-card-bottom,
+.builder-grid,
+.builder-wrap,
+.builder-bank,
+.builder-plate-card,
+.bank-items,
+.plate-list-wrap,
+.footer-inner,
+.cube-footer,
+.cube-hud {
+  min-width: 0 !important;
+}
+
+.builder-grid {
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1.12fr) !important;
+  gap: 20px !important;
+  align-items: start !important;
+}
+
+.bank-items {
+  max-height: 680px !important;
+  overflow: auto !important;
+  padding-right: 6px !important;
+}
+
+.bank-item {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-height: 72px !important;
+  padding: 14px 14px !important;
+  overflow: hidden !important;
+}
+
+.bank-left {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.bank-name {
+  display: block !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  line-height: 1.2 !important;
+}
+
+.bank-meta {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  line-height: 1.25 !important;
+}
+
+.add-btn {
+  flex: 0 0 auto !important;
+  min-width: 88px !important;
+  width: auto !important;
+  max-width: 100% !important;
+  justify-self: end !important;
+  align-self: center !important;
+  padding: 10px 12px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.drop-zone {
+  min-height: 700px !important;
+  padding: 20px !important;
+  overflow: hidden !important;
+}
+
+.drop-plate {
+  width: min(100%, 560px) !important;
+  max-width: 100% !important;
+  min-height: 560px !important;
+  padding: 24px !important;
+  overflow: hidden !important;
+}
+
+.plate-empty {
+  max-width: 78% !important;
+}
+
+.plate-list-wrap {
+  width: min(100%, 430px) !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  gap: 12px !important;
+  overflow: auto !important;
+}
+
+.plate-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(72px, auto) 36px !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 58px !important;
+  padding: 12px 14px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+.plate-row-name {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  line-height: 1.2 !important;
+}
+
+.plate-row-price {
+  min-width: 72px !important;
+  max-width: 96px !important;
+  justify-self: end !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1 !important;
+}
+
+.remove-btn {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  justify-self: end !important;
+  align-self: center !important;
+}
+
+.menu-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+  gap: 16px !important;
+}
+
+.menu-card {
+  min-height: 210px !important;
+  padding: 18px !important;
+  overflow: hidden !important;
+}
+
+.menu-card-top {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(78px, 96px) !important;
+  align-items: start !important;
+  gap: 12px !important;
+}
+
+.menu-card-top > div:first-child {
+  min-width: 0 !important;
+}
+
+.menu-card h4 {
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+.price {
+  min-width: 78px !important;
+  max-width: 96px !important;
+  justify-self: end !important;
+  white-space: nowrap !important;
+  text-align: right !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1 !important;
+}
+
+.menu-card-bottom {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.menu-card-bottom > .menu-desc {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+.price,
+.face-item-price,
+.plate-row-price,
+.bank-meta,
+.category-chip,
+.tab-meta {
+  text-wrap: pretty !important;
+}
+
+.drawer-panel {
+  overflow: hidden !important;
+}
+
+.mini-row {
+  grid-template-columns: minmax(0, 1fr) auto !important;
+}
+
+.mini-row span {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+@media (max-width: 1180px) {
+  .builder-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .drop-zone {
+    min-height: 660px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --cube-size: min(74vw, 300px) !important;
+  }
+
+  .cube-wrap {
+    min-height: 540px !important;
+  }
+
+  .cube-viewport {
+    min-height: 420px !important;
+  }
+
+  .drop-zone {
+    min-height: 620px !important;
+  }
+
+  .drop-plate {
+    width: min(100%, 520px) !important;
+    min-height: 520px !important;
+  }
+
+  .bank-item,
+  .plate-row,
+  .menu-card,
+  .face-item {
+    border-radius: 18px !important;
+  }
+}
+
+@media (max-width: 620px) {
+  :root {
+    --cube-size: min(72vw, 248px) !important;
+  }
+
+  .cube-wrap {
+    min-height: 500px !important;
+    padding: 14px !important;
+  }
+
+  .cube-viewport {
+    min-height: 360px !important;
+  }
+
+  .cube-face {
+    padding: 16px 16px 14px !important;
+  }
+
+  .face-item {
+    grid-template-columns: minmax(0, 1fr) 96px !important;
+    gap: 10px !important;
+    min-height: 64px !important;
+    padding: 10px 10px !important;
+  }
+
+  .face-item-side {
+    min-width: 96px !important;
+    max-width: 96px !important;
+  }
+
+  .face-item-price {
+    font-size: 0.74rem !important;
+  }
+
+  .cube-add-btn {
+    font-size: 0.68rem !important;
+    min-height: 32px !important;
+    padding: 7px 8px !important;
+  }
+
+  .drop-zone {
+    min-height: 560px !important;
+    padding: 12px !important;
+  }
+
+  .drop-plate {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    aspect-ratio: auto !important;
+    border-radius: 28px !important;
+    padding: 16px !important;
+  }
+
+  .plate-list-wrap {
+    width: 100% !important;
+  }
+
+  .plate-row {
+    grid-template-columns: minmax(0, 1fr) auto 34px !important;
+    padding: 10px 10px !important;
+    gap: 8px !important;
+  }
+
+  .plate-row-price {
+    min-width: 62px !important;
+    max-width: 74px !important;
+    font-size: 0.76rem !important;
+  }
+
+  .remove-btn {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+  }
+
+  .bank-item {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    min-height: 68px !important;
+    padding: 12px 12px !important;
+  }
+
+  .bank-name {
+    font-size: 0.88rem !important;
+  }
+
+  .bank-meta {
+    font-size: 0.66rem !important;
+  }
+
+  .add-btn {
+    min-width: 76px !important;
+    padding: 9px 10px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .menu-card {
+    min-height: 220px !important;
+  }
+
+  .menu-card-top {
+    grid-template-columns: minmax(0, 1fr) 78px !important;
+  }
+
+  .menu-card-bottom {
+    grid-template-columns: 1fr !important;
+  }
+
+  .menu-card-bottom .add-btn {
+    justify-self: stretch !important;
+    width: 100% !important;
+  }
+}
+
+</style>
 </head>
 <body>
   <div class="app-shell">
@@ -3596,7 +4269,22 @@ const state = {
     function renderFace(faceId, category) {
       const mount = document.getElementById(`face-${faceId}`);
       const items = byCategory(category).slice(0, 6);
-      mount.innerHTML = items.map(item => `<div class="face-item"><div class="face-item-name">${item.name}</div><div class="face-item-price">${priceLabel(item.price)}</div></div>`).join("");
+      mount.innerHTML = items.map(item => `
+        <div class="face-item">
+          <div class="face-item-main">
+            <div class="face-item-name">${item.name}</div>
+          </div>
+          <div class="face-item-side">
+            <div class="face-item-price">${priceLabel(item.price)}</div>
+            <button class="cube-add-btn" type="button" data-cube-add="${item.name}">Add</button>
+          </div>
+        </div>
+      `).join("");
+      mount.querySelectorAll("[data-cube-add]").forEach(button => button.addEventListener("click", event => {
+        event.stopPropagation();
+        const item = MENU_DATA.find(entry => entry.name === button.dataset.cubeAdd);
+        if (item) addItemToPlate(item, "cube");
+      }));
     }
     function renderCubeFaces() { Object.entries(FACE_CATEGORY_MAP).forEach(([faceId, category]) => renderFace(faceId, category)); }
     function renderBuilderCategoryItems() {
@@ -4174,7 +4862,243 @@ const state = {
       priceLabel: "Market / in-store",
       tags: ["special"]
     };
-  </script>
+  
+/* === overflow-safe builder rendering patch === */
+(function(){
+  function normalizeExistingPlateRows(){
+    const plate = document.getElementById('plateItems');
+    if(!plate) return;
+    [...plate.children].forEach((li) => {
+      if (li.dataset.normalized === 'true') return;
+      const rawText = li.textContent.trim();
+      let name = rawText;
+      let price = '';
+      const m = rawText.match(/^(.*?)(\$\d+(?:\.\d{2})?|In-store)$/i);
+      if (m) {
+        name = m[1].trim();
+        price = m[2].trim();
+      }
+      li.innerHTML = '';
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'plate-item-name';
+      nameSpan.textContent = name;
+      const right = document.createElement('span');
+      right.style.display = 'inline-flex';
+      right.style.alignItems = 'center';
+      right.style.gap = '0.45rem';
+      const priceSpan = document.createElement('span');
+      priceSpan.className = 'price-pill';
+      priceSpan.textContent = price || '';
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'remove-item';
+      removeBtn.textContent = '×';
+      removeBtn.setAttribute('aria-label', 'Remove item');
+      removeBtn.style.border = 'none';
+      removeBtn.style.background = 'rgba(255,255,255,0.08)';
+      removeBtn.style.color = 'white';
+      removeBtn.style.width = '28px';
+      removeBtn.style.height = '28px';
+      removeBtn.style.borderRadius = '999px';
+      removeBtn.style.cursor = 'pointer';
+      removeBtn.addEventListener('click', function(){
+        li.remove();
+        if (typeof window.updatePlateTotal === 'function') window.updatePlateTotal();
+      });
+      if (price) right.appendChild(priceSpan);
+      right.appendChild(removeBtn);
+      li.appendChild(nameSpan);
+      li.appendChild(right);
+      li.dataset.normalized = 'true';
+    });
+  }
+
+  function patchAddToPlate(){
+    if (window.__platePatched) return;
+    window.__platePatched = true;
+    window.addItemToPlateSafe = function(name, price){
+      const plate = document.getElementById('plateItems');
+      if(!plate) return;
+      const li = document.createElement('li');
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'plate-item-name';
+      nameSpan.textContent = name;
+      const right = document.createElement('span');
+      right.style.display = 'inline-flex';
+      right.style.alignItems = 'center';
+      right.style.gap = '0.45rem';
+      const priceSpan = document.createElement('span');
+      priceSpan.className = 'price-pill';
+      priceSpan.textContent = price || '';
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'remove-item';
+      removeBtn.textContent = '×';
+      removeBtn.setAttribute('aria-label', 'Remove item');
+      removeBtn.style.border = 'none';
+      removeBtn.style.background = 'rgba(255,255,255,0.08)';
+      removeBtn.style.color = 'white';
+      removeBtn.style.width = '28px';
+      removeBtn.style.height = '28px';
+      removeBtn.style.borderRadius = '999px';
+      removeBtn.style.cursor = 'pointer';
+      removeBtn.addEventListener('click', function(){
+        li.remove();
+        if (typeof window.updatePlateTotal === 'function') window.updatePlateTotal();
+      });
+      if (price) right.appendChild(priceSpan);
+      right.appendChild(removeBtn);
+      li.appendChild(nameSpan);
+      li.appendChild(right);
+      li.dataset.normalized = 'true';
+      plate.appendChild(li);
+      if (typeof window.updatePlateTotal === 'function') window.updatePlateTotal();
+    };
+
+    document.addEventListener('click', function(e){
+      const btn = e.target.closest('[data-add-plate],[data-add-to-plate],.cube-add-btn,.add-to-plate,.builder-add-btn');
+      if(!btn) return;
+      const card = btn.closest('[data-name], .builder-item, .menu-card-3d, li, .item-card');
+      let name = btn.dataset.name || (card && (card.dataset && card.dataset.name)) || '';
+      let price = btn.dataset.price || (card && (card.dataset && card.dataset.price)) || '';
+      if(!name && card){
+        const nameEl = card.querySelector('.item-name,.cube-item-name,h3,strong,span');
+        if (nameEl) name = nameEl.textContent.trim();
+      }
+      if(!price && card){
+        const priceEl = card.querySelector('.item-price,.cube-item-price,.price-pill,.price-badge');
+        if (priceEl) price = priceEl.textContent.trim();
+      }
+      if(name){
+        e.preventDefault();
+        e.stopPropagation();
+        window.addItemToPlateSafe(name, price);
+      }
+    }, true);
+  }
+
+  function fixBurgerTabCards(){
+    const burgerScopes = [
+      document.getElementById('burgersTab'),
+      ...document.querySelectorAll('[data-category="burgers"], [data-tab="burgers"]')
+    ].filter(Boolean);
+
+    burgerScopes.forEach(scope => {
+      scope.querySelectorAll('.builder-item,.item-card,.menu-card-3d').forEach(card => {
+        card.style.display = 'grid';
+        card.style.gridTemplateColumns = 'minmax(0,1fr) auto';
+        card.style.alignItems = 'start';
+        card.style.gap = '0.75rem';
+
+        let nameEl = card.querySelector('.item-name');
+        if(!nameEl){
+          const maybe = card.querySelector('h3,strong');
+          if(maybe){
+            maybe.classList.add('item-name');
+            nameEl = maybe;
+          }
+        }
+
+        let priceEl = card.querySelector('.item-price,.price-pill,.price-badge');
+        if(!priceEl){
+          const spans = [...card.querySelectorAll('span')];
+          const maybePrice = spans.find(s => /\$\d|In-store/i.test(s.textContent));
+          if(maybePrice){
+            maybePrice.classList.add('item-price');
+            priceEl = maybePrice;
+          }
+        }
+
+        if(nameEl){
+          nameEl.style.minWidth = '0';
+          nameEl.style.overflowWrap = 'anywhere';
+          nameEl.style.wordBreak = 'break-word';
+        }
+        if(priceEl){
+          priceEl.style.whiteSpace = 'nowrap';
+          priceEl.style.justifySelf = 'end';
+        }
+      });
+    });
+  }
+
+  function bootOverflowFixes(){
+    normalizeExistingPlateRows();
+    patchAddToPlate();
+    fixBurgerTabCards();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootOverflowFixes);
+  } else {
+    bootOverflowFixes();
+  }
+  window.addEventListener('load', bootOverflowFixes);
+})();
+
+
+/* === layout refinement patch === */
+(function(){
+  function priceLabelSafe(value){
+    if (typeof window.priceLabel === 'function') return window.priceLabel(value);
+    return typeof value === 'number' ? `$${value.toFixed(2)}` : 'In-store';
+  }
+
+  function rerenderPlateRows(){
+    if (!window.refs || !refs.plateListWrap || !window.state) return;
+    const empty = !state.plate.length;
+    if (refs.plateEmpty) refs.plateEmpty.classList.toggle('hidden', !empty);
+    refs.plateListWrap.classList.toggle('hidden', empty);
+    refs.plateListWrap.innerHTML = state.plate.map(item => `
+      <div class="plate-row" data-plate-id="${item.instanceId}">
+        <div class="plate-row-name">${item.name}</div>
+        <div class="plate-row-price">${priceLabelSafe(item.price)}</div>
+        <button class="remove-btn" type="button" data-remove-id="${item.instanceId}" aria-label="Remove ${item.name}">×</button>
+      </div>
+    `).join("");
+    if (refs.plateTotal && typeof window.plateTotal === 'function') {
+      refs.plateTotal.textContent = `$${plateTotal().toFixed(2)}`;
+    }
+    refs.plateListWrap.querySelectorAll("[data-remove-id]").forEach(button => {
+      button.addEventListener("click", () => {
+        if (typeof window.removePlateItem === 'function') removePlateItem(button.dataset.removeId);
+      });
+    });
+  }
+
+  function normalizeFaceHeights(){
+    document.querySelectorAll('.face-list').forEach(list => {
+      list.style.minWidth = '0';
+    });
+  }
+
+  function onResizeHardening(){
+    normalizeFaceHeights();
+  }
+
+  const boot = () => {
+    onResizeHardening();
+    if (window.renderPlate) {
+      const originalRenderPlate = window.renderPlate;
+      window.renderPlate = function(){
+        originalRenderPlate();
+        rerenderPlateRows();
+      };
+      window.renderPlate();
+    } else {
+      rerenderPlateRows();
+    }
+    window.addEventListener('resize', onResizeHardening);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+
+</script>
   <style>
     .minh-0 { min-height: 0px; }
     .maxh-0 { max-height: 0px; }
