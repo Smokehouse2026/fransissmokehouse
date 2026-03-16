@@ -3,7 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>The Francis Smokehouse · St. Francisville, LA</title>
+
+  <!-- ===== PRIMARY META TAGS ===== -->
+  <title>The Francis Smokehouse · St. Francisville, LA – BBQ & Southern Specialties</title>
+  <meta name="description" content="Family-owned smokehouse in St. Francisville, LA serving slow-smoked BBQ, boudin, po-boys, and Southern sides. Dine-in, takeout, and catering. Visit us on Highway 61.">
+  <meta name="keywords" content="smokehouse St. Francisville, BBQ Louisiana, boudin, smoked meats, Southern food, The Francis Smokehouse">
+  <meta name="author" content="The Francis Smokehouse">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://thefrancismokehouse.com/">
+
+  <!-- ===== FAVICON / ICONS ===== -->
+  <link rel="icon" type="image/png" href="/Smokehouselogo.png">
+  <link rel="apple-touch-icon" href="/Smokehouselogo.png">
+
+  <!-- ===== OPEN GRAPH (Facebook, LinkedIn) ===== -->
+  <meta property="og:title" content="The Francis Smokehouse – St. Francisville, LA">
+  <meta property="og:description" content="Family-owned smokehouse serving slow-smoked BBQ, boudin, po-boys, and Southern sides. Dine-in, takeout, and catering.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://thefrancismokehouse.com/">
+  <meta property="og:image" content="https://thefrancismokehouse.com/Smokehouselogo.png">
+  <meta property="og:image:alt" content="The Francis Smokehouse logo">
+  <meta property="og:site_name" content="The Francis Smokehouse">
+  <meta property="og:locale" content="en_US">
+
+  <!-- ===== TWITTER CARD ===== -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Francis Smokehouse – St. Francisville, LA">
+  <meta name="twitter:description" content="Family-owned smokehouse serving slow-smoked BBQ, boudin, po-boys, and Southern sides.">
+  <meta name="twitter:image" content="https://thefrancismokehouse.com/Smokehouselogo.png">
+  <meta name="twitter:image:alt" content="The Francis Smokehouse logo">
+
+  <!-- ===== STRUCTURED DATA (JSON-LD) ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "The Francis Smokehouse",
+    "image": "https://thefrancismokehouse.com/Smokehouselogo.png",
+    "url": "https://thefrancismokehouse.com/",
+    "telephone": "+12252455046",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "6779 US Highway 61",
+      "addressLocality": "St. Francisville",
+      "addressRegion": "LA",
+      "postalCode": "70775",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "30.7875",
+      "longitude": "-91.3765"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "10:00",
+        "closes": "18:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Sunday"],
+        "opens": "10:00",
+        "closes": "15:00"
+      }
+    ],
+    "priceRange": "$$",
+    "servesCuisine": "BBQ, Southern, Cajun",
+    "sameAs": [
+      "https://www.facebook.com/thefrancismokehouse"
+    ],
+    "description": "Family-owned smokehouse in St. Francisville, LA serving slow-smoked BBQ, boudin, po-boys, and Southern sides. Dine-in, takeout, and catering.",
+    "hasMap": "https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775"
+  }
+  </script>
+
   <!-- Font Awesome 6 (free) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Google Fonts: Playfair Display for headings, Montserrat for UI -->
@@ -1149,24 +1224,26 @@
         }
       });
 
+      // Navigate to link
+      function navigate(link) {
+        if (!link) return;
+        // For tel: and http(s) links, just set location.href (works for tel, mailto, and external)
+        window.location.href = link;
+      }
+
       homeCenter.addEventListener('click', () => {
         overlay.classList.remove('open');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const link = homeCenter.getAttribute('data-link');
+        if (link) navigate(link);
       });
 
-      function navigate(link) { if (link) window.location.href = link; }
-
-homeCenter.addEventListener('click', () => { overlay.classList.remove('open'); navigate(homeCenter.dataset.link); });
-
-menuItems.forEach(item => {
-  item.addEventListener('click', (e) => {
-    overlay.classList.remove('open');
-    const link = item.dataset.link;
-    const action = item.dataset.action;
-    if (action === 'share') sharePage();
-    else if (link) navigate(link);
-  });
-});
+      menuItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+          overlay.classList.remove('open');
+          const link = item.getAttribute('data-link');
+          if (link) navigate(link);
+        });
+      });
 
       document.querySelector('.circular-menu').addEventListener('click', (e) => {
         e.stopPropagation();
