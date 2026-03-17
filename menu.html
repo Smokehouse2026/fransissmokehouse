@@ -757,7 +757,7 @@
           const data = JSON.parse(local.textContent.trim());
           return normalizeMenus(data);
         }
-        const DATA_URLS = ["/menu-data.html", "/menu-data/"];
+        const DATA_URLS = ["/menu-data.html"];
         let lastErr = null;
         for (const url of DATA_URLS) {
           try {
