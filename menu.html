@@ -3,933 +3,100 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Francis Smokehouse — Interactive Menu Experience</title>
-  <meta name="description" content="Premium interactive menu and restaurant guide for The Francis Smokehouse in St. Francisville, Louisiana." />
+  <title>Menu</title>
+  <meta name="description" content="Clean daily menu" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#0a0705;
-      --bg2:#130c08;
-      --card:rgba(255,255,255,.07);
-      --card2:rgba(255,255,255,.05);
-      --line:rgba(255,255,255,.12);
-      --text:#f8f2ea;
-      --muted:rgba(248,242,234,.72);
-      --soft:rgba(248,242,234,.56);
-      --accent:#f28a3c;
-      --accent2:#ffbf7a;
-      --green:#49c38a;
-      --red:#ff8f8f;
-      --gold:#f5c56e;
-      --shadow:0 24px 70px rgba(0,0,0,.42);
-      --radius:28px;
-      --radius-sm:18px;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1000px 600px at 10% 0%, rgba(242,138,60,.15), transparent 60%),
-        radial-gradient(900px 600px at 100% 0%, rgba(73,195,138,.10), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg2) 55%, #090604);
-      min-height:100vh;
-      overflow-x:hidden;
-    }
-    body::before{
-      content:"";
-      position:fixed; inset:0;
-      pointer-events:none;
-      opacity:.08;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-      mix-blend-mode:screen;
-    }
-    a{color:inherit}
-    .shell{width:min(1320px, calc(100vw - 28px)); margin:0 auto; padding:18px 0 120px}
-    .glass{
-      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(18px);
-      -webkit-backdrop-filter:blur(18px);
-    }
-    .topbar{
-      position:sticky; top:12px; z-index:60;
-      margin-bottom:18px;
-      padding:10px;
-    }
-    .nav{
-      display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;
-    }
-    .brand{
-      display:flex; gap:12px; align-items:center; min-width:0;
-    }
-    .brand-badge{
-      width:48px; height:48px; border-radius:16px;
-      display:grid; place-items:center;
-      background:linear-gradient(180deg, rgba(242,138,60,.9), rgba(175,78,26,.95));
-      color:white; font-size:22px; box-shadow:0 10px 30px rgba(242,138,60,.35);
-      flex:0 0 auto;
-    }
-    .brand h1{
-      margin:0; font-size:18px; line-height:1.05; letter-spacing:-.03em;
-    }
-    .brand p{margin:4px 0 0; color:var(--soft); font-size:12px; font-weight:700}
-    .nav-links{
-      display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end;
-    }
-    .chip,.btn,.tab,.filter{
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
-      color:#fff;
-      border-radius:999px;
-      padding:10px 14px;
-      font-weight:800;
-      letter-spacing:.01em;
-      cursor:pointer;
-      transition:.18s ease;
-      text-decoration:none;
-      display:inline-flex; align-items:center; gap:8px; justify-content:center;
-    }
-    .chip:hover,.btn:hover,.tab:hover,.filter:hover{transform:translateY(-1px)}
-    .btn.primary,.tab.active,.filter.active{
-      background:linear-gradient(180deg, rgba(242,138,60,.95), rgba(172,77,27,.98));
-      border-color:rgba(255,215,170,.45);
-      box-shadow:0 10px 28px rgba(242,138,60,.26);
-    }
-    .btn.secondary{
-      background:linear-gradient(180deg, rgba(73,195,138,.45), rgba(28,92,64,.92));
-      border-color:rgba(143,255,209,.28);
-    }
-    .hero{
-      display:grid; grid-template-columns:1.1fr .9fr; gap:18px;
-      margin-bottom:18px;
-    }
-    .hero-main,.hero-side{padding:28px}
-    .eyebrow{
-      display:inline-flex; align-items:center; gap:8px;
-      text-transform:uppercase; letter-spacing:.15em; font-size:11px; font-weight:900;
-      color:var(--accent2);
-      padding:8px 12px; border-radius:999px;
-      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10);
-    }
-    .hero h2{
-      margin:16px 0 10px; font-size:clamp(32px, 6vw, 70px); line-height:.95; letter-spacing:-.05em;
-    }
-    .hero p{
-      margin:0; color:var(--muted); font-size:16px; line-height:1.7; max-width:760px;
-    }
-    .hero-actions{
-      display:flex; flex-wrap:wrap; gap:12px; margin-top:20px;
-    }
-    .quick-grid{
-      display:grid; grid-template-columns:repeat(2,1fr); gap:12px;
-    }
-    .stat{
-      padding:16px; border-radius:20px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09);
-      min-height:116px;
-    }
-    .stat .label{font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--soft); font-weight:900}
-    .stat .value{margin-top:8px; font-size:22px; font-weight:900; line-height:1.1}
-    .stat .sub{margin-top:8px; color:var(--muted); font-size:13px; line-height:1.45}
-    .openbar{
-      margin-top:16px; padding:14px 16px; border-radius:18px; font-weight:900; font-size:14px;
-      border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
-    }
-    .openbar.open{color:#baffd8; box-shadow:0 0 18px rgba(73,195,138,.24)}
-    .openbar.closed{color:#ffc9c9; box-shadow:0 0 18px rgba(255,143,143,.18)}
-    .section{margin-top:18px}
-    .section-head{
-      display:flex; gap:12px; align-items:end; justify-content:space-between; flex-wrap:wrap;
-      margin-bottom:12px;
-    }
-    .section-title{
-      font-size:clamp(26px, 3.8vw, 40px); line-height:1; letter-spacing:-.04em; margin:0;
-    }
-    .section-copy{margin:8px 0 0; color:var(--muted); max-width:800px; line-height:1.7}
-    .panel{padding:24px}
-    .tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px}
-    .menu-controls{display:grid; gap:14px; margin-bottom:14px}
-    .search-wrap{display:flex; gap:10px; flex-wrap:wrap}
-    .search{
-      flex:1 1 280px;
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:18px;
-      padding:15px 16px;
-      background:rgba(255,255,255,.06);
-      color:#fff; outline:none; font-size:15px; font-weight:700;
-    }
-    .search::placeholder{color:rgba(255,255,255,.52)}
-    .filters{display:flex; gap:8px; flex-wrap:wrap}
-    .menu-layout{display:grid; grid-template-columns:320px 1fr; gap:16px}
-    .category-list{
-      display:grid; gap:10px; align-content:start;
-      max-height:860px; overflow:auto; padding-right:4px;
-    }
-    .category-card{
-      padding:16px; border-radius:20px; cursor:pointer;
-      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10);
-      transition:.18s ease;
-    }
-    .category-card.active{
-      background:linear-gradient(180deg, rgba(242,138,60,.18), rgba(255,255,255,.05));
-      border-color:rgba(255,199,147,.30);
-      box-shadow:0 12px 30px rgba(242,138,60,.14);
-    }
-    .category-card:hover{transform:translateY(-2px)}
-    .category-card .name{font-size:18px; font-weight:900; letter-spacing:-.02em}
-    .category-card .meta{margin-top:6px; color:var(--muted); font-size:13px}
-    .category-card .count{margin-top:10px; font-size:12px; color:var(--accent2); font-weight:900; text-transform:uppercase; letter-spacing:.10em}
-    .detail{
-      min-height:640px;
-      padding:20px;
-      border-radius:24px;
-      background:
-        radial-gradient(600px 240px at 0% 0%, rgba(242,138,60,.12), transparent 60%),
-        radial-gradient(600px 260px at 100% 100%, rgba(73,195,138,.10), transparent 60%),
-        rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.11);
-    }
-    .detail-head{
-      display:flex; gap:14px; justify-content:space-between; align-items:start; flex-wrap:wrap;
-      margin-bottom:14px;
-    }
-    .detail-title{margin:0; font-size:34px; letter-spacing:-.04em}
-    .detail-sub{margin-top:8px; color:var(--muted); line-height:1.6}
-    .tagrow{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
-    .tag{
-      padding:8px 10px; border-radius:999px; font-size:11px; font-weight:900; letter-spacing:.11em; text-transform:uppercase;
-      background:rgba(255,255,255,.06); color:var(--soft); border:1px solid rgba(255,255,255,.10);
-    }
-    .list{
-      list-style:none; margin:14px 0 0; padding:0; display:grid; gap:12px;
-    }
-    .item{
-      padding:16px; border-radius:18px; border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
-    }
-    .item-top{
-      display:flex; gap:10px; justify-content:space-between; align-items:start;
-    }
-    .item-name{font-size:18px; font-weight:900; letter-spacing:-.02em}
-    .price{font-size:17px; font-weight:900; color:var(--accent2); white-space:nowrap}
-    .desc{margin-top:8px; color:var(--muted); line-height:1.65; font-size:14px}
-    .note-line{
-      margin-top:10px; font-size:12px; color:var(--soft); font-weight:800; letter-spacing:.03em;
-    }
-    .featured{
-      margin-top:16px;
-      display:grid; grid-template-columns:repeat(3,1fr); gap:12px;
-    }
-    .featured-card{
-      padding:18px; border-radius:22px;
-      background:linear-gradient(180deg, rgba(242,138,60,.14), rgba(255,255,255,.04));
-      border:1px solid rgba(255,192,136,.22);
-    }
-    .featured-card .kicker{
-      font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--accent2); font-weight:900;
-    }
-    .featured-card h4{margin:8px 0 6px; font-size:18px; letter-spacing:-.03em}
-    .featured-card p{margin:0; color:var(--muted); line-height:1.55; font-size:14px}
-    .grid-2,.grid-3,.grid-4{display:grid; gap:14px}
-    .grid-2{grid-template-columns:repeat(2,1fr)}
-    .grid-3{grid-template-columns:repeat(3,1fr)}
-    .grid-4{grid-template-columns:repeat(4,1fr)}
-    .info-card{
-      padding:20px; border-radius:24px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .info-card h3{margin:0 0 10px; font-size:22px; letter-spacing:-.03em}
-    .info-card p,.info-card li{
-      color:var(--muted); line-height:1.7; font-size:15px;
-    }
-    .info-card ul{margin:0; padding-left:18px}
-    .hours-grid{display:grid; gap:10px}
-    .hour-row{
-      display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center;
-      padding:14px; border-radius:18px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
-    }
-    .hour-row.today{border-color:rgba(255,191,122,.26); box-shadow:0 0 24px rgba(242,138,60,.10)}
-    .hour-day{font-weight:900; font-size:16px}
-    .hour-time{color:var(--accent2); font-weight:900}
-    .review-score{
-      display:flex; gap:12px; align-items:center; margin-bottom:12px;
-    }
-    .score{
-      width:82px; height:82px; border-radius:22px; display:grid; place-items:center;
-      background:linear-gradient(180deg, rgba(242,138,60,.95), rgba(174,78,27,.98)); font-size:28px; font-weight:900;
-      box-shadow:0 14px 34px rgba(242,138,60,.28);
-    }
-    .quote{
-      padding:16px; border-left:4px solid var(--accent); border-radius:16px; background:rgba(255,255,255,.05);
-      margin-top:10px;
-    }
-    .quote p{margin:0; font-style:italic}
-    .quote .src{margin-top:8px; color:var(--soft); font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.08em}
-    .timeline{display:grid; gap:12px}
-    .time-row{
-      display:grid; grid-template-columns:110px 1fr; gap:14px; align-items:start;
-      padding:14px; border-radius:18px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
-    }
-    .time-year{font-weight:900; color:var(--accent2); letter-spacing:.03em}
-    .disclaimer{
-      margin-top:18px; padding:18px 20px; border-radius:22px;
-      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10); color:var(--soft); line-height:1.7;
-      font-size:14px;
-    }
-    .footer{
-      margin-top:18px; padding:24px; text-align:center; color:var(--soft); line-height:1.7;
-    }
-    .floating{
-      position:fixed; right:18px; bottom:18px; z-index:70; display:flex; flex-direction:column; gap:10px;
-    }
-    .fab{
-      width:58px; height:58px; border-radius:18px; display:grid; place-items:center; text-decoration:none;
-      background:rgba(12,10,9,.9); border:1px solid rgba(255,255,255,.12); box-shadow:var(--shadow); font-size:22px;
-    }
-    .fab:hover{transform:translateY(-2px)}
-    .muted{color:var(--muted)}
-    .empty{
-      padding:18px; border-radius:18px; background:rgba(255,255,255,.04); border:1px dashed rgba(255,255,255,.12); color:var(--muted);
-    }
-
-    @media (max-width: 1100px){
-      .hero{grid-template-columns:1fr}
-      .menu-layout{grid-template-columns:1fr}
-      .featured,.grid-4{grid-template-columns:repeat(2,1fr)}
-      .grid-3{grid-template-columns:1fr}
-    }
-    @media (max-width: 760px){
-      .shell{width:min(100vw - 18px, 1320px)}
-      .hero-main,.hero-side,.panel{padding:20px}
-      .featured,.grid-2,.grid-4{grid-template-columns:1fr}
-      .time-row{grid-template-columns:1fr}
-      .item-top,.detail-head{flex-direction:column}
-      .nav{align-items:flex-start}
-      .floating{right:10px; bottom:10px}
-      .fab{width:52px; height:52px; border-radius:16px}
-    }
+    :root{--bg:#f6f2eb;--paper:#fffdf9;--ink:#1f1a17;--muted:#6d655f;--line:#e6ddd3;--accent:#8f4a28;--accent-soft:#f4e6dc;--shadow:0 10px 30px rgba(31,26,23,.08);--radius:22px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+    body{padding:24px 14px 80px}.wrap{max-width:960px;margin:0 auto}
+    .hero{background:linear-gradient(180deg,#fffdf9,#faf5ef);border:1px solid var(--line);border-radius:28px;padding:28px 22px;box-shadow:var(--shadow);text-align:center;margin-bottom:18px}
+    h1{font-size:clamp(28px,4vw,42px);line-height:1.05;letter-spacing:-.03em;margin-bottom:10px}
+    .sub{color:var(--muted);font-size:15px;line-height:1.6;max-width:720px;margin:0 auto}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:18px 0 20px}
+    .tab{border:1px solid var(--line);background:#fff;color:var(--ink);padding:11px 16px;border-radius:999px;font-weight:700;cursor:pointer;transition:.18s ease}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .panel[hidden]{display:none!important}.day-header{text-align:center;margin-bottom:18px}.day-title{font-size:clamp(24px,3vw,34px);font-weight:800;letter-spacing:-.03em}
+    .hours,.status,.note{margin-top:8px;color:var(--muted);line-height:1.6}.status{display:inline-block;padding:8px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:700}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{grid-column:span 12;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+    @media(min-width:760px){.card.half{grid-column:span 6}}
+    .card h3{font-size:20px;margin-bottom:6px;letter-spacing:-.02em}.card .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:800;margin-bottom:10px}
+    .list{list-style:none;display:grid;gap:10px;margin-top:10px}.list li{padding:12px 13px;border-radius:16px;background:#faf7f2;border:1px solid #efe7de;line-height:1.5}
+    details summary{cursor:pointer;font-weight:700;list-style:none}details summary::-webkit-details-marker{display:none}.desc{margin-top:8px;color:var(--muted);font-size:14px}
+    .empty{text-align:center;color:var(--muted);padding:20px;background:#faf7f2;border:1px dashed var(--line);border-radius:18px}.special{background:linear-gradient(180deg,#fff8f2,#fff);border-color:#edd8ca}
+    .special-badge{display:inline-block;margin-bottom:10px;background:var(--accent);color:#fff;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
   </style>
 </head>
 <body>
-  <div class="shell" id="top">
-    <div class="glass topbar">
-      <div class="nav">
-        <div class="brand">
-          <div class="brand-badge">🔥</div>
-          <div>
-            <h1>The Francis Smokehouse</h1>
-            <p>St. Francisville, Louisiana • Interactive restaurant guide</p>
-          </div>
-        </div>
-        <div class="nav-links">
-          <a class="chip" href="#menu">Menu</a>
-          <a class="chip" href="#hours">Hours</a>
-          <a class="chip" href="#reviews">Reviews</a>
-          <a class="chip" href="#details">Details</a>
-          <a class="chip" href="#history">History</a>
-        </div>
-      </div>
-    </div>
-
+  <div class="wrap">
     <section class="hero">
-      <div class="glass hero-main">
-        <div class="eyebrow">Smoke. BBQ. Louisiana comfort food.</div>
-        <h2>A menu experience<br/>built for The Francis Smokehouse.</h2>
-        <p>
-          This is a complete redesign inspired by your rough draft, but rebuilt as a more premium, cleaner, more useful interactive experience.
-          It highlights the best publicly surfaced menu items, hours, reviews, accessibility notes, and quick actions for guests planning a visit.
-        </p>
-        <div class="hero-actions">
-          <a class="btn primary" href="tel:2252455046">Call to Order</a>
-          <a class="btn secondary" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+Saint+Francisville%2C+LA+70775">Open Map</a>
-          <a class="btn" target="_blank" rel="noopener" href="mailto:francissmokehouse@att.net">Email</a>
-        </div>
-        <div id="openStatus" class="openbar">Checking live hours status…</div>
-      </div>
-
-      <div class="glass hero-side">
-        <div class="quick-grid">
-          <div class="stat">
-            <div class="label">Address</div>
-            <div class="value" style="font-size:18px">6779 US Highway 61</div>
-            <div class="sub">St. Francisville, LA 70775</div>
-          </div>
-          <div class="stat">
-            <div class="label">Phone</div>
-            <div class="value">(225) 245-5046</div>
-            <div class="sub">Best for current availability and large orders</div>
-          </div>
-          <div class="stat">
-            <div class="label">Typical hours</div>
-            <div class="value" style="font-size:18px">Mon–Sat 10–6</div>
-            <div class="sub">Sunday 10–3</div>
-          </div>
-          <div class="stat">
-            <div class="label">Known for</div>
-            <div class="value" style="font-size:18px">Brisket & Boudin</div>
-            <div class="sub">Also ribs, po-boys, sides, desserts, and rotating specials</div>
-          </div>
-        </div>
-        <div class="featured" style="grid-template-columns:1fr; margin-top:14px">
-          <div class="featured-card">
-            <div class="kicker">Best quick snapshot</div>
-            <h4>Casual smokehouse with standout comfort food</h4>
-            <p>Public sources consistently point to strong takeout, popular signature items, and a loyal mix of locals and visitors.</p>
-          </div>
-        </div>
-      </div>
+      <h1 id="siteTitle">Menu</h1>
+      <p class="sub">A clean, simple menu that reads from <strong>menu-data.html</strong>.</p>
     </section>
 
-    <section class="section" id="menu">
-      <div class="section-head">
-        <div>
-          <h2 class="section-title">Interactive menu</h2>
-          <p class="section-copy">Search, filter, and browse the publicly surfaced menu items and specials. Prices shown here are based on the research summary you provided and may change.</p>
-        </div>
+    <nav class="tabs" aria-label="Menu tabs">
+      <button class="tab active" data-panel="todayPanel">Today</button>
+      <button class="tab" data-panel="tomorrowPanel">Tomorrow</button>
+      <button class="tab" data-panel="specialPanel">Daily Special</button>
+    </nav>
+
+    <section id="todayPanel" class="panel">
+      <div class="day-header">
+        <div class="day-title" id="todayTitle">Today</div>
+        <div class="hours" id="todayHours"></div>
+        <div class="status" id="todayStatus"></div>
+        <div class="note" id="todayNote"></div>
       </div>
-
-      <div class="glass panel">
-        <div class="tabs" id="menuTabs"></div>
-
-        <div class="menu-controls">
-          <div class="search-wrap">
-            <input id="menuSearch" class="search" type="text" placeholder="Search brisket, boudin, po-boy, dessert..." />
-            <button class="btn primary" id="surpriseBtn">Choose for me</button>
-          </div>
-          <div class="filters" id="menuFilters"></div>
-        </div>
-
-        <div class="menu-layout">
-          <div class="category-list" id="categoryList"></div>
-          <div class="detail" id="detailView"></div>
-        </div>
-      </div>
+      <div class="grid" id="todayGrid"></div>
     </section>
 
-    <section class="section" id="hours">
-      <div class="section-head">
-        <div>
-          <h2 class="section-title">Hours & visit planning</h2>
-          <p class="section-copy">A simple planning view for current hours, access notes, and what to confirm before heading out.</p>
-        </div>
+    <section id="tomorrowPanel" class="panel" hidden>
+      <div class="day-header">
+        <div class="day-title" id="tomorrowTitle">Tomorrow</div>
+        <div class="hours" id="tomorrowHours"></div>
+        <div class="status" id="tomorrowStatus"></div>
+        <div class="note" id="tomorrowNote"></div>
       </div>
-
-      <div class="grid-2">
-        <div class="glass panel">
-          <div class="hours-grid" id="hoursGrid"></div>
-          <div class="disclaimer">
-            Hours are presented from the research summary you supplied: Monday–Saturday 10:00 AM–6:00 PM, Sunday 10:00 AM–3:00 PM.
-            Third-party listings can drift, so calling ahead is still the safest way to confirm same-day details.
-          </div>
-        </div>
-        <div class="glass panel">
-          <div class="info-card" style="padding:0; background:transparent; border:none">
-            <h3>Good to know before you go</h3>
-            <ul>
-              <li>Takeout appears strongly supported.</li>
-              <li>Parking is available, though peak times may feel tight.</li>
-              <li>Public sources indicate wheelchair accessibility.</li>
-              <li>Popular items can sell out, especially later in the day.</li>
-              <li>Delivery and reservations appear inconsistent across sources, so verify directly.</li>
-            </ul>
-            <div class="hero-actions" style="margin-top:18px">
-              <a class="btn primary" href="tel:2252455046">Verify today’s availability</a>
-              <a class="btn" target="_blank" rel="noopener" href="https://thefrancissmokehouse.com/">Visit website</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="grid" id="tomorrowGrid"></div>
     </section>
 
-    <section class="section" id="reviews">
-      <div class="section-head">
-        <div>
-          <h2 class="section-title">Reputation snapshot</h2>
-          <p class="section-copy">A clean summary of the review trends in your report, focused on what guests consistently love and what they occasionally flag.</p>
-        </div>
+    <section id="specialPanel" class="panel" hidden>
+      <div class="day-header">
+        <div class="day-title">Daily Special</div>
+        <div class="hours" id="specialDate"></div>
       </div>
-
-      <div class="grid-2">
-        <div class="glass panel">
-          <div class="review-score">
-            <div class="score">4.5</div>
-            <div>
-              <h3 style="margin:0 0 6px; font-size:28px; letter-spacing:-.03em">Tripadvisor</h3>
-              <div class="muted">143 reviews • Travellers’ Choice highlighted in your research summary</div>
-            </div>
-          </div>
-          <div class="quote">
-            <p>“Brisket practically melted in my mouth.”</p>
-            <div class="src">Representative theme from public review excerpts</div>
-          </div>
-          <div class="quote">
-            <p>“Boudin balls … absolutely delicious.”</p>
-            <div class="src">Representative theme from public review excerpts</div>
-          </div>
-          <div class="quote">
-            <p>Common downside themes: slow service at times, occasional sell-outs, and some price sensitivity.</p>
-            <div class="src">Recurring critical pattern across review syndications</div>
-          </div>
-        </div>
-
-        <div class="glass panel">
-          <div class="review-score">
-            <div class="score">4.7</div>
-            <div>
-              <h3 style="margin:0 0 6px; font-size:28px; letter-spacing:-.03em">Google signal</h3>
-              <div class="muted">505 reviews shown via syndicated directory source in your report</div>
-            </div>
-          </div>
-          <div class="info-card" style="padding:0; background:transparent; border:none">
-            <h3>What people seem to love most</h3>
-            <ul>
-              <li>Boudin balls and boudin-based items</li>
-              <li>Brisket tenderness and smoke flavor</li>
-              <li>Sides like corn pudding</li>
-              <li>Friendly staff and strong local appeal</li>
-              <li>Good value relative to portion size for many visitors</li>
-            </ul>
-          </div>
-        </div>
+      <div class="grid">
+        <div class="card special" id="specialCard"></div>
       </div>
     </section>
-
-    <section class="section" id="details">
-      <div class="section-head">
-        <div>
-          <h2 class="section-title">Access, service, and logistics</h2>
-          <p class="section-copy">The practical side of the restaurant, turned into a fast-scanning planning dashboard.</p>
-        </div>
-      </div>
-
-      <div class="grid-4">
-        <div class="glass panel info-card">
-          <h3>Takeout</h3>
-          <p>Strongly indicated by public listings and review patterns. This appears to be one of the safest assumptions for customer planning.</p>
-        </div>
-        <div class="glass panel info-card">
-          <h3>Reservations</h3>
-          <p>Generally not presented as a reservation-heavy concept. For large groups, calling ahead is still the smart move.</p>
-        </div>
-        <div class="glass panel info-card">
-          <h3>Delivery</h3>
-          <p>Mixed signals across sources. Treat delivery as uncertain until directly confirmed the same day.</p>
-        </div>
-        <div class="glass panel info-card">
-          <h3>Catering</h3>
-          <p>Evidence suggests support for larger orders, but no formal catering terms or current pricing were established in the material you sent.</p>
-        </div>
-      </div>
-
-      <div class="grid-3" style="margin-top:14px">
-        <div class="glass panel info-card">
-          <h3>Accessibility</h3>
-          <p>Public listings indicate wheelchair accessibility, with some third-party mentions of accessible parking, seating, and restroom features.</p>
-        </div>
-        <div class="glass panel info-card">
-          <h3>Atmosphere</h3>
-          <p>Casual, local, and welcoming. The review summary suggests a strong mix of locals and travelers with a laid-back smokehouse feel.</p>
-        </div>
-        <div class="glass panel info-card">
-          <h3>Price range</h3>
-          <p>Mid-range overall. Sandwiches and po-boys cluster lower, plates reach higher, and specials can move into the twenties.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="history">
-      <div class="section-head">
-        <div>
-          <h2 class="section-title">History & context</h2>
-          <p class="section-copy">A simplified timeline and business context view based on the report you provided.</p>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="glass panel">
-          <div class="timeline">
-            <div class="time-row">
-              <div class="time-year">2015</div>
-              <div class="muted">Review history indicates The Francis Smokehouse was operating by October 2015.</div>
-            </div>
-            <div class="time-row">
-              <div class="time-year">2015 era</div>
-              <div class="muted">A nearby related concept, The Francis Southern Table & Bar, is referenced in the same general timeframe in your research summary.</div>
-            </div>
-            <div class="time-row">
-              <div class="time-year">2024–2025</div>
-              <div class="muted">Recent review activity in the report suggests continued public visibility and guest traffic.</div>
-            </div>
-          </div>
-        </div>
-        <div class="glass panel">
-          <div class="info-card" style="padding:0; background:transparent; border:none">
-            <h3>Other “Smokehouse” match in town</h3>
-            <p>
-              Your report also surfaced Hill Country Smokehouse, LLC at 5716 Commerce Street. Its operating status looked inconsistent across directory sources,
-              so it’s best treated as uncertain until verified directly.
-            </p>
-            <div class="hero-actions" style="margin-top:16px">
-              <a class="btn" href="tel:2256352880">Call Hill Country listing</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="glass disclaimer">
-      <strong>Important note:</strong> This page is intentionally built from the research summary you supplied rather than from the original rough-draft restaurant data.
-      It should be treated as a polished presentation layer, not as an official live menu. Hours, prices, availability, delivery, reservations, and specials may change.
-      The best same-day confirmation method is still calling The Francis Smokehouse directly.
-    </div>
-
-    <div class="glass footer">
-      Built as a premium single-file HTML menu experience for The Francis Smokehouse • Designed for sharing, editing, and future expansion.
-    </div>
-  </div>
-
-  <div class="floating">
-    <a class="fab" href="#top" title="Back to top">↑</a>
-    <a class="fab" href="tel:2252455046" title="Call">☎</a>
   </div>
 
   <script>
-    const MENU = {
-      "BBQ Plates": {
-        meta: "With two sides",
-        description: "Classic smokehouse plates and barbecue mains surfaced in the research summary.",
-        tags: ["bbq", "plates", "mains", "smoked"],
-        items: [
-          {name:"Full rack of ribs", price:"$19.99", desc:"Big plate-style rib option with two sides."},
-          {name:"1/2 rack of ribs", price:"$11.99", desc:"Smaller rib plate with two sides."},
-          {name:"Pulled pork plate", price:"$9.99", desc:"Pulled pork barbecue plate with two sides."},
-          {name:"Brisket plate", price:"$10.99", desc:"Smoked brisket plate with two sides."},
-          {name:"1/2 chicken plate", price:"$9.99", desc:"Half chicken with plate service and two sides."},
-          {name:"Smoked wings", price:"$7.99", desc:"Smoke-forward wing option from the menu board."}
-        ]
-      },
-      "Burgers & Sandwiches": {
-        meta: "Served with one side",
-        description: "Burgers, sandwiches, and po-boys. Menu board notes indicate sandwiches are dressed with lettuce and tomato.",
-        tags: ["sandwiches", "po-boys", "burgers", "lunch"],
-        items: [
-          {name:"Hamburger", price:"$6.99", desc:"Classic burger with one side."},
-          {name:"Cheeseburger", price:"$7.99", desc:"Burger with cheese and one side."},
-          {name:"Bacon cheeseburger", price:"$8.99", desc:"Bacon-topped cheeseburger with one side."},
-          {name:"Pulled pork sandwich", price:"$7.99", desc:"Pulled pork on a sandwich format with one side."},
-          {name:"Brisket sandwich", price:"$8.99", desc:"Smoked brisket in sandwich form."},
-          {name:"Ribeye po-boy", price:"$10.99", desc:"Higher-ticket po-boy option from the menu board."},
-          {name:"Chicken sandwich", price:"$7.99", desc:"Chicken sandwich with one side."},
-          {name:"Shrimp po-boy", price:"$8.99", desc:"Seafood po-boy option."},
-          {name:"Crawfish po-boy", price:"$10.99", desc:"Crawfish po-boy from the public menu image."},
-          {name:"Catfish po-boy", price:"$8.99", desc:"Catfish po-boy with one side."}
-        ]
-      },
-      "Sides": {
-        meta: "Small and large pricing shown",
-        description: "Sides appear to be priced at $2.75 small and $6.99 large in the menu image referenced in your report.",
-        tags: ["sides", "shareable", "favorites"],
-        items: [
-          {name:"Baked beans", price:"$2.75 / $6.99", desc:"Small or large size."},
-          {name:"Corn pudding", price:"$2.75 / $6.99", desc:"Frequently praised in review excerpts."},
-          {name:"Potato salad", price:"$2.75 / $6.99", desc:"Classic cold side."},
-          {name:"Cole slaw", price:"$2.75 / $6.99", desc:"Smokehouse side staple."},
-          {name:"French fries", price:"$2.75 / $6.99", desc:"Traditional fries."},
-          {name:"Sweet potato waffle fries", price:"$2.75 / $6.99", desc:"Sweet potato variation with waffle cut texture."}
-        ]
-      },
-      "Boudin & Specialty Items": {
-        meta: "Publicly surfaced featured items",
-        description: "Items listed in the research summary without clearly visible prices on the captured menu board.",
-        tags: ["boudin", "specialty", "cajun", "favorites"],
-        items: [
-          {name:"Steamed boudin links", price:"Market / not shown", desc:"Price not clearly visible in the source menu image."},
-          {name:"Boudin balls", price:"Market / not shown", desc:"One of the most frequently praised items in review summaries."},
-          {name:"Pepper jack boudin balls", price:"Market / not shown", desc:"Cheesy variation listed in the report."},
-          {name:"Boudin egg rolls", price:"Market / not shown", desc:"Specialty Cajun-style item."},
-          {name:"Meat pies", price:"Market / not shown", desc:"Listed item without visible price in the captured board."},
-          {name:"Crawfish pies", price:"Market / not shown", desc:"Seafood pie offering surfaced in the research summary."}
-        ]
-      },
-      "Desserts": {
-        meta: "The Sweet",
-        description: "Desserts listed in the report; prices were not visible in the surfaced menu image except for one special dessert.",
-        tags: ["desserts", "sweet", "bakery"],
-        items: [
-          {name:"Homemade bread pudding", price:"Not shown", desc:"Frequently associated with take-home mentions in review notes."},
-          {name:"Creole cream cheesecake", price:"Not shown", desc:"Regional dessert option."},
-          {name:"Chocolate cake", price:"Not shown", desc:"Cake offering listed in the report."},
-          {name:"Carrot cake", price:"Not shown", desc:"Second cake option named in the report."},
-          {name:"Strawberry shortcake", price:"Not shown", desc:"Fruit-forward dessert option."}
-        ]
-      },
-      "Specials Snapshot": {
-        meta: "Example specials board from sample snapshot",
-        description: "These were described as example special-board items from a surfaced image in your research summary.",
-        tags: ["specials", "premium", "seafood", "entrees"],
-        items: [
-          {name:"Sweet Thai chili wings (app)", price:"$16", desc:"Appetizer special."},
-          {name:"Eggplant pirogue with seafood-style stuffing", price:"$26", desc:"Higher-end entrée special."},
-          {name:"Blackened lemon fish with cream spinach and grilled crawfish tails", price:"$28", desc:"Seafood entrée special."},
-          {name:"Jack Daniel’s BBQ shrimp + 14oz bone-in pork chop with mac & cheese and green beans", price:"$26", desc:"Large-format combo special."},
-          {name:"Grilled salmon with crabmeat and avocado cream sauce", price:"$28", desc:"Seafood special with sauce and sides."},
-          {name:"Miss Mud Pie", price:"$7", desc:"Dessert special noted in the snapshot."}
-        ]
-      }
-    };
-
-    const tabsEl = document.getElementById('menuTabs');
-    const filtersEl = document.getElementById('menuFilters');
-    const categoryListEl = document.getElementById('categoryList');
-    const detailViewEl = document.getElementById('detailView');
-    const searchEl = document.getElementById('menuSearch');
-    const surpriseBtn = document.getElementById('surpriseBtn');
-
-    const state = {
-      activeTab: 'All',
-      activeFilter: 'all',
-      activeCategory: Object.keys(MENU)[0],
-      query: ''
-    };
-
-    const tabDefs = ['All', 'Best Value', 'Signature', 'Desserts', 'Specials'];
-    const filterDefs = [
-      {id:'all', label:'Everything'},
-      {id:'bbq', label:'BBQ'},
-      {id:'sandwiches', label:'Sandwiches'},
-      {id:'boudin', label:'Boudin'},
-      {id:'sides', label:'Sides'},
-      {id:'desserts', label:'Desserts'},
-      {id:'specials', label:'Specials'}
-    ];
-
-    function slug(s){ return String(s).toLowerCase(); }
-
-    function matchesTab(name, category){
-      if(state.activeTab === 'All') return true;
-      if(state.activeTab === 'Best Value') return ['BBQ Plates','Burgers & Sandwiches','Sides'].includes(name);
-      if(state.activeTab === 'Signature') return ['BBQ Plates','Boudin & Specialty Items','Burgers & Sandwiches'].includes(name);
-      if(state.activeTab === 'Desserts') return name === 'Desserts';
-      if(state.activeTab === 'Specials') return name === 'Specials Snapshot';
-      return true;
-    }
-
-    function matchesFilter(category){
-      if(state.activeFilter === 'all') return true;
-      return (category.tags || []).includes(state.activeFilter);
-    }
-
-    function matchesQuery(category){
-      if(!state.query.trim()) return true;
-      const q = slug(state.query.trim());
-      const hay = [
-        category.description,
-        ...(category.tags || []),
-        ...category.items.map(i => `${i.name} ${i.desc} ${i.price}`)
-      ].join(' ').toLowerCase();
-      return hay.includes(q);
-    }
-
-    function getVisibleCategories(){
-      return Object.entries(MENU)
-        .filter(([name, cat]) => matchesTab(name, cat) && matchesFilter(cat) && matchesQuery(cat));
-    }
-
-    function renderTabs(){
-      tabsEl.innerHTML = tabDefs.map(tab => `
-        <button class="tab ${tab === state.activeTab ? 'active' : ''}" data-tab="${tab}">${tab}</button>
-      `).join('');
-      tabsEl.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
-        state.activeTab = btn.dataset.tab;
-        syncActiveCategory();
-        render();
-      }));
-    }
-
-    function renderFilters(){
-      filtersEl.innerHTML = filterDefs.map(f => `
-        <button class="filter ${f.id === state.activeFilter ? 'active' : ''}" data-filter="${f.id}">${f.label}</button>
-      `).join('');
-      filtersEl.querySelectorAll('.filter').forEach(btn => btn.addEventListener('click', () => {
-        state.activeFilter = btn.dataset.filter;
-        syncActiveCategory();
-        render();
-      }));
-    }
-
-    function syncActiveCategory(){
-      const visible = getVisibleCategories();
-      if(!visible.length){
-        state.activeCategory = '';
-        return;
-      }
-      if(!visible.some(([name]) => name === state.activeCategory)){
-        state.activeCategory = visible[0][0];
-      }
-    }
-
-    function renderCategoryList(){
-      const visible = getVisibleCategories();
-      if(!visible.length){
-        categoryListEl.innerHTML = `<div class="empty">No categories matched your current search or filters.</div>`;
-        return;
-      }
-      categoryListEl.innerHTML = visible.map(([name, cat]) => `
-        <button class="category-card ${name === state.activeCategory ? 'active' : ''}" data-category="${name}">
-          <div class="name">${name}</div>
-          <div class="meta">${cat.meta}</div>
-          <div class="count">${cat.items.length} items</div>
-        </button>
-      `).join('');
-      categoryListEl.querySelectorAll('.category-card').forEach(card => card.addEventListener('click', () => {
-        state.activeCategory = card.dataset.category;
-        renderDetail();
-        renderCategoryList();
-      }));
-    }
-
-    function renderDetail(){
-      if(!state.activeCategory || !MENU[state.activeCategory]){
-        detailViewEl.innerHTML = `<div class="empty">No menu category selected.</div>`;
-        return;
-      }
-      const cat = MENU[state.activeCategory];
-      const q = slug(state.query.trim());
-      const filteredItems = cat.items.filter(item => {
-        if(!q) return true;
-        return slug(`${item.name} ${item.desc} ${item.price}`).includes(q);
-      });
-
-      detailViewEl.innerHTML = `
-        <div class="detail-head">
-          <div>
-            <h3 class="detail-title">${state.activeCategory}</h3>
-            <div class="detail-sub">${cat.description}</div>
-            <div class="tagrow">${(cat.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}</div>
-          </div>
-          <div class="tag">${cat.meta}</div>
-        </div>
-
-        ${state.activeCategory === 'BBQ Plates' ? `
-          <div class="featured">
-            <div class="featured-card">
-              <div class="kicker">Signature pick</div>
-              <h4>Brisket plate</h4>
-              <p>One of the clearest “must-look-at” items from the report thanks to repeated brisket praise in the reviews.</p>
-            </div>
-            <div class="featured-card">
-              <div class="kicker">Classic order</div>
-              <h4>Pulled pork plate</h4>
-              <p>A dependable smokehouse starting point if someone wants a straightforward barbecue plate.</p>
-            </div>
-            <div class="featured-card">
-              <div class="kicker">Big appetite</div>
-              <h4>Full rack of ribs</h4>
-              <p>The highest-profile rib option shown in the surfaced pricing board.</p>
-            </div>
-          </div>
-        ` : ''}
-
-        <ul class="list">
-          ${filteredItems.length ? filteredItems.map(item => `
-            <li class="item">
-              <div class="item-top">
-                <div class="item-name">${item.name}</div>
-                <div class="price">${item.price}</div>
-              </div>
-              <div class="desc">${item.desc}</div>
-            </li>
-          `).join('') : `<div class="empty">No items in this category matched your search.</div>`}
-        </ul>
-
-        <div class="note-line">Prices and availability are based on the research material you provided and may not reflect live in-store changes.</div>
-      `;
-    }
-
-    function render(){
-      renderTabs();
-      renderFilters();
-      renderCategoryList();
-      renderDetail();
-    }
-
-    searchEl.addEventListener('input', e => {
-      state.query = e.target.value;
-      syncActiveCategory();
-      render();
-    });
-
-    surpriseBtn.addEventListener('click', () => {
-      const visible = getVisibleCategories();
-      const allItems = visible.flatMap(([name, cat]) => cat.items.map(item => ({category:name, ...item})));
-      if(!allItems.length) return;
-      const pick = allItems[Math.floor(Math.random() * allItems.length)];
-      state.activeCategory = pick.category;
-      render();
-      const block = detailViewEl.querySelector('.detail-head');
-      if(block){
-        const badge = document.createElement('div');
-        badge.className = 'quote';
-        badge.innerHTML = `<p><strong>Suggestion for you:</strong> ${pick.name} — ${pick.price}</p><div class="src">Random pick based on your current filters</div>`;
-        detailViewEl.insertBefore(badge, detailViewEl.querySelector('.list'));
-      }
-    });
-
-    function renderHours(){
-      const hours = [
-        ['Sunday','10:00 AM – 3:00 PM'],
-        ['Monday','10:00 AM – 6:00 PM'],
-        ['Tuesday','10:00 AM – 6:00 PM'],
-        ['Wednesday','10:00 AM – 6:00 PM'],
-        ['Thursday','10:00 AM – 6:00 PM'],
-        ['Friday','10:00 AM – 6:00 PM'],
-        ['Saturday','10:00 AM – 6:00 PM']
-      ];
-      const todayIdx = new Date().getDay();
-      const todayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][todayIdx];
-      document.getElementById('hoursGrid').innerHTML = hours.map(([day, time]) => `
-        <div class="hour-row ${day === todayName ? 'today' : ''}">
-          <div class="hour-day">${day}</div>
-          <div class="hour-time">${time}</div>
-        </div>
-      `).join('');
-    }
-
-    function updateOpenStatus(){
-      const now = new Date();
-      const day = now.getDay();
-      const mins = now.getHours() * 60 + now.getMinutes();
-      const open = 10 * 60;
-      const close = day === 0 ? 15 * 60 : 18 * 60;
-      const isOpen = mins >= open && mins < close;
-      const el = document.getElementById('openStatus');
-      if(isOpen){
-        const left = close - mins;
-        const h = Math.floor(left / 60);
-        const m = left % 60;
-        el.className = 'openbar open';
-        el.textContent = `Open now • Closes in ${h ? h + 'h ' : ''}${m}m`;
-      } else {
-        el.className = 'openbar closed';
-        if(mins < open){
-          el.textContent = 'Currently closed • Opens today at 10:00 AM';
-        } else {
-          const next = day === 6 ? 'Sunday at 10:00 AM' : 'tomorrow at 10:00 AM';
-          el.textContent = `Currently closed • Opens ${next}`;
-        }
-      }
-    }
-
-    syncActiveCategory();
-    render();
-    renderHours();
-    updateOpenStatus();
-    setInterval(updateOpenStatus, 60000);
+    const $ = id => document.getElementById(id);
+    function escapeHtml(str){return String(str ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;")}
+    function toISODateLocal(d){const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,"0");const day=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${day}`}
+    function formatDateNice(d){return d.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"})}
+    function parseISODateLocal(iso){const [y,m,d]=String(iso).split("-").map(Number);return new Date(y,(m||1)-1,d||1)}
+    function normalizeDateKey(key){const m=String(key||"").trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);if(!m)return null;return `${m[1]}-${String(Number(m[2])).padStart(2,"0")}-${String(Number(m[3])).padStart(2,"0")}`}
+    function normalizeItems(arr){return Array.isArray(arr)?arr.map(x=>String(x||"").trim()).filter(Boolean):[]}
+    function normalizeLunchItems(arr){const items=Array.isArray(arr)?arr:[];return items.map(raw=>{if(raw&&typeof raw==="object"){return {name:String(raw.name||"").trim(),desc:String(raw.desc||"").trim()}}const s=String(raw||"").trim();if(!s)return null;return {name:s,desc:""}}).filter(Boolean).filter(x=>x.name)}
+    function parseTimeToMinutes(timeStr){if(!timeStr)return null;const m=String(timeStr).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);if(!m)return null;let h=parseInt(m[1],10);const min=parseInt(m[2],10);const ap=m[3].toUpperCase();if(ap==="PM"&&h!==12)h+=12;if(ap==="AM"&&h===12)h=0;return h*60+min}
+    function getBusinessHours(dayName){const lower=String(dayName||"").toLowerCase();const open=lower==="sunday"?"7:00 AM":(lower==="saturday"?"6:00 AM":"5:30 AM");const close=lower==="sunday"?"3:00 PM":"2:00 PM";return {open,close,breakfast:`${open} - 10:30 AM`,lunch:`11:00 AM - ${close}`,crawfish:["thursday","friday","saturday"].includes(lower)?"4:00 PM - 8:00 PM":""}}
+    function getServiceStatus(dayName,isoDate){const todayISO=toISODateLocal(new Date());if(isoDate!==todayISO)return `${dayName} schedule`;const h=getBusinessHours(dayName);const now=new Date();const mins=now.getHours()*60+now.getMinutes();const open=parseTimeToMinutes(h.open);const breakfastEnd=10*60+30;const lunchStart=11*60;const close=parseTimeToMinutes(h.close);if(open!=null&&mins<open)return `Closed • Opens at ${h.open}`;if(mins<breakfastEnd)return "Breakfast is being served";if(mins<lunchStart)return "Breakfast is over • Lunch starts at 11:00 AM";if(close!=null&&mins<=close)return "Lunch is being served";return "Closed for today"}
+    function getClosure(data,dayName){const c=data?.closures||{};const key=Object.keys(c).find(k=>k.toLowerCase()===String(dayName||"").toLowerCase());return key?c[key]:null}
+    function getMenuByDate(data,isoDate){return (data?.menus||{})[isoDate]||null}
+    async function fetchHtml(url){const res=await fetch(url,{credentials:"same-origin",cache:"no-store"});if(!res.ok)throw new Error(`Fetch failed ${res.status} at ${url}`);return await res.text()}
+    function extractJsonFromHtml(html,label){const doc=new DOMParser().parseFromString(html,"text/html");const script=doc.querySelector("#hh-menu-data");if(!script)throw new Error(`No #hh-menu-data found on ${label}`);const raw=(script.textContent||"").trim();if(!raw)throw new Error(`#hh-menu-data is empty on ${label}`);return JSON.parse(raw)}
+    async function readData(){const urls=["menu-data.html","./menu-data.html","/menu-data.html"];let lastErr=null;for(const url of urls){try{const html=await fetchHtml(url);const data=extractJsonFromHtml(html,url);const rawMenus=data?.menus||{};const normalizedMenus={};Object.keys(rawMenus).forEach(k=>{const nk=normalizeDateKey(k);if(nk)normalizedMenus[nk]=rawMenus[k]});data.menus=normalizedMenus;return data}catch(e){lastErr=e}}throw lastErr||new Error("Menu data could not be read from menu-data.html.")}
+    function card(title,body,cls="half"){return `<section class="card ${cls}"><div class="eyebrow">Menu Section</div><h3>${escapeHtml(title)}</h3>${body}</section>`}
+    function simpleList(items){if(!items.length)return '<div class="empty">Nothing posted yet.</div>';return `<ul class="list">${items.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>`}
+    function detailsList(items,fallback){if(!items.length)return '<div class="empty">Nothing posted yet.</div>';return `<ul class="list">${items.map(it=>{if(typeof it==="string")return `<li>${escapeHtml(it)}</li>`;return `<li><details><summary>${escapeHtml(it.name)}</summary><div class="desc">${escapeHtml(it.desc||fallback)}</div></details></li>`}).join("")}</ul>`}
+    function renderMenuGrid(el,data,isoDate){const menu=getMenuByDate(data,isoDate)||{};const defaults=data?.defaults||{};const breakfastPlates=normalizeItems(menu.breakfast?.plates??defaults.breakfast?.plates??[]);const breakfastItems=normalizeItems(menu.breakfast?.items??defaults.breakfast?.items??[]);const lunchPlates=normalizeItems(menu.lunch?.plates??defaults.lunch?.plates??[]);const lunchItems=normalizeLunchItems(menu.lunch?.items??defaults.lunch?.items??[]);const drinks=normalizeItems(menu.drinks?.items??defaults.drinks?.items??[]);const desserts=normalizeItems(menu.dessert?.items??defaults.dessert?.items??[]);const saladPricing=normalizeItems(menu.salad?.items??defaults.salad?.items??[]);const lettuce=normalizeItems(menu.salad?.saladBar?.lettuce??defaults.salad?.saladBar?.lettuce??[]);const toppings=normalizeItems(menu.salad?.saladBar?.toppings??defaults.salad?.saladBar?.toppings??[]);const dressing=normalizeItems(menu.salad?.saladBar?.dressing??defaults.salad?.saladBar?.dressing??[]);const crawfishItems=normalizeItems(menu.crawfish?.items??defaults.crawfish?.items??[]);const showCrawfish=menu.crawfish?.show===false?false:crawfishItems.length>0;el.innerHTML=[card("Breakfast Plates",simpleList(breakfastPlates)),card("Breakfast Items",simpleList(breakfastItems)),card("Lunch Plates",simpleList(lunchPlates)),card("Lunch Items",detailsList(lunchItems,data?.settings?.noDescriptionText||"No description for this item.")),card("Drinks",simpleList(drinks)),card("Dessert",simpleList(desserts)),card("Salad Pricing",simpleList(saladPricing)),card("Salad Bar",[lettuce.length?`<div class="section-label">Lettuce</div>${simpleList(lettuce)}`:"",toppings.length?`<div class="section-label">Toppings</div>${simpleList(toppings)}`:"",dressing.length?`<div class="section-label">Dressing</div>${simpleList(dressing)}`:""].join(""),"card"),showCrawfish?card("Crawfish",simpleList(crawfishItems)):""].join("")}
+    function renderSpecial(data,isoDate,dayName){const el=$("specialCard");const menu=getMenuByDate(data,isoDate)||{};const lunch=menu?.lunch||{};const title=String(lunch.specialTitle??menu?.specialTitle??"").trim();const desc=String(lunch.specialDesc??menu?.specialDesc??"").trim();const plates=normalizeItems(lunch.plates||[]);const items=normalizeLunchItems(lunch.items||[]);const closure=getClosure(data,dayName);$("specialDate").textContent=`${dayName} • ${formatDateNice(parseISODateLocal(isoDate))}`;if(closure?.closed){el.innerHTML=`<div class="special-badge">Closed</div><div class="empty">${escapeHtml(closure.message||"Closed for the day.")}</div>`;return}if(!title&&!desc&&!plates.length&&!items.length){el.innerHTML='<div class="special-badge">No Special Posted</div><div class="empty">There is no daily special set for this date yet.</div>';return}el.innerHTML=`<div class="special-badge">Daily Special</div><h3 style="font-size:28px;margin-bottom:8px;">${escapeHtml(title||dayName+" Special")}</h3>${desc?`<p class="subline" style="margin-bottom:14px;">${escapeHtml(desc)}</p>`:""}${plates.length?`<div class="section-label">Plates</div>${simpleList(plates)}`:""}${items.length?`<div class="section-label">Included Items</div>${detailsList(items,data?.settings?.noDescriptionText||"No description for this item.")}`:""}`}
+    function setupTabs(){const tabs=Array.from(document.querySelectorAll(".tab"));tabs.forEach(tab=>{tab.addEventListener("click",()=>{tabs.forEach(t=>t.classList.toggle("active",t===tab));document.querySelectorAll(".panel").forEach(panel=>{panel.hidden=panel.id!==tab.dataset.panel})})})}
+    (async function init(){try{setupTabs();const data=await readData();$("siteTitle").textContent=document.title.replace(/\s[–-].*$/,"")||"Menu";const now=new Date();const todayISO=toISODateLocal(now);const tomorrow=new Date(now);tomorrow.setDate(now.getDate()+1);const tomorrowISO=toISODateLocal(tomorrow);const todayDate=parseISODateLocal(todayISO);const tomorrowDate=parseISODateLocal(tomorrowISO);const todayName=todayDate.toLocaleDateString("en-US",{weekday:"long"});const tomorrowName=tomorrowDate.toLocaleDateString("en-US",{weekday:"long"});const todayHours=getBusinessHours(todayName);const tomorrowHours=getBusinessHours(tomorrowName);$("todayTitle").textContent=formatDateNice(todayDate);$("tomorrowTitle").textContent=formatDateNice(tomorrowDate);$("todayHours").textContent=`Hours: ${todayHours.open} – ${todayHours.close} • Breakfast ${todayHours.breakfast} • Lunch ${todayHours.lunch}${todayHours.crawfish?` • Crawfish ${todayHours.crawfish}`:""}`;$("tomorrowHours").textContent=`Hours: ${tomorrowHours.open} – ${tomorrowHours.close} • Breakfast ${tomorrowHours.breakfast} • Lunch ${tomorrowHours.lunch}${tomorrowHours.crawfish?` • Crawfish ${tomorrowHours.crawfish}`:""}`;$("todayStatus").textContent=getServiceStatus(todayName,todayISO);$("tomorrowStatus").textContent=getServiceStatus(tomorrowName,tomorrowISO);$("todayNote").textContent=data?.hours?.note||"";$("tomorrowNote").textContent=data?.hours?.note||"";renderMenuGrid($("todayGrid"),data,todayISO);renderMenuGrid($("tomorrowGrid"),data,tomorrowISO);renderSpecial(data,todayISO,todayName)}catch(e){console.error(e);document.body.innerHTML=`<div style="max-width:760px;margin:40px auto;padding:24px;border-radius:20px;background:#fff;border:1px solid #e6ddd3;font-family:Inter,sans-serif;"><h2 style="margin-bottom:8px;">Menu couldn’t load</h2><p style="color:#6d655f;">${escapeHtml(String(e?.message||e))}</p></div>`}})();
   </script>
 </body>
 </html>
