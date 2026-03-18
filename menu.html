@@ -163,12 +163,12 @@
     .panel-wrap {
       position: fixed;
       left: 50%;
-      top: calc(var(--safe-top) + 76px);
-      bottom: calc(var(--safe-bottom) + 92px);
+      top: calc(var(--safe-top) + 72px);
+      bottom: calc(var(--safe-bottom) + 108px);
       transform: translateX(-50%);
       z-index: 6;
-      width: min(96vw, 560px);
-      max-width: 560px;
+      width: min(90vw, 480px);
+      max-width: 480px;
       will-change: auto;
       pointer-events: auto;
     }
@@ -291,8 +291,8 @@
     }
 
     .panel-body {
-      display: grid;
-      grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+      display: flex;
+      flex-direction: column;
       max-height: none;
       min-height: 0;
       flex: 1 1 auto;
@@ -300,19 +300,19 @@
     }
 
     .hero {
-      padding: 10px 10px 0;
+      padding: 8px 8px 0;
       display: grid;
-      gap: 8px;
+      gap: 6px;
       flex: 0 0 auto;
     }
 
     .hero-card {
-      padding: 10px;
-      border-radius: 18px;
+      padding: 8px;
+      border-radius: 16px;
       background: linear-gradient(135deg, rgba(110, 231, 255, 0.14), rgba(158, 255, 168, 0.12));
       border: 1px solid rgba(255,255,255,0.12);
       display: grid;
-      gap: 6px;
+      gap: 4px;
     }
 
     .hero-top {
@@ -353,29 +353,32 @@
     .tabs {
       display: flex;
       gap: 8px;
-      padding: 8px 10px;
+      padding: 8px 8px 6px;
       overflow-x: auto;
       overflow-y: hidden;
       scrollbar-width: none;
       scroll-snap-type: x proximity;
       -webkit-overflow-scrolling: touch;
+      flex: 0 0 auto;
     }
     .tabs::-webkit-scrollbar { display: none; }
     .tab-btn { border-radius: 999px; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); white-space: nowrap; scroll-snap-align: start; }
 
     .menu-list {
-      padding: 0 10px 10px;
+      padding: 0 8px 12px;
       overflow-x: hidden;
-      overflow-y: auto;
+      overflow-y: scroll;
       display: grid;
       grid-template-columns: 1fr;
       gap: 10px;
       align-content: start;
       overscroll-behavior: contain;
-      min-height: 0;
-      max-height: 100%;
+      min-height: 180px;
+      max-height: none;
+      flex: 1 1 auto;
       -webkit-overflow-scrolling: touch;
       touch-action: pan-y;
+      scrollbar-gutter: stable;
     }
 
     .menu-item {
@@ -395,6 +398,10 @@
       border-color: rgba(110, 231, 255, 0.38);
       background: rgba(255,255,255,0.085);
     }
+
+    .menu-list::-webkit-scrollbar { width: 8px; }
+    .menu-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.22); border-radius: 999px; }
+    .menu-list > * { touch-action: manipulation; }
 
     .item-main { min-width: 0; }
     .item-title-row {
@@ -450,7 +457,7 @@
 
     .panel-footer {
       border-top: 1px solid var(--line);
-      padding: 8px 10px calc(8px + var(--safe-bottom));
+      padding: 8px 8px calc(8px + var(--safe-bottom));
       display: grid;
       gap: 8px;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.14));
@@ -487,19 +494,19 @@
     .bottom-dock {
       position: absolute;
       left: 50%;
-      bottom: calc(12px + var(--safe-bottom));
+      bottom: calc(10px + var(--safe-bottom));
       transform: translateX(-50%);
       z-index: 5;
-      width: min(96vw, 560px);
-      padding: 8px;
-      border-radius: 22px;
+      width: min(92vw, 520px);
+      padding: 6px;
+      border-radius: 18px;
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(7, 12, 18, 0.58);
       backdrop-filter: blur(18px);
       box-shadow: var(--shadow);
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
+      gap: 6px;
     }
 
     .dock-btn {
@@ -637,32 +644,34 @@
     .hidden { display: none !important; }
 
     @media (min-width: 880px) {
-      .panel-wrap { width: min(44vw, 560px); max-width: 560px; left: 30%; }
-      .bottom-dock { width: min(68vw, 620px); }
+      .panel-wrap { width: min(40vw, 460px); max-width: 460px; left: 30%; }
+      .bottom-dock { width: min(60vw, 560px); }
       .cart-sheet { left: auto; right: 14px; width: 360px; }
-      .menu-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .menu-list { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 520px) {
       .panel-wrap {
-        width: calc(100vw - 12px);
+        width: calc(100vw - 20px);
         max-width: none;
-        top: calc(var(--safe-top) + 64px);
-        bottom: calc(var(--safe-bottom) + 84px);
+        top: calc(var(--safe-top) + 60px);
+        bottom: calc(var(--safe-bottom) + 96px);
       }
-      .menu-panel { border-radius: 20px; }
+      .menu-panel { border-radius: 18px; }
       .panel-header { padding: 8px; }
       .control-row { align-items: stretch; flex-direction: column; }
       .chip-group, .action-group { width: 100%; }
       .chip-group > *, .action-group > * { flex: 1 1 0; text-align: center; }
-      .hero-card p { font-size: 0.8rem; }
-      .hero-card h2 { font-size: 1rem; }
-      .brand-copy p { font-size: 0.76rem; }
+      .hero-card p { font-size: 0.76rem; line-height: 1.25; }
+      .hero-card h2 { font-size: 0.96rem; }
+      .brand-copy p { font-size: 0.72rem; }
+      .brand-copy h1 { font-size: 1rem; }
       .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .footer-actions { grid-template-columns: 1fr; }
-      .bottom-dock { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .dock-btn { min-height: 56px; }
-      .menu-item { padding: 12px; }
+      .bottom-dock { grid-template-columns: repeat(2, minmax(0, 1fr)); width: calc(100vw - 20px); }
+      .dock-btn { min-height: 50px; }
+      .menu-item { padding: 11px; }
+      .menu-list { min-height: 220px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -737,9 +746,9 @@
             </div>
           </div>
 
-          <div style="padding:0 10px 4px;color:var(--muted);font-size:0.78rem;">Swipe the category row, then scroll the menu list inside this frame.</div>
+          <div style="padding:0 10px 4px;color:var(--muted);font-size:0.78rem;">Swipe the category row sideways, then drag up or down inside the item list to see more.</div>
           <nav class="tabs" id="categoryTabs" aria-label="Menu categories"></nav>
-          <div class="menu-list" id="menuList" tabindex="0"></div>
+          <div class="menu-list" id="menuList" tabindex="0" aria-label="Menu items. Swipe up or down to scroll."></div>
 
           <div class="panel-footer">
             <div class="cart-row">
@@ -1040,9 +1049,9 @@
     }
 
     function distanceOffset() {
-      if (state.distance === 'far') return { scale: 0.94, y: 0.5 };
-      if (state.distance === 'mid') return { scale: 0.98, y: 0.5 };
-      return { scale: 1, y: 0.5 };
+      if (state.distance === 'far') return { scale: 0.82, y: 0.5 };
+      if (state.distance === 'mid') return { scale: 0.9, y: 0.5 };
+      return { scale: 0.96, y: 0.5 };
     }
 
     function applyPanelPosition(immediate = false) {
@@ -1080,6 +1089,14 @@
     }
 
     function setupEvents() {
+      menuList.style.overflowY = 'scroll';
+      let startY = 0;
+      menuList.addEventListener('touchstart', (e) => {
+        startY = e.touches[0]?.clientY || 0;
+      }, { passive: true });
+      menuList.addEventListener('touchmove', (e) => {
+        e.stopPropagation();
+      }, { passive: true });
       $('closeDialogBtn').addEventListener('click', closeItemDialog);
       $('decreaseQtyBtn').addEventListener('click', () => {
         state.qty = Math.max(1, state.qty - 1);
