@@ -634,8 +634,8 @@
   <div class="app">
     <div class="sticky">
       <div class="daybar" role="tablist" aria-label="Day selector">
-        <button class="daybtn active" type="button" role="tab" aria-controls="panel-today" aria-selected="true" id="dayBtnToday">Today</button>
-        <button class="daybtn" type="button" role="tab" aria-controls="panel-tomorrow" aria-selected="false" id="dayBtnTomorrow">Tomorrow</button>
+        <button class="daybtn active" type="button" role="tab" aria-controls="panel-today" aria-selected="true" id="dayBtnToday">Today Today</button>
+        <button class="daybtn" type="button" role="tab" aria-controls="panel-tomorrow" aria-selected="false" id="dayBtnTomorrow">Tomorrow Tomorrow</button>
         <button class="daybtn" type="button" role="tab" aria-controls="panel-advanced" aria-selected="false" id="dayBtnAdvanced">Daily Special</button>
       </div>
     </div>
@@ -1573,8 +1573,8 @@ function initPanel(prefix, data, isoDate, displayName) {
             displayTomorrowName = weekdayName(dayAfter);
           }
 
-          setText("dayBtnToday", displayTodayName);
-          setText("dayBtnTomorrow", displayTomorrowName);
+          
+          
 
           initPanel("today", data, displayTodayISO, displayTodayName);
           initPanel("tomorrow", data, displayTomorrowISO, displayTomorrowName);
