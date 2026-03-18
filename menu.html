@@ -1,384 +1,1061 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>The Francis Smokehouse — Compact Menu</title>
-<style>
-:root{
-  --bg1:#0b0710;--bg2:#1b0f06;--glass:rgba(255,255,255,0.04);
-  --accent:#ff6b00;--gold:#ffd27f;--muted:#cfcfcf;--card:rgba(255,255,255,0.03);
-  --fw-slab: "Cinzel", serif; --fw-sans: system-ui, "Segoe UI", Roboto, Arial;
-}
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:var(--fw-sans);background:
- radial-gradient(800px 400px at 10% 20%, rgba(255,110,16,0.03), transparent 8%),
- radial-gradient(800px 400px at 90% 80%, rgba(255,100,30,0.02), transparent 8%),
- linear-gradient(160deg,var(--bg1),var(--bg2));color:#fff;-webkit-font-smoothing:antialiased}
-.container{max-width:980px;margin:18px auto;padding:18px;display:grid;grid-template-columns:1fr 320px;gap:16px}
-.header{grid-column:1/-1;display:flex;gap:12px;align-items:center;justify-content:space-between}
-.brand{display:flex;flex-direction:column}
-.h1{font-family:var(--fw-slab);font-weight:700;letter-spacing:1px;font-size:20px;color:var(--gold)}
-.sub{color:var(--muted);font-size:13px}
-.meta{font-size:13px;color:var(--muted);text-align:right}
-.card{background:linear-gradient(180deg,var(--card), rgba(255,255,255,0.02));border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 10px 30px rgba(0,0,0,0.6)}
-.menu{padding:12px;display:grid;gap:10px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.025);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
-.row .name{font-weight:700}
-.row .desc{font-size:12px;color:var(--muted);margin-top:4px}
-.price{color:var(--accent);font-weight:800;min-width:72px;text-align:right}
-.grid-items{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.section-title{font-family:var(--fw-slab);font-size:14px;color:var(--gold);margin:6px 0 8px}
-.icon{width:44px;height:44;border-radius:8px;background:linear-gradient(135deg,#5a2b10,#a35b2e);display:grid;place-items:center;font-family:var(--fw-slab);font-size:12px;color:#fff;margin-right:8px;flex:0 0 44px}
-.item-compact{display:flex;align-items:flex-start;gap:10px}
-.side-panel{position:sticky;top:18px;height:fit-content;display:flex;flex-direction:column;gap:12px}
-.day-pills{display:flex;gap:6px;flex-wrap:wrap}
-.pill{padding:8px 10px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);font-weight:700;color:var(--muted);font-size:13px;cursor:pointer;border:1px solid rgba(255,255,255,0.03)}
-.pill.active{background:linear-gradient(90deg,var(--accent),#ff8f3b);color:#120400;box-shadow:0 8px 24px rgba(255,100,30,0.12)}
-.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.btn{background:var(--accent);border:none;padding:8px 10px;border-radius:8px;color:#fff;font-weight:800;cursor:pointer}
-.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-.small{font-size:13px;padding:6px 8px}
-.condensed .desc{display:none}
-.condensed .grid-items{grid-template-columns:repeat(3,1fr)}
-.condensed .icon{width:36px;height:36px;font-size:11px}
-.footer{text-align:center;color:var(--muted);font-size:13px;margin-top:12px}
-.controls .muted{color:var(--muted);font-size:13px}
-.search{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:#fff}
-.editable{padding:8px;border-radius:8px;background:rgba(0,0,0,0.25);border:1px dashed rgba(255,255,255,0.03);min-height:44px}
-.shop-row{display:flex;align-items:center;gap:8px}
-.checkbox{width:18px;height:18px;border-radius:4px;border:2px solid rgba(255,255,255,0.06);background:transparent;display:grid;place-items:center;cursor:pointer}
-.checkbox.checked{background:linear-gradient(90deg,var(--accent),#ff9a30);border-color:transparent;color:#120400;font-weight:900}
-.small-muted{font-size:12px;color:var(--muted)}
-.copy{font-size:12px;border-radius:8px;padding:6px 8px;background:rgba(255,255,255,0.03);cursor:pointer}
-@media(max-width:920px){.container{grid-template-columns:1fr}.meta{text-align:left}}
-/* Micro-unique: tile skew + shimmer */
-.tile{position:relative;overflow:hidden}
-.tile:after{content:"";position:absolute;left:-120%;top:-50%;width:60%;height:200%;background:linear-gradient(120deg,transparent,rgba(255,255,255,0.06),transparent);transform:skewX(-20deg);transition:all .9s}
-.tile:hover:after{left:120%}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Francis Smokehouse — Future Menu Experience</title>
+  <meta name="description" content="An experimental one-file menu experience for The Francis Smokehouse." />
+  <style>
+    :root{
+      --bg:#090607;
+      --bg2:#130b0a;
+      --card:rgba(30,18,16,.56);
+      --line:rgba(255,255,255,.11);
+      --text:#f8eee7;
+      --muted:#d2b8a4;
+      --accent:#ff8b3d;
+      --accent2:#ffd38e;
+      --accent3:#ff5f36;
+      --good:#98f0b7;
+      --shadow:0 30px 80px rgba(0,0,0,.45);
+      --radius:28px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:radial-gradient(circle at top,#1b100d 0%,#0f0908 35%,#070505 70%,#030303 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;scroll-behavior:smooth;overflow-x:hidden}
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,126,52,.10), transparent 18%),
+        radial-gradient(circle at 80% 12%, rgba(255,212,124,.08), transparent 22%),
+        radial-gradient(circle at 50% 80%, rgba(255,98,54,.08), transparent 18%);
+      pointer-events:none;
+      z-index:-2;
+      filter:blur(20px);
+    }
+    #embers, #smoke {position:fixed; inset:0; width:100%; height:100%; z-index:-1; pointer-events:none}
+    .grain{
+      position:fixed; inset:0; pointer-events:none; z-index:2; opacity:.06; mix-blend-mode:soft-light;
+      background-image:
+        linear-gradient(rgba(255,255,255,.15), rgba(255,255,255,.05)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.95'/%3E%3C/svg%3E");
+      animation:grain 10s steps(10) infinite;
+    }
+    @keyframes grain{
+      0%{transform:translate(0,0)}
+      10%{transform:translate(-1%, -1%)}
+      20%{transform:translate(1%, 1%)}
+      30%{transform:translate(-2%, 1%)}
+      40%{transform:translate(2%, -1%)}
+      50%{transform:translate(-1%, 2%)}
+      60%{transform:translate(2%, 1%)}
+      70%{transform:translate(0%, -2%)}
+      80%{transform:translate(-2%, 0%)}
+      90%{transform:translate(1%, -1%)}
+      100%{transform:translate(0,0)}
+    }
+
+    .topbar{
+      position:fixed; top:18px; left:50%; transform:translateX(-50%);
+      width:min(1100px, calc(100% - 28px));
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 16px;
+      backdrop-filter: blur(18px) saturate(1.15);
+      background:rgba(18,11,10,.45);
+      border:1px solid var(--line);
+      border-radius:999px;
+      box-shadow:var(--shadow);
+      z-index:20;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:.82rem;
+    }
+    .brand-badge{
+      width:34px;height:34px;border-radius:50%;
+      background:conic-gradient(from 180deg, var(--accent3), var(--accent2), var(--accent), var(--accent3));
+      box-shadow:0 0 28px rgba(255,130,70,.28), inset 0 0 30px rgba(255,255,255,.15);
+      position:relative; isolation:isolate;
+    }
+    .brand-badge::after{
+      content:"";
+      position:absolute; inset:7px;
+      background:#140d0b; border-radius:50%;
+      box-shadow: inset 0 0 18px rgba(255,160,96,.35);
+    }
+    .brand span small{display:block;color:var(--muted);font-weight:600;letter-spacing:.18em}
+    .chip-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .chip{
+      appearance:none;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05); color:var(--text);
+      border-radius:999px; padding:10px 14px; cursor:pointer;
+      font-weight:650; font-size:.88rem; transition:.25s ease; position:relative; overflow:hidden;
+    }
+    .chip::before{
+      content:""; position:absolute; inset:-1px;
+      background:linear-gradient(115deg, transparent 30%, rgba(255,255,255,.15), transparent 70%);
+      transform:translateX(-120%); transition:transform .6s ease;
+    }
+    .chip:hover::before{transform:translateX(120%)}
+    .chip:hover,.chip.active{background:rgba(255,140,61,.13); border-color:rgba(255,164,95,.42); transform:translateY(-1px)}
+    .searchWrap{
+      position:fixed; right:18px; bottom:18px; z-index:25;
+      width:min(420px, calc(100vw - 36px));
+      backdrop-filter: blur(18px);
+      background:rgba(17,12,11,.55);
+      border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .searchHead{display:flex; align-items:center; gap:12px; padding:14px 16px; border-bottom:1px solid var(--line)}
+    .searchHead input{
+      width:100%; background:transparent; border:none; outline:none; color:var(--text);
+      font-size:1rem; font-weight:600;
+    }
+    .searchMeta{font-size:.78rem; color:var(--muted); padding:0 16px 14px}
+    .cmd{font-weight:800;color:var(--accent2)}
+    .wrap{width:min(1200px, calc(100% - 28px)); margin:0 auto}
+    .hero{
+      min-height:100svh; display:grid; align-items:center;
+      padding:110px 0 48px;
+      position:relative;
+    }
+    .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:28px; align-items:center}
+    .eyebrow{
+      display:inline-flex; gap:10px; align-items:center; padding:10px 14px;
+      border:1px solid rgba(255,255,255,.10); border-radius:999px;
+      background:rgba(255,255,255,.04); color:var(--muted); font-size:.82rem;
+      text-transform:uppercase; letter-spacing:.16em; font-weight:700;
+    }
+    .eyebrow .pulse{width:8px;height:8px;border-radius:50%; background:var(--good); box-shadow:0 0 18px var(--good)}
+    h1{
+      margin:18px 0 14px; line-height:.92; letter-spacing:-.05em;
+      font-size:clamp(3.4rem, 9vw, 8.4rem);
+    }
+    .gradient{
+      background:linear-gradient(180deg,#fff 0%, #ffd9bb 38%, #ffa55e 100%);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow:0 0 42px rgba(255,154,86,.11);
+    }
+    .lead{
+      max-width:62ch; color:#e3cbb9; font-size:clamp(1rem, 1.7vw, 1.22rem); line-height:1.7;
+      margin-bottom:24px;
+    }
+    .hero-actions{display:flex; flex-wrap:wrap; gap:14px}
+    .btn{
+      position:relative; border:none; color:var(--text); cursor:pointer; text-decoration:none;
+      padding:14px 18px; border-radius:16px; font-weight:800; letter-spacing:.02em;
+      background:linear-gradient(180deg, rgba(255,145,69,.25), rgba(255,101,57,.14));
+      border:1px solid rgba(255,181,113,.28);
+      box-shadow:0 12px 30px rgba(255,109,44,.12), inset 0 1px 0 rgba(255,255,255,.12);
+      transition:.28s ease;
+    }
+    .btn:hover{transform:translateY(-2px) scale(1.01)}
+    .btn.ghost{background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.12)}
+    .stats{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:28px;
+    }
+    .stat{
+      padding:18px; border:1px solid var(--line); background:rgba(255,255,255,.04);
+      border-radius:22px; backdrop-filter: blur(12px);
+    }
+    .stat b{display:block; font-size:1.7rem}
+    .stat span{color:var(--muted); font-size:.92rem}
+    .hero-visual{
+      position:relative; min-height:640px;
+      display:grid; place-items:center;
+    }
+    .orbital{
+      position:relative; width:min(100%, 620px); aspect-ratio:1/1;
+      filter:drop-shadow(0 30px 80px rgba(255,94,44,.16));
+    }
+    .core{
+      position:absolute; inset:18%;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 45% 38%, rgba(255,232,193,.9), rgba(255,163,76,.55) 18%, rgba(255,109,54,.17) 45%, rgba(0,0,0,0) 68%),
+        radial-gradient(circle at 50% 50%, rgba(255,133,57,.22), transparent 70%);
+      box-shadow:0 0 90px rgba(255,127,61,.18), inset 0 0 60px rgba(255,255,255,.12);
+      animation:corePulse 5s ease-in-out infinite;
+    }
+    @keyframes corePulse{
+      0%,100%{transform:scale(1)}
+      50%{transform:scale(1.045)}
+    }
+    .ring{
+      position:absolute; inset:0; border-radius:50%;
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .ring.r1{inset:8%; animation:spin 16s linear infinite}
+    .ring.r2{inset:0; animation:spinR 20s linear infinite}
+    .ring.r3{inset:18%; animation:spin 11s linear infinite reverse}
+    .ring::before, .ring::after{
+      content:""; position:absolute; width:18px; height:18px; border-radius:50%;
+      background:radial-gradient(circle, #fff, #ffd29d 45%, #ff7b43 70%, transparent 71%);
+      box-shadow:0 0 22px rgba(255,157,91,.55);
+    }
+    .ring.r1::before{top:10%; left:40%}
+    .ring.r1::after{right:12%; bottom:30%}
+    .ring.r2::before{top:52%; left:2%}
+    .ring.r2::after{right:8%; top:20%}
+    .ring.r3::before{left:8%; top:24%}
+    .ring.r3::after{right:18%; bottom:8%}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes spinR{to{transform:rotate(-360deg)}}
+    .floating-panel{
+      position:absolute; padding:14px 16px; border-radius:20px;
+      background:rgba(20,14,13,.64); border:1px solid rgba(255,255,255,.09);
+      backdrop-filter: blur(18px); box-shadow:var(--shadow); max-width:220px;
+      transform-style:preserve-3d;
+    }
+    .floating-panel b{display:block; font-size:1rem; margin-bottom:6px}
+    .floating-panel span{color:var(--muted); font-size:.9rem; line-height:1.45}
+    .fp1{left:0; top:16%}
+    .fp2{right:0; top:8%}
+    .fp3{left:4%; bottom:14%}
+    .fp4{right:4%; bottom:18%}
+
+    .section{
+      padding:32px 0 100px;
+      position:relative;
+    }
+    .section-head{
+      display:flex; justify-content:space-between; align-items:end; gap:18px;
+      margin-bottom:26px;
+    }
+    .section-head h2{
+      margin:0; font-size:clamp(2rem, 4vw, 4rem); letter-spacing:-.04em; line-height:.95;
+    }
+    .section-head p{max-width:58ch; margin:0; color:var(--muted); line-height:1.6}
+    .constellation{
+      position:sticky; top:98px; z-index:5;
+      display:flex; justify-content:center; margin-bottom:28px;
+    }
+    .constellation-inner{
+      width:min(100%, 860px); padding:14px;
+      display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+      background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:999px;
+      backdrop-filter: blur(16px);
+      box-shadow:var(--shadow);
+    }
+    .node{
+      position:relative; padding:12px 15px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12); background:rgba(0,0,0,.18);
+      cursor:pointer; font-weight:800; color:var(--muted);
+      transition:.28s ease;
+    }
+    .node:hover, .node.active{
+      color:var(--text); transform:translateY(-2px) scale(1.02);
+      background:linear-gradient(180deg, rgba(255,139,61,.18), rgba(255,94,54,.10));
+      border-color:rgba(255,167,99,.3);
+      box-shadow:0 10px 24px rgba(255,107,54,.10);
+    }
+
+    .menu-grid{
+      display:grid; grid-template-columns:repeat(12,1fr); gap:18px;
+    }
+    .menu-card{
+      grid-column:span 4;
+      min-height:350px;
+      position:relative;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      overflow:hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025)),
+        radial-gradient(circle at top right, rgba(255,188,122,.12), transparent 28%),
+        linear-gradient(145deg, rgba(38,22,19,.8), rgba(18,13,12,.9));
+      box-shadow:var(--shadow);
+      transform-style:preserve-3d;
+      will-change:transform;
+      transition:transform .18s linear, border-color .3s ease, box-shadow .3s ease, opacity .35s ease;
+    }
+    .menu-card:hover{
+      border-color:rgba(255,175,116,.25);
+      box-shadow:0 30px 80px rgba(0,0,0,.42), 0 0 0 1px rgba(255,176,108,.08);
+    }
+    .menu-card.hidden{opacity:.15; filter:grayscale(.55) saturate(.5); transform:scale(.98); pointer-events:none}
+    .menu-card.wide{grid-column:span 6}
+    .card-top{
+      position:relative; padding:22px 22px 16px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+    }
+    .kicker{
+      display:flex; justify-content:space-between; gap:16px; align-items:center; margin-bottom:8px;
+      color:var(--muted); font-size:.82rem; letter-spacing:.14em; text-transform:uppercase; font-weight:800;
+    }
+    .price{
+      font-size:1.15rem; color:var(--accent2); font-weight:900;
+      text-shadow:0 0 18px rgba(255,187,122,.12);
+    }
+    .menu-card h3{
+      margin:0; font-size:1.55rem; line-height:1; letter-spacing:-.03em;
+    }
+    .menu-card p{
+      color:#dec7b5; margin:12px 0 0; line-height:1.62; font-size:.96rem;
+    }
+    .card-tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
+    .tag{
+      border:1px solid rgba(255,255,255,.08);
+      padding:7px 10px; border-radius:999px; font-size:.8rem;
+      background:rgba(255,255,255,.04); color:#efd8c4; font-weight:700;
+    }
+    .scent-line{
+      position:absolute; inset:auto -5% 16px auto; width:62%; height:70px; opacity:.45;
+      background:radial-gradient(circle at 20% 40%, rgba(255,255,255,.18), transparent 18%),
+                 radial-gradient(circle at 35% 55%, rgba(255,183,124,.16), transparent 18%),
+                 radial-gradient(circle at 52% 42%, rgba(255,121,65,.18), transparent 22%);
+      filter:blur(18px);
+      pointer-events:none;
+    }
+    .card-body{padding:18px 22px 22px}
+    .meta-line{display:flex; justify-content:space-between; gap:12px; margin-top:14px; color:var(--muted); font-size:.82rem}
+    .category-panel{
+      margin-top:24px; display:grid; grid-template-columns:1.1fr .9fr; gap:18px;
+    }
+    .feature-box{
+      border:1px solid var(--line); border-radius:28px; padding:24px;
+      background:rgba(255,255,255,.04); backdrop-filter: blur(14px);
+      box-shadow:var(--shadow);
+    }
+    .feature-box h3{margin:0 0 8px; font-size:1.65rem}
+    .feature-box p{color:var(--muted); line-height:1.72}
+    .special-stack{
+      display:grid; gap:14px;
+    }
+    .special{
+      border:1px solid rgba(255,255,255,.09); border-radius:20px; padding:16px 18px;
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      display:flex; justify-content:space-between; gap:14px; align-items:start;
+    }
+    .special b{display:block; font-size:1rem}
+    .special span{display:block; color:var(--muted); margin-top:5px; line-height:1.5}
+    .special em{font-style:normal; color:var(--accent2); font-weight:900; white-space:nowrap}
+    .footer{
+      padding:24px 0 60px; color:var(--muted);
+    }
+    .footer-card{
+      border:1px solid var(--line); border-radius:28px; padding:24px;
+      background:rgba(255,255,255,.04); box-shadow:var(--shadow);
+    }
+    .tiny{font-size:.88rem; line-height:1.65}
+    .reveal{opacity:0; transform:translateY(28px); transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1)}
+    .reveal.visible{opacity:1; transform:translateY(0)}
+
+    @media (max-width: 1040px){
+      .hero-grid,.category-panel{grid-template-columns:1fr}
+      .hero-visual{min-height:540px}
+      .menu-card, .menu-card.wide{grid-column:span 6}
+    }
+    @media (max-width: 760px){
+      .topbar{padding:10px 12px}
+      .chip-row{display:none}
+      .stats{grid-template-columns:1fr}
+      .menu-grid{grid-template-columns:1fr}
+      .menu-card, .menu-card.wide{grid-column:span 1}
+      .constellation{top:84px}
+      .searchWrap{position:relative; right:auto; bottom:auto; width:100%; margin:0 auto 16px}
+      .hero{padding-top:96px}
+      .floating-panel{display:none}
+      .section{padding-bottom:70px}
+    }
+  </style>
 </head>
 <body>
-<div class="container" id="app" aria-live="polite">
-  <header class="header">
+  <canvas id="smoke"></canvas>
+  <canvas id="embers"></canvas>
+  <div class="grain"></div>
+
+  <header class="topbar">
     <div class="brand">
-      <div class="h1">THE FRANCIS SMOKEHOUSE</div>
-      <div class="sub">Specialty Meats · 6779 US Highway 61 · St. Francisville, LA</div>
+      <div class="brand-badge"></div>
+      <span>
+        THE FRANCIS SMOKEHOUSE
+        <small>Future Menu Prototype</small>
+      </span>
     </div>
-    <div class="meta">
-      <div style="font-weight:800">(225) 245-5046</div>
-      <div style="margin-top:6px;color:var(--muted)">Mon–Sat: 10–6 · Sun: 10–3 · Takeout · Parking · Wheelchair</div>
+    <div class="chip-row">
+      <button class="chip active" data-jump="#menu">Menu</button>
+      <button class="chip" data-jump="#specials">Specials</button>
+      <button class="chip" data-jump="#visit">Visit</button>
     </div>
   </header>
 
-  <section class="card menu" id="menu" aria-label="Main menu">
-    <!-- Tiny search + mode -->
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-      <input id="q" class="search" placeholder="Quick find (eg. boudin, ribs)" aria-label="Search menu">
-      <div class="controls">
-        <button id="toggleCond" class="btn small" title="Condensed view (compact)">Condensed</button>
-        <button id="print" class="ghost small" style="border-color:rgba(255,255,255,0.05);color:var(--muted)">Print</button>
-      </div>
-    </div>
-
-    <div style="display:flex;gap:12px;margin-top:10px;align-items:flex-start">
-      <div style="flex:1">
-        <!-- Generated menu sections -->
-        <div id="sections"></div>
-        <div class="footer">Prices & specials rotate — call for catering & large orders.</div>
+  <main>
+    <section class="hero wrap">
+      <div class="searchWrap reveal">
+        <div class="searchHead">
+          <span style="opacity:.75">⌘</span>
+          <input id="searchInput" type="text" placeholder="Search brisket, boudin, shrimp po-boy…" />
+        </div>
+        <div class="searchMeta">Live-filter the entire menu. Try <span class="cmd">boudin</span>, <span class="cmd">ribs</span>, <span class="cmd">sweet</span>.</div>
       </div>
 
-      <aside class="side-panel card" aria-label="Daily specials and ordering">
-        <div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div style="font-weight:800;color:var(--gold)">Daily Specials</div>
-            <div class="small-muted">Editable · Saved locally</div>
+      <div class="hero-grid">
+        <div class="reveal">
+          <div class="eyebrow"><span class="pulse"></span> St. Francisville • Smoke, fire, and Southern ritual</div>
+          <h1><span class="gradient">A menu that feels</span><br/> like a campfire dream.</h1>
+          <p class="lead">
+            Not a list. Not a template. Not another tired restaurant layout.
+            This is an immersive menu universe for <strong>The Francis Smokehouse</strong> —
+            built as a cinematic, living object with smoke, orbiting flavor nodes, deep interaction,
+            and a sculpted flow that makes the food feel legendary.
+          </p>
+          <div class="hero-actions">
+            <a class="btn" href="#menu">Enter the flavor field</a>
+            <a class="btn ghost" href="#visit">See hours & location</a>
           </div>
+          <div class="stats">
+            <div class="stat"><b>4.5★</b><span>Tripadvisor sentiment signal</span></div>
+            <div class="stat"><b>10–6</b><span>Typical daily hours</span></div>
+            <div class="stat"><b>225</b><span>245-5046 for direct orders</span></div>
+          </div>
+        </div>
 
-          <div class="day-pills" id="dayPills" style="margin-top:8px"></div>
+        <div class="hero-visual reveal">
+          <div class="orbital">
+            <div class="core"></div>
+            <div class="ring r1"></div>
+            <div class="ring r2"></div>
+            <div class="ring r3"></div>
 
-          <div style="margin-top:10px">
-            <div style="font-weight:700">Today's special</div>
-            <div id="todayCard" class="tile" style="margin-top:8px;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent)">
-              <div id="todayName" style="font-weight:800"></div>
-              <div id="todayDesc" class="small-muted" style="margin-top:6px"></div>
-              <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
-                <button id="addToday" class="btn small" title="Add today's special to order">Add</button>
-                <button id="editToday" class="ghost small" title="Edit today's special">Edit</button>
-              </div>
-              <div id="editBox" style="display:none;margin-top:8px">
-                <textarea id="editText" class="editable" aria-label="Edit today's special"></textarea>
-                <div style="display:flex;gap:8px;margin-top:8px"><button id="saveEdit" class="btn small">Save</button><button id="cancelEdit" class="ghost small">Cancel</button></div>
-              </div>
+            <div class="floating-panel fp1">
+              <b>Brisket Signal</b>
+              <span>Tender, smoky, and built to anchor the whole visual identity.</span>
+            </div>
+            <div class="floating-panel fp2">
+              <b>Boudin Energy</b>
+              <span>Pepper jack boudin balls and egg rolls deserve the spotlight treatment.</span>
+            </div>
+            <div class="floating-panel fp3">
+              <b>Deck + Smoke</b>
+              <span>Outdoor atmosphere translated into floating warmth and ember motion.</span>
+            </div>
+            <div class="floating-panel fp4">
+              <b>Small-town Futurism</b>
+              <span>Louisiana soul rendered like a premium experimental microsite.</span>
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div style="margin-top:12px">
-          <div style="font-weight:800;margin-bottom:8px">Order</div>
-          <div id="bag" style="min-height:48px;border-radius:8px;padding:8px;border:1px dashed rgba(255,255,255,0.03)">
-            <div id="bagList" class="small-muted">No items yet</div>
+    <section id="menu" class="section wrap">
+      <div class="section-head reveal">
+        <div>
+          <h2>Flavor constellation.</h2>
+        </div>
+        <p>Each node below reshapes the menu in place. This keeps the browsing experience playful and unexpected instead of forcing people through a boring grid of categories.</p>
+      </div>
+
+      <div class="constellation reveal">
+        <div class="constellation-inner">
+          <button class="node active" data-filter="all">All</button>
+          <button class="node" data-filter="bbq">BBQ Plates</button>
+          <button class="node" data-filter="sandwich">Burgers & Sandwiches</button>
+          <button class="node" data-filter="boudin">Boudin & Handhelds</button>
+          <button class="node" data-filter="side">Sides</button>
+          <button class="node" data-filter="sweet">Desserts</button>
+          <button class="node" data-filter="special">Featured</button>
+        </div>
+      </div>
+
+      <div class="menu-grid" id="menuGrid">
+        <article class="menu-card wide reveal" data-category="bbq">
+          <div class="card-top">
+            <div class="kicker"><span>BBQ Plate</span><span class="price">$19.99</span></div>
+            <h3>Full Rack of Ribs</h3>
+            <p>A centerpiece plate with deep smoke, full bark energy, and two sides to turn lunch into an event.</p>
+            <div class="card-tags"><span class="tag">Signature</span><span class="tag">Two sides</span><span class="tag">Smokehouse ritual</span></div>
+            <div class="scent-line"></div>
           </div>
-          <div style="display:flex;gap:8px;margin-top:8px;justify-content:space-between">
-            <button id="mailOrder" class="btn small" title="Email order">Email Order</button>
-            <button id="copyOrder" class="copy" title="Copy order to clipboard">Copy</button>
+          <div class="card-body">
+            <div class="meta-line"><span>Category: BBQ</span><span>Big appetite favorite</span></div>
+          </div>
+        </article>
+
+        <article class="menu-card reveal" data-category="bbq">
+          <div class="card-top">
+            <div class="kicker"><span>BBQ Plate</span><span class="price">$11.99</span></div>
+            <h3>Half Rack of Ribs</h3>
+            <p>Same smoky direction, lighter commitment. Ideal for guests who still want room for something sweet.</p>
+            <div class="card-tags"><span class="tag">Balanced</span><span class="tag">Two sides</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: BBQ</span><span>Guest favorite</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="bbq">
+          <div class="card-top">
+            <div class="kicker"><span>BBQ Plate</span><span class="price">$9.99</span></div>
+            <h3>Pulled Pork Plate</h3>
+            <p>Rich shredded pork with smoke woven through every bite, served with two sides for maximum comfort.</p>
+            <div class="card-tags"><span class="tag">Classic</span><span class="tag">Two sides</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: BBQ</span><span>Comfort heavy</span></div></div>
+        </article>
+
+        <article class="menu-card wide reveal" data-category="bbq">
+          <div class="card-top">
+            <div class="kicker"><span>BBQ Plate</span><span class="price">$10.99</span></div>
+            <h3>Brisket Plate</h3>
+            <p>The texture-forward hero. This is the plate that should visually glow on the site because it is one of the most praised items in available reviews.</p>
+            <div class="card-tags"><span class="tag">Review standout</span><span class="tag">Two sides</span><span class="tag">Melt-in-your-mouth energy</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: BBQ</span><span>High-interest item</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="bbq">
+          <div class="card-top">
+            <div class="kicker"><span>Smoked Plate</span><span class="price">$9.99</span></div>
+            <h3>Half Chicken Plate</h3>
+            <p>Smoke-softened chicken with two sides and a cleaner profile for people not chasing the heavier meats.</p>
+            <div class="card-tags"><span class="tag">Two sides</span><span class="tag">Lighter smoke</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: BBQ</span><span>Easy crowd-pleaser</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="bbq special">
+          <div class="card-top">
+            <div class="kicker"><span>Smokehouse Wings</span><span class="price">$7.99</span></div>
+            <h3>Smoked Wings</h3>
+            <p>One of the best transition items between appetizer and main course, with enough smoke to make the whole interface feel honest.</p>
+            <div class="card-tags"><span class="tag">Handheld heat</span><span class="tag">Snack or meal</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: BBQ</span><span>High versatility</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sandwich">
+          <div class="card-top">
+            <div class="kicker"><span>Burger</span><span class="price">$6.99</span></div>
+            <h3>Hamburger</h3>
+            <p>Pure and stripped down. A strong baseline item that benefits from premium visual treatment rather than over-explaining.</p>
+            <div class="card-tags"><span class="tag">With one side</span><span class="tag">Simple build</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Burgers</span><span>Everyday order</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sandwich">
+          <div class="card-top">
+            <div class="kicker"><span>Burger</span><span class="price">$7.99</span></div>
+            <h3>Cheeseburger</h3>
+            <p>Smoky, cheesy, and approachable — the perfect card to showcase molten highlights and warm motion blur.</p>
+            <div class="card-tags"><span class="tag">With one side</span><span class="tag">Crowd magnet</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Burgers</span><span>Comfort icon</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sandwich">
+          <div class="card-top">
+            <div class="kicker"><span>Burger</span><span class="price">$8.99</span></div>
+            <h3>Bacon Cheeseburger</h3>
+            <p>The rich option for guests who want the menu to feel unapologetically indulgent.</p>
+            <div class="card-tags"><span class="tag">With one side</span><span class="tag">Loaded</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Burgers</span><span>Heavy flavor</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sandwich bbq">
+          <div class="card-top">
+            <div class="kicker"><span>Sandwich</span><span class="price">$7.99</span></div>
+            <h3>Pulled Pork Sandwich</h3>
+            <p>Soft, smoky, and fast-moving — a useful choice for mobile users who want a familiar entry point.</p>
+            <div class="card-tags"><span class="tag">With one side</span><span class="tag">Fast favorite</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Sandwiches</span><span>Smoke-forward</span></div></div>
+        </article>
+
+        <article class="menu-card wide reveal" data-category="sandwich bbq">
+          <div class="card-top">
+            <div class="kicker"><span>Sandwich</span><span class="price">$8.99</span></div>
+            <h3>Brisket Sandwich</h3>
+            <p>The flagship handheld. This card should almost behave like a launch trailer when hovered — it is that central to the menu story.</p>
+            <div class="card-tags"><span class="tag">With one side</span><span class="tag">Review standout</span><span class="tag">Hero item</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Sandwiches</span><span>Can headline homepage</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sandwich">
+          <div class="card-top">
+            <div class="kicker"><span>Po-Boy</span><span class="price">$10.99</span></div>
+            <h3>Ribeye Po-Boy</h3>
+            <p>A more premium detour that adds range to the menu and signals the kitchen is not one-note.</p>
+            <div class="card-tags"><span class="tag">With one side</span><span class="tag">Premium feel</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Po-Boys</span><span>Upper-tier handheld</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sandwich">
+          <div class="card-top">
+            <div class="kicker"><span>Sandwich</span><span class="price">$7.99</span></div>
+            <h3>Chicken Sandwich</h3>
+            <p>Clean, approachable, and useful for people who want a straightforward order without losing the smokehouse feel.</p>
+            <div class="card-tags"><span class="tag">With one side</span><span class="tag">Accessible pick</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Sandwiches</span><span>Balanced</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sandwich">
+          <div class="card-top">
+            <div class="kicker"><span>Po-Boy</span><span class="price">$8.99</span></div>
+            <h3>Shrimp Po-Boy</h3>
+            <p>Seafood lift with smokehouse surroundings — exactly the kind of contrast that makes a menu feel alive.</p>
+            <div class="card-tags"><span class="tag">With one side</span><span class="tag">Seafood option</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Po-Boys</span><span>Louisiana-coded</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sandwich">
+          <div class="card-top">
+            <div class="kicker"><span>Po-Boy</span><span class="price">$10.99</span></div>
+            <h3>Crawfish Po-Boy</h3>
+            <p>A sharper regional signal, built for customers who want something that feels unmistakably local.</p>
+            <div class="card-tags"><span class="tag">With one side</span><span class="tag">Regional favorite</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Po-Boys</span><span>Distinctive</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sandwich">
+          <div class="card-top">
+            <div class="kicker"><span>Po-Boy</span><span class="price">$8.99</span></div>
+            <h3>Catfish Po-Boy</h3>
+            <p>Another regional anchor that helps the menu avoid feeling over-weighted toward only barbecue plates.</p>
+            <div class="card-tags"><span class="tag">With one side</span><span class="tag">Southern staple</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Po-Boys</span><span>Good variety marker</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="boudin">
+          <div class="card-top">
+            <div class="kicker"><span>Specialty Meat</span><span class="price">Market</span></div>
+            <h3>Steamed Boudin Links</h3>
+            <p>A foundational Louisiana item and the kind of thing that separates a real smokehouse identity from generic BBQ branding.</p>
+            <div class="card-tags"><span class="tag">Local signal</span><span class="tag">Counter favorite</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Boudin</span><span>Price not shown in source image</span></div></div>
+        </article>
+
+        <article class="menu-card wide reveal" data-category="boudin">
+          <div class="card-top">
+            <div class="kicker"><span>Specialty Meat</span><span class="price">Market</span></div>
+            <h3>Boudin Balls</h3>
+            <p>One of the most praised items in the public review material — these deserve a loud, kinetic visual treatment and could easily become the site’s most-clicked item.</p>
+            <div class="card-tags"><span class="tag">Highly praised</span><span class="tag">Must-feature</span><span class="tag">Louisiana icon</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Boudin</span><span>Price not shown in source image</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="boudin">
+          <div class="card-top">
+            <div class="kicker"><span>Specialty Meat</span><span class="price">Market</span></div>
+            <h3>Pepper Jack Boudin Balls</h3>
+            <p>Spicier, richer, and visually perfect for molten accents and glowing hover feedback.</p>
+            <div class="card-tags"><span class="tag">Heat</span><span class="tag">Cheese-loaded</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Boudin</span><span>Price not shown in source image</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="boudin">
+          <div class="card-top">
+            <div class="kicker"><span>Specialty Meat</span><span class="price">Market</span></div>
+            <h3>Boudin Egg Rolls</h3>
+            <p>The sort of cross-format comfort food that creates curiosity and makes the menu feel modern without losing place.</p>
+            <div class="card-tags"><span class="tag">Crunch factor</span><span class="tag">Conversation starter</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Boudin</span><span>Price not shown in source image</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="boudin">
+          <div class="card-top">
+            <div class="kicker"><span>Handheld Pie</span><span class="price">Market</span></div>
+            <h3>Meat Pies</h3>
+            <p>Portable, savory, and useful as an impulse-order card within the interface.</p>
+            <div class="card-tags"><span class="tag">Portable</span><span class="tag">Snackable</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Handhelds</span><span>Price not shown in source image</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="boudin">
+          <div class="card-top">
+            <div class="kicker"><span>Handheld Pie</span><span class="price">Market</span></div>
+            <h3>Crawfish Pies</h3>
+            <p>A great regional detail piece that broadens the menu personality far beyond standard rib-and-brisket presentation.</p>
+            <div class="card-tags"><span class="tag">Regional</span><span class="tag">Savory pastry</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Handhelds</span><span>Price not shown in source image</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="side">
+          <div class="card-top">
+            <div class="kicker"><span>Side</span><span class="price">$2.75 / $6.99</span></div>
+            <h3>Baked Beans</h3>
+            <p>Sweet-smoky grounding for the louder meats.</p>
+            <div class="card-tags"><span class="tag">Small / large</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Sides</span><span>Classic pairing</span></div></div>
+        </article>
+
+        <article class="menu-card wide reveal" data-category="side">
+          <div class="card-top">
+            <div class="kicker"><span>Side</span><span class="price">$2.75 / $6.99</span></div>
+            <h3>Corn Pudding</h3>
+            <p>Frequently praised in review syndications and one of the best opportunities to visually contrast creamy comfort against all the smoke and fire.</p>
+            <div class="card-tags"><span class="tag">Highly praised</span><span class="tag">Small / large</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Sides</span><span>Strong supporting star</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="side">
+          <div class="card-top">
+            <div class="kicker"><span>Side</span><span class="price">$2.75 / $6.99</span></div>
+            <h3>Potato Salad</h3>
+            <p>Cool balance for ribs, brisket, and heavier sandwiches.</p>
+            <div class="card-tags"><span class="tag">Small / large</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Sides</span><span>Classic counterweight</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="side">
+          <div class="card-top">
+            <div class="kicker"><span>Side</span><span class="price">$2.75 / $6.99</span></div>
+            <h3>Cole Slaw</h3>
+            <p>Fresh crunch and cooling lift for richer plates.</p>
+            <div class="card-tags"><span class="tag">Small / large</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Sides</span><span>Texture contrast</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="side">
+          <div class="card-top">
+            <div class="kicker"><span>Side</span><span class="price">$2.75 / $6.99</span></div>
+            <h3>French Fries</h3>
+            <p>The universal comfort side, great for simplifying orders.</p>
+            <div class="card-tags"><span class="tag">Small / large</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Sides</span><span>Always useful</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="side sweet">
+          <div class="card-top">
+            <div class="kicker"><span>Side</span><span class="price">$2.75 / $6.99</span></div>
+            <h3>Sweet Potato Waffle Fries</h3>
+            <p>One of the most visually expressive sides on the menu — easy to make feel premium.</p>
+            <div class="card-tags"><span class="tag">Small / large</span><span class="tag">Sweet edge</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Sides</span><span>Photo-friendly</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sweet">
+          <div class="card-top">
+            <div class="kicker"><span>Dessert</span><span class="price">Market</span></div>
+            <h3>Homemade Bread Pudding</h3>
+            <p>Warm, dense, and totally in line with the smokehouse mood. A perfect closer to the experience.</p>
+            <div class="card-tags"><span class="tag">Comfort dessert</span><span class="tag">Price not shown</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Desserts</span><span>Southern classic</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sweet">
+          <div class="card-top">
+            <div class="kicker"><span>Dessert</span><span class="price">Market</span></div>
+            <h3>Creole Cream Cheesecake</h3>
+            <p>Silky and rich — the kind of dessert card that benefits from soft lighting and a totally different animation profile.</p>
+            <div class="card-tags"><span class="tag">Price not shown</span><span class="tag">Rich finish</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Desserts</span><span>Elegant closer</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sweet">
+          <div class="card-top">
+            <div class="kicker"><span>Dessert</span><span class="price">Market</span></div>
+            <h3>Chocolate & Carrot Cake</h3>
+            <p>Classic bakery energy with enough range to satisfy different dessert moods.</p>
+            <div class="card-tags"><span class="tag">Price not shown</span><span class="tag">Cake duo</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Desserts</span><span>Bakery-style close</span></div></div>
+        </article>
+
+        <article class="menu-card reveal" data-category="sweet">
+          <div class="card-top">
+            <div class="kicker"><span>Dessert</span><span class="price">Market</span></div>
+            <h3>Strawberry Shortcake</h3>
+            <p>Bright, soft, and visually excellent for bringing in a final contrast after all the dark smoke tones.</p>
+            <div class="card-tags"><span class="tag">Price not shown</span><span class="tag">Lightest finish</span></div>
+            <div class="scent-line"></div>
+          </div>
+          <div class="card-body"><div class="meta-line"><span>Category: Desserts</span><span>Fresh finish</span></div></div>
+        </article>
+      </div>
+
+      <div id="specials" class="category-panel reveal">
+        <div class="feature-box">
+          <h3>Featured transmissions.</h3>
+          <p>
+            The source material also included a rotating specials board. Instead of presenting it like a static daily list,
+            this design treats specials like incoming transmissions — rare, time-sensitive flavor events. This concept gives the site
+            a reason to feel alive every time the staff updates it.
+          </p>
+          <p>
+            You can swap these manually, or connect them to a CMS later. The visual system is already built to make them feel premium.
+          </p>
+        </div>
+        <div class="special-stack">
+          <div class="special">
+            <div><b>Sweet Thai Chili Wings</b><span>Appetizer with high visual drama and fast click appeal.</span></div>
+            <em>$16</em>
+          </div>
+          <div class="special">
+            <div><b>Eggplant Pirogue w/ Seafood-Style Stuffing</b><span>A more unexpected plated special for people who want range.</span></div>
+            <em>$26</em>
+          </div>
+          <div class="special">
+            <div><b>Blackened Lemon Fish + Cream Spinach + Crawfish Tails</b><span>Premium and distinctly Louisiana.</span></div>
+            <em>$28</em>
+          </div>
+          <div class="special">
+            <div><b>Jack Daniel’s BBQ Shrimp + 14oz Bone-In Pork Chop</b><span>Smoke, sweetness, and spectacle in one dish.</span></div>
+            <em>$26</em>
+          </div>
+          <div class="special">
+            <div><b>Grilled Salmon with Crabmeat + Avocado Cream Sauce</b><span>Elegant contrast against the darker smokehouse core.</span></div>
+            <em>$28</em>
+          </div>
+          <div class="special">
+            <div><b>Miss Mud Pie</b><span>Simple dessert closer with easy merch-like appeal.</span></div>
+            <em>$7</em>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div style="margin-top:12px">
-          <div style="font-weight:700">Quick links</div>
-          <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
-            <a href="tel:+12252455046" class="small muted" style="color:var(--muted);text-decoration:none">Call to order</a>
-            <a href="mailto:francissmokehouse@att.net?subject=Catering%20Inquiry" class="small muted" style="color:var(--muted);text-decoration:none">Catering & events</a>
-          </div>
+    <section id="visit" class="section wrap">
+      <div class="section-head reveal">
+        <div><h2>Come find the fire.</h2></div>
+        <p>Operational details are styled as part of the world rather than dropped into a boring footer block. That keeps the final scroll feeling intentional.</p>
+      </div>
+      <div class="category-panel">
+        <div class="feature-box reveal">
+          <h3>Visit The Francis Smokehouse</h3>
+          <p><strong>Address:</strong> 6779 US Highway 61, St. Francisville, LA 70775</p>
+          <p><strong>Phone:</strong> (225) 245-5046</p>
+          <p><strong>Hours:</strong> Mon–Sat 10:00 AM – 6:00 PM • Sun 10:00 AM – 3:00 PM</p>
+          <p><strong>Notes:</strong> Takeout available. Prices shown reflect publicly visible source material and may change.</p>
+          <p><strong>Web concept:</strong> This one-file build is ready to use as a standalone prototype, landing page, or handoff piece for a deeper production build.</p>
         </div>
-      </aside>
-    </div>
-  </section>
+        <div class="feature-box reveal">
+          <h3>Why this feels different</h3>
+          <p>
+            Most restaurant menus are rigid and expected. This one behaves like a sensory object:
+            floating flavor nodes, atmospheric motion, responsive depth, search-driven discovery,
+            cinematic cards, and a premium, almost sci-fi mood without losing the Southern smokehouse soul.
+          </p>
+          <p>
+            It is weird in the right way. Distinctive. Memorable. Hard to confuse with anything else.
+          </p>
+        </div>
+      </div>
+    </section>
 
-  <section class="card" style="text-align:center">
-    <div style="font-weight:800">A compact, future-friendly menu</div>
-    <div style="margin-top:8px;color:var(--muted);font-size:13px">Toggle condensed view, search quickly, edit today's special, and email orders in one tap.</div>
-  </section>
-</div>
+    <footer class="footer wrap">
+      <div class="footer-card reveal">
+        <div class="tiny">
+          Built as a single self-contained HTML file with embedded CSS and JavaScript. No frameworks. No dependencies.
+          Menu content is based on the information you provided in your research summary. Items labeled “Market” indicate no visible price was confirmed in the provided source imagery.
+        </div>
+      </div>
+    </footer>
+  </main>
 
-<script>
-/* ===== DATA ===== */
-const DATA = {
-  "BBQ Plates":[
-    {id:'rfull',name:'Full Rack of Ribs',desc:'Slow smoked, brushed with house glaze — fall-off-the-bone.',price:'$19.99'},
-    {id:'rhalf',name:'1/2 Rack of Ribs',desc:'Smaller portion with all the same attention to smoke & bark.',price:'$11.99'},
-    {id:'pp',name:'Pulled Pork Plate',desc:'House-smoked pork, tangy sauce on the side.',price:'$9.99'},
-    {id:'brisk',name:'Brisket Plate',desc:'Smoky, tender brisket with seasoned bark.',price:'$10.99'},
-    {id:'c1/2',name:'1/2 Chicken Plate',desc:'Buttermilk brined then smoked and crisped.',price:'$9.99'},
-    {id:'wings',name:'Smoked Wings',desc:'Sweet-and-spicy glaze or classic buffalo.',price:'$7.99'}
-  ],
-  "Burgers & Sandwiches":[
-    {id:'hamb',name:'Hamburger',desc:'Classic smash, lettuce & tomato.',price:'$6.99'},
-    {id:'cb',name:'Cheeseburger',desc:'American cheese, pickles, served hot.',price:'$7.99'},
-    {id:'bcb',name:'Bacon Cheeseburger',desc:'Smoked bacon, cheddar, house sauce.',price:'$8.99'},
-    {id:'ppsand',name:'Pulled Pork Sandwich',desc:'Tender pulled pork piled high.',price:'$7.99'},
-    {id:'brisand',name:'Brisket Sandwich',desc:'Thin-sliced brisket on toasted bun.',price:'$8.99'},
-    {id:'ribpo',name:'Ribeye Po-Boy',desc:'Steak-po-boy dressed with lettuce & tomato.',price:'$10.99'},
-    {id:'chsand',name:'Chicken Sandwich',desc:'Crispy or grilled, house slaw optional.',price:'$7.99'},
-    {id:'shrimp',name:'Shrimp Po-Boy',desc:'Lightly breaded local shrimp.',price:'$8.99'},
-    {id:'cat',name:'Catfish Po-Boy',desc:'Golden fried catfish with remoulade.',price:'$8.99'},
-    {id:'craw',name:'Crawfish Po-Boy',desc:'Crawfish tails in remoulade style.',price:'$10.99'}
-  ],
-  "Sides":[
-    {id:'beans',name:'Baked Beans',desc:'Smoky and sweet.',price:'$2.75 / $6.99'},
-    {id:'cornp',name:'Corn Pudding',desc:'Rich, buttery — customer favorite.',price:'$2.75 / $6.99'},
-    {id:'ps',name:'Potato Salad',desc:'Old-school creamy.',price:'$2.75 / $6.99'},
-    {id:'slaw',name:'Cole Slaw',desc:'Bright and tangy.',price:'$2.75 / $6.99'},
-    {id:'fries',name:'French Fries',desc:'House-cut or sweet potato waffle fries.',price:'$2.75 / $6.99'}
-  ],
-  "Boudin & Deli":[
-    {id:'boudin',name:'Steamed Boudin Links',desc:'Traditional Cajun-style boudin.',price:'Market'},
-    {id:'bb',name:'Boudin Balls',desc:'Crunchy outside, flavorful inside (highly recommended).',price:'Market'},
-    {id:'pies',name:'Crawfish & Meat Pies',desc:'Local flavors tucked in golden crust.',price:'Market'},
-    {id:'eggro',name:'Boudin Egg Rolls',desc:'Fusion favorite — boudin wrapped in crispy roll.',price:'Market'}
-  ],
-  "Desserts":[
-    {id:'bp',name:'Homemade Bread Pudding',desc:'Warm, boozy sauce optional.',price:'Market'},
-    {id:'cc',name:'Creole Cream Cheesecake',desc:'Local twist on a classic.',price:'Market'},
-    {id:'cake',name:'Chocolate & Carrot Cake',desc:'House-baked goodness.',price:'Market'},
-    {id:'short',name:'Strawberry Shortcake',desc:'Seasonal and light.',price:'Market'}
-  ],
-  "Specials Sample":[
-    {id:'stwings',name:'Sweet Thai Chili Wings (App)',desc:'Spicy-sweet with cool dip.',price:'$16'},
-    {id:'egg',name:'Eggplant Pirogue w/ Seafood',desc:'Handheld, southern-style seafood stuffing.',price:'$26'},
-    {id:'jdb',name:"Jack Daniel's BBQ Shrimp + 14oz Pork Chop",desc:'Hearty plate with mac & cheese.',price:'$26'},
-    {id:'sal',name:'Grilled Salmon w/ Crab & Avocado',desc:'Delicate and rich.',price:'$28'}
-  ]
-};
+  <script>
+    // Reveal on scroll
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, {threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
-/* default weekly specials; editable & stored in localStorage */
-const DEFAULT_SPECIALS = {
-  0:{name:"Bread Pudding & Coffee",desc:"Classic southern bread pudding with a bold coffee."},
-  1:{name:"Boudin Balls & Creole Cheesecake",desc:"Spicy boudin balanced by silky cheesecake."},
-  2:{name:"Brisket & Corn Pudding",desc:"Smoky brisket with creamy corn pudding."},
-  3:{name:"Pulled Pork & Potato Salad",desc:"Tangy pork with cool, creamy potato salad."},
-  4:{name:"Ribeye Po-Boy & Fries",desc:"Robust steak flavors with classic fries."},
-  5:{name:"Smoked Wings & Sweet Thai Dip",desc:"Sweet-spicy wings with an addictive dip."},
-  6:{name:"1/2 Chicken & Mac & Cheese",desc:"Juicy smoked chicken with rich mac."}
-};
-
-/* ===== RENDER ===== */
-const sectionsEl = document.getElementById('sections');
-const dayPills = document.getElementById('dayPills');
-const todayName = document.getElementById('todayName');
-const todayDesc = document.getElementById('todayDesc');
-const addToday = document.getElementById('addToday');
-const editToday = document.getElementById('editToday');
-const editBox = document.getElementById('editBox');
-const editText = document.getElementById('editText');
-const saveEdit = document.getElementById('saveEdit');
-const cancelEdit = document.getElementById('cancelEdit');
-const bagList = document.getElementById('bagList');
-const mailOrder = document.getElementById('mailOrder');
-const copyOrder = document.getElementById('copyOrder');
-const q = document.getElementById('q');
-const toggleCond = document.getElementById('toggleCond');
-const app = document.getElementById('app');
-const printBtn = document.getElementById('print');
-
-let condensed = false;
-let bag = [];
-
-/* load specials */
-function loadSpecials(){ try{
-  const raw = localStorage.getItem('francis_specials_v1');
-  return raw? JSON.parse(raw): DEFAULT_SPECIALS;
-}catch(e){return DEFAULT_SPECIALS}}
-function saveSpecials(s){ localStorage.setItem('francis_specials_v1',JSON.stringify(s)); }
-
-/* build menu UI compactly */
-function mkIcon(text){ return '<div class="icon" aria-hidden="true">'+text+'</div>'; }
-function build(){
-  sectionsEl.innerHTML = '';
-  for(const sec in DATA){
-    const arr = DATA[sec];
-    const el = document.createElement('div');
-    el.innerHTML = `<div class="section-title">${sec}</div><div class="grid-items" role="list" aria-label="${sec}"></div>`;
-    const list = el.querySelector('.grid-items');
-    arr.forEach(it=>{
-      const card = document.createElement('div');
-      card.className = 'row tile';
-      card.tabIndex=0;
-      card.innerHTML = `<div style="display:flex;align-items:flex-start;gap:8px">
-        ${mkIcon(it.name.split(' ').slice(0,2).map(s=>s[0]).join('').toUpperCase())}
-        <div style="flex:1">
-          <div class="name">${it.name}</div>
-          <div class="desc">${it.desc}</div>
-        </div></div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end">
-          <div class="price">${it.price}</div>
-          <div style="margin-top:8px">
-            <button class="btn small" data-add="${it.id}">Add</button>
-          </div>
-        </div>`;
-      list.appendChild(card);
-      card.querySelector('[data-add]').addEventListener('click',()=>addToBag(it));
-      card.addEventListener('keydown',e=>{ if(e.key==='Enter') addToBag(it); });
+    // Smooth jump
+    document.querySelectorAll('[data-jump]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelector(btn.dataset.jump)?.scrollIntoView({behavior:'smooth', block:'start'});
+      });
     });
-    sectionsEl.appendChild(el);
-  }
-}
 
-/* search filter */
-q.addEventListener('input',()=>{
-  const v = q.value.trim().toLowerCase();
-  [...sectionsEl.querySelectorAll('.row')].forEach(row=>{
-    row.style.display = (v==='' || (row.textContent||'').toLowerCase().includes(v)) ? '' : 'none';
-  });
-});
+    // Filtering
+    const nodes = [...document.querySelectorAll('.node')];
+    const cards = [...document.querySelectorAll('.menu-card')];
+    let activeFilter = 'all';
 
-/* bag functions */
-function addToBag(item){
-  bag.push({name:item.name,price:item.price});
-  renderBag();
-  // subtle animation: flash small confirmation
-  const b = document.querySelector('.meta'); b.style.transform='translateY(-3px)'; setTimeout(()=>b.style.transform='',220);
-}
-function renderBag(){
-  if(bag.length===0){ bagList.innerHTML = '<div class="small-muted">No items yet</div>'; return; }
-  bagList.innerHTML = bag.map((it,i)=>`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><div>${it.name}</div><div style="color:var(--accent);font-weight:800">${it.price}</div></div>`).join('') +
-    `<div style="border-top:1px dashed rgba(255,255,255,0.04);margin-top:8px;padding-top:8px;font-weight:800">Total: <span style="color:var(--gold)">${calcTotal()}</span></div>`;
-}
-function calcTotal(){
-  const nums = bag.map(b=>{ const p=b.price.replace(/[^\d\.\-]/g,'' ); return p? parseFloat(p):0 });
-  const s = nums.reduce((a,b)=>a+b,0);
-  return s? '$'+s.toFixed(2):'Var';
-}
-copyOrder.addEventListener('click',()=>{
-  const txt = bag.length? bag.map((b,i)=>`${i+1}. ${b.name} — ${b.price}`).join('\n') : 'No items';
-  navigator.clipboard?.writeText(txt).then(()=>alert('Order copied')).catch(()=>alert('Unable to copy'));
-});
-mailOrder.addEventListener('click',()=>{
-  const subject = encodeURIComponent('Order from The Francis Smokehouse');
-  const body = encodeURIComponent((bag.length? bag.map((b,i)=>`${i+1}. ${b.name} — ${b.price}`).join('\n') : 'No items') + '\n\nCall: (225) 245-5046');
-  window.location.href = `mailto:francissmokehouse@att.net?subject=${subject}&body=${body}`;
-});
+    function applyFilters() {
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      cards.forEach(card=>{
+        const cat = card.dataset.category.toLowerCase();
+        const text = card.innerText.toLowerCase();
+        const catMatch = activeFilter === 'all' || cat.includes(activeFilter);
+        const qMatch = !q || text.includes(q);
+        card.classList.toggle('hidden', !(catMatch && qMatch));
+      });
+    }
 
-/* specials UI */
-const specials = loadSpecials();
-function renderPills(){
-  dayPills.innerHTML = '';
-  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  days.forEach((d,i)=>{
-    const p = document.createElement('button');
-    p.className='pill'+(i===todayIdx? ' active':'');
-    p.textContent = d;
-    p.addEventListener('click',()=>selectDay(i));
-    dayPills.appendChild(p);
-  });
-}
-let todayIdx = (new Date()).getDay();
-function renderToday(day=todayIdx){
-  const s = specials[day] || DEFAULT_SPECIALS[day];
-  todayName.textContent = s.name || '—';
-  todayDesc.textContent = s.desc || '';
-  editText.value = s.name + (s.desc? '\\n' + s.desc : '');
-  // highlight active pill
-  [...dayPills.children].forEach((p,i)=>p.classList.toggle('active', i===day));
-}
-function selectDay(d){
-  todayIdx = d;
-  renderToday(d);
-}
-editToday.addEventListener('click',()=>{ editBox.style.display='block'; editText.focus(); });
-cancelEdit.addEventListener('click',()=>{ editBox.style.display='none'; });
-saveEdit.addEventListener('click',()=>{
-  const val = editText.value.trim();
-  const [name, ...rest] = val.split('\\n');
-  specials[todayIdx] = {name: name || 'Special', desc: rest.join(' ')};
-  saveSpecials(specials);
-  editBox.style.display='none';
-  renderToday(todayIdx);
-});
+    nodes.forEach(node=>{
+      node.addEventListener('click', ()=>{
+        nodes.forEach(n=>n.classList.remove('active'));
+        node.classList.add('active');
+        activeFilter = node.dataset.filter;
+        applyFilters();
+      });
+    });
 
-/* add today's special to bag */
-addToday.addEventListener('click',()=>{
-  const s = specials[todayIdx] || DEFAULT_SPECIALS[todayIdx];
-  bag.push({name:s.name,price:'Market'});
-  renderBag();
-});
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
 
-/* toggle condensed */
-toggleCond.addEventListener('click',()=>{
-  condensed = !condensed;
-  app.classList.toggle('condensed',condensed);
-  toggleCond.textContent = condensed? 'Expanded':'Condensed';
-});
+    // 3D tilt cards
+    cards.forEach(card=>{
+      card.addEventListener('mousemove', e=>{
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        const rx = (py - .5) * -8;
+        const ry = (px - .5) * 10;
+        card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px)`;
+      });
+      card.addEventListener('mouseleave', ()=>{ card.style.transform=''; });
+    });
 
-/* print */
-printBtn.addEventListener('click',()=>window.print());
+    // Floating panels parallax
+    const floaters = [...document.querySelectorAll('.floating-panel')];
+    window.addEventListener('mousemove', e=>{
+      const x = (e.clientX / window.innerWidth - .5);
+      const y = (e.clientY / window.innerHeight - .5);
+      floaters.forEach((el, i)=>{
+        const mult = (i + 1) * 6;
+        el.style.transform = `translate3d(${x * mult}px, ${y * mult}px, 0) rotateX(${y * -8}deg) rotateY(${x * 8}deg)`;
+      });
+    });
 
-/* init */
-build();
-renderBag();
-renderPills();
-renderToday();
+    // Smoke canvas
+    const smoke = document.getElementById('smoke');
+    const sctx = smoke.getContext('2d');
+    let sw, sh, smokeNodes = [];
+    function resizeSmoke(){
+      sw = smoke.width = innerWidth * devicePixelRatio;
+      sh = smoke.height = innerHeight * devicePixelRatio;
+      smoke.style.width = innerWidth + 'px';
+      smoke.style.height = innerHeight + 'px';
+      sctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+      smokeNodes = Array.from({length: 30}, ()=>({
+        x: Math.random() * innerWidth,
+        y: innerHeight + Math.random() * innerHeight * .6,
+        r: 60 + Math.random() * 180,
+        vx: -0.15 + Math.random() * 0.3,
+        vy: -0.25 - Math.random() * 0.6,
+        life: Math.random() * 1,
+        drift: Math.random() * Math.PI * 2
+      }));
+    }
+    function drawSmoke(){
+      sctx.clearRect(0,0,innerWidth,innerHeight);
+      smokeNodes.forEach(p=>{
+        p.life += 0.003;
+        p.x += Math.sin(p.drift + p.life * 2) * 0.18 + p.vx;
+        p.y += p.vy;
+        if(p.y < -200){
+          p.x = Math.random() * innerWidth;
+          p.y = innerHeight + 50 + Math.random() * 200;
+          p.life = 0;
+        }
+        const alpha = Math.max(0, .08 - p.life * .025);
+        const g = sctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+        g.addColorStop(0, `rgba(255,255,255,${alpha})`);
+        g.addColorStop(.35, `rgba(255,220,190,${alpha * .55})`);
+        g.addColorStop(1, 'rgba(255,255,255,0)');
+        sctx.fillStyle = g;
+        sctx.beginPath();
+        sctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        sctx.fill();
+      });
+      requestAnimationFrame(drawSmoke);
+    }
 
-/* keyboard a11y: space toggles day pills when focused */
-dayPills.addEventListener('keydown',(e)=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); const idx = [...dayPills.children].indexOf(document.activeElement); if(idx>=0) selectDay(idx); } });
+    // Ember canvas
+    const embers = document.getElementById('embers');
+    const ectx = embers.getContext('2d');
+    let ew, eh, sparks = [];
+    function resizeEmbers(){
+      ew = embers.width = innerWidth * devicePixelRatio;
+      eh = embers.height = innerHeight * devicePixelRatio;
+      embers.style.width = innerWidth + 'px';
+      embers.style.height = innerHeight + 'px';
+      ectx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+      sparks = Array.from({length: 140}, ()=>spawnSpark(true));
+    }
+    function spawnSpark(initial=false){
+      return {
+        x: Math.random() * innerWidth,
+        y: initial ? Math.random() * innerHeight : innerHeight + Math.random() * 80,
+        vx: -0.3 + Math.random() * 0.6,
+        vy: -1 - Math.random() * 2.2,
+        size: Math.random() * 2.2 + 0.5,
+        life: Math.random(),
+        hue: 25 + Math.random() * 20
+      };
+    }
+    function drawEmbers(){
+      ectx.clearRect(0,0,innerWidth,innerHeight);
+      sparks.forEach((s, i)=>{
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life += 0.014;
+        if(s.y < -10 || s.life > 1) sparks[i] = spawnSpark(false);
+        const alpha = 1 - s.life;
+        ectx.beginPath();
+        ectx.fillStyle = `hsla(${s.hue}, 100%, 65%, ${alpha})`;
+        ectx.shadowBlur = 20;
+        ectx.shadowColor = `hsla(${s.hue}, 100%, 65%, ${alpha})`;
+        ectx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+        ectx.fill();
+      });
+      ectx.shadowBlur = 0;
+      requestAnimationFrame(drawEmbers);
+    }
 
-/* small polish: local search via /#q=string */
-(function(){
-  const hash = decodeURIComponent(location.hash.replace(/^#/,''));
-  if(hash.startsWith('q=')){ document.getElementById('q').value = hash.slice(2); document.getElementById('q').dispatchEvent(new Event('input')); }
-})();
-
-/* subtle drag-to-add for touch: double-tap an item to add */
-let lastTap = 0;
-document.addEventListener('touchend', function(e){
-  const now = Date.now();
-  if(now - lastTap < 350){
-    const el = e.target.closest('[data-add]');
-    if(el){ el.click(); }
-  }
-  lastTap = now;
-});
-</script>
+    addEventListener('resize', ()=>{
+      resizeSmoke();
+      resizeEmbers();
+    });
+    resizeSmoke();
+    resizeEmbers();
+    drawSmoke();
+    drawEmbers();
+  </script>
 </body>
 </html>
