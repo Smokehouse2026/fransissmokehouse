@@ -605,29 +605,6 @@
   50% { transform: translateY(-6px); }
 }
 
-
-    .special-badge {
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
-      border:1px solid rgba(255,200,130,.45);
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      margin-bottom:12px;
-      box-shadow:0 10px 24px rgba(192,90,42,.24);
-    }
-    .special-off {
-      text-align:center;
-      color:rgba(255,255,255,.82);
-      font-weight:800;
-      line-height:1.6;
-    }
-
 </style>
 </head>
 <body>
@@ -636,7 +613,7 @@
       <div class="daybar" role="tablist" aria-label="Day selector">
         <button class="daybtn active" type="button" role="tab" aria-controls="panel-today" aria-selected="true" id="dayBtnToday">Today</button>
         <button class="daybtn" type="button" role="tab" aria-controls="panel-tomorrow" aria-selected="false" id="dayBtnTomorrow">Tomorrow</button>
-        <button class="daybtn" type="button" role="tab" aria-controls="panel-advanced" aria-selected="false" id="dayBtnAdvanced">Daily Special</button>
+        <button class="daybtn" type="button" role="tab" aria-controls="panel-advanced" aria-selected="false" id="dayBtnAdvanced">Advanced Menu</button>
       </div>
     </div>
 
@@ -726,18 +703,19 @@
       </div>
     </section>
 
-    <section class="panel hide" id="panel-advanced" role="tabpanel" aria-labelledby="dayBtnAdvanced">
-      <div class="header">
-        <div class="title">Daily Special</div>
-        <div class="subline" id="advancedDisclaimer"></div>
-      </div>
-      <div class="swipe-shell">
-        <div class="glasscard pulse" id="dailySpecialCard">
-          <div class="cat-title" id="dailySpecialTitle">Daily Special</div>
-          <div id="dailySpecialContent"></div>
-        </div>
-      </div>
-    </section>
+    
+<section class="panel hide" id="panel-advanced" role="tabpanel" aria-labelledby="dayBtnAdvanced">
+  <div class="header">
+    <div class="title">Daily Special</div>
+    <div class="subline" id="advancedDisclaimer"></div>
+  </div>
+  <div class="swipe-shell">
+    <div class="glasscard" id="dailySpecialCard">
+      <div class="cat-title" id="dailySpecialTitle">Daily Special</div>
+      <div id="dailySpecialContent"></div>
+    </div>
+  </div>
+</section>
 
     <div class="state hide" id="loadError">
       <div class="title" style="font-size:24px;">Menu couldn’t load</div>
@@ -1338,25 +1316,40 @@
         const d = parseISODateToLocal(startISO);
         const iso = toISODateLocal(d);
         const dayName = weekdayName(d);
+        const todayISO = toISODateLocal(new Date());
+
         const menu = getMenuByDate(data, iso) || {};
         const lunch = menu?.lunch || {};
-        const specialTitle = (lunch.specialTitle || menu?.specialTitle || "").trim();
-        const specialDesc = (lunch.specialDesc || menu?.specialDesc || "").trim();
+        const specialTitle = String(lunch.specialTitle ?? menu?.specialTitle ?? "").trim();
+        const specialDesc = String(lunch.specialDesc ?? menu?.specialDesc ?? "").trim();
         const plates = normalizeItems(lunch.plates || []);
         const items = normalizeLunchItems(lunch.items || []);
         const closure = getClosure(data, dayName);
-        const closedForDay = !!closure?.closed || isPastClosingToday([], dayName) && iso === toISODateLocal(new Date());
-        const hasSpecial = !!specialTitle || !!specialDesc || plates.length > 0 || items.length > 0;
+
+        const isSameDay = iso === todayISO;
+        const afterCloseToday = isSameDay ? isPastClosingToday([], dayName) : false;
+        const hideSpecial = !!closure?.closed || afterCloseToday;
 
         disclaimerEl.textContent = `${dayName} • ${formatDateNice(d)}`;
 
-        if (closedForDay || !hasSpecial) {
+        if (hideSpecial) {
           titleEl.textContent = `${dayName} Daily Special`;
           contentEl.innerHTML = `
             <div class="special-off">
               <div class="special-badge">Not Active</div>
-              <div>The daily special is not being shown right now.</div>
-              <div>It will stay hidden until someone updates the date and special.</div>
+              <div>The daily special is hidden right now.</div>
+              <div>Update the date and special to show a new one.</div>
+            </div>
+          `;
+          return;
+        }
+
+        if (!specialTitle && !specialDesc && !plates.length && !items.length) {
+          titleEl.textContent = `${dayName} Daily Special`;
+          contentEl.innerHTML = `
+            <div class="special-off">
+              <div class="special-badge">No Special Posted</div>
+              <div>There is no daily special set for this date yet.</div>
             </div>
           `;
           return;
@@ -1364,17 +1357,18 @@
 
         titleEl.textContent = specialTitle || `${dayName} Daily Special`;
 
-        let html = `<div class="special-badge">Featured Today</div>`;
+        let specialHtml = `<div class="special-badge">Featured Today</div>`;
+
         if (specialDesc) {
-          html += `<div class="subline" style="margin-bottom:12px;">${escapeHtml(specialDesc)}</div>`;
+          specialHtml += `<div class="subline" style="margin-bottom:12px;">${escapeHtml(specialDesc)}</div>`;
         }
 
         if (plates.length) {
-          html += `<div class="section-label">Plates</div><ul class="list">${plates.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
+          specialHtml += `<div class="section-label">Plates</div><ul class="list">${plates.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
         }
 
         if (items.length) {
-          html += `<div class="section-label">Included Items</div><ul class="list">` +
+          specialHtml += `<div class="section-label">Included Items</div><ul class="list">` +
             items.map(it => {
               const desc = it.desc ? `<div class="desc">${escapeHtml(it.desc)}</div>` : "";
               return `<li><strong>${escapeHtml(it.name)}</strong>${desc}</li>`;
@@ -1382,7 +1376,7 @@
             `</ul>`;
         }
 
-        contentEl.innerHTML = html;
+        contentEl.innerHTML = specialHtml;
       }
 
       
