@@ -1,555 +1,1155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>broken brick · wheel of categories</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rustic Brick Portal Space Navigation</title>
+  <style>
+    :root{
+      --bg0:#040507;
+      --bg1:#0d0a0a;
+      --bg2:#1a100d;
+      --ui:rgba(245,250,255,.96);
+      --ui-muted:rgba(228,236,245,.7);
+      --panel:rgba(8,12,20,.74);
+    }
 
-        body {
-            background: #2d2d2d;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            margin: 0;
-            padding: 16px;
-        }
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 50% 46%, rgba(255,157,87,.05), transparent 16%),
+        radial-gradient(circle at 50% 55%, rgba(99,132,255,.09), transparent 28%),
+        linear-gradient(180deg, var(--bg2), var(--bg1) 45%, var(--bg0));
+      color: white;
+    }
 
-        /* main brick wall */
-        .brick-wall {
-            position: relative;
-            width: min(85vmin, 650px);
-            height: min(85vmin, 650px);
-            background-color: #b53b2c;
-            /* brick pattern using layered gradients */
-            background-image: 
-                linear-gradient(45deg, #6b2e1f 2px, transparent 2px),
-                linear-gradient(-45deg, #6b2e1f 2px, transparent 2px),
-                repeating-linear-gradient(0deg, #8b4b3a, #8b4b3a 12px, #b53b2c 12px, #b53b2c 24px),
-                repeating-linear-gradient(90deg, #6b2e1f, #6b2e1f 2px, #b53b2c 2px, #b53b2c 24px);
-            background-size: 48px 48px, 48px 48px, auto auto, auto auto;
-            background-blend-mode: overlay;
-            border-radius: 12px;
-            box-shadow: 0 20px 30px rgba(0,0,0,0.7), inset 0 2px 5px rgba(255,200,150,0.3);
-            overflow: visible;
-            border: 4px solid #3e2a1f;
-        }
+    #app {
+      position: fixed;
+      inset: 0;
+      perspective: 1700px;
+      perspective-origin: 50% 42%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 46%, rgba(255,184,120,.08), transparent 18%),
+        radial-gradient(circle at 50% 55%, rgba(99,132,255,.10), transparent 30%);
+    }
 
-        /* the HOLE – broken opening with fragments floating */
-        .hole {
-            position: absolute;
-            width: 70%;
-            height: 70%;
-            top: 15%;
-            left: 15%;
-            background: radial-gradient(circle at 35% 35%, #1e1a16, #040302 90%);
-            border-radius: 50%;
-            box-shadow: 
-                inset 0 0 30px #000000cc,
-                0 0 0 8px rgba(60, 40, 25, 0.7),
-                0 0 0 12px rgba(40, 25, 10, 0.4);
-            overflow: hidden;            /* fragments stay inside the hole */
-            z-index: 5;
-            backdrop-filter: blur(1px);
-            border: 2px solid #543e2b;
-        }
+    .camera {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      transition: transform .18s ease-out;
+    }
 
-        /* brick fragments floating inside the hole */
-        .fragment {
-            position: absolute;
-            background: linear-gradient(145deg, #d35d3a, #964b2e, #6b301e);
-            border-radius: 2px 6px 4px 2px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.8), inset 0 1px 3px #ffb08a;
-            transform-origin: center;
-            pointer-events: none;         /* so they don't block wheel clicks */
-            will-change: transform;
-            animation: float-toward-center 7s infinite alternate ease-in-out;
-            border: 1px solid #ac6c4b;
-            opacity: 0.85;
-            z-index: 10;
-        }
+    .starfield,
+    .starfield-2,
+    .starfield-3,
+    .nebula {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-style: preserve-3d;
+      pointer-events: none;
+    }
 
-        /* floating animation: gentle drift & rotation, giving illusion of floating toward wheel */
-        @keyframes float-toward-center {
-            0% {
-                transform: translate(var(--x-start), var(--y-start)) rotate(0deg) scale(1);
-                opacity: 0.9;
-            }
-            50% {
-                transform: translate(calc(var(--x-start) * 0.3), calc(var(--y-start) * 0.3)) rotate(60deg) scale(0.95);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translate(0px, 0px) rotate(120deg) scale(0.9);
-                opacity: 0.6;
-            }
-        }
+    .starfield {
+      width: 1800px;
+      height: 1200px;
+      margin-left: -900px;
+      margin-top: -600px;
+      transform: translateZ(-1450px);
+      opacity: .95;
+    }
 
-        /* central wheel container – items arranged in a circle */
-        .wheel {
-            position: absolute;
-            width: 60%;
-            height: 60%;
-            top: 20%;
-            left: 20%;
-            background: rgba(10, 8, 5, 0.5);
-            border-radius: 50%;
-            backdrop-filter: blur(2px);
-            box-shadow: 0 0 0 4px #755e45, 0 0 20px #000000, inset 0 0 20px #ab7e5a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 30;
-            transition: box-shadow 0.2s;
-            border: 2px solid #ac8b6b;
-        }
+    .starfield-2 {
+      width: 1500px;
+      height: 1000px;
+      margin-left: -750px;
+      margin-top: -500px;
+      transform: translateZ(-1080px);
+      opacity: .7;
+    }
 
-        .wheel:hover {
-            box-shadow: 0 0 0 4px #b7926b, 0 0 30px #ffc89c;
-        }
+    .starfield-3 {
+      width: 1200px;
+      height: 900px;
+      margin-left: -600px;
+      margin-top: -450px;
+      transform: translateZ(-760px);
+      opacity: .55;
+    }
 
-        .wheel-items {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-        }
+    .star {
+      position: absolute;
+      width: var(--s);
+      height: var(--s);
+      left: var(--x);
+      top: var(--y);
+      border-radius: 50%;
+      background: rgba(255,255,255,var(--a));
+      box-shadow:
+        0 0 calc(var(--s) * 1.8) rgba(255,255,255,.45),
+        0 0 calc(var(--s) * 4.5) rgba(122,170,255,.12);
+      animation: twinkle var(--t) ease-in-out infinite;
+      animation-delay: var(--d);
+    }
 
-        .wheel-item {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform-origin: 0 0;
-            background: #eed7c0;
-            color: #2d1d0e;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.7), 0 0 0 2px #573e28, 0 0 0 4px #a17b5b;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: 0.15s;
-            border: 1px solid #ffddb0;
-            pointer-events: auto;
-            z-index: 40;
-            text-shadow: 0 1px 2px #ffe2b3;
-        }
+    .nebula {
+      width: 1100px;
+      height: 720px;
+      margin-left: -550px;
+      margin-top: -360px;
+      transform: translateZ(-980px);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 25% 45%, rgba(110,140,255,.13), transparent 20%),
+        radial-gradient(circle at 66% 40%, rgba(255,156,86,.12), transparent 18%),
+        radial-gradient(circle at 52% 62%, rgba(179,112,255,.08), transparent 20%),
+        radial-gradient(circle at 44% 48%, rgba(255,255,255,.04), transparent 10%);
+      filter: blur(36px);
+      animation: nebulaShift 14s ease-in-out infinite alternate;
+    }
 
-        .wheel-item:hover {
-            background: #ffeac2;
-            transform: scale(1.15) translateY(-2px);
-            box-shadow: 0 8px 12px black, 0 0 0 3px #b8865b;
-            color: #311e0e;
-            z-index: 100;
-        }
+    .wall-plane {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 1820px;
+      height: 1120px;
+      margin-left: -910px;
+      margin-top: -560px;
+      transform-style: preserve-3d;
+      transform: translateZ(-220px);
+      filter: drop-shadow(0 70px 100px rgba(0,0,0,.6));
+    }
 
-        /* info card – appears when an item is clicked */
-        .info-card {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 190px;
-            background: #fcf3e0;
-            border: 6px solid #79553a;
-            border-radius: 32px 12px 32px 12px;
-            padding: 20px 16px;
-            box-shadow: 0 15px 30px black, 0 0 0 6px #503e2b;
-            z-index: 200;
-            color: #261a0e;
-            text-align: center;
-            backdrop-filter: blur(4px);
-            font-size: 1.2rem;
-            pointer-events: auto;
-        }
+    .brick-field {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+    }
 
-        .info-card h3 {
-            margin-bottom: 10px;
-            font-size: 1.8rem;
-            color: #643f20;
-            border-bottom: 3px dashed #b78354;
-            padding-bottom: 6px;
-        }
+    .brick {
+      position: absolute;
+      width: var(--w);
+      height: var(--h);
+      border-radius: var(--r);
+      background:
+        radial-gradient(circle at 24% 28%, rgba(255,255,255,.11), transparent 16%),
+        radial-gradient(circle at 70% 64%, rgba(0,0,0,.14), transparent 16%),
+        linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,0) 34%, rgba(0,0,0,.09) 74%, rgba(0,0,0,.20)),
+        linear-gradient(135deg, var(--b1), var(--b2) 54%, var(--b3));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.14),
+        inset 0 -12px 20px rgba(0,0,0,.19),
+        0 10px 14px rgba(0,0,0,.18);
+      border: 1px solid rgba(27,12,7,.30);
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
 
-        .info-card p {
-            font-size: 1.1rem;
-            background: #dbb58b;
-            padding: 10px 5px;
-            border-radius: 40px;
-            color: #201508;
-            margin: 12px 0;
-            border: 2px solid #9e6f46;
-        }
+    .brick::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(23deg, rgba(255,255,255,.02) 0 2px, transparent 2px 8px),
+        radial-gradient(circle at 76% 65%, rgba(0,0,0,.13), transparent 16%),
+        radial-gradient(circle at 38% 52%, rgba(0,0,0,.08), transparent 12%),
+        radial-gradient(circle at 56% 26%, rgba(255,255,255,.04), transparent 10%),
+        radial-gradient(circle at 18% 72%, rgba(0,0,0,.08), transparent 10%);
+      mix-blend-mode: overlay;
+      opacity: .95;
+      pointer-events: none;
+    }
 
-        .close-card {
-            background: #ab5533;
-            border: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            padding: 8px 16px;
-            border-radius: 40px;
-            color: #faead3;
-            border-bottom: 5px solid #582f1c;
-            cursor: pointer;
-            transition: 0.1s;
-            width: 100%;
-            letter-spacing: 0.5px;
-        }
+    .brick::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow:
+        inset 8px 0 10px rgba(255,255,255,.03),
+        inset -10px 0 12px rgba(0,0,0,.09),
+        inset 0 10px 10px rgba(255,255,255,.03),
+        inset 0 -14px 14px rgba(0,0,0,.12);
+      pointer-events: none;
+    }
 
-        .close-card:hover {
-            background: #c57049;
-            border-bottom-width: 2px;
-            transform: translateY(3px);
-        }
+    .chip {
+      position: absolute;
+      width: var(--cw);
+      height: var(--ch);
+      left: var(--cx);
+      top: var(--cy);
+      background: rgba(28,13,8,.23);
+      border-radius: 40% 50% 60% 45%;
+      transform: rotate(var(--cr));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+      pointer-events: none;
+    }
 
-        /* little reset button (back to categories) */
-        .reset-btn {
-            position: absolute;
-            bottom: -18%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #93785c;
-            border: 3px solid #2e1d12;
-            color: #2f1e0f;
-            font-weight: bold;
-            padding: 8px 24px;
-            border-radius: 60px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            box-shadow: 0 5px 0 #3d2b1b, 0 8px 12px black;
-            transition: 0.07s linear;
-            z-index: 50;
-            white-space: nowrap;
-            letter-spacing: 1px;
-        }
+    .brick-side {
+      position: absolute;
+      pointer-events: none;
+    }
 
-        .reset-btn:active {
-            transform: translateX(-50%) translateY(5px);
-            box-shadow: 0 3px 0 #3d2b1b, 0 8px 12px black;
-        }
+    .brick-side.right {
+      right: calc(var(--depth) * -1);
+      top: 2px;
+      width: var(--depth);
+      height: calc(var(--h) - 4px);
+      transform: rotateY(90deg);
+      transform-origin: left center;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.22)),
+        linear-gradient(180deg, #6a3522, #482216);
+    }
 
-        .reset-btn:hover {
-            background: #b39678;
-            color: #100a05;
-        }
+    .brick-side.bottom {
+      left: 2px;
+      bottom: calc(var(--depth) * -1);
+      width: calc(var(--w) - 4px);
+      height: var(--depth);
+      transform: rotateX(-90deg);
+      transform-origin: center top;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.04), rgba(0,0,0,.22)),
+        linear-gradient(90deg, #6a3522, #482216);
+    }
 
-        /* category indicator (tiny) */
-        .category-tag {
-            position: absolute;
-            top: -14%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #35281b;
-            color: #ebc9a4;
-            padding: 5px 20px;
-            border-radius: 40px;
-            font-size: 1rem;
-            border: 2px solid #ac8a62;
-            white-space: nowrap;
-            box-shadow: 0 2px 8px black;
-            z-index: 55;
-        }
-    </style>
+    .mortar-shadow {
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0 6px, transparent 6px 74px),
+        repeating-linear-gradient(90deg, rgba(0,0,0,.08) 0 6px, transparent 6px 144px);
+      opacity: .20;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+    }
+
+    .portal-shell {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 980px;
+      height: 800px;
+      margin-left: -490px;
+      margin-top: -400px;
+      transform-style: preserve-3d;
+      pointer-events: none;
+    }
+
+    .depth-ring {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--w);
+      height: var(--h);
+      margin-left: calc(var(--w) / -2);
+      margin-top: calc(var(--h) / -2);
+      border-radius: var(--shape);
+      transform: translateZ(var(--z)) rotate(var(--rot));
+      background:
+        radial-gradient(circle at 50% 44%, rgba(255,176,96,.04), transparent 40%),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.14)),
+        linear-gradient(180deg, #26160f, #140c0a 55%, #09090b);
+      box-shadow:
+        inset 0 0 0 9px rgba(66,35,22,.68),
+        inset 0 0 0 28px rgba(33,17,12,.78),
+        inset 0 14px 20px rgba(255,220,160,.03),
+        inset 0 -30px 40px rgba(0,0,0,.35),
+        0 30px 80px rgba(0,0,0,.45);
+      filter: blur(var(--blur));
+    }
+
+    .depth-ring.inner {
+      box-shadow:
+        inset 0 0 0 8px rgba(22,14,14,.74),
+        inset 0 0 0 22px rgba(8,11,16,.94),
+        inset 0 0 60px rgba(86,132,255,.04),
+        inset 0 0 40px rgba(255,155,86,.03);
+      background:
+        radial-gradient(circle at 50% 44%, rgba(255,176,96,.03), transparent 42%),
+        linear-gradient(180deg, #10131a, #080c13 55%, #030508);
+    }
+
+    .portal-core {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 420px;
+      height: 420px;
+      margin-left: -210px;
+      margin-top: -210px;
+      border-radius: 50%;
+      transform: translateZ(-840px);
+      background:
+        radial-gradient(circle, rgba(255,241,220,.95) 0 5%, rgba(255,193,118,.72) 9%, rgba(133,177,255,.18) 22%, rgba(91,133,255,.08) 32%, rgba(0,0,0,0) 58%);
+      filter: blur(12px) saturate(1.2);
+      mix-blend-mode: screen;
+      animation: pulse 4.8s ease-in-out infinite;
+    }
+
+    .portal-swirl,
+    .portal-swirl-2 {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      border-radius: 50%;
+      opacity: .78;
+      filter: blur(7px);
+      mix-blend-mode: screen;
+    }
+
+    .portal-swirl {
+      width: 500px;
+      height: 500px;
+      margin-left: -250px;
+      margin-top: -250px;
+      transform: translateZ(-790px);
+      background:
+        conic-gradient(
+          from 0deg,
+          rgba(255,188,110,0) 0deg,
+          rgba(255,188,110,.26) 34deg,
+          rgba(125,170,255,.16) 66deg,
+          rgba(255,188,110,0) 120deg,
+          rgba(255,188,110,.18) 168deg,
+          rgba(125,170,255,.10) 212deg,
+          rgba(255,188,110,0) 360deg
+        );
+      animation: spin 18s linear infinite;
+    }
+
+    .portal-swirl-2 {
+      width: 360px;
+      height: 360px;
+      margin-left: -180px;
+      margin-top: -180px;
+      transform: translateZ(-825px);
+      background:
+        conic-gradient(
+          from 180deg,
+          rgba(255,188,110,0) 0deg,
+          rgba(125,170,255,.20) 60deg,
+          rgba(255,188,110,.16) 110deg,
+          rgba(255,188,110,0) 180deg,
+          rgba(125,170,255,.12) 240deg,
+          rgba(255,188,110,.18) 300deg,
+          rgba(255,188,110,0) 360deg
+        );
+      animation: spinReverse 13s linear infinite;
+    }
+
+    .mist {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 700px;
+      height: 470px;
+      margin-left: -350px;
+      margin-top: -235px;
+      transform: translateZ(-600px);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 28% 50%, rgba(255,255,255,.05), transparent 18%),
+        radial-gradient(circle at 54% 42%, rgba(138,175,255,.08), transparent 22%),
+        radial-gradient(circle at 62% 70%, rgba(255,188,110,.08), transparent 18%);
+      filter: blur(18px);
+      animation: mistShift 7.5s ease-in-out infinite alternate;
+    }
+
+    .space-dust {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 900px;
+      height: 700px;
+      margin-left: -450px;
+      margin-top: -350px;
+      transform: translateZ(-700px);
+      pointer-events: none;
+    }
+
+    .dust {
+      position: absolute;
+      width: var(--s);
+      height: var(--s);
+      left: var(--x);
+      top: var(--y);
+      border-radius: 50%;
+      background: rgba(255,255,255,var(--a));
+      box-shadow:
+        0 0 calc(var(--s) * 1.8) rgba(255,255,255,.35),
+        0 0 calc(var(--s) * 4.2) rgba(126,170,255,.10);
+      animation: twinkle var(--t) ease-in-out infinite;
+      animation-delay: var(--d);
+    }
+
+    .rim-chunk {
+      position: absolute;
+      width: var(--w);
+      height: var(--h);
+      left: var(--x);
+      top: var(--y);
+      transform: translateZ(var(--z)) rotate(var(--r));
+      border-radius: 4px;
+      background:
+        linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,0) 34%, rgba(0,0,0,.1) 74%, rgba(0,0,0,.18)),
+        linear-gradient(135deg, #986049, #74412c 60%, #4e291b);
+      border: 1px solid rgba(28,11,5,.5);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.08),
+        0 12px 18px rgba(0,0,0,.3);
+      animation: floatPiece var(--d) ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+
+    .rim-chunk::after {
+      content:"";
+      position:absolute;
+      inset:2px;
+      border-radius:2px;
+      background: linear-gradient(90deg, rgba(0,0,0,.16), transparent 48%, rgba(255,255,255,.07));
+      opacity: .55;
+    }
+
+    .ui {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .title {
+      position: absolute;
+      left: 50%;
+      top: 18px;
+      transform: translateX(-50%);
+      text-align: center;
+      text-shadow: 0 12px 30px rgba(0,0,0,.55);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,.68);
+      font-size: 11px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+    }
+
+    .title h1 {
+      margin: 12px 0 6px;
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+
+    .title p {
+      margin: 0;
+      color: rgba(255,255,255,.64);
+      font-size: 14px;
+    }
+
+    .menu-layer {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(560px, 86vw);
+      height: min(560px, 86vw);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      transition: transform .18s ease-out, opacity .18s ease-out;
+      filter: drop-shadow(0 34px 60px rgba(0,0,0,.45));
+    }
+
+    .menu-ring {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 360px;
+      height: 360px;
+      margin-left: -180px;
+      margin-top: -180px;
+      border-radius: 50%;
+      border: 1px solid rgba(221,233,255,.16);
+      background:
+        radial-gradient(circle at 50% 48%, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow:
+        0 0 60px rgba(93,132,255,.08),
+        inset 0 0 28px rgba(255,255,255,.03);
+      backdrop-filter: blur(8px);
+      animation: spin 28s linear infinite;
+    }
+
+    .menu-ring::before,
+    .menu-ring::after {
+      content:"";
+      position:absolute;
+      inset:18px;
+      border:1px dashed rgba(255,255,255,.08);
+      border-radius:50%;
+    }
+
+    .menu-ring::after {
+      inset:42px;
+      border-style: solid;
+      opacity: .45;
+    }
+
+    .menu-node {
+      position: absolute;
+      width: 98px;
+      height: 98px;
+      margin: -49px 0 0 -49px;
+      border-radius: 50%;
+      border: 1px solid rgba(223,235,255,.18);
+      background:
+        radial-gradient(circle at 28% 25%, rgba(255,255,255,.17), rgba(255,255,255,.04) 36%, rgba(10,15,23,.9) 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.14),
+        0 18px 34px rgba(0,0,0,.34),
+        0 0 28px rgba(100,140,255,.08);
+      color: #f5fbff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 6px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      pointer-events: auto;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .menu-node::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background: radial-gradient(circle, var(--ga), transparent 68%);
+      opacity:.65;
+    }
+
+    .menu-node:hover {
+      transform: scale(1.08);
+      border-color: rgba(255,255,255,.28);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.18),
+        0 24px 42px rgba(0,0,0,.44),
+        0 0 40px rgba(100,140,255,.13);
+    }
+
+    .menu-node .icon,
+    .menu-node .label {
+      position: relative;
+      z-index: 1;
+    }
+
+    .menu-node .icon { font-size: 22px; line-height: 1; }
+    .menu-node .label { font-size: 12px; line-height: 1.1; font-weight: 700; padding: 0 8px; }
+
+    .menu-hub {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 156px;
+      height: 156px;
+      margin-left: -78px;
+      margin-top: -78px;
+      border-radius: 50%;
+      border: 1px solid rgba(226,236,255,.18);
+      background:
+        radial-gradient(circle at 36% 28%, rgba(255,255,255,.18), rgba(255,255,255,.04) 32%, rgba(4,8,14,.95) 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.16),
+        0 24px 44px rgba(0,0,0,.46),
+        0 0 36px rgba(255,183,91,.08);
+      backdrop-filter: blur(10px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      text-align:center;
+      color:rgba(255,255,255,.95);
+      pointer-events:none;
+    }
+
+    .menu-hub .big {
+      font-size: 15px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .menu-hub .small {
+      margin-top: 6px;
+      font-size: 10px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.46);
+    }
+
+    .card {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(520px, 88vw);
+      min-height: 320px;
+      transform: translate(-50%, -50%);
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)),
+        var(--panel);
+      box-shadow:
+        0 36px 84px rgba(0,0,0,.45),
+        0 0 42px rgba(115,155,255,.08);
+      backdrop-filter: blur(12px);
+      pointer-events: auto;
+    }
+
+    .card .bar {
+      height: 7px;
+      background: linear-gradient(90deg, #fb923c, #fde68a, #60a5fa);
+    }
+
+    .card .body {
+      padding: 28px 28px 30px;
+      color: white;
+    }
+
+    .card .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.58);
+      font-size: 11px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: clamp(28px, 3vw, 38px);
+      line-height: 1.03;
+      letter-spacing: -.03em;
+    }
+
+    .card p {
+      margin: 0;
+      color: rgba(235,242,255,.82);
+      line-height: 1.78;
+      font-size: 15px;
+    }
+
+    .controls {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      pointer-events: auto;
+    }
+
+    .action {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      padding: 12px 18px;
+      background: rgba(16,20,28,.58);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 30px rgba(0,0,0,.3);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .action.primary {
+      background: rgba(255,255,255,.93);
+      color: #111827;
+      border-color: rgba(255,255,255,.42);
+    }
+
+    .action:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,.28);
+      background: rgba(31,39,52,.74);
+    }
+
+    .action.primary:hover { background: rgba(255,255,255,.98); }
+
+    .hint {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      width: min(340px, calc(100vw - 36px));
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(8,10,14,.48);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.7);
+      font-size: 13px;
+      line-height: 1.55;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+      pointer-events: none;
+    }
+
+    @keyframes pulse {
+      0%,100% { transform: translateZ(-840px) scale(1); opacity: .9; }
+      50% { transform: translateZ(-840px) scale(1.08); opacity: 1; }
+    }
+
+    @keyframes spin { to { transform: translateZ(-790px) rotate(360deg); } }
+    @keyframes spinReverse { to { transform: translateZ(-825px) rotate(-360deg); } }
+
+    @keyframes mistShift {
+      from { transform: translateZ(-600px) translateX(-12px) translateY(4px); }
+      to { transform: translateZ(-600px) translateX(12px) translateY(-6px); }
+    }
+
+    @keyframes floatPiece {
+      0%,100% { transform: translateZ(var(--z)) rotate(var(--r)) translate(0,0); }
+      25% { transform: translateZ(calc(var(--z) - 8px)) rotate(calc(var(--r) + 4deg)) translate(8px,-10px); }
+      50% { transform: translateZ(calc(var(--z) + 6px)) rotate(calc(var(--r) - 5deg)) translate(-8px,8px); }
+      75% { transform: translateZ(calc(var(--z) - 4px)) rotate(calc(var(--r) + 2deg)) translate(10px,4px); }
+    }
+
+    @keyframes twinkle {
+      0%,100% { opacity: .45; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.35); }
+    }
+
+    @keyframes nebulaShift {
+      from { transform: translateZ(-980px) translateX(-18px) translateY(10px) scale(1); }
+      to { transform: translateZ(-980px) translateX(18px) translateY(-10px) scale(1.04); }
+    }
+
+    @media (max-width: 760px) {
+      .hint, .title p { display:none; }
+      .menu-ring { width: 300px; height: 300px; margin-left: -150px; margin-top: -150px; }
+      .menu-node { width: 84px; height: 84px; margin: -42px 0 0 -42px; }
+      .menu-node .label { font-size: 11px; }
+      .menu-hub { width: 130px; height: 130px; margin-left: -65px; margin-top: -65px; }
+      .portal-shell { transform: scale(.86); }
+    }
+  </style>
 </head>
 <body>
-<div class="brick-wall">
-    <!-- the broken hole with floating fragments -->
-    <div class="hole" id="hole">
-        <!-- fragments will be injected by js -->
+  <div id="app">
+    <div id="camera" class="camera">
+      <div id="starfield" class="starfield"></div>
+      <div id="starfield2" class="starfield-2"></div>
+      <div id="starfield3" class="starfield-3"></div>
+      <div class="nebula"></div>
+
+      <div class="wall-plane">
+        <div id="brickField" class="brick-field"></div>
+        <div class="mortar-shadow"></div>
+
+        <div id="portalShell" class="portal-shell">
+          <div class="depth-ring" style="--w:880px;--h:740px;--z:-36px;--rot:-2deg;--shape:46% 54% 49% 51% / 39% 44% 56% 61%;--blur:0px;"></div>
+          <div class="depth-ring inner" style="--w:770px;--h:640px;--z:-230px;--rot:1.5deg;--shape:49% 51% 47% 53% / 42% 40% 60% 58%;--blur:.2px;"></div>
+          <div class="depth-ring inner" style="--w:635px;--h:530px;--z:-450px;--rot:-1.3deg;--shape:45% 55% 50% 50% / 41% 47% 53% 59%;--blur:.25px;"></div>
+          <div class="depth-ring inner" style="--w:500px;--h:410px;--z:-660px;--rot:.9deg;--shape:47% 53% 51% 49% / 44% 40% 60% 56%;--blur:.3px;"></div>
+          <div class="mist"></div>
+          <div class="portal-core"></div>
+          <div class="portal-swirl"></div>
+          <div class="portal-swirl-2"></div>
+          <div id="spaceDust" class="space-dust"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui">
+    <div class="title">
+      <div class="eyebrow">Rustic Brick Portal Space</div>
+      <h1>Break Through the Wall</h1>
+      <p>More mortar, imperfect bricks, irregular opening, and space sitting behind the menu.</p>
     </div>
 
-    <!-- central interactive wheel -->
-    <div class="wheel" id="wheelContainer">
-        <div class="wheel-items" id="wheelItems"></div>
-    </div>
+    <div class="hint">This version roughens the masonry, breaks the perfect oval, and adds layered stars, nebula glow, and dust behind the menu so it reads like a chamber opening into space.</div>
 
-    <!-- info card (hidden by default) -->
-    <div class="info-card" id="infoCard">
-        <!-- content set dynamically -->
-    </div>
+    <div id="menuLayer" class="menu-layer"></div>
+    <div id="controls" class="controls"></div>
+  </div>
 
-    <!-- reset button to go back to main categories -->
-    <button class="reset-btn" id="resetBtn">🧱  CATEGORIES  🧱</button>
+  <script>
+    const DATA = {
+      categories: [
+        {
+          id: "services",
+          label: "Services",
+          icon: "🛠",
+          glow: "rgba(255,196,119,.34)",
+          items: [
+            { id: "web-design", label: "Web Design", icon: "🎨", title: "Web Design", description: "Custom layouts, visual systems, and responsive user experiences tailored to your brand." },
+            { id: "seo", label: "SEO", icon: "🔎", title: "Search Optimization", description: "On-page strategy, technical improvements, and content structure designed to increase discoverability." },
+            { id: "branding", label: "Branding", icon: "✨", title: "Brand Systems", description: "Identity development, messaging alignment, and brand consistency across digital touchpoints." },
+            { id: "hosting", label: "Hosting", icon: "🌐", title: "Hosting & Support", description: "Reliable infrastructure, maintenance, monitoring, and long-term site support." }
+          ]
+        },
+        {
+          id: "industries",
+          label: "Industries",
+          icon: "🏗",
+          glow: "rgba(146,214,255,.34)",
+          items: [
+            { id: "construction", label: "Construction", icon: "🏗", title: "Construction", description: "Portfolio-ready presentation for projects, service lines, and trust-building proof points." },
+            { id: "medical", label: "Medical", icon: "⚕", title: "Medical", description: "Clear, compliant, patient-friendly information structures with strong calls to action." },
+            { id: "legal", label: "Legal", icon: "⚖", title: "Legal", description: "Professional layouts for practice areas, attorney bios, and streamlined lead intake." },
+            { id: "retail", label: "Retail", icon: "🛍", title: "Retail", description: "Visual merchandising online with category-led pathways and persuasive product storytelling." }
+          ]
+        },
+        {
+          id: "materials",
+          label: "Materials",
+          icon: "🧱",
+          glow: "rgba(255,177,177,.34)",
+          items: [
+            { id: "brick", label: "Brick", icon: "🧱", title: "Brick Texture", description: "Classic, rugged masonry styling with layered shadows and weathered detail." },
+            { id: "stone", label: "Stone", icon: "🪨", title: "Stone Texture", description: "Heavy, carved surfaces with organic edges for a monumental feel." },
+            { id: "metal", label: "Metal", icon: "⚙", title: "Metal Texture", description: "Industrial finishes with brushed highlights and cool reflective accents." },
+            { id: "glass", label: "Glass", icon: "🔷", title: "Glass Texture", description: "Clean translucent panels with polished light behavior and modern contrast." }
+          ]
+        }
+      ]
+    };
 
-    <!-- small tag to show current mode (optional) -->
-    <div class="category-tag" id="categoryTag">choose a category</div>
-</div>
+    const state = {
+      categoryId: null,
+      itemId: null,
+      mouseX: 0,
+      mouseY: 0
+    };
 
-<script>
-    (function() {
-        // ---------- DATA ----------
-        const categories = [
-            { name: "🍎 FRUITS", items: ["Apple", "Banana", "Orange"] },
-            { name: "🐾 ANIMALS", items: ["Dog", "Cat", "Bird"] },
-            { name: "🎨 COLORS", items: ["Red", "Blue", "Green"] }
-        ];
+    const brickField = document.getElementById("brickField");
+    const portalShell = document.getElementById("portalShell");
+    const cameraEl = document.getElementById("camera");
+    const menuLayer = document.getElementById("menuLayer");
+    const controls = document.getElementById("controls");
+    const starfield = document.getElementById("starfield");
+    const starfield2 = document.getElementById("starfield2");
+    const starfield3 = document.getElementById("starfield3");
+    const spaceDust = document.getElementById("spaceDust");
 
-        // extra item details (simple placeholder)
-        const itemDetails = {
-            "Apple": "Crisp and sweet. Great for pies.",
-            "Banana": "Rich in potassium. A perfect snack.",
-            "Orange": "Citrus burst. Loaded with vitamin C.",
-            "Dog": "Loyal companion. Loves to play fetch.",
-            "Cat": "Independent and curious. Purrs softly.",
-            "Bird": "Colorful feathers. Loves to sing.",
-            "Red": "Color of passion and energy.",
-            "Blue": "Calm like the ocean and sky.",
-            "Green": "Nature's hue, fresh and vibrant."
-        };
+    function currentCategory() {
+      return DATA.categories.find(c => c.id === state.categoryId) || null;
+    }
 
-        // ---------- GLOBALS ----------
-        let currentCategory = null;               // selected category object
-        const holeElement = document.getElementById('hole');
-        const wheelItemsDiv = document.getElementById('wheelItems');
-        const infoCard = document.getElementById('infoCard');
-        const categoryTag = document.getElementById('categoryTag');
-        const resetBtn = document.getElementById('resetBtn');
+    function currentItem() {
+      const c = currentCategory();
+      return c ? c.items.find(i => i.id === state.itemId) || null : null;
+    }
 
-        // ---------- FRAGMENTS (brick pieces floating inside hole) ----------
-        function createFragments(count = 18) {
-            for (let i = 0; i < count; i++) {
-                const frag = document.createElement('div');
-                frag.className = 'fragment';
+    function rand(seed) {
+      const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453123;
+      return x - Math.floor(x);
+    }
 
-                // random size between 6px and 22px
-                const w = 6 + Math.random() * 16;
-                const h = w * (0.6 + Math.random() * 0.6);
-                frag.style.width = `${w}px`;
-                frag.style.height = `${h}px`;
+    function noisyHoleValue(x, y) {
+      const n1 = Math.sin(x * 0.012) * Math.cos(y * 0.010) * 0.09;
+      const n2 = Math.sin(x * 0.021 + 2.4) * 0.06;
+      const n3 = Math.cos(y * 0.017 - 1.3) * 0.05;
+      const n4 = (rand(x * 0.003 + y * 0.005) - 0.5) * 0.08;
+      return n1 + n2 + n3 + n4;
+    }
 
-                // random starting position relative to hole (percentage)
-                const posX = 20 + Math.random() * 60; // % left
-                const posY = 20 + Math.random() * 60; // % top
-                frag.style.left = `${posX}%`;
-                frag.style.top = `${posY}%`;
+    function buildBricks() {
+      brickField.innerHTML = "";
 
-                // set custom properties for animation (start offsets in px relative to its own position)
-                // we want floating from far to center: we use translate offsets between -40px and 40px roughly
-                const xOffset = (Math.random() * 100 - 50).toFixed(1);
-                const yOffset = (Math.random() * 100 - 50).toFixed(1);
-                frag.style.setProperty('--x-start', xOffset + 'px');
-                frag.style.setProperty('--y-start', yOffset + 'px');
+      const wallW = 1820;
+      const wallH = 1120;
+      const gapBaseX = 8;
+      const gapBaseY = 10;
+      const holeRx = 365;
+      const holeRy = 300;
 
-                // random rotation start via animation delay & duration
-                frag.style.animationDelay = `${Math.random() * 3}s`;
-                frag.style.animationDuration = `${5 + Math.random() * 8}s`;
+      let rowIndex = 0;
 
-                // slight variation in color
-                const hueShift = Math.random() * 20 - 10;
-                frag.style.background = `linear-gradient(145deg, #d87d4a, #9b5535, #5f3320)`;
+      for (let y = -20; y < wallH + 100; y += 74 + (rand(rowIndex * 7) * 8 - 4)) {
+        const rowOffset = rowIndex % 2 ? 76 + rand(rowIndex * 13) * 20 : rand(rowIndex * 17) * 18;
 
-                holeElement.appendChild(frag);
+        for (let x = -160; x < wallW + 180; ) {
+          const bw = 124 + rand(x * 0.007 + y * 0.004) * 34;
+          const bh = 58 + rand(x * 0.011 + y * 0.005) * 14;
+          const gapX = gapBaseX + rand(x * 0.012 + y * 0.006) * 6;
+          const gapY = gapBaseY + rand(x * 0.013 + y * 0.008) * 5;
+
+          const px = x + rowOffset;
+          const py = y + rand(x * 0.015 + y * 0.006) * gapY * 0.3;
+          const centerX = px + bw / 2 - wallW / 2;
+          const centerY = py + bh / 2 - wallH / 2;
+
+          const distortion = noisyHoleValue(centerX, centerY);
+          const ellipse = Math.sqrt((centerX * centerX) / ((holeRx * (1 + distortion)) ** 2) + (centerY * centerY) / ((holeRy * (1 - distortion * 0.7)) ** 2));
+
+          if (ellipse >= 1.04) {
+            const brick = document.createElement("div");
+            brick.className = "brick";
+
+            const hue = 14 + Math.floor(rand(px * 0.02 + py * 0.03) * 9);
+            const sat = 36 + Math.floor(rand(px * 0.03 + py * 0.01) * 18);
+            const light = 24 + Math.floor(rand(px * 0.04 + py * 0.02) * 12);
+            const depth = 12 + rand(px * 0.05 + py * 0.06) * 18;
+            const radius = 2 + rand(px * 0.07 + py * 0.08) * 4;
+            const rotateX = (rand(px * 0.07 + py * 0.08) - 0.5) * 7;
+            const rotateY = (rand(px * 0.09 + py * 0.1) - 0.5) * 8;
+            const rotateZ = (rand(px * 0.11 + py * 0.12) - 0.5) * 5;
+
+            brick.style.setProperty("--w", bw + "px");
+            brick.style.setProperty("--h", bh + "px");
+            brick.style.setProperty("--r", radius + "px");
+            brick.style.setProperty("--depth", depth + "px");
+            brick.style.setProperty("--b1", `hsl(${hue} ${sat}% ${light + 6}%)`);
+            brick.style.setProperty("--b2", `hsl(${hue} ${sat}% ${light}%)`);
+            brick.style.setProperty("--b3", `hsl(${hue} ${sat}% ${Math.max(14, light - 9)}%)`);
+
+            brick.style.left = `${px}px`;
+            brick.style.top = `${py}px`;
+            brick.style.transform = `translateZ(${depth}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
+
+            const sideR = document.createElement("div");
+            sideR.className = "brick-side right";
+            const sideB = document.createElement("div");
+            sideB.className = "brick-side bottom";
+            brick.appendChild(sideR);
+            brick.appendChild(sideB);
+
+            const chipCount = 1 + Math.floor(rand(px * 0.021 + py * 0.025) * 4);
+            for (let i = 0; i < chipCount; i++) {
+              const chip = document.createElement("div");
+              chip.className = "chip";
+              chip.style.setProperty("--cw", (6 + rand(i * 3 + px * 0.01) * 18) + "px");
+              chip.style.setProperty("--ch", (4 + rand(i * 5 + py * 0.02) * 10) + "px");
+              chip.style.setProperty("--cx", (rand(i * 7 + px * 0.02) * 88) + "%");
+              chip.style.setProperty("--cy", (rand(i * 11 + py * 0.03) * 76) + "%");
+              chip.style.setProperty("--cr", ((rand(i * 13 + px * 0.04) - 0.5) * 120) + "deg");
+              brick.appendChild(chip);
             }
+
+            brickField.appendChild(brick);
+          }
+
+          x += bw + gapX;
         }
 
-        // ---------- WHEEL RENDERING ----------
-        function renderWheel(itemsArray, clickHandler, isCategoryMode = false) {
-            wheelItemsDiv.innerHTML = '';  // clear
-            const total = itemsArray.length;
-            if (total === 0) return;
+        rowIndex++;
+      }
 
-            // base radius (distance from center)
-            const radius = 70; // percentage relative to wheel container size (60% of hole, so 70 works)
+      buildRimChunks();
+    }
 
-            for (let i = 0; i < total; i++) {
-                const angle = (i / total) * 2 * Math.PI; // radians
-                // calculate position using transform: rotate + translate
-                const x = radius * Math.sin(angle);
-                const y = -radius * Math.cos(angle);  // minus so first item at top
+    function buildRimChunks() {
+      const parts = [
+        [8,16,86,34,-22,-54],[15,11,46,24,-35,-92],[84,21,70,30,18,-116],[92,40,36,20,16,-88],
+        [10,73,74,30,12,-96],[76,80,82,34,-18,-138],[3,48,64,26,-8,-108],[90,58,48,20,14,-154],
+        [24,5,42,18,-30,-182],[59,88,40,18,22,-208],[20,32,28,18,-16,-244],[74,34,34,22,11,-262],
+        [28,82,32,18,-12,-218],[83,68,38,18,24,-286],[39,9,24,16,18,-320],[61,14,30,18,-12,-296]
+      ];
 
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'wheel-item';
-                itemDiv.textContent = itemsArray[i];
-                // store label in dataset
-                itemDiv.dataset.label = itemsArray[i];
+      for (const p of parts) {
+        const el = document.createElement("div");
+        el.className = "rim-chunk";
+        el.style.setProperty("--x", p[0] + "%");
+        el.style.setProperty("--y", p[1] + "%");
+        el.style.setProperty("--w", p[2] + "px");
+        el.style.setProperty("--h", p[3] + "px");
+        el.style.setProperty("--r", p[4] + "deg");
+        el.style.setProperty("--z", p[5] + "px");
+        el.style.setProperty("--d", (4.8 + Math.abs(p[4]) * 0.05) + "s");
+        el.style.setProperty("--delay", (Math.abs(p[5]) * 0.002) + "s");
+        portalShell.appendChild(el);
+      }
+    }
 
-                // apply transform: start at center (50% 50%) then translate
-                itemDiv.style.transform = `translate(-50%, -50%) translate(${x}%, ${y}%)`;
-                // small rotation so text is upright (optional)
-                // we can also rotate back: but we want text readable, so we cancel rotation
-                // we already keep orientation by not adding extra rotate.
+    function buildStars(container, count, minSize, maxSize, seedOffset) {
+      for (let i = 0; i < count; i++) {
+        const s = minSize + rand(i * 13 + seedOffset) * (maxSize - minSize);
+        const star = document.createElement("div");
+        star.className = "star";
+        star.style.setProperty("--x", (rand(i * 17 + seedOffset) * 100) + "%");
+        star.style.setProperty("--y", (rand(i * 23 + seedOffset) * 100) + "%");
+        star.style.setProperty("--s", s.toFixed(2) + "px");
+        star.style.setProperty("--a", (0.35 + rand(i * 19 + seedOffset) * 0.65).toFixed(2));
+        star.style.setProperty("--t", (2.2 + rand(i * 29 + seedOffset) * 5.5).toFixed(2) + "s");
+        star.style.setProperty("--d", (rand(i * 31 + seedOffset) * 5).toFixed(2) + "s");
+        container.appendChild(star);
+      }
+    }
 
-                // add click behaviour
-                itemDiv.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    clickHandler(itemsArray[i], isCategoryMode);
-                });
+    function buildSpaceDust() {
+      for (let i = 0; i < 70; i++) {
+        const d = document.createElement("div");
+        d.className = "dust";
+        const s = 1.2 + rand(i * 7) * 3.6;
+        d.style.setProperty("--x", (rand(i * 13) * 100) + "%");
+        d.style.setProperty("--y", (rand(i * 17) * 100) + "%");
+        d.style.setProperty("--s", s.toFixed(2) + "px");
+        d.style.setProperty("--a", (0.18 + rand(i * 19) * 0.42).toFixed(2));
+        d.style.setProperty("--t", (2.8 + rand(i * 23) * 6).toFixed(2) + "s");
+        d.style.setProperty("--d", (rand(i * 29) * 4).toFixed(2) + "s");
+        spaceDust.appendChild(d);
+      }
+    }
 
-                wheelItemsDiv.appendChild(itemDiv);
-            }
-        }
+    function clearMenu() {
+      menuLayer.innerHTML = "";
+      controls.innerHTML = "";
+    }
 
-        // ---------- HANDLERS ----------
-        function handleCategoryClick(categoryName) {
-            const category = categories.find(c => c.name === categoryName);
-            if (!category) return;
+    function addAction(text, primary, onClick) {
+      const btn = document.createElement("button");
+      btn.className = "action" + (primary ? " primary" : "");
+      btn.textContent = text;
+      btn.addEventListener("click", onClick);
+      controls.appendChild(btn);
+    }
 
-            currentCategory = category;
-            categoryTag.textContent = `📁 ${category.name}`;
+    function polar(angle, radius) {
+      return {
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius * 0.82
+      };
+    }
 
-            // render wheel with items of this category
-            renderWheel(category.items, handleItemClick, false);
-        }
+    function renderWheel(entries, centerLabel, subLabel, glowSource) {
+      const ring = document.createElement("div");
+      ring.className = "menu-ring";
+      menuLayer.appendChild(ring);
 
-        function handleItemClick(itemName) {
-            // show info card with details
-            const detail = itemDetails[itemName] || 'A mysterious brick fragment.';
-            infoCard.innerHTML = `
-                <h3>${itemName}</h3>
-                <p>${detail}</p>
-                <button class="close-card" id="closeCardBtn">✕ close ✕</button>
-            `;
-            infoCard.style.display = 'block';
+      const hub = document.createElement("div");
+      hub.className = "menu-hub";
+      hub.innerHTML = `<div class="big">${centerLabel}</div><div class="small">${subLabel}</div>`;
+      menuLayer.appendChild(hub);
 
-            // attach close event
-            document.getElementById('closeCardBtn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                infoCard.style.display = 'none';
-            });
-        }
+      const radius = Math.min(menuLayer.clientWidth, menuLayer.clientHeight) * 0.33;
 
-        // show main categories (initial mode)
-        function showMainCategories() {
-            currentCategory = null;
-            categoryTag.textContent = '⚙️ pick a category';
-            const categoryNames = categories.map(c => c.name);
-            renderWheel(categoryNames, (label, isCategory) => {
-                // this will be called from wheel click
-                // label is category name, isCategory true (we don't use that flag)
-                handleCategoryClick(label);
-            }, true);   // true = category mode (unused but can help)
+      entries.forEach((entry, index) => {
+        const angle = (index / entries.length) * Math.PI * 2 - Math.PI / 2;
+        const pos = polar(angle, radius);
+        const node = document.createElement("div");
+        node.className = "menu-node";
+        node.style.left = `calc(50% + ${pos.x}px)`;
+        node.style.top = `calc(50% + ${pos.y}px)`;
+        node.style.setProperty("--ga", (glowSource?.glow || entry.glow || "rgba(255,196,119,.34)"));
 
-            // hide info card if open
-            infoCard.style.display = 'none';
-        }
+        node.innerHTML = `<div class="icon">${entry.icon || "✦"}</div><div class="label">${entry.label}</div>`;
 
-        // reset button
-        resetBtn.addEventListener('click', () => {
-            showMainCategories();
+        node.addEventListener("click", () => {
+          if (!glowSource) {
+            state.categoryId = entry.id;
+            state.itemId = null;
+          } else {
+            state.itemId = entry.id;
+          }
+          renderUI();
         });
 
-        // ---------- INIT ----------
-        function init() {
-            createFragments(24);            // floating brick pieces
-            showMainCategories();            // first wheel = categories
+        menuLayer.appendChild(node);
+      });
+    }
 
-            // click on hole or wheel background does nothing, but fragments have pointer-events none
-        }
+    function renderCard(item) {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="bar"></div>
+        <div class="body">
+          <div class="pill">Selected Item</div>
+          <h2>${item.title}</h2>
+          <p>${item.description}</p>
+        </div>
+      `;
+      menuLayer.appendChild(card);
+    }
 
-        init();
+    function renderUI() {
+      clearMenu();
+      const cat = currentCategory();
+      const item = currentItem();
 
-        // edge: if info card is open and new wheel item is clicked, we close it automatically 
-        // by rendering new wheel, but also hide card
-        const originalRender = renderWheel;
-        window.renderWheel = function(...args) {
-            infoCard.style.display = 'none';
-            originalRender(...args);
-        };
-        // (override safely)
-        renderWheel = function(itemsArray, clickHandler, isCategoryMode) {
-            infoCard.style.display = 'none';
-            originalRender(itemsArray, clickHandler, isCategoryMode);
-        };
+      if (!cat) {
+        renderWheel(DATA.categories, "Categories", "Choose a Path", null);
+        return;
+      }
 
-        // attach the overridden version
-        const temp = renderWheel;
-        renderWheel = function(...params) {
-            infoCard.style.display = 'none';
-            return temp(...params);
-        };
-
-        // re-assign to the function name (used internally)
-        const originalRenderWheel = renderWheel;
-        renderWheel = function(a,b,c) {
-            infoCard.style.display = 'none';
-            return originalRenderWheel(a,b,c);
-        };
-
-        // final: ensure showMainCategories uses latest renderWheel
-        showMainCategories = function() {
-            currentCategory = null;
-            categoryTag.textContent = '⚙️ pick a category';
-            const categoryNames = categories.map(c => c.name);
-            renderWheel(categoryNames, (label) => {
-                handleCategoryClick(label);
-            });
-            infoCard.style.display = 'none';
-        };
-
-        // apply again on reset
-        resetBtn.onclick = () => {
-            showMainCategories();
-        };
-
-        // re-init with proper references
-        showMainCategories();
-
-        // also handle outside click on infoCard close? Already done in handleItemClick
-
-        // one more: stop propagation from wheel items to avoid weirdness
-        document.querySelectorAll('.wheel-item').forEach(el => {
-            el.addEventListener('click', (e) => e.stopPropagation());
+      if (!item) {
+        renderWheel(cat.items, cat.label, "Choose an Item", cat);
+        addAction("Back to Categories", true, () => {
+          state.categoryId = null;
+          state.itemId = null;
+          renderUI();
         });
+        return;
+      }
 
-        // fix for dynamic items: event listener attached inside renderWheel
-        // we need to update the renderWheel to attach stopPropagation
-        // but we already add click handler inside, but we can also add a global listener
-        // improved renderWheel function (redefine)
-        const superRender = function(itemsArray, clickHandler) {
-            wheelItemsDiv.innerHTML = '';
-            const total = itemsArray.length;
-            if (total === 0) return;
-            const radius = 70;
-            for (let i = 0; i < total; i++) {
-                const angle = (i / total) * 2 * Math.PI;
-                const x = radius * Math.sin(angle);
-                const y = -radius * Math.cos(angle);
+      renderCard(item);
+      addAction("Back to " + cat.label, true, () => {
+        state.itemId = null;
+        renderUI();
+      });
+      addAction("All Categories", false, () => {
+        state.categoryId = null;
+        state.itemId = null;
+        renderUI();
+      });
+    }
 
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'wheel-item';
-                itemDiv.textContent = itemsArray[i];
-                itemDiv.dataset.label = itemsArray[i];
-                itemDiv.style.transform = `translate(-50%, -50%) translate(${x}%, ${y}%)`;
+    function updateCameraTilt() {
+      const x = state.mouseX * 7;
+      const y = state.mouseY * 5;
+      cameraEl.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+      const depthScale = 1 + state.mouseY * 0.04;
+      menuLayer.style.transform = `translate(-50%, -50%) scale(${depthScale})`;
+      starfield.style.transform = `translateZ(-1450px) translate(${state.mouseX * -30}px, ${state.mouseY * -16}px)`;
+      starfield2.style.transform = `translateZ(-1080px) translate(${state.mouseX * -18}px, ${state.mouseY * -10}px)`;
+      starfield3.style.transform = `translateZ(-760px) translate(${state.mouseX * -10}px, ${state.mouseY * -6}px)`;
+    }
 
-                itemDiv.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    clickHandler(itemsArray[i]);
-                });
+    window.addEventListener("mousemove", (e) => {
+      state.mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      state.mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      updateCameraTilt();
+    });
 
-                wheelItemsDiv.appendChild(itemDiv);
-            }
-            infoCard.style.display = 'none';
-        };
+    window.addEventListener("resize", renderUI);
 
-        // reassign
-        renderWheel = superRender;
-        showMainCategories = function() {
-            currentCategory = null;
-            categoryTag.textContent = '⚙️ pick a category';
-            const categoryNames = categories.map(c => c.name);
-            renderWheel(categoryNames, (label) => {
-                handleCategoryClick(label);
-            });
-            infoCard.style.display = 'none';
-        };
-
-        // restart
-        showMainCategories();
-        resetBtn.onclick = () => { showMainCategories(); };
-
-        // minor: ensure card close button works when newly created
-        // already handled inside handleItemClick, fine
-    })();
-</script>
+    buildBricks();
+    buildStars(starfield, 180, 1.2, 3.4, 10);
+    buildStars(starfield2, 100, 1.0, 2.8, 200);
+    buildStars(starfield3, 70, 0.8, 2.2, 500);
+    buildSpaceDust();
+    renderUI();
+    updateCameraTilt();
+  </script>
 </body>
 </html>
