@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Hot Headz Southern Foods – Future Menu</title>
-  <meta name="description" content="Hot Headz Southern Foods interactive future menu" />
+  <title>Fransis – Interactive Menu</title>
+  <meta name="description" content="Fransis interactive menu with orbit navigation, hologram cards, and daily specials." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -38,7 +38,8 @@
     }
     .app > * { position: relative; z-index: 1; }
 
-    .daybar, .glassbar {
+    .sticky { position: sticky; top: 10px; z-index: 20; margin-bottom: 14px; }
+    .daybar {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -51,9 +52,8 @@
       -webkit-backdrop-filter: blur(14px);
       box-shadow: 0 16px 40px rgba(0,0,0,.28);
     }
-    .sticky { position: sticky; top: 10px; z-index: 20; margin-bottom: 14px; }
 
-    .pill, .viewbtn, .actionbtn, .daybtn {
+    .pill, .viewbtn, .actionbtn, .daybtn, .chip {
       border: 1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
       color: #fff;
@@ -63,17 +63,15 @@
       transition: .18s ease;
       white-space: nowrap;
     }
-    .pill:hover, .viewbtn:hover, .actionbtn:hover, .daybtn:hover { transform: translateY(-1px); }
+    .pill:hover, .viewbtn:hover, .actionbtn:hover, .daybtn:hover, .chip:hover { transform: translateY(-1px); }
     .daybtn, .viewbtn { padding: 10px 16px; }
     .actionbtn { padding: 12px 18px; }
-    .daybtn.active, .viewbtn.active, .actionbtn.primary {
+    .chip { padding: 9px 12px; font-size: 12px; }
+
+    .daybtn.active, .viewbtn.active, .actionbtn.primary, .chip.active {
       background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
       border-color: rgba(255,200,130,.5);
-      box-shadow: 0 10px 28px rgba(192,90,42,.32);
-    }
-    .actionbtn.secondary {
-      background: linear-gradient(180deg, rgba(42,127,98,.5), rgba(20,70,52,.86));
-      border-color: rgba(146,255,212,.35);
+      box-shadow: 0 10px 28px rgba(192,90,42,.28);
     }
 
     .header {
@@ -89,24 +87,39 @@
       font-weight: 900;
       line-height: 1.06;
       letter-spacing: -.03em;
-    }
-    .subline {
-      margin-top: 0;
-      color: rgba(255,255,255,.76);
-      font-weight: 700;
-      font-size: 14px;
       text-align: center;
-      line-height: 1.5;
     }
-    .note {
-      margin-top: 0;
-      color: rgba(255,255,255,.6);
-      font-size: 13px;
-      font-weight: 600;
+    .subline, .note {
       text-align: center;
       line-height: 1.5;
       width: min(760px, 100%);
     }
+    .subline {
+      color: rgba(255,255,255,.78);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .note {
+      color: rgba(255,255,255,.62);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .nowbar {
+      width: min(760px, 100%);
+      white-space: normal;
+      line-height: 1.4;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 13px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.06);
+    }
+    .nowbar.open { color: #5effad; box-shadow: 0 0 12px rgba(94,255,173,.4); }
+    .nowbar.warn { color: #ffd27a; box-shadow: 0 0 12px rgba(255,210,122,.4); }
+    .nowbar.closed { color: #ff8a8a; box-shadow: 0 0 12px rgba(255,138,138,.4); }
 
     .toolbar {
       display: flex;
@@ -114,6 +127,14 @@
       gap: 10px;
       justify-content: center;
       margin: 16px 0 8px;
+    }
+
+    .modehint {
+      color: rgba(255,255,255,.66);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 2px;
     }
 
     .wheel-stage {
@@ -215,14 +236,8 @@
       box-shadow: 0 18px 50px rgba(0,0,0,.35);
       text-align: center;
     }
-    .glasscard.pulse {
-      animation: pulseCard .85s ease 1;
-    }
-    #todayDetailCard, #tomorrowDetailCard {
-      max-height: 60vh;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
+    .glasscard.pulse { animation: pulseCard .85s ease 1; }
+    #todayDetailCard, #tomorrowDetailCard { max-height: 60vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
     @keyframes pulseCard {
       0% { transform: scale(1); box-shadow: 0 18px 50px rgba(0,0,0,.35); }
       50% { transform: scale(1.015); box-shadow: 0 0 42px rgba(255,149,91,.35), 0 18px 50px rgba(0,0,0,.42); }
@@ -236,6 +251,7 @@
       margin-bottom: 8px;
       border-bottom: 2px solid rgba(255,179,90,.24);
       padding-bottom: 8px;
+      text-align: center;
     }
     .section-label {
       margin: 14px 0 8px;
@@ -244,6 +260,7 @@
       letter-spacing: .12em;
       text-transform: uppercase;
       color: rgba(255,255,255,.68);
+      text-align: center;
     }
     .list { list-style: none; display: grid; gap: 8px; text-align: left; }
     .list li {
@@ -265,43 +282,6 @@
       line-height: 1.5;
     }
 
-    .swipe-shell {
-      margin-top: 20px;
-      display: grid;
-      gap: 10px;
-      justify-items: center;
-    }
-    .chipnav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: min(760px, calc(100vw - 28px));
-      margin-top: 4px;
-    }
-    .chip {
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: #fff;
-      border-radius: 999px;
-      padding: 9px 12px;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: .18s ease;
-    }
-    .chip.active {
-      background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
-      border-color: rgba(255,200,130,.5);
-      box-shadow: 0 10px 22px rgba(192,90,42,.22);
-    }
-    .modehint {
-      color: rgba(255,255,255,.66);
-      font-size: 12px;
-      font-weight: 700;
-      text-align: center;
-      margin-top: 2px;
-    }
     .closed-note {
       margin-top: 12px;
       padding: 12px 14px;
@@ -314,6 +294,7 @@
       text-align: center;
       line-height: 1.5;
     }
+
     .pick-card {
       margin-top: 12px;
       padding: 14px;
@@ -329,12 +310,131 @@
       text-transform: uppercase;
       color: rgba(255,255,255,.7);
       margin-bottom: 8px;
+      text-align: center;
     }
     .pick-line {
       font-size: 15px;
       color: #fff;
       margin-top: 6px;
       font-weight: 700;
+      text-align: center;
+    }
+
+    .swipe-shell {
+      margin-top: 20px;
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+    }
+    .chipnav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: min(760px, calc(100vw - 28px));
+      margin-top: 4px;
+    }
+    .swipe-head {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .swipe-track {
+      width: min(760px, calc(100vw - 28px));
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding: 8px 4px 10px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .swipe-track::-webkit-scrollbar { display: none; }
+    .swipe-card {
+      position: relative;
+      flex: 0 0 100%;
+      scroll-snap-align: center;
+      min-height: 420px;
+      border-radius: 30px;
+      padding: 22px;
+      overflow: hidden;
+      background:
+        radial-gradient(500px 240px at 10% 0%, rgba(255,148,92,.18), transparent 60%),
+        radial-gradient(500px 240px at 100% 100%, rgba(68,224,170,.14), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border: 1px solid rgba(255,255,255,.15);
+      box-shadow: 0 24px 60px rgba(0,0,0,.36);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transform-style: preserve-3d;
+      will-change: transform;
+      animation: floatCard 6s ease-in-out infinite;
+    }
+    .swipe-card.active { box-shadow: 0 0 40px rgba(255,149,91,.24), 0 24px 60px rgba(0,0,0,.42); }
+    @keyframes floatCard {
+      0%,100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .swipe-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.15) 45%, transparent 70%);
+      transform: translateX(-120%);
+      animation: hologram 4s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes hologram { to { transform: translateX(120%); } }
+    .card-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: rgba(255,255,255,.7);
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      margin-bottom: 10px;
+    }
+
+    .special-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
+      border: 1px solid rgba(255,200,130,.45);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      box-shadow: 0 10px 24px rgba(192,90,42,.24);
+    }
+    .special-off {
+      text-align: center;
+      color: rgba(255,255,255,.82);
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .state {
+      width: min(760px, calc(100vw - 28px));
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 28px;
+      padding: 20px;
+      background: rgba(255,255,255,.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 16px 44px rgba(0,0,0,.26);
+      text-align: center;
     }
 
     .flash-overlay {
@@ -404,208 +504,96 @@
       text-transform: uppercase;
       text-align: center;
     }
-    .statusbar {
-      display: inline-flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
-      color: rgba(255,255,255,.74);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .04em;
-      text-align: center;
-    }
-    .statusdot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #5effad;
-      box-shadow: 0 0 12px rgba(94,255,173,.7);
-    }
-    .statusdot.closed {
-      background: #ff8a8a;
-      box-shadow: 0 0 12px rgba(255,138,138,.7);
-    }
-    .swipe-head {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .swipe-track {
-      width: min(760px, calc(100vw - 28px));
-      display: flex;
-      gap: 16px;
-      overflow-x: auto;
-      padding: 8px 4px 10px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .swipe-track::-webkit-scrollbar { display: none; }
-
-    .advanced-tabs {
-      width: min(1100px, calc(100vw - 28px));
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      padding: 8px 4px 6px;
-    }
-    .advanced-tab {
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: #fff;
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .02em;
-      cursor: pointer;
-      transition: .18s ease;
-    }
-    .advanced-tab.active {
-      background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
-      border-color: rgba(255,200,130,.5);
-      box-shadow: 0 10px 22px rgba(192,90,42,.22);
-    }
-    .advanced-card-wrap {
-      width: min(760px, calc(100vw - 28px));
-      padding: 8px 4px 10px;
-    }
-    .swipe-card {
-      position: relative;
-      flex: 0 0 100%;
-      scroll-snap-align: center;
-      min-height: 420px;
-      border-radius: 30px;
-      padding: 22px;
-      overflow: hidden;
-      background:
-        radial-gradient(500px 240px at 10% 0%, rgba(255,148,92,.18), transparent 60%),
-        radial-gradient(500px 240px at 100% 100%, rgba(68,224,170,.14), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
-      border: 1px solid rgba(255,255,255,.15);
-      box-shadow: 0 24px 60px rgba(0,0,0,.36);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      transform-style: preserve-3d;
-      will-change: transform;
-    }
-    .swipe-card.active {
-      box-shadow: 0 0 40px rgba(255,149,91,.24), 0 24px 60px rgba(0,0,0,.42);
-    }
-    .swipe-card::before {
-      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.15) 45%, transparent 70%);
-      animation: hologram 4s linear infinite;
-
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.1) 45%, transparent 70%);
-      transform: translateX(-120%);
-      animation: hologram 7s linear infinite;
-      pointer-events: none;
-    }
-    @keyframes hologram { to { transform: translateX(120%); } }
-    .card-meta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      font-weight: 900;
-      color: rgba(255,255,255,.7);
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.1);
-      margin-bottom: 10px;
-    }
-
-    .state {
-      width: min(760px, calc(100vw - 28px));
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 28px;
-      padding: 20px;
-      background: rgba(255,255,255,.05);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 16px 44px rgba(0,0,0,.26);
-    }
 
     .nav-btn {
-      position: fixed; z-index: 90; bottom: 24px; left: 50%; transform: translateX(-50%);
-      background: rgba(25,25,25,.92); border: 2px solid #c05a2a; border-radius: 999px;
-      display: flex; align-items: center; gap: 12px; cursor: pointer;
-      box-shadow: 0 0 25px rgba(192,90,42,0.32); transition: .2s ease; backdrop-filter: blur(8px);
+      position: fixed;
+      z-index: 90;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(25,25,25,.92);
+      border: 2px solid #c05a2a;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(192,90,42,0.32);
+      transition: .2s ease;
+      backdrop-filter: blur(8px);
       padding: 12px 20px;
     }
     .nav-btn:hover { transform: translateX(-50%) scale(1.04); }
     .btn-icon { font-size: 1.5rem; color: #c05a2a; }
     .btn-text .main { font-weight: 800; letter-spacing: .12em; font-size: .92rem; }
     .btn-text .sub { font-size: .62rem; opacity: .7; text-transform: uppercase; }
+
     .circ-menu-overlay {
-      position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
-      pointer-events: none; background: rgba(0,0,0,.7); opacity: 0; transition: opacity .3s ease; backdrop-filter: blur(8px);
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      background: rgba(0,0,0,.7);
+      opacity: 0;
+      transition: opacity .3s ease;
+      backdrop-filter: blur(8px);
     }
     .circ-menu-overlay.open { opacity: 1; pointer-events: all; }
     .circular-menu {
-      width: 300px; height: 300px; border-radius: 50%; border: 2px solid #c05a2a;
-      box-shadow: 0 0 40px rgba(192,90,42,.4); display: flex; align-items: center; justify-content: center;
-      position: relative; transform: scale(.6); transition: transform .25s ease;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 2px solid #c05a2a;
+      box-shadow: 0 0 40px rgba(192,90,42,.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transform: scale(.6);
+      transition: transform .25s ease;
     }
     .circ-menu-overlay.open .circular-menu { transform: scale(1); }
     .center-home {
-      width: 74px; height: 74px; background: #2a7f62; border: 3px solid #c05a2a; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer;
-      box-shadow: 0 0 30px rgba(192,90,42,.4); z-index: 2;
+      width: 74px;
+      height: 74px;
+      background: #2a7f62;
+      border: 3px solid #c05a2a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 0 30px rgba(192,90,42,.4);
+      z-index: 2;
     }
     .menu-item {
       position: absolute;
-      width: 66px; height: 66px;
-      background: #1e1b1b; border: 2px solid #c05a2a; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; text-align: center; padding: 6px;
-      color: #fff; font-size: .72rem; font-weight: 700; text-transform: uppercase;
-      top: 50%; left: 50%;
+      width: 66px;
+      height: 66px;
+      background: #1e1b1b;
+      border: 2px solid #c05a2a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6px;
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-110px) rotate(calc(var(--angle) * -1deg));
       cursor: pointer;
     }
 
     .hide { display: none !important; }
-  
-.nowbar {
-  white-space: normal;
-  line-height: 1.4;
-  padding: 12px 16px;
-
-  margin-top: 8px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  font-weight: 900;
-  font-size: 13px;
-  letter-spacing: .05em;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,.15);
-  background: rgba(255,255,255,.06);
-}
-.nowbar.open { color: #5effad; box-shadow: 0 0 12px rgba(94,255,173,.4); }
-.nowbar.warn { color: #ffd27a; box-shadow: 0 0 12px rgba(255,210,122,.4); }
-.nowbar.closed { color: #ff8a8a; box-shadow: 0 0 12px rgba(255,138,138,.4); }
-
-.swipe-card {
-  animation: floatCard 6s ease-in-out infinite;
-}
-@keyframes floatCard {
-  0%,100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
-}
-
-</style>
+  </style>
 </head>
 <body>
   <div class="app">
@@ -613,7 +601,7 @@
       <div class="daybar" role="tablist" aria-label="Day selector">
         <button class="daybtn active" type="button" role="tab" aria-controls="panel-today" aria-selected="true" id="dayBtnToday">Today</button>
         <button class="daybtn" type="button" role="tab" aria-controls="panel-tomorrow" aria-selected="false" id="dayBtnTomorrow">Tomorrow</button>
-        <button class="daybtn" type="button" role="tab" aria-controls="panel-advanced" aria-selected="false" id="dayBtnAdvanced">Advanced Menu</button>
+        <button class="daybtn" type="button" role="tab" aria-controls="panel-special" aria-selected="false" id="dayBtnSpecial">Daily Special</button>
       </div>
     </div>
 
@@ -621,7 +609,8 @@
       <div class="header">
         <div class="title" id="todayTitle">Today’s Menu</div>
         <div class="subline" id="todayHours">Loading hours…</div>
-        <div class="note" id="todayNote"></div><div class="nowbar" id="todayNow"></div>
+        <div class="note" id="todayNote"></div>
+        <div class="nowbar" id="todayNow"></div>
       </div>
       <div class="toolbar">
         <button class="viewbtn" id="todayViewWheel">Orbit Navigator</button>
@@ -638,7 +627,8 @@
           </div>
           <div class="glasscard" id="todayDetailCard">
             <div class="cat-title" id="todayDetailTitle"></div>
-            <div id="todayDetailContent"></div><div id="todayPickCard"></div>
+            <div id="todayDetailContent"></div>
+            <div id="todayPickCard"></div>
           </div>
         </div>
       </div>
@@ -664,7 +654,8 @@
       <div class="header">
         <div class="title" id="tomorrowTitle">Tomorrow’s Menu</div>
         <div class="subline" id="tomorrowHours">Loading hours…</div>
-        <div class="note" id="tomorrowNote"></div><div class="nowbar" id="tomorrowNow"></div>
+        <div class="note" id="tomorrowNote"></div>
+        <div class="nowbar" id="tomorrowNow"></div>
       </div>
       <div class="toolbar">
         <button class="viewbtn" id="tomorrowViewWheel">Orbit Navigator</button>
@@ -681,7 +672,8 @@
           </div>
           <div class="glasscard" id="tomorrowDetailCard">
             <div class="cat-title" id="tomorrowDetailTitle"></div>
-            <div id="tomorrowDetailContent"></div><div id="tomorrowPickCard"></div>
+            <div id="tomorrowDetailContent"></div>
+            <div id="tomorrowPickCard"></div>
           </div>
         </div>
       </div>
@@ -703,14 +695,16 @@
       </div>
     </section>
 
-    <section class="panel hide" id="panel-advanced" role="tabpanel" aria-labelledby="dayBtnAdvanced">
+    <section class="panel hide" id="panel-special" role="tabpanel" aria-labelledby="dayBtnSpecial">
       <div class="header">
-        <div class="title">Advanced Menu Forecast</div>
-        <div class="subline" id="advancedDisclaimer"></div>
+        <div class="title">Daily Special</div>
+        <div class="subline" id="specialDisclaimer"></div>
       </div>
       <div class="swipe-shell">
-        <div class="advanced-tabs" id="advancedTabs"></div>
-        <div class="advanced-card-wrap" id="advancedTrack"></div>
+        <div class="glasscard" id="dailySpecialCard">
+          <div class="cat-title" id="dailySpecialTitle">Daily Special</div>
+          <div id="dailySpecialContent"></div>
+        </div>
       </div>
     </section>
 
@@ -735,6 +729,15 @@
     </div>
   </div>
 
+  <div class="flash-overlay" id="luckModal">
+    <div class="flash-card">
+      <div class="flash-count" id="luckCountdown">5</div>
+      <div class="flash-title" id="luckModalTitle">Currently closed</div>
+      <div class="flash-text" id="luckModalText"></div>
+      <div class="flash-sub">Closing automatically</div>
+    </div>
+  </div>
+
   <script>
     (function () {
       const $ = id => document.getElementById(id);
@@ -747,25 +750,33 @@
           .replace(/"/g, "&quot;")
           .replace(/'/g, "&#039;");
       }
-      function setText(id, text) { const el = $(id); if (el) el.textContent = text || ""; }
-      function normalizeItems(arr) { return Array.isArray(arr) ? arr.map(x => String(x || "").trim()).filter(Boolean) : []; }
+      function setText(id, text) {
+        const el = $(id);
+        if (el) el.textContent = text || "";
+      }
+      function normalizeItems(arr) {
+        return Array.isArray(arr) ? arr.map(x => String(x || "").trim()).filter(Boolean) : [];
+      }
       function normalizeLunchItems(arr) {
         const items = Array.isArray(arr) ? arr : [];
         return items.map(raw => {
-          if (raw && typeof raw === "object") return { name: String(raw.name || "").trim(), desc: String(raw.desc || "").trim() };
+          if (raw && typeof raw === "object") {
+            return { name: String(raw.name || "").trim(), desc: String(raw.desc || "").trim() };
+          }
           const s = String(raw || "").trim();
           if (!s) return null;
           return { name: s, desc: "" };
         }).filter(Boolean).filter(x => x.name);
       }
       function toISODateLocal(d) {
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, "0");
-        const day = String(d.getDate()).padStart(2, "0");
-        return `${y}-${m}-${day}`;
+        return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
       }
-      function formatDateNice(d) { return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
-      function weekdayName(d) { return d.toLocaleDateString("en-US", { weekday: "long" }); }
+      function formatDateNice(d) {
+        return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      }
+      function weekdayName(d) {
+        return d.toLocaleDateString("en-US", { weekday: "long" });
+      }
       function parseISODateToLocal(iso) {
         const [y, m, d] = String(iso).split("-").map(Number);
         return new Date(y, (m || 1) - 1, d || 1);
@@ -777,44 +788,24 @@
       }
       function parseTimeToMinutes(timeStr) {
         if (!timeStr) return null;
-        const match = timeStr.match(/(\d+):?(\d*)\s*(AM|PM)/i);
+        const match = String(timeStr).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
         if (!match) return null;
         let hours = parseInt(match[1], 10);
-        const minutes = match[2] ? parseInt(match[2], 10) : 0;
+        const minutes = parseInt(match[2], 10);
         const ampm = match[3].toUpperCase();
         if (ampm === "PM" && hours !== 12) hours += 12;
         if (ampm === "AM" && hours === 12) hours = 0;
         return hours * 60 + minutes;
       }
-      function findHours(weekly, dayName) {
-        return getBusinessHours(dayName);
+      function rangeIncludes(nowMinutes, rangeStr) {
+        if (!rangeStr || !String(rangeStr).includes("-")) return false;
+        const [a, b] = String(rangeStr).split("-").map(s => s.trim());
+        const start = parseTimeToMinutes(a);
+        const end = parseTimeToMinutes(b);
+        if (start == null || end == null) return false;
+        return nowMinutes >= start && nowMinutes <= end;
       }
-      function getClosure(data, dayName) {
-        const c = data?.closures || {};
-        const key = Object.keys(c).find(k => k.toLowerCase() === String(dayName || "").toLowerCase());
-        return key ? c[key] : null;
-      }
-      function getMenuByDate(data, isoDate) { return (data?.menus || {})[isoDate] || null; }
-      function crawfishFor(data, menu) {
-        const def = data?.defaults?.crawfish || {};
-        const c = menu?.crawfish || {};
-        return {
-          show: c.show === false ? false : true,
-          subtitle: String(c.subtitle ?? def.subtitle ?? "").trim(),
-          items: normalizeItems(c.items ?? def.items ?? [])
-        };
-      }
-      function isPastClosingToday(weekly, todayName) {
-        const hours = findHours(weekly, todayName);
-        const closeMinutes = parseTimeToMinutes(hours.close);
-        if (closeMinutes == null) return false;
-        const now = new Date();
-        return (now.getHours() * 60 + now.getMinutes()) >= closeMinutes;
-      }
-      function showLoadError(msg) {
-        $("loadError").classList.remove("hide");
-        setText("loadErrorMsg", msg || "Try again in a moment.");
-      }
+
       function getBusinessHours(dayName) {
         const lower = String(dayName || "").toLowerCase();
         const open = lower === "sunday" ? "7:00 AM" : (lower === "saturday" ? "6:00 AM" : "5:30 AM");
@@ -825,27 +816,32 @@
           close,
           breakfast: `${open} - 10:30 AM`,
           lunch: `11:00 AM - ${close}`,
-          crawfish: ["thursday","friday","saturday"].includes(lower) ? "4:00 PM - 8:00 PM" : ""
+          crawfish: ["thursday", "friday", "saturday"].includes(lower) ? "4:00 PM - 8:00 PM" : ""
         };
       }
-      function timeToMinutes12h(timeStr) {
-        if (!timeStr) return null;
-        const m = String(timeStr).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
-        if (!m) return null;
-        let h = parseInt(m[1], 10);
-        const min = parseInt(m[2], 10);
-        const ap = m[3].toUpperCase();
-        if (ap === "PM" && h !== 12) h += 12;
-        if (ap === "AM" && h === 12) h = 0;
-        return h * 60 + min;
+      function getClosure(data, dayName) {
+        const c = data?.closures || {};
+        const key = Object.keys(c).find(k => k.toLowerCase() === String(dayName || "").toLowerCase());
+        return key ? c[key] : null;
       }
-      function rangeIncludes(nowMinutes, rangeStr) {
-        if (!rangeStr || !String(rangeStr).includes("-")) return false;
-        const [a, b] = String(rangeStr).split("-").map(s => s.trim());
-        const start = timeToMinutes12h(a);
-        const end = timeToMinutes12h(b);
-        if (start == null || end == null) return false;
-        return nowMinutes >= start && nowMinutes <= end;
+      function getMenuByDate(data, isoDate) {
+        return (data?.menus || {})[isoDate] || null;
+      }
+      function crawfishFor(data, menu) {
+        const def = data?.defaults?.crawfish || {};
+        const c = menu?.crawfish || {};
+        return {
+          show: c.show === false ? false : true,
+          subtitle: String(c.subtitle ?? def.subtitle ?? "").trim(),
+          items: normalizeItems(c.items ?? def.items ?? [])
+        };
+      }
+      function isPastClosingToday(_, dayName) {
+        const hours = getBusinessHours(dayName);
+        const closeMinutes = parseTimeToMinutes(hours.close);
+        if (closeMinutes == null) return false;
+        const now = new Date();
+        return (now.getHours() * 60 + now.getMinutes()) >= closeMinutes;
       }
       function categoryOpenNow(catName, dayName, nowDate) {
         const hours = getBusinessHours(dayName);
@@ -858,7 +854,11 @@
       }
       function openingMessageFor(dayName) {
         const hours = getBusinessHours(dayName);
-        return `${dayName} opens at ${hours.open}. Breakfast runs until 10:30 AM, lunch starts at 11:00 AM${hours.crawfish ? `, and crawfish runs ${hours.crawfish}` : ""}.`;
+        return `${dayName} opens at ${hours.open}. Breakfast ends at 10:30 AM, lunch starts at 11:00 AM${hours.crawfish ? `, and crawfish runs ${hours.crawfish}` : ""}.`;
+      }
+      function showLoadError(msg) {
+        $("loadError").classList.remove("hide");
+        setText("loadErrorMsg", msg || "Try again in a moment.");
       }
 
       let luckTimer = null;
@@ -867,13 +867,17 @@
         const modal = $("luckModal");
         const countEl = $("luckCountdown");
         if (!modal || !countEl) return;
+
         setText("luckModalTitle", title);
         setText("luckModalText", text);
+
         if (luckTimer) clearTimeout(luckTimer);
         if (luckCountdownTimer) clearInterval(luckCountdownTimer);
+
         let remaining = 5;
         countEl.textContent = String(remaining);
         modal.classList.add("show");
+
         luckCountdownTimer = setInterval(() => {
           remaining -= 1;
           if (remaining > 0) {
@@ -883,6 +887,7 @@
             luckCountdownTimer = null;
           }
         }, 1000);
+
         luckTimer = setTimeout(() => {
           hideLuckModal();
         }, 5000);
@@ -898,36 +903,6 @@
           luckCountdownTimer = null;
         }
         if (modal) modal.classList.remove("show");
-      }
-
-      function pickLunchCombo(cat) {
-        const entries = Array.isArray(cat?.items) ? cat.items.slice() : [];
-        const labels = entries.map(it => typeof it === "string" ? it : (it?.name || "")).filter(Boolean);
-        if (!labels.length) return null;
-        const meats = labels.filter(x => /chicken|pork|steak|fish|shrimp|hamburger|roast|sausage|turkey|beef|meatloaf|catfish|tenders|boudin/i.test(x));
-        const sides = labels.filter(x => !/chicken|pork|steak|fish|shrimp|hamburger|roast|sausage|turkey|beef|meatloaf|catfish|tenders|boudin/i.test(x));
-        const rand = arr => arr[Math.floor(Math.random() * arr.length)];
-        const meat = meats.length ? rand(meats) : rand(labels);
-        const sidePool = sides.length ? sides.slice() : labels.filter(x => x !== meat);
-        const side1 = sidePool.length ? rand(sidePool) : null;
-        const side2Pool = sidePool.filter(x => x !== side1);
-        const side2 = side2Pool.length ? rand(side2Pool) : (sidePool.length > 1 ? sidePool[0] : null);
-        return { meat, sides: [side1, side2].filter(Boolean) };
-      }
-      function renderPickCard(prefix, combo, catName) {
-        const el = $(`${prefix}PickCard`);
-        if (!el) return;
-        if (!combo) {
-          el.innerHTML = "";
-          return;
-        }
-        el.innerHTML = `
-          <div class="pick-card">
-            <div class="pick-title">Suggested ${escapeHtml(catName)} Plate</div>
-            <div class="pick-line">Meat: ${escapeHtml(combo.meat || "Chef's choice")}</div>
-            <div class="pick-line">Sides: ${escapeHtml((combo.sides || []).join(" + ") || "Chef's choice")}</div>
-          </div>
-        `;
       }
 
       async function fetchHtml(url) {
@@ -997,12 +972,21 @@
           { name: "Drinks", meta: "Cold & hot", items: normalizeItems(menu.drinks?.items ?? defaults.drinks?.items ?? []) },
           { name: "Dessert", meta: "Sweet finish", items: normalizeItems(menu.dessert?.items ?? defaults.dessert?.items ?? []) }
         );
-        return cats.filter(cat => (cat.plates && cat.plates.length) || (cat.items && cat.items.length) || (cat.pricing && cat.pricing.length) || (cat.lettuce && cat.lettuce.length) || (cat.toppings && cat.toppings.length) || (cat.dressing && cat.dressing.length));
+        return cats.filter(cat =>
+          (cat.plates && cat.plates.length) ||
+          (cat.items && cat.items.length) ||
+          (cat.pricing && cat.pricing.length) ||
+          (cat.lettuce && cat.lettuce.length) ||
+          (cat.toppings && cat.toppings.length) ||
+          (cat.dressing && cat.dressing.length)
+        );
       }
 
       function renderCategoryContent(cat, data) {
         let html = "";
-        if (cat.plates?.length) html += `<div class="section-label">Plates</div><ul class="list">${cat.plates.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
+        if (cat.plates?.length) {
+          html += `<div class="section-label">Plates</div><ul class="list">${cat.plates.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
+        }
         if (cat.items?.length) {
           html += `<div class="section-label">Items</div><ul class="list">` + cat.items.map(it => {
             if (typeof it === "string") return `<li>${escapeHtml(it)}</li>`;
@@ -1016,22 +1000,107 @@
         return html || `<div class="subline">No items available.</div>`;
       }
 
+      function pickLunchCombo(cat) {
+        const entries = Array.isArray(cat?.items) ? cat.items.slice() : [];
+        const labels = entries.map(it => typeof it === "string" ? it : (it?.name || "")).filter(Boolean);
+        if (!labels.length) return null;
+
+        const meats = labels.filter(x => /chicken|pork|steak|fish|shrimp|hamburger|roast|sausage|turkey|beef|meatloaf|catfish|tenders|boudin/i.test(x));
+        const sides = labels.filter(x => !/chicken|pork|steak|fish|shrimp|hamburger|roast|sausage|turkey|beef|meatloaf|catfish|tenders|boudin/i.test(x));
+
+        const rand = arr => arr[Math.floor(Math.random() * arr.length)];
+        const meat = meats.length ? rand(meats) : rand(labels);
+        const sidePool = sides.length ? sides.slice() : labels.filter(x => x !== meat);
+        const side1 = sidePool.length ? rand(sidePool) : null;
+        const side2Pool = sidePool.filter(x => x !== side1);
+        const side2 = side2Pool.length ? rand(side2Pool) : (sidePool.length > 1 ? sidePool[0] : null);
+
+        return { meat, sides: [side1, side2].filter(Boolean) };
+      }
+      function renderPickCard(prefix, combo, catName) {
+        const el = $(`${prefix}PickCard`);
+        if (!el) return;
+        if (!combo) {
+          el.innerHTML = "";
+          return;
+        }
+        el.innerHTML = `
+          <div class="pick-card">
+            <div class="pick-title">Suggested ${escapeHtml(catName)} Plate</div>
+            <div class="pick-line">Meat: ${escapeHtml(combo.meat || "Chef's choice")}</div>
+            <div class="pick-line">Sides: ${escapeHtml((combo.sides || []).join(" + ") || "Chef's choice")}</div>
+          </div>
+        `;
+      }
+
+      function updateNowBar(prefix, dayName, isoDate) {
+        const el = $(`${prefix}Now`);
+        if (!el) return;
+
+        const todayISO = toISODateLocal(new Date());
+        const isActualToday = isoDate === todayISO;
+        const h = getBusinessHours(dayName);
+
+        if (!isActualToday) {
+          el.className = "nowbar warn";
+          el.textContent = `${dayName} • Opens at ${h.open}`;
+          return;
+        }
+
+        const now = new Date();
+        const mins = now.getHours() * 60 + now.getMinutes();
+        const breakfastEnd = 10 * 60 + 30;
+        const lunchStart = 11 * 60;
+
+        let text = "";
+        let cls = "";
+
+        if (!rangeIncludes(mins, `${h.open} - ${h.close}`) && !(h.crawfish && rangeIncludes(mins, h.crawfish))) {
+          text = `Closed • Opens ${h.open}`;
+          cls = "closed";
+        } else if (mins < breakfastEnd) {
+          const remaining = breakfastEnd - mins;
+          text = `Breakfast • Ends in ${remaining} min`;
+          cls = remaining < 30 ? "warn" : "open";
+        } else if (mins < lunchStart) {
+          text = "Transition • Lunch starts at 11:00 AM";
+          cls = "warn";
+        } else if (rangeIncludes(mins, h.lunch)) {
+          text = "Now Serving Lunch";
+          cls = "open";
+        } else if (h.crawfish && rangeIncludes(mins, h.crawfish)) {
+          text = "Now Serving Crawfish";
+          cls = "open";
+        } else {
+          text = `Closed • Opens ${h.open}`;
+          cls = "closed";
+        }
+
+        el.className = `nowbar ${cls}`;
+        el.textContent = text;
+      }
+
       function initSwipe(prefix, categories, data) {
         const track = $(`${prefix}SwipeTrack`);
         const prev = $(`${prefix}PrevCard`);
         const next = $(`${prefix}NextCard`);
         const chipNav = $(`${prefix}ChipNav`);
-        if (!track) return;
+        if (!track) return null;
+
         track.innerHTML = categories.map((cat, i) => `
-          <article class="swipe-card${i === 0 ? " active" : ""}" data-index="${i}">
+          <article class="swipe-card${i === 0 ? ' active' : ''}" data-index="${i}">
             <div class="card-meta">${escapeHtml(cat.meta || "Menu category")}</div>
             <div class="cat-title">${escapeHtml(cat.name)}</div>
             ${renderCategoryContent(cat, data)}
           </article>
         `).join("");
+
         if (chipNav) {
-          chipNav.innerHTML = categories.map((cat, i) => `<button class="chip${i === 0 ? " active" : ""}" data-index="${i}">${escapeHtml(cat.name)}</button>`).join("");
+          chipNav.innerHTML = categories.map((cat, i) =>
+            `<button class="chip${i === 0 ? ' active' : ''}" data-index="${i}">${escapeHtml(cat.name)}</button>`
+          ).join("");
         }
+
         const cards = Array.from(track.querySelectorAll(".swipe-card"));
         const chips = Array.from((chipNav || document.createElement("div")).querySelectorAll(".chip"));
 
@@ -1069,7 +1138,9 @@
             card.style.transform = "perspective(1000px) rotateY(0deg) rotateX(0deg)";
           });
         });
+
         updateStatus();
+
         return {
           selectByName(name) {
             const idx = categories.findIndex(c => c.name === name);
@@ -1092,13 +1163,14 @@
         const detailContent = $(`${prefix}DetailContent`);
         const detailCard = $(`${prefix}DetailCard`);
         if (!wrap || !wheel || !detailTitle || !detailContent) return null;
+
         const N = categories.length;
         const step = 360 / N;
         const radius = 112;
         const topAngle = -90;
         wheel.innerHTML = "";
 
-        const items = categories.map((cat, i) => {
+        const items = categories.map(cat => {
           const el = document.createElement("div");
           el.className = "wheel-item";
           el.textContent = cat.name;
@@ -1106,7 +1178,13 @@
           return el;
         });
 
-        let angle = 0, velocity = 0, dragging = false, lastPointerAngle = 0, selected = 0, raf = 0, lockedByHours = false;
+        let angle = 0;
+        let velocity = 0;
+        let dragging = false;
+        let lastPointerAngle = 0;
+        let selected = 0;
+        let raf = 0;
+        let lockedByHours = false;
 
         function shortestDelta(a, b) {
           let diff = a - b;
@@ -1125,7 +1203,10 @@
           for (let i = 0; i < N; i++) {
             const a = topAngle + i * step + angle;
             const diff = Math.abs(shortestDelta(a, topAngle));
-            if (diff < bestDiff) { bestDiff = diff; best = i; }
+            if (diff < bestDiff) {
+              bestDiff = diff;
+              best = i;
+            }
           }
           return best;
         }
@@ -1138,11 +1219,14 @@
           const allowed = canShowCategory(cat);
           lockedByHours = !allowed;
           detailTitle.textContent = cat.name;
+
           const closedNowNote = isTodayPanel && !allowed
             ? `<div class="closed-note">This is the ${escapeHtml(dayName)} menu for ${escapeHtml(cat.name)}. They are currently closed for this category. ${escapeHtml(openingMessageFor(dayName))}</div>`
             : "";
+
           detailContent.innerHTML = renderCategoryContent(cat, data) + closedNowNote;
           renderPickCard(prefix, null, cat.name);
+
           if (force) {
             detailCard.classList.add("pulse");
             setTimeout(() => detailCard.classList.remove("pulse"), 520);
@@ -1213,6 +1297,7 @@
             showLuckModal("Currently closed", `${categories[selected].name} is not being served right now. ${openingMessageFor(dayName)}`);
           }
         }
+
         wrap.addEventListener("pointerdown", onDown, { passive: false });
         wrap.addEventListener("pointermove", onMove, { passive: false });
         wrap.addEventListener("pointerup", onUp);
@@ -1239,6 +1324,7 @@
             const startAngle = angle;
             const extraTurns = 720 + Math.random() * 360;
             const endAngle = target + extraTurns;
+
             function animate(now) {
               const t = Math.min(1, (now - start) / 2400);
               const ease = 1 - Math.pow(1 - t, 3);
@@ -1272,10 +1358,12 @@
         const swipeBtn = $(`${prefix}ViewSwipe`);
         const wheelView = $(`${prefix}WheelView`);
         const swipeView = $(`${prefix}SwipeView`);
+
         swipeBtn?.classList.add("active");
         wheelBtn?.classList.remove("active");
         swipeView?.classList.remove("hide");
         wheelView?.classList.add("hide");
+
         wheelBtn?.addEventListener("click", () => {
           wheelBtn.classList.add("active");
           swipeBtn?.classList.remove("active");
@@ -1291,8 +1379,8 @@
       }
 
       function setupDayTabs() {
-        const buttons = [$("dayBtnToday"), $("dayBtnTomorrow"), $("dayBtnAdvanced")];
-        const panels = [$("panel-today"), $("panel-tomorrow"), $("panel-advanced")];
+        const buttons = [$("dayBtnToday"), $("dayBtnTomorrow"), $("dayBtnSpecial")];
+        const panels = [$("panel-today"), $("panel-tomorrow"), $("panel-special")];
         buttons.forEach((btn, i) => {
           btn?.addEventListener("click", () => {
             buttons.forEach((b, bi) => {
@@ -1304,137 +1392,69 @@
         });
       }
 
-      function buildAdvanced(data, startISO) {
-        const tabs = $("advancedTabs");
-        const track = $("advancedTrack");
-        if (!track || !tabs) return;
-        tabs.innerHTML = "";
-        track.innerHTML = "";
-        setText("advancedDisclaimer", "Showing the next 7 days starting from the next active menu day.");
-        const start = parseISODateToLocal(startISO);
-        const lDef = data?.defaults?.lunch || {};
-        const days = 7;
-        const cards = [];
+      function buildDailySpecial(data, isoDate, dayName) {
+        const titleEl = $("dailySpecialTitle");
+        const contentEl = $("dailySpecialContent");
+        const disclaimerEl = $("specialDisclaimer");
+        if (!titleEl || !contentEl || !disclaimerEl) return;
 
-        for (let i = 0; i < days; i++) {
-          const d = new Date(start);
-          d.setDate(start.getDate() + i);
+        const d = parseISODateToLocal(isoDate);
+        const todayISO = toISODateLocal(new Date());
+        const menu = getMenuByDate(data, isoDate) || {};
+        const lunch = menu?.lunch || {};
+        const specialTitle = String(lunch.specialTitle ?? menu?.specialTitle ?? "").trim();
+        const specialDesc = String(lunch.specialDesc ?? menu?.specialDesc ?? "").trim();
+        const plates = normalizeItems(lunch.plates || []);
+        const items = normalizeLunchItems(lunch.items || []);
+        const closure = getClosure(data, dayName);
 
-          const iso = toISODateLocal(d);
-          const dayName = weekdayName(d);
-          const hours = getBusinessHours(dayName);
-          const closure = getClosure(data, dayName);
-          const dayMenu = getMenuByDate(data, iso);
+        const isSameDay = isoDate === todayISO;
+        const afterCloseToday = isSameDay ? isPastClosingToday([], dayName) : false;
+        const hideSpecial = !!closure?.closed || afterCloseToday;
 
-          const tab = document.createElement("button");
-          tab.className = "advanced-tab" + (i === 0 ? " active" : "");
-          tab.type = "button";
-          tab.textContent = `${dayName.slice(0,3)} ${d.getMonth()+1}/${d.getDate()}`;
-          tabs.appendChild(tab);
+        disclaimerEl.textContent = `${dayName} • ${formatDateNice(d)}`;
 
-          const card = document.createElement("article");
-          card.className = "swipe-card active" + (i === 0 ? "" : " hide");
-
-          if (!dayMenu) {
-            card.innerHTML = `
-              <div class="card-meta">${escapeHtml(formatDateNice(d))}</div>
-              <div class="cat-title">${escapeHtml(dayName)}</div>
-              <div class="subline">${escapeHtml(iso)}</div>
-              <div class="section-label">Status</div>
-              <ul class="list">
-                <li>Unable to fetch the menu for this day.</li>
-              </ul>
-            `;
-          } else {
-            const lunch = dayMenu?.lunch || {};
-            const plates = normalizeItems(lunch.plates ?? lDef.plates ?? []);
-            const items = normalizeLunchItems(lunch.items ?? []);
-            card.innerHTML = `
-              <div class="card-meta">${escapeHtml(formatDateNice(d))}</div>
-              <div class="cat-title">${escapeHtml(dayName)}</div>
-              <div class="subline">${closure?.closed ? "Closed" : (hours.lunch ? `Lunch ${escapeHtml(hours.lunch)}` : "")}</div>
-              ${
-                closure?.closed
-                  ? `<div class="section-label">Status</div><ul class="list"><li>${escapeHtml(closure.message || "Closed")}</li></ul>`
-                  : `
-                    <div class="section-label">Plates</div>
-                    <ul class="list">${plates.length ? plates.map(x => `<li>${escapeHtml(x)}</li>`).join("") : `<li>Unable to fetch the menu for this day.</li>`}</ul>
-                    <div class="section-label">Lunch Items</div>
-                    <ul class="list">${items.length ? items.map(x => `<li>${escapeHtml(x.name)}</li>`).join("") : `<li>Unable to fetch the menu for this day.</li>`}</ul>
-                  `
-              }
-            `;
-          }
-
-          track.appendChild(card);
-          cards.push({tab, card});
+        if (hideSpecial) {
+          titleEl.textContent = `${dayName} Daily Special`;
+          contentEl.innerHTML = `
+            <div class="special-off">
+              <div class="special-badge">Not Active</div>
+              <div>The daily special is hidden right now.</div>
+              <div>Update the date and special to show a new one.</div>
+            </div>
+          `;
+          return;
         }
 
-        cards.forEach((entry, idx) => {
-          entry.tab.addEventListener("click", () => {
-            cards.forEach((item, i) => {
-              item.tab.classList.toggle("active", i === idx);
-              item.card.classList.toggle("hide", i !== idx);
-            });
-          });
-        });
+        if (!specialTitle && !specialDesc && !plates.length && !items.length) {
+          titleEl.textContent = `${dayName} Daily Special`;
+          contentEl.innerHTML = `
+            <div class="special-off">
+              <div class="special-badge">No Special Posted</div>
+              <div>There is no daily special set for this date yet.</div>
+            </div>
+          `;
+          return;
+        }
+
+        titleEl.textContent = specialTitle || `${dayName} Daily Special`;
+        let html = `<div class="special-badge">Featured Today</div>`;
+
+        if (specialDesc) {
+          html += `<div class="subline" style="margin-bottom:12px;">${escapeHtml(specialDesc)}</div>`;
+        }
+        if (plates.length) {
+          html += `<div class="section-label">Plates</div><ul class="list">${plates.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
+        }
+        if (items.length) {
+          html += `<div class="section-label">Included Items</div><ul class="list">` +
+            items.map(it => `<li><strong>${escapeHtml(it.name)}</strong>${it.desc ? `<div class="desc">${escapeHtml(it.desc)}</div>` : ""}</li>`).join("") +
+            `</ul>`;
+        }
+        contentEl.innerHTML = html;
       }
 
-      
-function updateNowBar(prefix, dayName, isoDate) {
-  const el = document.getElementById(prefix + "Now");
-  if (!el) return;
-
-  const todayISO = (function(){
-    const d = new Date();
-    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
-  })();
-
-  const isActualToday = isoDate === todayISO;
-
-  const h = getBusinessHours(dayName);
-
-  if (!isActualToday) {
-    el.className = "nowbar warn";
-    el.textContent = dayName + " • Opens at " + h.open;
-    return;
-  }
-
-  const now = new Date();
-  const mins = now.getHours()*60 + now.getMinutes();
-
-  const breakfastEnd = 10*60+30;
-  const lunchStart = 11*60;
-
-  let text = "";
-  let cls = "";
-
-  if (!rangeIncludes(mins, h.open + " - " + h.close) && !(h.crawfish && rangeIncludes(mins, h.crawfish))) {
-    text = "Closed • Opens " + h.open;
-    cls = "closed";
-  } else if (mins < breakfastEnd) {
-    const remaining = breakfastEnd - mins;
-    text = "Breakfast • Ends in " + remaining + " min";
-    cls = remaining < 30 ? "warn" : "open";
-  } else if (mins < lunchStart) {
-    text = "Transition • Lunch starts at 11:00 AM";
-    cls = "warn";
-  } else if (rangeIncludes(mins, h.lunch)) {
-    text = "Now Serving Lunch";
-    cls = "open";
-  } else if (h.crawfish && rangeIncludes(mins, h.crawfish)) {
-    text = "Now Serving Crawfish";
-    cls = "open";
-  } else {
-    text = "Closed • Opens " + h.open;
-    cls = "closed";
-  }
-
-  el.className = "nowbar " + cls;
-  el.textContent = text;
-}
-
-function initPanel(prefix, data, isoDate, displayName) {
+      function initPanel(prefix, data, isoDate, displayName) {
         const hours = getBusinessHours(displayName);
         const closure = getClosure(data, displayName);
         const isTodayPanel = prefix === "today";
@@ -1458,10 +1478,7 @@ function initPanel(prefix, data, isoDate, displayName) {
         } else if (!isActualToday) {
           nowStatus = `<span class="statusdot closed"></span> SCHEDULED`;
         } else {
-          const openNow =
-            rangeIncludes(nowMinutes, `${hours.open} - ${hours.close}`) ||
-            (!!hours.crawfish && rangeIncludes(nowMinutes, hours.crawfish));
-
+          const openNow = rangeIncludes(nowMinutes, `${hours.open} - ${hours.close}`) || (!!hours.crawfish && rangeIncludes(nowMinutes, hours.crawfish));
           nowStatus = `<span class="statusdot ${openNow ? "" : "closed"}"></span>${openNow ? "OPEN NOW" : "CURRENTLY CLOSED"}`;
         }
 
@@ -1495,20 +1512,31 @@ function initPanel(prefix, data, isoDate, displayName) {
         const home = $("homeCenter");
         const items = Array.from(document.querySelectorAll(".menu-item"));
         if (!overlay || !navBtn || !home) return;
-        navBtn.addEventListener("click", e => { e.stopPropagation(); overlay.classList.toggle("open"); });
-        overlay.addEventListener("click", e => { if (e.target === overlay) overlay.classList.remove("open"); });
+
+        navBtn.addEventListener("click", e => {
+          e.stopPropagation();
+          overlay.classList.toggle("open");
+        });
+        overlay.addEventListener("click", e => {
+          if (e.target === overlay) overlay.classList.remove("open");
+        });
         home.addEventListener("click", () => {
           overlay.classList.remove("open");
           const link = home.getAttribute("data-link");
           if (link) window.location.href = link;
         });
+
         async function sharePage() {
-          const data = { title: document.title, text: "Check out Hot Headz!", url: window.location.href };
+          const data = { title: document.title, text: "Check out Fransis!", url: window.location.href };
           try {
             if (navigator.share) await navigator.share(data);
-            else if (navigator.clipboard) { await navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
+            else if (navigator.clipboard) {
+              await navigator.clipboard.writeText(window.location.href);
+              alert("Link copied!");
+            }
           } catch (_) {}
         }
+
         items.forEach(item => item.addEventListener("click", () => {
           overlay.classList.remove("open");
           const action = item.getAttribute("data-action");
@@ -1516,12 +1544,16 @@ function initPanel(prefix, data, isoDate, displayName) {
           if (action === "share") sharePage();
           else if (link) window.location.href = link;
         }));
+
         document.querySelector(".circular-menu")?.addEventListener("click", e => e.stopPropagation());
+
         const modalEl = $("luckModal");
         const flashCard = modalEl?.querySelector(".flash-card");
         flashCard?.addEventListener("click", e => e.stopPropagation());
         modalEl?.addEventListener("click", () => hideLuckModal());
-        window.addEventListener("keydown", e => { if (e.key === "Escape") hideLuckModal(); });
+        window.addEventListener("keydown", e => {
+          if (e.key === "Escape") hideLuckModal();
+        });
       }
 
       setupDayTabs();
@@ -1533,7 +1565,8 @@ function initPanel(prefix, data, isoDate, displayName) {
           const now = new Date();
           const todayISO = toISODateLocal(now);
           const todayName = weekdayName(now);
-          const tomorrow = new Date(now); tomorrow.setDate(now.getDate() + 1);
+          const tomorrow = new Date(now);
+          tomorrow.setDate(now.getDate() + 1);
           const tomorrowISO = toISODateLocal(tomorrow);
           const tomorrowName = weekdayName(tomorrow);
 
@@ -1546,17 +1579,15 @@ function initPanel(prefix, data, isoDate, displayName) {
           if (isPastClosingToday([], todayName) && !closureToday?.closed) {
             displayTodayISO = tomorrowISO;
             displayTodayName = tomorrowName;
-            const dayAfter = new Date(now); dayAfter.setDate(now.getDate() + 2);
+            const dayAfter = new Date(now);
+            dayAfter.setDate(now.getDate() + 2);
             displayTomorrowISO = toISODateLocal(dayAfter);
             displayTomorrowName = weekdayName(dayAfter);
           }
 
-          setText("dayBtnToday", displayTodayName);
-          setText("dayBtnTomorrow", displayTomorrowName);
-
           initPanel("today", data, displayTodayISO, displayTodayName);
           initPanel("tomorrow", data, displayTomorrowISO, displayTomorrowName);
-          buildAdvanced(data, displayTodayISO);
+          buildDailySpecial(data, displayTodayISO, displayTodayName);
         } catch (e) {
           console.error(e);
           showLoadError(String(e?.message || e));
@@ -1564,14 +1595,5 @@ function initPanel(prefix, data, isoDate, displayName) {
       })();
     })();
   </script>
-
-  <div class="flash-overlay" id="luckModal">
-    <div class="flash-card">
-      <div class="flash-count" id="luckCountdown">5</div>
-      <div class="flash-title" id="luckModalTitle">Currently closed</div>
-      <div class="flash-text" id="luckModalText"></div>
-      <div class="flash-sub">Closing automatically</div>
-    </div>
-  </div>
 </body>
 </html>
