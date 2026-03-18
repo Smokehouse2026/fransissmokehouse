@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Hot Headz Orbit Navigator</title>
+  <title>The Francis Smokehouse Orbit Menu</title>
   <style>
     :root{
       --bg:#030611;
@@ -13,17 +13,17 @@
       --mint:#9effc3;
       --violet:#a089ff;
       --pink:#ff7ad9;
+      --gold:#ffda8e;
       --line:rgba(255,255,255,.12);
-      --panel:rgba(8,14,28,.58);
+      --panel:rgba(8,14,28,.60);
       --shadow:0 24px 80px rgba(0,0,0,.42);
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-right: env(safe-area-inset-right, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --safe-left: env(safe-area-inset-left, 0px);
-      --radius:260px;
-      --node-size:128px;
+      --radius:255px;
+      --node-size:126px;
       --tilt:62deg;
-      --spin:0deg;
     }
 
     *{box-sizing:border-box}
@@ -87,14 +87,13 @@
 
     .scene{
       position:relative;
-      width:min(1220px, 100%);
-      height:min(900px, calc(100dvh - 36px - var(--safe-top) - var(--safe-bottom)));
+      width:min(1280px, 100%);
+      height:min(920px, calc(100dvh - 36px - var(--safe-top) - var(--safe-bottom)));
       display:grid;
-      grid-template-columns:minmax(420px, 1fr) 400px;
+      grid-template-columns:minmax(460px, 1fr) 420px;
       gap:22px;
       align-items:center;
       perspective:1800px;
-      user-select:none;
     }
 
     .left{
@@ -102,6 +101,21 @@
       min-height:100%;
       display:grid;
       place-items:center;
+    }
+
+    .header-chip{
+      position:absolute;
+      inset:18px auto auto 18px;
+      z-index:6;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(8,14,28,.48);
+      color:#dcedfb;
+      backdrop-filter:blur(12px);
+      font-size:.82rem;
+      line-height:1.35;
+      max-width:min(52ch, calc(100% - 36px));
     }
 
     .glow-aura{
@@ -130,9 +144,8 @@
       position:absolute;
       inset:0;
       transform-style:preserve-3d;
-      transform:rotateX(var(--tilt)) rotateZ(var(--spin));
-      transition:transform 700ms cubic-bezier(.2,.8,.2,1);
-      will-change:transform;
+      transform:rotateX(var(--tilt));
+      pointer-events:none;
     }
 
     .ring, .ring-two, .ring-three{
@@ -170,7 +183,6 @@
       top:6%;
       transform:translateX(-50%);
       opacity:.4;
-      pointer-events:none;
     }
 
     .node-anchor{
@@ -251,7 +263,10 @@
     }
 
     .node.front{
-      transform:translate(-50%, -50%) rotateX(calc(var(--tilt) * -1)) scale(1.06);
+      box-shadow:
+        0 26px 48px rgba(0,0,0,.38),
+        0 0 40px rgba(120,236,255,.22),
+        inset 0 1px 0 rgba(255,255,255,.08);
     }
 
     .node .emoji{
@@ -261,12 +276,12 @@
     }
 
     .node strong{
-      font-size:.96rem;
+      font-size:.94rem;
       letter-spacing:.02em;
     }
 
     .node span{
-      font-size:.78rem;
+      font-size:.76rem;
       line-height:1.2;
       color:var(--muted);
       max-width:92px;
@@ -325,7 +340,7 @@
     }
 
     .core-text strong{
-      font-size:1.1rem;
+      font-size:1.08rem;
       text-transform:uppercase;
       letter-spacing:.18em;
       color:var(--cyan);
@@ -334,7 +349,39 @@
     .core-text span{
       color:#d9e9f8;
       line-height:1.35;
-      font-size:.95rem;
+      font-size:.92rem;
+    }
+
+    .controls{
+      position:absolute;
+      inset:auto auto 16px 50%;
+      transform:translateX(-50%);
+      display:flex;
+      gap:10px;
+      z-index:5;
+    }
+
+    .ctrl{
+      min-width:136px;
+      min-height:46px;
+      padding:0 16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
+        var(--panel);
+      color:var(--text);
+      cursor:pointer;
+      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.05);
+      backdrop-filter:blur(14px);
+      transition:transform .18s ease, border-color .18s ease;
+    }
+
+    .ctrl:hover,
+    .ctrl:focus-visible{
+      outline:none;
+      transform:translateY(-1px);
+      border-color:rgba(120,236,255,.34);
     }
 
     .panel{
@@ -359,9 +406,9 @@
       gap:8px;
     }
 
-    .panel-head h2{
+    .panel-head h1{
       margin:0;
-      font-size:1.3rem;
+      font-size:1.36rem;
       letter-spacing:-.03em;
     }
 
@@ -370,6 +417,25 @@
       color:var(--muted);
       line-height:1.45;
       font-size:.92rem;
+    }
+
+    .info-line{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      min-height:30px;
+      padding:0 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1);
+      color:#def3ff;
+      font-size:.74rem;
     }
 
     .item-list{
@@ -457,54 +523,6 @@
       line-height:1.4;
     }
 
-    .controls{
-      position:absolute;
-      inset:auto auto 16px 50%;
-      transform:translateX(-50%);
-      display:flex;
-      gap:10px;
-      z-index:5;
-    }
-
-    .ctrl{
-      min-width:132px;
-      min-height:46px;
-      padding:0 16px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.12);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
-        var(--panel);
-      color:var(--text);
-      cursor:pointer;
-      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.05);
-      backdrop-filter:blur(14px);
-      transition:transform .18s ease, border-color .18s ease, background .18s ease;
-    }
-
-    .ctrl:hover,
-    .ctrl:focus-visible{
-      outline:none;
-      transform:translateY(-1px);
-      border-color:rgba(120,236,255,.34);
-    }
-
-    .hint{
-      position:absolute;
-      inset:20px auto auto 50%;
-      transform:translateX(-50%);
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(8,14,28,.48);
-      color:#dcedfb;
-      font-size:.84rem;
-      backdrop-filter:blur(10px);
-      z-index:5;
-      text-align:center;
-      white-space:nowrap;
-    }
-
     .modal{
       position:fixed;
       inset:0;
@@ -520,7 +538,7 @@
     .modal.show{ display:flex; }
 
     .modal-card{
-      width:min(760px, 100%);
+      width:min(820px, 100%);
       border-radius:28px;
       background:
         linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
@@ -542,7 +560,7 @@
 
     .modal-copy h3{
       margin:0;
-      font-size:1.5rem;
+      font-size:1.56rem;
       letter-spacing:-.03em;
     }
 
@@ -614,19 +632,19 @@
       cursor:pointer;
     }
 
-    @media (max-width: 1080px){
+    @media (max-width: 1120px){
       .scene{
         grid-template-columns:1fr;
-        height:min(1200px, calc(100dvh - 24px - var(--safe-top) - var(--safe-bottom)));
+        height:min(1280px, calc(100dvh - 24px - var(--safe-top) - var(--safe-bottom)));
         overflow:auto;
-        padding-bottom:90px;
+        padding-bottom:94px;
       }
       .left{ min-height:620px; }
-      .panel{ min-height:420px; }
+      .panel{ min-height:440px; }
       .controls{ position:fixed; bottom:10px; }
     }
 
-    @media (max-width: 680px){
+    @media (max-width: 700px){
       :root{
         --radius:180px;
         --node-size:96px;
@@ -650,11 +668,6 @@
       .node strong{ font-size:.8rem; }
       .node span{ font-size:.68rem; max-width:74px; }
       .detail-grid{ grid-template-columns:1fr 1fr; }
-      .hint{
-        font-size:.76rem;
-        white-space:normal;
-        width:min(90vw, 360px);
-      }
       .controls{
         width:calc(100vw - 20px);
         gap:8px;
@@ -663,6 +676,11 @@
         min-width:0;
         flex:1 1 0;
         padding:0 10px;
+      }
+      .header-chip{
+        position:static;
+        margin-bottom:10px;
+        justify-self:center;
       }
     }
 
@@ -678,8 +696,8 @@
   <main class="app">
     <div class="scene">
       <section class="left">
+        <div class="header-chip">The Francis Smokehouse • 6779 US Highway 61, St. Francisville, LA • First click rotates, second click opens the category.</div>
         <div class="glow-aura" aria-hidden="true"></div>
-        <div class="hint">First click rotates a tile to the front. Click the front tile again to open its category.</div>
 
         <div class="ring-shell">
           <div class="orbit-plane" id="orbitPlane">
@@ -703,13 +721,18 @@
         </div>
       </section>
 
-      <aside class="panel" id="categoryPanel">
+      <aside class="panel">
         <div class="panel-head">
-          <h2 id="panelTitle">Featured</h2>
-          <p id="panelSubtitle">Click the front tile again to open this category. Then click an item to see details and pricing.</p>
+          <h1 id="panelTitle">Featured</h1>
+          <p id="panelSubtitle">This menu is now wired to the restaurant research you sent. Item pricing is based on the report and visible photographed menu boards, where available.</p>
+          <div class="info-line">
+            <span class="pill">Hours: Mon–Sat 10 AM–6 PM</span>
+            <span class="pill">Sun 10 AM–3 PM</span>
+            <span class="pill">Takeout available</span>
+          </div>
         </div>
         <div class="item-list" id="itemList"></div>
-        <div class="panel-foot" id="panelFoot">This is placeholder menu content. Once you send your real restaurant info, I can replace every category, item, description, and price.</div>
+        <div class="panel-foot" id="panelFoot">The Francis Smokehouse • (225) 245-5046 • francissmokehouse@att.net</div>
       </aside>
     </div>
   </main>
@@ -728,7 +751,7 @@
         <div style="font-size:1.25rem; font-weight:700; color:var(--mint);" id="modalPrice">$0.00</div>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn" id="modalBackBtn" type="button">Back</button>
-          <button class="btn primary" type="button">Add to order</button>
+          <button class="btn primary" type="button">Call to order</button>
         </div>
       </div>
     </div>
@@ -739,102 +762,129 @@
       {
         id:'featured',
         label:'Featured',
-        sub:'Top signals',
+        sub:'Best-known items',
         emoji:'✦',
         glow:'rgba(120,236,255,.18)',
-        description:'Spotlight items for the menu experience.',
+        description:'A quick way into the menu using the items most often highlighted in public reviews and visible menu boards.',
         items:[
-          {name:'Hot Honey Firebird', price:17, desc:'Crispy chicken, hot honey lacquer, pickles, comeback slaw, and toasted brioche.', prep:'10 min', spice:'Medium', calories:'790 cal'},
-          {name:'Bayou Smoke Burger', price:18, desc:'Double smash patties, smoked cheddar, onion jam, pepper mayo, and charred bun edges.', prep:'12 min', spice:'Low', calories:'920 cal'},
-          {name:'Delta Truffle Pasta', price:16, desc:'Creamy truffle sauce, black pepper, pecorino snowfall, and buttery toasted crumbs.', prep:'11 min', spice:'Low', calories:'710 cal'}
+          {name:'Brisket Plate', price:10.99, desc:'BBQ brisket plate served with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
+          {name:'Pulled Pork Plate', price:9.99, desc:'Pulled pork plate served with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
+          {name:'Boudin Balls', price:null, desc:'Frequently praised by reviewers; exact public pricing not visible in the report.', prep:'Snack', spice:'Medium', calories:'Unspecified'},
+          {name:'Corn Pudding', price:2.75, desc:'One of the most-mentioned sides in review excerpts.', prep:'Side', spice:'None', calories:'Unspecified'}
+        ]
+      },
+      {
+        id:'bbq',
+        label:'BBQ Plates',
+        sub:'Ribs, pork, brisket',
+        emoji:'🍖',
+        glow:'rgba(255,122,217,.16)',
+        description:'BBQ plates from the photographed menu board. Public pricing appears to be from a captured board and may change.',
+        items:[
+          {name:'Full Rack of Ribs', price:19.99, desc:'Full rack BBQ plate with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
+          {name:'Half Rack of Ribs', price:11.99, desc:'Half rack BBQ plate with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
+          {name:'Pulled Pork Plate', price:9.99, desc:'Pulled pork BBQ plate with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
+          {name:'Brisket Plate', price:10.99, desc:'Brisket BBQ plate with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
+          {name:'Half Chicken Plate', price:9.99, desc:'Smoked half chicken plate with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
+          {name:'Smoked Wings', price:7.99, desc:'Smoked wings plate from the BBQ board.', prep:'Plate', spice:'Medium', calories:'Unspecified'}
         ]
       },
       {
         id:'sandwiches',
-        label:'Sandwiches',
-        sub:'Stacked heat',
+        label:'Burgers & Po-Boys',
+        sub:'Sandwich lane',
         emoji:'🥪',
         glow:'rgba(255,218,142,.16)',
-        description:'Fast, dramatic, stacked sandwiches.',
+        description:'Burgers, sandwiches, and po-boys listed on the public menu board. Sandwiches are noted as dressed with lettuce and tomato.',
         items:[
-          {name:'Comeback Shrimp Po-Boy', price:16, desc:'Crispy shrimp, comeback sauce, lettuce shred, tomato, and lemon pepper dust.', prep:'10 min', spice:'Low', calories:'690 cal'},
-          {name:'Southern Melt Deluxe', price:15, desc:'Sliced beef, caramelized onions, provolone melt, and garlic butter hoagie.', prep:'11 min', spice:'Low', calories:'760 cal'},
-          {name:'Heatwave Club', price:17, desc:'Blackened chicken, pepper jack, bacon, jalapeno aioli, and tomato jam.', prep:'12 min', spice:'High', calories:'810 cal'}
+          {name:'Hamburger', price:6.99, desc:'Burger served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
+          {name:'Cheeseburger', price:7.99, desc:'Cheeseburger served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
+          {name:'Bacon Cheeseburger', price:8.99, desc:'Bacon cheeseburger served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
+          {name:'Pulled Pork Sandwich', price:7.99, desc:'Pulled pork sandwich served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
+          {name:'Brisket Sandwich', price:8.99, desc:'Brisket sandwich served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
+          {name:'Ribeye Po-Boy', price:10.99, desc:'Ribeye po-boy served with one side.', prep:'Po-boy', spice:'Low', calories:'Unspecified'},
+          {name:'Chicken Sandwich', price:7.99, desc:'Chicken sandwich served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
+          {name:'Shrimp Po-Boy', price:8.99, desc:'Shrimp po-boy served with one side.', prep:'Po-boy', spice:'Low', calories:'Unspecified'},
+          {name:'Crawfish Po-Boy', price:10.99, desc:'Crawfish po-boy served with one side.', prep:'Po-boy', spice:'Low', calories:'Unspecified'},
+          {name:'Catfish Po-Boy', price:8.99, desc:'Catfish po-boy served with one side.', prep:'Po-boy', spice:'Low', calories:'Unspecified'}
         ]
       },
       {
-        id:'plates',
-        label:'Plates',
-        sub:'Big comfort',
-        emoji:'🍗',
-        glow:'rgba(255,122,217,.16)',
-        description:'Heavier dinner plates and comfort meals.',
+        id:'sides',
+        label:'Sides',
+        sub:'Small / large',
+        emoji:'🍟',
+        glow:'rgba(158,255,195,.16)',
+        description:'The visible sides board appears to price these at $2.75 small and $6.99 large.',
         items:[
-          {name:'Blackened Catfish Plate', price:19, desc:'Blackened catfish, dirty rice, green beans, and lemon pepper butter.', prep:'14 min', spice:'Medium', calories:'730 cal'},
-          {name:'Braised Rib Plate', price:23, desc:'Slow braised short rib, whipped mash, roasted carrots, and brown butter gravy.', prep:'18 min', spice:'Low', calories:'960 cal'},
-          {name:'Nashville Heat Tenders', price:18, desc:'Three giant tenders, pickles, waffle fries, and cooling white sauce.', prep:'12 min', spice:'High', calories:'890 cal'}
+          {name:'Baked Beans', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'},
+          {name:'Corn Pudding', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'},
+          {name:'Potato Salad', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'},
+          {name:'Cole Slaw', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'},
+          {name:'French Fries', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'},
+          {name:'Sweet Potato Waffle Fries', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'}
+        ]
+      },
+      {
+        id:'specialty',
+        label:'Specialty Items',
+        sub:'Boudin + pies',
+        emoji:'🔥',
+        glow:'rgba(255,122,217,.18)',
+        description:'Featured deli-style items visible on the board, but public captured pricing was not readable in the report.',
+        items:[
+          {name:'Steamed Boudin Links', price:null, desc:'Specialty meat item listed on the public board.', prep:'Specialty', spice:'Medium', calories:'Unspecified'},
+          {name:'Boudin Balls', price:null, desc:'Frequently praised in review excerpts.', prep:'Specialty', spice:'Medium', calories:'Unspecified'},
+          {name:'Pepper Jack Boudin Balls', price:null, desc:'Boudin balls with pepper jack.', prep:'Specialty', spice:'Medium', calories:'Unspecified'},
+          {name:'Boudin Egg Rolls', price:null, desc:'Specialty item listed on the board.', prep:'Specialty', spice:'Medium', calories:'Unspecified'},
+          {name:'Meat Pies', price:null, desc:'Specialty pie item listed on the board.', prep:'Specialty', spice:'Medium', calories:'Unspecified'},
+          {name:'Crawfish Pies', price:null, desc:'Specialty pie item listed on the board.', prep:'Specialty', spice:'Medium', calories:'Unspecified'}
         ]
       },
       {
         id:'desserts',
         label:'Desserts',
-        sub:'Afterglow',
+        sub:'The Sweet',
         emoji:'🍰',
         glow:'rgba(160,137,255,.18)',
-        description:'Finish with premium sweet items.',
+        description:'Desserts visible on the public menu image. Publicly accessible pricing was not readable for most dessert items.',
         items:[
-          {name:'Velvet Banana Pudding', price:8, desc:'Whipped vanilla pudding, brown butter wafers, and banana cream ribbons.', prep:'5 min', spice:'None', calories:'480 cal'},
-          {name:'Midnight Lava Cake', price:9, desc:'Dark chocolate cake with molten center and cold vanilla cloud.', prep:'7 min', spice:'None', calories:'560 cal'},
-          {name:'Neon Peach Cobbler', price:9, desc:'Cobbler crust, roasted peaches, cinnamon syrup, and cool cream.', prep:'7 min', spice:'None', calories:'520 cal'}
-        ]
-      },
-      {
-        id:'drinks',
-        label:'Drinks',
-        sub:'Cold charge',
-        emoji:'🥤',
-        glow:'rgba(158,255,195,.16)',
-        description:'Cold drinks and signature refreshers.',
-        items:[
-          {name:'Laser Sweet Tea', price:4, desc:'Black tea, citrus peel, cane sugar, and plenty of ice.', prep:'2 min', spice:'None', calories:'150 cal'},
-          {name:'Berry Fizz Cooler', price:5, desc:'Blueberry syrup, lemon, soda, and mint sparkle.', prep:'3 min', spice:'None', calories:'130 cal'},
-          {name:'Peach Lemon Shock', price:5, desc:'Peach nectar, lemon punch, and a sugar rim glow.', prep:'3 min', spice:'None', calories:'160 cal'}
+          {name:'Homemade Bread Pudding', price:null, desc:'Dessert item listed under The Sweet.', prep:'Dessert', spice:'None', calories:'Unspecified'},
+          {name:'Creole Cream Cheesecake', price:null, desc:'Dessert item listed under The Sweet.', prep:'Dessert', spice:'None', calories:'Unspecified'},
+          {name:'Chocolate Cake', price:null, desc:'Dessert item listed under The Sweet.', prep:'Dessert', spice:'None', calories:'Unspecified'},
+          {name:'Carrot Cake', price:null, desc:'Dessert item listed under The Sweet.', prep:'Dessert', spice:'None', calories:'Unspecified'},
+          {name:'Strawberry Shortcake', price:null, desc:'Dessert item listed under The Sweet.', prep:'Dessert', spice:'None', calories:'Unspecified'},
+          {name:'Miss Mud Pie', price:7.00, desc:'A dessert price visible on the specials snapshot.', prep:'Dessert', spice:'None', calories:'Unspecified'}
         ]
       },
       {
         id:'specials',
         label:'Specials',
-        sub:'Limited drop',
-        emoji:'🔥',
-        glow:'rgba(255,122,217,.18)',
-        description:'Limited-time or rotating featured items.',
-        items:[
-          {name:'Chef Smoke Sampler', price:26, desc:'A rotating trio of smoked proteins, pickles, sauces, and cornbread crunch.', prep:'18 min', spice:'Medium', calories:'980 cal'},
-          {name:'Peach Heat Wing Window', price:15, desc:'Sticky peach heat wings with cool ranch drizzle.', prep:'11 min', spice:'High', calories:'740 cal'}
-        ]
-      },
-      {
-        id:'combos',
-        label:'Combos',
-        sub:'Built sets',
+        sub:'Sample snapshot',
         emoji:'⚡',
         glow:'rgba(120,236,255,.16)',
-        description:'Meal pairings and combo deals.',
+        description:'These came from an example daily/weekly specials board image in the report and may not be current.',
         items:[
-          {name:'Burger + Fries Combo', price:21, desc:'Bayou Smoke Burger with fries and a fountain drink.', prep:'12 min', spice:'Low', calories:'1160 cal'},
-          {name:'Tender Basket Combo', price:20, desc:'Nashville tenders, waffle fries, and Laser Sweet Tea.', prep:'12 min', spice:'High', calories:'1090 cal'}
+          {name:'Sweet Thai Chili Wings', price:16.00, desc:'Specials board appetizer.', prep:'App', spice:'Medium', calories:'Unspecified'},
+          {name:'Eggplant Pirogue with Stuffing', price:26.00, desc:'Entree with seafood-style stuffing from specials snapshot.', prep:'Entree', spice:'Medium', calories:'Unspecified'},
+          {name:'Blackened Lemon Fish', price:28.00, desc:'Served with cream spinach and grilled crawfish tails.', prep:'Entree', spice:'Medium', calories:'Unspecified'},
+          {name:'Jack Daniel’s BBQ Shrimp + Bone-In Pork Chop', price:26.00, desc:'Served with mac and cheese and green beans.', prep:'Entree', spice:'Medium', calories:'Unspecified'},
+          {name:'Grilled Salmon with Crabmeat', price:28.00, desc:'With avocado cream sauce and sides.', prep:'Entree', spice:'Low', calories:'Unspecified'}
         ]
       },
       {
-        id:'catering',
-        label:'Catering',
-        sub:'Large orders',
-        emoji:'🚀',
-        glow:'rgba(160,137,255,.16)',
-        description:'Group trays and large-format ordering.',
+        id:'visit',
+        label:'Visit Info',
+        sub:'Hours + contact',
+        emoji:'📍',
+        glow:'rgba(255,218,142,.16)',
+        description:'Core public details from the report for location, hours, takeout, and accessibility.',
         items:[
-          {name:'Party Tender Tray', price:64, desc:'Twenty hand-breaded tenders with sauces and pickles.', prep:'35 min', spice:'Medium', calories:'Shareable'},
-          {name:'Sandwich Pack', price:72, desc:'Six assorted sandwiches cut for sharing with sides.', prep:'40 min', spice:'Mixed', calories:'Shareable'}
+          {name:'Address', price:null, desc:'6779 US Highway 61, St. Francisville, LA 70775', prep:'Location', spice:'—', calories:'—'},
+          {name:'Phone', price:null, desc:'(225) 245-5046', prep:'Contact', spice:'—', calories:'—'},
+          {name:'Email', price:null, desc:'francissmokehouse@att.net', prep:'Contact', spice:'—', calories:'—'},
+          {name:'Hours', price:null, desc:'Mon–Sat 10:00 AM–6:00 PM; Sun 10:00 AM–3:00 PM', prep:'Hours', spice:'—', calories:'—'},
+          {name:'Features', price:null, desc:'Takeout, parking available, wheelchair accessibility noted in public sources.', prep:'Service', spice:'—', calories:'—'}
         ]
       }
     ];
@@ -860,24 +910,27 @@
       return categories.find(c => c.id === state.openCategoryId) || currentCategory();
     }
 
+    function priceText(value) {
+      return value == null ? 'Ask in store' : `$${Number(value).toFixed(2)}`;
+    }
+
     function renderOrbit() {
       orbitPlane.querySelectorAll('.node-anchor').forEach(n => n.remove());
       const count = categories.length;
       const step = 360 / count;
-      const activeRotation = state.index * step;
-      document.documentElement.style.setProperty('--spin', `${-activeRotation}deg`);
 
       categories.forEach((node, index) => {
-        const angle = index * step;
+        const relative = (index - state.index) * step;
+
         const anchor = document.createElement('div');
         anchor.className = 'node-anchor';
-        anchor.style.transform = `rotate(${angle}deg) translateY(calc(var(--radius) * -1))`;
+        anchor.style.transform = `rotate(${relative}deg) translateY(calc(var(--radius) * -1))`;
 
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'node' + (index === state.index ? ' active front' : '');
         btn.style.setProperty('--glow', node.glow);
-        btn.style.transform = `translate(-50%, -50%) rotateX(calc(var(--tilt) * -1)) rotate(${-activeRotation - angle}deg)`;
+        btn.style.transform = `translate(-50%, -50%) rotate(${-relative}deg) rotateX(calc(var(--tilt) * -1)) ${index === state.index ? 'scale(1.06)' : 'scale(1)'}`;
         btn.innerHTML = `
           <div class="emoji">${node.emoji}</div>
           <strong>${node.label}</strong>
@@ -891,6 +944,7 @@
           } else {
             state.openCategoryId = node.id;
             renderPanel();
+            coreSub.textContent = 'Category open';
           }
         });
 
@@ -909,7 +963,7 @@
       panelTitle.textContent = category.label;
       panelSubtitle.textContent = category.description;
       panelFoot.textContent = state.openCategoryId === currentCategory().id
-        ? 'Click any item for details, pricing, and metadata.'
+        ? 'Item details are based on the research report you pasted. Prices marked “Ask in store” were not visible in the publicly captured menu images.'
         : 'Bring a tile to the front, then click it again to open that category here.';
 
       itemList.innerHTML = '';
@@ -927,7 +981,7 @@
               <span class="tag">${item.calories}</span>
             </div>
           </div>
-          <div class="price">$${Number(item.price).toFixed(2)}</div>
+          <div class="price">${priceText(item.price)}</div>
         `;
         btn.addEventListener('click', () => openModal(item, category));
         itemList.appendChild(btn);
@@ -947,7 +1001,7 @@
     function openModal(item, category) {
       document.getElementById('modalTitle').textContent = item.name;
       document.getElementById('modalDesc').textContent = item.desc;
-      document.getElementById('modalPrice').textContent = `$${Number(item.price).toFixed(2)}`;
+      document.getElementById('modalPrice').textContent = priceText(item.price);
       document.getElementById('modalMeta').innerHTML = `
         <div class="detail"><div class="label">Category</div><div class="value">${category.label}</div></div>
         <div class="detail"><div class="label">Prep</div><div class="value">${item.prep}</div></div>
