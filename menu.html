@@ -3,100 +3,1381 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Menu</title>
-  <meta name="description" content="Clean daily menu" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>The Francis Smokehouse — Signature Experience</title>
+  <meta name="description" content="A fully custom premium interactive menu experience for The Francis Smokehouse in St. Francisville, Louisiana." />
   <style>
-    :root{--bg:#f6f2eb;--paper:#fffdf9;--ink:#1f1a17;--muted:#6d655f;--line:#e6ddd3;--accent:#8f4a28;--accent-soft:#f4e6dc;--shadow:0 10px 30px rgba(31,26,23,.08);--radius:22px}
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
-    body{padding:24px 14px 80px}.wrap{max-width:960px;margin:0 auto}
-    .hero{background:linear-gradient(180deg,#fffdf9,#faf5ef);border:1px solid var(--line);border-radius:28px;padding:28px 22px;box-shadow:var(--shadow);text-align:center;margin-bottom:18px}
-    h1{font-size:clamp(28px,4vw,42px);line-height:1.05;letter-spacing:-.03em;margin-bottom:10px}
-    .sub{color:var(--muted);font-size:15px;line-height:1.6;max-width:720px;margin:0 auto}
-    .tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:18px 0 20px}
-    .tab{border:1px solid var(--line);background:#fff;color:var(--ink);padding:11px 16px;border-radius:999px;font-weight:700;cursor:pointer;transition:.18s ease}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-    .panel[hidden]{display:none!important}.day-header{text-align:center;margin-bottom:18px}.day-title{font-size:clamp(24px,3vw,34px);font-weight:800;letter-spacing:-.03em}
-    .hours,.status,.note{margin-top:8px;color:var(--muted);line-height:1.6}.status{display:inline-block;padding:8px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:700}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{grid-column:span 12;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
-    @media(min-width:760px){.card.half{grid-column:span 6}}
-    .card h3{font-size:20px;margin-bottom:6px;letter-spacing:-.02em}.card .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:800;margin-bottom:10px}
-    .list{list-style:none;display:grid;gap:10px;margin-top:10px}.list li{padding:12px 13px;border-radius:16px;background:#faf7f2;border:1px solid #efe7de;line-height:1.5}
-    details summary{cursor:pointer;font-weight:700;list-style:none}details summary::-webkit-details-marker{display:none}.desc{margin-top:8px;color:var(--muted);font-size:14px}
-    .empty{text-align:center;color:var(--muted);padding:20px;background:#faf7f2;border:1px dashed var(--line);border-radius:18px}.special{background:linear-gradient(180deg,#fff8f2,#fff);border-color:#edd8ca}
-    .special-badge{display:inline-block;margin-bottom:10px;background:var(--accent);color:#fff;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    :root{
+      --bg:#070504;
+      --bg2:#120b08;
+      --panel:rgba(255,255,255,.065);
+      --panel-2:rgba(255,255,255,.045);
+      --line:rgba(255,255,255,.12);
+      --text:#f7efe7;
+      --muted:rgba(247,239,231,.74);
+      --soft:rgba(247,239,231,.56);
+      --accent:#ff8a3d;
+      --accent-2:#ffbf82;
+      --accent-3:#ffd7b3;
+      --green:#53d49d;
+      --red:#ff9999;
+      --gold:#f3c86d;
+      --shadow:0 24px 80px rgba(0,0,0,.45);
+      --radius:30px;
+      --radius-sm:18px;
+      --navH:76px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 10% 0%, rgba(255,138,61,.15), transparent 60%),
+        radial-gradient(1000px 700px at 100% 0%, rgba(83,212,157,.10), transparent 60%),
+        radial-gradient(800px 600px at 50% 100%, rgba(255,191,130,.05), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2) 42%, #060403);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.08;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:screen;
+    }
+
+    a{color:inherit}
+    button,input{font:inherit}
+    .app{width:min(1440px, calc(100vw - 24px)); margin:0 auto; padding:14px 0 110px}
+    .glass{
+      background:linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.04));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      box-shadow:var(--shadow);
+    }
+
+    .topbar{
+      position:sticky; top:10px; z-index:100;
+      padding:10px;
+      margin-bottom:16px;
+    }
+
+    .nav{
+      display:flex; gap:12px; justify-content:space-between; align-items:center; flex-wrap:wrap;
+      min-height:calc(var(--navH) - 20px);
+    }
+
+    .brand{
+      display:flex; gap:14px; align-items:center;
+      min-width:0;
+    }
+
+    .brand-mark{
+      width:54px; height:54px; border-radius:18px;
+      display:grid; place-items:center;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,215,184,.25), transparent 40%),
+        linear-gradient(180deg, #ff9a4d, #b94f14);
+      box-shadow:0 14px 36px rgba(255,138,61,.35);
+      font-size:24px;
+      flex:0 0 auto;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:19px;
+      line-height:1;
+      letter-spacing:-.03em;
+    }
+
+    .brand p{
+      margin:5px 0 0;
+      color:var(--soft);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.03em;
+    }
+
+    .nav-links{
+      display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px;
+    }
+
+    .chip,.btn,.tab,.filter,.ghost-btn,.mini-btn{
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      text-decoration:none;
+      padding:11px 15px;
+      display:inline-flex; gap:8px; align-items:center; justify-content:center;
+      cursor:pointer;
+      font-weight:850;
+      letter-spacing:.01em;
+      transition:.18s ease;
+      box-shadow:none;
+    }
+
+    .chip:hover,.btn:hover,.tab:hover,.filter:hover,.ghost-btn:hover,.mini-btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .btn.primary,.tab.active,.filter.active{
+      background:linear-gradient(180deg, rgba(255,138,61,.95), rgba(178,72,18,.98));
+      border-color:rgba(255,215,184,.42);
+      box-shadow:0 12px 28px rgba(255,138,61,.25);
+    }
+
+    .btn.secondary{
+      background:linear-gradient(180deg, rgba(83,212,157,.45), rgba(32,109,76,.92));
+      border-color:rgba(180,255,225,.26);
+    }
+
+    .ghost-btn{
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.2fr .85fr;
+      gap:16px;
+      margin-bottom:16px;
+    }
+
+    .hero-main,.hero-side{padding:28px}
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:8px;
+      border-radius:999px;
+      padding:8px 12px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);
+      text-transform:uppercase;
+      letter-spacing:.15em;
+      font-size:11px;
+      font-weight:900;
+      color:var(--accent-2);
+    }
+
+    .hero-title{
+      margin:18px 0 10px;
+      font-size:clamp(38px, 7vw, 86px);
+      line-height:.92;
+      letter-spacing:-.06em;
+      max-width:900px;
+    }
+
+    .hero-copy{
+      margin:0;
+      max-width:760px;
+      color:var(--muted);
+      line-height:1.8;
+      font-size:16px;
+    }
+
+    .hero-actions{
+      display:flex; gap:12px; flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .signal{
+      margin-top:16px;
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+
+    .badge{
+      padding:10px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    .nowbar{
+      margin-top:20px;
+      padding:14px 16px;
+      border-radius:18px;
+      font-weight:900;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      font-size:14px;
+      letter-spacing:.02em;
+    }
+
+    .nowbar.open{
+      color:#c5ffe3;
+      box-shadow:0 0 18px rgba(83,212,157,.25);
+    }
+
+    .nowbar.closed{
+      color:#ffd2d2;
+      box-shadow:0 0 18px rgba(255,153,153,.14);
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+    }
+
+    .stat{
+      padding:18px;
+      border-radius:22px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.09);
+      min-height:128px;
+    }
+
+    .stat .k{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      font-weight:900;
+      color:var(--soft);
+    }
+
+    .stat .v{
+      margin-top:10px;
+      font-size:22px;
+      font-weight:950;
+      letter-spacing:-.03em;
+      line-height:1.05;
+    }
+
+    .stat .s{
+      margin-top:8px;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:13px;
+    }
+
+    .section{margin-top:16px}
+    .section-head{
+      display:flex;
+      gap:12px;
+      justify-content:space-between;
+      align-items:end;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .section-title{
+      margin:0;
+      font-size:clamp(28px, 4vw, 44px);
+      line-height:1;
+      letter-spacing:-.05em;
+    }
+
+    .section-copy{
+      margin:8px 0 0;
+      max-width:840px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .panel{padding:22px}
+
+    .orchestra{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:16px;
+      align-items:start;
+    }
+
+    .sidebar-stack{
+      display:grid;
+      gap:12px;
+    }
+
+    .search{
+      width:100%;
+      padding:16px 16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.05);
+      color:#fff;
+      outline:none;
+      font-weight:700;
+      font-size:15px;
+    }
+    .search::placeholder{color:rgba(255,255,255,.5)}
+
+    .tabs,.filters{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+
+    .cat-list{
+      display:grid; gap:10px;
+      max-height:810px;
+      overflow:auto;
+      padding-right:4px;
+    }
+
+    .cat-card{
+      width:100%;
+      text-align:left;
+      padding:16px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.045);
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .cat-card:hover{transform:translateY(-2px)}
+    .cat-card.active{
+      background:
+        radial-gradient(320px 140px at 0% 0%, rgba(255,138,61,.14), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border-color:rgba(255,215,184,.28);
+      box-shadow:0 12px 28px rgba(255,138,61,.12);
+    }
+
+    .cat-top{
+      display:flex; gap:10px; justify-content:space-between; align-items:start;
+    }
+
+    .cat-name{
+      font-size:18px;
+      font-weight:950;
+      letter-spacing:-.02em;
+    }
+
+    .cat-count{
+      color:var(--accent-2);
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.11em;
+      white-space:nowrap;
+    }
+
+    .cat-meta{
+      margin-top:8px;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:13px;
+    }
+
+    .stage{
+      min-height:720px;
+      padding:20px;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.1);
+      background:
+        radial-gradient(700px 240px at 0% 0%, rgba(255,138,61,.12), transparent 58%),
+        radial-gradient(700px 260px at 100% 100%, rgba(83,212,157,.08), transparent 58%),
+        rgba(255,255,255,.035);
+    }
+
+    .stage-head{
+      display:flex; gap:16px; justify-content:space-between; align-items:start; flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .stage-title{
+      margin:0;
+      font-size:36px;
+      letter-spacing:-.05em;
+      line-height:.98;
+    }
+
+    .stage-sub{
+      margin-top:8px;
+      color:var(--muted);
+      line-height:1.75;
+      max-width:780px;
+      font-size:15px;
+    }
+
+    .tagrow{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;
+    }
+
+    .tag{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.11em;
+      text-transform:uppercase;
+      color:var(--soft);
+    }
+
+    .feature-strip{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin:16px 0 12px;
+    }
+
+    .feature-card{
+      padding:18px;
+      border-radius:22px;
+      border:1px solid rgba(255,206,173,.18);
+      background:linear-gradient(180deg, rgba(255,138,61,.12), rgba(255,255,255,.04));
+    }
+
+    .feature-card .k{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-weight:900;
+      color:var(--accent-2);
+    }
+
+    .feature-card h4{
+      margin:8px 0 6px;
+      font-size:18px;
+      letter-spacing:-.03em;
+    }
+
+    .feature-card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    .menu-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .menu-item{
+      padding:16px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .menu-item::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent 25%, rgba(255,255,255,.08) 48%, transparent 70%);
+      transform:translateX(-120%);
+      animation:shimmer 7s linear infinite;
+      pointer-events:none;
+    }
+
+    @keyframes shimmer{
+      to{transform:translateX(120%)}
+    }
+
+    .item-top{
+      display:flex; gap:10px; justify-content:space-between; align-items:start;
+    }
+
+    .item-name{
+      font-size:18px;
+      font-weight:950;
+      letter-spacing:-.02em;
+    }
+
+    .price{
+      white-space:nowrap;
+      color:var(--accent-2);
+      font-size:17px;
+      font-weight:950;
+    }
+
+    .item-desc{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.68;
+    }
+
+    .item-note{
+      margin-top:10px;
+      color:var(--soft);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.03em;
+    }
+
+    .empty{
+      padding:20px;
+      border-radius:20px;
+      border:1px dashed rgba(255,255,255,.16);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    .mini-grid,.grid-2,.grid-3,.grid-4{
+      display:grid;
+      gap:14px;
+    }
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .mini-grid{grid-template-columns:repeat(5,1fr)}
+
+    .info-card{
+      padding:20px;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);
+    }
+
+    .info-card h3{
+      margin:0 0 10px;
+      font-size:22px;
+      letter-spacing:-.03em;
+    }
+
+    .info-card p,.info-card li{
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .info-card ul{margin:0; padding-left:18px}
+
+    .hours-grid{
+      display:grid; gap:10px;
+    }
+
+    .hour-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      padding:14px 16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.05);
+      align-items:center;
+    }
+
+    .hour-row.today{
+      border-color:rgba(255,215,184,.25);
+      box-shadow:0 0 24px rgba(255,138,61,.09);
+    }
+
+    .hour-day{
+      font-weight:950;
+      font-size:16px;
+    }
+
+    .hour-time{
+      font-weight:950;
+      color:var(--accent-2);
+    }
+
+    .review-score{
+      display:flex; gap:14px; align-items:center;
+      margin-bottom:14px;
+    }
+
+    .score{
+      width:84px; height:84px;
+      border-radius:24px;
+      display:grid; place-items:center;
+      background:linear-gradient(180deg, rgba(255,138,61,.96), rgba(173,69,16,.98));
+      box-shadow:0 14px 32px rgba(255,138,61,.28);
+      font-size:30px;
+      font-weight:950;
+    }
+
+    .quote{
+      margin-top:10px;
+      padding:16px;
+      border-radius:18px;
+      border-left:4px solid var(--accent);
+      background:rgba(255,255,255,.05);
+    }
+
+    .quote p{
+      margin:0;
+      color:var(--text);
+      line-height:1.7;
+      font-style:italic;
+    }
+
+    .quote .src{
+      margin-top:8px;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      color:var(--soft);
+      font-weight:900;
+    }
+
+    .timeline{
+      display:grid; gap:12px;
+    }
+
+    .t-row{
+      display:grid;
+      grid-template-columns:110px 1fr;
+      gap:14px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.05);
+    }
+
+    .t-year{
+      font-weight:950;
+      color:var(--accent-2);
+      letter-spacing:.03em;
+    }
+
+    .disclaimer{
+      margin-top:16px;
+      padding:18px 20px;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);
+      color:var(--soft);
+      line-height:1.75;
+      font-size:14px;
+    }
+
+    .footer{
+      margin-top:16px;
+      padding:24px;
+      text-align:center;
+      color:var(--soft);
+      line-height:1.8;
+    }
+
+    .dock{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:90;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .fab{
+      width:58px; height:58px;
+      border-radius:18px;
+      display:grid; place-items:center;
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(10,8,7,.9);
+      box-shadow:var(--shadow);
+      font-size:22px;
+      transition:.18s ease;
+    }
+    .fab:hover{transform:translateY(-2px)}
+
+    @media (max-width: 1180px){
+      .hero{grid-template-columns:1fr}
+      .orchestra{grid-template-columns:1fr}
+      .feature-strip,.menu-grid,.mini-grid,.grid-4{grid-template-columns:repeat(2,1fr)}
+      .grid-3{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 760px){
+      .app{width:min(100vw - 14px, 1440px)}
+      .hero-main,.hero-side,.panel{padding:18px}
+      .hero-grid,.feature-strip,.menu-grid,.grid-2,.grid-4,.mini-grid{grid-template-columns:1fr}
+      .t-row,.hour-row,.item-top,.stage-head,.cat-top{grid-template-columns:1fr; flex-direction:column}
+      .fab{width:52px; height:52px; border-radius:16px}
+      .dock{right:10px; bottom:10px}
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="app" id="top">
+    <div class="glass topbar">
+      <div class="nav">
+        <div class="brand">
+          <div class="brand-mark">🔥</div>
+          <div>
+            <h1>The Francis Smokehouse</h1>
+            <p>St. Francisville, Louisiana • Completely custom signature build</p>
+          </div>
+        </div>
+
+        <div class="nav-links">
+          <a class="chip" href="#menu">Menu Lab</a>
+          <a class="chip" href="#plan">Plan Visit</a>
+          <a class="chip" href="#reviews">Reviews</a>
+          <a class="chip" href="#insights">Insights</a>
+          <a class="chip" href="#history">History</a>
+        </div>
+      </div>
+    </div>
+
     <section class="hero">
-      <h1 id="siteTitle">Menu</h1>
-      <p class="sub">A clean, simple menu that reads from <strong>menu-data.html</strong>.</p>
+      <div class="glass hero-main">
+        <div class="eyebrow">Smokehouse intelligence • premium single-page experience</div>
+        <h2 class="hero-title">Not a template.<br>Not a reskin.<br>A custom build.</h2>
+        <p class="hero-copy">
+          This page starts from scratch and turns your research into a high-end interactive experience for The Francis Smokehouse.
+          It’s designed to feel editorial, useful, immersive, and sharp—more like a flagship digital menu lounge than a restaurant page.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="tel:2252455046">Call The Francis Smokehouse</a>
+          <a class="btn secondary" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+Saint+Francisville%2C+LA+70775">Open Directions</a>
+          <a class="btn" target="_blank" rel="noopener" href="mailto:francissmokehouse@att.net">Email</a>
+        </div>
+
+        <div class="signal">
+          <div class="badge">BBQ Plates</div>
+          <div class="badge">Boudin Favorites</div>
+          <div class="badge">Po-Boys & Sandwiches</div>
+          <div class="badge">Desserts & Specials</div>
+        </div>
+
+        <div id="openStatus" class="nowbar">Checking current status…</div>
+      </div>
+
+      <div class="glass hero-side">
+        <div class="hero-grid">
+          <div class="stat">
+            <div class="k">Address</div>
+            <div class="v" style="font-size:20px">6779 US Highway 61</div>
+            <div class="s">St. Francisville, LA 70775</div>
+          </div>
+          <div class="stat">
+            <div class="k">Phone</div>
+            <div class="v">(225) 245-5046</div>
+            <div class="s">Best option for same-day availability checks</div>
+          </div>
+          <div class="stat">
+            <div class="k">Hours</div>
+            <div class="v" style="font-size:20px">Mon–Sat 10–6</div>
+            <div class="s">Sunday 10–3 based on the research you provided</div>
+          </div>
+          <div class="stat">
+            <div class="k">Standout Items</div>
+            <div class="v" style="font-size:20px">Brisket • Boudin</div>
+            <div class="s">Plus ribs, po-boys, corn pudding, and rotating specials</div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <nav class="tabs" aria-label="Menu tabs">
-      <button class="tab active" data-panel="todayPanel">Today</button>
-      <button class="tab" data-panel="tomorrowPanel">Tomorrow</button>
-      <button class="tab" data-panel="specialPanel">Daily Special</button>
-    </nav>
-
-    <section id="todayPanel" class="panel">
-      <div class="day-header">
-        <div class="day-title" id="todayTitle">Today</div>
-        <div class="hours" id="todayHours"></div>
-        <div class="status" id="todayStatus"></div>
-        <div class="note" id="todayNote"></div>
+    <section class="section" id="menu">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Menu Lab</h2>
+          <p class="section-copy">
+            Browse the menu like a curator. Filter by mood, category, and search terms, then jump into a fully custom presentation of the dishes surfaced in your report.
+          </p>
+        </div>
       </div>
-      <div class="grid" id="todayGrid"></div>
+
+      <div class="glass panel">
+        <div class="orchestra">
+          <aside class="sidebar-stack">
+            <input id="menuSearch" class="search" type="text" placeholder="Search brisket, boudin, po-boy, dessert, salmon…" />
+
+            <div class="tabs" id="tabs"></div>
+            <div class="filters" id="filters"></div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap">
+              <button class="btn primary" id="surpriseBtn">Choose for me</button>
+              <button class="ghost-btn" id="resetBtn">Reset</button>
+            </div>
+
+            <div class="cat-list" id="catList"></div>
+          </aside>
+
+          <main class="stage" id="stage"></main>
+        </div>
+      </div>
     </section>
 
-    <section id="tomorrowPanel" class="panel" hidden>
-      <div class="day-header">
-        <div class="day-title" id="tomorrowTitle">Tomorrow</div>
-        <div class="hours" id="tomorrowHours"></div>
-        <div class="status" id="tomorrowStatus"></div>
-        <div class="note" id="tomorrowNote"></div>
+    <section class="section" id="plan">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Plan the visit</h2>
+          <p class="section-copy">
+            The practical layer: hours, service assumptions, what to confirm, and what kind of visit this place seems to support best.
+          </p>
+        </div>
       </div>
-      <div class="grid" id="tomorrowGrid"></div>
+
+      <div class="grid-2">
+        <div class="glass panel">
+          <div class="hours-grid" id="hoursGrid"></div>
+          <div class="disclaimer">
+            Hours shown here are based on the information you provided: Monday through Saturday 10:00 AM to 6:00 PM, Sunday 10:00 AM to 3:00 PM.
+            Same-day changes, sell-outs, and holiday shifts are still worth confirming by phone.
+          </div>
+        </div>
+
+        <div class="glass panel">
+          <div class="grid-2">
+            <div class="info-card">
+              <h3>Takeout</h3>
+              <p>Strongest service signal in the research. This seems like one of the safest planning assumptions.</p>
+            </div>
+            <div class="info-card">
+              <h3>Reservations</h3>
+              <p>Not strongly presented as a reservation-driven experience. For larger groups, calling is smarter than assuming.</p>
+            </div>
+            <div class="info-card">
+              <h3>Delivery</h3>
+              <p>Mixed source signals. Treat delivery as uncertain until confirmed directly.</p>
+            </div>
+            <div class="info-card">
+              <h3>Catering</h3>
+              <p>Large-order evidence exists, but no formal terms or current catering pricing were established in your source material.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="specialPanel" class="panel" hidden>
-      <div class="day-header">
-        <div class="day-title">Daily Special</div>
-        <div class="hours" id="specialDate"></div>
+    <section class="section" id="reviews">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Reputation lens</h2>
+          <p class="section-copy">
+            Not just ratings—patterns. This section reframes the review data into what guests consistently praise and what tends to go wrong.
+          </p>
+        </div>
       </div>
-      <div class="grid">
-        <div class="card special" id="specialCard"></div>
+
+      <div class="grid-2">
+        <div class="glass panel">
+          <div class="review-score">
+            <div class="score">4.5</div>
+            <div>
+              <h3 style="margin:0 0 6px; font-size:30px; letter-spacing:-.04em">Tripadvisor signal</h3>
+              <div style="color:var(--muted)">143 reviews • strong long-term public sentiment in the report</div>
+            </div>
+          </div>
+
+          <div class="quote">
+            <p>“Brisket practically melted in my mouth.”</p>
+            <div class="src">Recurring brisket praise signal</div>
+          </div>
+
+          <div class="quote">
+            <p>“Boudin balls … absolutely delicious.”</p>
+            <div class="src">Signature-item praise signal</div>
+          </div>
+
+          <div class="quote">
+            <p>Most criticism clusters around slower service, item sell-outs, and some price friction rather than around severe quality concerns.</p>
+            <div class="src">Cross-source pattern from your report</div>
+          </div>
+        </div>
+
+        <div class="glass panel">
+          <div class="review-score">
+            <div class="score">4.7</div>
+            <div>
+              <h3 style="margin:0 0 6px; font-size:30px; letter-spacing:-.04em">Google-style rating signal</h3>
+              <div style="color:var(--muted)">505 reviews shown via a syndicated directory source in your report</div>
+            </div>
+          </div>
+
+          <div class="info-card" style="padding:0; border:none; background:transparent">
+            <h3>Most likely crowd-pleasers</h3>
+            <ul>
+              <li>Boudin balls and other Cajun specialty items</li>
+              <li>Brisket and smoked-meat plates</li>
+              <li>Sides, especially corn pudding</li>
+              <li>Friendly service and strong local flavor</li>
+              <li>Casual barbecue comfort-food energy</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
+
+    <section class="section" id="insights">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Operational insights</h2>
+          <p class="section-copy">
+            The research turned into planning-friendly takeaways: atmosphere, pricing feel, accessibility, and what kind of experience a guest should expect.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-4">
+        <div class="glass panel info-card">
+          <h3>Atmosphere</h3>
+          <p>Casual, local, and relaxed. The report points to a place that feels approachable rather than formal.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Accessibility</h3>
+          <p>Public listings indicate wheelchair accessibility, with some third-party references to parking, restroom, and seating access.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Price feel</h3>
+          <p>Mid-range overall. Sandwiches stay accessible while plates and specials move higher.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Best strategy</h3>
+          <p>Go with a target order in mind, and consider calling ahead if you care about specific items not selling out.</p>
+        </div>
+      </div>
+
+      <div class="mini-grid" style="margin-top:14px">
+        <div class="glass panel info-card">
+          <h3>Best first order</h3>
+          <p>Brisket plate if you want the strongest overlap between menu visibility and review praise.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Most iconic bite</h3>
+          <p>Boudin balls. They show up repeatedly as a signature favorite.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Most likely side pick</h3>
+          <p>Corn pudding appears to have unusual standout praise compared with a typical side dish.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Biggest uncertainty</h3>
+          <p>Delivery and same-day item availability.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Best confirmation move</h3>
+          <p>Call directly before making a destination trip around a specific item or special.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="history">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">History & context</h2>
+          <p class="section-copy">
+            A cleaned-up timeline that frames the Smokehouse within the public signals surfaced in your report.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="glass panel">
+          <div class="timeline">
+            <div class="t-row">
+              <div class="t-year">2015</div>
+              <div style="color:var(--muted); line-height:1.75">Review history in the report indicates The Francis Smokehouse was operating by October 2015.</div>
+            </div>
+            <div class="t-row">
+              <div class="t-year">2015 era</div>
+              <div style="color:var(--muted); line-height:1.75">A neighboring concept, The Francis Southern Table &amp; Bar, appears in the same broader public timeline.</div>
+            </div>
+            <div class="t-row">
+              <div class="t-year">2024–2025</div>
+              <div style="color:var(--muted); line-height:1.75">Recent review activity suggests continuing public interest, active traffic, and ongoing menu relevance.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass panel">
+          <div class="info-card" style="padding:0; background:transparent; border:none">
+            <h3>Other Smokehouse match</h3>
+            <p>
+              Your report also surfaced Hill Country Smokehouse, LLC in St. Francisville. Because the status looked inconsistent across directories,
+              it’s best treated as uncertain until verified directly.
+            </p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px">
+              <a class="btn" href="tel:2256352880">Call Hill Country listing</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glass disclaimer">
+      <strong>Note:</strong> this is a custom presentation layer built from the information you provided in your reference report. It is intentionally not derived from your earlier rough-draft restaurant code.
+      Menu items, prices, hours, and service availability should still be treated as subject to change.
+    </div>
+
+    <div class="glass footer">
+      Designed as a from-scratch signature HTML build for The Francis Smokehouse • polished for presentation, iteration, and future expansion.
+    </div>
+  </div>
+
+  <div class="dock">
+    <a class="fab" href="#top" title="Back to top">↑</a>
+    <a class="fab" href="tel:2252455046" title="Call">☎</a>
   </div>
 
   <script>
-    const $ = id => document.getElementById(id);
-    function escapeHtml(str){return String(str ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;")}
-    function toISODateLocal(d){const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,"0");const day=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${day}`}
-    function formatDateNice(d){return d.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"})}
-    function parseISODateLocal(iso){const [y,m,d]=String(iso).split("-").map(Number);return new Date(y,(m||1)-1,d||1)}
-    function normalizeDateKey(key){const m=String(key||"").trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);if(!m)return null;return `${m[1]}-${String(Number(m[2])).padStart(2,"0")}-${String(Number(m[3])).padStart(2,"0")}`}
-    function normalizeItems(arr){return Array.isArray(arr)?arr.map(x=>String(x||"").trim()).filter(Boolean):[]}
-    function normalizeLunchItems(arr){const items=Array.isArray(arr)?arr:[];return items.map(raw=>{if(raw&&typeof raw==="object"){return {name:String(raw.name||"").trim(),desc:String(raw.desc||"").trim()}}const s=String(raw||"").trim();if(!s)return null;return {name:s,desc:""}}).filter(Boolean).filter(x=>x.name)}
-    function parseTimeToMinutes(timeStr){if(!timeStr)return null;const m=String(timeStr).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);if(!m)return null;let h=parseInt(m[1],10);const min=parseInt(m[2],10);const ap=m[3].toUpperCase();if(ap==="PM"&&h!==12)h+=12;if(ap==="AM"&&h===12)h=0;return h*60+min}
-    function getBusinessHours(dayName){const lower=String(dayName||"").toLowerCase();const open=lower==="sunday"?"7:00 AM":(lower==="saturday"?"6:00 AM":"5:30 AM");const close=lower==="sunday"?"3:00 PM":"2:00 PM";return {open,close,breakfast:`${open} - 10:30 AM`,lunch:`11:00 AM - ${close}`,crawfish:["thursday","friday","saturday"].includes(lower)?"4:00 PM - 8:00 PM":""}}
-    function getServiceStatus(dayName,isoDate){const todayISO=toISODateLocal(new Date());if(isoDate!==todayISO)return `${dayName} schedule`;const h=getBusinessHours(dayName);const now=new Date();const mins=now.getHours()*60+now.getMinutes();const open=parseTimeToMinutes(h.open);const breakfastEnd=10*60+30;const lunchStart=11*60;const close=parseTimeToMinutes(h.close);if(open!=null&&mins<open)return `Closed • Opens at ${h.open}`;if(mins<breakfastEnd)return "Breakfast is being served";if(mins<lunchStart)return "Breakfast is over • Lunch starts at 11:00 AM";if(close!=null&&mins<=close)return "Lunch is being served";return "Closed for today"}
-    function getClosure(data,dayName){const c=data?.closures||{};const key=Object.keys(c).find(k=>k.toLowerCase()===String(dayName||"").toLowerCase());return key?c[key]:null}
-    function getMenuByDate(data,isoDate){return (data?.menus||{})[isoDate]||null}
-    async function fetchHtml(url){const res=await fetch(url,{credentials:"same-origin",cache:"no-store"});if(!res.ok)throw new Error(`Fetch failed ${res.status} at ${url}`);return await res.text()}
-    function extractJsonFromHtml(html,label){const doc=new DOMParser().parseFromString(html,"text/html");const script=doc.querySelector("#hh-menu-data");if(!script)throw new Error(`No #hh-menu-data found on ${label}`);const raw=(script.textContent||"").trim();if(!raw)throw new Error(`#hh-menu-data is empty on ${label}`);return JSON.parse(raw)}
-    async function readData(){const urls=["menu-data.html","./menu-data.html","/menu-data.html"];let lastErr=null;for(const url of urls){try{const html=await fetchHtml(url);const data=extractJsonFromHtml(html,url);const rawMenus=data?.menus||{};const normalizedMenus={};Object.keys(rawMenus).forEach(k=>{const nk=normalizeDateKey(k);if(nk)normalizedMenus[nk]=rawMenus[k]});data.menus=normalizedMenus;return data}catch(e){lastErr=e}}throw lastErr||new Error("Menu data could not be read from menu-data.html.")}
-    function card(title,body,cls="half"){return `<section class="card ${cls}"><div class="eyebrow">Menu Section</div><h3>${escapeHtml(title)}</h3>${body}</section>`}
-    function simpleList(items){if(!items.length)return '<div class="empty">Nothing posted yet.</div>';return `<ul class="list">${items.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>`}
-    function detailsList(items,fallback){if(!items.length)return '<div class="empty">Nothing posted yet.</div>';return `<ul class="list">${items.map(it=>{if(typeof it==="string")return `<li>${escapeHtml(it)}</li>`;return `<li><details><summary>${escapeHtml(it.name)}</summary><div class="desc">${escapeHtml(it.desc||fallback)}</div></details></li>`}).join("")}</ul>`}
-    function renderMenuGrid(el,data,isoDate){const menu=getMenuByDate(data,isoDate)||{};const defaults=data?.defaults||{};const breakfastPlates=normalizeItems(menu.breakfast?.plates??defaults.breakfast?.plates??[]);const breakfastItems=normalizeItems(menu.breakfast?.items??defaults.breakfast?.items??[]);const lunchPlates=normalizeItems(menu.lunch?.plates??defaults.lunch?.plates??[]);const lunchItems=normalizeLunchItems(menu.lunch?.items??defaults.lunch?.items??[]);const drinks=normalizeItems(menu.drinks?.items??defaults.drinks?.items??[]);const desserts=normalizeItems(menu.dessert?.items??defaults.dessert?.items??[]);const saladPricing=normalizeItems(menu.salad?.items??defaults.salad?.items??[]);const lettuce=normalizeItems(menu.salad?.saladBar?.lettuce??defaults.salad?.saladBar?.lettuce??[]);const toppings=normalizeItems(menu.salad?.saladBar?.toppings??defaults.salad?.saladBar?.toppings??[]);const dressing=normalizeItems(menu.salad?.saladBar?.dressing??defaults.salad?.saladBar?.dressing??[]);const crawfishItems=normalizeItems(menu.crawfish?.items??defaults.crawfish?.items??[]);const showCrawfish=menu.crawfish?.show===false?false:crawfishItems.length>0;el.innerHTML=[card("Breakfast Plates",simpleList(breakfastPlates)),card("Breakfast Items",simpleList(breakfastItems)),card("Lunch Plates",simpleList(lunchPlates)),card("Lunch Items",detailsList(lunchItems,data?.settings?.noDescriptionText||"No description for this item.")),card("Drinks",simpleList(drinks)),card("Dessert",simpleList(desserts)),card("Salad Pricing",simpleList(saladPricing)),card("Salad Bar",[lettuce.length?`<div class="section-label">Lettuce</div>${simpleList(lettuce)}`:"",toppings.length?`<div class="section-label">Toppings</div>${simpleList(toppings)}`:"",dressing.length?`<div class="section-label">Dressing</div>${simpleList(dressing)}`:""].join(""),"card"),showCrawfish?card("Crawfish",simpleList(crawfishItems)):""].join("")}
-    function renderSpecial(data,isoDate,dayName){const el=$("specialCard");const menu=getMenuByDate(data,isoDate)||{};const lunch=menu?.lunch||{};const title=String(lunch.specialTitle??menu?.specialTitle??"").trim();const desc=String(lunch.specialDesc??menu?.specialDesc??"").trim();const plates=normalizeItems(lunch.plates||[]);const items=normalizeLunchItems(lunch.items||[]);const closure=getClosure(data,dayName);$("specialDate").textContent=`${dayName} • ${formatDateNice(parseISODateLocal(isoDate))}`;if(closure?.closed){el.innerHTML=`<div class="special-badge">Closed</div><div class="empty">${escapeHtml(closure.message||"Closed for the day.")}</div>`;return}if(!title&&!desc&&!plates.length&&!items.length){el.innerHTML='<div class="special-badge">No Special Posted</div><div class="empty">There is no daily special set for this date yet.</div>';return}el.innerHTML=`<div class="special-badge">Daily Special</div><h3 style="font-size:28px;margin-bottom:8px;">${escapeHtml(title||dayName+" Special")}</h3>${desc?`<p class="subline" style="margin-bottom:14px;">${escapeHtml(desc)}</p>`:""}${plates.length?`<div class="section-label">Plates</div>${simpleList(plates)}`:""}${items.length?`<div class="section-label">Included Items</div>${detailsList(items,data?.settings?.noDescriptionText||"No description for this item.")}`:""}`}
-    function setupTabs(){const tabs=Array.from(document.querySelectorAll(".tab"));tabs.forEach(tab=>{tab.addEventListener("click",()=>{tabs.forEach(t=>t.classList.toggle("active",t===tab));document.querySelectorAll(".panel").forEach(panel=>{panel.hidden=panel.id!==tab.dataset.panel})})})}
-    (async function init(){try{setupTabs();const data=await readData();$("siteTitle").textContent=document.title.replace(/\s[–-].*$/,"")||"Menu";const now=new Date();const todayISO=toISODateLocal(now);const tomorrow=new Date(now);tomorrow.setDate(now.getDate()+1);const tomorrowISO=toISODateLocal(tomorrow);const todayDate=parseISODateLocal(todayISO);const tomorrowDate=parseISODateLocal(tomorrowISO);const todayName=todayDate.toLocaleDateString("en-US",{weekday:"long"});const tomorrowName=tomorrowDate.toLocaleDateString("en-US",{weekday:"long"});const todayHours=getBusinessHours(todayName);const tomorrowHours=getBusinessHours(tomorrowName);$("todayTitle").textContent=formatDateNice(todayDate);$("tomorrowTitle").textContent=formatDateNice(tomorrowDate);$("todayHours").textContent=`Hours: ${todayHours.open} – ${todayHours.close} • Breakfast ${todayHours.breakfast} • Lunch ${todayHours.lunch}${todayHours.crawfish?` • Crawfish ${todayHours.crawfish}`:""}`;$("tomorrowHours").textContent=`Hours: ${tomorrowHours.open} – ${tomorrowHours.close} • Breakfast ${tomorrowHours.breakfast} • Lunch ${tomorrowHours.lunch}${tomorrowHours.crawfish?` • Crawfish ${tomorrowHours.crawfish}`:""}`;$("todayStatus").textContent=getServiceStatus(todayName,todayISO);$("tomorrowStatus").textContent=getServiceStatus(tomorrowName,tomorrowISO);$("todayNote").textContent=data?.hours?.note||"";$("tomorrowNote").textContent=data?.hours?.note||"";renderMenuGrid($("todayGrid"),data,todayISO);renderMenuGrid($("tomorrowGrid"),data,tomorrowISO);renderSpecial(data,todayISO,todayName)}catch(e){console.error(e);document.body.innerHTML=`<div style="max-width:760px;margin:40px auto;padding:24px;border-radius:20px;background:#fff;border:1px solid #e6ddd3;font-family:Inter,sans-serif;"><h2 style="margin-bottom:8px;">Menu couldn’t load</h2><p style="color:#6d655f;">${escapeHtml(String(e?.message||e))}</p></div>`}})();
+    const MENU = {
+      "Smokehouse Plates": {
+        meta: "Two sides included",
+        mood: ["all","signature","plates","best"],
+        description: "The core barbecue plate section surfaced in your report. This is the most direct expression of the smokehouse identity.",
+        tags: ["bbq","smoked","signature","plates"],
+        highlights: [
+          {k:"Best starting point", h:"Brisket plate", p:"The strongest overlap between menu visibility and review praise."},
+          {k:"Classic barbecue lane", h:"Pulled pork plate", p:"A lower-commitment smokehouse staple with broad appeal."},
+          {k:"Go big", h:"Full rack of ribs", p:"The most dramatic plate-style order visible in the menu snapshot."}
+        ],
+        items: [
+          {name:"Full rack of ribs", price:"$19.99", desc:"Big-format rib plate with two sides."},
+          {name:"1/2 rack of ribs", price:"$11.99", desc:"Smaller rib plate with smokehouse sides."},
+          {name:"Pulled pork plate", price:"$9.99", desc:"Pulled pork barbecue plate with two sides."},
+          {name:"Brisket plate", price:"$10.99", desc:"Smoked brisket plate and one of the best-known anchors in the report."},
+          {name:"1/2 chicken plate", price:"$9.99", desc:"Half chicken plate with two sides."},
+          {name:"Smoked wings", price:"$7.99", desc:"A smoked wing option from the surfaced menu board."}
+        ]
+      },
+      "Burgers & Po-Boys": {
+        meta: "One side included",
+        mood: ["all","sandwiches","best"],
+        description: "A deep lunch lane spanning burgers, sandwiches, and po-boys. The board notes sandwiches are dressed with lettuce and tomato.",
+        tags: ["sandwiches","po-boys","burgers","lunch"],
+        highlights: [
+          {k:"Most premium sandwich", h:"Ribeye po-boy", p:"Higher-ticket and higher-presence than the basic sandwich options."},
+          {k:"Crowd-pleaser", h:"Brisket sandwich", p:"Strong smoked-meat identity in a more casual handheld format."},
+          {k:"Seafood lane", h:"Crawfish po-boy", p:"A Louisiana-coded option that expands the menu beyond pure barbecue."}
+        ],
+        items: [
+          {name:"Hamburger", price:"$6.99", desc:"Classic burger with one side."},
+          {name:"Cheeseburger", price:"$7.99", desc:"Burger with cheese and one side."},
+          {name:"Bacon cheeseburger", price:"$8.99", desc:"Bacon-topped cheeseburger with one side."},
+          {name:"Pulled pork sandwich", price:"$7.99", desc:"Pulled pork in sandwich form with one side."},
+          {name:"Brisket sandwich", price:"$8.99", desc:"Smoked brisket served handheld."},
+          {name:"Ribeye po-boy", price:"$10.99", desc:"Premium po-boy option from the surfaced board."},
+          {name:"Chicken sandwich", price:"$7.99", desc:"Chicken sandwich with one side."},
+          {name:"Shrimp po-boy", price:"$8.99", desc:"Seafood sandwich option."},
+          {name:"Crawfish po-boy", price:"$10.99", desc:"Crawfish-forward po-boy from the reported menu image."},
+          {name:"Catfish po-boy", price:"$8.99", desc:"Catfish po-boy with one side."}
+        ]
+      },
+      "Sideboard": {
+        meta: "Small and large pricing shown",
+        mood: ["all","sides","best"],
+        description: "The side section appears to use a two-size system. Corn pudding stands out because it receives more praise than a typical side dish.",
+        tags: ["sides","comfort","shareable"],
+        highlights: [
+          {k:"Standout side", h:"Corn pudding", p:"One of the most memorable praise signals in the review summary."},
+          {k:"Classic balance", h:"Potato salad", p:"A familiar cold-side anchor for smoked meats."},
+          {k:"Texture lane", h:"Sweet potato waffle fries", p:"The most visually distinct fry choice on the list."}
+        ],
+        items: [
+          {name:"Baked beans", price:"$2.75 / $6.99", desc:"Available in small and large."},
+          {name:"Corn pudding", price:"$2.75 / $6.99", desc:"Repeatedly praised and likely a signature side."},
+          {name:"Potato salad", price:"$2.75 / $6.99", desc:"Classic cold-side pairing."},
+          {name:"Cole slaw", price:"$2.75 / $6.99", desc:"Smokehouse standard with a fresh contrast lane."},
+          {name:"French fries", price:"$2.75 / $6.99", desc:"Traditional fry option."},
+          {name:"Sweet potato waffle fries", price:"$2.75 / $6.99", desc:"Sweet potato variation with waffle-cut texture."}
+        ]
+      },
+      "Boudin Counter": {
+        meta: "Specialty Cajun items",
+        mood: ["all","signature","cajun"],
+        description: "This is the personality section. The report repeatedly points to boudin items as part of what makes the place memorable.",
+        tags: ["boudin","cajun","specialty","signature"],
+        highlights: [
+          {k:"Most iconic bite", h:"Boudin balls", p:"The clearest signature-item praise signal in the report."},
+          {k:"Extra flavor lane", h:"Pepper jack boudin balls", p:"A richer, more indulgent twist on the favorite."},
+          {k:"Curiosity order", h:"Boudin egg rolls", p:"An item that instantly adds uniqueness to the menu mix."}
+        ],
+        items: [
+          {name:"Steamed boudin links", price:"Price not shown", desc:"Listed publicly but without a clearly readable price in the provided research."},
+          {name:"Boudin balls", price:"Price not shown", desc:"The most consistently celebrated specialty item in the review summary."},
+          {name:"Pepper jack boudin balls", price:"Price not shown", desc:"Cheesy variation listed in the report."},
+          {name:"Boudin egg rolls", price:"Price not shown", desc:"A specialty Cajun item that broadens the menu character."},
+          {name:"Meat pies", price:"Price not shown", desc:"Listed without clearly surfaced price."},
+          {name:"Crawfish pies", price:"Price not shown", desc:"Seafood pie option referenced in the report."}
+        ]
+      },
+      "Sweet Finish": {
+        meta: "Dessert lane",
+        mood: ["all","dessert"],
+        description: "Dessert options surfaced in the report, with one notable special dessert called out separately in the specials board snapshot.",
+        tags: ["dessert","sweet","bakery"],
+        highlights: [
+          {k:"Most classic", h:"Homemade bread pudding", p:"A natural fit for this style of restaurant and one with take-home energy."},
+          {k:"Regional twist", h:"Creole cream cheesecake", p:"Adds a more local Louisiana identity to the dessert list."},
+          {k:"Bright finish", h:"Strawberry shortcake", p:"The lightest-feeling ending in the lineup."}
+        ],
+        items: [
+          {name:"Homemade bread pudding", price:"Price not shown", desc:"Comforting dessert option with strong smokehouse-dessert logic."},
+          {name:"Creole cream cheesecake", price:"Price not shown", desc:"Regional dessert profile."},
+          {name:"Chocolate cake", price:"Price not shown", desc:"Classic cake option."},
+          {name:"Carrot cake", price:"Price not shown", desc:"Second cake lane from the report."},
+          {name:"Strawberry shortcake", price:"Price not shown", desc:"Fruit-forward dessert choice."}
+        ]
+      },
+      "Chef Moment Specials": {
+        meta: "Sample specials board snapshot",
+        mood: ["all","specials","signature"],
+        description: "These appear to come from a special-board image captured in the research. They read more like chef-driven spotlights than everyday core menu items.",
+        tags: ["specials","premium","seafood","entrees"],
+        highlights: [
+          {k:"Most dramatic plate", h:"Blackened lemon fish", p:"High-end seafood composition with cream spinach and grilled crawfish tails."},
+          {k:"Biggest flex", h:"Jack Daniel’s BBQ shrimp + pork chop", p:"The boldest special in terms of sheer format and abundance."},
+          {k:"Dessert wildcard", h:"Miss Mud Pie", p:"A special-board sweet finish with a visible price."}
+        ],
+        items: [
+          {name:"Sweet Thai chili wings", price:"$16", desc:"Appetizer special."},
+          {name:"Eggplant pirogue with seafood-style stuffing", price:"$26", desc:"More composed entrée-style special."},
+          {name:"Blackened lemon fish with cream spinach and grilled crawfish tails", price:"$28", desc:"High-end seafood special."},
+          {name:"Jack Daniel’s BBQ shrimp + 14oz bone-in pork chop with mac & cheese and green beans", price:"$26", desc:"Large-format surf-and-smoke special."},
+          {name:"Grilled salmon with crabmeat and avocado cream sauce", price:"$28", desc:"Seafood-focused special with sauce and sides."},
+          {name:"Miss Mud Pie", price:"$7", desc:"Dessert special from the example board."}
+        ]
+      }
+    };
+
+    const tabDefs = [
+      {id:"all", label:"Everything"},
+      {id:"signature", label:"Signature"},
+      {id:"best", label:"Best Bet"},
+      {id:"specials", label:"Specials"},
+      {id:"dessert", label:"Desserts"}
+    ];
+
+    const filterDefs = [
+      {id:"all", label:"All"},
+      {id:"bbq", label:"BBQ"},
+      {id:"sandwiches", label:"Sandwiches"},
+      {id:"sides", label:"Sides"},
+      {id:"boudin", label:"Boudin"},
+      {id:"specialty", label:"Specialty"},
+      {id:"dessert", label:"Dessert"},
+      {id:"seafood", label:"Seafood"}
+    ];
+
+    const state = {
+      tab: "all",
+      filter: "all",
+      query: "",
+      active: Object.keys(MENU)[0]
+    };
+
+    const tabsEl = document.getElementById("tabs");
+    const filtersEl = document.getElementById("filters");
+    const catListEl = document.getElementById("catList");
+    const stageEl = document.getElementById("stage");
+    const searchEl = document.getElementById("menuSearch");
+
+    function normalize(s){ return String(s || "").toLowerCase(); }
+
+    function visibleCategories(){
+      return Object.entries(MENU).filter(([name, cat]) => {
+        const tabOk = state.tab === "all" ? true : (cat.mood || []).includes(state.tab);
+        const filterOk = state.filter === "all" ? true : (cat.tags || []).includes(state.filter);
+        const q = normalize(state.query.trim());
+        const queryOk = !q ? true : normalize([
+          name, cat.meta, cat.description, ...(cat.tags || []),
+          ...cat.items.map(item => `${item.name} ${item.desc} ${item.price}`)
+        ].join(" ")).includes(q);
+        return tabOk && filterOk && queryOk;
+      });
+    }
+
+    function syncActive(){
+      const visible = visibleCategories();
+      if(!visible.length){
+        state.active = "";
+        return;
+      }
+      if(!visible.some(([name]) => name === state.active)){
+        state.active = visible[0][0];
+      }
+    }
+
+    function renderTabs(){
+      tabsEl.innerHTML = tabDefs.map(tab => `
+        <button class="tab ${state.tab === tab.id ? 'active' : ''}" data-id="${tab.id}">${tab.label}</button>
+      `).join("");
+      tabsEl.querySelectorAll(".tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.tab = btn.dataset.id;
+          syncActive();
+          renderAll();
+        });
+      });
+    }
+
+    function renderFilters(){
+      filtersEl.innerHTML = filterDefs.map(f => `
+        <button class="filter ${state.filter === f.id ? 'active' : ''}" data-id="${f.id}">${f.label}</button>
+      `).join("");
+      filtersEl.querySelectorAll(".filter").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.filter = btn.dataset.id;
+          syncActive();
+          renderAll();
+        });
+      });
+    }
+
+    function renderCategoryList(){
+      const visible = visibleCategories();
+      if(!visible.length){
+        catListEl.innerHTML = `<div class="empty">Nothing matched your current search and filters. Try a broader search or hit reset.</div>`;
+        return;
+      }
+      catListEl.innerHTML = visible.map(([name, cat]) => `
+        <button class="cat-card ${state.active === name ? 'active' : ''}" data-name="${name}">
+          <div class="cat-top">
+            <div class="cat-name">${name}</div>
+            <div class="cat-count">${cat.items.length} items</div>
+          </div>
+          <div class="cat-meta">${cat.description}</div>
+        </button>
+      `).join("");
+      catListEl.querySelectorAll(".cat-card").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.active = btn.dataset.name;
+          renderCategoryList();
+          renderStage();
+        });
+      });
+    }
+
+    function renderStage(){
+      if(!state.active || !MENU[state.active]){
+        stageEl.innerHTML = `<div class="empty">No category selected.</div>`;
+        return;
+      }
+      const cat = MENU[state.active];
+      const q = normalize(state.query.trim());
+      const items = cat.items.filter(item => !q || normalize(`${item.name} ${item.desc} ${item.price}`).includes(q));
+
+      stageEl.innerHTML = `
+        <div class="stage-head">
+          <div>
+            <h3 class="stage-title">${state.active}</h3>
+            <div class="stage-sub">${cat.description}</div>
+            <div class="tagrow">${(cat.tags || []).map(tag => `<div class="tag">${tag}</div>`).join("")}</div>
+          </div>
+          <div class="tag">${cat.meta}</div>
+        </div>
+
+        <div class="feature-strip">
+          ${(cat.highlights || []).map(h => `
+            <div class="feature-card">
+              <div class="k">${h.k}</div>
+              <h4>${h.h}</h4>
+              <p>${h.p}</p>
+            </div>
+          `).join("")}
+        </div>
+
+        <div class="menu-grid">
+          ${items.length ? items.map(item => `
+            <div class="menu-item">
+              <div class="item-top">
+                <div class="item-name">${item.name}</div>
+                <div class="price">${item.price}</div>
+              </div>
+              <div class="item-desc">${item.desc}</div>
+              <div class="item-note">From the research summary you provided • subject to live in-store changes</div>
+            </div>
+          `).join("") : `<div class="empty">No items in this category matched your search.</div>`}
+        </div>
+      `;
+    }
+
+    function renderAll(){
+      renderTabs();
+      renderFilters();
+      renderCategoryList();
+      renderStage();
+    }
+
+    searchEl.addEventListener("input", e => {
+      state.query = e.target.value;
+      syncActive();
+      renderAll();
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      state.tab = "all";
+      state.filter = "all";
+      state.query = "";
+      searchEl.value = "";
+      syncActive();
+      renderAll();
+    });
+
+    document.getElementById("surpriseBtn").addEventListener("click", () => {
+      const visible = visibleCategories();
+      const flattened = visible.flatMap(([catName, cat]) => cat.items.map(item => ({catName, ...item})));
+      if(!flattened.length) return;
+      const pick = flattened[Math.floor(Math.random() * flattened.length)];
+      state.active = pick.catName;
+      renderAll();
+      const note = document.createElement("div");
+      note.className = "quote";
+      note.innerHTML = `<p><strong>Suggested pick:</strong> ${pick.name} — ${pick.price}</p><div class="src">Pulled from your current filters</div>`;
+      const grid = stageEl.querySelector(".menu-grid");
+      if(grid) stageEl.insertBefore(note, grid);
+    });
+
+    function buildHours(){
+      const rows = [
+        ["Sunday","10:00 AM – 3:00 PM"],
+        ["Monday","10:00 AM – 6:00 PM"],
+        ["Tuesday","10:00 AM – 6:00 PM"],
+        ["Wednesday","10:00 AM – 6:00 PM"],
+        ["Thursday","10:00 AM – 6:00 PM"],
+        ["Friday","10:00 AM – 6:00 PM"],
+        ["Saturday","10:00 AM – 6:00 PM"]
+      ];
+      const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      const todayName = dayNames[new Date().getDay()];
+      document.getElementById("hoursGrid").innerHTML = rows.map(([day, time]) => `
+        <div class="hour-row ${day === todayName ? 'today' : ''}">
+          <div class="hour-day">${day}</div>
+          <div class="hour-time">${time}</div>
+        </div>
+      `).join("");
+    }
+
+    function updateStatus(){
+      const el = document.getElementById("openStatus");
+      const now = new Date();
+      const day = now.getDay(); // 0 = Sun
+      const mins = now.getHours() * 60 + now.getMinutes();
+      const open = 10 * 60;
+      const close = day === 0 ? 15 * 60 : 18 * 60;
+      const openNow = mins >= open && mins < close;
+
+      if(openNow){
+        const left = close - mins;
+        const h = Math.floor(left / 60);
+        const m = left % 60;
+        el.className = "nowbar open";
+        el.textContent = `Open now • Closes in ${h ? h + "h " : ""}${m}m`;
+      } else {
+        el.className = "nowbar closed";
+        if(mins < open){
+          el.textContent = "Currently closed • Opens today at 10:00 AM";
+        } else {
+          el.textContent = day === 6
+            ? "Currently closed • Opens Sunday at 10:00 AM"
+            : "Currently closed • Opens tomorrow at 10:00 AM";
+        }
+      }
+    }
+
+    syncActive();
+    renderAll();
+    buildHours();
+    updateStatus();
+    setInterval(updateStatus, 60000);
   </script>
 </body>
 </html>
