@@ -576,29 +576,6 @@
       cursor: pointer;
     }
 
-
-    .special-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
-      border: 1px solid rgba(255,200,130,.45);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      box-shadow: 0 10px 24px rgba(192,90,42,.24);
-    }
-    .special-off {
-      text-align: center;
-      color: rgba(255,255,255,.82);
-      font-weight: 800;
-      line-height: 1.6;
-    }
-
     .hide { display: none !important; }
   
 .nowbar {
@@ -634,9 +611,9 @@
   <div class="app">
     <div class="sticky">
       <div class="daybar" role="tablist" aria-label="Day selector">
-        <button class="daybtn active" type="button" role="tab" aria-controls="panel-today" aria-selected="true" id="dayBtnToday">Today Today</button>
-        <button class="daybtn" type="button" role="tab" aria-controls="panel-tomorrow" aria-selected="false" id="dayBtnTomorrow">Tomorrow Tomorrow</button>
-        <button class="daybtn" type="button" role="tab" aria-controls="panel-advanced" aria-selected="false" id="dayBtnAdvanced">Daily Special</button>
+        <button class="daybtn active" type="button" role="tab" aria-controls="panel-today" aria-selected="true" id="dayBtnToday">Today</button>
+        <button class="daybtn" type="button" role="tab" aria-controls="panel-tomorrow" aria-selected="false" id="dayBtnTomorrow">Tomorrow</button>
+        <button class="daybtn" type="button" role="tab" aria-controls="panel-advanced" aria-selected="false" id="dayBtnAdvanced">Advanced Menu</button>
       </div>
     </div>
 
@@ -726,19 +703,16 @@
       </div>
     </section>
 
-    
-<section class="panel hide" id="panel-advanced" role="tabpanel" aria-labelledby="dayBtnAdvanced">
-  <div class="header">
-    <div class="title">Daily Special</div>
-    <div class="subline" id="advancedDisclaimer"></div>
-  </div>
-  <div class="swipe-shell">
-    <div class="glasscard" id="dailySpecialCard">
-      <div class="cat-title" id="dailySpecialTitle">Daily Special</div>
-      <div id="dailySpecialContent"></div>
-    </div>
-  </div>
-</section>
+    <section class="panel hide" id="panel-advanced" role="tabpanel" aria-labelledby="dayBtnAdvanced">
+      <div class="header">
+        <div class="title">Advanced Menu Forecast</div>
+        <div class="subline" id="advancedDisclaimer"></div>
+      </div>
+      <div class="swipe-shell">
+        <div class="advanced-tabs" id="advancedTabs"></div>
+        <div class="advanced-card-wrap" id="advancedTrack"></div>
+      </div>
+    </section>
 
     <div class="state hide" id="loadError">
       <div class="title" style="font-size:24px;">Menu couldn’t load</div>
@@ -1331,75 +1305,79 @@
       }
 
       function buildAdvanced(data, startISO) {
-        const titleEl = $("dailySpecialTitle");
-        const contentEl = $("dailySpecialContent");
-        const disclaimerEl = $("advancedDisclaimer");
-        if (!titleEl || !contentEl || !disclaimerEl) return;
+        const tabs = $("advancedTabs");
+        const track = $("advancedTrack");
+        if (!track || !tabs) return;
+        tabs.innerHTML = "";
+        track.innerHTML = "";
+        setText("advancedDisclaimer", "Showing the next 7 days starting from the next active menu day.");
+        const start = parseISODateToLocal(startISO);
+        const lDef = data?.defaults?.lunch || {};
+        const days = 7;
+        const cards = [];
 
-        const d = parseISODateToLocal(startISO);
-        const iso = toISODateLocal(d);
-        const dayName = weekdayName(d);
-        const todayISO = toISODateLocal(new Date());
+        for (let i = 0; i < days; i++) {
+          const d = new Date(start);
+          d.setDate(start.getDate() + i);
 
-        const menu = getMenuByDate(data, iso) || {};
-        const lunch = menu?.lunch || {};
-        const specialTitle = String(lunch.specialTitle ?? menu?.specialTitle ?? "").trim();
-        const specialDesc = String(lunch.specialDesc ?? menu?.specialDesc ?? "").trim();
-        const plates = normalizeItems(lunch.plates || []);
-        const items = normalizeLunchItems(lunch.items || []);
-        const closure = getClosure(data, dayName);
+          const iso = toISODateLocal(d);
+          const dayName = weekdayName(d);
+          const hours = getBusinessHours(dayName);
+          const closure = getClosure(data, dayName);
+          const dayMenu = getMenuByDate(data, iso);
 
-        const isSameDay = iso === todayISO;
-        const afterCloseToday = isSameDay ? isPastClosingToday([], dayName) : false;
-        const hideSpecial = !!closure?.closed || afterCloseToday;
+          const tab = document.createElement("button");
+          tab.className = "advanced-tab" + (i === 0 ? " active" : "");
+          tab.type = "button";
+          tab.textContent = `${dayName.slice(0,3)} ${d.getMonth()+1}/${d.getDate()}`;
+          tabs.appendChild(tab);
 
-        disclaimerEl.textContent = `${dayName} • ${formatDateNice(d)}`;
+          const card = document.createElement("article");
+          card.className = "swipe-card active" + (i === 0 ? "" : " hide");
 
-        if (hideSpecial) {
-          titleEl.textContent = `${dayName} Daily Special`;
-          contentEl.innerHTML = `
-            <div class="special-off">
-              <div class="special-badge">Not Active</div>
-              <div>The daily special is hidden right now.</div>
-              <div>Update the date and special to show a new one.</div>
-            </div>
-          `;
-          return;
+          if (!dayMenu) {
+            card.innerHTML = `
+              <div class="card-meta">${escapeHtml(formatDateNice(d))}</div>
+              <div class="cat-title">${escapeHtml(dayName)}</div>
+              <div class="subline">${escapeHtml(iso)}</div>
+              <div class="section-label">Status</div>
+              <ul class="list">
+                <li>Unable to fetch the menu for this day.</li>
+              </ul>
+            `;
+          } else {
+            const lunch = dayMenu?.lunch || {};
+            const plates = normalizeItems(lunch.plates ?? lDef.plates ?? []);
+            const items = normalizeLunchItems(lunch.items ?? []);
+            card.innerHTML = `
+              <div class="card-meta">${escapeHtml(formatDateNice(d))}</div>
+              <div class="cat-title">${escapeHtml(dayName)}</div>
+              <div class="subline">${closure?.closed ? "Closed" : (hours.lunch ? `Lunch ${escapeHtml(hours.lunch)}` : "")}</div>
+              ${
+                closure?.closed
+                  ? `<div class="section-label">Status</div><ul class="list"><li>${escapeHtml(closure.message || "Closed")}</li></ul>`
+                  : `
+                    <div class="section-label">Plates</div>
+                    <ul class="list">${plates.length ? plates.map(x => `<li>${escapeHtml(x)}</li>`).join("") : `<li>Unable to fetch the menu for this day.</li>`}</ul>
+                    <div class="section-label">Lunch Items</div>
+                    <ul class="list">${items.length ? items.map(x => `<li>${escapeHtml(x.name)}</li>`).join("") : `<li>Unable to fetch the menu for this day.</li>`}</ul>
+                  `
+              }
+            `;
+          }
+
+          track.appendChild(card);
+          cards.push({tab, card});
         }
 
-        if (!specialTitle && !specialDesc && !plates.length && !items.length) {
-          titleEl.textContent = `${dayName} Daily Special`;
-          contentEl.innerHTML = `
-            <div class="special-off">
-              <div class="special-badge">No Special Posted</div>
-              <div>There is no daily special set for this date yet.</div>
-            </div>
-          `;
-          return;
-        }
-
-        titleEl.textContent = specialTitle || `${dayName} Daily Special`;
-
-        let specialHtml = `<div class="special-badge">Featured Today</div>`;
-
-        if (specialDesc) {
-          specialHtml += `<div class="subline" style="margin-bottom:12px;">${escapeHtml(specialDesc)}</div>`;
-        }
-
-        if (plates.length) {
-          specialHtml += `<div class="section-label">Plates</div><ul class="list">${plates.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
-        }
-
-        if (items.length) {
-          specialHtml += `<div class="section-label">Included Items</div><ul class="list">` +
-            items.map(it => {
-              const desc = it.desc ? `<div class="desc">${escapeHtml(it.desc)}</div>` : "";
-              return `<li><strong>${escapeHtml(it.name)}</strong>${desc}</li>`;
-            }).join("") +
-            `</ul>`;
-        }
-
-        contentEl.innerHTML = specialHtml;
+        cards.forEach((entry, idx) => {
+          entry.tab.addEventListener("click", () => {
+            cards.forEach((item, i) => {
+              item.tab.classList.toggle("active", i === idx);
+              item.card.classList.toggle("hide", i !== idx);
+            });
+          });
+        });
       }
 
       
@@ -1573,8 +1551,8 @@ function initPanel(prefix, data, isoDate, displayName) {
             displayTomorrowName = weekdayName(dayAfter);
           }
 
-          
-          
+          setText("dayBtnToday", displayTodayName);
+          setText("dayBtnTomorrow", displayTomorrowName);
 
           initPanel("today", data, displayTodayISO, displayTodayName);
           initPanel("tomorrow", data, displayTomorrowISO, displayTomorrowName);
