@@ -3,47 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Hot Headz Quantum Menu</title>
+  <title>Hot Headz Orbit Navigator</title>
   <style>
     :root{
-      --bg:#040612;
-      --bg2:#0a1431;
-      --panel:rgba(7, 13, 28, 0.62);
-      --panel-strong:rgba(8, 15, 32, 0.84);
-      --panel-soft:rgba(255,255,255,0.05);
-      --line:rgba(255,255,255,0.12);
-      --line-strong:rgba(122,232,255,0.28);
+      --bg:#030611;
       --text:#f4fbff;
-      --muted:#9db4cb;
-      --cyan:#76ecff;
+      --muted:#9fb5cc;
+      --cyan:#78ecff;
       --mint:#9effc3;
-      --violet:#9f8bff;
-      --pink:#ff79da;
-      --gold:#ffda8e;
-      --danger:#ff8f96;
-      --shadow:0 20px 60px rgba(0,0,0,0.45);
-      --radius:28px;
+      --violet:#a089ff;
+      --pink:#ff7ad9;
+      --line:rgba(255,255,255,.12);
+      --panel:rgba(8,14,28,.56);
+      --shadow:0 24px 80px rgba(0,0,0,.42);
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-right: env(safe-area-inset-right, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --safe-left: env(safe-area-inset-left, 0px);
-      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --orbit-rotation: 0deg;
-      --glow: rgba(118,236,255,0.18);
+      --orbit-rotation:0deg;
+      --count:8;
+      --radius:260px;
+      --node-size:132px;
+      --tilt:62deg;
     }
 
     *{box-sizing:border-box}
     html,body{
       margin:0;
       min-height:100%;
-      color:var(--text);
+      overflow:hidden;
       background:
-        radial-gradient(circle at 15% 10%, rgba(118,236,255,.12), transparent 18%),
-        radial-gradient(circle at 82% 12%, rgba(159,139,255,.16), transparent 20%),
-        radial-gradient(circle at 50% 90%, rgba(158,255,195,.08), transparent 18%),
-        linear-gradient(180deg, #02040a 0%, #040714 35%, #070d1f 100%);
-      font-family:var(--font);
-      overflow-x:hidden;
+        radial-gradient(circle at 18% 15%, rgba(120,236,255,.14), transparent 18%),
+        radial-gradient(circle at 82% 15%, rgba(160,137,255,.16), transparent 20%),
+        radial-gradient(circle at 50% 85%, rgba(158,255,195,.08), transparent 18%),
+        linear-gradient(180deg, #02040a 0%, #040817 45%, #030611 100%);
+      color:var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body::before{
@@ -55,1866 +50,525 @@
         linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
       background-size:36px 36px;
-      mask-image:radial-gradient(circle at center, black 30%, transparent 95%);
-      opacity:.42;
-      z-index:0;
+      mask-image:radial-gradient(circle at center, black 28%, transparent 92%);
+      opacity:.4;
     }
 
     body::after{
       content:"";
       position:fixed;
-      inset:-20%;
+      inset:-10%;
       pointer-events:none;
       background:
-        radial-gradient(circle at 50% 50%, rgba(118,236,255,.08), transparent 20%),
-        radial-gradient(circle at 60% 45%, rgba(255,121,218,.05), transparent 20%),
-        radial-gradient(circle at 42% 58%, rgba(159,139,255,.06), transparent 20%);
-      filter:blur(48px);
-      animation: drift 16s linear infinite alternate;
-      z-index:0;
+        radial-gradient(circle at 50% 50%, rgba(120,236,255,.08), transparent 18%),
+        radial-gradient(circle at 60% 45%, rgba(255,122,217,.06), transparent 20%),
+        radial-gradient(circle at 42% 58%, rgba(160,137,255,.06), transparent 20%);
+      filter:blur(42px);
+      animation:drift 14s linear infinite alternate;
     }
 
     @keyframes drift{
-      0%{ transform:translate3d(-2%, -1%, 0) scale(1); }
-      100%{ transform:translate3d(2%, 1%, 0) scale(1.05); }
+      0%{transform:translate3d(-2%,-1%,0) scale(1)}
+      100%{transform:translate3d(2%,1%,0) scale(1.04)}
     }
 
     .app{
       position:relative;
-      z-index:1;
-      width:min(1560px, 100%);
-      margin:0 auto;
+      width:100vw;
+      min-height:100dvh;
       padding:
         calc(18px + var(--safe-top))
         calc(18px + var(--safe-right))
-        calc(24px + var(--safe-bottom))
+        calc(18px + var(--safe-bottom))
         calc(18px + var(--safe-left));
-    }
-
-    .glass{
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
-        var(--panel);
-      border:1px solid var(--line);
-      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);
-      backdrop-filter:blur(18px);
-    }
-
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:18px;
-    }
-
-    .brand{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      min-width:0;
-    }
-
-    .mark{
-      width:58px;height:58px;border-radius:18px;
-      position:relative;
-      border:1px solid rgba(255,255,255,.12);
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 35%),
-        linear-gradient(135deg, rgba(118,236,255,.24), rgba(159,139,255,.26) 55%, rgba(255,121,218,.2));
-      display:grid;place-items:center;
-      box-shadow:0 14px 30px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.08);
-      overflow:hidden;
-    }
-
-    .mark::before{
-      content:"✦";
-      font-size:1.3rem;
-      color:white;
-      text-shadow:0 0 22px rgba(118,236,255,.55);
-    }
-
-    .brand h1{
-      margin:0;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      font-size:clamp(1.3rem, 2.6vw, 2rem);
-      letter-spacing:-.03em;
-    }
-
-    .brand p{
-      margin:4px 0 0;
-      color:var(--muted);
-      max-width:760px;
-      line-height:1.45;
-      font-size:.96rem;
-    }
-
-    .chip-live{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      min-height:32px;
-      padding:0 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      color:var(--cyan);
-      font-size:.76rem;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-    }
-
-    .chip-live .dot{
-      width:8px;height:8px;border-radius:50%;
-      background:var(--mint);
-      box-shadow:0 0 0 0 rgba(158,255,195,.8);
-      animation:pulse 2s infinite;
-    }
-
-    @keyframes pulse{
-      0%{ box-shadow:0 0 0 0 rgba(158,255,195,.8); }
-      70%{ box-shadow:0 0 0 12px rgba(158,255,195,0); }
-      100%{ box-shadow:0 0 0 0 rgba(158,255,195,0); }
-    }
-
-    .top-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-    }
-
-    button, input{
-      font:inherit;
-      color:var(--text);
-    }
-
-    .btn, .icon-btn, .search{
-      border:none;
-    }
-
-    .btn{
-      min-height:46px;
-      padding:0 16px;
-      border-radius:16px;
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.1);
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      cursor:pointer;
-      transition:transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-    }
-
-    .btn:hover, .btn:focus-visible, .icon-btn:hover, .icon-btn:focus-visible{
-      outline:none;
-      transform:translateY(-1px);
-      background:rgba(255,255,255,.1);
-      border-color:var(--line-strong);
-      box-shadow:0 10px 22px rgba(0,0,0,.2);
-    }
-
-    .btn.primary{
-      background:
-        linear-gradient(135deg, rgba(118,236,255,.14), rgba(159,139,255,.18) 60%, rgba(255,121,218,.14)),
-        rgba(255,255,255,.08);
-      border-color:rgba(118,236,255,.22);
-    }
-
-    .btn.active{
-      background:
-        linear-gradient(135deg, rgba(118,236,255,.16), rgba(159,139,255,.18)),
-        rgba(255,255,255,.08);
-      border-color:rgba(118,236,255,.28);
-    }
-
-    .icon-btn{
-      width:46px;height:46px;border-radius:16px;
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.1);
-      display:grid;place-items:center;
-      cursor:pointer;
-    }
-
-    .hero{
-      display:grid;
-      grid-template-columns:minmax(0, 1.35fr) minmax(320px, .75fr);
-      gap:18px;
-      margin-bottom:18px;
-    }
-
-    .hero-panel, .control-panel, .stage-panel, .cart-panel, .forecast-panel, .modal-card{
-      border-radius:30px;
-    }
-
-    .hero-panel{
-      padding:22px;
-      position:relative;
-      overflow:hidden;
-      min-height:280px;
-    }
-
-    .hero-panel::before{
-      content:"";
-      position:absolute;
-      width:420px;height:420px;border-radius:50%;
-      left:-90px; top:-110px;
-      background:radial-gradient(circle, rgba(118,236,255,.16), transparent 60%);
-      filter:blur(14px);
-      pointer-events:none;
-    }
-
-    .hero-panel::after{
-      content:"";
-      position:absolute;
-      width:320px;height:320px;border-radius:50%;
-      right:-100px; bottom:-120px;
-      background:radial-gradient(circle, rgba(159,139,255,.16), transparent 60%);
-      filter:blur(12px);
-      pointer-events:none;
-    }
-
-    .eyebrow{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      min-height:34px;
-      padding:0 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      color:var(--cyan);
-      font-size:.76rem;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      margin-bottom:14px;
-    }
-
-    .hero-grid{
-      display:grid;
-      grid-template-columns:minmax(0, 1fr) 280px;
-      gap:18px;
-      align-items:end;
-    }
-
-    .hero-copy h2{
-      margin:0;
-      font-size:clamp(2.2rem, 5vw, 4.8rem);
-      line-height:.92;
-      letter-spacing:-.05em;
-    }
-
-    .gradient{
-      background:linear-gradient(90deg, #fff 0%, var(--cyan) 34%, var(--violet) 68%, var(--pink));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-    }
-
-    .hero-copy p{
-      margin:14px 0 0;
-      color:#d6e6f4;
-      line-height:1.62;
-      font-size:1rem;
-      max-width:740px;
-    }
-
-    .hero-tags{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:18px;
-    }
-
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      min-height:32px;
-      padding:0 11px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      color:#def3ff;
-      font-size:.78rem;
-    }
-
-    .orb-stack{
-      display:grid;
-      gap:12px;
-      align-content:end;
-    }
-
-    .orb{
-      min-height:160px;
-      border-radius:28px;
-      position:relative;
-      overflow:hidden;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(118,236,255,.22), transparent 26%),
-        radial-gradient(circle at 50% 50%, rgba(159,139,255,.16), transparent 42%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border:1px solid rgba(255,255,255,.1);
-    }
-
-    .orb::before{
-      content:"";
-      position:absolute;
-      inset:20px;
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:50%;
-      animation:spin 18s linear infinite;
-    }
-
-    .orb::after{
-      content:"";
-      position:absolute;
-      inset:38px;
-      border:1px dashed rgba(255,255,255,.12);
-      border-radius:50%;
-      animation:spin 26s linear infinite reverse;
-    }
-
-    @keyframes spin{ from{ transform:rotate(0); } to{ transform:rotate(360deg); } }
-
-    .control-panel{
-      padding:18px;
-      display:grid;
-      gap:14px;
-      align-content:start;
-    }
-
-    .menu-switch{
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:10px;
-    }
-
-    .mode-btn{
-      min-height:54px;
-      border-radius:18px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      color:var(--text);
-      cursor:pointer;
       display:grid;
       place-items:center;
-      gap:4px;
-      padding:10px;
-      transition:transform .18s ease, background .18s ease, border-color .18s ease;
+      isolation:isolate;
     }
 
-    .mode-btn strong{ font-size:.94rem; }
-    .mode-btn span{ font-size:.76rem; color:var(--muted); }
-
-    .mode-btn.active{
-      background:
-        linear-gradient(135deg, rgba(118,236,255,.16), rgba(159,139,255,.16)),
-        rgba(255,255,255,.08);
-      border-color:rgba(118,236,255,.28);
-      box-shadow:0 12px 24px rgba(0,0,0,.18);
-    }
-
-    .small-metrics{
-      display:grid;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-      gap:10px;
-    }
-
-    .metric{
-      min-height:92px;
-      border-radius:22px;
-      padding:12px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.1);
-      display:grid;
-      align-content:start;
-      gap:8px;
-    }
-
-    .metric .label{
-      color:var(--muted);
-      font-size:.78rem;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-    }
-
-    .metric .value{
-      font-size:1.2rem;
-      font-weight:700;
-    }
-
-    .metric .sub{
-      color:#d3e5f5;
-      font-size:.86rem;
-      line-height:1.4;
-    }
-
-    .layout{
-      display:grid;
-      grid-template-columns:minmax(0, 1fr) 360px;
-      gap:18px;
-      align-items:start;
-    }
-
-    .main-col{
-      min-width:0;
-      display:grid;
-      gap:18px;
-    }
-
-    .stage-panel{
-      padding:18px;
-      overflow:hidden;
+    .scene{
       position:relative;
-    }
-
-    .toolbar{
+      width:min(900px, 100%);
+      height:min(900px, calc(100dvh - 36px - var(--safe-top) - var(--safe-bottom)));
       display:grid;
-      grid-template-columns:minmax(0, 1fr) auto auto;
-      gap:10px;
-      margin-bottom:16px;
+      place-items:center;
+      perspective:1800px;
+      user-select:none;
     }
 
-    .search{
-      min-height:48px;
-      width:100%;
-      border-radius:16px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      padding:0 16px;
-      outline:none;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
-    }
-
-    .search::placeholder{ color:#a7bdd4; }
-
-    .chips{
-      display:flex;
-      gap:10px;
-      overflow:auto;
-      scrollbar-width:none;
-      -webkit-overflow-scrolling:touch;
-      margin-bottom:18px;
-      padding-bottom:2px;
-    }
-
-    .chips::-webkit-scrollbar{ display:none; }
-
-    .chip{
-      min-height:42px;
-      padding:0 14px;
-      border-radius:14px;
-      background:rgba(255,255,255,.055);
-      border:1px solid rgba(255,255,255,.1);
-      color:var(--text);
-      cursor:pointer;
-      white-space:nowrap;
-      transition:transform .18s ease, background .18s ease, border-color .18s ease;
-    }
-
-    .chip.active{
+    .glow-aura{
+      position:absolute;
+      width:min(72vw, 680px);
+      height:min(72vw, 680px);
+      border-radius:50%;
       background:
-        linear-gradient(135deg, rgba(118,236,255,.16), rgba(159,139,255,.16)),
-        rgba(255,255,255,.08);
-      border-color:rgba(118,236,255,.3);
-    }
-
-    .stage-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:end;
-      gap:14px;
-      flex-wrap:wrap;
-      margin-bottom:16px;
-    }
-
-    .stage-head h3{
-      margin:0;
-      font-size:1.5rem;
-      letter-spacing:-.03em;
-    }
-
-    .stage-head p{
-      margin:6px 0 0;
-      color:var(--muted);
-      max-width:760px;
-      line-height:1.5;
-    }
-
-    .results-pill{
-      min-height:36px;
-      padding:0 12px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      color:#dcefff;
-      font-size:.86rem;
-    }
-
-    .orbit-stage{
-      display:grid;
-      grid-template-columns:320px minmax(0, 1fr);
-      gap:20px;
-      align-items:center;
+        radial-gradient(circle, rgba(120,236,255,.12), transparent 42%),
+        radial-gradient(circle at 60% 40%, rgba(160,137,255,.10), transparent 34%),
+        radial-gradient(circle at 45% 65%, rgba(255,122,217,.08), transparent 28%);
+      filter:blur(18px);
+      transform:translateZ(0);
+      pointer-events:none;
     }
 
     .orbit-wrap{
       position:relative;
-      min-height:420px;
+      width:100%;
+      height:100%;
       display:grid;
       place-items:center;
-      perspective:1400px;
+      transform-style:preserve-3d;
     }
 
-    .ring-core{
-      position:absolute;
-      width:170px;height:170px;border-radius:50%;
-      display:grid;place-items:center;
-      background:
-        radial-gradient(circle at 50% 45%, rgba(255,255,255,.18), transparent 28%),
-        linear-gradient(135deg, rgba(118,236,255,.15), rgba(159,139,255,.16), rgba(255,121,218,.14));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:
-        0 0 0 18px rgba(255,255,255,.03),
-        0 0 0 36px rgba(255,255,255,.015),
-        0 0 48px rgba(118,236,255,.16);
-      z-index:2;
-      text-align:center;
-      padding:18px;
-    }
-
-    .ring-core strong{
-      display:block;
-      font-size:1.02rem;
-      letter-spacing:.04em;
-      text-transform:uppercase;
-      color:var(--cyan);
-      margin-bottom:6px;
-    }
-
-    .ring-core span{
-      color:#d8e8f8;
-      line-height:1.35;
-      font-size:.92rem;
+    .ring-shell{
+      position:relative;
+      width:min(78vw, 720px);
+      height:min(78vw, 720px);
+      display:grid;
+      place-items:center;
+      transform-style:preserve-3d;
     }
 
     .orbit{
       position:relative;
-      width:310px;height:310px;
+      width:100%;
+      height:100%;
       transform-style:preserve-3d;
-      transform:rotateX(64deg) rotateZ(var(--orbit-rotation));
-      transition:transform .5s ease;
+      transform:rotateX(var(--tilt)) rotateZ(var(--orbit-rotation));
+      transition:transform 700ms cubic-bezier(.2,.8,.2,1);
+      will-change:transform;
     }
 
-    .orbit::before, .orbit::after{
-      content:"";
-      position:absolute; inset:0;
-      border-radius:50%;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 0 28px rgba(118,236,255,.08);
-    }
-
-    .orbit::after{
-      inset:24px;
-      border-style:dashed;
-      opacity:.8;
-    }
-
-    .orbit-node{
+    .ring, .ring-two, .ring-three{
       position:absolute;
-      left:50%; top:50%;
-      width:116px; height:116px;
-      margin:-58px;
-      border-radius:28px;
-      padding:12px;
+      inset:0;
+      border-radius:50%;
+      pointer-events:none;
+    }
+
+    .ring{
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:
+        0 0 42px rgba(120,236,255,.08),
+        inset 0 0 32px rgba(120,236,255,.04);
+    }
+
+    .ring-two{
+      inset:42px;
+      border:1px dashed rgba(255,255,255,.14);
+      opacity:.9;
+    }
+
+    .ring-three{
+      inset:82px;
+      border:1px solid rgba(255,255,255,.08);
+      opacity:.7;
+    }
+
+    .axis{
+      position:absolute;
+      width:2px;
+      height:88%;
+      background:linear-gradient(180deg, transparent, rgba(255,255,255,.18), transparent);
+      left:50%;
+      top:6%;
+      transform:translateX(-50%);
+      opacity:.4;
+      pointer-events:none;
+    }
+
+    .node{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:var(--node-size);
+      height:var(--node-size);
+      margin:calc(var(--node-size) / -2);
+      border-radius:30px;
+      padding:14px;
+      cursor:pointer;
       transform-style:preserve-3d;
-      transform:
-        rotate(calc(var(--i) * 72deg))
-        translateY(-145px)
-        rotate(calc(var(--i) * -72deg))
-        rotateX(-64deg);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02)),
-        rgba(7,13,28,.74);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 16px 26px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.06);
       display:grid;
       align-content:center;
       justify-items:center;
       text-align:center;
       gap:8px;
-      cursor:pointer;
-      transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
-      backface-visibility:hidden;
-    }
-
-    .orbit-node:hover, .orbit-node:focus-visible{
-      outline:none;
-      border-color:rgba(118,236,255,.32);
-      box-shadow:0 18px 34px rgba(0,0,0,.28), 0 0 28px rgba(118,236,255,.14);
-    }
-
-    .orbit-node.active{
+      color:var(--text);
       background:
-        linear-gradient(135deg, rgba(118,236,255,.16), rgba(159,139,255,.18) 55%, rgba(255,121,218,.14)),
-        rgba(7,13,28,.8);
-      border-color:rgba(118,236,255,.34);
-      box-shadow:0 18px 36px rgba(0,0,0,.3), 0 0 34px rgba(118,236,255,.18);
+        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02)),
+        rgba(7,13,28,.78);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:
+        0 16px 30px rgba(0,0,0,.28),
+        inset 0 1px 0 rgba(255,255,255,.06);
+      backface-visibility:hidden;
+      transition:
+        transform 700ms cubic-bezier(.2,.8,.2,1),
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
     }
 
-    .orbit-node .emoji{
-      font-size:1.6rem;
+    .node::before{
+      content:"";
+      position:absolute;
+      inset:auto -18% -22% auto;
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      background:radial-gradient(circle, var(--glow, rgba(120,236,255,.16)), transparent 62%);
+      filter:blur(8px);
+      pointer-events:none;
+    }
+
+    .node:hover,
+    .node:focus-visible{
+      outline:none;
+      border-color:rgba(120,236,255,.34);
+      box-shadow:
+        0 20px 36px rgba(0,0,0,.32),
+        0 0 28px rgba(120,236,255,.14),
+        inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .node.active{
+      background:
+        linear-gradient(135deg, rgba(120,236,255,.16), rgba(160,137,255,.18) 58%, rgba(255,122,217,.14)),
+        rgba(7,13,28,.84);
+      border-color:rgba(120,236,255,.4);
+      box-shadow:
+        0 22px 40px rgba(0,0,0,.34),
+        0 0 34px rgba(120,236,255,.18),
+        inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .node .emoji{
+      font-size:1.75rem;
       line-height:1;
+      filter:drop-shadow(0 0 18px rgba(120,236,255,.24));
     }
 
-    .orbit-node strong{
-      font-size:.88rem;
+    .node strong{
+      font-size:.96rem;
       letter-spacing:.02em;
     }
 
-    .orbit-node span{
-      font-size:.72rem;
+    .node span{
+      font-size:.78rem;
+      line-height:1.2;
       color:var(--muted);
-      line-height:1.25;
+      max-width:92px;
     }
 
-    .cards-area{
-      min-width:0;
+    .core{
+      position:absolute;
+      width:200px;
+      height:200px;
+      border-radius:50%;
       display:grid;
-      gap:14px;
+      place-items:center;
+      text-align:center;
+      padding:26px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255,255,255,.16), transparent 26%),
+        linear-gradient(135deg, rgba(120,236,255,.14), rgba(160,137,255,.16), rgba(255,122,217,.12));
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:
+        0 0 0 18px rgba(255,255,255,.03),
+        0 0 0 36px rgba(255,255,255,.015),
+        0 0 58px rgba(120,236,255,.14);
+      z-index:3;
+      pointer-events:none;
+      transform:translateZ(42px);
     }
 
-    .lead-card{
-      min-height:240px;
-      border-radius:28px;
-      position:relative;
-      overflow:hidden;
-      padding:18px;
-      background:
-        radial-gradient(circle at 80% 20%, var(--glow), transparent 26%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
-        rgba(6,12,24,.64);
+    .core::before{
+      content:"";
+      position:absolute;
+      inset:18px;
+      border-radius:50%;
       border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 18px 32px rgba(0,0,0,.22);
+      animation:spin 18s linear infinite;
+    }
+
+    .core::after{
+      content:"";
+      position:absolute;
+      inset:40px;
+      border-radius:50%;
+      border:1px dashed rgba(255,255,255,.12);
+      animation:spin 24s linear infinite reverse;
+    }
+
+    @keyframes spin{
+      from{transform:rotate(0)}
+      to{transform:rotate(360deg)}
+    }
+
+    .core-text{
+      position:relative;
+      z-index:1;
       display:grid;
-      grid-template-rows:auto 1fr auto;
-      gap:14px;
-    }
-
-    .lead-top{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:start;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      min-height:30px;
-      padding:0 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      color:#e3f7ff;
-      font-size:.74rem;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-    }
-
-    .price{
-      font-size:1.2rem;
-      font-weight:700;
-      color:var(--mint);
-      text-shadow:0 0 18px rgba(158,255,195,.14);
-    }
-
-    .lead-card h4{
-      margin:0;
-      font-size:1.5rem;
-      letter-spacing:-.03em;
-    }
-
-    .lead-card p{
-      margin:10px 0 0;
-      color:#d6e6f4;
-      line-height:1.62;
-      max-width:760px;
-    }
-
-    .meta{
-      display:flex;
       gap:8px;
-      flex-wrap:wrap;
-      margin-top:14px;
     }
 
-    .lead-actions{
+    .core-text strong{
+      font-size:1.1rem;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      color:var(--cyan);
+    }
+
+    .core-text span{
+      color:#d9e9f8;
+      line-height:1.35;
+      font-size:.95rem;
+    }
+
+    .controls{
+      position:absolute;
+      inset:auto auto 16px 50%;
+      transform:translateX(-50%);
       display:flex;
       gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
+      z-index:5;
     }
 
-    .mini-grid{
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:12px;
-    }
-
-    .mini-card{
-      min-height:180px;
-      border-radius:22px;
-      padding:14px;
+    .ctrl{
+      min-width:132px;
+      min-height:46px;
+      padding:0 16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
       background:
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
-        rgba(6,12,24,.56);
-      border:1px solid rgba(255,255,255,.1);
-      display:grid;
-      grid-template-rows:auto 1fr auto;
-      gap:10px;
-      transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
-    }
-
-    .mini-card:hover, .mini-card:focus-within{
-      transform:translateY(-2px);
-      border-color:rgba(118,236,255,.28);
-      box-shadow:0 14px 24px rgba(0,0,0,.2);
-    }
-
-    .mini-card h5{
-      margin:0;
-      font-size:1rem;
-      letter-spacing:-.02em;
-    }
-
-    .mini-card p{
-      margin:8px 0 0;
-      color:#cfe0ef;
-      font-size:.9rem;
-      line-height:1.5;
-    }
-
-    .mini-actions{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-
-    .micro{
-      min-height:38px;
-      padding:0 12px;
-      border-radius:12px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
+        var(--panel);
       color:var(--text);
       cursor:pointer;
-      transition:transform .16s ease, background .16s ease, border-color .16s ease;
+      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.05);
+      backdrop-filter:blur(14px);
+      transition:transform .18s ease, border-color .18s ease, background .18s ease;
     }
 
-    .micro:hover, .micro:focus-visible{
+    .ctrl:hover,
+    .ctrl:focus-visible{
       outline:none;
       transform:translateY(-1px);
-      background:rgba(255,255,255,.09);
-      border-color:rgba(118,236,255,.26);
-    }
-
-    .micro.primary{
+      border-color:rgba(120,236,255,.34);
       background:
-        linear-gradient(135deg, rgba(118,236,255,.14), rgba(159,139,255,.16)),
-        rgba(255,255,255,.08);
-      border-color:rgba(118,236,255,.24);
+        linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03)),
+        rgba(8,14,28,.74);
     }
 
-    .forecast-panel{
-      padding:16px;
-      display:grid;
-      gap:12px;
-    }
-
-    .forecast-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:end;
-      gap:12px;
-    }
-
-    .forecast-head h3{
-      margin:0;
-      font-size:1.16rem;
-      letter-spacing:-.02em;
-    }
-
-    .forecast-list{
-      display:grid;
-      gap:10px;
-    }
-
-    .forecast-row{
-      border-radius:18px;
-      padding:12px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.1);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-    }
-
-    .forecast-row strong{
-      display:block;
-      margin-bottom:4px;
-    }
-
-    .forecast-row span{
-      color:var(--muted);
-      font-size:.88rem;
-    }
-
-    .cart-panel{
-      padding:16px;
-      display:grid;
-      gap:14px;
-      position:sticky;
-      top:18px;
-    }
-
-    .cart-head{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-    }
-
-    .cart-head h3{
-      margin:0;
-      font-size:1.2rem;
-    }
-
-    .subtle{
-      color:var(--muted);
-      font-size:.9rem;
-    }
-
-    .cart-list{
-      display:grid;
-      gap:10px;
-      max-height:42vh;
-      overflow:auto;
-      padding-right:2px;
-      scrollbar-width:thin;
-    }
-
-    .cart-item{
-      border-radius:18px;
-      padding:12px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.1);
-      display:grid;
-      gap:10px;
-    }
-
-    .cart-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-    }
-
-    .cart-item h4{
-      margin:0;
-      font-size:.98rem;
-    }
-
-    .qty{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
+    .hint{
+      position:absolute;
+      inset:20px auto auto 50%;
+      transform:translateX(-50%);
+      padding:10px 14px;
       border-radius:999px;
-      padding:4px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(8,14,28,.48);
+      color:#dcedfb;
+      font-size:.84rem;
+      letter-spacing:.02em;
+      backdrop-filter:blur(10px);
+      z-index:5;
+      text-align:center;
+      white-space:nowrap;
     }
 
-    .qty button{
-      width:28px;height:28px;border-radius:50%;
-      border:none; background:rgba(255,255,255,.08); color:var(--text); cursor:pointer;
-    }
-
-    .totals{
-      border-top:1px solid rgba(255,255,255,.08);
-      padding-top:12px;
-      display:grid;
-      gap:9px;
-    }
-
-    .line{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      color:#d7e7f6;
-    }
-
-    .line.total{
-      font-size:1.08rem;
-      font-weight:700;
-    }
-
-    .empty{
-      border-radius:20px;
-      padding:16px;
-      background:linear-gradient(135deg, rgba(118,236,255,.08), rgba(159,139,255,.08));
-      border:1px dashed rgba(255,255,255,.14);
-      color:#d5e5f3;
-      line-height:1.55;
-    }
-
-    .modal{
-      position:fixed;
-      inset:0;
-      background:rgba(3,6,14,.66);
-      backdrop-filter:blur(12px);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-      z-index:30;
-    }
-
-    .modal.show{ display:flex; }
-
-    .modal-card{
-      width:min(780px, 100%);
-      padding:18px;
-      display:grid;
-      gap:16px;
-    }
-
-    .modal-head{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:start;
-    }
-
-    .modal-copy h3{
-      margin:0;
-      font-size:1.6rem;
-      letter-spacing:-.03em;
-    }
-
-    .modal-copy p{
-      margin:10px 0 0;
-      color:#d2e3f1;
-      line-height:1.62;
-    }
-
-    .detail-grid{
-      display:grid;
-      grid-template-columns:repeat(4, minmax(0,1fr));
-      gap:10px;
-    }
-
-    .detail{
-      border-radius:18px;
-      padding:12px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.1);
-    }
-
-    .detail .label{
-      color:var(--muted);
-      font-size:.76rem;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      margin-bottom:8px;
-    }
-
-    .detail .value{
-      font-size:.98rem;
-      font-weight:600;
-    }
-
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:calc(18px + var(--safe-bottom));
-      transform:translateX(-50%) translateY(24px);
-      opacity:0;
-      pointer-events:none;
-      padding:12px 16px;
-      border-radius:16px;
-      background:rgba(8,15,32,.88);
-      border:1px solid rgba(118,236,255,.24);
-      box-shadow:var(--shadow);
-      z-index:50;
-      transition:opacity .2s ease, transform .2s ease;
-    }
-
-    .toast.show{
-      opacity:1;
-      transform:translateX(-50%) translateY(0);
-    }
-
-    .footer{
-      margin-top:20px;
-      display:flex;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-      align-items:center;
-      color:var(--muted);
-      font-size:.9rem;
-      padding:0 4px;
-    }
-
-    .footer-links{
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-
-    .footer-links a{
-      color:#dcefff;
-      text-decoration:none;
-    }
-
-    .sr-only{
-      position:absolute !important;
-      width:1px !important;
-      height:1px !important;
-      margin:-1px !important;
-      padding:0 !important;
-      overflow:hidden !important;
-      clip:rect(0,0,0,0) !important;
-      white-space:nowrap !important;
-      border:0 !important;
-    }
-
-    @media (max-width: 1240px){
-      .hero{ grid-template-columns:1fr; }
-      .layout{ grid-template-columns:1fr; }
-      .cart-panel{ position:relative; top:auto; }
-      .orbit-stage{ grid-template-columns:1fr; }
-      .forecast-panel{ order:3; }
-    }
-
-    @media (max-width: 860px){
-      .hero-grid{ grid-template-columns:1fr; }
-      .toolbar{ grid-template-columns:1fr 1fr; }
-      .toolbar .search{ grid-column:1 / -1; }
-      .mini-grid{ grid-template-columns:1fr; }
-      .detail-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
-      .menu-switch{ grid-template-columns:1fr; }
+    @media (max-width: 900px){
+      :root{
+        --radius:220px;
+        --node-size:118px;
+      }
+      .scene{
+        height:min(820px, calc(100dvh - 24px - var(--safe-top) - var(--safe-bottom)));
+      }
+      .core{
+        width:176px;
+        height:176px;
+      }
+      .controls{
+        bottom:10px;
+      }
     }
 
     @media (max-width: 640px){
-      .app{ padding-inline:12px; }
-      .hero-panel, .control-panel, .stage-panel, .cart-panel, .forecast-panel, .modal-card{ border-radius:24px; }
-      .hero-panel{ padding:18px; }
-      .orbit-wrap{ min-height:340px; }
-      .orbit{ width:260px; height:260px; }
-      .orbit-node{
-        width:98px; height:98px; margin:-49px;
-        transform:
-          rotate(calc(var(--i) * 72deg))
-          translateY(-122px)
-          rotate(calc(var(--i) * -72deg))
-          rotateX(-64deg);
+      :root{
+        --radius:180px;
+        --node-size:96px;
       }
-      .ring-core{ width:148px; height:148px; font-size:.94rem; }
-      .detail-grid{ grid-template-columns:1fr; }
-      .top-actions{ width:100%; }
-      .top-actions .btn{ flex:1 1 160px; }
+      .ring-shell{
+        width:min(96vw, 520px);
+        height:min(96vw, 520px);
+      }
+      .core{
+        width:144px;
+        height:144px;
+        padding:18px;
+      }
+      .core-text strong{
+        font-size:.92rem;
+      }
+      .core-text span{
+        font-size:.82rem;
+      }
+      .node{
+        border-radius:24px;
+        padding:10px;
+      }
+      .node .emoji{
+        font-size:1.35rem;
+      }
+      .node strong{
+        font-size:.8rem;
+      }
+      .node span{
+        font-size:.68rem;
+        max-width:74px;
+      }
+      .controls{
+        width:100%;
+        padding:0 8px;
+        gap:8px;
+      }
+      .ctrl{
+        min-width:0;
+        flex:1 1 0;
+        padding:0 10px;
+      }
+      .hint{
+        font-size:.76rem;
+        white-space:normal;
+        width:min(90vw, 360px);
+      }
     }
 
     @media (prefers-reduced-motion: reduce){
       *, *::before, *::after{
         animation:none !important;
         transition:none !important;
-        scroll-behavior:auto !important;
       }
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="mark" aria-hidden="true"></div>
-        <div>
-          <h1>Hot Headz Quantum Menu <span class="chip-live"><span class="dot"></span> orbit navigator live</span></h1>
-          <p>A high-drama redesign built around orbit navigation, hologram-style hero cards, and a stronger sense of spectacle than a standard futuristic card grid.</p>
-        </div>
-      </div>
-      <div class="top-actions">
-        <button class="btn" id="ambientBtn" type="button" aria-pressed="false">Ambient mode</button>
-        <button class="btn primary" id="chooserBtn" type="button">Choose for me</button>
-        <button class="icon-btn" id="cartJumpBtn" type="button" title="Jump to cart" aria-label="Jump to cart">🛒</button>
-      </div>
-    </header>
+  <main class="app">
+    <div class="scene">
+      <div class="glow-aura" aria-hidden="true"></div>
 
-    <section class="hero">
-      <div class="hero-panel glass">
-        <div class="eyebrow">Reimagined future menu</div>
-        <div class="hero-grid">
-          <div class="hero-copy">
-            <h2>Make the menu feel like a <span class="gradient">destination</span>, not a list.</h2>
-            <p>This version leans into the ideas on your existing page — Today, Tomorrow, Advanced Menu, Orbit Navigator, Hologram Cards, and Choose for Me — but pushes them into a much more premium interactive experience.</p>
-            <div class="hero-tags">
-              <span class="tag">Orbit navigator</span>
-              <span class="tag">Hologram spotlight</span>
-              <span class="tag">Today / Tomorrow / Forecast</span>
-              <span class="tag">Chef AI chooser</span>
+      <div class="hint">Tap a tile or use the arrows. The whole orbit rotates together while every tile stays facing forward.</div>
+
+      <div class="orbit-wrap">
+        <div class="ring-shell">
+          <div class="orbit" id="orbit">
+            <div class="ring"></div>
+            <div class="ring-two"></div>
+            <div class="ring-three"></div>
+            <div class="axis"></div>
+          </div>
+
+          <div class="core">
+            <div class="core-text">
+              <strong id="coreTitle">Featured</strong>
+              <span id="coreSub">Orbit navigator</span>
             </div>
           </div>
-          <div class="orb-stack">
-            <div class="orb" aria-hidden="true"></div>
-            <div class="tag">Tonight’s signal: smoke • citrus • crunch • heat</div>
-          </div>
         </div>
       </div>
 
-      <aside class="control-panel glass">
-        <div class="menu-switch" id="daySwitch"></div>
-        <div class="small-metrics">
-          <div class="metric">
-            <div class="label">Navigator</div>
-            <div class="value" id="metricNav">Featured</div>
-            <div class="sub">Orbit pinpoints the active category.</div>
-          </div>
-          <div class="metric">
-            <div class="label">Cards</div>
-            <div class="value" id="metricCards">4 live</div>
-            <div class="sub">Lead hologram plus supporting dishes.</div>
-          </div>
-          <div class="metric">
-            <div class="label">Status</div>
-            <div class="value" id="metricStatus">Available</div>
-            <div class="sub">Ready for dine-in, pickup, or inspiration.</div>
-          </div>
-          <div class="metric">
-            <div class="label">Chooser</div>
-            <div class="value" id="metricChooser">Chef AI</div>
-            <div class="sub">Picks a dish when indecision hits.</div>
-          </div>
-        </div>
-      </aside>
-    </section>
-
-    <section class="layout">
-      <div class="main-col">
-        <section class="stage-panel glass">
-          <div class="toolbar">
-            <label class="sr-only" for="searchInput">Search menu</label>
-            <input class="search" id="searchInput" type="search" placeholder="Search dishes, ingredients, or flavor vibes..." />
-            <button class="btn" id="vegBtn" type="button" aria-pressed="false">Vegetarian only</button>
-            <button class="btn" id="resetBtn" type="button">Reset</button>
-          </div>
-
-          <div class="chips" id="chips" aria-label="Menu categories"></div>
-
-          <div class="stage-head">
-            <div>
-              <h3 id="stageTitle">Featured signals</h3>
-              <p id="stageText">Orbit navigation controls the spotlight. Spin with the arrows, tap a node, or let the chooser decide.</p>
-            </div>
-            <div class="results-pill" id="resultsPill">4 dishes active</div>
-          </div>
-
-          <div class="orbit-stage">
-            <div class="orbit-wrap">
-              <div class="orbit" id="orbit"></div>
-              <div class="ring-core">
-                <div>
-                  <strong id="coreTitle">Featured</strong>
-                  <span id="coreSub">Tap nodes or use the arrows below.</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="cards-area">
-              <article class="lead-card" id="leadCard"></article>
-              <div class="mini-grid" id="miniGrid"></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="forecast-panel glass">
-          <div class="forecast-head">
-            <div>
-              <h3>Advanced menu forecast</h3>
-              <div class="subtle">A predictive tasting stream for the next few drops.</div>
-            </div>
-            <div class="tag" id="forecastTag">3 upcoming pulses</div>
-          </div>
-          <div class="forecast-list" id="forecastList"></div>
-        </section>
-      </div>
-
-      <aside class="cart-panel glass" id="cartPanel">
-        <div class="cart-head">
-          <div>
-            <h3>Your Order</h3>
-            <div class="subtle" id="cartSub">No items yet</div>
-          </div>
-          <button class="icon-btn" id="clearCartBtn" type="button" title="Clear cart" aria-label="Clear cart">⌫</button>
-        </div>
-        <div class="cart-list" id="cartList"></div>
-        <div class="totals">
-          <div class="line"><span>Subtotal</span><strong id="subtotal">$0.00</strong></div>
-          <div class="line"><span>Service</span><strong id="service">$0.00</strong></div>
-          <div class="line"><span>Tax</span><strong id="tax">$0.00</strong></div>
-          <div class="line total"><span>Total</span><strong id="total">$0.00</strong></div>
-          <button class="btn primary" id="checkoutBtn" type="button">Begin checkout</button>
-        </div>
-      </aside>
-    </section>
-
-    <footer class="footer">
-      <div>Quantum redesign concept for Hot Headz Southern Foods</div>
-      <div class="footer-links">
-        <a href="#" onclick="return false;">Delivery</a>
-        <a href="#" onclick="return false;">Order</a>
-        <a href="#" onclick="return false;">About</a>
-        <a href="#" onclick="return false;">Location</a>
-      </div>
-    </footer>
-  </div>
-
-  <div class="modal" id="itemModal" aria-hidden="true">
-    <div class="modal-card glass">
-      <div class="modal-head">
-        <div class="modal-copy">
-          <div class="badge" id="modalBadge">Signature</div>
-          <h3 id="modalTitle">Item</h3>
-          <p id="modalDesc"></p>
-        </div>
-        <button class="icon-btn" id="closeModalBtn" type="button" aria-label="Close dialog">✕</button>
-      </div>
-      <div class="detail-grid" id="modalMeta"></div>
-      <div style="display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap;">
-        <div class="price" id="modalPrice">$0.00</div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn" id="modalBackBtn" type="button">Back</button>
-          <button class="btn primary" id="modalAddBtn" type="button">Add to order</button>
-        </div>
+      <div class="controls">
+        <button class="ctrl" id="prevBtn" type="button">← Previous</button>
+        <button class="ctrl" id="nextBtn" type="button">Next →</button>
       </div>
     </div>
-  </div>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
 
   <script>
-    const menuModes = [
-      {
-        id: 'today',
-        label: 'Today',
-        sub: 'Live now',
-        status: 'Available',
-        categories: [
-          {
-            id:'featured',
-            name:'Featured',
-            emoji:'✦',
-            blurb:'Hologram spotlight signatures built to sell the concept fast.',
-            items:[
-              {id:'truffle-bird', name:'Hot Honey Firebird', price:17, badge:'Popular', desc:'Crispy chicken, hot honey lacquer, pickles, comeback slaw, and toasted brioche.', calories:'790 cal', prep:'10 min', spice:'Medium', vegetarian:false, tags:['Crunch','Heat','Sweet'], glow:'rgba(118,236,255,.17)'},
-              {id:'bayou-burger', name:'Bayou Smoke Burger', price:18, badge:'Bestseller', desc:'Double smash patties, smoked cheddar, onion jam, pepper mayo, and charred bun edges.', calories:'920 cal', prep:'12 min', spice:'Low', vegetarian:false, tags:['Beef','Smoke','Heavy'], glow:'rgba(255,121,218,.15)'},
-              {id:'delta-pasta', name:'Delta Truffle Pasta', price:16, badge:'Vegetarian', desc:'Creamy truffle sauce, black pepper, pecorino snowfall, and buttery toasted crumbs.', calories:'710 cal', prep:'11 min', spice:'Low', vegetarian:true, tags:['Creamy','Luxury','Pasta'], glow:'rgba(159,139,255,.18)'},
-              {id:'citrus-rib', name:'Citrus Ember Rib Tips', price:19, badge:'Chef pick', desc:'Sticky rib tips tossed in citrus smoke glaze with crackle onions and lime ash.', calories:'860 cal', prep:'13 min', spice:'Medium', vegetarian:false, tags:['Sticky','Bold','Shareable'], glow:'rgba(158,255,195,.16)'}
-            ]
-          },
-          {
-            id:'sandwiches',
-            name:'Sandwiches',
-            emoji:'🥪',
-            blurb:'Fast, dramatic, stacked, and easy to turn into a signature lane.',
-            items:[
-              {id:'comeback-po-boy', name:'Comeback Shrimp Po-Boy', price:16, badge:'Fresh', desc:'Crispy shrimp, comeback sauce, lettuce shred, tomato, and lemon pepper dust.', calories:'690 cal', prep:'10 min', spice:'Low', vegetarian:false, tags:['Seafood','Crunch','Saucy'], glow:'rgba(118,236,255,.15)'},
-              {id:'southern-melt', name:'Southern Melt Deluxe', price:15, badge:'Classic', desc:'Sliced beef, caramelized onions, provolone melt, and garlic butter hoagie.', calories:'760 cal', prep:'11 min', spice:'Low', vegetarian:false, tags:['Melt','Comfort','Beef'], glow:'rgba(255,218,142,.14)'},
-              {id:'green-stack', name:'Green Room Veg Stack', price:14, badge:'Vegetarian', desc:'Fried green tomato, pimento aioli, lettuce, pickles, and herb crunch.', calories:'610 cal', prep:'9 min', spice:'Low', vegetarian:true, tags:['Fresh','Crunch','Veg'], glow:'rgba(158,255,195,.16)'},
-              {id:'heatwave-club', name:'Heatwave Club', price:17, badge:'Spicy', desc:'Blackened chicken, pepper jack, bacon, jalapeno aioli, and tomato jam.', calories:'810 cal', prep:'12 min', spice:'High', vegetarian:false, tags:['Chicken','Spicy','Stacked'], glow:'rgba(255,121,218,.14)'}
-            ]
-          },
-          {
-            id:'plates',
-            name:'Plates',
-            emoji:'🍗',
-            blurb:'The big hitters for when the menu needs weight and comfort.',
-            items:[
-              {id:'catfish-plate', name:'Blackened Catfish Plate', price:19, badge:'Southern', desc:'Blackened catfish, dirty rice, green beans, and lemon pepper butter.', calories:'730 cal', prep:'14 min', spice:'Medium', vegetarian:false, tags:['Fish','Rice','Savory'], glow:'rgba(118,236,255,.16)'},
-              {id:'short-rib-plate', name:'Braised Rib Plate', price:23, badge:'Premium', desc:'Slow braised short rib, whipped mash, roasted carrots, and brown butter gravy.', calories:'960 cal', prep:'18 min', spice:'Low', vegetarian:false, tags:['Rich','Braised','Premium'], glow:'rgba(159,139,255,.17)'},
-              {id:'nashville-plate', name:'Nashville Heat Tenders', price:18, badge:'Hot', desc:'Three giant tenders, pickles, waffle fries, and cooling white sauce.', calories:'890 cal', prep:'12 min', spice:'High', vegetarian:false, tags:['Chicken','Hot','Crispy'], glow:'rgba(255,121,218,.16)'},
-              {id:'veg-bowl', name:'Garden Grain Bowl', price:15, badge:'Vegetarian', desc:'Ancient grains, squash, avocado, cucumber ribbons, herb vinaigrette, and feta.', calories:'580 cal', prep:'8 min', spice:'Low', vegetarian:true, tags:['Balanced','Fresh','Bowl'], glow:'rgba(158,255,195,.16)'}
-            ]
-          },
-          {
-            id:'desserts',
-            name:'Desserts',
-            emoji:'🍰',
-            blurb:'The sugar lane should feel like an encore, not an afterthought.',
-            items:[
-              {id:'banana-pudding', name:'Velvet Banana Pudding', price:8, badge:'Favorite', desc:'Whipped vanilla pudding, brown butter wafers, and banana cream ribbons.', calories:'480 cal', prep:'5 min', spice:'None', vegetarian:true, tags:['Creamy','Cool','Classic'], glow:'rgba(255,218,142,.14)'},
-              {id:'lava-cake', name:'Midnight Lava Cake', price:9, badge:'Hot', desc:'Dark chocolate cake with molten center and cold vanilla cloud.', calories:'560 cal', prep:'7 min', spice:'None', vegetarian:true, tags:['Chocolate','Warm','Rich'], glow:'rgba(255,121,218,.16)'},
-              {id:'bread-pudding', name:'Bourbon Bread Pudding', price:10, badge:'Southern', desc:'Warm bread pudding with bourbon glaze and toasted pecan crunch.', calories:'610 cal', prep:'8 min', spice:'None', vegetarian:true, tags:['Warm','Pecan','Comfort'], glow:'rgba(159,139,255,.15)'},
-              {id:'peach-cobbler', name:'Neon Peach Cobbler', price:9, badge:'Fresh', desc:'Cobbler crust, roasted peaches, cinnamon syrup, and cool cream.', calories:'520 cal', prep:'7 min', spice:'None', vegetarian:true, tags:['Peach','Warm','Bright'], glow:'rgba(118,236,255,.14)'}
-            ]
-          },
-          {
-            id:'drinks',
-            name:'Drinks',
-            emoji:'🥤',
-            blurb:'Bright sips, sugar hits, and clean refreshers for every heavy plate.',
-            items:[
-              {id:'sweet-tea', name:'Laser Sweet Tea', price:4, badge:'House', desc:'Black tea, citrus peel, cane sugar, and plenty of ice.', calories:'150 cal', prep:'2 min', spice:'None', vegetarian:true, tags:['Tea','Cold','Classic'], glow:'rgba(118,236,255,.14)'},
-              {id:'berry-fizz', name:'Berry Fizz Cooler', price:5, badge:'Signature', desc:'Blueberry syrup, lemon, soda, and mint sparkle.', calories:'130 cal', prep:'3 min', spice:'None', vegetarian:true, tags:['Sparkling','Berry','Mint'], glow:'rgba(255,121,218,.14)'},
-              {id:'peach-lemonade', name:'Peach Lemon Shock', price:5, badge:'Bright', desc:'Peach nectar, lemon punch, and a sugar rim glow.', calories:'160 cal', prep:'3 min', spice:'None', vegetarian:true, tags:['Peach','Lemon','Sweet'], glow:'rgba(255,218,142,.14)'},
-              {id:'matcha-lime', name:'Matcha Lime Chill', price:6, badge:'Fresh', desc:'Ceremonial matcha, lime, coconut water, and mint foam.', calories:'110 cal', prep:'4 min', spice:'None', vegetarian:true, tags:['Green','Cool','Modern'], glow:'rgba(158,255,195,.15)'}
-            ]
-          }
-        ],
-        forecast: [
-          {name:'Cajun Alfredo Drop', time:'In 2 hours', note:'Late-night comfort lane enters the feed.'},
-          {name:'Peach Heat Wing Window', time:'Tomorrow 11:30 AM', note:'Limited batch with sticky peach heat glaze.'},
-          {name:'Chef Smoke Sampler', time:'Tomorrow 6:00 PM', note:'Three-smoke tasting board for evening traffic.'}
-        ]
-      },
-      {
-        id: 'tomorrow',
-        label: 'Tomorrow',
-        sub: 'Next wave',
-        status: 'Forecasted',
-        categories: [
-          {
-            id:'featured',
-            name:'Featured',
-            emoji:'✦',
-            blurb:'Tomorrow leans brighter, fresher, and slightly more playful.',
-            items:[
-              {id:'peach-bird', name:'Peach Heat Firebird', price:17, badge:'Tomorrow', desc:'Crispy chicken with peach heat glaze, lime slaw, and crunchy pickles.', calories:'770 cal', prep:'10 min', spice:'Medium', vegetarian:false, tags:['Sweet heat','Chicken','Crunch'], glow:'rgba(255,218,142,.16)'},
-              {id:'river-burger', name:'River Smoke Burger', price:18, badge:'Forecast', desc:'Double beef, smoked onion jam, sharp cheddar, and black pepper sauce.', calories:'910 cal', prep:'12 min', spice:'Low', vegetarian:false, tags:['Beef','Smoke','Heavy'], glow:'rgba(118,236,255,.15)'},
-              {id:'lemon-pasta', name:'Lemon Pepper Pasta', price:16, badge:'Vegetarian', desc:'Creamy lemon pepper sauce with crispy garlic and parmesan rain.', calories:'690 cal', prep:'10 min', spice:'Low', vegetarian:true, tags:['Creamy','Citrus','Pasta'], glow:'rgba(159,139,255,.16)'},
-              {id:'brisket-tips', name:'Glow Brisket Tips', price:20, badge:'Chef pick', desc:'Sticky brisket bites with charred scallions and smoked citrus glaze.', calories:'880 cal', prep:'14 min', spice:'Medium', vegetarian:false, tags:['Brisket','Sticky','Bold'], glow:'rgba(255,121,218,.15)'}
-            ]
-          },
-          {
-            id:'sandwiches',
-            name:'Sandwiches',
-            emoji:'🥪',
-            blurb:'Tomorrow’s stack game is brighter and a little more citrus-forward.',
-            items:[
-              {id:'shrimp-stack', name:'Citrus Shrimp Stack', price:16, badge:'Fresh', desc:'Fried shrimp, lemon pepper aioli, lettuce, tomato, and spicy pickles.', calories:'700 cal', prep:'10 min', spice:'Medium', vegetarian:false, tags:['Seafood','Citrus','Crunch'], glow:'rgba(118,236,255,.16)'},
-              {id:'steak-stack', name:'Steakhouse Melt', price:16, badge:'Classic', desc:'Thin-sliced steak, grilled onions, melted provolone, and garlic butter bread.', calories:'760 cal', prep:'11 min', spice:'Low', vegetarian:false, tags:['Steak','Melt','Comfort'], glow:'rgba(255,218,142,.14)'},
-              {id:'veg-crunch', name:'Veg Crunch Melt', price:14, badge:'Vegetarian', desc:'Crispy green tomato, melted provolone, pimento spread, and herbs.', calories:'620 cal', prep:'9 min', spice:'Low', vegetarian:true, tags:['Vegetarian','Melt','Crunch'], glow:'rgba(158,255,195,.16)'},
-              {id:'hot-club', name:'Blackened Club', price:17, badge:'Spicy', desc:'Blackened chicken, bacon, pepper jack, roasted tomato spread.', calories:'820 cal', prep:'12 min', spice:'High', vegetarian:false, tags:['Chicken','Club','Heat'], glow:'rgba(255,121,218,.15)'}
-            ]
-          },
-          {
-            id:'plates',
-            name:'Plates',
-            emoji:'🍗',
-            blurb:'Heavier plates stay in the system, but tomorrow gets more herbs and acid.',
-            items:[
-              {id:'snapper-plate', name:'Lemon Snapper Plate', price:20, badge:'Fresh', desc:'Pan-seared snapper, dirty rice, broccolini, and lemon herb butter.', calories:'720 cal', prep:'15 min', spice:'Low', vegetarian:false, tags:['Fish','Lemon','Rice'], glow:'rgba(118,236,255,.15)'},
-              {id:'rib-plate-two', name:'Braised Rib and Mash', price:23, badge:'Premium', desc:'Braised short rib, whipped mash, roasted carrots, pan glaze.', calories:'950 cal', prep:'18 min', spice:'Low', vegetarian:false, tags:['Braised','Premium','Comfort'], glow:'rgba(159,139,255,.16)'},
-              {id:'hot-tender-two', name:'Peach Heat Tenders', price:18, badge:'Hot', desc:'Crispy tenders, peach heat lacquer, fries, and cooling slaw.', calories:'900 cal', prep:'12 min', spice:'High', vegetarian:false, tags:['Chicken','Hot','Sweet heat'], glow:'rgba(255,121,218,.16)'},
-              {id:'grain-bowl-two', name:'Herb Grain Bowl', price:15, badge:'Vegetarian', desc:'Warm grains, squash, avocado, cucumber, herbs, feta, lemon vinaigrette.', calories:'560 cal', prep:'8 min', spice:'Low', vegetarian:true, tags:['Balanced','Bowl','Fresh'], glow:'rgba(158,255,195,.15)'}
-            ]
-          },
-          {
-            id:'desserts',
-            name:'Desserts',
-            emoji:'🍰',
-            blurb:'Dessert rotates just enough to feel like a reason to return tomorrow.',
-            items:[
-              {id:'banana-pud-two', name:'Banana Cream Crunch', price:8, badge:'Favorite', desc:'Whipped banana cream, vanilla wafers, and caramel crumble.', calories:'470 cal', prep:'5 min', spice:'None', vegetarian:true, tags:['Banana','Creamy','Cool'], glow:'rgba(255,218,142,.15)'},
-              {id:'choco-tart', name:'Dark Chocolate Tart', price:9, badge:'Rich', desc:'Silky dark chocolate tart with whipped cream and cocoa dust.', calories:'530 cal', prep:'6 min', spice:'None', vegetarian:true, tags:['Chocolate','Silky','Elegant'], glow:'rgba(255,121,218,.15)'},
-              {id:'pecan-bread', name:'Pecan Bread Pudding', price:10, badge:'Southern', desc:'Warm pudding with pecan crunch and caramel drizzle.', calories:'600 cal', prep:'8 min', spice:'None', vegetarian:true, tags:['Warm','Pecan','Comfort'], glow:'rgba(159,139,255,.15)'},
-              {id:'berry-cobbler', name:'Berry Cobbler Burst', price:9, badge:'Bright', desc:'Mixed berry cobbler with vanilla cloud and lemon zest.', calories:'500 cal', prep:'7 min', spice:'None', vegetarian:true, tags:['Berry','Warm','Bright'], glow:'rgba(118,236,255,.14)'}
-            ]
-          },
-          {
-            id:'drinks',
-            name:'Drinks',
-            emoji:'🥤',
-            blurb:'Tomorrow’s drinks push floral, berry, and cleaner refreshment notes.',
-            items:[
-              {id:'tea-two', name:'Citrus Sweet Tea', price:4, badge:'House', desc:'Sweet tea sharpened with citrus peel and crushed ice.', calories:'145 cal', prep:'2 min', spice:'None', vegetarian:true, tags:['Tea','Cold','Citrus'], glow:'rgba(118,236,255,.14)'},
-              {id:'violet-fizz', name:'Violet Berry Fizz', price:5, badge:'Signature', desc:'Berry syrup, violet tone, lemon, and sparkling soda.', calories:'125 cal', prep:'3 min', spice:'None', vegetarian:true, tags:['Berry','Floral','Sparkling'], glow:'rgba(159,139,255,.16)'},
-              {id:'peach-lime', name:'Peach Lime Freeze', price:5, badge:'Bright', desc:'Peach puree, lime punch, and frozen sparkle.', calories:'155 cal', prep:'3 min', spice:'None', vegetarian:true, tags:['Peach','Lime','Sweet'], glow:'rgba(255,218,142,.14)'},
-              {id:'mint-matcha', name:'Mint Matcha Lift', price:6, badge:'Fresh', desc:'Matcha, mint, coconut water, and lime mist.', calories:'108 cal', prep:'4 min', spice:'None', vegetarian:true, tags:['Green','Mint','Cool'], glow:'rgba(158,255,195,.15)'}
-            ]
-          }
-        ],
-        forecast: [
-          {name:'Brunch biscuit wave', time:'Tomorrow 9:00 AM', note:'Breakfast lane activates with biscuit stacks.'},
-          {name:'Cajun pasta pulse', time:'Tomorrow 1:00 PM', note:'Creamy cajun pasta rotates into the feed.'},
-          {name:'After-dark dessert drop', time:'Tomorrow 8:00 PM', note:'Late-night sweets get elevated presentation.'}
-        ]
-      },
-      {
-        id: 'advanced',
-        label: 'Advanced',
-        sub: 'Forecast',
-        status: 'Experimental',
-        categories: [
-          {
-            id:'featured',
-            name:'Featured',
-            emoji:'✦',
-            blurb:'This is the concept lane — more theatrical, more limited, more memorable.',
-            items:[
-              {id:'smoke-sampler', name:'Chef Smoke Sampler', price:26, badge:'Limited', desc:'A rotating trio of smoked proteins, pickles, sauces, and cornbread crunch.', calories:'980 cal', prep:'18 min', spice:'Medium', vegetarian:false, tags:['Sampler','Smoke','Share'], glow:'rgba(118,236,255,.18)'},
-              {id:'bayou-trio', name:'Bayou Trio Plate', price:24, badge:'Concept', desc:'Catfish bite, hot honey chicken, and rib tip served in one premium board.', calories:'1020 cal', prep:'19 min', spice:'Medium', vegetarian:false, tags:['Trio','Southern','Board'], glow:'rgba(255,121,218,.16)'},
-              {id:'green-signal', name:'Green Signal Bowl', price:17, badge:'Vegetarian', desc:'Herb grains, charred squash, avocado, pickled onion, whipped feta.', calories:'590 cal', prep:'9 min', spice:'Low', vegetarian:true, tags:['Vegetarian','Fresh','Premium'], glow:'rgba(158,255,195,.16)'},
-              {id:'ember-pasta', name:'Ember Alfredo Rigatoni', price:18, badge:'Limited', desc:'Smoked alfredo rigatoni with blackened chicken and crispy herb crumbs.', calories:'860 cal', prep:'14 min', spice:'Medium', vegetarian:false, tags:['Pasta','Smoke','Creamy'], glow:'rgba(159,139,255,.17)'}
-            ]
-          },
-          {
-            id:'sandwiches',
-            name:'Sandwiches',
-            emoji:'🥪',
-            blurb:'Advanced mode lets even sandwiches feel like event pieces.',
-            items:[
-              {id:'brisket-sandwich', name:'Brisket Ember Melt', price:18, badge:'Limited', desc:'Smoked brisket, cheddar melt, burnt onion aioli, and glossy hoagie roll.', calories:'840 cal', prep:'12 min', spice:'Low', vegetarian:false, tags:['Brisket','Melt','Rich'], glow:'rgba(118,236,255,.15)'},
-              {id:'shrimp-vortex', name:'Shrimp Vortex Po-Boy', price:17, badge:'Concept', desc:'Crispy shrimp, tamarind comeback, lettuce, and pepper citrus slaw.', calories:'710 cal', prep:'11 min', spice:'Medium', vegetarian:false, tags:['Shrimp','Crunch','Bright'], glow:'rgba(255,218,142,.14)'},
-              {id:'veg-tower', name:'Veg Tower Deluxe', price:15, badge:'Vegetarian', desc:'Fried green tomato, smoked pimento, crispy onions, and herbs.', calories:'640 cal', prep:'9 min', spice:'Low', vegetarian:true, tags:['Veg','Southern','Crunch'], glow:'rgba(158,255,195,.15)'},
-              {id:'heat-stack', name:'Atomic Heat Stack', price:18, badge:'Hot', desc:'Blackened chicken, ghost pepper aioli, bacon, and cold slaw.', calories:'830 cal', prep:'12 min', spice:'High', vegetarian:false, tags:['Chicken','Hot','Stacked'], glow:'rgba(255,121,218,.15)'}
-            ]
-          },
-          {
-            id:'plates',
-            name:'Plates',
-            emoji:'🍗',
-            blurb:'Advanced plates make the menu feel more chef-driven and less ordinary.',
-            items:[
-              {id:'glazed-rib', name:'Glazed Rib Dinner', price:24, badge:'Premium', desc:'Sticky glazed ribs, mashed potatoes, collards, and smoked gravy.', calories:'1040 cal', prep:'19 min', spice:'Low', vegetarian:false, tags:['Ribs','Comfort','Heavy'], glow:'rgba(159,139,255,.16)'},
-              {id:'catfish-board', name:'Catfish Cornbread Board', price:22, badge:'Southern', desc:'Blackened catfish, cornbread crisp, pickled veg, and lemon butter.', calories:'820 cal', prep:'15 min', spice:'Medium', vegetarian:false, tags:['Catfish','Board','Savory'], glow:'rgba(118,236,255,.15)'},
-              {id:'nashville-basket', name:'Nashville Basket XL', price:20, badge:'Hot', desc:'Oversized tenders, waffle fries, pickles, and white comeback sauce.', calories:'960 cal', prep:'12 min', spice:'High', vegetarian:false, tags:['Chicken','Basket','Hot'], glow:'rgba(255,121,218,.15)'},
-              {id:'charred-bowl', name:'Charred Harvest Bowl', price:16, badge:'Vegetarian', desc:'Charred squash, grains, avocado, herbs, feta, lemon tahini.', calories:'570 cal', prep:'8 min', spice:'Low', vegetarian:true, tags:['Bowl','Veg','Balanced'], glow:'rgba(158,255,195,.15)'}
-            ]
-          },
-          {
-            id:'desserts',
-            name:'Desserts',
-            emoji:'🍰',
-            blurb:'Dessert becomes a premium finish in advanced mode.',
-            items:[
-              {id:'pecan-glow', name:'Pecan Glow Tart', price:10, badge:'Limited', desc:'Pecan tart with caramel gloss and whipped cream.', calories:'540 cal', prep:'7 min', spice:'None', vegetarian:true, tags:['Pecan','Caramel','Elegant'], glow:'rgba(255,218,142,.15)'},
-              {id:'midnight-cake', name:'Midnight Mirror Cake', price:11, badge:'Concept', desc:'Chocolate mirror glaze, mousse core, and vanilla shine.', calories:'590 cal', prep:'8 min', spice:'None', vegetarian:true, tags:['Chocolate','Glossy','Rich'], glow:'rgba(255,121,218,.15)'},
-              {id:'banana-royale', name:'Banana Royale', price:10, badge:'Classic+', desc:'Banana pudding reworked with brûléed wafers and whipped cream.', calories:'500 cal', prep:'6 min', spice:'None', vegetarian:true, tags:['Banana','Creamy','Southern'], glow:'rgba(159,139,255,.15)'},
-              {id:'cobbler-prime', name:'Prime Peach Cobbler', price:10, badge:'Bright', desc:'Roasted peach cobbler with cinnamon sugar top and cool cream.', calories:'530 cal', prep:'7 min', spice:'None', vegetarian:true, tags:['Peach','Warm','Classic'], glow:'rgba(118,236,255,.14)'}
-            ]
-          },
-          {
-            id:'drinks',
-            name:'Drinks',
-            emoji:'🥤',
-            blurb:'The drink lane gets more distinct and branded in forecast mode.',
-            items:[
-              {id:'tonic-zero', name:'Zero Gravity Tonic', price:6, badge:'Zero proof', desc:'Juniper tonic, cucumber, lime, and crisp fizz.', calories:'95 cal', prep:'3 min', spice:'None', vegetarian:true, tags:['Zero proof','Crisp','Botanical'], glow:'rgba(118,236,255,.14)'},
-              {id:'violet-wave', name:'Violet Wave Soda', price:6, badge:'Concept', desc:'Berry, violet syrup, lemon, and charged bubbles.', calories:'120 cal', prep:'3 min', spice:'None', vegetarian:true, tags:['Floral','Berry','Sparkling'], glow:'rgba(159,139,255,.15)'},
-              {id:'cola-ember', name:'Ember Cherry Cola', price:5, badge:'Bold', desc:'Black cherry, smoked vanilla, dark cola reduction.', calories:'150 cal', prep:'3 min', spice:'None', vegetarian:true, tags:['Cherry','Smoked','Sweet'], glow:'rgba(255,121,218,.14)'},
-              {id:'cloud-matcha', name:'Cloud Matcha Cooler', price:6, badge:'Fresh', desc:'Matcha, coconut water, lime, and mint foam.', calories:'110 cal', prep:'4 min', spice:'None', vegetarian:true, tags:['Matcha','Cool','Modern'], glow:'rgba(158,255,195,.14)'}
-            ]
-          }
-        ],
-        forecast: [
-          {name:'Chef smoke board', time:'Friday 6:30 PM', note:'New premium board is projected to launch next.'},
-          {name:'Brunch biscuit matrix', time:'Saturday 9:00 AM', note:'Breakfast lane becomes the spotlight event.'},
-          {name:'Dessert lab release', time:'Saturday 7:00 PM', note:'Mirror cakes and elevated puddings enter the feed.'}
-        ]
-      }
+    const nodes = [
+      { id:'featured', label:'Featured', sub:'Top signals', emoji:'✦', glow:'rgba(120,236,255,.18)' },
+      { id:'sandwiches', label:'Sandwiches', sub:'Stacked heat', emoji:'🥪', glow:'rgba(255,218,142,.16)' },
+      { id:'plates', label:'Plates', sub:'Big comfort', emoji:'🍗', glow:'rgba(255,122,217,.16)' },
+      { id:'desserts', label:'Desserts', sub:'Afterglow', emoji:'🍰', glow:'rgba(160,137,255,.18)' },
+      { id:'drinks', label:'Drinks', sub:'Cold charge', emoji:'🥤', glow:'rgba(158,255,195,.16)' },
+      { id:'specials', label:'Specials', sub:'Limited drop', emoji:'🔥', glow:'rgba(255,122,217,.18)' },
+      { id:'combos', label:'Combos', sub:'Built sets', emoji:'⚡', glow:'rgba(120,236,255,.16)' },
+      { id:'catering', label:'Catering', sub:'Large orders', emoji:'🚀', glow:'rgba(160,137,255,.16)' }
     ];
 
-    const state = {
-      mode: 'today',
-      category: 'featured',
-      query: '',
-      vegetarianOnly: false,
-      cart: [],
-      modalItem: null,
-      ambient: false
-    };
+    const state = { index: 0 };
+    const orbit = document.getElementById('orbit');
+    const coreTitle = document.getElementById('coreTitle');
+    const coreSub = document.getElementById('coreSub');
 
-    const $ = (id) => document.getElementById(id);
+    function renderOrbit() {
+      orbit.querySelectorAll('.node').forEach(n => n.remove());
+      const count = nodes.length;
+      document.documentElement.style.setProperty('--count', count);
 
-    function money(n){ return `$${n.toFixed(2)}`; }
-    function currentMode(){ return menuModes.find(m => m.id === state.mode) || menuModes[0]; }
-    function currentCategory(){ return currentMode().categories.find(c => c.id === state.category) || currentMode().categories[0]; }
-    function allItems(){ return currentMode().categories.flatMap(c => c.items.map(i => ({...i, categoryId:c.id, categoryName:c.name}))); }
-
-    function filteredItems(categoryId = state.category){
-      const category = currentMode().categories.find(c => c.id === categoryId);
-      if (!category) return [];
-      const q = state.query.trim().toLowerCase();
-      return category.items.filter(item => {
-        const text = [item.name, item.desc, item.badge, ...item.tags].join(' ').toLowerCase();
-        const queryOk = !q || text.includes(q);
-        const vegOk = !state.vegetarianOnly || item.vegetarian;
-        return queryOk && vegOk;
-      });
-    }
-
-    function renderModeSwitch(){
-      const wrap = $('daySwitch');
-      wrap.innerHTML = '';
-      menuModes.forEach(mode => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'mode-btn' + (mode.id === state.mode ? ' active' : '');
-        btn.innerHTML = `<strong>${mode.label}</strong><span>${mode.sub}</span>`;
-        btn.addEventListener('click', () => {
-          state.mode = mode.id;
-          state.category = currentMode().categories[0].id;
-          renderAll();
-          showToast(`${mode.label} menu activated`);
-        });
-        wrap.appendChild(btn);
-      });
-      $('metricStatus').textContent = currentMode().status;
-    }
-
-    function renderChips(){
-      const chips = $('chips');
-      chips.innerHTML = '';
-      currentMode().categories.forEach(category => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'chip' + (category.id === state.category ? ' active' : '');
-        btn.textContent = category.name;
-        btn.addEventListener('click', () => {
-          state.category = category.id;
-          renderStage();
-        });
-        chips.appendChild(btn);
-      });
-    }
-
-    function renderOrbit(){
-      const orbit = $('orbit');
-      orbit.innerHTML = '';
-      currentMode().categories.forEach((category, index) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'orbit-node' + (category.id === state.category ? ' active' : '');
-        btn.style.setProperty('--i', index);
-        btn.innerHTML = `<div class="emoji">${category.emoji}</div><strong>${category.name}</strong><span>${category.items.length} signals</span>`;
-        btn.addEventListener('click', () => {
-          state.category = category.id;
-          renderStage();
-        });
-        orbit.appendChild(btn);
-      });
-      const activeIndex = Math.max(0, currentMode().categories.findIndex(c => c.id === state.category));
-      document.documentElement.style.setProperty('--orbit-rotation', `${-activeIndex * 72}deg`);
-      $('coreTitle').textContent = currentCategory().name;
-      $('coreSub').textContent = currentCategory().blurb;
-      $('metricNav').textContent = currentCategory().name;
-    }
-
-    function renderLeadCard(items){
-      const lead = items[0];
-      const leadCard = $('leadCard');
-      if (!lead){
-        leadCard.innerHTML = `<div class="empty"><strong>No dishes matched.</strong><br>Try a broader search or reset the filters.</div>`;
-        leadCard.style.setProperty('--glow', 'rgba(118,236,255,.12)');
-        return;
-      }
-      leadCard.style.setProperty('--glow', lead.glow || 'rgba(118,236,255,.14)');
-      leadCard.innerHTML = `
-        <div class="lead-top">
-          <div>
-            <div class="badge">${lead.badge}</div>
-            <h4>${lead.name}</h4>
-            <p>${lead.desc}</p>
-            <div class="meta">
-              <span class="tag">${lead.calories}</span>
-              <span class="tag">${lead.prep}</span>
-              <span class="tag">${lead.spice}</span>
-              ${lead.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-          </div>
-          <div class="price">${money(lead.price)}</div>
-        </div>
-        <div></div>
-        <div class="lead-actions">
-          <button class="btn" type="button" data-view="${lead.id}">View details</button>
-          <button class="btn primary" type="button" data-add="${lead.id}">Add to order</button>
-        </div>
-      `;
-      leadCard.querySelector('[data-view]').addEventListener('click', () => openModal(lead.id));
-      leadCard.querySelector('[data-add]').addEventListener('click', () => addToCart(lead.id));
-    }
-
-    function renderMiniCards(items){
-      const miniGrid = $('miniGrid');
-      miniGrid.innerHTML = '';
-      items.slice(1, 4).forEach(item => {
-        const card = document.createElement('article');
-        card.className = 'mini-card';
-        card.innerHTML = `
-          <div>
-            <div class="badge">${item.badge}</div>
-            <h5>${item.name}</h5>
-            <p>${item.desc}</p>
-          </div>
-          <div class="meta">
-            <span class="tag">${item.prep}</span>
-            <span class="tag">${item.spice}</span>
-          </div>
-          <div class="mini-actions">
-            <strong class="price">${money(item.price)}</strong>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <button class="micro" type="button" data-view="${item.id}">Details</button>
-              <button class="micro primary" type="button" data-add="${item.id}">Add</button>
-            </div>
-          </div>
+      nodes.forEach((node, index) => {
+        const el = document.createElement('button');
+        el.type = 'button';
+        el.className = 'node' + (index === state.index ? ' active' : '');
+        el.style.setProperty('--glow', node.glow);
+        el.innerHTML = `
+          <div class="emoji">${node.emoji}</div>
+          <strong>${node.label}</strong>
+          <span>${node.sub}</span>
         `;
-        miniGrid.appendChild(card);
-      });
 
-      if (items.length <= 1){
-        for (let i = items.length; i < 4; i += 1){
-          const ghost = document.createElement('div');
-          ghost.className = 'mini-card';
-          ghost.innerHTML = `<div class="empty">More dishes will appear here as this category grows.</div>`;
-          miniGrid.appendChild(ghost);
-        }
-      }
-
-      miniGrid.querySelectorAll('[data-view]').forEach(btn => btn.addEventListener('click', () => openModal(btn.getAttribute('data-view'))));
-      miniGrid.querySelectorAll('[data-add]').forEach(btn => btn.addEventListener('click', () => addToCart(btn.getAttribute('data-add'))));
-    }
-
-    function renderForecast(){
-      const list = $('forecastList');
-      list.innerHTML = '';
-      currentMode().forecast.forEach(item => {
-        const row = document.createElement('div');
-        row.className = 'forecast-row';
-        row.innerHTML = `
-          <div>
-            <strong>${item.name}</strong>
-            <span>${item.note}</span>
-          </div>
-          <div class="tag">${item.time}</div>
+        // Position each node around the ring while counter-rotating the card
+        // so it stays facing forward even as the whole orbit spins.
+        const step = 360 / count;
+        const angle = index * step;
+        const rotation = state.index * step;
+        el.style.transform = `
+          rotate(${angle}deg)
+          translateY(calc(var(--radius) * -1))
+          rotate(${-angle - rotation}deg)
+          rotateX(calc(var(--tilt) * -1))
         `;
-        list.appendChild(row);
+
+        el.addEventListener('click', () => {
+          state.index = index;
+          update();
+        });
+        orbit.appendChild(el);
       });
-      $('forecastTag').textContent = `${currentMode().forecast.length} upcoming pulses`;
+
+      const spin = -(state.index * (360 / count));
+      document.documentElement.style.setProperty('--orbit-rotation', `${spin}deg`);
+
+      coreTitle.textContent = nodes[state.index].label;
+      coreSub.textContent = nodes[state.index].sub;
     }
 
-    function renderStage(){
-      renderChips();
+    function update() {
       renderOrbit();
-      const items = filteredItems();
-      renderLeadCard(items);
-      renderMiniCards(items);
-      $('stageTitle').textContent = `${currentCategory().name} signals`;
-      $('stageText').textContent = currentCategory().blurb;
-      $('resultsPill').textContent = `${items.length} ${items.length === 1 ? 'dish' : 'dishes'} active`;
-      $('metricCards').textContent = `${Math.max(1, Math.min(items.length, 4))} live`;
-      renderForecast();
-      $('vegBtn').classList.toggle('active', state.vegetarianOnly);
-      $('vegBtn').setAttribute('aria-pressed', String(state.vegetarianOnly));
     }
 
-    function findItem(id){
-      return allItems().find(item => item.id === id);
-    }
-
-    function addToCart(id){
-      const item = findItem(id);
-      if (!item) return;
-      const existing = state.cart.find(entry => entry.id === id);
-      if (existing) existing.qty += 1;
-      else state.cart.push({id:item.id, name:item.name, price:item.price, qty:1});
-      renderCart();
-      showToast(`${item.name} added`);
-    }
-
-    function updateQty(id, delta){
-      const item = state.cart.find(entry => entry.id === id);
-      if (!item) return;
-      item.qty += delta;
-      if (item.qty <= 0){
-        state.cart = state.cart.filter(entry => entry.id !== id);
-      }
-      renderCart();
-    }
-
-    function renderCart(){
-      const cartList = $('cartList');
-      cartList.innerHTML = '';
-      if (!state.cart.length){
-        cartList.innerHTML = `<div class="empty">Your cart is empty.<br>Tap <strong>Add</strong> from the spotlight or support cards to start an order.</div>`;
-      } else {
-        state.cart.forEach(item => {
-          const row = document.createElement('div');
-          row.className = 'cart-item';
-          row.innerHTML = `
-            <div class="cart-row">
-              <div>
-                <h4>${item.name}</h4>
-                <div class="subtle">${money(item.price)} each</div>
-              </div>
-              <strong>${money(item.price * item.qty)}</strong>
-            </div>
-            <div class="cart-row">
-              <div class="qty" aria-label="Quantity controls for ${item.name}">
-                <button type="button" data-dec="${item.id}" aria-label="Decrease quantity">−</button>
-                <span>${item.qty}</span>
-                <button type="button" data-inc="${item.id}" aria-label="Increase quantity">+</button>
-              </div>
-              <button class="micro" type="button" data-remove="${item.id}">Remove</button>
-            </div>
-          `;
-          cartList.appendChild(row);
-        });
-        cartList.querySelectorAll('[data-dec]').forEach(btn => btn.addEventListener('click', () => updateQty(btn.getAttribute('data-dec'), -1)));
-        cartList.querySelectorAll('[data-inc]').forEach(btn => btn.addEventListener('click', () => updateQty(btn.getAttribute('data-inc'), 1)));
-        cartList.querySelectorAll('[data-remove]').forEach(btn => btn.addEventListener('click', () => {
-          state.cart = state.cart.filter(item => item.id !== btn.getAttribute('data-remove'));
-          renderCart();
-        }));
-      }
-
-      const subtotal = state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-      const service = subtotal * 0.08;
-      const tax = subtotal * 0.09;
-      const total = subtotal + service + tax;
-      $('subtotal').textContent = money(subtotal);
-      $('service').textContent = money(service);
-      $('tax').textContent = money(tax);
-      $('total').textContent = money(total);
-      $('cartSub').textContent = state.cart.length ? `${state.cart.reduce((n, item) => n + item.qty, 0)} items ready` : 'No items yet';
-    }
-
-    function openModal(id){
-      const item = findItem(id);
-      if (!item) return;
-      state.modalItem = item;
-      $('modalBadge').textContent = item.badge;
-      $('modalTitle').textContent = item.name;
-      $('modalDesc').textContent = item.desc;
-      $('modalPrice').textContent = money(item.price);
-      $('modalMeta').innerHTML = `
-        <div class="detail"><div class="label">Calories</div><div class="value">${item.calories}</div></div>
-        <div class="detail"><div class="label">Prep</div><div class="value">${item.prep}</div></div>
-        <div class="detail"><div class="label">Spice</div><div class="value">${item.spice}</div></div>
-        <div class="detail"><div class="label">Tags</div><div class="value">${item.tags.join(', ')}</div></div>
-      `;
-      $('itemModal').classList.add('show');
-      $('itemModal').setAttribute('aria-hidden', 'false');
-    }
-
-    function closeModal(){
-      $('itemModal').classList.remove('show');
-      $('itemModal').setAttribute('aria-hidden', 'true');
-      state.modalItem = null;
-    }
-
-    function showToast(message){
-      const toast = $('toast');
-      toast.textContent = message;
-      toast.classList.add('show');
-      clearTimeout(showToast._timer);
-      showToast._timer = setTimeout(() => toast.classList.remove('show'), 1800);
-    }
-
-    function chooseForMe(){
-      const pool = filteredItems();
-      const pick = pool[Math.floor(Math.random() * pool.length)];
-      if (!pick){
-        showToast('No active dishes to choose from');
-        return;
-      }
-      openModal(pick.id);
-      $('metricChooser').textContent = pick.name;
-    }
-
-    function renderAll(){
-      renderModeSwitch();
-      renderStage();
-      renderCart();
-    }
-
-    $('searchInput').addEventListener('input', (e) => {
-      state.query = e.target.value;
-      renderStage();
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      state.index = (state.index - 1 + nodes.length) % nodes.length;
+      update();
     });
 
-    $('vegBtn').addEventListener('click', () => {
-      state.vegetarianOnly = !state.vegetarianOnly;
-      renderStage();
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      state.index = (state.index + 1) % nodes.length;
+      update();
     });
 
-    $('resetBtn').addEventListener('click', () => {
-      state.mode = 'today';
-      state.category = 'featured';
-      state.query = '';
-      state.vegetarianOnly = false;
-      $('searchInput').value = '';
-      renderAll();
-      showToast('Filters reset');
-    });
-
-    $('chooserBtn').addEventListener('click', chooseForMe);
-
-    $('ambientBtn').addEventListener('click', () => {
-      state.ambient = !state.ambient;
-      document.documentElement.style.setProperty('--panel', state.ambient ? 'rgba(4, 8, 18, 0.78)' : 'rgba(7, 13, 28, 0.62)');
-      document.documentElement.style.setProperty('--glow', state.ambient ? 'rgba(255,121,218,0.16)' : 'rgba(118,236,255,0.18)');
-      $('ambientBtn').classList.toggle('active', state.ambient);
-      $('ambientBtn').setAttribute('aria-pressed', String(state.ambient));
-      showToast(state.ambient ? 'Ambient mode enabled' : 'Ambient mode disabled');
-    });
-
-    $('cartJumpBtn').addEventListener('click', () => $('cartPanel').scrollIntoView({behavior:'smooth', block:'start'}));
-    $('clearCartBtn').addEventListener('click', () => {
-      state.cart = [];
-      renderCart();
-      showToast('Cart cleared');
-    });
-    $('checkoutBtn').addEventListener('click', () => showToast(state.cart.length ? 'Checkout sequence initialized' : 'Add something delicious first'));
-    $('closeModalBtn').addEventListener('click', closeModal);
-    $('modalBackBtn').addEventListener('click', closeModal);
-    $('modalAddBtn').addEventListener('click', () => {
-      if (state.modalItem) addToCart(state.modalItem.id);
-      closeModal();
-    });
-    $('itemModal').addEventListener('click', (e) => {
-      if (e.target.id === 'itemModal') closeModal();
-    });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-      if (e.key === 'ArrowRight'){
-        const cats = currentMode().categories;
-        const i = cats.findIndex(c => c.id === state.category);
-        state.category = cats[(i + 1) % cats.length].id;
-        renderStage();
+      if (e.key === 'ArrowLeft') {
+        state.index = (state.index - 1 + nodes.length) % nodes.length;
+        update();
       }
-      if (e.key === 'ArrowLeft'){
-        const cats = currentMode().categories;
-        const i = cats.findIndex(c => c.id === state.category);
-        state.category = cats[(i - 1 + cats.length) % cats.length].id;
-        renderStage();
+      if (e.key === 'ArrowRight') {
+        state.index = (state.index + 1) % nodes.length;
+        update();
       }
     });
 
-    renderAll();
+    update();
   </script>
 </body>
 </html>
