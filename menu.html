@@ -1,1127 +1,746 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Francis Smokehouse — Immersive Menu</title>
-  <meta name="description" content="An experimental cinematic menu experience for The Francis Smokehouse." />
-  <style>
-    :root{
-      --bg:#0a0706;
-      --bg2:#140d0a;
-      --card:rgba(255,255,255,0.07);
-      --line:rgba(255,255,255,0.12);
-      --text:#f7efe7;
-      --muted:#d1b9a6;
-      --accent:#ff8c42;
-      --accent2:#ffd166;
-      --accent3:#ff4d4d;
-      --good:#c7ffb2;
-      --shadow:0 30px 80px rgba(0,0,0,.45);
-      --radius:28px;
-      --max:1400px;
-      --cursorX:50vw;
-      --cursorY:50vh;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Francis Smokehouse — Future Menu Reactor</title>
+<style>
+:root{
+  --bg:#03060d;
+  --bg2:#08111f;
+  --cyan:#7df9ff;
+  --blue:#53a6ff;
+  --violet:#9b7bff;
+  --amber:#ffb24d;
+  --hot:#ff6b4a;
+  --text:#ecf7ff;
+  --muted:#9cb8d6;
+  --glass:rgba(255,255,255,.06);
+  --line:rgba(125,249,255,.22);
+  --line2:rgba(155,123,255,.18);
+  --shadow:0 30px 80px rgba(0,0,0,.45);
+  --mx:50vw;
+  --my:50vh;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(circle at 50% 50%, #0c1e38 0%, #07111d 24%, #040810 54%, #010308 100%);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+body::before{
+  content:"";
+  position:fixed;inset:-30vmax;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(83,166,255,.1), transparent 18%),
+    radial-gradient(circle at 50% 50%, rgba(125,249,255,.06), transparent 32%),
+    conic-gradient(from 0deg, rgba(125,249,255,.12), rgba(155,123,255,.06), rgba(255,107,74,.08), rgba(125,249,255,.12));
+  filter:blur(80px) saturate(130%);
+  animation:aurora 18s linear infinite;
+  pointer-events:none;
+}
+@keyframes aurora{to{transform:rotate(360deg)}}
 
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:radial-gradient(circle at top, #281511 0%, var(--bg) 40%, #050404 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;scroll-behavior:smooth}
-    body{overflow-x:hidden}
-    a{color:inherit;text-decoration:none}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#grid{opacity:.9}
+#fx{opacity:1}
 
-    #smoke, #embers{
-      position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:0;
-      opacity:.95;
-    }
+.scanlines,.vignette,.cursor-light,.noise{
+  position:fixed;inset:0;pointer-events:none
+}
+.scanlines{
+  background:repeating-linear-gradient(to bottom, rgba(255,255,255,.04) 0, rgba(255,255,255,.04) 1px, transparent 2px, transparent 4px);
+  mix-blend-mode:soft-light;opacity:.12
+}
+.vignette{background:radial-gradient(circle at center, transparent 40%, rgba(0,0,0,.5) 100%)}
+.cursor-light{
+  background:
+    radial-gradient(28rem 28rem at var(--mx) var(--my), rgba(125,249,255,.12), transparent 55%),
+    radial-gradient(42rem 42rem at var(--mx) var(--my), rgba(155,123,255,.08), transparent 70%);
+  transition:background .08s linear
+}
+.noise{
+  opacity:.05;
+  background-image:
+   radial-gradient(circle at 20% 30%, #fff 0 1px, transparent 1px),
+   radial-gradient(circle at 75% 60%, #fff 0 1px, transparent 1px),
+   radial-gradient(circle at 40% 80%, #fff 0 1px, transparent 1px);
+  background-size:150px 150px, 190px 190px, 210px 210px;
+}
 
-    .noise,
-    .vignette,
-    .spotlight{
-      position:fixed; inset:0; pointer-events:none; z-index:1;
-    }
-    .noise{
-      opacity:.06;
-      background-image:
-        radial-gradient(circle at 20% 30%, rgba(255,255,255,.7) 0 1px, transparent 1px),
-        radial-gradient(circle at 70% 60%, rgba(255,255,255,.45) 0 1px, transparent 1px),
-        radial-gradient(circle at 40% 80%, rgba(255,255,255,.4) 0 1px, transparent 1px);
-      background-size: 160px 160px, 220px 220px, 180px 180px;
-      mix-blend-mode:soft-light;
-    }
-    .vignette{
-      background:radial-gradient(circle at center, transparent 45%, rgba(0,0,0,.55) 100%);
-    }
-    .spotlight{
-      background:
-        radial-gradient(420px 420px at var(--cursorX) var(--cursorY), rgba(255,140,66,.14), transparent 65%),
-        radial-gradient(780px 780px at 20% 15%, rgba(255,209,102,.08), transparent 70%);
-      transition:background .15s linear;
-    }
+.ui{
+  position:relative;
+  z-index:2;
+  height:100%;
+  display:grid;
+  grid-template-columns: 1fr;
+  grid-template-rows:auto 1fr auto;
+  padding:18px;
+}
+.topbar,.bottombar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap
+}
+.brand, .top-actions, .meta-chip{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap
+}
+.logo{
+  width:44px;height:44px;border-radius:14px;position:relative;
+  border:1px solid rgba(125,249,255,.35);
+  background:
+    radial-gradient(circle at 50% 65%, rgba(255,178,77,.8), transparent 26%),
+    linear-gradient(145deg, rgba(125,249,255,.18), rgba(155,123,255,.12));
+  box-shadow:0 0 0 1px rgba(255,255,255,.05) inset, 0 0 24px rgba(125,249,255,.15);
+  overflow:hidden
+}
+.logo:before,.logo:after{content:"";position:absolute;left:50%;transform:translateX(-50%);border-radius:999px}
+.logo:before{top:8px;width:4px;height:18px;background:linear-gradient(180deg, rgba(255,255,255,.95), transparent);box-shadow:-9px 3px 0 rgba(255,255,255,.7), 9px -2px 0 rgba(255,255,255,.6)}
+.logo:after{bottom:8px;width:24px;height:10px;background:radial-gradient(circle at center, rgba(255,178,77,1), transparent 70%)}
+.title-block small,.meta-chip small{display:block;color:var(--muted);letter-spacing:.22em;text-transform:uppercase;font-size:.62rem}
+.title-block strong{display:block;font-weight:700;font-size:.98rem;letter-spacing:.02em}
+.meta-chip{
+  padding:.7rem .85rem;border-radius:999px;
+  border:1px solid rgba(125,249,255,.18);
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(12px)
+}
+.action-btn{
+  appearance:none;border:0;cursor:pointer;
+  padding:.85rem 1rem;border-radius:999px;color:var(--text);
+  background:linear-gradient(180deg, rgba(125,249,255,.16), rgba(125,249,255,.08));
+  border:1px solid rgba(125,249,255,.22);
+  box-shadow:0 10px 30px rgba(125,249,255,.08), inset 0 1px 0 rgba(255,255,255,.08);
+  font-weight:600;letter-spacing:.03em
+}
+.action-btn:hover{transform:translateY(-2px)}
 
-    .shell{position:relative; z-index:2}
+.stage{
+  position:relative;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+.reactor-wrap{
+  position:relative;
+  width:min(88vw,1080px);
+  aspect-ratio:1.45/1;
+  display:grid;
+  place-items:center;
+  filter:drop-shadow(0 25px 100px rgba(0,0,0,.45));
+}
+.reactor{
+  position:absolute;
+  width:min(74vw,560px);
+  aspect-ratio:1;
+  border-radius:50%;
+  display:grid;place-items:center;
+  transform-style:preserve-3d;
+  animation:reactorFloat 7s ease-in-out infinite;
+}
+@keyframes reactorFloat{
+  0%,100%{transform:translateY(0) rotateZ(0deg)}
+  50%{transform:translateY(-10px) rotateZ(1.2deg)}
+}
+.halo,.halo2,.halo3,.inner-ring,.outer-ring,.pulse-ring{
+  position:absolute;border-radius:50%;inset:0
+}
+.halo{
+  background:radial-gradient(circle, rgba(125,249,255,.2) 0, rgba(125,249,255,.1) 22%, rgba(83,166,255,.06) 36%, transparent 64%);
+  filter:blur(8px)
+}
+.halo2{
+  inset:6%;
+  border:1px solid rgba(125,249,255,.22);
+  box-shadow:0 0 32px rgba(125,249,255,.14), inset 0 0 24px rgba(125,249,255,.08);
+  animation:spin 18s linear infinite
+}
+.halo3{
+  inset:14%;
+  border:1px solid rgba(155,123,255,.24);
+  animation:spinReverse 14s linear infinite
+}
+.outer-ring{
+  inset:22%;
+  border:1px solid rgba(255,255,255,.09);
+  box-shadow:0 0 0 1px rgba(255,255,255,.03) inset;
+}
+.inner-ring{
+  inset:34%;
+  border:1px solid rgba(125,249,255,.28);
+  box-shadow:0 0 20px rgba(125,249,255,.18);
+}
+.pulse-ring{
+  inset:34%;
+  border:1px solid rgba(125,249,255,.4);
+  animation:pulse 2.4s ease-out infinite
+}
+@keyframes pulse{
+  0%{transform:scale(.94);opacity:.7}
+  70%{transform:scale(1.22);opacity:0}
+  100%{transform:scale(1.22);opacity:0}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spinReverse{to{transform:rotate(-360deg)}}
 
-    .hero{
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      padding:28px;
-      position:relative;
-    }
+.core{
+  position:absolute;inset:38%;
+  border-radius:50%;
+  display:grid;place-items:center;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.95) 0 4%, rgba(125,249,255,.95) 8%, rgba(83,166,255,.65) 20%, rgba(155,123,255,.22) 42%, transparent 65%);
+  box-shadow:0 0 80px rgba(125,249,255,.28), 0 0 160px rgba(83,166,255,.14)
+}
+.core .coretext{
+  text-align:center;
+  transform:translateZ(30px)
+}
+.core .big{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:clamp(.9rem,1.5vw,1rem);
+  letter-spacing:.38em;
+  color:#d9faff;
+  text-transform:uppercase;
+}
+.core .small{
+  font-size:.74rem;
+  color:#88c7e2;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  margin-top:10px
+}
 
-    .hero-card{
-      width:min(100%, var(--max));
-      min-height:88vh;
-      border:1px solid var(--line);
-      border-radius:42px;
-      position:relative;
-      overflow:hidden;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
-        radial-gradient(circle at top left, rgba(255,140,66,.20), transparent 35%),
-        radial-gradient(circle at bottom right, rgba(255,77,77,.18), transparent 32%),
-        rgba(17,10,9,.55);
-      backdrop-filter:blur(18px);
-      box-shadow:var(--shadow);
-      padding:28px;
-      display:grid;
-      grid-template-rows:auto 1fr auto;
-      isolation:isolate;
-    }
+.node{
+  position:absolute;
+  left:50%;top:50%;
+  width:170px;height:170px;
+  margin:-85px;
+  display:grid;place-items:center;
+  transform-origin:center center;
+}
+.node-btn{
+  width:100%;height:100%;
+  border-radius:30px;
+  border:1px solid rgba(125,249,255,.24);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03)),
+    radial-gradient(circle at 30% 20%, rgba(125,249,255,.22), transparent 40%),
+    rgba(8,16,28,.48);
+  color:var(--text);
+  box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter:blur(16px);
+  transform:perspective(900px) rotateX(18deg) rotateY(-10deg);
+  cursor:pointer;
+  transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+  overflow:hidden;
+  position:relative;
+}
+.node-btn::before{
+  content:"";
+  position:absolute;inset:-1px;
+  background:linear-gradient(120deg, transparent 20%, rgba(255,255,255,.18), transparent 55%);
+  transform:translateX(-120%);
+  animation:sheen 4.5s ease-in-out infinite;
+}
+@keyframes sheen{
+  0%,100%{transform:translateX(-120%)}
+  40%{transform:translateX(140%)}
+}
+.node-btn:hover,.node-btn.active{
+  border-color:rgba(125,249,255,.5);
+  box-shadow:0 0 40px rgba(125,249,255,.16), 0 30px 80px rgba(0,0,0,.4);
+  transform:perspective(900px) rotateX(6deg) rotateY(0deg) translateY(-8px) scale(1.05)
+}
+.node-ui{
+  position:relative;
+  z-index:1;
+  width:100%;height:100%;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:16px;
+  text-align:left
+}
+.node-ui small{
+  color:#90d6f2;letter-spacing:.24em;text-transform:uppercase;font-size:.62rem
+}
+.node-ui strong{
+  font-size:1.15rem;line-height:.95;letter-spacing:.02em
+}
+.node-ui span{
+  font-size:.8rem;color:var(--muted);line-height:1.35;max-width:12ch
+}
 
-    .topbar{
-      display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap;
-    }
+.overlay{
+  position:absolute;
+  inset:auto 50% 24px auto;
+  transform:translateX(50%);
+  width:min(92vw,1180px);
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap:16px;
+  align-items:end;
+  pointer-events:none;
+}
+.panel{
+  pointer-events:auto;
+  min-height:220px;
+  border-radius:30px;
+  border:1px solid rgba(125,249,255,.16);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03)),
+    radial-gradient(circle at top left, rgba(125,249,255,.12), transparent 35%),
+    rgba(8,15,27,.62);
+  backdrop-filter:blur(18px);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  position:relative;
+}
+.panel::after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), transparent 18%, transparent 82%, rgba(125,249,255,.03));
+  pointer-events:none
+}
+.hero-panel{
+  padding:22px 22px 18px;
+}
+.hero-panel small, .menu-panel small{
+  display:block;color:#8fdaff;letter-spacing:.28em;text-transform:uppercase;font-size:.62rem;margin-bottom:10px
+}
+.hero-panel h1{
+  margin:0;font-size:clamp(2rem,5vw,4rem);line-height:.88;
+  text-transform:uppercase;letter-spacing:.02em
+}
+.hero-panel p{
+  margin:12px 0 0;color:var(--muted);max-width:46ch;font-size:1rem;line-height:1.55
+}
+.menu-panel{
+  padding:18px;
+  display:grid;
+  grid-template-rows:auto 1fr;
+}
+.panel-top{
+  display:flex;justify-content:space-between;gap:10px;align-items:start;margin-bottom:12px
+}
+.panel-title{
+  font-size:1.4rem;font-weight:800;letter-spacing:.02em;text-transform:uppercase;line-height:.95
+}
+.panel-sub{
+  color:var(--muted);font-size:.86rem;max-width:28ch;line-height:1.45;margin-top:8px
+}
+.price-list{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px
+}
+.item{
+  border-radius:18px;
+  border:1px solid rgba(125,249,255,.12);
+  background:rgba(255,255,255,.04);
+  padding:12px;
+  min-height:84px;
+  display:flex;flex-direction:column;justify-content:space-between
+}
+.item strong{
+  font-size:1rem;line-height:1
+}
+.item em{
+  font-style:normal;color:var(--muted);font-size:.78rem;line-height:1.35;margin-top:7px
+}
+.item b{
+  font-size:1rem;color:#ffffff;letter-spacing:.04em
+}
 
-    .brand{
-      display:flex; align-items:center; gap:16px;
-    }
-    .brand-mark{
-      width:58px;height:58px;border-radius:18px;position:relative;
-      border:1px solid rgba(255,255,255,.16);
-      background:
-        radial-gradient(circle at 50% 100%, rgba(255,209,102,.65), transparent 45%),
-        linear-gradient(160deg, rgba(255,140,66,.35), rgba(255,77,77,.15));
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 10px 28px rgba(255,140,66,.16);
-      overflow:hidden;
-    }
-    .brand-mark::before,
-    .brand-mark::after{
-      content:"";
-      position:absolute;
-      left:50%;
-      transform:translateX(-50%);
-      border-radius:999px;
-      background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,0));
-      filter:blur(.2px);
-    }
-    .brand-mark::before{width:4px;height:24px;top:13px;box-shadow:-12px 4px 0 rgba(255,255,255,.7), 12px -2px 0 rgba(255,255,255,.6)}
-    .brand-mark::after{width:34px;height:18px;bottom:10px;background:radial-gradient(circle at center, rgba(255,209,102,.88), rgba(255,140,66,.15) 70%, transparent 71%)}
+.bottombar{
+  align-self:end
+}
+.coords{
+  display:flex;gap:10px;flex-wrap:wrap
+}
+.coords .meta-chip{padding:.75rem .95rem}
+.coords b{font-size:.82rem}
 
-    .eyebrow{
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:var(--accent2);
-      font-size:.72rem;
-      margin-bottom:5px;
-    }
-    .brand h1{font-size:clamp(1.2rem, 2vw, 1.7rem);margin:0}
-    .brand p{margin:2px 0 0;color:var(--muted);font-size:.92rem}
+.reveal{opacity:0;transform:translateY(18px) scale(.98);animation:reveal .9s ease forwards}
+.delay1{animation-delay:.08s}.delay2{animation-delay:.16s}.delay3{animation-delay:.24s}
+@keyframes reveal{to{opacity:1;transform:none}}
 
-    .status-pills{display:flex;gap:10px;flex-wrap:wrap}
-    .pill{
-      padding:.75rem 1rem;border:1px solid var(--line);border-radius:999px;
-      background:rgba(255,255,255,.06);
-      color:#f5e6d9;font-size:.84rem;
-      backdrop-filter:blur(10px);
-    }
-
-    .hero-main{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:28px;
-      align-items:end;
-      padding:32px 0 12px;
-    }
-
-    .headline{
-      max-width:820px;
-    }
-    .headline h2{
-      font-family: Georgia, "Times New Roman", serif;
-      font-size:clamp(3rem, 8vw, 7rem);
-      line-height:.92;
-      letter-spacing:-.04em;
-      margin:0 0 18px;
-      text-wrap:balance;
-    }
-    .headline .gradient{
-      background:linear-gradient(90deg, #fff7ee, #ffd7bf 38%, #ffb171 65%, #fff1cc);
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-      text-shadow: 0 0 28px rgba(255,173,103,.12);
-    }
-
-    .headline p{
-      color:#ead4c1;
-      font-size:clamp(1rem, 1.8vw, 1.15rem);
-      line-height:1.75;
-      max-width:680px;
-      margin:0 0 26px;
-    }
-
-    .action-row{display:flex;gap:12px;flex-wrap:wrap}
-    .cta{
-      padding:1rem 1.2rem;border-radius:18px;border:1px solid rgba(255,255,255,.16);
-      background:linear-gradient(180deg, rgba(255,140,66,.23), rgba(255,140,66,.10));
-      color:white;font-weight:700;letter-spacing:.02em;
-      box-shadow:0 12px 32px rgba(255,140,66,.18);
-      position:relative;overflow:hidden;
-    }
-    .cta.alt{
-      background:rgba(255,255,255,.06);
-      color:#f1dfd2;
-      box-shadow:none;
-    }
-    .cta::after{
-      content:"";
-      position:absolute; inset:-2px;
-      background:linear-gradient(120deg, transparent 20%, rgba(255,255,255,.30), transparent 60%);
-      transform:translateX(-120%);
-      animation:glint 4.8s ease-in-out infinite;
-    }
-    @keyframes glint {
-      0%, 100% {transform:translateX(-120%)}
-      35% {transform:translateX(120%)}
-    }
-
-    .orbital{
-      display:grid;
-      place-items:center;
-      min-height:430px;
-      position:relative;
-    }
-    .orbital-core{
-      width:min(72vw, 400px); aspect-ratio:1;
-      border-radius:50%;
-      position:relative;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255,214,161,.20) 0, rgba(255,140,66,.15) 22%, rgba(255,77,77,.08) 36%, transparent 60%),
-        radial-gradient(circle at 50% 55%, rgba(255,191,110,.24), transparent 54%);
-      display:grid;place-items:center;
-      transform-style:preserve-3d;
-      animation: float 8s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%,100% {transform:translateY(0) rotateZ(0deg)}
-      50% {transform:translateY(-12px) rotateZ(2deg)}
-    }
-
-    .ring{
-      position:absolute; inset:8%;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:50%;
-      transform-style:preserve-3d;
-      animation: spin 24s linear infinite;
-    }
-    .ring.r2{inset:18%; animation-direction:reverse; animation-duration:17s}
-    .ring.r3{inset:30%; animation-duration:13s}
-    @keyframes spin { to{transform:rotate(360deg)} }
-
-    .node{
-      position:absolute; left:50%; top:50%;
-      transform-origin:0 0;
-      padding:.7rem .9rem;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.14);
-      backdrop-filter: blur(14px);
-      border-radius:16px;
-      font-size:.83rem;
-      color:#ffe9d7;
-      box-shadow:0 10px 25px rgba(0,0,0,.18);
-      white-space:nowrap;
-    }
-
-    .orb-title{
-      position:relative;
-      width:190px;height:190px;border-radius:50%;
-      display:grid;place-items:center;
-      background:
-        radial-gradient(circle at 30% 25%, rgba(255,255,255,.28), transparent 30%),
-        radial-gradient(circle at center, rgba(255,140,66,.22), rgba(255,140,66,.04) 65%, transparent 66%);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 30px 70px rgba(0,0,0,.25);
-      text-align:center;
-      padding:18px;
-    }
-    .orb-title strong{
-      font-family: Georgia, "Times New Roman", serif;
-      display:block;font-size:1.8rem;line-height:1.03;
-      margin-bottom:6px;
-    }
-    .orb-title span{display:block;color:var(--muted);font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
-
-    .microcopy{
-      display:grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap:14px;
-      margin-top:8px;
-    }
-    .micro{
-      padding:15px 16px;
-      border:1px solid var(--line);
-      border-radius:20px;
-      background:rgba(255,255,255,.05);
-      min-height:90px;
-    }
-    .micro .label{font-size:.72rem; text-transform:uppercase; letter-spacing:.18em; color:var(--accent2); margin-bottom:8px}
-    .micro strong{display:block; font-size:1rem; margin-bottom:4px}
-    .micro span{color:var(--muted); font-size:.92rem; line-height:1.5}
-
-    .section{
-      position:relative;
-      padding:90px 22px;
-    }
-    .section-inner{
-      width:min(100%, var(--max));
-      margin:0 auto;
-    }
-    .section-head{
-      display:flex; justify-content:space-between; gap:18px; align-items:end; flex-wrap:wrap;
-      margin-bottom:24px;
-    }
-    .section-head h3{
-      font-family: Georgia, "Times New Roman", serif;
-      font-size:clamp(2.2rem, 5vw, 4rem);
-      margin:0;
-      line-height:1;
-    }
-    .section-head p{
-      max-width:720px; color:var(--muted); line-height:1.7; margin:0;
-    }
-
-    .swirl-nav{
-      display:grid;
-      grid-template-columns: repeat(5, minmax(0,1fr));
-      gap:16px;
-      margin-bottom:24px;
-    }
-    .swirl-btn{
-      position:relative;
-      border-radius:24px;
-      padding:18px 18px 18px 20px;
-      border:1px solid rgba(255,255,255,.13);
-      background:
-        radial-gradient(circle at 0% 0%, rgba(255,140,66,.18), transparent 50%),
-        rgba(255,255,255,.05);
-      min-height:108px;
-      overflow:hidden;
-      cursor:pointer;
-      transition:transform .22s ease, border-color .22s ease, background .22s ease;
-    }
-    .swirl-btn:hover{transform:translateY(-6px); border-color:rgba(255,255,255,.22)}
-    .swirl-btn.active{
-      background:
-        radial-gradient(circle at 20% 10%, rgba(255,140,66,.26), transparent 46%),
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
-      border-color:rgba(255,209,102,.35);
-      box-shadow:0 18px 45px rgba(255,140,66,.15);
-    }
-    .swirl-btn::after{
-      content:"";
-      position:absolute; width:140px;height:140px;border-radius:50%;
-      right:-40px;bottom:-50px;border:1px solid rgba(255,255,255,.11);
-    }
-    .swirl-btn .kicker{font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent2); margin-bottom:10px}
-    .swirl-btn strong{display:block; font-size:1.15rem; margin-bottom:6px}
-    .swirl-btn span{color:var(--muted); font-size:.9rem}
-
-    .constellation{
-      position:relative;
-      border-radius:36px;
-      border:1px solid rgba(255,255,255,.11);
-      overflow:hidden;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
-        rgba(13,8,7,.62);
-      box-shadow:var(--shadow);
-      min-height:720px;
-      padding:22px;
-    }
-
-    .beam{
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(90deg, transparent 0%, rgba(255,255,255,.06) 48%, transparent 100%),
-        linear-gradient(180deg, transparent 0%, rgba(255,140,66,.05) 50%, transparent 100%);
-      mix-blend-mode:screen;
-      opacity:.8;
-      pointer-events:none;
-      animation:beam 8s linear infinite;
-    }
-    @keyframes beam {
-      0%{transform:translateX(-10%)}
-      50%{transform:translateX(10%)}
-      100%{transform:translateX(-10%)}
-    }
-
-    .cards{
-      position:relative;
-      display:grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap:18px;
-      align-items:start;
-    }
-    .menu-card{
-      grid-column: span 4;
-      position:relative;
-      border-radius:28px;
-      padding:20px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)),
-        radial-gradient(circle at top right, rgba(255,140,66,.18), transparent 34%),
-        rgba(255,255,255,.035);
-      border:1px solid rgba(255,255,255,.12);
-      backdrop-filter: blur(16px);
-      box-shadow:0 24px 60px rgba(0,0,0,.22);
-      min-height:300px;
-      transform-style:preserve-3d;
-      transition:transform .18s ease, border-color .18s ease;
-    }
-    .menu-card:hover{
-      border-color:rgba(255,209,102,.32);
-      transform:translateY(-8px);
-    }
-    .menu-card.large{grid-column: span 8; min-height:300px}
-    .menu-card.wide{grid-column: span 6}
-    .menu-card .top{
-      display:flex; justify-content:space-between; gap:14px; align-items:start; margin-bottom:16px;
-    }
-    .menu-card .tag{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:.45rem .7rem;border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06);
-      color:#ffedd8; font-size:.76rem; letter-spacing:.1em; text-transform:uppercase;
-    }
-    .menu-card h4{
-      font-size:1.7rem; margin:0 0 8px; font-family: Georgia, "Times New Roman", serif; line-height:1;
-    }
-    .menu-card .lede{
-      color:var(--muted); line-height:1.7; margin:0 0 14px;
-      max-width:62ch;
-    }
-    .lines{display:grid; gap:10px}
-    .line{
-      display:grid; grid-template-columns:1fr auto; gap:14px; align-items:end;
-      padding:10px 0;
-      border-bottom:1px dashed rgba(255,255,255,.10);
-    }
-    .line:last-child{border-bottom:none}
-    .line strong{font-size:1.02rem}
-    .line span{display:block; color:#d4baa7; font-size:.9rem; margin-top:4px; line-height:1.45}
-    .price{
-      color:#fff5e6;
-      font-weight:800;
-      letter-spacing:.03em;
-      font-size:1rem;
-      padding-left:10px;
-    }
-
-    .grid-note{
-      margin-top:20px;
-      color:#cdb29f;
-      font-size:.9rem;
-      line-height:1.7;
-      border-top:1px solid rgba(255,255,255,.08);
-      padding-top:14px;
-    }
-
-    .special-portal{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:18px;
-    }
-    .special{
-      border-radius:24px;
-      padding:18px;
-      border:1px solid rgba(255,255,255,.11);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035)),
-        rgba(255,255,255,.03);
-    }
-    .special .small{color:var(--accent2); text-transform:uppercase; letter-spacing:.15em; font-size:.72rem; margin-bottom:10px}
-    .special strong{display:block; font-size:1.22rem; margin-bottom:6px}
-    .special p{margin:0; color:var(--muted); line-height:1.6}
-
-    .footer{
-      padding:35px 22px 70px;
-    }
-    .footer-box{
-      width:min(100%, var(--max));
-      margin:0 auto;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:30px;
-      padding:24px;
-      background:rgba(255,255,255,.04);
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:20px;
-    }
-    .footer h5{
-      margin:0 0 10px;
-      font-size:1.4rem;
-      font-family: Georgia, "Times New Roman", serif;
-    }
-    .footer p{
-      margin:0;color:var(--muted);line-height:1.7
-    }
-    .meta{
-      display:grid;
-      gap:12px;
-    }
-    .meta .row{
-      display:flex;justify-content:space-between; gap:14px; border-bottom:1px dashed rgba(255,255,255,.08); padding-bottom:10px;
-    }
-    .meta .row:last-child{border-bottom:none;padding-bottom:0}
-    .meta .row span{color:var(--muted)}
-
-    .reveal{
-      opacity:0;
-      transform:translateY(28px) scale(.985);
-      transition: opacity .8s ease, transform .8s ease;
-    }
-    .reveal.show{
-      opacity:1;
-      transform:translateY(0) scale(1);
-    }
-
-    .signature{
-      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
-      margin-top:18px;
-      padding-top:14px;
-      border-top:1px solid rgba(255,255,255,.08);
-      color:#d6bca9;
-      font-size:.9rem;
-    }
-
-    @media (max-width: 1100px){
-      .hero-main{grid-template-columns:1fr}
-      .microcopy{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .swirl-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .menu-card,.menu-card.large,.menu-card.wide{grid-column:span 12}
-      .footer-box{grid-template-columns:1fr}
-      .special-portal{grid-template-columns:1fr}
-    }
-
-    @media (max-width: 720px){
-      .hero-card{min-height:auto}
-      .headline h2{font-size:clamp(2.7rem, 15vw, 4.8rem)}
-      .orbital{min-height:320px}
-      .orbital-core{width:290px}
-      .orb-title{width:150px;height:150px}
-      .microcopy{grid-template-columns:1fr}
-      .swirl-nav{grid-template-columns:1fr}
-      .section{padding:72px 16px}
-      .hero{padding:16px}
-      .hero-card{padding:18px}
-    }
-  </style>
+@media (max-width: 980px){
+  .overlay{
+    position:absolute;left:16px;right:16px;bottom:16px;transform:none;width:auto;
+    grid-template-columns:1fr
+  }
+  .panel{min-height:auto}
+  .hero-panel h1{font-size:2rem}
+  .price-list{grid-template-columns:1fr 1fr}
+  .node{width:132px;height:132px;margin:-66px}
+  .node-ui strong{font-size:.95rem}
+  .node-ui span{font-size:.72rem}
+}
+@media (max-width: 700px){
+  .ui{padding:12px}
+  .topbar{justify-content:center}
+  .top-actions{justify-content:center}
+  .reactor-wrap{width:100vw;transform:scale(.96)}
+  .reactor{width:min(108vw,560px)}
+  .node{width:110px;height:110px;margin:-55px}
+  .node-ui{padding:10px}
+  .node-ui small{font-size:.52rem}
+  .node-ui strong{font-size:.84rem}
+  .node-ui span{display:none}
+  .overlay{left:10px;right:10px;bottom:10px}
+  .hero-panel p{font-size:.9rem}
+  .price-list{grid-template-columns:1fr}
+  .meta-chip{padding:.6rem .75rem}
+}
+</style>
 </head>
 <body>
-  <canvas id="smoke"></canvas>
-  <canvas id="embers"></canvas>
-  <div class="noise"></div>
-  <div class="spotlight"></div>
-  <div class="vignette"></div>
+<canvas id="grid"></canvas>
+<canvas id="fx"></canvas>
+<div class="noise"></div>
+<div class="scanlines"></div>
+<div class="cursor-light"></div>
+<div class="vignette"></div>
 
-  <div class="shell">
-    <section class="hero">
-      <div class="hero-card reveal">
-        <div class="topbar">
-          <div class="brand">
-            <div class="brand-mark" aria-hidden="true"></div>
-            <div>
-              <div class="eyebrow">St. Francisville • Louisiana</div>
-              <h1>The Francis Smokehouse</h1>
-              <p>Immersive menu concept • cinematic single-file build</p>
-            </div>
-          </div>
-          <div class="status-pills">
-            <div class="pill">Open concept menu</div>
-            <div class="pill">Smoke + ember motion</div>
-            <div class="pill">Mobile responsive</div>
-          </div>
-        </div>
-
-        <div class="hero-main">
-          <div class="headline">
-            <h2><span class="gradient">Not a menu.</span><br/>A live-fire atmosphere.</h2>
-            <p>
-              This concept turns the menu into an experience: floating smoke physics, ember drift, cinematic glass surfaces,
-              magnetic interactions, and a constellation-style layout that feels more like a premium trailer than a restaurant page.
-              It is built as one standalone file so you can drop it straight into a site or hand it off as-is.
-            </p>
-            <div class="action-row">
-              <a href="#menu-experience" class="cta">Enter the menu galaxy</a>
-              <a href="#visit" class="cta alt">Jump to hours & location</a>
-            </div>
-          </div>
-
-          <div class="orbital" aria-hidden="true">
-            <div class="orbital-core">
-              <div class="ring">
-                <div class="node" style="transform:rotate(16deg) translate(156px) rotate(-16deg)">Boudin</div>
-                <div class="node" style="transform:rotate(120deg) translate(168px) rotate(-120deg)">Brisket</div>
-                <div class="node" style="transform:rotate(228deg) translate(158px) rotate(-228deg)">Po-boys</div>
-              </div>
-              <div class="ring r2">
-                <div class="node" style="transform:rotate(55deg) translate(112px) rotate(-55deg)">Ribs</div>
-                <div class="node" style="transform:rotate(194deg) translate(104px) rotate(-194deg)">Smoke</div>
-                <div class="node" style="transform:rotate(305deg) translate(112px) rotate(-305deg)">Sides</div>
-              </div>
-              <div class="ring r3"></div>
-              <div class="orb-title">
-                <div>
-                  <strong>Flavor<br/>Orbit</strong>
-                  <span>crafted over fire</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="microcopy">
-          <div class="micro">
-            <div class="label">Signature</div>
-            <strong>Ribs, brisket, boudin</strong>
-            <span>The experience is structured around the items people remember and talk about first.</span>
-          </div>
-          <div class="micro">
-            <div class="label">Design move</div>
-            <strong>Constellation navigation</strong>
-            <span>Instead of expected tabs, categories feel like drifting worlds you explore.</span>
-          </div>
-          <div class="micro">
-            <div class="label">Built for</div>
-            <strong>Attention and recall</strong>
-            <span>Everything is designed to stop scrolling and make the brand feel larger than life.</span>
-          </div>
-          <div class="micro">
-            <div class="label">Drop-in ready</div>
-            <strong>One file, no dependencies</strong>
-            <span>All structure, style, and interaction live inside this single HTML file.</span>
-          </div>
-        </div>
+<div class="ui">
+  <div class="topbar reveal">
+    <div class="brand">
+      <div class="logo"></div>
+      <div class="title-block">
+        <small>ST. FRANCISVILLE • LA</small>
+        <strong>THE FRANCIS SMOKEHOUSE</strong>
       </div>
-    </section>
-
-    <section class="section" id="menu-experience">
-      <div class="section-inner">
-        <div class="section-head reveal">
-          <div>
-            <div class="eyebrow">Interactive category system</div>
-            <h3>Choose a flavor dimension</h3>
-          </div>
-          <p>
-            Each tile remaps the menu below. The transitions are intentionally dramatic, tactile, and cinematic. This is
-            the opposite of a basic restaurant page.
-          </p>
-        </div>
-
-        <div class="swirl-nav reveal" id="categoryNav"></div>
-
-        <div class="constellation reveal">
-          <div class="beam"></div>
-          <div class="cards" id="menuGrid"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="visit">
-      <div class="section-inner">
-        <div class="section-head reveal">
-          <div>
-            <div class="eyebrow">Visit & contact</div>
-            <h3>Fire, smoke, and a real front door</h3>
-          </div>
-          <p>
-            This lower section keeps practical information elevated but consistent with the immersive visual language.
-          </p>
-        </div>
-
-        <div class="footer-box reveal footer">
-          <div>
-            <h5>The Francis Smokehouse</h5>
-            <p>
-              6779 US Highway 61, St. Francisville, LA 70775<br/>
-              Phone: (225) 245-5046<br/>
-              Hours: Mon–Sat 10:00 AM–6:00 PM • Sun 10:00 AM–3:00 PM
-            </p>
-            <div class="signature">
-              <span>Concept direction: future-forward Southern fire</span>
-              <span>Built as a single-file prototype</span>
-            </div>
-          </div>
-          <div class="meta">
-            <div class="row"><strong>Experience style</strong><span>immersive / premium / cinematic</span></div>
-            <div class="row"><strong>Interaction layer</strong><span>mouse light, tilt, smoke, ember, reveal</span></div>
-            <div class="row"><strong>Best use</strong><span>home page hero or menu landing page</span></div>
-            <div class="row"><strong>Content note</strong><span>prices and items should be verified before production</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
+    </div>
+    <div class="top-actions">
+      <div class="meta-chip"><small>Mode</small><b>Menu Reactor</b></div>
+      <button class="action-btn" id="shuffleBtn">Shuffle Aura</button>
+    </div>
   </div>
 
-  <script>
-    const menuData = {
-      bbq: {
-        kicker: "Fire boards",
-        title: "BBQ Plates",
-        subtitle: "Low, slow, and impossible to ignore.",
-        desc: "A large-format presentation centered on smokehouse core plates. These are the anchors of the whole visual story.",
-        cards: [
-          {
-            size:"large",
-            tag:"Smoked plates",
-            title:"Main smokehouse run",
-            lede:"Each plate is presented as a premium event rather than a static line item, reinforcing the house-special feeling.",
-            items:[
-              ["Full Rack of Ribs", "Smoked, lacquered, and built to be the centerpiece.", "$19.99"],
-              ["Half Rack of Ribs", "For a lighter fire hit without losing the drama.", "$11.99"],
-              ["Pulled Pork Plate", "Classic smokehouse comfort with deep bark flavor.", "$9.99"],
-              ["Brisket Plate", "Rich, sliced, and ideal for the hero category.", "$10.99"],
-              ["Half Chicken Plate", "Smoked chicken with Southern comfort energy.", "$9.99"],
-              ["Smoked Wings", "A sharp smoky entry point for first-time visitors.", "$7.99"]
-            ]
-          },
-          {
-            size:"",
-            tag:"Side pairings",
-            title:"Choose your two",
-            lede:"Side language is intentionally elevated so the page feels editorial, not transactional.",
-            items:[
-              ["Corn Pudding", "Sweet, soft, and one of the most memorable supporting players.", "$2.75 / $6.99"],
-              ["Baked Beans", "Classic smokehouse depth and molasses comfort.", "$2.75 / $6.99"],
-              ["Potato Salad", "Cooling contrast against heavier smoked meats.", "$2.75 / $6.99"],
-              ["Cole Slaw", "Fresh, crisp, and essential for balance.", "$2.75 / $6.99"]
-            ]
-          },
-          {
-            size:"",
-            tag:"Extra texture",
-            title:"Crisp finishers",
-            lede:"Use these to add punchy edge in the interface and in the meal.",
-            items:[
-              ["French Fries", "Straightforward, familiar, and comfort-heavy.", "$2.75 / $6.99"],
-              ["Sweet Potato Waffle Fries", "A more visual side with a distinct silhouette.", "$2.75 / $6.99"]
-            ]
-          }
-        ],
-        specials:[
-          ["Category mood", "This section is about gravity. Heavy cards, slow motion, glowing edges, and bold price locks make the smoked meats feel like luxury objects."],
-          ["Why it works", "Most restaurant menus flatten their best items into text. Here, signature plates become visual landmarks that frame the entire page."]
-        ]
-      },
-
-      sandwiches: {
-        kicker: "Handhelds",
-        title: "Sandwiches, burgers & po-boys",
-        subtitle: "Fast comfort, framed like icons.",
-        desc: "This category leans punchier and quicker, with tighter cards and more magnetic movement to reflect grab-and-go energy.",
-        cards: [
-          {
-            size:"wide",
-            tag:"Burger line",
-            title:"Stacked classics",
-            lede:"These cards can animate more aggressively on hover to fit the comfort-food personality.",
-            items:[
-              ["Hamburger", "Clean, direct, no-nonsense baseline burger.", "$6.99"],
-              ["Cheeseburger", "Classic melt and a familiar comfort cue.", "$7.99"],
-              ["Bacon Cheeseburger", "Smokier, richer, and a stronger visual sell.", "$8.99"]
-            ]
-          },
-          {
-            size:"wide",
-            tag:"Smoke sandwiches",
-            title:"From the pit",
-            lede:"The smoked sandwich pair creates a bridge between the burger audience and full plate audience.",
-            items:[
-              ["Pulled Pork Sandwich", "Soft roll, smoky center, high-appeal comfort.", "$7.99"],
-              ["Brisket Sandwich", "A high-intent order with premium perception.", "$8.99"],
-              ["Chicken Sandwich", "A lighter lane with wide appeal.", "$7.99"]
-            ]
-          },
-          {
-            size:"large",
-            tag:"Po-boy run",
-            title:"Louisiana-built po-boys",
-            lede:"The page can treat po-boys as a distinct visual culture zone with a slightly brighter accent and quicker ambient motion.",
-            items:[
-              ["Ribeye Po-boy", "More indulgent, more premium, more swagger.", "$10.99"],
-              ["Shrimp Po-boy", "A seafood pivot that widens the menu's emotional range.", "$8.99"],
-              ["Crawfish Po-boy", "Regional, expressive, and instantly memorable.", "$10.99"],
-              ["Catfish Po-boy", "Southern comfort with a familiar crunch profile.", "$8.99"]
-            ]
-          }
-        ],
-        specials:[
-          ["Category mood", "Faster motion, crisper hover response, and a slightly brighter orange edge treatment make this feel more energetic than the plate section."],
-          ["Why it works", "Users who are not yet committed to BBQ plates can enter through handheld options without feeling like they are in a secondary menu area."]
-        ]
-      },
-
-      cajun: {
-        kicker: "Cajun signatures",
-        title: "Boudin, pies & hot counter favorites",
-        subtitle: "The category with cult-following energy.",
-        desc: "This category is where the page gets more playful and collectible. Small-format items become addictive visual tokens.",
-        cards: [
-          {
-            size:"large",
-            tag:"Hot favorites",
-            title:"Counter legends",
-            lede:"This is a perfect place to lean into animated badges, micro-reviews, or limited-run labels in a production site.",
-            items:[
-              ["Steamed Boudin Links", "The kind of item that signals place immediately.", "Market"],
-              ["Boudin Balls", "Probably the easiest crowd-favorite to spotlight.", "Market"],
-              ["Pepper Jack Boudin Balls", "The spicier variant with stronger novelty pull.", "Market"],
-              ["Boudin Egg Rolls", "High-curiosity item with social-media potential.", "Market"],
-              ["Meat Pies", "Grab-and-go comfort with classic Louisiana identity.", "Market"],
-              ["Crawfish Pies", "Seafood-forward and highly regional.", "Market"]
-            ]
-          },
-          {
-            size:"",
-            tag:"Design move",
-            title:"Collectible item treatment",
-            lede:"Instead of plain list rows, each signature item can feel like a rare drop or featured artifact.",
-            items:[
-              ["Visual badge system", "Use hot, spicy, staff-pick, or local-favorite badges to deepen browsing.", ""],
-              ["Motion hint", "A subtle pulse on boudin cards gives them a signature behavioral identity.", ""]
-            ]
-          },
-          {
-            size:"",
-            tag:"Use case",
-            title:"Built for word-of-mouth",
-            lede:"These are the pieces visitors remember, mention, and come back to try next time.",
-            items:[
-              ["Best social hooks", "Boudin Balls, Egg Rolls, Crawfish Pies", ""],
-              ["Best design focus", "Scarcity, flavor intensity, local identity", ""]
-            ]
-          }
-        ],
-        specials:[
-          ["Category mood", "This is the most 'talked about' category, so it gets a slightly more collectible visual rhythm."],
-          ["Why it works", "Novelty items become memorable when the interface treats them like discoveries rather than footnotes."]
-        ]
-      },
-
-      sweets: {
-        kicker: "Finish the meal",
-        title: "Desserts",
-        subtitle: "A softer glow after the fire.",
-        desc: "The color palette shifts warmer and creamier here. Motion eases. Shadows lift. The energy changes like the final act of a film.",
-        cards: [
-          {
-            size:"wide",
-            tag:"House-made close",
-            title:"Southern dessert finish",
-            lede:"This zone is intentionally more elegant and less aggressive, giving the experience a satisfying landing.",
-            items:[
-              ["Homemade Bread Pudding", "Rich, nostalgic, and one of the strongest comfort signals.", "House"],
-              ["Creole Cream Cheesecake", "A more refined sweet note with regional personality.", "House"],
-              ["Chocolate Cake", "Dense, familiar, and universally legible.", "House"]
-            ]
-          },
-          {
-            size:"wide",
-            tag:"Bright finish",
-            title:"Lighter sweet energy",
-            lede:"End the page with color and softness so the entire interface doesn't stay on one smoky emotional note.",
-            items:[
-              ["Carrot Cake", "Spiced sweetness and a home-baked feel.", "House"],
-              ["Strawberry Shortcake", "The brightest dessert profile on the board.", "House"],
-              ["Miss Mud Pie", "Shown in specials imagery as a richer premium dessert.", "$7"]
-            ]
-          },
-          {
-            size:"large",
-            tag:"Design move",
-            title:"Dessert as atmosphere shift",
-            lede:"Instead of simply appending sweets at the bottom, dessert changes the mood of the experience. That contrast is part of what makes the design feel expensive.",
-            items:[
-              ["Color treatment", "Cream, gold, soft ember, and lifted glass reflections.", ""],
-              ["Motion treatment", "Slower transitions and softer parallax than meat categories.", ""],
-              ["Typography treatment", "A touch more serif elegance to signal a final course.", ""]
-            ]
-          }
-        ],
-        specials:[
-          ["Category mood", "The scene relaxes here. Fire becomes glow. Smoke becomes haze. The page exhales."],
-          ["Why it works", "A dramatic interface needs emotional contrast. Dessert gives the system a second register."]
-        ]
-      },
-
-      specials: {
-        kicker: "Spotlight features",
-        title: "Special boards & chef energy",
-        subtitle: "The zone for surprise, rotation, and flex.",
-        desc: "A future-proof slot for weekly specials, chef features, and limited-run drops. This is where the site can feel alive every visit.",
-        cards: [
-          {
-            size:"large",
-            tag:"Sample spotlight",
-            title:"Board-driven specials",
-            lede:"These sample entries are based on the special-board style captured in public imagery and are ideal for animated feature placement.",
-            items:[
-              ["Sweet Thai Chili Wings", "App-style entry with sticky heat and visual punch.", "$16"],
-              ["Eggplant Pirogue with Seafood-Style Stuffing", "A more elevated plate that expands the brand upward.", "$26"],
-              ["Blackened Lemon Fish with Cream Spinach + Grilled Crawfish Tails", "A premium special that adds theater.", "$28"],
-              ["Jack Daniel's BBQ Shrimp + 14oz Bone-In Pork Chop", "The most dramatic board item in the set.", "$26"],
-              ["Grilled Salmon with Crabmeat + Avocado Cream Sauce", "Signals versatility beyond classic smokehouse expectations.", "$28"]
-            ]
-          },
-          {
-            size:"",
-            tag:"Website potential",
-            title:"Limited-run drop system",
-            lede:"In a production build, this can become the section that changes most often and keeps the site from feeling static.",
-            items:[
-              ["Timed release cards", "Specials can appear with countdowns, glow states, or 'today only' pulses.", ""],
-              ["Photo-forward mode", "This category benefits most from large-format imagery when available.", ""]
-            ]
-          },
-          {
-            size:"",
-            tag:"Merch logic",
-            title:"Make the menu feel alive",
-            lede:"A strong specials mechanic can create repeat traffic just by changing motion and wording every week.",
-            items:[
-              ["Refresh cadence", "Weekly or twice-weekly", ""],
-              ["Best emotional hook", "scarcity + spectacle", ""]
-            ]
-          }
-        ],
-        specials:[
-          ["Category mood", "This is where the site feels most current and most dangerous—in the best way."],
-          ["Why it works", "Specials are not buried. They become an event, which makes the brand feel active instead of archival."]
-        ]
-      }
-    };
-
-    const categoryMeta = [
-      {key:"bbq", kicker:"Smoke core", title:"BBQ Plates", blurb:"The heavy hitters. Deep smoke, rich cards, premium pacing."},
-      {key:"sandwiches", kicker:"Handheld velocity", title:"Burgers & Po-boys", blurb:"More agile, more magnetic, more immediate."},
-      {key:"cajun", kicker:"Local cult favorites", title:"Boudin & Pies", blurb:"Signature small bites with collectible energy."},
-      {key:"sweets", kicker:"Soft close", title:"Desserts", blurb:"Creamier glow, lifted glass, final-course atmosphere."},
-      {key:"specials", kicker:"Live board", title:"Specials", blurb:"Chef energy, weekly drops, and surprise features."}
-    ];
-
-    const nav = document.getElementById('categoryNav');
-    const grid = document.getElementById('menuGrid');
-    let current = 'bbq';
-
-    function renderNav() {
-      nav.innerHTML = '';
-      categoryMeta.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.className = 'swirl-btn' + (cat.key === current ? ' active' : '');
-        btn.innerHTML = `
-          <div class="kicker">${cat.kicker}</div>
-          <strong>${cat.title}</strong>
-          <span>${cat.blurb}</span>
-        `;
-        btn.addEventListener('click', () => {
-          current = cat.key;
-          renderNav();
-          renderMenu();
-        });
-        nav.appendChild(btn);
-      });
-    }
-
-    function itemLine(item){
-      return `
-        <div class="line">
-          <div>
-            <strong>${item[0]}</strong>
-            <span>${item[1]}</span>
+  <main class="stage">
+    <div class="reactor-wrap reveal delay1">
+      <div class="reactor" id="reactor">
+        <div class="halo"></div>
+        <div class="halo2"></div>
+        <div class="halo3"></div>
+        <div class="outer-ring"></div>
+        <div class="inner-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="core">
+          <div class="coretext">
+            <div class="big">MENU</div>
+            <div class="small">LIVE • SIGNAL</div>
           </div>
-          <div class="price">${item[2] || '&nbsp;'}</div>
         </div>
-      `;
-    }
+      </div>
 
-    function renderMenu(){
-      const data = menuData[current];
-      const cards = data.cards.map(card => `
-        <article class="menu-card ${card.size || ''}" data-tilt>
-          <div class="top">
+      <div class="node" style="transform:translate(-50%,-50%) rotate(-90deg) translateY(-265px) rotate(90deg)">
+        <button class="node-btn active" data-key="plates">
+          <div class="node-ui">
+            <small>Sector 01</small>
+            <strong>PLATES</strong>
+            <span>ribs • brisket • wings</span>
+          </div>
+        </button>
+      </div>
+
+      <div class="node" style="transform:translate(-50%,-50%) rotate(-18deg) translateY(-255px) rotate(18deg)">
+        <button class="node-btn" data-key="sandwiches">
+          <div class="node-ui">
+            <small>Sector 02</small>
+            <strong>STACKS</strong>
+            <span>burgers • po-boys</span>
+          </div>
+        </button>
+      </div>
+
+      <div class="node" style="transform:translate(-50%,-50%) rotate(54deg) translateY(-258px) rotate(-54deg)">
+        <button class="node-btn" data-key="cajun">
+          <div class="node-ui">
+            <small>Sector 03</small>
+            <strong>CAJUN</strong>
+            <span>boudin • pies</span>
+          </div>
+        </button>
+      </div>
+
+      <div class="node" style="transform:translate(-50%,-50%) rotate(126deg) translateY(-258px) rotate(-126deg)">
+        <button class="node-btn" data-key="desserts">
+          <div class="node-ui">
+            <small>Sector 04</small>
+            <strong>SWEET</strong>
+            <span>bread pudding • cake</span>
+          </div>
+        </button>
+      </div>
+
+      <div class="node" style="transform:translate(-50%,-50%) rotate(198deg) translateY(-255px) rotate(-198deg)">
+        <button class="node-btn" data-key="specials">
+          <div class="node-ui">
+            <small>Sector 05</small>
+            <strong>SIGNAL+</strong>
+            <span>limited drops</span>
+          </div>
+        </button>
+      </div>
+
+      <div class="overlay">
+        <section class="panel hero-panel reveal delay2">
+          <small id="heroKicker">Sector 01 • Plates</small>
+          <h1 id="heroTitle">MEAT. FIRE. IMPACT.</h1>
+          <p id="heroDesc">A menu built like a machine. Choose a sector and the whole interface reconfigures around it.</p>
+        </section>
+
+        <section class="panel menu-panel reveal delay3">
+          <div class="panel-top">
             <div>
-              <div class="tag">${card.tag}</div>
-              <h4>${card.title}</h4>
+              <small>Live menu feed</small>
+              <div class="panel-title" id="panelTitle">BBQ Plates</div>
+              <div class="panel-sub" id="panelSub">The heavy hitters from the smokehouse core.</div>
             </div>
           </div>
-          <p class="lede">${card.lede}</p>
-          <div class="lines">${card.items.map(itemLine).join('')}</div>
-        </article>
-      `).join('');
+          <div class="price-list" id="priceList"></div>
+        </section>
+      </div>
+    </div>
+  </main>
 
-      const specials = `
-        <article class="menu-card large" data-tilt>
-          <div class="top">
-            <div>
-              <div class="tag">${data.kicker}</div>
-              <h4>${data.title}</h4>
-            </div>
-          </div>
-          <p class="lede">${data.desc}</p>
-          <div class="special-portal">
-            ${data.specials.map(s => `
-              <div class="special">
-                <div class="small">${data.subtitle}</div>
-                <strong>${s[0]}</strong>
-                <p>${s[1]}</p>
-              </div>
-            `).join('')}
-          </div>
-          <div class="grid-note">
-            Prototype note: this concept uses menu data as content fuel, but the real innovation is the interaction model,
-            atmosphere system, and the feeling that the menu is performing in real time.
-          </div>
-        </article>
-      `;
+  <div class="bottombar reveal delay3">
+    <div class="coords">
+      <div class="meta-chip"><small>Hours</small><b>Mon-Sat 10-6 • Sun 10-3</b></div>
+      <div class="meta-chip"><small>Address</small><b>6779 US Hwy 61</b></div>
+      <div class="meta-chip"><small>Phone</small><b>(225) 245-5046</b></div>
+    </div>
+    <div class="meta-chip"><small>Interaction</small><b>Move mouse • tap sectors</b></div>
+  </div>
+</div>
 
-      grid.innerHTML = specials + cards;
-      bindTilt();
+<script>
+const menu = {
+  plates: {
+    kicker:"Sector 01 • Plates",
+    title:"MEAT. FIRE. IMPACT.",
+    desc:"The dense core. This is where the interface hits hardest.",
+    panel:"BBQ Plates",
+    sub:"The heavy hitters from the smokehouse core.",
+    items:[
+      ["Full Rack of Ribs","full-send smoke", "$19.99"],
+      ["Half Rack of Ribs","smaller blast radius", "$11.99"],
+      ["Pulled Pork Plate","soft, smoky, fast", "$9.99"],
+      ["Brisket Plate","deep bark energy", "$10.99"],
+      ["Half Chicken Plate","smoke + comfort", "$9.99"],
+      ["Smoked Wings","sharp entry point", "$7.99"]
+    ],
+    hue:["#7df9ff","#53a6ff"]
+  },
+  sandwiches: {
+    kicker:"Sector 02 • Stacks",
+    title:"GRAB. BITE. GONE.",
+    desc:"Faster, tighter, more kinetic. Handheld comfort with future chrome.",
+    panel:"Stacks",
+    sub:"Burgers, sandwiches, and po-boys.",
+    items:[
+      ["Hamburger","clean baseline", "$6.99"],
+      ["Cheeseburger","classic melt", "$7.99"],
+      ["Bacon Cheeseburger","smokier stack", "$8.99"],
+      ["Pulled Pork Sandwich","pit-made comfort", "$7.99"],
+      ["Brisket Sandwich","premium handheld", "$8.99"],
+      ["Ribeye Po-boy","max swagger", "$10.99"]
+    ],
+    hue:["#7df9ff","#ffb24d"]
+  },
+  cajun: {
+    kicker:"Sector 03 • Cajun",
+    title:"LOCAL. LOUD. LEGEND.",
+    desc:"Small items with cult-favorite status. This sector feels collectible.",
+    panel:"Cajun Counter",
+    sub:"Boudin, pies, and hot counter favorites.",
+    items:[
+      ["Steamed Boudin","local signal", "Market"],
+      ["Boudin Balls","crowd favorite", "Market"],
+      ["Pepper Jack Balls","hotter route", "Market"],
+      ["Boudin Egg Rolls","unexpected hit", "Market"],
+      ["Meat Pies","grab-and-go", "Market"],
+      ["Crawfish Pies","regional flex", "Market"]
+    ],
+    hue:["#ffb24d","#ff6b4a"]
+  },
+  desserts: {
+    kicker:"Sector 04 • Sweet",
+    title:"SOFT GLOW. HARD FINISH.",
+    desc:"The whole atmosphere eases off the heat and moves into the afterglow.",
+    panel:"Desserts",
+    sub:"A warmer end-state after the fire.",
+    items:[
+      ["Bread Pudding","rich finish", "House"],
+      ["Creole Cream Cheesecake","refined sweet", "House"],
+      ["Chocolate Cake","dense classic", "House"],
+      ["Carrot Cake","spiced finish", "House"],
+      ["Strawberry Shortcake","brightest note", "House"],
+      ["Miss Mud Pie","premium closer", "$7"]
+    ],
+    hue:["#9b7bff","#7df9ff"]
+  },
+  specials: {
+    kicker:"Sector 05 • Signal+",
+    title:"LIMITED DROP DETECTED.",
+    desc:"This is the rotating feature lane. Change this weekly and the site never goes stale.",
+    panel:"Signal+ Specials",
+    sub:"A slot for new energy every visit.",
+    items:[
+      ["Thai Chili Wings","sticky heat", "$16"],
+      ["Eggplant Pirogue","seafood stuffing", "$26"],
+      ["Blackened Lemon Fish","creamed greens", "$28"],
+      ["BBQ Shrimp + Bone-In Chop","big board energy", "$26"],
+      ["Grilled Salmon + Crab","avocado cream", "$28"],
+      ["Chef Drop","whatever breaks the pattern", "Live"]
+    ],
+    hue:["#53a6ff","#9b7bff"]
+  }
+};
+
+const reactor = document.getElementById('reactor');
+const priceList = document.getElementById('priceList');
+const heroKicker = document.getElementById('heroKicker');
+const heroTitle = document.getElementById('heroTitle');
+const heroDesc = document.getElementById('heroDesc');
+const panelTitle = document.getElementById('panelTitle');
+const panelSub = document.getElementById('panelSub');
+const buttons = [...document.querySelectorAll('.node-btn')];
+let current = 'plates';
+
+function render(key){
+  current = key;
+  const data = menu[key];
+  buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.key === key));
+  heroKicker.textContent = data.kicker;
+  heroTitle.textContent = data.title;
+  heroDesc.textContent = data.desc;
+  panelTitle.textContent = data.panel;
+  panelSub.textContent = data.sub;
+  priceList.innerHTML = data.items.map(([name,desc,price]) => `
+    <div class="item">
+      <div>
+        <strong>${name}</strong>
+        <em>${desc}</em>
+      </div>
+      <b>${price}</b>
+    </div>
+  `).join('');
+  document.documentElement.style.setProperty('--cyan', data.hue[0]);
+  document.documentElement.style.setProperty('--violet', data.hue[1]);
+}
+buttons.forEach(btn => btn.addEventListener('click', ()=>render(btn.dataset.key)));
+render(current);
+
+document.getElementById('shuffleBtn').addEventListener('click', ()=>{
+  const keys = Object.keys(menu);
+  render(keys[Math.floor(Math.random()*keys.length)]);
+});
+
+window.addEventListener('pointermove', e => {
+  document.documentElement.style.setProperty('--mx', e.clientX + 'px');
+  document.documentElement.style.setProperty('--my', e.clientY + 'px');
+  const cx = innerWidth / 2;
+  const cy = innerHeight / 2;
+  const dx = (e.clientX - cx) / cx;
+  const dy = (e.clientY - cy) / cy;
+  reactor.style.transform = `translateY(${dy * -6}px) rotateX(${dy * -6}deg) rotateY(${dx * 8}deg)`;
+});
+
+// Background grid
+const gridCanvas = document.getElementById('grid');
+const fxCanvas = document.getElementById('fx');
+const g = gridCanvas.getContext('2d');
+const f = fxCanvas.getContext('2d');
+let W,H,DPR,particles=[];
+
+function resize(){
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  [gridCanvas, fxCanvas].forEach(c=>{
+    c.width = W*DPR; c.height = H*DPR;
+    c.style.width = W+'px'; c.style.height = H+'px';
+  });
+  g.setTransform(DPR,0,0,DPR,0,0);
+  f.setTransform(DPR,0,0,DPR,0,0);
+  particles = Array.from({length:Math.max(60, Math.floor(W/18))}, ()=>({
+    x:Math.random()*W,
+    y:Math.random()*H,
+    vx:(Math.random()-.5)*.28,
+    vy:(Math.random()-.5)*.28,
+    r:Math.random()*2+1,
+    a:Math.random()*.8+.2
+  }));
+}
+window.addEventListener('resize', resize);
+resize();
+
+function drawGrid(t){
+  g.clearRect(0,0,W,H);
+  g.save();
+  g.translate(W/2,H*0.62);
+  g.scale(1,.32);
+  for(let i=-11;i<=11;i++){
+    g.beginPath();
+    g.strokeStyle='rgba(83,166,255,.11)';
+    g.lineWidth=1;
+    g.moveTo(i*90,-H);
+    g.lineTo(i*90,H);
+    g.stroke();
+  }
+  for(let y=0;y<16;y++){
+    const p = (y/15);
+    const yy = -p*H*1.35 + ((t*0.03)%90);
+    g.beginPath();
+    g.strokeStyle = `rgba(125,249,255,${0.03 + (1-p)*0.12})`;
+    g.moveTo(-W, yy);
+    g.lineTo(W, yy);
+    g.stroke();
+  }
+  g.restore();
+}
+
+function drawFx(t){
+  f.clearRect(0,0,W,H);
+  const cx = W/2, cy = H/2;
+  for(const p of particles){
+    p.x += p.vx + Math.sin((t*0.001) + p.y*.01)*.05;
+    p.y += p.vy + Math.cos((t*0.0012) + p.x*.01)*.05;
+    if(p.x<0) p.x=W; if(p.x>W) p.x=0;
+    if(p.y<0) p.y=H; if(p.y>H) p.y=0;
+
+    f.beginPath();
+    f.fillStyle=`rgba(125,249,255,${p.a*.5})`;
+    f.shadowBlur=14;
+    f.shadowColor='rgba(125,249,255,.3)';
+    f.arc(p.x,p.y,p.r,0,Math.PI*2);
+    f.fill();
+
+    const dx = p.x-cx, dy = p.y-cy;
+    const dist = Math.hypot(dx,dy);
+    if(dist<220){
+      f.beginPath();
+      f.strokeStyle=`rgba(125,249,255,${(1-dist/220)*.12})`;
+      f.moveTo(p.x,p.y);
+      f.lineTo(cx,cy);
+      f.stroke();
     }
+  }
+  f.shadowBlur=0;
 
-    function bindTilt(){
-      document.querySelectorAll('[data-tilt]').forEach(card => {
-        card.addEventListener('mousemove', e => {
-          const r = card.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width;
-          const py = (e.clientY - r.top) / r.height;
-          const rx = (py - .5) * -8;
-          const ry = (px - .5) * 10;
-          card.style.transform = `translateY(-8px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-        });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = '';
-        });
-      });
-    }
+  // rotating arc HUD
+  f.save();
+  f.translate(cx, cy);
+  for(let i=0;i<3;i++){
+    f.beginPath();
+    f.strokeStyle = i===0 ? 'rgba(125,249,255,.18)' : i===1 ? 'rgba(155,123,255,.14)' : 'rgba(255,178,77,.16)';
+    f.lineWidth = 2;
+    const rad = 145 + i*34;
+    const off = t*0.0004*(i%2===0?1:-1);
+    f.arc(0,0,rad, off, off + Math.PI*0.9);
+    f.stroke();
+  }
+  f.restore();
+}
 
-    renderNav();
-    renderMenu();
-
-    // Cursor spotlight
-    window.addEventListener('pointermove', e => {
-      document.documentElement.style.setProperty('--cursorX', e.clientX + 'px');
-      document.documentElement.style.setProperty('--cursorY', e.clientY + 'px');
-    });
-
-    // Reveal on scroll
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting){
-          entry.target.classList.add('show');
-        }
-      });
-    }, {threshold: .14});
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // Smoke canvas
-    const smokeCanvas = document.getElementById('smoke');
-    const sctx = smokeCanvas.getContext('2d');
-    const emberCanvas = document.getElementById('embers');
-    const ectx = emberCanvas.getContext('2d');
-    let w, h, dpr;
-    let smokes = [];
-    let embers = [];
-
-    function resize(){
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = smokeCanvas.width = emberCanvas.width = innerWidth * dpr;
-      h = smokeCanvas.height = emberCanvas.height = innerHeight * dpr;
-      smokeCanvas.style.width = emberCanvas.style.width = innerWidth + 'px';
-      smokeCanvas.style.height = emberCanvas.style.height = innerHeight + 'px';
-      sctx.setTransform(dpr,0,0,dpr,0,0);
-      ectx.setTransform(dpr,0,0,dpr,0,0);
-      makeParticles();
-    }
-
-    function makeParticles(){
-      smokes = Array.from({length: Math.max(24, Math.floor(innerWidth / 55))}, () => ({
-        x: Math.random() * innerWidth,
-        y: innerHeight + Math.random() * innerHeight,
-        r: 50 + Math.random() * 180,
-        dx: -0.4 + Math.random() * 0.8,
-        dy: 0.35 + Math.random() * 1.0,
-        a: 0.03 + Math.random() * 0.055
-      }));
-      embers = Array.from({length: Math.max(38, Math.floor(innerWidth / 28))}, () => ({
-        x: Math.random() * innerWidth,
-        y: Math.random() * innerHeight,
-        r: 0.8 + Math.random() * 2.2,
-        dx: -0.55 + Math.random() * 1.1,
-        dy: -0.25 - Math.random() * 1.2,
-        a: 0.22 + Math.random() * 0.5
-      }));
-    }
-
-    function drawSmoke(){
-      sctx.clearRect(0,0,innerWidth,innerHeight);
-      for(const p of smokes){
-        const g = sctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        g.addColorStop(0, `rgba(255,255,255,${p.a})`);
-        g.addColorStop(.35, `rgba(210,210,210,${p.a * .45})`);
-        g.addColorStop(1, 'rgba(80,80,80,0)');
-        sctx.fillStyle = g;
-        sctx.beginPath();
-        sctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-        sctx.fill();
-
-        p.x += p.dx + Math.sin((performance.now() * 0.0004) + p.y * 0.004) * .25;
-        p.y -= p.dy * .18;
-        if(p.y < -p.r){
-          p.x = Math.random() * innerWidth;
-          p.y = innerHeight + p.r + Math.random() * 140;
-        }
-      }
-    }
-
-    function drawEmbers(){
-      ectx.clearRect(0,0,innerWidth,innerHeight);
-      for(const p of embers){
-        ectx.beginPath();
-        ectx.fillStyle = `rgba(255, ${140 + Math.random()*80}, ${50 + Math.random()*30}, ${p.a})`;
-        ectx.shadowBlur = 14;
-        ectx.shadowColor = 'rgba(255,140,66,.45)';
-        ectx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-        ectx.fill();
-
-        p.x += p.dx + Math.sin((performance.now() * 0.001) + p.y * 0.02) * .1;
-        p.y += p.dy;
-        if(p.y < -10 || p.x < -20 || p.x > innerWidth + 20){
-          p.x = Math.random() * innerWidth;
-          p.y = innerHeight + Math.random() * 60;
-        }
-      }
-      ectx.shadowBlur = 0;
-    }
-
-    function tick(){
-      drawSmoke();
-      drawEmbers();
-      requestAnimationFrame(tick);
-    }
-
-    window.addEventListener('resize', resize);
-    resize();
-    tick();
-  </script>
+function loop(t){
+  drawGrid(t);
+  drawFx(t);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
 </body>
 </html>
