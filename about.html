@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EchoEarth — Two Worlds, One Place</title>
+  <meta name="description" content="EchoEarth is a location-based memory layer for the world where people, museums, and communities leave stories behind for others to discover in the places that matter most." />
+  <style>
+    :root {
+      --bg: #081018;
+      --bg-2: #0e1b27;
+      --card: rgba(255,255,255,0.08);
+      --card-strong: rgba(255,255,255,0.12);
+      --text: #edf5ff;
+      --muted: #b7c8dc;
+      --line: rgba(255,255,255,0.14);
+      --brand: #73e0c1;
+      --brand-2: #6ca7ff;
+      --accent: #ffd36f;
+      --danger: #ff9ea8;
+      --shadow: 0 24px 60px rgba(0,0,0,0.35);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --max: 1220px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(108,167,255,0.22), transparent 28%),
+        radial-gradient(circle at 80% 10%, rgba(115,224,193,0.18), transparent 24%),
+        radial-gradient(circle at 50% 80%, rgba(255,211,111,0.08), transparent 18%),
+        linear-gradient(180deg, #071018 0%, #0a1420 42%, #09111a 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
+
+    .bg-grid::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at center, black 45%, transparent 88%);
+      opacity: 0.35;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(6, 13, 20, 0.62);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 30% 30%, #91f2d7, transparent 35%),
+        radial-gradient(circle at 70% 70%, #7eb6ff, transparent 35%),
+        linear-gradient(135deg, rgba(115,224,193,0.25), rgba(108,167,255,0.25));
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-badge::after {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a:hover { color: white; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 14px 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 180ms ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #061018;
+      box-shadow: 0 16px 36px rgba(108,167,255,0.22);
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.13);
+      color: var(--text);
+    }
+    .btn-ghost {
+      background: transparent;
+      border-color: rgba(255,255,255,0.12);
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 72px 0 48px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: #d8e8fb;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--brand);
+      box-shadow: 0 0 0 6px rgba(115,224,193,0.12);
+    }
+
+    h1 {
+      font-size: clamp(42px, 8vw, 78px);
+      line-height: 0.96;
+      margin: 0;
+      letter-spacing: -0.04em;
+      max-width: 12ch;
+    }
+
+    .hero h1 span {
+      display: block;
+      background: linear-gradient(135deg, #ffffff, #bfe5ff 55%, #a6ffe4 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subcopy {
+      margin: 22px 0 30px;
+      max-width: 640px;
+      font-size: 19px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 26px;
+    }
+
+    .hero-points {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .point {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .point strong { display: block; font-size: 14px; margin-bottom: 6px; }
+    .point span { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    .hero-visual {
+      position: relative;
+      min-height: 650px;
+    }
+
+    .phone-shell {
+      width: min(100%, 420px);
+      margin-left: auto;
+      border-radius: 38px;
+      padding: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.06));
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phone-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), transparent 30%);
+      pointer-events: none;
+    }
+
+    .phone-screen {
+      border-radius: 30px;
+      overflow: hidden;
+      min-height: 620px;
+      background:
+        radial-gradient(circle at 25% 15%, rgba(115,224,193,0.18), transparent 18%),
+        radial-gradient(circle at 70% 30%, rgba(108,167,255,0.18), transparent 20%),
+        linear-gradient(180deg, #122031 0%, #0e1823 100%);
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px 0;
+      color: rgba(255,255,255,0.72);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .camera-scene {
+      position: relative;
+      height: 460px;
+      margin: 12px 14px 0;
+      border-radius: 24px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(164,221,255,0.9) 0%, rgba(100,162,222,0.82) 32%, rgba(39,71,98,0.8) 33%, rgba(20,32,46,0.9) 100%),
+        linear-gradient(135deg, #364b63, #1b2a39);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .mountain, .mountain::before, .mountain::after {
+      position: absolute;
+      bottom: 0;
+      content: "";
+      background: linear-gradient(180deg, rgba(30,52,69,0.7), rgba(15,25,35,0.95));
+      clip-path: polygon(0% 100%, 16% 72%, 28% 82%, 42% 54%, 62% 78%, 80% 46%, 100% 100%);
+      width: 100%;
+      height: 48%;
+    }
+
+    .mountain::before {
+      left: -10%;
+      width: 78%;
+      height: 42%;
+      opacity: 0.8;
+      clip-path: polygon(0 100%, 18% 66%, 43% 84%, 66% 34%, 100% 100%);
+    }
+
+    .mountain::after {
+      right: -12%;
+      width: 76%;
+      height: 38%;
+      opacity: 0.7;
+      clip-path: polygon(0 100%, 24% 52%, 44% 75%, 75% 22%, 100% 100%);
+    }
+
+    .ar-card {
+      position: absolute;
+      background: rgba(9,16,24,0.68);
+      border: 1px solid rgba(255,255,255,0.14);
+      backdrop-filter: blur(14px);
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+      padding: 14px;
+    }
+
+    .ar-card.small { width: 180px; }
+    .ar-card.medium { width: 230px; }
+    .ar-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .ar-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(115,224,193,0.12);
+      color: #baf5e4;
+    }
+
+    .ar-title { font-weight: 700; margin: 0 0 6px; font-size: 15px; }
+    .ar-body { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+
+    .ar-card.one { left: 18px; top: 28px; animation: float 6s ease-in-out infinite; }
+    .ar-card.two { right: 18px; top: 94px; animation: float 7s ease-in-out infinite 1s; }
+    .ar-card.three { left: 50%; transform: translateX(-50%); bottom: 24px; animation: float 6.5s ease-in-out infinite 0.5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .mini-map {
+      margin: 12px 14px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 14px;
+    }
+
+    .mini-map-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .mini-grid {
+      position: relative;
+      border-radius: 16px;
+      min-height: 120px;
+      background:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(108,167,255,0.14), rgba(115,224,193,0.08));
+      background-size: 24px 24px, 24px 24px, auto;
+      overflow: hidden;
+    }
+
+    .pin {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), #ff9b76);
+      border: 2px solid rgba(0,0,0,0.3);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.2);
+    }
+
+    .pin:nth-child(1) { left: 20%; top: 28%; }
+    .pin:nth-child(2) { left: 48%; top: 54%; background: linear-gradient(135deg, var(--brand), #7dd7f6); }
+    .pin:nth-child(3) { left: 72%; top: 32%; background: linear-gradient(135deg, #d2b6ff, #7c9dff); }
+
+    .stats {
+      padding: 26px 0 12px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card h3 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 5vw, 42px);
+      letter-spacing: -0.04em;
+    }
+
+    .stat-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    section {
+      padding: 72px 0;
+    }
+
+    .section-head {
+      max-width: 780px;
+      margin-bottom: 28px;
+    }
+
+    .section-head .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+      color: #d2e3f9;
+      margin-bottom: 16px;
+    }
+
+    .section-head h2 {
+      margin: 0 0 12px;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 18px;
+    }
+
+    .cards-3, .cards-4, .pricing-grid, .steps, .museum-layout, .demo-grid, .faq-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .cards-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .pricing-grid { grid-template-columns: 1fr 1.1fr 1fr; align-items: start; }
+    .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .museum-layout { grid-template-columns: 1.15fr 0.85fr; align-items: stretch; }
+    .demo-grid { grid-template-columns: 0.95fr 1.05fr; align-items: start; }
+    .faq-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .card strong.kicker {
+      display: inline-flex;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #bfe6ff;
+      margin-bottom: 14px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(115,224,193,0.18), rgba(108,167,255,0.18));
+      border: 1px solid rgba(255,255,255,0.1);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      margin-bottom: 18px;
+    }
+
+    ul.clean {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    ul.clean li {
+      position: relative;
+      padding-left: 24px;
+      margin: 12px 0;
+    }
+
+    ul.clean li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: 0 0 0 5px rgba(115,224,193,0.09);
+    }
+
+    .museum-shell {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .museum-shell::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -36% auto;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(115,224,193,0.18), transparent 60%);
+      filter: blur(10px);
+    }
+
+    .museum-window {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+    }
+
+    .museum-sidebar, .museum-panel, .museum-stat, .museum-exhibit {
+      background: rgba(8,14,22,0.7);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+    }
+
+    .museum-sidebar { padding: 16px; }
+    .museum-panel { padding: 18px; }
+
+    .museum-logo {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,211,111,0.3), rgba(108,167,255,0.22));
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .museum-nav {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .museum-nav span {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      color: #d7e6f8;
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .museum-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .museum-top h3 { margin: 0 0 6px; }
+    .museum-top p { margin: 0; }
+
+    .museum-badge {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(115,224,193,0.12);
+      color: #baf5e4;
+      border: 1px solid rgba(115,224,193,0.18);
+    }
+
+    .museum-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .museum-stat {
+      padding: 14px;
+    }
+
+    .museum-stat strong {
+      display: block;
+      font-size: 26px;
+      margin-bottom: 4px;
+    }
+
+    .museum-stat span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .museum-exhibits {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .museum-exhibit { padding: 14px; }
+
+    .museum-exhibit .mini-tag {
+      display: inline-flex;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #ffdca0;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .pricing-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 100%;
+    }
+
+    .pricing-card.featured {
+      background: linear-gradient(180deg, rgba(108,167,255,0.16), rgba(115,224,193,0.12));
+      border-color: rgba(255,255,255,0.18);
+      transform: translateY(-8px);
+    }
+
+    .pricing-card .price {
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      margin: 10px 0 6px;
+    }
+
+    .pricing-card .sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .pricing-pill {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,211,111,0.16);
+      color: #ffe6ae;
+      border: 1px solid rgba(255,211,111,0.18);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .step-card {
+      position: relative;
+      padding-top: 56px;
+    }
+
+    .step-num {
+      position: absolute;
+      top: 18px;
+      left: 20px;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #061018;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .demo-preview {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 28px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .map-stage {
+      min-height: 560px;
+      border-radius: 22px;
+      overflow: hidden;
+      position: relative;
+      background:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
+        radial-gradient(circle at 18% 24%, rgba(115,224,193,0.18), transparent 18%),
+        radial-gradient(circle at 74% 36%, rgba(108,167,255,0.22), transparent 24%),
+        radial-gradient(circle at 44% 78%, rgba(255,211,111,0.12), transparent 20%),
+        linear-gradient(180deg, #102032 0%, #0a1420 100%);
+      background-size: 36px 36px, 36px 36px, auto, auto, auto, auto;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .map-toolbar {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      z-index: 2;
+    }
+
+    .glass {
+      background: rgba(8,14,22,0.72);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.28);
+    }
+
+    .tabs, .filter-row, .legend-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: #eaf4ff;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: 180ms ease;
+    }
+
+    .chip.active, .chip:hover {
+      background: linear-gradient(135deg, rgba(115,224,193,0.18), rgba(108,167,255,0.18));
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    .demo-search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      min-width: 280px;
+    }
+
+    .demo-search input, .composer input, .composer textarea, .composer select {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+    }
+
+    .composer textarea { min-height: 108px; resize: vertical; }
+    .composer label { display: grid; gap: 8px; font-size: 13px; color: #d7e6f7; }
+    .composer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .composer-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+
+    .location-pin {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .location-pin button {
+      all: unset;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      min-width: 24px;
+      min-height: 24px;
+    }
+
+    .pin-core {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      border: 3px solid rgba(255,255,255,0.8);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.28);
+      transition: 180ms ease;
+    }
+
+    .location-pin.active .pin-core,
+    .location-pin:hover .pin-core { transform: scale(1.12); }
+
+    .pin-label {
+      position: absolute;
+      left: 50%;
+      top: -10px;
+      transform: translate(-50%, -100%);
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(6,10,16,0.82);
+      border: 1px solid rgba(255,255,255,0.1);
+      white-space: nowrap;
+      font-size: 12px;
+      opacity: 0;
+      transition: 180ms ease;
+      pointer-events: none;
+    }
+
+    .location-pin:hover .pin-label,
+    .location-pin.active .pin-label { opacity: 1; }
+
+    .panel-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .detail-card {
+      min-height: 320px;
+    }
+
+    .detail-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .detail-head h3 { margin: 0 0 6px; }
+    .detail-head p { margin: 0; }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px;
+      color: #d7e8fb;
+    }
+
+    .detail-message {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      line-height: 1.8;
+      color: #edf5ff;
+      margin-bottom: 14px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: #d9e8fb;
+    }
+
+    .museum, .public, .legacy, .food {
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    }
+
+    .museum .pin-core { background: linear-gradient(135deg, #ffd36f, #ff9f67); }
+    .public .pin-core { background: linear-gradient(135deg, #73e0c1, #67c8ef); }
+    .legacy .pin-core { background: linear-gradient(135deg, #d7b7ff, #7f9fff); }
+    .food .pin-core { background: linear-gradient(135deg, #ffa8ad, #ffcf73); }
+
+    .revenue-strip {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .revenue-math {
+      display: grid;
+      gap: 12px;
+    }
+
+    .equation {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .equation strong { font-size: 28px; letter-spacing: -0.04em; }
+
+    details {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 18px 18px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+    details p { color: var(--muted); line-height: 1.7; margin: 12px 0 0; }
+
+    .cta {
+      padding-bottom: 88px;
+    }
+
+    .cta-card {
+      padding: 34px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(108,167,255,0.18), rgba(115,224,193,0.12));
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .cta-card h2 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 54px); letter-spacing: -0.04em; }
+    .cta-card p { margin: 0; color: #e1eefc; line-height: 1.75; font-size: 18px; max-width: 760px; }
+
+    footer {
+      padding: 28px 0 40px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .museum-layout,
+      .demo-grid,
+      .revenue-strip,
+      .cta-card,
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cards-4,
+      .steps,
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cards-3,
+      .faq-grid { grid-template-columns: 1fr; }
+      .phone-shell { margin: 0 auto; }
+      .hero-visual { min-height: auto; }
+    }
+
+    @media (max-width: 760px) {
+      .nav { flex-wrap: wrap; }
+      .nav-links { order: 2; width: 100%; overflow-x: auto; }
+      .hero { padding-top: 40px; }
+      .hero-points,
+      .cards-4,
+      .steps,
+      .stats-grid,
+      .museum-window,
+      .museum-stats,
+      .museum-exhibits,
+      .composer-grid,
+      .faq-grid { grid-template-columns: 1fr; }
+      h1 { max-width: none; }
+      .subcopy { font-size: 17px; }
+      .cta-card { padding: 24px; }
+      .map-stage { min-height: 460px; }
+      .phone-screen { min-height: 560px; }
+      .camera-scene { height: 380px; }
+    }
+  </style>
+</head>
+<body class="bg-grid">
+  <header class="topbar">
+    <div class="container nav">
+      <a href="#top" class="brand" aria-label="EchoEarth home">
+        <div class="brand-badge" aria-hidden="true"></div>
+        <div>
+          <div>EchoEarth</div>
+          <div style="font-size:12px;color:var(--muted);font-weight:600;">Two Worlds, One Place</div>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="#vision">Vision</a>
+        <a href="#how">How It Works</a>
+        <a href="#museums">Museums</a>
+        <a href="#demo">Demo</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn btn-primary" href="#contact">Book a Museum Pilot</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow"><span class="eyebrow-dot"></span> A living memory layer for the planet</div>
+          <h1>
+            <span>Leave stories</span>
+            <span>inside the</span>
+            <span>real world.</span>
+          </h1>
+          <p class="subcopy">
+            EchoEarth lets people, museums, and communities attach memories, history, and meaning to real GPS locations.
+            Visitors must physically go there to unlock what was left behind — from final legacy messages to museum-built AR exhibits.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#demo">Launch Live Demo</a>
+            <a class="btn btn-secondary" href="#museums">See the Museum Model</a>
+          </div>
+          <div class="hero-points">
+            <div class="point">
+              <strong>Legacy</strong>
+              <span>People can leave something behind in a place that mattered to them.</span>
+            </div>
+            <div class="point">
+              <strong>Discovery</strong>
+              <span>Users unlock human experiences only by visiting in real time.</span>
+            </div>
+            <div class="point">
+              <strong>Museums</strong>
+              <span>Institutions can place many museums inside one city, street, trail, or landmark.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="phone-shell">
+            <div class="phone-screen">
+              <div class="status"><span>9:41</span><span>EchoEarth Live</span></div>
+              <div class="camera-scene">
+                <div class="mountain"></div>
+                <div class="ar-card small one">
+                  <div class="ar-top"><span class="ar-pill">Legacy Post</span><span>0.1 mi</span></div>
+                  <p class="ar-title">A message left at the overlook</p>
+                  <p class="ar-body">“This was the place I felt most alive. Come here at sunset and stand still for one minute.”</p>
+                </div>
+                <div class="ar-card small two">
+                  <div class="ar-top"><span class="ar-pill">Museum Layer</span><span>On site</span></div>
+                  <p class="ar-title">What stood here in 1876</p>
+                  <p class="ar-body">Reconstructed storefront, oral history, and photo overlay from the city archive.</p>
+                </div>
+                <div class="ar-card medium three">
+                  <div class="ar-top"><span class="ar-pill">Unlocked Now</span><span>Real-time</span></div>
+                  <p class="ar-title">Two Worlds, One Place</p>
+                  <p class="ar-body">The same location holds a memorial, a restaurant recommendation, and an institution-grade historical layer — all in the same spot.</p>
+                </div>
+              </div>
+              <div class="mini-map">
+                <div class="mini-map-top">
+                  <div>
+                    <strong style="display:block;font-size:15px;">Nearby layers</strong>
+                    <span style="color:var(--muted);font-size:13px;">Memory posts, museum trails, and legacy markers</span>
+                  </div>
+                  <span class="ar-pill">Live GPS</span>
+                </div>
+                <div class="mini-grid">
+                  <div class="pin"></div>
+                  <div class="pin"></div>
+                  <div class="pin"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="container stats-grid">
+        <div class="stat-card">
+          <h3>1 place</h3>
+          <p>can hold a memorial, a museum reconstruction, a family story, and a restaurant review at the same time.</p>
+        </div>
+        <div class="stat-card">
+          <h3>0 ads</h3>
+          <p>because the platform is designed around culture, institutions, and meaningful place-based experiences.</p>
+        </div>
+        <div class="stat-card">
+          <h3>∞ reach</h3>
+          <p>because museums can publish exhibits beyond their walls and into the exact places where history happened.</p>
+        </div>
+        <div class="stat-card">
+          <h3>1 world</h3>
+          <p>made deeper by letting people experience someone else’s moment where it actually took place.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="vision">
+      <div class="container">
+        <div class="section-head">
+          <div class="tag">Vision</div>
+          <h2>A website demo for a product that turns the physical world into a discoverable archive of human experience.</h2>
+          <p>
+            EchoEarth is not just another social platform. It is a place-based layer for memory, culture, education, and legacy.
+            Users visit locations in real life to unlock what others chose to leave behind there.
+          </p>
+        </div>
+
+        <div class="cards-3">
+          <article class="card">
+            <div class="feature-icon">📍</div>
+            <strong class="kicker">Location Memory</strong>
+            <h3>Posts live in real places</h3>
+            <p>Every story, review, memorial, or museum layer is attached to GPS coordinates and meant to be experienced on-site.</p>
+          </article>
+          <article class="card">
+            <div class="feature-icon">🕊️</div>
+            <strong class="kicker">Legacy</strong>
+            <h3>Leave something behind</h3>
+            <p>People facing the end of life — or simply wanting to preserve a moment — can create a message for the future in a meaningful place.</p>
+          </article>
+          <article class="card">
+            <div class="feature-icon">🏛️</div>
+            <strong class="kicker">Institutions</strong>
+            <h3>Museums beyond their buildings</h3>
+            <p>One museum can create 30 digital museum moments in 30 different places and open new ways to teach history in context.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="container">
+        <div class="section-head">
+          <div class="tag">How it works</div>
+          <h2>Experience someone else’s experience by physically going where it happened.</h2>
+          <p>
+            The magic is simple: the message is not fully accessible until the user reaches the location. That turns passive content into real-world discovery.
+          </p>
+        </div>
+
+        <div class="steps">
+          <article class="card step-card">
+            <div class="step-num">1</div>
+            <h3>Create a memory</h3>
+            <p>A person, museum, or business writes, records, or publishes a story tied to a real location.</p>
+          </article>
+          <article class="card step-card">
+            <div class="step-num">2</div>
+            <h3>Tag the place</h3>
+            <p>The creator pins it to precise GPS coordinates so the message belongs to that place forever.</p>
+          </article>
+          <article class="card step-card">
+            <div class="step-num">3</div>
+            <h3>Visit in real time</h3>
+            <p>Users walk there, stand in that space, and unlock the post once they are physically present.</p>
+          </article>
+          <article class="card step-card">
+            <div class="step-num">4</div>
+            <h3>See the hidden layer</h3>
+            <p>They discover a memorial, a memory, a museum reconstruction, or a recommendation that changes how they see the place.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="museums">
+      <div class="container">
+        <div class="section-head">
+          <div class="tag">Museum platform</div>
+          <h2>Two Worlds, One Place: the museum layout that helps institutions say yes.</h2>
+          <p>
+            Museums do not need another app. They need a way to extend education, history, and cultural memory into the exact places where stories happened.
+            This layout shows them how their presence would work inside EchoEarth.
+          </p>
+        </div>
+
+        <div class="museum-layout">
+          <div class="museum-shell">
+            <div class="museum-window">
+              <aside class="museum-sidebar">
+                <div class="museum-logo">🏛️</div>
+                <strong style="display:block;font-size:18px;">Museum Dashboard</strong>
+                <p style="margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.6;">Your digital headquarters inside EchoEarth.</p>
+                <div class="museum-nav">
+                  <span>Overview</span>
+                  <span>Location Exhibits</span>
+                  <span>Historical Trails</span>
+                  <span>AR Layers</span>
+                  <span>Education Access</span>
+                  <span>Visitor Analytics</span>
+                </div>
+              </aside>
+              <div class="museum-panel">
+                <div class="museum-top">
+                  <div>
+                    <h3>Chicago City History Museum</h3>
+                    <p>Publishing a living archive across streets, landmarks, and neighborhoods where history actually happened.</p>
+                  </div>
+                  <span class="museum-badge">Verified Institution</span>
+                </div>
+                <div class="museum-stats">
+                  <div class="museum-stat">
+                    <strong>30</strong>
+                    <span>active location exhibits</span>
+                  </div>
+                  <div class="museum-stat">
+                    <strong>4</strong>
+                    <span>guided city trails</span>
+                  </div>
+                  <div class="museum-stat">
+                    <strong>12.8k</strong>
+                    <span>visits this month</span>
+                  </div>
+                </div>
+                <div class="museum-exhibits">
+                  <div class="museum-exhibit">
+                    <span class="mini-tag">Trail</span>
+                    <h4 style="margin:0 0 8px;">Civil Rights Path</h4>
+                    <p style="margin:0;">An 8-stop educational trail with on-site oral histories, photos, and AR reconstructions.</p>
+                  </div>
+                  <div class="museum-exhibit">
+                    <span class="mini-tag">AR Exhibit</span>
+                    <h4 style="margin:0 0 8px;">What stood here in 1910</h4>
+                    <p style="margin:0;">Visitors point their phones at the block and see a layered historical reconstruction.</p>
+                  </div>
+                  <div class="museum-exhibit">
+                    <span class="mini-tag">School Access</span>
+                    <h4 style="margin:0 0 8px;">Field Trip Mode</h4>
+                    <p style="margin:0;">Teachers unlock guided educational routes for students in the city.</p>
+                  </div>
+                  <div class="museum-exhibit">
+                    <span class="mini-tag">Membership</span>
+                    <h4 style="margin:0 0 8px;">Digital Pass Layer</h4>
+                    <p style="margin:0;">Premium museum content sits inside the public map with ticketed access options.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-stack">
+            <article class="card">
+              <strong class="kicker">What museums get</strong>
+              <h3>One museum can become thirty</h3>
+              <ul class="clean">
+                <li>A branded museum profile inside the app.</li>
+                <li>GPS-tagged exhibits placed wherever history happened.</li>
+                <li>Paid digital trails, city passes, or premium educational layers.</li>
+                <li>Analytics on visits, unlocks, and engagement.</li>
+                <li>Verified institutional credibility in a public discovery map.</li>
+              </ul>
+            </article>
+            <article class="card">
+              <strong class="kicker">Pitch line</strong>
+              <h3>Expand the museum into the real world</h3>
+              <p>
+                Through EchoEarth, museums can teach history in the exact spaces where it happened,
+                preserve local memory in place, and reach audiences far beyond their building walls.
+              </p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo">
+      <div class="container">
+        <div class="section-head">
+          <div class="tag">Interactive website demo</div>
+          <h2>Click the map pins, switch categories, and preview the live experience.</h2>
+          <p>
+            This one-page demo shows how public stories, museum exhibits, legacy messages, and food recommendations can all exist in the same place.
+          </p>
+        </div>
+
+        <div class="demo-grid">
+          <div class="demo-preview">
+            <div class="map-stage" id="mapStage">
+              <div class="map-toolbar">
+                <div class="glass" style="padding:10px 12px;">
+                  <div class="tabs" id="tabs"></div>
+                </div>
+                <div class="glass demo-search">
+                  <span>🔎</span>
+                  <input id="searchInput" type="text" placeholder="Search places, memories, museums..." />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-stack">
+            <article class="card detail-card" id="detailCard">
+              <div class="detail-head">
+                <div>
+                  <h3>Welcome to EchoEarth</h3>
+                  <p>Select a location pin to preview what users would discover on site.</p>
+                </div>
+                <span class="museum-badge">Live Demo</span>
+              </div>
+              <div class="detail-message">
+                In the real product, this content would unlock only when the person reaches the location. For the website demo, it opens instantly so museums and partners can understand the experience.
+              </div>
+              <div class="badge-row">
+                <span class="badge">GPS-tagged</span>
+                <span class="badge">On-site unlock</span>
+                <span class="badge">Museum-ready</span>
+                <span class="badge">Legacy-friendly</span>
+              </div>
+              <p style="color:var(--muted);line-height:1.8;">Use the category chips or search field to filter the map. Then click a pin to load the content preview here.</p>
+            </article>
+
+            <article class="card composer">
+              <strong class="kicker">Create a sample post</strong>
+              <h3>Show how simple publishing can feel</h3>
+              <div class="composer-grid">
+                <label>
+                  Title
+                  <input id="composeTitle" placeholder="Sunset Overlook Memory" />
+                </label>
+                <label>
+                  Type
+                  <select id="composeType">
+                    <option value="public">Public Memory</option>
+                    <option value="legacy">Legacy Message</option>
+                    <option value="museum">Museum Exhibit</option>
+                    <option value="food">Restaurant Review</option>
+                  </select>
+                </label>
+              </div>
+              <label style="margin-top:12px;display:grid;gap:8px;">
+                Message
+                <textarea id="composeMessage" placeholder="Leave something meaningful tied to a real place..."></textarea>
+              </label>
+              <div class="composer-actions">
+                <button class="btn btn-primary" id="addPostBtn" type="button">Add Demo Post</button>
+                <button class="btn btn-ghost" id="seedBtn" type="button">Reset Demo Data</button>
+              </div>
+              <p style="margin:14px 0 0;color:var(--muted);font-size:13px;line-height:1.6;">New demo posts are added near the center of the map and stored only in this browser session.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <div class="container">
+        <div class="section-head">
+          <div class="tag">Revenue model</div>
+          <h2>No ads. No clutter. A business model built around museums, culture, and place-based access.</h2>
+          <p>
+            The cleanest version of this company is a cultural infrastructure platform: museums and institutions fund premium layers,
+            while public memories keep the world emotionally alive.
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          <article class="card pricing-card">
+            <strong class="kicker">Starter</strong>
+            <h3>Local Museum Pilot</h3>
+            <div class="price">$1,500</div>
+            <div class="sub">per year / institution</div>
+            <ul class="clean">
+              <li>1 museum profile</li>
+              <li>Up to 10 location exhibits</li>
+              <li>Basic historical trail access</li>
+              <li>Simple visitor analytics</li>
+            </ul>
+          </article>
+
+          <article class="card pricing-card featured">
+            <div class="pricing-pill">Best fit</div>
+            <strong class="kicker">Growth</strong>
+            <h3>Two Worlds Institutional Plan</h3>
+            <div class="price">$6,000</div>
+            <div class="sub">per year / institution</div>
+            <ul class="clean">
+              <li>Unlimited branded museum profile</li>
+              <li>30+ GPS-tagged exhibits</li>
+              <li>Premium city trails and museum passes</li>
+              <li>Education mode for schools and tours</li>
+              <li>Priority support and launch setup</li>
+            </ul>
+          </article>
+
+          <article class="card pricing-card">
+            <strong class="kicker">Public add-on</strong>
+            <h3>Cultural Pass</h3>
+            <div class="price">$8</div>
+            <div class="sub">per user / month</div>
+            <ul class="clean">
+              <li>Unlock premium museum trails</li>
+              <li>Access curated city experiences</li>
+              <li>Support ad-free exploration</li>
+              <li>Keep public memories free</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="revenue-strip" style="margin-top:18px;">
+          <article class="card">
+            <strong class="kicker">Why this works</strong>
+            <h3>A revenue model that matches the mission</h3>
+            <p>
+              Ads would destroy the emotional value of memorials, history, and place. Museum licensing, digital passes,
+              and cultural partnerships keep the platform aligned with what makes it meaningful.
+            </p>
+            <div class="badge-row" style="margin-top:14px;">
+              <span class="badge">Museum licensing</span>
+              <span class="badge">City passes</span>
+              <span class="badge">Educational trails</span>
+              <span class="badge">Legacy preservation</span>
+            </div>
+          </article>
+          <div class="revenue-math">
+            <div class="equation">
+              <span style="color:var(--muted);font-size:13px;">Scenario A</span>
+              <strong>500 museums × $6,000 = $3,000,000/year</strong>
+              <span style="color:var(--muted);">A lean operation can stay ad-free and still scale into strong revenue with institutional adoption.</span>
+            </div>
+            <div class="equation">
+              <span style="color:var(--muted);font-size:13px;">Scenario B</span>
+              <strong>25,000 users × $8 × 12 = $2,400,000/year</strong>
+              <span style="color:var(--muted);">A modest paid cultural audience can support expansion without damaging the product experience.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="tag">Partnership offer</div>
+          <h2>What museums are actually buying when they join.</h2>
+          <p>
+            The offer should feel clear, practical, and mission-aligned: not experimental tech for its own sake, but a new distribution model for culture and history.
+          </p>
+        </div>
+
+        <div class="cards-4">
+          <article class="card">
+            <strong class="kicker">Profile</strong>
+            <h3>Branded presence</h3>
+            <p>A verified museum page inside EchoEarth with logo, description, trails, exhibits, and institutional trust.</p>
+          </article>
+          <article class="card">
+            <strong class="kicker">Publishing</strong>
+            <h3>Location-based exhibits</h3>
+            <p>Curators can publish historical stories directly onto real streets, landmarks, battlefields, and neighborhoods.</p>
+          </article>
+          <article class="card">
+            <strong class="kicker">Education</strong>
+            <h3>Field trip mode</h3>
+            <p>Teachers and student groups can unlock guided, museum-authored educational routes in the real world.</p>
+          </article>
+          <article class="card">
+            <strong class="kicker">Revenue</strong>
+            <h3>Digital passes</h3>
+            <p>Museums can sell premium access to city trails, thematic routes, and special collections layered into public spaces.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head">
+          <div class="tag">FAQ</div>
+          <h2>Questions partners and users will ask first.</h2>
+          <p>This section helps you handle early objections during museum outreach and live demos.</p>
+        </div>
+        <div class="faq-grid">
+          <details open>
+            <summary>Why does the content unlock only on-site?</summary>
+            <p>Because that is what makes the experience feel real. EchoEarth turns a place into part of the message. The person must physically arrive to fully experience what was left there.</p>
+          </details>
+          <details>
+            <summary>Why would museums care?</summary>
+            <p>It expands their reach far beyond their walls, creates new educational experiences, and allows them to teach history exactly where it happened.</p>
+          </details>
+          <details>
+            <summary>Can multiple layers exist in one place?</summary>
+            <p>Yes. That is the core concept: one location can hold public memories, legacy messages, museum exhibits, and commercial recommendations at the same time.</p>
+          </details>
+          <details>
+            <summary>How does the platform make money without ads?</summary>
+            <p>Through museum licensing, cultural passes, institutional partnerships, educational experiences, and optional premium preservation features.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="contact">
+      <div class="container">
+        <div class="cta-card">
+          <div>
+            <h2>Ready to pitch this live?</h2>
+            <p>
+              Use this one-page website as a launch demo, outreach page, or museum presentation site.
+              Replace the placeholder name and contact details, then host it on GitHub Pages, Netlify, or any basic web server.
+            </p>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end;">
+            <a class="btn btn-primary" href="mailto:hello@echoearthdemo.com?subject=EchoEarth%20Museum%20Pilot">Email Museum Partners</a>
+            <a class="btn btn-secondary" href="#top">Back to Top</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-line">
+      <div>EchoEarth demo site — built as a single HTML file for easy launch and sharing.</div>
+      <div>Tagline: <strong style="color:#eef6ff;">Two Worlds, One Place</strong></div>
+    </div>
+  </footer>
+
+  <script>
+    const seedPosts = [
+      {
+        id: 1,
+        title: 'Last Message at the Lake',
+        type: 'legacy',
+        category: 'Legacy Message',
+        author: 'A father leaving something behind',
+        location: 'North Shore Overlook',
+        distance: 'On site',
+        access: 'Unlock when standing at the railing',
+        x: 24,
+        y: 62,
+        message: 'If you are seeing this, then you made it to the place that gave me peace. I wanted to leave one quiet reminder here: slow down, breathe deeper, and keep loving people while you still can.',
+        badges: ['Legacy', 'Emotional', 'On-site only']
+      },
+      {
+        id: 2,
+        title: 'What This Block Looked Like in 1912',
+        type: 'museum',
+        category: 'Museum Exhibit',
+        author: 'Chicago City History Museum',
+        location: 'Old Market Street',
+        distance: '47 ft away',
+        access: 'Included with Museum Pass',
+        x: 52,
+        y: 34,
+        message: 'Stand in the center of the block and view a museum-curated reconstruction showing storefronts, horse-drawn traffic, and an audio story pulled from archived oral histories.',
+        badges: ['Verified Institution', 'AR Reconstruction', 'Premium']
+      },
+      {
+        id: 3,
+        title: 'Order the Spicy Ramen',
+        type: 'food',
+        category: 'Restaurant Review',
+        author: 'A traveler who found the perfect meal',
+        location: 'Lantern Alley Noodle House',
+        distance: '0.2 mi',
+        access: 'Unlock at restaurant entrance',
+        x: 72,
+        y: 48,
+        message: 'Skip the menu panic. Order the spicy ramen, ask for the egg, and sit by the window if it is raining. This is the meal I still think about when I miss this city.',
+        badges: ['Food', 'Travel', 'Recommendation']
+      },
+      {
+        id: 4,
+        title: 'The Spot Where I Proposed',
+        type: 'public',
+        category: 'Public Memory',
+        author: 'Local Explorer',
+        location: 'Riverwalk Bridge',
+        distance: '140 ft away',
+        access: 'Public unlock',
+        x: 38,
+        y: 22,
+        message: 'This bridge is where my life changed. I wanted to pin the joy here so other people could feel that places can hold beginnings, not just history.',
+        badges: ['Public', 'Love', 'Free']
+      },
+      {
+        id: 5,
+        title: 'Civil Rights Trail Stop 3',
+        type: 'museum',
+        category: 'Museum Exhibit',
+        author: 'Regional Justice Archive',
+        location: 'Courthouse Steps',
+        distance: '0.4 mi',
+        access: 'Digital Trail Pass',
+        x: 62,
+        y: 70,
+        message: 'Visitors unlock a curator-led story, archive photography, and an oral history segment that explains why this address became a turning point for local organizing.',
+        badges: ['Trail', 'Education', 'Premium']
+      },
+      {
+        id: 6,
+        title: 'A Quiet Place After the Funeral',
+        type: 'legacy',
+        category: 'Legacy Message',
+        author: 'Family remembrance post',
+        location: 'Willow Garden Bench',
+        distance: '0.1 mi',
+        access: 'Family circle or public memorial mode',
+        x: 18,
+        y: 36,
+        message: 'We sat here after the service because it was the first place the world felt calm again. This marker exists to say that grief and beauty can live in the same place.',
+        badges: ['Memorial', 'Healing', 'On-site only']
+      }
+    ];
+
+    const mapStage = document.getElementById('mapStage');
+    const detailCard = document.getElementById('detailCard');
+    const tabsEl = document.getElementById('tabs');
+    const searchInput = document.getElementById('searchInput');
+    const addPostBtn = document.getElementById('addPostBtn');
+    const seedBtn = document.getElementById('seedBtn');
+    const composeTitle = document.getElementById('composeTitle');
+    const composeType = document.getElementById('composeType');
+    const composeMessage = document.getElementById('composeMessage');
+
+    const filters = [
+      { key: 'all', label: 'All Layers' },
+      { key: 'museum', label: 'Museums' },
+      { key: 'legacy', label: 'Legacy' },
+      { key: 'public', label: 'Public' },
+      { key: 'food', label: 'Food' }
+    ];
+
+    let currentFilter = 'all';
+    let currentQuery = '';
+    let posts = JSON.parse(sessionStorage.getItem('echoearth-demo-posts') || 'null') || seedPosts.slice();
+    let activeId = null;
+
+    function savePosts() {
+      sessionStorage.setItem('echoearth-demo-posts', JSON.stringify(posts));
+    }
+
+    function renderTabs() {
+      tabsEl.innerHTML = '';
+      filters.forEach(filter => {
+        const button = document.createElement('button');
+        button.className = 'chip' + (currentFilter === filter.key ? ' active' : '');
+        button.type = 'button';
+        button.textContent = filter.label;
+        button.addEventListener('click', () => {
+          currentFilter = filter.key;
+          renderTabs();
+          renderMap();
+        });
+        tabsEl.appendChild(button);
+      });
+    }
+
+    function getFilteredPosts() {
+      return posts.filter(post => {
+        const matchesFilter = currentFilter === 'all' ? true : post.type === currentFilter;
+        const query = currentQuery.trim().toLowerCase();
+        const matchesQuery = !query ? true : [post.title, post.author, post.location, post.message, post.category]
+          .join(' ')
+          .toLowerCase()
+          .includes(query);
+        return matchesFilter && matchesQuery;
+      });
+    }
+
+    function renderMap() {
+      mapStage.querySelectorAll('.location-pin').forEach(el => el.remove());
+      const filtered = getFilteredPosts();
+
+      filtered.forEach(post => {
+        const pin = document.createElement('div');
+        pin.className = `location-pin ${post.type}` + (activeId === post.id ? ' active' : '');
+        pin.style.left = post.x + '%';
+        pin.style.top = post.y + '%';
+
+        pin.innerHTML = `
+          <div class="pin-label">${post.title}</div>
+          <button type="button" aria-label="Open ${post.title}">
+            <div class="pin-core"></div>
+          </button>
+        `;
+
+        pin.addEventListener('click', () => {
+          activeId = post.id;
+          renderMap();
+          renderDetail(post);
+        });
+
+        mapStage.appendChild(pin);
+      });
+
+      if (!filtered.length) {
+        renderEmptyState();
+      } else if (activeId && !filtered.some(post => post.id === activeId)) {
+        activeId = filtered[0].id;
+        renderDetail(filtered[0]);
+        renderMap();
+      }
+    }
+
+    function renderDetail(post) {
+      detailCard.innerHTML = `
+        <div class="detail-head">
+          <div>
+            <h3>${escapeHtml(post.title)}</h3>
+            <p>${escapeHtml(post.category)} by ${escapeHtml(post.author)}</p>
+          </div>
+          <span class="museum-badge">${escapeHtml(post.type)}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta">📍 ${escapeHtml(post.location)}</span>
+          <span class="meta">🧭 ${escapeHtml(post.distance)}</span>
+          <span class="meta">🔓 ${escapeHtml(post.access)}</span>
+        </div>
+        <div class="detail-message">${escapeHtml(post.message)}</div>
+        <div class="badge-row">
+          ${post.badges.map(b => `<span class="badge">${escapeHtml(b)}</span>`).join('')}
+        </div>
+        <p style="color:var(--muted);line-height:1.8;margin:0;">In the full app, this panel could also show video, audio playback, AR overlays, route guidance, memorial settings, museum branding, and pass requirements.</p>
+      `;
+    }
+
+    function renderEmptyState() {
+      detailCard.innerHTML = `
+        <div class="detail-head">
+          <div>
+            <h3>No matching posts found</h3>
+            <p>Try a different filter or search phrase.</p>
+          </div>
+          <span class="museum-badge">Filtered</span>
+        </div>
+        <div class="detail-message">This demo lets you quickly show how different categories of place-based content can live together inside one product.</div>
+      `;
+    }
+
+    function addDemoPost() {
+      const title = composeTitle.value.trim();
+      const type = composeType.value;
+      const message = composeMessage.value.trim();
+      if (!title || !message) {
+        alert('Please add both a title and a message.');
+        return;
+      }
+
+      const typeMap = {
+        public: { category: 'Public Memory', author: 'Demo user', access: 'Public unlock', badges: ['Public', 'New', 'Free'] },
+        legacy: { category: 'Legacy Message', author: 'Legacy creator', access: 'On-site legacy unlock', badges: ['Legacy', 'Personal', 'On-site only'] },
+        museum: { category: 'Museum Exhibit', author: 'Partner Museum', access: 'Museum Pass', badges: ['Institution', 'Curated', 'Premium'] },
+        food: { category: 'Restaurant Review', author: 'Food explorer', access: 'Unlock at venue', badges: ['Food', 'Recommendation', 'Local'] }
+      };
+
+      const extra = typeMap[type];
+      const newPost = {
+        id: Date.now(),
+        title,
+        type,
+        category: extra.category,
+        author: extra.author,
+        location: 'Demo Plaza Center',
+        distance: 'New',
+        access: extra.access,
+        x: 50 + Math.round((Math.random() * 16) - 8),
+        y: 54 + Math.round((Math.random() * 16) - 8),
+        message,
+        badges: extra.badges
+      };
+
+      posts = [newPost, ...posts];
+      activeId = newPost.id;
+      savePosts();
+      composeTitle.value = '';
+      composeMessage.value = '';
+      renderTabs();
+      renderMap();
+      renderDetail(newPost);
+    }
+
+    function resetDemo() {
+      posts = seedPosts.slice();
+      activeId = null;
+      currentFilter = 'all';
+      currentQuery = '';
+      searchInput.value = '';
+      sessionStorage.removeItem('echoearth-demo-posts');
+      renderTabs();
+      renderMap();
+      detailCard.innerHTML = `
+        <div class="detail-head">
+          <div>
+            <h3>Welcome to EchoEarth</h3>
+            <p>Select a location pin to preview what users would discover on site.</p>
+          </div>
+          <span class="museum-badge">Live Demo</span>
+        </div>
+        <div class="detail-message">
+          In the real product, this content would unlock only when the person reaches the location. For the website demo, it opens instantly so museums and partners can understand the experience.
+        </div>
+        <div class="badge-row">
+          <span class="badge">GPS-tagged</span>
+          <span class="badge">On-site unlock</span>
+          <span class="badge">Museum-ready</span>
+          <span class="badge">Legacy-friendly</span>
+        </div>
+        <p style="color:var(--muted);line-height:1.8;">Use the category chips or search field to filter the map. Then click a pin to load the content preview here.</p>
+      `;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    searchInput.addEventListener('input', (event) => {
+      currentQuery = event.target.value;
+      renderMap();
+    });
+
+    addPostBtn.addEventListener('click', addDemoPost);
+    seedBtn.addEventListener('click', resetDemo);
+
+    renderTabs();
+    renderMap();
+  </script>
+</body>
+</html>
