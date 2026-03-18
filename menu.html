@@ -163,22 +163,25 @@
     .panel-wrap {
       position: absolute;
       left: 50%;
-      top: 54%;
+      top: 53%;
       transform: translate3d(-50%, -50%, 0);
       z-index: 6;
-      width: min(94vw, 460px);
-      max-height: min(72vh, 760px);
+      width: min(98vw, 520px);
+      max-height: min(84vh, 860px);
       will-change: transform;
     }
 
     .menu-panel {
-      background: linear-gradient(180deg, rgba(12, 22, 34, 0.92), rgba(8, 14, 23, 0.9));
+      background: linear-gradient(180deg, rgba(12, 22, 34, 0.94), rgba(8, 14, 23, 0.92));
       border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: 28px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
       overflow: hidden;
       touch-action: pan-y;
+      display: flex;
+      flex-direction: column;
+      height: min(84vh, 860px);
     }
 
     .panel-header {
@@ -286,24 +289,26 @@
 
     .panel-body {
       display: grid;
-      grid-template-rows: auto auto 1fr auto;
-      max-height: min(65vh, 660px);
-      min-height: 360px;
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      max-height: none;
+      min-height: 0;
+      flex: 1 1 auto;
     }
 
     .hero {
-      padding: 14px 14px 0;
+      padding: 12px 12px 0;
       display: grid;
-      gap: 12px;
+      gap: 10px;
+      flex: 0 0 auto;
     }
 
     .hero-card {
-      padding: 14px;
-      border-radius: 20px;
+      padding: 12px;
+      border-radius: 18px;
       background: linear-gradient(135deg, rgba(110, 231, 255, 0.14), rgba(158, 255, 168, 0.12));
       border: 1px solid rgba(255,255,255,0.12);
       display: grid;
-      gap: 10px;
+      gap: 8px;
     }
 
     .hero-top {
@@ -344,21 +349,25 @@
     .tabs {
       display: flex;
       gap: 8px;
-      padding: 12px 14px;
+      padding: 10px 12px;
       overflow-x: auto;
       scrollbar-width: none;
+      scroll-snap-type: x proximity;
     }
     .tabs::-webkit-scrollbar { display: none; }
-    .tab-btn { border-radius: 999px; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); white-space: nowrap; }
+    .tab-btn { border-radius: 999px; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); white-space: nowrap; scroll-snap-align: start; }
 
     .menu-list {
-      padding: 0 14px 14px;
+      padding: 0 12px 12px;
       overflow: auto;
       display: grid;
       grid-template-columns: 1fr;
       gap: 10px;
       align-content: start;
       overscroll-behavior: contain;
+      min-height: 0;
+      max-height: 100%;
+      -webkit-overflow-scrolling: touch;
     }
 
     .menu-item {
@@ -433,10 +442,11 @@
 
     .panel-footer {
       border-top: 1px solid var(--line);
-      padding: 12px 14px calc(12px + var(--safe-bottom));
+      padding: 10px 12px calc(10px + var(--safe-bottom));
       display: grid;
       gap: 10px;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.14));
+      flex: 0 0 auto;
     }
 
     .cart-row {
@@ -619,15 +629,21 @@
     .hidden { display: none !important; }
 
     @media (min-width: 880px) {
-      .panel-wrap { width: min(44vw, 520px); left: 28%; }
+      .panel-wrap { width: min(48vw, 580px); left: 30%; }
       .bottom-dock { width: min(68vw, 620px); }
       .cart-sheet { left: auto; right: 14px; width: 360px; }
+      .menu-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 520px) {
-      .panel-wrap { width: min(96vw, 460px); }
-      .panel-body { min-height: 325px; }
-      .kpis { grid-template-columns: 1fr; }
+      .panel-wrap { width: min(98vw, 520px); top: 51%; }
+      .menu-panel { height: min(86vh, 860px); border-radius: 24px; }
+      .panel-header { padding: 10px; }
+      .control-row { align-items: stretch; flex-direction: column; }
+      .chip-group, .action-group { width: 100%; }
+      .chip-group > *, .action-group > * { flex: 1 1 0; text-align: center; }
+      .hero-card p { font-size: 0.84rem; }
+      .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .footer-actions { grid-template-columns: 1fr; }
       .bottom-dock { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
@@ -664,7 +680,7 @@
               <div class="brand-icon" aria-hidden="true">🍽️</div>
               <div class="brand-copy">
                 <h1>Northstar Kitchen</h1>
-                <p>Floating mobile-first menu • tap-friendly • no forced scrolling</p>
+                <p>Floating mobile-first menu • bigger frame • all options visible</p>
               </div>
             </div>
             <div class="mini-actions">
@@ -692,7 +708,7 @@
               <div class="hero-top">
                 <div>
                   <h2>Browse in AR, order by touch</h2>
-                  <p>This demo keeps the menu easy to reach on mobile. The panel can follow the guest, be pinned in place, and still remains fully usable as a normal web UI.</p>
+                  <p>Menu frame enlarged for mobile so categories and item cards stay visible inside the AR panel.</p>
                 </div>
                 <span class="tag">Touch-first</span>
               </div>
@@ -704,6 +720,7 @@
             </div>
           </div>
 
+          <div style="padding:0 12px 4px;color:var(--muted);font-size:0.8rem;">Swipe categories if needed, or scroll the item list inside the frame.</div>
           <nav class="tabs" id="categoryTabs" aria-label="Menu categories"></nav>
           <div class="menu-list" id="menuList" tabindex="0"></div>
 
@@ -857,6 +874,7 @@
           state.category = section.category;
           renderTabs();
           renderItems();
+          menuList.scrollTo({ top: 0, behavior: 'smooth' });
         });
         categoryTabs.appendChild(btn);
       });
@@ -1005,18 +1023,20 @@
     }
 
     function distanceOffset() {
-      if (state.distance === 'far') return { scale: 0.94, y: 0.47 };
-      if (state.distance === 'mid') return { scale: 0.98, y: 0.52 };
-      return { scale: 1.02, y: 0.58 };
+      if (state.distance === 'far') return { scale: 0.97, y: 0.47 };
+      if (state.distance === 'mid') return { scale: 1.0, y: 0.52 };
+      return { scale: 1.03, y: 0.58 };
     }
 
     function applyPanelPosition(immediate = false) {
       const bounds = panelWrap.getBoundingClientRect();
       const halfW = bounds.width / 2;
       const halfH = bounds.height / 2;
-      const margin = 10;
+      const margin = 8;
+      const topSafe = 92;
+      const bottomSafe = 124;
       const x = Math.max(margin + halfW, Math.min(window.innerWidth - halfW - margin, state.panelCurrent.x));
-      const y = Math.max(120, Math.min(window.innerHeight - halfH - 100, state.panelCurrent.y));
+      const y = Math.max(topSafe + halfH, Math.min(window.innerHeight - halfH - bottomSafe, state.panelCurrent.y));
       const { scale } = distanceOffset();
       panelWrap.style.transform = `translate3d(${x - window.innerWidth / 2}px, ${y - window.innerHeight / 2}px, 0) scale(${scale})`;
       if (immediate) return;
