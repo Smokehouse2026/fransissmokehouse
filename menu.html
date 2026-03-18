@@ -3,104 +3,104 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Francis Smokehouse — Emerald Diamond Edition</title>
-  <meta name="description" content="A custom luxury emerald-and-diamond concept for The Francis Smokehouse." />
+  <title>The Francis Smokehouse — Obsidian Runway</title>
+  <meta name="description" content="A completely fresh luxury concept for The Francis Smokehouse." />
   <style>
     :root{
-      --bg:#07110d;
-      --bg2:#0d1713;
-      --bg3:#10100f;
-      --emerald:#0f8f6f;
-      --emerald-deep:#0a5a47;
-      --emerald-glow:#54f0c2;
-      --diamond:#dff7ff;
-      --ice:#b8f2ff;
-      --champagne:#f0dfb2;
-      --mist:rgba(223,247,255,.08);
-      --line:rgba(223,247,255,.14);
-      --soft:rgba(239,247,245,.68);
+      --bg:#060707;
+      --bg2:#0c1110;
+      --obsidian:#0b0f0e;
+      --panel:rgba(255,255,255,.055);
+      --line:rgba(216,255,244,.12);
+      --soft:rgba(240,250,247,.68);
       --text:#f7fcfb;
-      --shadow:0 30px 100px rgba(0,0,0,.46);
+      --emerald:#1ab58d;
+      --emerald-soft:#8dffe0;
+      --ice:#d7fff3;
+      --champ:#e6d3aa;
+      --shadow:0 30px 90px rgba(0,0,0,.5);
       --radius:34px;
     }
 
     *{box-sizing:border-box}
     html,body{margin:0;min-height:100%}
     body{
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       color:var(--text);
       overflow:hidden;
       background:
-        radial-gradient(1000px 700px at 0% 0%, rgba(84,240,194,.09), transparent 60%),
-        radial-gradient(1000px 800px at 100% 0%, rgba(223,247,255,.08), transparent 58%),
-        radial-gradient(900px 700px at 50% 100%, rgba(240,223,178,.05), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg2) 46%, var(--bg3));
+        radial-gradient(1000px 700px at 0% 0%, rgba(26,181,141,.10), transparent 60%),
+        radial-gradient(900px 700px at 100% 0%, rgba(215,255,243,.05), transparent 58%),
+        linear-gradient(180deg, var(--bg), var(--bg2) 45%, #070808);
     }
 
     body::before{
       content:"";
-      position:fixed; inset:-8%;
+      position:fixed; inset:0;
       pointer-events:none;
-      opacity:.35;
-      background:
-        linear-gradient(135deg, transparent 24%, rgba(255,255,255,.045) 25%, transparent 26%, transparent 49%, rgba(255,255,255,.03) 50%, transparent 51%, transparent 74%, rgba(255,255,255,.04) 75%, transparent 76%),
-        linear-gradient(45deg, transparent 24%, rgba(84,240,194,.03) 25%, transparent 26%, transparent 49%, rgba(223,247,255,.04) 50%, transparent 51%, transparent 74%, rgba(240,223,178,.03) 75%, transparent 76%);
-      background-size:120px 120px, 160px 160px;
-      filter:blur(.4px);
-      mix-blend-mode:screen;
+      opacity:.08;
+      background-image:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size:72px 72px;
+      mask-image:radial-gradient(circle at center, black 35%, transparent 95%);
     }
 
     .app{
-      position:relative;
       min-height:100vh;
-      padding:18px;
       display:grid;
       place-items:center;
+      padding:18px;
     }
 
     .shell{
       position:relative;
-      width:min(1480px, calc(100vw - 24px));
+      width:min(1500px, calc(100vw - 24px));
       height:min(920px, calc(100vh - 24px));
       overflow:hidden;
-      border-radius:42px;
-      border:1px solid rgba(223,247,255,.12);
+      border-radius:40px;
+      border:1px solid var(--line);
       background:
-        radial-gradient(900px 340px at 50% 0%, rgba(84,240,194,.10), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.05);
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)),
+        radial-gradient(900px 240px at 20% 0%, rgba(26,181,141,.08), transparent 60%);
+      box-shadow:var(--shadow);
       backdrop-filter:blur(18px);
       -webkit-backdrop-filter:blur(18px);
       isolation:isolate;
     }
 
-    .glass-noise{
+    .noise{
       position:absolute; inset:0;
-      opacity:.06; pointer-events:none;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+      pointer-events:none;
+      opacity:.06;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
       mix-blend-mode:screen;
     }
 
-    .prism-web{
+    .columns{
       position:absolute; inset:0;
       pointer-events:none;
-      background:
-        linear-gradient(120deg, transparent 0 47%, rgba(223,247,255,.05) 48%, transparent 49% 100%),
-        linear-gradient(60deg, transparent 0 47%, rgba(84,240,194,.04) 48%, transparent 49% 100%),
-        linear-gradient(180deg, transparent 0 79%, rgba(255,255,255,.02) 80%, transparent 81% 100%);
-      background-size:240px 240px, 180px 180px, 100% 90px;
-      opacity:.35;
-      mask-image:radial-gradient(circle at center, black 45%, transparent 100%);
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+      gap:16px;
+      padding:0 18px;
+      opacity:.38;
+    }
+    .columns div{
+      height:100%;
+      background:linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,.005));
+      border-left:1px solid rgba(255,255,255,.03);
+      border-right:1px solid rgba(255,255,255,.03);
     }
 
     .topbar{
       position:absolute;
       top:0; left:0; right:0;
-      padding:24px 28px;
       display:flex;
-      align-items:center;
       justify-content:space-between;
+      align-items:center;
       gap:14px;
+      padding:24px 30px;
       z-index:5;
     }
 
@@ -110,39 +110,29 @@
       gap:14px;
     }
 
-    .crest{
-      width:62px; height:62px;
+    .mark{
       position:relative;
-      display:grid;
-      place-items:center;
-      filter:drop-shadow(0 0 22px rgba(84,240,194,.25));
-    }
-
-    .crest::before{
-      content:"";
-      position:absolute; inset:0;
+      width:56px; height:56px;
+      border-radius:18px;
       background:
-        linear-gradient(145deg, rgba(223,247,255,.28), rgba(84,240,194,.08));
-      clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-      border:1px solid rgba(223,247,255,.18);
-      box-shadow:inset 0 0 30px rgba(255,255,255,.08);
+        linear-gradient(145deg, rgba(215,255,243,.14), rgba(26,181,141,.08)),
+        radial-gradient(circle at 32% 28%, rgba(255,255,255,.18), transparent 34%);
+      border:1px solid rgba(215,255,243,.12);
+      box-shadow:0 0 30px rgba(26,181,141,.15);
+      overflow:hidden;
     }
-
-    .crest::after{
+    .mark::before,
+    .mark::after{
       content:"";
-      position:absolute; inset:12px;
-      clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-      border:1px solid rgba(223,247,255,.18);
-      background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.18), rgba(255,255,255,.02));
+      position:absolute;
+      left:50%; top:50%;
+      transform:translate(-50%,-50%) rotate(45deg);
+      width:28px; height:28px;
+      border:1px solid rgba(215,255,243,.16);
     }
-
-    .crest span{
-      position:relative;
-      z-index:2;
-      font-size:18px;
-      color:var(--champagne);
-      letter-spacing:.16em;
-      font-weight:900;
+    .mark::after{
+      width:14px; height:14px;
+      border-color:rgba(230,211,170,.22);
     }
 
     .brand-title{
@@ -151,592 +141,579 @@
       font-weight:900;
       letter-spacing:.22em;
       text-transform:uppercase;
-      color:var(--diamond);
+      color:var(--ice);
     }
-
     .brand-sub{
       margin-top:5px;
+      color:var(--soft);
       font-size:11px;
       text-transform:uppercase;
-      letter-spacing:.16em;
-      color:var(--soft);
+      letter-spacing:.15em;
     }
 
-    .status{
+    .hours{
       display:flex;
       align-items:center;
       gap:10px;
       padding:12px 16px;
       border-radius:999px;
+      border:1px solid rgba(215,255,243,.12);
       background:rgba(255,255,255,.04);
-      border:1px solid rgba(223,247,255,.12);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+      color:var(--soft);
       font-size:12px;
+      font-weight:800;
       letter-spacing:.11em;
       text-transform:uppercase;
-      color:var(--soft);
-      font-weight:800;
     }
-
-    .status-dot{
+    .hours-dot{
       width:10px; height:10px; border-radius:50%;
-      background:var(--emerald-glow);
-      box-shadow:0 0 20px rgba(84,240,194,.9);
+      background:var(--emerald-soft);
+      box-shadow:0 0 22px rgba(141,255,224,.8);
     }
 
     .layout{
-      position:absolute;
-      inset:0;
+      position:absolute; inset:0;
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns: .95fr 1.05fr;
       z-index:2;
     }
 
     .left{
-      position:relative;
-      padding:112px 42px 42px;
+      padding:120px 38px 170px;
       display:flex;
       flex-direction:column;
       justify-content:center;
+      position:relative;
     }
 
     .eyebrow{
-      display:inline-flex;
+      color:var(--champ);
+      text-transform:uppercase;
+      letter-spacing:.28em;
+      font-size:11px;
+      font-weight:900;
+      margin-bottom:18px;
+      display:flex;
       align-items:center;
       gap:12px;
-      color:var(--champagne);
-      font-size:11px;
-      letter-spacing:.28em;
-      text-transform:uppercase;
-      font-weight:900;
-      margin-bottom:16px;
     }
-
     .eyebrow::before{
       content:"";
-      width:42px; height:1px;
-      background:linear-gradient(90deg, transparent, var(--champagne));
+      width:46px; height:1px;
+      background:linear-gradient(90deg, transparent, var(--champ));
     }
 
-    .title{
+    h1{
       margin:0;
+      max-width:650px;
       font-family: Georgia, "Times New Roman", serif;
       font-size:clamp(54px, 7vw, 108px);
-      line-height:.87;
-      letter-spacing:-.08em;
+      line-height:.86;
       font-weight:600;
-      max-width:680px;
-    }
-
-    .title .cut{
-      color:var(--diamond);
-      text-shadow:0 0 22px rgba(223,247,255,.12);
+      letter-spacing:-.08em;
     }
 
     .copy{
       margin:18px 0 0;
-      max-width:540px;
+      max-width:500px;
       color:var(--soft);
       line-height:1.95;
       font-size:15px;
     }
 
-    .legend{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:28px;
-    }
-
-    .legend-chip{
-      padding:11px 14px;
+    .house-line{
+      margin-top:26px;
+      display:inline-flex;
+      padding:12px 16px;
       border-radius:999px;
+      border:1px solid rgba(215,255,243,.10);
       background:rgba(255,255,255,.035);
-      border:1px solid rgba(223,247,255,.11);
-      color:var(--soft);
+      color:var(--ice);
       font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
       text-transform:uppercase;
-      letter-spacing:.11em;
-      font-weight:900;
-    }
-
-    .whisper{
-      margin-top:22px;
-      max-width:560px;
-      color:rgba(247,252,251,.48);
-      line-height:1.85;
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.10em;
+      width:max-content;
     }
 
     .right{
       position:relative;
-      display:grid;
-      place-items:center;
-      padding:96px 30px 220px;
-    }
-
-    /* New made-up interface: Diamond Chamber */
-    .chamber{
-      position:relative;
-      width:min(760px, 100%);
-      aspect-ratio:1/1;
-    }
-
-    .diamond-field{
-      position:absolute;
-      inset:10%;
-      clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-      border:1px solid rgba(223,247,255,.12);
-      transform:rotate(45deg);
-      box-shadow:0 0 80px rgba(84,240,194,.10), inset 0 0 70px rgba(255,255,255,.02);
-    }
-
-    .diamond-field::before,
-    .diamond-field::after{
-      content:"";
-      position:absolute;
-      inset:14%;
-      border:1px solid rgba(223,247,255,.08);
-      clip-path:inherit;
-    }
-    .diamond-field::after{
-      inset:30%;
-      border-color:rgba(84,240,194,.12);
-    }
-
-    .beam{
-      position:absolute;
-      left:50%; top:50%;
-      width:2px; height:42%;
-      transform-origin:top center;
-      background:linear-gradient(180deg, rgba(223,247,255,.22), transparent);
-      filter:drop-shadow(0 0 10px rgba(223,247,255,.16));
-      opacity:.75;
-    }
-
-    .beam.b1{transform:translate(-50%,-50%) rotate(0deg)}
-    .beam.b2{transform:translate(-50%,-50%) rotate(60deg)}
-    .beam.b3{transform:translate(-50%,-50%) rotate(120deg)}
-    .beam.b4{transform:translate(-50%,-50%) rotate(180deg)}
-    .beam.b5{transform:translate(-50%,-50%) rotate(240deg)}
-    .beam.b6{transform:translate(-50%,-50%) rotate(300deg)}
-
-    .core{
-      position:absolute;
-      left:50%; top:50%;
-      transform:translate(-50%,-50%);
-      width:210px; height:210px;
-      display:grid;
-      place-items:center;
-      z-index:4;
-      filter:drop-shadow(0 0 30px rgba(84,240,194,.22));
-    }
-
-    .core-shape{
-      position:absolute; inset:0;
-      clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-      background:
-        linear-gradient(145deg, rgba(223,247,255,.22), rgba(84,240,194,.08)),
-        radial-gradient(circle at 32% 28%, rgba(255,255,255,.20), transparent 28%);
-      border:1px solid rgba(223,247,255,.15);
-      transform:rotate(45deg);
-      box-shadow:inset 0 0 55px rgba(255,255,255,.06), 0 0 60px rgba(84,240,194,.10);
-      animation:pulse 7s ease-in-out infinite;
-    }
-
-    @keyframes pulse{
-      0%,100%{transform:rotate(45deg) scale(1)}
-      50%{transform:rotate(45deg) scale(1.02)}
-    }
-
-    .core-text{
-      position:relative;
-      z-index:2;
-      text-align:center;
-      padding:18px;
-      pointer-events:none;
-    }
-
-    .core-text h2{
-      margin:0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size:30px;
-      line-height:.98;
-      letter-spacing:-.04em;
-      font-weight:600;
-      color:var(--diamond);
-    }
-
-    .core-text p{
-      margin:10px 0 0;
-      color:var(--soft);
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      line-height:1.7;
-    }
-
-    .facet{
-      position:absolute;
-      width:132px; height:132px;
-      border:none;
-      background:transparent;
-      padding:0;
-      cursor:pointer;
-      transform:translate(-50%,-50%);
-      color:inherit;
-      z-index:3;
-    }
-
-    .facet-shape{
-      position:absolute; inset:0;
-      clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-      transform:rotate(45deg) scale(.78);
-      background:
-        linear-gradient(145deg, rgba(223,247,255,.16), rgba(84,240,194,.05)),
-        radial-gradient(circle at 34% 28%, rgba(255,255,255,.18), transparent 28%);
-      border:1px solid rgba(223,247,255,.12);
-      box-shadow:inset 0 0 20px rgba(255,255,255,.04), 0 0 22px rgba(84,240,194,.06);
-      transition:.28s ease;
-    }
-
-    .facet-ring{
-      position:absolute; inset:7px;
-      clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-      transform:rotate(45deg);
-      border:1px dashed rgba(223,247,255,.10);
-      transition:.28s ease;
-      opacity:.8;
-    }
-
-    .facet-label{
-      position:absolute; inset:0;
-      display:grid; place-items:center;
-      text-align:center;
-      padding:18px;
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:var(--diamond);
-      line-height:1.45;
-      transition:.28s ease;
-    }
-
-    .facet:hover .facet-shape,
-    .facet.active .facet-shape{
-      transform:rotate(45deg) scale(.92);
-      border-color:rgba(223,247,255,.22);
-      box-shadow:0 0 38px rgba(84,240,194,.16), inset 0 0 28px rgba(255,255,255,.06);
-      background:
-        linear-gradient(145deg, rgba(223,247,255,.24), rgba(84,240,194,.10)),
-        radial-gradient(circle at 34% 28%, rgba(255,255,255,.22), transparent 28%);
-    }
-
-    .facet:hover .facet-ring,
-    .facet.active .facet-ring{
-      transform:rotate(45deg) scale(1.08);
-      border-color:rgba(240,223,178,.18);
-    }
-
-    .facet:hover .facet-label,
-    .facet.active .facet-label{
-      color:#fff;
-      text-shadow:0 0 18px rgba(223,247,255,.16);
-    }
-
-    .panel{
-      position:absolute;
-      left:28px; right:28px; bottom:24px;
-      min-height:180px;
-      padding:26px 28px;
-      border-radius:30px;
-      overflow:hidden;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.065), rgba(255,255,255,.04)),
-        radial-gradient(600px 200px at 0% 0%, rgba(84,240,194,.10), transparent 60%);
-      border:1px solid rgba(223,247,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(16px);
-      -webkit-backdrop-filter:blur(16px);
-      z-index:6;
-    }
-
-    .panel::before{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        linear-gradient(120deg, transparent 16%, rgba(223,247,255,.08) 48%, transparent 76%);
-      transform:translateX(-120%);
-      animation:sheen 10s linear infinite;
-      pointer-events:none;
-    }
-
-    @keyframes sheen{
-      to{transform:translateX(120%)}
-    }
-
-    .panel-top{
+      padding:106px 36px 190px 0;
       display:flex;
-      gap:16px;
-      justify-content:space-between;
-      align-items:flex-start;
-      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* Completely different presentation */
+    .runway{
       position:relative;
-      z-index:2;
+      width:min(930px, 100%);
+      height:min(560px, 100%);
     }
 
-    .panel h3{
-      margin:0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size:36px;
-      line-height:.95;
-      letter-spacing:-.05em;
-      font-weight:600;
-      color:var(--diamond);
+    .slab{
+      position:absolute;
+      border-radius:30px;
+      border:1px solid rgba(215,255,243,.10);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      overflow:hidden;
     }
 
-    .panel-meta{
-      margin-top:10px;
-      color:var(--champagne);
+    .slab::before{
+      content:"";
+      position:absolute; inset:0;
+      background:linear-gradient(120deg, transparent 10%, rgba(255,255,255,.07) 48%, transparent 80%);
+      transform:translateX(-120%);
+      animation:sheen 11s linear infinite;
+      pointer-events:none;
+    }
+
+    @keyframes sheen{to{transform:translateX(120%)}}
+
+    .slab.back{
+      left:62px; top:48px;
+      width:70%; height:66%;
+      opacity:.28;
+      transform:rotate(-7deg);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)),
+        radial-gradient(500px 180px at 20% 0%, rgba(230,211,170,.06), transparent 60%);
+    }
+
+    .slab.mid{
+      left:124px; top:26px;
+      width:72%; height:74%;
+      opacity:.44;
+      transform:rotate(5deg);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025)),
+        radial-gradient(520px 200px at 80% 0%, rgba(26,181,141,.08), transparent 60%);
+    }
+
+    .slab.front{
+      right:0; top:0;
+      width:76%; height:82%;
+      padding:34px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.04)),
+        radial-gradient(520px 220px at 0% 0%, rgba(26,181,141,.10), transparent 60%);
+      border-color:rgba(215,255,243,.14);
+    }
+
+    .front .mini{
+      color:var(--champ);
+      text-transform:uppercase;
+      letter-spacing:.20em;
       font-size:11px;
       font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.18em;
     }
 
-    .price{
-      flex:0 0 auto;
-      padding:12px 16px;
-      border-radius:999px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(223,247,255,.12);
-      color:var(--diamond);
-      font-size:13px;
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-weight:900;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
-    }
-
-    .panel p{
-      position:relative;
-      z-index:2;
+    .front h2{
       margin:14px 0 0;
-      max-width:760px;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:clamp(42px, 4vw, 72px);
+      line-height:.90;
+      letter-spacing:-.07em;
+      font-weight:600;
+      max-width:560px;
+    }
+
+    .front p{
+      margin:16px 0 0;
+      max-width:520px;
       color:var(--soft);
       line-height:1.95;
       font-size:15px;
     }
 
-    .foot{
-      position:absolute;
-      left:28px;
-      bottom:8px;
-      z-index:7;
-      color:rgba(247,252,251,.48);
-      font-size:10px;
-      letter-spacing:.15em;
+    .meta{
+      margin-top:18px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .meta span{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(215,255,243,.1);
+      background:rgba(255,255,255,.035);
+      color:var(--ice);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.12em;
       text-transform:uppercase;
     }
 
-    @media (max-width: 1160px){
+    .price{
+      position:absolute;
+      right:28px;
+      bottom:28px;
+      padding:12px 16px;
+      border-radius:999px;
+      border:1px solid rgba(215,255,243,.14);
+      background:rgba(255,255,255,.045);
+      color:var(--ice);
+      font-size:13px;
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+
+    /* custom control - not buttons */
+    .rail-wrap{
+      position:absolute;
+      left:34px; right:34px; bottom:26px;
+      z-index:7;
+      padding:18px 22px 24px;
+      border-radius:28px;
+      border:1px solid rgba(215,255,243,.10);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035)),
+        radial-gradient(500px 180px at 0% 0%, rgba(26,181,141,.08), transparent 60%);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+    }
+
+    .rail-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin-bottom:16px;
+      flex-wrap:wrap;
+    }
+
+    .rail-title{
+      color:var(--champ);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+    }
+
+    .rail-note{
+      color:rgba(240,250,247,.54);
+      font-size:10px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:800;
+    }
+
+    .rail{
+      position:relative;
+      height:68px;
+      border-radius:999px;
+      border:1px solid rgba(215,255,243,.10);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02)),
+        radial-gradient(400px 120px at 0% 50%, rgba(26,181,141,.06), transparent 60%);
+      overflow:hidden;
+      user-select:none;
+    }
+
+    .rail-line{
+      position:absolute;
+      left:40px; right:40px; top:50%;
+      height:1px;
+      background:linear-gradient(90deg, rgba(215,255,243,.08), rgba(141,255,224,.4), rgba(215,255,243,.08));
+      transform:translateY(-50%);
+    }
+
+    .tick{
+      position:absolute;
+      top:50%;
+      width:10px; height:10px;
+      border-radius:50%;
+      background:rgba(215,255,243,.18);
+      transform:translate(-50%,-50%);
+      box-shadow:0 0 14px rgba(215,255,243,.08);
+    }
+
+    .tick-label{
+      position:absolute;
+      top:10px;
+      transform:translateX(-50%);
+      color:rgba(240,250,247,.55);
+      font-size:10px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .keystone{
+      position:absolute;
+      top:50%;
+      left:0;
+      width:82px; height:82px;
+      transform:translate(-50%,-50%);
+      cursor:grab;
+      touch-action:none;
+    }
+
+    .keystone:active{cursor:grabbing}
+
+    .keystone-core{
+      position:absolute; inset:12px;
+      background:
+        linear-gradient(145deg, rgba(215,255,243,.20), rgba(26,181,141,.10)),
+        radial-gradient(circle at 35% 28%, rgba(255,255,255,.20), transparent 30%);
+      clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      transform:rotate(45deg);
+      border:1px solid rgba(215,255,243,.16);
+      box-shadow:0 0 32px rgba(26,181,141,.22);
+    }
+
+    .keystone-ring{
+      position:absolute; inset:0;
+      clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      transform:rotate(45deg);
+      border:1px dashed rgba(230,211,170,.22);
+      opacity:.9;
+    }
+
+    .foot{
+      position:absolute;
+      left:34px;
+      bottom:8px;
+      color:rgba(240,250,247,.44);
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.15em;
+      z-index:8;
+    }
+
+    @media (max-width: 1180px){
       body{overflow:auto}
       .shell{height:auto; min-height:100vh}
       .layout{
         position:relative;
         grid-template-columns:1fr;
       }
-      .left{padding:108px 24px 30px}
-      .right{padding:12px 18px 230px}
-      .panel{left:18px; right:18px; bottom:18px}
-      .chamber{width:min(700px, 96vw)}
+      .left{padding:112px 24px 26px}
+      .right{padding:8px 18px 240px}
+      .rail-wrap{left:18px; right:18px; bottom:18px}
+      .foot{left:18px}
     }
 
     @media (max-width: 760px){
       .topbar{padding:18px}
-      .title{font-size:clamp(46px, 14vw, 74px)}
+      h1{font-size:clamp(44px, 14vw, 72px)}
       .copy{font-size:14px}
-      .status{font-size:10px}
-      .facet{width:108px;height:108px}
-      .facet-label{font-size:10px;padding:14px}
-      .core{width:170px;height:170px}
-      .core-text h2{font-size:24px}
-      .panel{padding:20px}
-      .panel h3{font-size:28px}
-      .foot{left:18px}
+      .front{padding:24px}
+      .front h2{font-size:clamp(34px, 9vw, 50px)}
+      .front p{font-size:14px}
+      .price{position:static; margin-top:18px; width:max-content}
+      .keystone{width:72px; height:72px}
     }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="shell">
-      <div class="glass-noise"></div>
-      <div class="prism-web"></div>
+      <div class="noise"></div>
+      <div class="columns"><div></div><div></div><div></div><div></div><div></div></div>
 
       <div class="topbar">
         <div class="brand">
-          <div class="crest"><span>FS</span></div>
+          <div class="mark"></div>
           <div>
             <div class="brand-title">The Francis Smokehouse</div>
-            <div class="brand-sub">Emerald Diamond Edition • luxury concept build</div>
+            <div class="brand-sub">Obsidian Runway • fresh concept build</div>
           </div>
         </div>
 
-        <div class="status" id="status">
-          <span class="status-dot"></span>
+        <div class="hours" id="hours">
+          <span class="hours-dot"></span>
           <span>Checking service hours</span>
         </div>
       </div>
 
       <div class="layout">
         <section class="left">
-          <div class="eyebrow">Color as architecture</div>
-          <h1 class="title">An <span class="cut">emerald</span><br/>room of cut glass,<br/>smoke, and light.</h1>
+          <div class="eyebrow">Not a card stack. Not a menu grid.</div>
+          <h1>A luxury runway<br/>for smoke,<br/>shape, and pace.</h1>
           <p class="copy">
-            This version leans into jewel-tone luxury instead of restaurant-site familiarity. The interface becomes a diamond chamber:
-            faceted selections, crystalline texture, cold light over warm smoke, and a richer emerald atmosphere.
+            This design starts over completely. Instead of orbiting nodes or diamond clusters, it behaves like a slow-moving presentation slab:
+            editorial, cinematic, and controlled. The selection mechanism is a draggable keystone that glides across a luminous rail.
           </p>
-          <div class="legend">
-            <div class="legend-chip">Emerald glow</div>
-            <div class="legend-chip">Diamond facets</div>
-            <div class="legend-chip">Champagne accents</div>
-            <div class="legend-chip">Polished smoke</div>
-          </div>
-          <div class="whisper">
-            The center stays still like a gemstone under light. The selections orbit around it like cut facets being turned in the hand.
-          </div>
+          <div class="house-line">Move the keystone to change the course</div>
         </section>
 
         <section class="right">
-          <div class="chamber">
-            <div class="diamond-field"></div>
-            <div class="beam b1"></div>
-            <div class="beam b2"></div>
-            <div class="beam b3"></div>
-            <div class="beam b4"></div>
-            <div class="beam b5"></div>
-            <div class="beam b6"></div>
+          <div class="runway">
+            <div class="slab back"></div>
+            <div class="slab mid"></div>
 
-            <div class="core">
-              <div class="core-shape"></div>
-              <div class="core-text">
-                <h2>Cut Fire</h2>
-                <p>Touch a facet</p>
+            <div class="slab front" id="front">
+              <div class="mini" id="mini">Smokehouse Plates</div>
+              <h2 id="title">Brisket Plate</h2>
+              <p id="desc">The cleanest opening statement in the house: direct smoke, quiet confidence, and no excess. Presented here like the lead look in a runway sequence.</p>
+              <div class="meta" id="meta">
+                <span>Two sides</span>
+                <span>House anchor</span>
+                <span>Smoked</span>
               </div>
+              <div class="price" id="price">$10.99</div>
             </div>
-
-            <button class="facet active" style="left:50%; top:13%" data-key="brisket">
-              <div class="facet-shape"></div><div class="facet-ring"></div><div class="facet-label">Brisket<br/>Plate</div>
-            </button>
-
-            <button class="facet" style="left:82%; top:30%" data-key="boudin">
-              <div class="facet-shape"></div><div class="facet-ring"></div><div class="facet-label">Boudin<br/>Balls</div>
-            </button>
-
-            <button class="facet" style="left:86%; top:66%" data-key="ribeye">
-              <div class="facet-shape"></div><div class="facet-ring"></div><div class="facet-label">Ribeye<br/>Po-Boy</div>
-            </button>
-
-            <button class="facet" style="left:50%; top:87%" data-key="bread">
-              <div class="facet-shape"></div><div class="facet-ring"></div><div class="facet-label">Bread<br/>Pudding</div>
-            </button>
-
-            <button class="facet" style="left:14%; top:66%" data-key="corn">
-              <div class="facet-shape"></div><div class="facet-ring"></div><div class="facet-label">Corn<br/>Pudding</div>
-            </button>
-
-            <button class="facet" style="left:18%; top:30%" data-key="special">
-              <div class="facet-shape"></div><div class="facet-ring"></div><div class="facet-label">Chef<br/>Moment</div>
-            </button>
           </div>
         </section>
       </div>
 
-      <section class="panel" id="panel">
-        <div class="panel-top">
-          <div>
-            <h3>Brisket Plate</h3>
-            <div class="panel-meta">Smokehouse Plates • two sides</div>
-          </div>
-          <div class="price">$10.99</div>
+      <div class="rail-wrap">
+        <div class="rail-top">
+          <div class="rail-title">Selection rail</div>
+          <div class="rail-note">Drag the keystone or tap a station</div>
         </div>
-        <p>
-          The cleanest luxury move in the room: direct smoke, quiet confidence, no excess. Presented here as the anchor facet —
-          the piece the entire chamber seems to revolve around.
-        </p>
-      </section>
+
+        <div class="rail" id="rail">
+          <div class="rail-line"></div>
+
+          <div class="tick-label" style="left:8%">Brisket</div>
+          <div class="tick-label" style="left:26%">Boudin</div>
+          <div class="tick-label" style="left:44%">Ribeye</div>
+          <div class="tick-label" style="left:62%">Corn</div>
+          <div class="tick-label" style="left:80%">Bread</div>
+          <div class="tick-label" style="left:92%">Special</div>
+
+          <div class="tick" style="left:8%"></div>
+          <div class="tick" style="left:26%"></div>
+          <div class="tick" style="left:44%"></div>
+          <div class="tick" style="left:62%"></div>
+          <div class="tick" style="left:80%"></div>
+          <div class="tick" style="left:92%"></div>
+
+          <div class="keystone" id="keystone" aria-label="Selection controller">
+            <div class="keystone-ring"></div>
+            <div class="keystone-core"></div>
+          </div>
+        </div>
+      </div>
 
       <div class="foot">Mon–Sat 10:00 AM–6:00 PM • Sun 10:00 AM–3:00 PM • (225) 245-5046</div>
     </div>
   </div>
 
   <script>
-    const DATA = {
-      brisket: {
+    const ITEMS = [
+      {
+        pos: 8,
+        mini: "Smokehouse Plates",
         title: "Brisket Plate",
-        meta: "Smokehouse Plates • two sides",
-        price: "$10.99",
-        text: "The cleanest luxury move in the room: direct smoke, quiet confidence, no excess. Presented here as the anchor facet — the piece the entire chamber seems to revolve around."
+        desc: "The cleanest opening statement in the house: direct smoke, quiet confidence, and no excess. Presented here like the lead look in a runway sequence.",
+        meta: ["Two sides","House anchor","Smoked"],
+        price: "$10.99"
       },
-      boudin: {
+      {
+        pos: 26,
+        mini: "Cajun Signatures",
         title: "Boudin Balls",
-        meta: "Cajun Signatures • house favorite",
-        price: "Signature",
-        text: "A jewel-like bite with reputation and repeat desire. Small in scale, but powerful in memory — the kind of item that turns into the story guests keep retelling."
+        desc: "A concentrated signature. Small, rich, memorable, and exactly the kind of item that creates repeat cravings and repeated stories.",
+        meta: ["House favorite","Signature","Cajun"],
+        price: "Signature"
       },
-      ribeye: {
+      {
+        pos: 44,
+        mini: "Sandwiches & Po-Boys",
         title: "Ribeye Po-Boy",
-        meta: "Sandwiches & Po-Boys • one side",
-        price: "$10.99",
-        text: "This facet feels sharper and more tailored than a standard sandwich lane. It adds polish and appetite at the same time — familiar in form, elevated in presence."
+        desc: "This selection sharpens the menu profile. It feels more tailored than a casual sandwich and gives the runway a luxurious pivot.",
+        meta: ["One side","Polished","Po-Boy"],
+        price: "$10.99"
       },
-      bread: {
-        title: "Homemade Bread Pudding",
-        meta: "Sweet Finish • house dessert",
-        price: "Dessert",
-        text: "The warm counterpoint to all the cool crystal light. Soft, rich, and comforting — the finishing note that keeps the room from feeling too cold or too formal."
-      },
-      corn: {
+      {
+        pos: 62,
+        mini: "Sideboard",
         title: "Corn Pudding",
-        meta: "Sideboard • standout side",
-        price: "$2.75 / $6.99",
-        text: "An unexpectedly luxurious side. More than support, it behaves like a texture note — creamy, memorable, and distinct enough to deserve its own facet in the chamber."
+        desc: "Unexpectedly glamorous for a side. Creamy, warm, and more memorable than most support pieces ever get to be.",
+        meta: ["Standout side","Comfort","Texture"],
+        price: "$2.75 / $6.99"
       },
-      special: {
-        title: "Chef Moment",
-        meta: "Specials Snapshot • rotating highlight",
-        price: "$26–$28",
-        text: "This facet stands for the more dramatic flashes in the menu: composed seafood, larger-format plates, and the sudden sense that the house can pivot from rustic smoke to theater."
+      {
+        pos: 80,
+        mini: "Sweet Finish",
+        title: "Homemade Bread Pudding",
+        desc: "The runway softens here. Warm, familiar, and deeply comforting — the note that keeps the whole experience human.",
+        meta: ["Dessert","Warm finish","House sweet"],
+        price: "Dessert"
+      },
+      {
+        pos: 92,
+        mini: "Chef Moment",
+        title: "Specials Snapshot",
+        desc: "The most theatrical station on the rail — the place where composed seafood dishes, larger-format plates, and surprise ambition appear.",
+        meta: ["Rotating","Premium","Spotlight"],
+        price: "$26–$28"
       }
-    };
+    ];
 
-    const facets = [...document.querySelectorAll('.facet')];
-    const panel = document.getElementById('panel');
+    const rail = document.getElementById('rail');
+    const keystone = document.getElementById('keystone');
+    const mini = document.getElementById('mini');
+    const title = document.getElementById('title');
+    const desc = document.getElementById('desc');
+    const meta = document.getElementById('meta');
+    const price = document.getElementById('price');
 
-    function render(key){
-      const d = DATA[key];
-      panel.innerHTML = `
-        <div class="panel-top">
-          <div>
-            <h3>${d.title}</h3>
-            <div class="panel-meta">${d.meta}</div>
-          </div>
-          <div class="price">${d.price}</div>
-        </div>
-        <p>${d.text}</p>
-      `;
-      facets.forEach(f => f.classList.toggle('active', f.dataset.key === key));
+    let dragging = false;
+    let currentIndex = 0;
+
+    function render(index){
+      const item = ITEMS[index];
+      currentIndex = index;
+      mini.textContent = item.mini;
+      title.textContent = item.title;
+      desc.textContent = item.desc;
+      meta.innerHTML = item.meta.map(x => `<span>${x}</span>`).join('');
+      price.textContent = item.price;
+      keystone.style.left = item.pos + '%';
     }
 
-    facets.forEach(f => {
-      f.addEventListener('mouseenter', () => render(f.dataset.key));
-      f.addEventListener('click', () => render(f.dataset.key));
+    function nearestIndex(percent){
+      let best = 0;
+      let bestDiff = Infinity;
+      ITEMS.forEach((item, i) => {
+        const diff = Math.abs(item.pos - percent);
+        if(diff < bestDiff){ bestDiff = diff; best = i; }
+      });
+      return best;
+    }
+
+    function pointerPercent(clientX){
+      const rect = rail.getBoundingClientRect();
+      const x = Math.min(rect.right - 20, Math.max(rect.left + 20, clientX));
+      return ((x - rect.left) / rect.width) * 100;
+    }
+
+    keystone.addEventListener('pointerdown', e => {
+      dragging = true;
+      keystone.setPointerCapture(e.pointerId);
     });
 
-    const status = document.getElementById('status');
+    keystone.addEventListener('pointermove', e => {
+      if(!dragging) return;
+      const pct = pointerPercent(e.clientX);
+      keystone.style.left = pct + '%';
+    });
+
+    keystone.addEventListener('pointerup', e => {
+      dragging = false;
+      const pct = pointerPercent(e.clientX);
+      render(nearestIndex(pct));
+    });
+
+    rail.addEventListener('click', e => {
+      if(e.target === keystone || keystone.contains(e.target)) return;
+      const pct = pointerPercent(e.clientX);
+      render(nearestIndex(pct));
+    });
+
+    render(0);
+
+    const hours = document.getElementById('hours');
     (() => {
       const now = new Date();
       const day = now.getDay();
@@ -748,9 +725,9 @@
         const left = close - mins;
         const h = Math.floor(left / 60);
         const m = left % 60;
-        status.innerHTML = `<span class="status-dot"></span><span>Open now • closes in ${h ? h + 'h ' : ''}${m}m</span>`;
+        hours.innerHTML = `<span class="hours-dot"></span><span>Open now • closes in ${h ? h + 'h ' : ''}${m}m</span>`;
       } else {
-        status.innerHTML = `<span class="status-dot"></span><span>Currently closed • opens at 10:00 AM</span>`;
+        hours.innerHTML = `<span class="hours-dot"></span><span>Currently closed • opens at 10:00 AM</span>`;
       }
     })();
   </script>
