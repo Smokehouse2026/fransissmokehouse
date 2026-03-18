@@ -1,536 +1,682 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Francis Smokehouse — Maison Edition</title>
-  <meta name="description" content="A refined, minimal, luxury-inspired menu presentation for The Francis Smokehouse." />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Francis Smokehouse — Ember Ritual</title>
+  <meta name="description" content="An experimental, never-template luxury menu concept for The Francis Smokehouse.">
   <style>
     :root{
-      --bg:#090807;
-      --bg-soft:#12100e;
-      --panel:rgba(255,255,255,.045);
+      --bg:#070505;
+      --bg2:#110b09;
+      --smoke:rgba(255,255,255,.06);
       --line:rgba(255,255,255,.10);
-      --gold:#d8b26e;
-      --gold-soft:#f1dfb9;
-      --text:#f5f1ea;
-      --muted:rgba(245,241,234,.68);
-      --shadow:0 30px 80px rgba(0,0,0,.42);
-      --radius:28px;
+      --text:#f6efe8;
+      --muted:rgba(246,239,232,.66);
+      --ember:#ff7b36;
+      --ember-soft:#ffd0a8;
+      --gold:#e5c07e;
+      --glow:0 0 30px rgba(255,123,54,.25);
+      --shadow:0 30px 90px rgba(0,0,0,.45);
+      --radius:34px;
     }
 
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
+    html,body{margin:0;height:100%}
     body{
-      margin:0;
-      font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(900px 500px at 10% 0%, rgba(216,178,110,.10), transparent 60%),
-        radial-gradient(900px 600px at 100% 0%, rgba(255,255,255,.04), transparent 60%),
-        linear-gradient(180deg, #060505, var(--bg-soft) 48%, #070606);
-      min-height:100vh;
-      overflow-x:hidden;
-      letter-spacing:.01em;
+        radial-gradient(1000px 700px at 0% 0%, rgba(255,123,54,.12), transparent 60%),
+        radial-gradient(1000px 700px at 100% 0%, rgba(229,192,126,.08), transparent 60%),
+        radial-gradient(800px 500px at 50% 100%, rgba(255,255,255,.04), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2) 44%, #060403);
+      overflow:hidden;
     }
 
     body::before{
       content:"";
-      position:fixed; inset:0;
+      position:fixed; inset:-10%;
       pointer-events:none;
-      opacity:.05;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+      opacity:.08;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.15), transparent 18%),
+        radial-gradient(circle at 80% 10%, rgba(255,255,255,.1), transparent 14%),
+        radial-gradient(circle at 60% 80%, rgba(255,255,255,.12), transparent 16%);
+      filter:blur(80px);
+      animation:drift 18s ease-in-out infinite alternate;
     }
 
-    .wrap{
-      width:min(980px, calc(100vw - 32px));
-      margin:0 auto;
-      padding:24px 0 60px;
+    @keyframes drift{
+      from{transform:translate3d(-2%, -1%, 0) scale(1)}
+      to{transform:translate3d(2%, 2%, 0) scale(1.06)}
     }
 
-    .frame{
+    .app{
+      position:relative;
+      width:100%;
+      height:100%;
+      display:grid;
+      place-items:center;
+      padding:18px;
+    }
+
+    .shell{
+      position:relative;
+      width:min(1420px, calc(100vw - 24px));
+      height:min(900px, calc(100vh - 24px));
       border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.03));
-      border-radius:var(--radius);
+      border-radius:40px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)),
+        radial-gradient(800px 300px at 50% 0%, rgba(255,123,54,.10), transparent 60%);
+      box-shadow:var(--shadow);
+      overflow:hidden;
       backdrop-filter:blur(18px);
       -webkit-backdrop-filter:blur(18px);
-      box-shadow:var(--shadow);
+      isolation:isolate;
+    }
+
+    .noise{
+      position:absolute; inset:0;
+      opacity:.06; pointer-events:none; mix-blend-mode:screen;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+    }
+
+    .grid{
+      position:absolute; inset:0;
+      background:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size:64px 64px;
+      mask-image:radial-gradient(circle at center, black 40%, transparent 92%);
+      opacity:.18;
+      pointer-events:none;
+    }
+
+    .top{
+      position:absolute; top:0; left:0; right:0;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:24px 28px;
+      z-index:5;
+    }
+
+    .wordmark{
+      display:flex; gap:14px; align-items:center;
+    }
+
+    .sigil{
+      width:52px; height:52px; border-radius:18px;
+      display:grid; place-items:center;
+      position:relative;
+      border:1px solid rgba(255,208,168,.18);
+      background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.12), rgba(255,255,255,.03));
+      box-shadow:var(--glow);
       overflow:hidden;
     }
 
-    .hero{
-      padding:72px 56px 54px;
-      position:relative;
-      text-align:center;
-    }
-
-    .hero::before{
+    .sigil::before,
+    .sigil::after{
       content:"";
       position:absolute;
-      inset:0;
-      background:
-        linear-gradient(180deg, rgba(216,178,110,.08), transparent 35%),
-        radial-gradient(600px 240px at 50% 0%, rgba(216,178,110,.08), transparent 60%);
-      pointer-events:none;
+      border-radius:999px;
+      border:1px solid rgba(255,208,168,.18);
+      inset:8px;
+      animation:spin 10s linear infinite;
     }
-
-    .crest{
-      position:relative;
-      width:88px;
-      height:88px;
-      margin:0 auto 22px;
-      border-radius:50%;
-      border:1px solid rgba(216,178,110,.28);
-      display:grid;
-      place-items:center;
-      color:var(--gold-soft);
-      font-size:30px;
-      box-shadow:0 0 0 10px rgba(255,255,255,.02), 0 12px 30px rgba(0,0,0,.25);
-      background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    .sigil::after{
+      inset:15px;
+      animation-direction:reverse;
+      animation-duration:7s;
     }
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-    .eyebrow{
-      position:relative;
-      display:inline-block;
-      color:var(--gold);
-      text-transform:uppercase;
-      letter-spacing:.28em;
-      font-size:11px;
-      font-weight:700;
-      margin-bottom:18px;
-    }
-
-    h1{
-      position:relative;
+    .brand-title{
       margin:0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-weight:600;
-      font-size:clamp(44px, 8vw, 82px);
-      line-height:.96;
-      letter-spacing:-.05em;
+      font-size:16px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      font-weight:900;
+      color:var(--ember-soft);
     }
-
-    .sub{
-      position:relative;
-      width:min(680px, 100%);
-      margin:18px auto 0;
+    .brand-sub{
+      margin-top:5px;
+      font-size:11px;
       color:var(--muted);
-      line-height:1.85;
-      font-size:15px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
     }
 
     .status{
+      display:flex; gap:10px; align-items:center;
+      padding:12px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      backdrop-filter:blur(14px);
+    }
+
+    .status-dot{
+      width:9px; height:9px; border-radius:50%;
+      background:var(--gold); box-shadow:0 0 20px rgba(229,192,126,.9);
+    }
+
+    .center-stage{
+      position:absolute; inset:0;
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      z-index:2;
+    }
+
+    .left{
       position:relative;
-      margin:28px auto 0;
+      padding:110px 40px 40px 40px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .eyebrow{
       display:inline-flex;
       align-items:center;
       gap:10px;
+      font-size:11px;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:var(--gold);
+      font-weight:900;
+      margin-bottom:14px;
+    }
+    .eyebrow::before{
+      content:"";
+      width:34px; height:1px;
+      background:linear-gradient(90deg, transparent, var(--gold));
+    }
+
+    .hero{
+      max-width:640px;
+    }
+
+    .hero h1{
+      margin:0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size:clamp(54px, 7vw, 106px);
+      line-height:.88;
+      letter-spacing:-.07em;
+      font-weight:600;
+    }
+
+    .hero p{
+      margin:18px 0 0;
+      max-width:540px;
+      color:var(--muted);
+      line-height:1.9;
+      font-size:15px;
+    }
+
+    .ritual{
+      margin-top:28px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .token{
       border:1px solid rgba(255,255,255,.10);
       border-radius:999px;
-      padding:12px 18px;
-      color:var(--gold-soft);
+      padding:10px 14px;
       background:rgba(255,255,255,.04);
-      font-weight:700;
-      font-size:13px;
-      letter-spacing:.08em;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.10em;
       text-transform:uppercase;
     }
 
-    .dot{
-      width:8px; height:8px; border-radius:50%;
-      background:var(--gold);
-      box-shadow:0 0 18px rgba(216,178,110,.75);
-    }
-
-    .section{
-      padding:0 56px 0;
-    }
-
-    .divider{
-      height:1px;
-      background:linear-gradient(90deg, transparent, rgba(216,178,110,.3), transparent);
-      margin:0 56px;
-    }
-
-    .intro{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:20px;
-      padding:34px 0 10px;
-    }
-
-    .card{
-      padding:22px 24px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.03);
-    }
-
-    .card-kicker{
-      color:var(--gold);
-      text-transform:uppercase;
-      letter-spacing:.20em;
-      font-size:11px;
-      font-weight:700;
-      margin-bottom:10px;
-    }
-
-    .card h3{
-      margin:0 0 8px;
-      font-family: Georgia, "Times New Roman", serif;
-      font-weight:600;
-      font-size:26px;
-      letter-spacing:-.03em;
-    }
-
-    .card p{
-      margin:0;
-      color:var(--muted);
-      line-height:1.8;
-      font-size:14px;
-    }
-
-    .menu{
-      padding:30px 0 12px;
-    }
-
-    .menu-head{
-      text-align:center;
-      margin-bottom:28px;
-    }
-
-    .menu-head .eyebrow{margin-bottom:10px}
-    .menu-head h2{
-      margin:0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size:42px;
-      font-weight:600;
-      letter-spacing:-.04em;
-    }
-
-    .menu-head p{
-      width:min(620px, 100%);
-      margin:14px auto 0;
-      color:var(--muted);
-      line-height:1.8;
-      font-size:14px;
-    }
-
-    .category{
-      padding:24px 0 8px;
-    }
-
-    .category-title{
-      display:flex;
-      align-items:end;
-      justify-content:space-between;
-      gap:14px;
-      margin-bottom:18px;
-    }
-
-    .category-title h3{
-      margin:0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size:30px;
-      font-weight:600;
-      letter-spacing:-.04em;
-    }
-
-    .category-title span{
-      color:var(--gold);
-      text-transform:uppercase;
-      letter-spacing:.16em;
-      font-size:11px;
-      font-weight:700;
-      white-space:nowrap;
-    }
-
-    .items{
-      display:grid;
-      gap:12px;
-    }
-
-    .item{
-      padding:18px 0;
-      border-top:1px solid rgba(255,255,255,.08);
-    }
-
-    .item:first-child{border-top:1px solid rgba(255,255,255,.08)}
-
-    .item-top{
-      display:flex;
-      gap:14px;
-      justify-content:space-between;
-      align-items:baseline;
-    }
-
-    .item-name{
-      font-size:18px;
-      font-weight:700;
-      letter-spacing:-.02em;
-    }
-
-    .item-price{
-      color:var(--gold-soft);
-      font-size:15px;
-      font-weight:700;
-      white-space:nowrap;
-    }
-
-    .item-desc{
-      margin-top:8px;
-      color:var(--muted);
-      line-height:1.75;
-      font-size:14px;
-      max-width:720px;
-    }
-
-    .signature{
+    .whisper{
       margin-top:24px;
-      padding:26px;
-      border-radius:24px;
-      border:1px solid rgba(216,178,110,.18);
+      max-width:520px;
+      color:rgba(246,239,232,.52);
+      font-size:12px;
+      letter-spacing:.06em;
+      line-height:1.8;
+      text-transform:uppercase;
+    }
+
+    .right{
+      position:relative;
+      display:grid;
+      place-items:center;
+      padding:100px 20px 40px;
+    }
+
+    /* INVENTED NAVIGATION OBJECT */
+    .constellation{
+      position:relative;
+      width:min(700px, 100%);
+      height:min(700px, 100%);
+      aspect-ratio:1/1;
+    }
+
+    .halo{
+      position:absolute; inset:13%;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.07);
+      box-shadow:inset 0 0 80px rgba(255,255,255,.02), 0 0 60px rgba(255,123,54,.08);
+      animation:breathe 7s ease-in-out infinite;
+    }
+
+    .halo::before,
+    .halo::after{
+      content:"";
+      position:absolute; inset:12%;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.05);
+    }
+    .halo::after{ inset:24%; }
+
+    @keyframes breathe{
+      0%,100%{transform:scale(1); opacity:.9}
+      50%{transform:scale(1.025); opacity:1}
+    }
+
+    .core{
+      position:absolute;
+      left:50%; top:50%;
+      transform:translate(-50%,-50%);
+      width:190px; height:190px;
+      border-radius:50%;
+      display:grid; place-items:center;
       background:
-        radial-gradient(500px 180px at 0% 0%, rgba(216,178,110,.08), transparent 60%),
-        rgba(255,255,255,.03);
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,.14), transparent 35%),
+        radial-gradient(circle at center, rgba(255,123,54,.18), rgba(255,255,255,.03));
+      border:1px solid rgba(255,208,168,.14);
+      box-shadow:0 0 100px rgba(255,123,54,.12), inset 0 0 50px rgba(255,255,255,.04);
+      z-index:3;
       text-align:center;
+      padding:18px;
+      pointer-events:none;
     }
 
-    .signature .eyebrow{margin-bottom:8px}
-    .signature h3{
+    .core h2{
       margin:0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-weight:600;
-      font-size:34px;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:28px;
+      line-height:1;
       letter-spacing:-.04em;
+      font-weight:600;
     }
-
-    .signature p{
-      width:min(600px, 100%);
-      margin:12px auto 0;
+    .core p{
+      margin:10px 0 0;
       color:var(--muted);
-      line-height:1.8;
-      font-size:14px;
+      font-size:12px;
+      line-height:1.7;
+      text-transform:uppercase;
+      letter-spacing:.10em;
     }
 
-    .footer{
-      padding:32px 56px 44px;
+    .node{
+      --size:110px;
+      position:absolute;
+      width:var(--size); height:var(--size);
+      border:none;
+      background:transparent;
+      cursor:pointer;
+      padding:0;
+      color:inherit;
+      transform:translate(-50%,-50%);
+    }
+
+    .node::before{
+      content:"";
+      position:absolute; inset:18px;
+      border-radius:50%;
+      background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.16), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:0 0 40px rgba(255,123,54,.06);
+      transition:.3s ease;
+    }
+
+    .node::after{
+      content:"";
+      position:absolute; inset:4px;
+      border-radius:50%;
+      border:1px dashed rgba(255,255,255,.08);
+      transition:.3s ease;
+      opacity:.8;
+    }
+
+    .node:hover::before,
+    .node.active::before{
+      inset:10px;
+      background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.2), rgba(255,123,54,.10));
+      box-shadow:0 0 50px rgba(255,123,54,.18);
+      border-color:rgba(255,208,168,.24);
+    }
+
+    .node:hover::after,
+    .node.active::after{
+      inset:0;
+      border-color:rgba(255,208,168,.18);
+      transform:rotate(28deg);
+    }
+
+    .node > span{
+      position:absolute; inset:0;
+      display:grid; place-items:center;
       text-align:center;
+      padding:24px;
+      font-size:11px;
+      line-height:1.45;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--ember-soft);
+    }
+
+    .trail{
+      position:absolute; inset:0;
+      pointer-events:none;
+      z-index:1;
+    }
+    .trail line{
+      stroke:rgba(255,255,255,.08);
+      stroke-width:1;
+    }
+    .trail .hot{
+      stroke:rgba(255,123,54,.20);
+      filter:drop-shadow(0 0 8px rgba(255,123,54,.3));
+    }
+
+    .panel{
+      position:absolute;
+      left:32px; right:32px; bottom:28px;
+      min-height:170px;
+      padding:24px 26px;
+      border-radius:30px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04)),
+        radial-gradient(500px 180px at 0% 0%, rgba(255,123,54,.08), transparent 60%);
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      box-shadow:var(--shadow);
+      z-index:6;
+      overflow:hidden;
+    }
+
+    .panel::before{
+      content:"";
+      position:absolute; inset:0;
+      background:linear-gradient(120deg, transparent 10%, rgba(255,255,255,.08) 48%, transparent 76%);
+      transform:translateX(-120%);
+      animation:sheen 9s linear infinite;
+      pointer-events:none;
+    }
+    @keyframes sheen{to{transform:translateX(120%)}}
+
+    .panel-top{
+      display:flex; gap:18px; justify-content:space-between; align-items:flex-start; flex-wrap:wrap;
+      position:relative; z-index:2;
+    }
+
+    .panel h3{
+      margin:0;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:34px;
+      line-height:.95;
+      letter-spacing:-.05em;
+      font-weight:600;
+    }
+
+    .panel-meta{
+      margin-top:10px;
+      color:var(--gold);
+      font-size:11px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      font-weight:900;
+    }
+
+    .panel p{
+      margin:12px 0 0;
+      max-width:700px;
       color:var(--muted);
-      line-height:1.8;
-      font-size:13px;
+      line-height:1.9;
+      font-size:15px;
+      position:relative; z-index:2;
     }
 
-    .footer a{
-      color:var(--gold-soft);
-      text-decoration:none;
+    .price{
+      flex:0 0 auto;
+      padding:12px 16px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      color:var(--ember-soft);
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
     }
 
-    @media (max-width: 760px){
-      .hero{padding:54px 22px 40px}
-      .section{padding:0 22px}
-      .divider{margin:0 22px}
-      .footer{padding:28px 22px 34px}
-      .intro{grid-template-columns:1fr}
-      .category-title,.item-top{display:block}
-      .category-title span,.item-price{display:block; margin-top:8px}
+    .floor{
+      position:absolute; left:0; right:0; bottom:0;
+      height:110px;
+      background:linear-gradient(180deg, transparent, rgba(0,0,0,.22));
+      pointer-events:none;
+    }
+
+    .footer-note{
+      position:absolute; left:30px; bottom:8px;
+      color:rgba(246,239,232,.46);
+      font-size:10px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      z-index:7;
+    }
+
+    @media (max-width: 1100px){
+      .shell{height:auto; min-height:100vh}
+      body{overflow:auto}
+      .center-stage{
+        position:relative;
+        display:block;
+      }
+      .left{padding:110px 24px 26px}
+      .right{padding:14px 18px 220px}
+      .panel{left:18px; right:18px; bottom:18px}
+      .constellation{width:min(620px, 92vw); height:min(620px, 92vw)}
+    }
+
+    @media (max-width: 720px){
+      .top{padding:18px}
+      .status{font-size:10px; letter-spacing:.08em}
+      .hero h1{font-size:clamp(44px, 14vw, 72px)}
+      .hero p{font-size:14px}
+      .constellation{width:min(520px, 96vw); height:min(520px, 96vw)}
+      .node{--size:94px}
+      .node > span{font-size:10px; padding:18px}
+      .core{width:150px;height:150px}
+      .core h2{font-size:22px}
+      .panel{padding:20px}
+      .panel h3{font-size:28px}
+      .price{font-size:12px}
+      .footer-note{left:18px}
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="frame">
-      <section class="hero">
-        <div class="crest">✦</div>
-        <div class="eyebrow">Maison Edition</div>
-        <h1>The Francis<br>Smokehouse</h1>
-        <p class="sub">
-          A restrained, luxury-inspired presentation built to feel closer to a destination dining house than a casual menu board.
-          Focused. elegant. intentional.
-        </p>
-        <div class="status" id="statusBar"><span class="dot"></span><span>Checking service hours</span></div>
-      </section>
+  <div class="app">
+    <div class="shell">
+      <div class="noise"></div>
+      <div class="grid"></div>
 
-      <div class="divider"></div>
-
-      <section class="section">
-        <div class="intro">
-          <div class="card">
-            <div class="card-kicker">Experience</div>
-            <h3>Southern fire, refined restraint</h3>
-            <p>
-              This concept strips away the clutter and presents only what matters: signature plates, standout sandwiches,
-              elevated Cajun specialties, and a clean sense of place.
-            </p>
-          </div>
-          <div class="card">
-            <div class="card-kicker">House Notes</div>
-            <h3>St. Francisville, Louisiana</h3>
-            <p>
-              Built around the identity of The Francis Smokehouse with a polished, top-tier visual tone—less information overload,
-              more atmosphere, elegance, and appetite.
-            </p>
+      <div class="top">
+        <div class="wordmark">
+          <div class="sigil">✶</div>
+          <div>
+            <div class="brand-title">The Francis Smokehouse</div>
+            <div class="brand-sub">Ember Ritual • experimental dining concept</div>
           </div>
         </div>
-      </section>
-
-      <section class="section menu">
-        <div class="menu-head">
-          <div class="eyebrow">The Menu</div>
-          <h2>Selected House Offerings</h2>
-          <p>
-            Curated for clarity and style. Designed to read like a signature restaurant menu rather than a directory listing.
-          </p>
+        <div class="status" id="status">
+          <span class="status-dot"></span>
+          <span>Checking service hours</span>
         </div>
-
-        <div class="category">
-          <div class="category-title">
-            <h3>Smokehouse Plates</h3>
-            <span>With two sides</span>
-          </div>
-          <div class="items">
-            <div class="item">
-              <div class="item-top">
-                <div class="item-name">Brisket Plate</div>
-                <div class="item-price">$10.99</div>
-              </div>
-              <div class="item-desc">Smoked brisket presented with the house side selection.</div>
-            </div>
-            <div class="item">
-              <div class="item-top">
-                <div class="item-name">Pulled Pork Plate</div>
-                <div class="item-price">$9.99</div>
-              </div>
-              <div class="item-desc">A classic smokehouse staple with deep, slow-cooked character.</div>
-            </div>
-            <div class="item">
-              <div class="item-top">
-                <div class="item-name">Full Rack of Ribs</div>
-                <div class="item-price">$19.99</div>
-              </div>
-              <div class="item-desc">The grander plate—bold, rich, and built for a full dinner moment.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="category">
-          <div class="category-title">
-            <h3>Sandwiches & Po-Boys</h3>
-            <span>With one side</span>
-          </div>
-          <div class="items">
-            <div class="item">
-              <div class="item-top">
-                <div class="item-name">Brisket Sandwich</div>
-                <div class="item-price">$8.99</div>
-              </div>
-              <div class="item-desc">A more casual expression of the house brisket profile.</div>
-            </div>
-            <div class="item">
-              <div class="item-top">
-                <div class="item-name">Ribeye Po-Boy</div>
-                <div class="item-price">$10.99</div>
-              </div>
-              <div class="item-desc">A richer, more elevated po-boy option with stronger menu presence.</div>
-            </div>
-            <div class="item">
-              <div class="item-top">
-                <div class="item-name">Crawfish Po-Boy</div>
-                <div class="item-price">$10.99</div>
-              </div>
-              <div class="item-desc">A Louisiana-forward choice with a more coastal accent.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="category">
-          <div class="category-title">
-            <h3>Cajun Signatures</h3>
-            <span>House favorites</span>
-          </div>
-          <div class="items">
-            <div class="item">
-              <div class="item-top">
-                <div class="item-name">Boudin Balls</div>
-                <div class="item-price">Signature</div>
-              </div>
-              <div class="item-desc">The most iconic specialty item in the house’s public reputation.</div>
-            </div>
-            <div class="item">
-              <div class="item-top">
-                <div class="item-name">Pepper Jack Boudin Balls</div>
-                <div class="item-price">Signature</div>
-              </div>
-              <div class="item-desc">A richer variation with extra indulgence and character.</div>
-            </div>
-            <div class="item">
-              <div class="item-top">
-                <div class="item-name">Boudin Egg Rolls</div>
-                <div class="item-price">Specialty</div>
-              </div>
-              <div class="item-desc">A playful, memorable offering that gives the menu personality.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="category">
-          <div class="category-title">
-            <h3>Sweet Finish</h3>
-            <span>Dessert</span>
-          </div>
-          <div class="items">
-            <div class="item">
-              <div class="item-top">
-                <div class="item-name">Homemade Bread Pudding</div>
-                <div class="item-price">House Dessert</div>
-              </div>
-              <div class="item-desc">Warm, familiar, and perfectly aligned with the smokehouse identity.</div>
-            </div>
-            <div class="item">
-              <div class="item-top">
-                <div class="item-name">Creole Cream Cheesecake</div>
-                <div class="item-price">House Dessert</div>
-              </div>
-              <div class="item-desc">A more regional finish with a slightly more refined tone.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="signature">
-          <div class="eyebrow">Chef’s Impression</div>
-          <h3>The Brisket & Boudin Pairing</h3>
-          <p>
-            If the goal is a signature experience, begin with the brisket, add the boudin balls, and finish with bread pudding.
-            That sequence feels the closest to a true house statement.
-          </p>
-        </div>
-      </section>
-
-      <div class="footer">
-        The Francis Smokehouse • St. Francisville, Louisiana<br>
-        Hours: Mon–Sat 10:00 AM–6:00 PM • Sun 10:00 AM–3:00 PM<br>
-        <a href="tel:2252455046">(225) 245-5046</a>
       </div>
+
+      <div class="center-stage">
+        <section class="left">
+          <div class="eyebrow">A made-up interface object</div>
+          <div class="hero">
+            <h1>A menu<br>that behaves<br>like a ritual.</h1>
+            <p>
+              No standard buttons. No ordinary cards. No familiar restaurant layout. This concept treats the menu as a living ember field:
+              a constellation you awaken rather than a page you click through.
+            </p>
+            <div class="ritual">
+              <div class="token">Smoke</div>
+              <div class="token">Flame</div>
+              <div class="token">Cajun Memory</div>
+              <div class="token">House Signature</div>
+            </div>
+            <div class="whisper">
+              Rotate through the field by touching the ember nodes. The center never changes. The orbit does.
+            </div>
+          </div>
+        </section>
+
+        <section class="right">
+          <div class="constellation" id="constellation">
+            <svg class="trail" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <line x1="50" y1="50" x2="18" y2="28" class="hot"></line>
+              <line x1="50" y1="50" x2="78" y2="18"></line>
+              <line x1="50" y1="50" x2="86" y2="52"></line>
+              <line x1="50" y1="50" x2="72" y2="84"></line>
+              <line x1="50" y1="50" x2="26" y2="82"></line>
+              <line x1="50" y1="50" x2="10" y2="56"></line>
+            </svg>
+            <div class="halo"></div>
+            <div class="core">
+              <div>
+                <h2>House Fire</h2>
+                <p>Touch the orbit</p>
+              </div>
+            </div>
+
+            <button class="node active" style="left:18%; top:28%" data-key="brisket"><span>Brisket<br>Plate</span></button>
+            <button class="node" style="left:78%; top:18%" data-key="boudin"><span>Boudin<br>Balls</span></button>
+            <button class="node" style="left:86%; top:52%" data-key="ribeye"><span>Ribeye<br>Po‑Boy</span></button>
+            <button class="node" style="left:72%; top:84%" data-key="bread"><span>Bread<br>Pudding</span></button>
+            <button class="node" style="left:26%; top:82%" data-key="corn"><span>Corn<br>Pudding</span></button>
+            <button class="node" style="left:10%; top:56%" data-key="special"><span>Chef<br>Moment</span></button>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel" id="panel">
+        <div class="panel-top">
+          <div>
+            <h3>Brisket Plate</h3>
+            <div class="panel-meta">Smokehouse Plates • two sides</div>
+          </div>
+          <div class="price">$10.99</div>
+        </div>
+        <p>
+          The cleanest opening statement in the house: smoked brisket, direct and confident, presented without clutter.
+          If there is a single order that feels like the identity of the room, it begins here.
+        </p>
+      </section>
+
+      <div class="footer-note">Mon–Sat 10:00 AM–6:00 PM • Sun 10:00 AM–3:00 PM • (225) 245-5046</div>
+      <div class="floor"></div>
     </div>
   </div>
 
   <script>
+    const DATA = {
+      brisket: {
+        title: "Brisket Plate",
+        meta: "Smokehouse Plates • two sides",
+        price: "$10.99",
+        text: "The cleanest opening statement in the house: smoked brisket, direct and confident, presented without clutter. If there is a single order that feels like the identity of the room, it begins here."
+      },
+      boudin: {
+        title: "Boudin Balls",
+        meta: "Cajun Signatures • house favorite",
+        price: "Signature",
+        text: "This is the bite with myth around it. Compact, warm, indulgent, and memorable — the kind of menu element that moves beyond food and becomes a repeated story."
+      },
+      ribeye: {
+        title: "Ribeye Po-Boy",
+        meta: "Sandwiches & Po-Boys • one side",
+        price: "$10.99",
+        text: "A more luxurious lane through the menu: still casual in format, but stronger in presence. It feels less like a standard sandwich and more like a signature move."
+      },
+      bread: {
+        title: "Homemade Bread Pudding",
+        meta: "Sweet Finish • house dessert",
+        price: "Dessert",
+        text: "The closing ember. Soft, warm, familiar, and quietly decadent — exactly the kind of finish that makes the experience feel complete rather than merely finished."
+      },
+      corn: {
+        title: "Corn Pudding",
+        meta: "Sideboard • standout side",
+        price: "$2.75 / $6.99",
+        text: "Unexpectedly important. Not just a supporting player, but one of the clearest signals of house personality — rich, comforting, and more memorable than a side has any right to be."
+      },
+      special: {
+        title: "Chef Moment",
+        meta: "Specials Snapshot • rotating highlight",
+        price: "$26–$28",
+        text: "This node represents the dramatic side of the menu: blackened fish, salmon, pork chop combinations, and composed dishes that feel like sudden flashes of ambition inside the smokehouse world."
+      }
+    };
+
+    const panel = document.getElementById('panel');
+    const nodes = [...document.querySelectorAll('.node')];
+
+    function render(key){
+      const d = DATA[key];
+      panel.innerHTML = `
+        <div class="panel-top">
+          <div>
+            <h3>${d.title}</h3>
+            <div class="panel-meta">${d.meta}</div>
+          </div>
+          <div class="price">${d.price}</div>
+        </div>
+        <p>${d.text}</p>
+      `;
+      nodes.forEach(n => n.classList.toggle('active', n.dataset.key === key));
+    }
+
+    nodes.forEach(node => {
+      node.addEventListener('click', () => render(node.dataset.key));
+      node.addEventListener('mouseenter', () => render(node.dataset.key));
+    });
+
+    const status = document.getElementById('status');
     (function(){
-      const el = document.getElementById("statusBar");
       const now = new Date();
       const day = now.getDay();
       const mins = now.getHours() * 60 + now.getMinutes();
       const open = 10 * 60;
       const close = day === 0 ? 15 * 60 : 18 * 60;
       const openNow = mins >= open && mins < close;
-
       if(openNow){
         const left = close - mins;
         const h = Math.floor(left / 60);
         const m = left % 60;
-        el.innerHTML = '<span class="dot"></span><span>Open now • closes in ' + (h ? h + 'h ' : '') + m + 'm</span>';
+        status.innerHTML = `<span class="status-dot"></span><span>Open now • closes in ${h ? h + 'h ' : ''}${m}m</span>`;
       } else {
-        el.innerHTML = '<span class="dot"></span><span>Currently closed • opens at 10:00 AM</span>';
+        status.innerHTML = `<span class="status-dot"></span><span>Currently closed • opens at 10:00 AM</span>`;
       }
     })();
   </script>
