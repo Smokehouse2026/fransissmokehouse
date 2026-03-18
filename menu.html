@@ -2,1035 +2,934 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>The Francis Smokehouse Orbit Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Francis Smokehouse — Interactive Menu Experience</title>
+  <meta name="description" content="Premium interactive menu and restaurant guide for The Francis Smokehouse in St. Francisville, Louisiana." />
   <style>
     :root{
-      --bg:#030611;
-      --text:#f4fbff;
-      --muted:#9fb5cc;
-      --cyan:#78ecff;
-      --mint:#9effc3;
-      --violet:#a089ff;
-      --pink:#ff7ad9;
-      --gold:#ffda8e;
+      --bg:#0a0705;
+      --bg2:#130c08;
+      --card:rgba(255,255,255,.07);
+      --card2:rgba(255,255,255,.05);
       --line:rgba(255,255,255,.12);
-      --panel:rgba(8,14,28,.60);
-      --shadow:0 24px 80px rgba(0,0,0,.42);
-      --safe-top: env(safe-area-inset-top, 0px);
-      --safe-right: env(safe-area-inset-right, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-      --safe-left: env(safe-area-inset-left, 0px);
-      --radius:255px;
-      --node-size:126px;
-      --tilt:62deg;
+      --text:#f8f2ea;
+      --muted:rgba(248,242,234,.72);
+      --soft:rgba(248,242,234,.56);
+      --accent:#f28a3c;
+      --accent2:#ffbf7a;
+      --green:#49c38a;
+      --red:#ff8f8f;
+      --gold:#f5c56e;
+      --shadow:0 24px 70px rgba(0,0,0,.42);
+      --radius:28px;
+      --radius-sm:18px;
     }
-
     *{box-sizing:border-box}
-    html,body{
+    html{scroll-behavior:smooth}
+    body{
       margin:0;
-      min-height:100%;
-      overflow:hidden;
-      background:
-        radial-gradient(circle at 18% 15%, rgba(120,236,255,.14), transparent 18%),
-        radial-gradient(circle at 82% 15%, rgba(160,137,255,.16), transparent 20%),
-        radial-gradient(circle at 50% 85%, rgba(158,255,195,.08), transparent 18%),
-        linear-gradient(180deg, #02040a 0%, #040817 45%, #030611 100%);
-      color:var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1000px 600px at 10% 0%, rgba(242,138,60,.15), transparent 60%),
+        radial-gradient(900px 600px at 100% 0%, rgba(73,195,138,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2) 55%, #090604);
+      min-height:100vh;
+      overflow-x:hidden;
     }
-
     body::before{
       content:"";
-      position:fixed;
-      inset:0;
+      position:fixed; inset:0;
       pointer-events:none;
-      background:
-        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
-      background-size:36px 36px;
-      mask-image:radial-gradient(circle at center, black 28%, transparent 92%);
-      opacity:.4;
+      opacity:.08;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+      mix-blend-mode:screen;
     }
-
-    body::after{
-      content:"";
-      position:fixed;
-      inset:-10%;
-      pointer-events:none;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(120,236,255,.08), transparent 18%),
-        radial-gradient(circle at 60% 45%, rgba(255,122,217,.06), transparent 20%),
-        radial-gradient(circle at 42% 58%, rgba(160,137,255,.06), transparent 20%);
-      filter:blur(42px);
-      animation:drift 14s linear infinite alternate;
-    }
-
-    @keyframes drift{
-      0%{transform:translate3d(-2%,-1%,0) scale(1)}
-      100%{transform:translate3d(2%,1%,0) scale(1.04)}
-    }
-
-    .app{
-      position:relative;
-      width:100vw;
-      min-height:100dvh;
-      padding:
-        calc(18px + var(--safe-top))
-        calc(18px + var(--safe-right))
-        calc(18px + var(--safe-bottom))
-        calc(18px + var(--safe-left));
-      display:grid;
-      place-items:center;
-      isolation:isolate;
-    }
-
-    .scene{
-      position:relative;
-      width:min(1280px, 100%);
-      height:min(920px, calc(100dvh - 36px - var(--safe-top) - var(--safe-bottom)));
-      display:grid;
-      grid-template-columns:minmax(460px, 1fr) 420px;
-      gap:22px;
-      align-items:center;
-      perspective:1800px;
-    }
-
-    .left{
-      position:relative;
-      min-height:100%;
-      display:grid;
-      place-items:center;
-    }
-
-    .header-chip{
-      position:absolute;
-      inset:18px auto auto 18px;
-      z-index:6;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(8,14,28,.48);
-      color:#dcedfb;
-      backdrop-filter:blur(12px);
-      font-size:.82rem;
-      line-height:1.35;
-      max-width:min(52ch, calc(100% - 36px));
-    }
-
-    .glow-aura{
-      position:absolute;
-      width:min(72vw, 680px);
-      height:min(72vw, 680px);
-      border-radius:50%;
-      background:
-        radial-gradient(circle, rgba(120,236,255,.12), transparent 42%),
-        radial-gradient(circle at 60% 40%, rgba(160,137,255,.10), transparent 34%),
-        radial-gradient(circle at 45% 65%, rgba(255,122,217,.08), transparent 28%);
-      filter:blur(18px);
-      pointer-events:none;
-    }
-
-    .ring-shell{
-      position:relative;
-      width:min(78vw, 720px);
-      height:min(78vw, 720px);
-      display:grid;
-      place-items:center;
-      transform-style:preserve-3d;
-    }
-
-    .orbit-plane{
-      position:absolute;
-      inset:0;
-      transform-style:preserve-3d;
-      transform:rotateX(var(--tilt));
-      pointer-events:none;
-    }
-
-    .ring, .ring-two, .ring-three{
-      position:absolute;
-      inset:0;
-      border-radius:50%;
-      pointer-events:none;
-    }
-
-    .ring{
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:
-        0 0 42px rgba(120,236,255,.08),
-        inset 0 0 32px rgba(120,236,255,.04);
-    }
-
-    .ring-two{
-      inset:42px;
-      border:1px dashed rgba(255,255,255,.14);
-      opacity:.9;
-    }
-
-    .ring-three{
-      inset:82px;
-      border:1px solid rgba(255,255,255,.08);
-      opacity:.7;
-    }
-
-    .axis{
-      position:absolute;
-      width:2px;
-      height:88%;
-      background:linear-gradient(180deg, transparent, rgba(255,255,255,.18), transparent);
-      left:50%;
-      top:6%;
-      transform:translateX(-50%);
-      opacity:.4;
-    }
-
-    .node-anchor{
-      position:absolute;
-      left:50%;
-      top:50%;
-      width:0;
-      height:0;
-      transform-style:preserve-3d;
-      transition:transform 700ms cubic-bezier(.2,.8,.2,1);
-      pointer-events:none;
-    }
-
-    .node{
-      position:absolute;
-      left:50%;
-      top:50%;
-      width:var(--node-size);
-      height:var(--node-size);
-      margin:calc(var(--node-size) / -2);
-      border-radius:30px;
-      padding:14px;
-      cursor:pointer;
-      transform-style:preserve-3d;
-      display:grid;
-      align-content:center;
-      justify-items:center;
-      text-align:center;
-      gap:8px;
-      color:var(--text);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02)),
-        rgba(7,13,28,.78);
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:
-        0 16px 30px rgba(0,0,0,.28),
-        inset 0 1px 0 rgba(255,255,255,.06);
-      backface-visibility:hidden;
-      transition:
-        transform 700ms cubic-bezier(.2,.8,.2,1),
-        border-color .18s ease,
-        box-shadow .18s ease,
-        background .18s ease;
-      pointer-events:auto;
-    }
-
-    .node::before{
-      content:"";
-      position:absolute;
-      inset:auto -18% -22% auto;
-      width:120px;
-      height:120px;
-      border-radius:50%;
-      background:radial-gradient(circle, var(--glow, rgba(120,236,255,.16)), transparent 62%);
-      filter:blur(8px);
-      pointer-events:none;
-    }
-
-    .node:hover,
-    .node:focus-visible{
-      outline:none;
-      border-color:rgba(120,236,255,.34);
-      box-shadow:
-        0 20px 36px rgba(0,0,0,.32),
-        0 0 28px rgba(120,236,255,.14),
-        inset 0 1px 0 rgba(255,255,255,.08);
-    }
-
-    .node.active{
-      background:
-        linear-gradient(135deg, rgba(120,236,255,.16), rgba(160,137,255,.18) 58%, rgba(255,122,217,.14)),
-        rgba(7,13,28,.84);
-      border-color:rgba(120,236,255,.4);
-      box-shadow:
-        0 22px 40px rgba(0,0,0,.34),
-        0 0 34px rgba(120,236,255,.18),
-        inset 0 1px 0 rgba(255,255,255,.08);
-    }
-
-    .node.front{
-      box-shadow:
-        0 26px 48px rgba(0,0,0,.38),
-        0 0 40px rgba(120,236,255,.22),
-        inset 0 1px 0 rgba(255,255,255,.08);
-    }
-
-    .node .emoji{
-      font-size:1.75rem;
-      line-height:1;
-      filter:drop-shadow(0 0 18px rgba(120,236,255,.24));
-    }
-
-    .node strong{
-      font-size:.94rem;
-      letter-spacing:.02em;
-    }
-
-    .node span{
-      font-size:.76rem;
-      line-height:1.2;
-      color:var(--muted);
-      max-width:92px;
-    }
-
-    .core{
-      position:absolute;
-      width:200px;
-      height:200px;
-      border-radius:50%;
-      display:grid;
-      place-items:center;
-      text-align:center;
-      padding:26px;
-      background:
-        radial-gradient(circle at 50% 42%, rgba(255,255,255,.16), transparent 26%),
-        linear-gradient(135deg, rgba(120,236,255,.14), rgba(160,137,255,.16), rgba(255,122,217,.12));
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:
-        0 0 0 18px rgba(255,255,255,.03),
-        0 0 0 36px rgba(255,255,255,.015),
-        0 0 58px rgba(120,236,255,.14);
-      z-index:3;
-      pointer-events:none;
-      transform:translateZ(42px);
-    }
-
-    .core::before{
-      content:"";
-      position:absolute;
-      inset:18px;
-      border-radius:50%;
-      border:1px solid rgba(255,255,255,.12);
-      animation:spin 18s linear infinite;
-    }
-
-    .core::after{
-      content:"";
-      position:absolute;
-      inset:40px;
-      border-radius:50%;
-      border:1px dashed rgba(255,255,255,.12);
-      animation:spin 24s linear infinite reverse;
-    }
-
-    @keyframes spin{
-      from{transform:rotate(0)}
-      to{transform:rotate(360deg)}
-    }
-
-    .core-text{
-      position:relative;
-      z-index:1;
-      display:grid;
-      gap:8px;
-    }
-
-    .core-text strong{
-      font-size:1.08rem;
-      text-transform:uppercase;
-      letter-spacing:.18em;
-      color:var(--cyan);
-    }
-
-    .core-text span{
-      color:#d9e9f8;
-      line-height:1.35;
-      font-size:.92rem;
-    }
-
-    .controls{
-      position:absolute;
-      inset:auto auto 16px 50%;
-      transform:translateX(-50%);
-      display:flex;
-      gap:10px;
-      z-index:5;
-    }
-
-    .ctrl{
-      min-width:136px;
-      min-height:46px;
-      padding:0 16px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.12);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
-        var(--panel);
-      color:var(--text);
-      cursor:pointer;
-      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.05);
-      backdrop-filter:blur(14px);
-      transition:transform .18s ease, border-color .18s ease;
-    }
-
-    .ctrl:hover,
-    .ctrl:focus-visible{
-      outline:none;
-      transform:translateY(-1px);
-      border-color:rgba(120,236,255,.34);
-    }
-
-    .panel{
-      position:relative;
-      min-height:100%;
-      border-radius:28px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
-        var(--panel);
+    a{color:inherit}
+    .shell{width:min(1320px, calc(100vw - 28px)); margin:0 auto; padding:18px 0 120px}
+    .glass{
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
       border:1px solid var(--line);
-      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
       backdrop-filter:blur(18px);
-      display:grid;
-      grid-template-rows:auto minmax(0, 1fr) auto;
-      overflow:hidden;
+      -webkit-backdrop-filter:blur(18px);
     }
-
-    .panel-head{
-      padding:18px 18px 14px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      display:grid;
-      gap:8px;
+    .topbar{
+      position:sticky; top:12px; z-index:60;
+      margin-bottom:18px;
+      padding:10px;
     }
-
-    .panel-head h1{
-      margin:0;
-      font-size:1.36rem;
-      letter-spacing:-.03em;
+    .nav{
+      display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;
     }
-
-    .panel-head p{
-      margin:0;
-      color:var(--muted);
-      line-height:1.45;
-      font-size:.92rem;
+    .brand{
+      display:flex; gap:12px; align-items:center; min-width:0;
     }
-
-    .info-line{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:6px;
+    .brand-badge{
+      width:48px; height:48px; border-radius:16px;
+      display:grid; place-items:center;
+      background:linear-gradient(180deg, rgba(242,138,60,.9), rgba(175,78,26,.95));
+      color:white; font-size:22px; box-shadow:0 10px 30px rgba(242,138,60,.35);
+      flex:0 0 auto;
     }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      min-height:30px;
-      padding:0 10px;
-      border-radius:999px;
+    .brand h1{
+      margin:0; font-size:18px; line-height:1.05; letter-spacing:-.03em;
+    }
+    .brand p{margin:4px 0 0; color:var(--soft); font-size:12px; font-weight:700}
+    .nav-links{
+      display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end;
+    }
+    .chip,.btn,.tab,.filter{
+      border:1px solid rgba(255,255,255,.14);
       background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      color:#def3ff;
-      font-size:.74rem;
-    }
-
-    .item-list{
-      padding:14px;
-      overflow:auto;
-      display:grid;
-      gap:10px;
-      align-content:start;
-    }
-
-    .item{
-      width:100%;
-      text-align:left;
-      border:none;
-      min-height:86px;
-      padding:14px;
-      border-radius:20px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
-        rgba(7,13,28,.58);
-      border:1px solid rgba(255,255,255,.1);
-      color:var(--text);
+      color:#fff;
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:800;
+      letter-spacing:.01em;
       cursor:pointer;
-      display:grid;
-      grid-template-columns:minmax(0, 1fr) auto;
-      gap:12px;
-      transition:transform .18s ease, border-color .18s ease, background .18s ease;
+      transition:.18s ease;
+      text-decoration:none;
+      display:inline-flex; align-items:center; gap:8px; justify-content:center;
     }
-
-    .item:hover,
-    .item:focus-visible{
-      outline:none;
-      transform:translateY(-1px);
-      border-color:rgba(120,236,255,.28);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025)),
-        rgba(7,13,28,.68);
+    .chip:hover,.btn:hover,.tab:hover,.filter:hover{transform:translateY(-1px)}
+    .btn.primary,.tab.active,.filter.active{
+      background:linear-gradient(180deg, rgba(242,138,60,.95), rgba(172,77,27,.98));
+      border-color:rgba(255,215,170,.45);
+      box-shadow:0 10px 28px rgba(242,138,60,.26);
     }
-
-    .item h3{
-      margin:0;
-      font-size:1rem;
-      letter-spacing:-.02em;
+    .btn.secondary{
+      background:linear-gradient(180deg, rgba(73,195,138,.45), rgba(28,92,64,.92));
+      border-color:rgba(143,255,209,.28);
     }
-
-    .item p{
-      margin:8px 0 0;
-      color:#d4e5f5;
-      font-size:.9rem;
-      line-height:1.45;
+    .hero{
+      display:grid; grid-template-columns:1.1fr .9fr; gap:18px;
+      margin-bottom:18px;
     }
-
-    .price{
-      color:var(--mint);
-      font-size:1rem;
-      font-weight:700;
-      white-space:nowrap;
-      align-self:start;
+    .hero-main,.hero-side{padding:28px}
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:8px;
+      text-transform:uppercase; letter-spacing:.15em; font-size:11px; font-weight:900;
+      color:var(--accent2);
+      padding:8px 12px; border-radius:999px;
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10);
     }
-
-    .meta{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:8px;
+    .hero h2{
+      margin:16px 0 10px; font-size:clamp(32px, 6vw, 70px); line-height:.95; letter-spacing:-.05em;
     }
-
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      min-height:28px;
-      padding:0 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      color:#def3ff;
-      font-size:.72rem;
+    .hero p{
+      margin:0; color:var(--muted); font-size:16px; line-height:1.7; max-width:760px;
     }
-
-    .panel-foot{
-      padding:14px 18px 18px;
-      border-top:1px solid rgba(255,255,255,.08);
-      color:var(--muted);
-      font-size:.85rem;
-      line-height:1.4;
+    .hero-actions{
+      display:flex; flex-wrap:wrap; gap:12px; margin-top:20px;
     }
-
-    .modal{
-      position:fixed;
-      inset:0;
-      background:rgba(3,6,14,.66);
-      backdrop-filter:blur(12px);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-      z-index:40;
+    .quick-grid{
+      display:grid; grid-template-columns:repeat(2,1fr); gap:12px;
     }
-
-    .modal.show{ display:flex; }
-
-    .modal-card{
-      width:min(820px, 100%);
-      border-radius:28px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
-        rgba(8,14,28,.82);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);
-      backdrop-filter:blur(18px);
-      padding:18px;
-      display:grid;
-      gap:16px;
+    .stat{
+      padding:16px; border-radius:20px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09);
+      min-height:116px;
     }
-
-    .modal-head{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:start;
+    .stat .label{font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--soft); font-weight:900}
+    .stat .value{margin-top:8px; font-size:22px; font-weight:900; line-height:1.1}
+    .stat .sub{margin-top:8px; color:var(--muted); font-size:13px; line-height:1.45}
+    .openbar{
+      margin-top:16px; padding:14px 16px; border-radius:18px; font-weight:900; font-size:14px;
+      border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
     }
-
-    .modal-copy h3{
-      margin:0;
-      font-size:1.56rem;
-      letter-spacing:-.03em;
+    .openbar.open{color:#baffd8; box-shadow:0 0 18px rgba(73,195,138,.24)}
+    .openbar.closed{color:#ffc9c9; box-shadow:0 0 18px rgba(255,143,143,.18)}
+    .section{margin-top:18px}
+    .section-head{
+      display:flex; gap:12px; align-items:end; justify-content:space-between; flex-wrap:wrap;
+      margin-bottom:12px;
     }
-
-    .modal-copy p{
-      margin:10px 0 0;
-      color:#d3e4f3;
-      line-height:1.6;
+    .section-title{
+      font-size:clamp(26px, 3.8vw, 40px); line-height:1; letter-spacing:-.04em; margin:0;
     }
-
-    .detail-grid{
-      display:grid;
-      grid-template-columns:repeat(4, minmax(0,1fr));
-      gap:10px;
-    }
-
-    .detail{
+    .section-copy{margin:8px 0 0; color:var(--muted); max-width:800px; line-height:1.7}
+    .panel{padding:24px}
+    .tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px}
+    .menu-controls{display:grid; gap:14px; margin-bottom:14px}
+    .search-wrap{display:flex; gap:10px; flex-wrap:wrap}
+    .search{
+      flex:1 1 280px;
+      border:1px solid rgba(255,255,255,.14);
       border-radius:18px;
-      padding:12px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.1);
-    }
-
-    .detail .label{
-      color:var(--muted);
-      font-size:.76rem;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      margin-bottom:8px;
-    }
-
-    .detail .value{
-      font-size:.95rem;
-      font-weight:600;
-    }
-
-    .modal-actions{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-
-    .btn{
-      min-height:44px;
-      padding:0 16px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
+      padding:15px 16px;
       background:rgba(255,255,255,.06);
-      color:var(--text);
-      cursor:pointer;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+      color:#fff; outline:none; font-size:15px; font-weight:700;
     }
-
-    .btn.primary{
+    .search::placeholder{color:rgba(255,255,255,.52)}
+    .filters{display:flex; gap:8px; flex-wrap:wrap}
+    .menu-layout{display:grid; grid-template-columns:320px 1fr; gap:16px}
+    .category-list{
+      display:grid; gap:10px; align-content:start;
+      max-height:860px; overflow:auto; padding-right:4px;
+    }
+    .category-card{
+      padding:16px; border-radius:20px; cursor:pointer;
+      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10);
+      transition:.18s ease;
+    }
+    .category-card.active{
+      background:linear-gradient(180deg, rgba(242,138,60,.18), rgba(255,255,255,.05));
+      border-color:rgba(255,199,147,.30);
+      box-shadow:0 12px 30px rgba(242,138,60,.14);
+    }
+    .category-card:hover{transform:translateY(-2px)}
+    .category-card .name{font-size:18px; font-weight:900; letter-spacing:-.02em}
+    .category-card .meta{margin-top:6px; color:var(--muted); font-size:13px}
+    .category-card .count{margin-top:10px; font-size:12px; color:var(--accent2); font-weight:900; text-transform:uppercase; letter-spacing:.10em}
+    .detail{
+      min-height:640px;
+      padding:20px;
+      border-radius:24px;
       background:
-        linear-gradient(135deg, rgba(120,236,255,.16), rgba(160,137,255,.18) 58%, rgba(255,122,217,.14)),
-        rgba(7,13,28,.84);
-      border-color:rgba(120,236,255,.34);
+        radial-gradient(600px 240px at 0% 0%, rgba(242,138,60,.12), transparent 60%),
+        radial-gradient(600px 260px at 100% 100%, rgba(73,195,138,.10), transparent 60%),
+        rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.11);
+    }
+    .detail-head{
+      display:flex; gap:14px; justify-content:space-between; align-items:start; flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+    .detail-title{margin:0; font-size:34px; letter-spacing:-.04em}
+    .detail-sub{margin-top:8px; color:var(--muted); line-height:1.6}
+    .tagrow{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+    .tag{
+      padding:8px 10px; border-radius:999px; font-size:11px; font-weight:900; letter-spacing:.11em; text-transform:uppercase;
+      background:rgba(255,255,255,.06); color:var(--soft); border:1px solid rgba(255,255,255,.10);
+    }
+    .list{
+      list-style:none; margin:14px 0 0; padding:0; display:grid; gap:12px;
+    }
+    .item{
+      padding:16px; border-radius:18px; border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+    }
+    .item-top{
+      display:flex; gap:10px; justify-content:space-between; align-items:start;
+    }
+    .item-name{font-size:18px; font-weight:900; letter-spacing:-.02em}
+    .price{font-size:17px; font-weight:900; color:var(--accent2); white-space:nowrap}
+    .desc{margin-top:8px; color:var(--muted); line-height:1.65; font-size:14px}
+    .note-line{
+      margin-top:10px; font-size:12px; color:var(--soft); font-weight:800; letter-spacing:.03em;
+    }
+    .featured{
+      margin-top:16px;
+      display:grid; grid-template-columns:repeat(3,1fr); gap:12px;
+    }
+    .featured-card{
+      padding:18px; border-radius:22px;
+      background:linear-gradient(180deg, rgba(242,138,60,.14), rgba(255,255,255,.04));
+      border:1px solid rgba(255,192,136,.22);
+    }
+    .featured-card .kicker{
+      font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--accent2); font-weight:900;
+    }
+    .featured-card h4{margin:8px 0 6px; font-size:18px; letter-spacing:-.03em}
+    .featured-card p{margin:0; color:var(--muted); line-height:1.55; font-size:14px}
+    .grid-2,.grid-3,.grid-4{display:grid; gap:14px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .info-card{
+      padding:20px; border-radius:24px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .info-card h3{margin:0 0 10px; font-size:22px; letter-spacing:-.03em}
+    .info-card p,.info-card li{
+      color:var(--muted); line-height:1.7; font-size:15px;
+    }
+    .info-card ul{margin:0; padding-left:18px}
+    .hours-grid{display:grid; gap:10px}
+    .hour-row{
+      display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center;
+      padding:14px; border-radius:18px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+    }
+    .hour-row.today{border-color:rgba(255,191,122,.26); box-shadow:0 0 24px rgba(242,138,60,.10)}
+    .hour-day{font-weight:900; font-size:16px}
+    .hour-time{color:var(--accent2); font-weight:900}
+    .review-score{
+      display:flex; gap:12px; align-items:center; margin-bottom:12px;
+    }
+    .score{
+      width:82px; height:82px; border-radius:22px; display:grid; place-items:center;
+      background:linear-gradient(180deg, rgba(242,138,60,.95), rgba(174,78,27,.98)); font-size:28px; font-weight:900;
+      box-shadow:0 14px 34px rgba(242,138,60,.28);
+    }
+    .quote{
+      padding:16px; border-left:4px solid var(--accent); border-radius:16px; background:rgba(255,255,255,.05);
+      margin-top:10px;
+    }
+    .quote p{margin:0; font-style:italic}
+    .quote .src{margin-top:8px; color:var(--soft); font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.08em}
+    .timeline{display:grid; gap:12px}
+    .time-row{
+      display:grid; grid-template-columns:110px 1fr; gap:14px; align-items:start;
+      padding:14px; border-radius:18px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+    }
+    .time-year{font-weight:900; color:var(--accent2); letter-spacing:.03em}
+    .disclaimer{
+      margin-top:18px; padding:18px 20px; border-radius:22px;
+      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10); color:var(--soft); line-height:1.7;
+      font-size:14px;
+    }
+    .footer{
+      margin-top:18px; padding:24px; text-align:center; color:var(--soft); line-height:1.7;
+    }
+    .floating{
+      position:fixed; right:18px; bottom:18px; z-index:70; display:flex; flex-direction:column; gap:10px;
+    }
+    .fab{
+      width:58px; height:58px; border-radius:18px; display:grid; place-items:center; text-decoration:none;
+      background:rgba(12,10,9,.9); border:1px solid rgba(255,255,255,.12); box-shadow:var(--shadow); font-size:22px;
+    }
+    .fab:hover{transform:translateY(-2px)}
+    .muted{color:var(--muted)}
+    .empty{
+      padding:18px; border-radius:18px; background:rgba(255,255,255,.04); border:1px dashed rgba(255,255,255,.12); color:var(--muted);
     }
 
-    .icon-btn{
-      width:44px;
-      height:44px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      cursor:pointer;
+    @media (max-width: 1100px){
+      .hero{grid-template-columns:1fr}
+      .menu-layout{grid-template-columns:1fr}
+      .featured,.grid-4{grid-template-columns:repeat(2,1fr)}
+      .grid-3{grid-template-columns:1fr}
     }
-
-    @media (max-width: 1120px){
-      .scene{
-        grid-template-columns:1fr;
-        height:min(1280px, calc(100dvh - 24px - var(--safe-top) - var(--safe-bottom)));
-        overflow:auto;
-        padding-bottom:94px;
-      }
-      .left{ min-height:620px; }
-      .panel{ min-height:440px; }
-      .controls{ position:fixed; bottom:10px; }
-    }
-
-    @media (max-width: 700px){
-      :root{
-        --radius:180px;
-        --node-size:96px;
-      }
-      .ring-shell{
-        width:min(96vw, 520px);
-        height:min(96vw, 520px);
-      }
-      .core{
-        width:146px;
-        height:146px;
-        padding:18px;
-      }
-      .core-text strong{ font-size:.92rem; }
-      .core-text span{ font-size:.82rem; }
-      .node{
-        border-radius:24px;
-        padding:10px;
-      }
-      .node .emoji{ font-size:1.35rem; }
-      .node strong{ font-size:.8rem; }
-      .node span{ font-size:.68rem; max-width:74px; }
-      .detail-grid{ grid-template-columns:1fr 1fr; }
-      .controls{
-        width:calc(100vw - 20px);
-        gap:8px;
-      }
-      .ctrl{
-        min-width:0;
-        flex:1 1 0;
-        padding:0 10px;
-      }
-      .header-chip{
-        position:static;
-        margin-bottom:10px;
-        justify-self:center;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      *, *::before, *::after{
-        animation:none !important;
-        transition:none !important;
-      }
+    @media (max-width: 760px){
+      .shell{width:min(100vw - 18px, 1320px)}
+      .hero-main,.hero-side,.panel{padding:20px}
+      .featured,.grid-2,.grid-4{grid-template-columns:1fr}
+      .time-row{grid-template-columns:1fr}
+      .item-top,.detail-head{flex-direction:column}
+      .nav{align-items:flex-start}
+      .floating{right:10px; bottom:10px}
+      .fab{width:52px; height:52px; border-radius:16px}
     }
   </style>
 </head>
 <body>
-  <main class="app">
-    <div class="scene">
-      <section class="left">
-        <div class="header-chip">The Francis Smokehouse • 6779 US Highway 61, St. Francisville, LA • First click rotates, second click opens the category.</div>
-        <div class="glow-aura" aria-hidden="true"></div>
-
-        <div class="ring-shell">
-          <div class="orbit-plane" id="orbitPlane">
-            <div class="ring"></div>
-            <div class="ring-two"></div>
-            <div class="ring-three"></div>
-            <div class="axis"></div>
+  <div class="shell" id="top">
+    <div class="glass topbar">
+      <div class="nav">
+        <div class="brand">
+          <div class="brand-badge">🔥</div>
+          <div>
+            <h1>The Francis Smokehouse</h1>
+            <p>St. Francisville, Louisiana • Interactive restaurant guide</p>
           </div>
+        </div>
+        <div class="nav-links">
+          <a class="chip" href="#menu">Menu</a>
+          <a class="chip" href="#hours">Hours</a>
+          <a class="chip" href="#reviews">Reviews</a>
+          <a class="chip" href="#details">Details</a>
+          <a class="chip" href="#history">History</a>
+        </div>
+      </div>
+    </div>
 
-          <div class="core">
-            <div class="core-text">
-              <strong id="coreTitle">Featured</strong>
-              <span id="coreSub">Tap a tile to bring it forward</span>
+    <section class="hero">
+      <div class="glass hero-main">
+        <div class="eyebrow">Smoke. BBQ. Louisiana comfort food.</div>
+        <h2>A menu experience<br/>built for The Francis Smokehouse.</h2>
+        <p>
+          This is a complete redesign inspired by your rough draft, but rebuilt as a more premium, cleaner, more useful interactive experience.
+          It highlights the best publicly surfaced menu items, hours, reviews, accessibility notes, and quick actions for guests planning a visit.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="tel:2252455046">Call to Order</a>
+          <a class="btn secondary" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+Saint+Francisville%2C+LA+70775">Open Map</a>
+          <a class="btn" target="_blank" rel="noopener" href="mailto:francissmokehouse@att.net">Email</a>
+        </div>
+        <div id="openStatus" class="openbar">Checking live hours status…</div>
+      </div>
+
+      <div class="glass hero-side">
+        <div class="quick-grid">
+          <div class="stat">
+            <div class="label">Address</div>
+            <div class="value" style="font-size:18px">6779 US Highway 61</div>
+            <div class="sub">St. Francisville, LA 70775</div>
+          </div>
+          <div class="stat">
+            <div class="label">Phone</div>
+            <div class="value">(225) 245-5046</div>
+            <div class="sub">Best for current availability and large orders</div>
+          </div>
+          <div class="stat">
+            <div class="label">Typical hours</div>
+            <div class="value" style="font-size:18px">Mon–Sat 10–6</div>
+            <div class="sub">Sunday 10–3</div>
+          </div>
+          <div class="stat">
+            <div class="label">Known for</div>
+            <div class="value" style="font-size:18px">Brisket & Boudin</div>
+            <div class="sub">Also ribs, po-boys, sides, desserts, and rotating specials</div>
+          </div>
+        </div>
+        <div class="featured" style="grid-template-columns:1fr; margin-top:14px">
+          <div class="featured-card">
+            <div class="kicker">Best quick snapshot</div>
+            <h4>Casual smokehouse with standout comfort food</h4>
+            <p>Public sources consistently point to strong takeout, popular signature items, and a loyal mix of locals and visitors.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="menu">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Interactive menu</h2>
+          <p class="section-copy">Search, filter, and browse the publicly surfaced menu items and specials. Prices shown here are based on the research summary you provided and may change.</p>
+        </div>
+      </div>
+
+      <div class="glass panel">
+        <div class="tabs" id="menuTabs"></div>
+
+        <div class="menu-controls">
+          <div class="search-wrap">
+            <input id="menuSearch" class="search" type="text" placeholder="Search brisket, boudin, po-boy, dessert..." />
+            <button class="btn primary" id="surpriseBtn">Choose for me</button>
+          </div>
+          <div class="filters" id="menuFilters"></div>
+        </div>
+
+        <div class="menu-layout">
+          <div class="category-list" id="categoryList"></div>
+          <div class="detail" id="detailView"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="hours">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Hours & visit planning</h2>
+          <p class="section-copy">A simple planning view for current hours, access notes, and what to confirm before heading out.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="glass panel">
+          <div class="hours-grid" id="hoursGrid"></div>
+          <div class="disclaimer">
+            Hours are presented from the research summary you supplied: Monday–Saturday 10:00 AM–6:00 PM, Sunday 10:00 AM–3:00 PM.
+            Third-party listings can drift, so calling ahead is still the safest way to confirm same-day details.
+          </div>
+        </div>
+        <div class="glass panel">
+          <div class="info-card" style="padding:0; background:transparent; border:none">
+            <h3>Good to know before you go</h3>
+            <ul>
+              <li>Takeout appears strongly supported.</li>
+              <li>Parking is available, though peak times may feel tight.</li>
+              <li>Public sources indicate wheelchair accessibility.</li>
+              <li>Popular items can sell out, especially later in the day.</li>
+              <li>Delivery and reservations appear inconsistent across sources, so verify directly.</li>
+            </ul>
+            <div class="hero-actions" style="margin-top:18px">
+              <a class="btn primary" href="tel:2252455046">Verify today’s availability</a>
+              <a class="btn" target="_blank" rel="noopener" href="https://thefrancissmokehouse.com/">Visit website</a>
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="controls">
-          <button class="ctrl" id="prevBtn" type="button">← Previous</button>
-          <button class="ctrl" id="nextBtn" type="button">Next →</button>
+    <section class="section" id="reviews">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Reputation snapshot</h2>
+          <p class="section-copy">A clean summary of the review trends in your report, focused on what guests consistently love and what they occasionally flag.</p>
         </div>
-      </section>
+      </div>
 
-      <aside class="panel">
-        <div class="panel-head">
-          <h1 id="panelTitle">Featured</h1>
-          <p id="panelSubtitle">This menu is now wired to the restaurant research you sent. Item pricing is based on the report and visible photographed menu boards, where available.</p>
-          <div class="info-line">
-            <span class="pill">Hours: Mon–Sat 10 AM–6 PM</span>
-            <span class="pill">Sun 10 AM–3 PM</span>
-            <span class="pill">Takeout available</span>
+      <div class="grid-2">
+        <div class="glass panel">
+          <div class="review-score">
+            <div class="score">4.5</div>
+            <div>
+              <h3 style="margin:0 0 6px; font-size:28px; letter-spacing:-.03em">Tripadvisor</h3>
+              <div class="muted">143 reviews • Travellers’ Choice highlighted in your research summary</div>
+            </div>
+          </div>
+          <div class="quote">
+            <p>“Brisket practically melted in my mouth.”</p>
+            <div class="src">Representative theme from public review excerpts</div>
+          </div>
+          <div class="quote">
+            <p>“Boudin balls … absolutely delicious.”</p>
+            <div class="src">Representative theme from public review excerpts</div>
+          </div>
+          <div class="quote">
+            <p>Common downside themes: slow service at times, occasional sell-outs, and some price sensitivity.</p>
+            <div class="src">Recurring critical pattern across review syndications</div>
           </div>
         </div>
-        <div class="item-list" id="itemList"></div>
-        <div class="panel-foot" id="panelFoot">The Francis Smokehouse • (225) 245-5046 • francissmokehouse@att.net</div>
-      </aside>
-    </div>
-  </main>
 
-  <div class="modal" id="itemModal" aria-hidden="true">
-    <div class="modal-card">
-      <div class="modal-head">
-        <div class="modal-copy">
-          <h3 id="modalTitle">Item</h3>
-          <p id="modalDesc"></p>
+        <div class="glass panel">
+          <div class="review-score">
+            <div class="score">4.7</div>
+            <div>
+              <h3 style="margin:0 0 6px; font-size:28px; letter-spacing:-.03em">Google signal</h3>
+              <div class="muted">505 reviews shown via syndicated directory source in your report</div>
+            </div>
+          </div>
+          <div class="info-card" style="padding:0; background:transparent; border:none">
+            <h3>What people seem to love most</h3>
+            <ul>
+              <li>Boudin balls and boudin-based items</li>
+              <li>Brisket tenderness and smoke flavor</li>
+              <li>Sides like corn pudding</li>
+              <li>Friendly staff and strong local appeal</li>
+              <li>Good value relative to portion size for many visitors</li>
+            </ul>
+          </div>
         </div>
-        <button class="icon-btn" id="closeModalBtn" type="button" aria-label="Close dialog">✕</button>
       </div>
-      <div class="detail-grid" id="modalMeta"></div>
-      <div class="modal-actions">
-        <div style="font-size:1.25rem; font-weight:700; color:var(--mint);" id="modalPrice">$0.00</div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn" id="modalBackBtn" type="button">Back</button>
-          <button class="btn primary" type="button">Call to order</button>
+    </section>
+
+    <section class="section" id="details">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Access, service, and logistics</h2>
+          <p class="section-copy">The practical side of the restaurant, turned into a fast-scanning planning dashboard.</p>
         </div>
       </div>
+
+      <div class="grid-4">
+        <div class="glass panel info-card">
+          <h3>Takeout</h3>
+          <p>Strongly indicated by public listings and review patterns. This appears to be one of the safest assumptions for customer planning.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Reservations</h3>
+          <p>Generally not presented as a reservation-heavy concept. For large groups, calling ahead is still the smart move.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Delivery</h3>
+          <p>Mixed signals across sources. Treat delivery as uncertain until directly confirmed the same day.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Catering</h3>
+          <p>Evidence suggests support for larger orders, but no formal catering terms or current pricing were established in the material you sent.</p>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top:14px">
+        <div class="glass panel info-card">
+          <h3>Accessibility</h3>
+          <p>Public listings indicate wheelchair accessibility, with some third-party mentions of accessible parking, seating, and restroom features.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Atmosphere</h3>
+          <p>Casual, local, and welcoming. The review summary suggests a strong mix of locals and travelers with a laid-back smokehouse feel.</p>
+        </div>
+        <div class="glass panel info-card">
+          <h3>Price range</h3>
+          <p>Mid-range overall. Sandwiches and po-boys cluster lower, plates reach higher, and specials can move into the twenties.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="history">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">History & context</h2>
+          <p class="section-copy">A simplified timeline and business context view based on the report you provided.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="glass panel">
+          <div class="timeline">
+            <div class="time-row">
+              <div class="time-year">2015</div>
+              <div class="muted">Review history indicates The Francis Smokehouse was operating by October 2015.</div>
+            </div>
+            <div class="time-row">
+              <div class="time-year">2015 era</div>
+              <div class="muted">A nearby related concept, The Francis Southern Table & Bar, is referenced in the same general timeframe in your research summary.</div>
+            </div>
+            <div class="time-row">
+              <div class="time-year">2024–2025</div>
+              <div class="muted">Recent review activity in the report suggests continued public visibility and guest traffic.</div>
+            </div>
+          </div>
+        </div>
+        <div class="glass panel">
+          <div class="info-card" style="padding:0; background:transparent; border:none">
+            <h3>Other “Smokehouse” match in town</h3>
+            <p>
+              Your report also surfaced Hill Country Smokehouse, LLC at 5716 Commerce Street. Its operating status looked inconsistent across directory sources,
+              so it’s best treated as uncertain until verified directly.
+            </p>
+            <div class="hero-actions" style="margin-top:16px">
+              <a class="btn" href="tel:2256352880">Call Hill Country listing</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glass disclaimer">
+      <strong>Important note:</strong> This page is intentionally built from the research summary you supplied rather than from the original rough-draft restaurant data.
+      It should be treated as a polished presentation layer, not as an official live menu. Hours, prices, availability, delivery, reservations, and specials may change.
+      The best same-day confirmation method is still calling The Francis Smokehouse directly.
+    </div>
+
+    <div class="glass footer">
+      Built as a premium single-file HTML menu experience for The Francis Smokehouse • Designed for sharing, editing, and future expansion.
     </div>
   </div>
 
+  <div class="floating">
+    <a class="fab" href="#top" title="Back to top">↑</a>
+    <a class="fab" href="tel:2252455046" title="Call">☎</a>
+  </div>
+
   <script>
-    const categories = [
-      {
-        id:'featured',
-        label:'Featured',
-        sub:'Best-known items',
-        emoji:'✦',
-        glow:'rgba(120,236,255,.18)',
-        description:'A quick way into the menu using the items most often highlighted in public reviews and visible menu boards.',
-        items:[
-          {name:'Brisket Plate', price:10.99, desc:'BBQ brisket plate served with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
-          {name:'Pulled Pork Plate', price:9.99, desc:'Pulled pork plate served with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
-          {name:'Boudin Balls', price:null, desc:'Frequently praised by reviewers; exact public pricing not visible in the report.', prep:'Snack', spice:'Medium', calories:'Unspecified'},
-          {name:'Corn Pudding', price:2.75, desc:'One of the most-mentioned sides in review excerpts.', prep:'Side', spice:'None', calories:'Unspecified'}
+    const MENU = {
+      "BBQ Plates": {
+        meta: "With two sides",
+        description: "Classic smokehouse plates and barbecue mains surfaced in the research summary.",
+        tags: ["bbq", "plates", "mains", "smoked"],
+        items: [
+          {name:"Full rack of ribs", price:"$19.99", desc:"Big plate-style rib option with two sides."},
+          {name:"1/2 rack of ribs", price:"$11.99", desc:"Smaller rib plate with two sides."},
+          {name:"Pulled pork plate", price:"$9.99", desc:"Pulled pork barbecue plate with two sides."},
+          {name:"Brisket plate", price:"$10.99", desc:"Smoked brisket plate with two sides."},
+          {name:"1/2 chicken plate", price:"$9.99", desc:"Half chicken with plate service and two sides."},
+          {name:"Smoked wings", price:"$7.99", desc:"Smoke-forward wing option from the menu board."}
         ]
       },
-      {
-        id:'bbq',
-        label:'BBQ Plates',
-        sub:'Ribs, pork, brisket',
-        emoji:'🍖',
-        glow:'rgba(255,122,217,.16)',
-        description:'BBQ plates from the photographed menu board. Public pricing appears to be from a captured board and may change.',
-        items:[
-          {name:'Full Rack of Ribs', price:19.99, desc:'Full rack BBQ plate with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
-          {name:'Half Rack of Ribs', price:11.99, desc:'Half rack BBQ plate with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
-          {name:'Pulled Pork Plate', price:9.99, desc:'Pulled pork BBQ plate with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
-          {name:'Brisket Plate', price:10.99, desc:'Brisket BBQ plate with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
-          {name:'Half Chicken Plate', price:9.99, desc:'Smoked half chicken plate with two sides.', prep:'Plate', spice:'Low', calories:'Unspecified'},
-          {name:'Smoked Wings', price:7.99, desc:'Smoked wings plate from the BBQ board.', prep:'Plate', spice:'Medium', calories:'Unspecified'}
+      "Burgers & Sandwiches": {
+        meta: "Served with one side",
+        description: "Burgers, sandwiches, and po-boys. Menu board notes indicate sandwiches are dressed with lettuce and tomato.",
+        tags: ["sandwiches", "po-boys", "burgers", "lunch"],
+        items: [
+          {name:"Hamburger", price:"$6.99", desc:"Classic burger with one side."},
+          {name:"Cheeseburger", price:"$7.99", desc:"Burger with cheese and one side."},
+          {name:"Bacon cheeseburger", price:"$8.99", desc:"Bacon-topped cheeseburger with one side."},
+          {name:"Pulled pork sandwich", price:"$7.99", desc:"Pulled pork on a sandwich format with one side."},
+          {name:"Brisket sandwich", price:"$8.99", desc:"Smoked brisket in sandwich form."},
+          {name:"Ribeye po-boy", price:"$10.99", desc:"Higher-ticket po-boy option from the menu board."},
+          {name:"Chicken sandwich", price:"$7.99", desc:"Chicken sandwich with one side."},
+          {name:"Shrimp po-boy", price:"$8.99", desc:"Seafood po-boy option."},
+          {name:"Crawfish po-boy", price:"$10.99", desc:"Crawfish po-boy from the public menu image."},
+          {name:"Catfish po-boy", price:"$8.99", desc:"Catfish po-boy with one side."}
         ]
       },
-      {
-        id:'sandwiches',
-        label:'Burgers & Po-Boys',
-        sub:'Sandwich lane',
-        emoji:'🥪',
-        glow:'rgba(255,218,142,.16)',
-        description:'Burgers, sandwiches, and po-boys listed on the public menu board. Sandwiches are noted as dressed with lettuce and tomato.',
-        items:[
-          {name:'Hamburger', price:6.99, desc:'Burger served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
-          {name:'Cheeseburger', price:7.99, desc:'Cheeseburger served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
-          {name:'Bacon Cheeseburger', price:8.99, desc:'Bacon cheeseburger served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
-          {name:'Pulled Pork Sandwich', price:7.99, desc:'Pulled pork sandwich served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
-          {name:'Brisket Sandwich', price:8.99, desc:'Brisket sandwich served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
-          {name:'Ribeye Po-Boy', price:10.99, desc:'Ribeye po-boy served with one side.', prep:'Po-boy', spice:'Low', calories:'Unspecified'},
-          {name:'Chicken Sandwich', price:7.99, desc:'Chicken sandwich served with one side.', prep:'Sandwich', spice:'Low', calories:'Unspecified'},
-          {name:'Shrimp Po-Boy', price:8.99, desc:'Shrimp po-boy served with one side.', prep:'Po-boy', spice:'Low', calories:'Unspecified'},
-          {name:'Crawfish Po-Boy', price:10.99, desc:'Crawfish po-boy served with one side.', prep:'Po-boy', spice:'Low', calories:'Unspecified'},
-          {name:'Catfish Po-Boy', price:8.99, desc:'Catfish po-boy served with one side.', prep:'Po-boy', spice:'Low', calories:'Unspecified'}
+      "Sides": {
+        meta: "Small and large pricing shown",
+        description: "Sides appear to be priced at $2.75 small and $6.99 large in the menu image referenced in your report.",
+        tags: ["sides", "shareable", "favorites"],
+        items: [
+          {name:"Baked beans", price:"$2.75 / $6.99", desc:"Small or large size."},
+          {name:"Corn pudding", price:"$2.75 / $6.99", desc:"Frequently praised in review excerpts."},
+          {name:"Potato salad", price:"$2.75 / $6.99", desc:"Classic cold side."},
+          {name:"Cole slaw", price:"$2.75 / $6.99", desc:"Smokehouse side staple."},
+          {name:"French fries", price:"$2.75 / $6.99", desc:"Traditional fries."},
+          {name:"Sweet potato waffle fries", price:"$2.75 / $6.99", desc:"Sweet potato variation with waffle cut texture."}
         ]
       },
-      {
-        id:'sides',
-        label:'Sides',
-        sub:'Small / large',
-        emoji:'🍟',
-        glow:'rgba(158,255,195,.16)',
-        description:'The visible sides board appears to price these at $2.75 small and $6.99 large.',
-        items:[
-          {name:'Baked Beans', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'},
-          {name:'Corn Pudding', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'},
-          {name:'Potato Salad', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'},
-          {name:'Cole Slaw', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'},
-          {name:'French Fries', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'},
-          {name:'Sweet Potato Waffle Fries', price:2.75, desc:'Small side. Large appears to be $6.99.', prep:'Small', spice:'None', calories:'Unspecified'}
+      "Boudin & Specialty Items": {
+        meta: "Publicly surfaced featured items",
+        description: "Items listed in the research summary without clearly visible prices on the captured menu board.",
+        tags: ["boudin", "specialty", "cajun", "favorites"],
+        items: [
+          {name:"Steamed boudin links", price:"Market / not shown", desc:"Price not clearly visible in the source menu image."},
+          {name:"Boudin balls", price:"Market / not shown", desc:"One of the most frequently praised items in review summaries."},
+          {name:"Pepper jack boudin balls", price:"Market / not shown", desc:"Cheesy variation listed in the report."},
+          {name:"Boudin egg rolls", price:"Market / not shown", desc:"Specialty Cajun-style item."},
+          {name:"Meat pies", price:"Market / not shown", desc:"Listed item without visible price in the captured board."},
+          {name:"Crawfish pies", price:"Market / not shown", desc:"Seafood pie offering surfaced in the research summary."}
         ]
       },
-      {
-        id:'specialty',
-        label:'Specialty Items',
-        sub:'Boudin + pies',
-        emoji:'🔥',
-        glow:'rgba(255,122,217,.18)',
-        description:'Featured deli-style items visible on the board, but public captured pricing was not readable in the report.',
-        items:[
-          {name:'Steamed Boudin Links', price:null, desc:'Specialty meat item listed on the public board.', prep:'Specialty', spice:'Medium', calories:'Unspecified'},
-          {name:'Boudin Balls', price:null, desc:'Frequently praised in review excerpts.', prep:'Specialty', spice:'Medium', calories:'Unspecified'},
-          {name:'Pepper Jack Boudin Balls', price:null, desc:'Boudin balls with pepper jack.', prep:'Specialty', spice:'Medium', calories:'Unspecified'},
-          {name:'Boudin Egg Rolls', price:null, desc:'Specialty item listed on the board.', prep:'Specialty', spice:'Medium', calories:'Unspecified'},
-          {name:'Meat Pies', price:null, desc:'Specialty pie item listed on the board.', prep:'Specialty', spice:'Medium', calories:'Unspecified'},
-          {name:'Crawfish Pies', price:null, desc:'Specialty pie item listed on the board.', prep:'Specialty', spice:'Medium', calories:'Unspecified'}
+      "Desserts": {
+        meta: "The Sweet",
+        description: "Desserts listed in the report; prices were not visible in the surfaced menu image except for one special dessert.",
+        tags: ["desserts", "sweet", "bakery"],
+        items: [
+          {name:"Homemade bread pudding", price:"Not shown", desc:"Frequently associated with take-home mentions in review notes."},
+          {name:"Creole cream cheesecake", price:"Not shown", desc:"Regional dessert option."},
+          {name:"Chocolate cake", price:"Not shown", desc:"Cake offering listed in the report."},
+          {name:"Carrot cake", price:"Not shown", desc:"Second cake option named in the report."},
+          {name:"Strawberry shortcake", price:"Not shown", desc:"Fruit-forward dessert option."}
         ]
       },
-      {
-        id:'desserts',
-        label:'Desserts',
-        sub:'The Sweet',
-        emoji:'🍰',
-        glow:'rgba(160,137,255,.18)',
-        description:'Desserts visible on the public menu image. Publicly accessible pricing was not readable for most dessert items.',
-        items:[
-          {name:'Homemade Bread Pudding', price:null, desc:'Dessert item listed under The Sweet.', prep:'Dessert', spice:'None', calories:'Unspecified'},
-          {name:'Creole Cream Cheesecake', price:null, desc:'Dessert item listed under The Sweet.', prep:'Dessert', spice:'None', calories:'Unspecified'},
-          {name:'Chocolate Cake', price:null, desc:'Dessert item listed under The Sweet.', prep:'Dessert', spice:'None', calories:'Unspecified'},
-          {name:'Carrot Cake', price:null, desc:'Dessert item listed under The Sweet.', prep:'Dessert', spice:'None', calories:'Unspecified'},
-          {name:'Strawberry Shortcake', price:null, desc:'Dessert item listed under The Sweet.', prep:'Dessert', spice:'None', calories:'Unspecified'},
-          {name:'Miss Mud Pie', price:7.00, desc:'A dessert price visible on the specials snapshot.', prep:'Dessert', spice:'None', calories:'Unspecified'}
-        ]
-      },
-      {
-        id:'specials',
-        label:'Specials',
-        sub:'Sample snapshot',
-        emoji:'⚡',
-        glow:'rgba(120,236,255,.16)',
-        description:'These came from an example daily/weekly specials board image in the report and may not be current.',
-        items:[
-          {name:'Sweet Thai Chili Wings', price:16.00, desc:'Specials board appetizer.', prep:'App', spice:'Medium', calories:'Unspecified'},
-          {name:'Eggplant Pirogue with Stuffing', price:26.00, desc:'Entree with seafood-style stuffing from specials snapshot.', prep:'Entree', spice:'Medium', calories:'Unspecified'},
-          {name:'Blackened Lemon Fish', price:28.00, desc:'Served with cream spinach and grilled crawfish tails.', prep:'Entree', spice:'Medium', calories:'Unspecified'},
-          {name:'Jack Daniel’s BBQ Shrimp + Bone-In Pork Chop', price:26.00, desc:'Served with mac and cheese and green beans.', prep:'Entree', spice:'Medium', calories:'Unspecified'},
-          {name:'Grilled Salmon with Crabmeat', price:28.00, desc:'With avocado cream sauce and sides.', prep:'Entree', spice:'Low', calories:'Unspecified'}
-        ]
-      },
-      {
-        id:'visit',
-        label:'Visit Info',
-        sub:'Hours + contact',
-        emoji:'📍',
-        glow:'rgba(255,218,142,.16)',
-        description:'Core public details from the report for location, hours, takeout, and accessibility.',
-        items:[
-          {name:'Address', price:null, desc:'6779 US Highway 61, St. Francisville, LA 70775', prep:'Location', spice:'—', calories:'—'},
-          {name:'Phone', price:null, desc:'(225) 245-5046', prep:'Contact', spice:'—', calories:'—'},
-          {name:'Email', price:null, desc:'francissmokehouse@att.net', prep:'Contact', spice:'—', calories:'—'},
-          {name:'Hours', price:null, desc:'Mon–Sat 10:00 AM–6:00 PM; Sun 10:00 AM–3:00 PM', prep:'Hours', spice:'—', calories:'—'},
-          {name:'Features', price:null, desc:'Takeout, parking available, wheelchair accessibility noted in public sources.', prep:'Service', spice:'—', calories:'—'}
+      "Specials Snapshot": {
+        meta: "Example specials board from sample snapshot",
+        description: "These were described as example special-board items from a surfaced image in your research summary.",
+        tags: ["specials", "premium", "seafood", "entrees"],
+        items: [
+          {name:"Sweet Thai chili wings (app)", price:"$16", desc:"Appetizer special."},
+          {name:"Eggplant pirogue with seafood-style stuffing", price:"$26", desc:"Higher-end entrée special."},
+          {name:"Blackened lemon fish with cream spinach and grilled crawfish tails", price:"$28", desc:"Seafood entrée special."},
+          {name:"Jack Daniel’s BBQ shrimp + 14oz bone-in pork chop with mac & cheese and green beans", price:"$26", desc:"Large-format combo special."},
+          {name:"Grilled salmon with crabmeat and avocado cream sauce", price:"$28", desc:"Seafood special with sauce and sides."},
+          {name:"Miss Mud Pie", price:"$7", desc:"Dessert special noted in the snapshot."}
         ]
       }
-    ];
-
-    const state = {
-      index: 0,
-      openCategoryId: categories[0].id
     };
 
-    const orbitPlane = document.getElementById('orbitPlane');
-    const coreTitle = document.getElementById('coreTitle');
-    const coreSub = document.getElementById('coreSub');
-    const itemList = document.getElementById('itemList');
-    const panelTitle = document.getElementById('panelTitle');
-    const panelSubtitle = document.getElementById('panelSubtitle');
-    const panelFoot = document.getElementById('panelFoot');
+    const tabsEl = document.getElementById('menuTabs');
+    const filtersEl = document.getElementById('menuFilters');
+    const categoryListEl = document.getElementById('categoryList');
+    const detailViewEl = document.getElementById('detailView');
+    const searchEl = document.getElementById('menuSearch');
+    const surpriseBtn = document.getElementById('surpriseBtn');
 
-    function currentCategory() {
-      return categories[state.index];
+    const state = {
+      activeTab: 'All',
+      activeFilter: 'all',
+      activeCategory: Object.keys(MENU)[0],
+      query: ''
+    };
+
+    const tabDefs = ['All', 'Best Value', 'Signature', 'Desserts', 'Specials'];
+    const filterDefs = [
+      {id:'all', label:'Everything'},
+      {id:'bbq', label:'BBQ'},
+      {id:'sandwiches', label:'Sandwiches'},
+      {id:'boudin', label:'Boudin'},
+      {id:'sides', label:'Sides'},
+      {id:'desserts', label:'Desserts'},
+      {id:'specials', label:'Specials'}
+    ];
+
+    function slug(s){ return String(s).toLowerCase(); }
+
+    function matchesTab(name, category){
+      if(state.activeTab === 'All') return true;
+      if(state.activeTab === 'Best Value') return ['BBQ Plates','Burgers & Sandwiches','Sides'].includes(name);
+      if(state.activeTab === 'Signature') return ['BBQ Plates','Boudin & Specialty Items','Burgers & Sandwiches'].includes(name);
+      if(state.activeTab === 'Desserts') return name === 'Desserts';
+      if(state.activeTab === 'Specials') return name === 'Specials Snapshot';
+      return true;
     }
 
-    function openedCategory() {
-      return categories.find(c => c.id === state.openCategoryId) || currentCategory();
+    function matchesFilter(category){
+      if(state.activeFilter === 'all') return true;
+      return (category.tags || []).includes(state.activeFilter);
     }
 
-    function priceText(value) {
-      return value == null ? 'Ask in store' : `$${Number(value).toFixed(2)}`;
+    function matchesQuery(category){
+      if(!state.query.trim()) return true;
+      const q = slug(state.query.trim());
+      const hay = [
+        category.description,
+        ...(category.tags || []),
+        ...category.items.map(i => `${i.name} ${i.desc} ${i.price}`)
+      ].join(' ').toLowerCase();
+      return hay.includes(q);
     }
 
-    function renderOrbit() {
-      orbitPlane.querySelectorAll('.node-anchor').forEach(n => n.remove());
-      const count = categories.length;
-      const step = 360 / count;
+    function getVisibleCategories(){
+      return Object.entries(MENU)
+        .filter(([name, cat]) => matchesTab(name, cat) && matchesFilter(cat) && matchesQuery(cat));
+    }
 
-      categories.forEach((node, index) => {
-        const relative = (index - state.index) * step;
+    function renderTabs(){
+      tabsEl.innerHTML = tabDefs.map(tab => `
+        <button class="tab ${tab === state.activeTab ? 'active' : ''}" data-tab="${tab}">${tab}</button>
+      `).join('');
+      tabsEl.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
+        state.activeTab = btn.dataset.tab;
+        syncActiveCategory();
+        render();
+      }));
+    }
 
-        const anchor = document.createElement('div');
-        anchor.className = 'node-anchor';
-        anchor.style.transform = `rotate(${relative}deg) translateY(calc(var(--radius) * -1))`;
+    function renderFilters(){
+      filtersEl.innerHTML = filterDefs.map(f => `
+        <button class="filter ${f.id === state.activeFilter ? 'active' : ''}" data-filter="${f.id}">${f.label}</button>
+      `).join('');
+      filtersEl.querySelectorAll('.filter').forEach(btn => btn.addEventListener('click', () => {
+        state.activeFilter = btn.dataset.filter;
+        syncActiveCategory();
+        render();
+      }));
+    }
 
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'node' + (index === state.index ? ' active front' : '');
-        btn.style.setProperty('--glow', node.glow);
-        btn.style.transform = `translate(-50%, -50%) rotate(${-relative}deg) rotateX(calc(var(--tilt) * -1)) ${index === state.index ? 'scale(1.06)' : 'scale(1)'}`;
-        btn.innerHTML = `
-          <div class="emoji">${node.emoji}</div>
-          <strong>${node.label}</strong>
-          <span>${node.sub}</span>
-        `;
+    function syncActiveCategory(){
+      const visible = getVisibleCategories();
+      if(!visible.length){
+        state.activeCategory = '';
+        return;
+      }
+      if(!visible.some(([name]) => name === state.activeCategory)){
+        state.activeCategory = visible[0][0];
+      }
+    }
 
-        btn.addEventListener('click', () => {
-          if (state.index !== index) {
-            state.index = index;
-            update();
-          } else {
-            state.openCategoryId = node.id;
-            renderPanel();
-            coreSub.textContent = 'Category open';
-          }
-        });
+    function renderCategoryList(){
+      const visible = getVisibleCategories();
+      if(!visible.length){
+        categoryListEl.innerHTML = `<div class="empty">No categories matched your current search or filters.</div>`;
+        return;
+      }
+      categoryListEl.innerHTML = visible.map(([name, cat]) => `
+        <button class="category-card ${name === state.activeCategory ? 'active' : ''}" data-category="${name}">
+          <div class="name">${name}</div>
+          <div class="meta">${cat.meta}</div>
+          <div class="count">${cat.items.length} items</div>
+        </button>
+      `).join('');
+      categoryListEl.querySelectorAll('.category-card').forEach(card => card.addEventListener('click', () => {
+        state.activeCategory = card.dataset.category;
+        renderDetail();
+        renderCategoryList();
+      }));
+    }
 
-        anchor.appendChild(btn);
-        orbitPlane.appendChild(anchor);
+    function renderDetail(){
+      if(!state.activeCategory || !MENU[state.activeCategory]){
+        detailViewEl.innerHTML = `<div class="empty">No menu category selected.</div>`;
+        return;
+      }
+      const cat = MENU[state.activeCategory];
+      const q = slug(state.query.trim());
+      const filteredItems = cat.items.filter(item => {
+        if(!q) return true;
+        return slug(`${item.name} ${item.desc} ${item.price}`).includes(q);
       });
 
-      coreTitle.textContent = currentCategory().label;
-      coreSub.textContent = state.openCategoryId === currentCategory().id
-        ? 'Category open'
-        : 'Click again to open category';
-    }
-
-    function renderPanel() {
-      const category = openedCategory();
-      panelTitle.textContent = category.label;
-      panelSubtitle.textContent = category.description;
-      panelFoot.textContent = state.openCategoryId === currentCategory().id
-        ? 'Item details are based on the research report you pasted. Prices marked “Ask in store” were not visible in the publicly captured menu images.'
-        : 'Bring a tile to the front, then click it again to open that category here.';
-
-      itemList.innerHTML = '';
-      category.items.forEach((item) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'item';
-        btn.innerHTML = `
+      detailViewEl.innerHTML = `
+        <div class="detail-head">
           <div>
-            <h3>${item.name}</h3>
-            <p>${item.desc}</p>
-            <div class="meta">
-              <span class="tag">${item.prep}</span>
-              <span class="tag">${item.spice}</span>
-              <span class="tag">${item.calories}</span>
+            <h3 class="detail-title">${state.activeCategory}</h3>
+            <div class="detail-sub">${cat.description}</div>
+            <div class="tagrow">${(cat.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}</div>
+          </div>
+          <div class="tag">${cat.meta}</div>
+        </div>
+
+        ${state.activeCategory === 'BBQ Plates' ? `
+          <div class="featured">
+            <div class="featured-card">
+              <div class="kicker">Signature pick</div>
+              <h4>Brisket plate</h4>
+              <p>One of the clearest “must-look-at” items from the report thanks to repeated brisket praise in the reviews.</p>
+            </div>
+            <div class="featured-card">
+              <div class="kicker">Classic order</div>
+              <h4>Pulled pork plate</h4>
+              <p>A dependable smokehouse starting point if someone wants a straightforward barbecue plate.</p>
+            </div>
+            <div class="featured-card">
+              <div class="kicker">Big appetite</div>
+              <h4>Full rack of ribs</h4>
+              <p>The highest-profile rib option shown in the surfaced pricing board.</p>
             </div>
           </div>
-          <div class="price">${priceText(item.price)}</div>
-        `;
-        btn.addEventListener('click', () => openModal(item, category));
-        itemList.appendChild(btn);
-      });
-    }
+        ` : ''}
 
-    function update() {
-      renderOrbit();
-      renderPanel();
-    }
+        <ul class="list">
+          ${filteredItems.length ? filteredItems.map(item => `
+            <li class="item">
+              <div class="item-top">
+                <div class="item-name">${item.name}</div>
+                <div class="price">${item.price}</div>
+              </div>
+              <div class="desc">${item.desc}</div>
+            </li>
+          `).join('') : `<div class="empty">No items in this category matched your search.</div>`}
+        </ul>
 
-    function changeIndex(delta) {
-      state.index = (state.index + delta + categories.length) % categories.length;
-      update();
-    }
-
-    function openModal(item, category) {
-      document.getElementById('modalTitle').textContent = item.name;
-      document.getElementById('modalDesc').textContent = item.desc;
-      document.getElementById('modalPrice').textContent = priceText(item.price);
-      document.getElementById('modalMeta').innerHTML = `
-        <div class="detail"><div class="label">Category</div><div class="value">${category.label}</div></div>
-        <div class="detail"><div class="label">Prep</div><div class="value">${item.prep}</div></div>
-        <div class="detail"><div class="label">Spice</div><div class="value">${item.spice}</div></div>
-        <div class="detail"><div class="label">Calories</div><div class="value">${item.calories}</div></div>
+        <div class="note-line">Prices and availability are based on the research material you provided and may not reflect live in-store changes.</div>
       `;
-      document.getElementById('itemModal').classList.add('show');
-      document.getElementById('itemModal').setAttribute('aria-hidden', 'false');
     }
 
-    function closeModal() {
-      document.getElementById('itemModal').classList.remove('show');
-      document.getElementById('itemModal').setAttribute('aria-hidden', 'true');
+    function render(){
+      renderTabs();
+      renderFilters();
+      renderCategoryList();
+      renderDetail();
     }
 
-    document.getElementById('prevBtn').addEventListener('click', () => changeIndex(-1));
-    document.getElementById('nextBtn').addEventListener('click', () => changeIndex(1));
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') changeIndex(-1);
-      if (e.key === 'ArrowRight') changeIndex(1);
-      if (e.key === 'Escape') closeModal();
-    });
-    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-    document.getElementById('modalBackBtn').addEventListener('click', closeModal);
-    document.getElementById('itemModal').addEventListener('click', (e) => {
-      if (e.target.id === 'itemModal') closeModal();
+    searchEl.addEventListener('input', e => {
+      state.query = e.target.value;
+      syncActiveCategory();
+      render();
     });
 
-    update();
+    surpriseBtn.addEventListener('click', () => {
+      const visible = getVisibleCategories();
+      const allItems = visible.flatMap(([name, cat]) => cat.items.map(item => ({category:name, ...item})));
+      if(!allItems.length) return;
+      const pick = allItems[Math.floor(Math.random() * allItems.length)];
+      state.activeCategory = pick.category;
+      render();
+      const block = detailViewEl.querySelector('.detail-head');
+      if(block){
+        const badge = document.createElement('div');
+        badge.className = 'quote';
+        badge.innerHTML = `<p><strong>Suggestion for you:</strong> ${pick.name} — ${pick.price}</p><div class="src">Random pick based on your current filters</div>`;
+        detailViewEl.insertBefore(badge, detailViewEl.querySelector('.list'));
+      }
+    });
+
+    function renderHours(){
+      const hours = [
+        ['Sunday','10:00 AM – 3:00 PM'],
+        ['Monday','10:00 AM – 6:00 PM'],
+        ['Tuesday','10:00 AM – 6:00 PM'],
+        ['Wednesday','10:00 AM – 6:00 PM'],
+        ['Thursday','10:00 AM – 6:00 PM'],
+        ['Friday','10:00 AM – 6:00 PM'],
+        ['Saturday','10:00 AM – 6:00 PM']
+      ];
+      const todayIdx = new Date().getDay();
+      const todayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][todayIdx];
+      document.getElementById('hoursGrid').innerHTML = hours.map(([day, time]) => `
+        <div class="hour-row ${day === todayName ? 'today' : ''}">
+          <div class="hour-day">${day}</div>
+          <div class="hour-time">${time}</div>
+        </div>
+      `).join('');
+    }
+
+    function updateOpenStatus(){
+      const now = new Date();
+      const day = now.getDay();
+      const mins = now.getHours() * 60 + now.getMinutes();
+      const open = 10 * 60;
+      const close = day === 0 ? 15 * 60 : 18 * 60;
+      const isOpen = mins >= open && mins < close;
+      const el = document.getElementById('openStatus');
+      if(isOpen){
+        const left = close - mins;
+        const h = Math.floor(left / 60);
+        const m = left % 60;
+        el.className = 'openbar open';
+        el.textContent = `Open now • Closes in ${h ? h + 'h ' : ''}${m}m`;
+      } else {
+        el.className = 'openbar closed';
+        if(mins < open){
+          el.textContent = 'Currently closed • Opens today at 10:00 AM';
+        } else {
+          const next = day === 6 ? 'Sunday at 10:00 AM' : 'tomorrow at 10:00 AM';
+          el.textContent = `Currently closed • Opens ${next}`;
+        }
+      }
+    }
+
+    syncActiveCategory();
+    render();
+    renderHours();
+    updateOpenStatus();
+    setInterval(updateOpenStatus, 60000);
   </script>
 </body>
 </html>
