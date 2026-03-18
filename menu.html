@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Fransis – Future Menu</title>
-  <meta name="description" content="Fransis interactive future menu" />
+  <title>Hot Headz Southern Foods – Future Menu</title>
+  <meta name="description" content="Hot Headz Southern Foods interactive future menu" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -576,6 +576,29 @@
       cursor: pointer;
     }
 
+
+    .special-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
+      border: 1px solid rgba(255,200,130,.45);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      box-shadow: 0 10px 24px rgba(192,90,42,.24);
+    }
+    .special-off {
+      text-align: center;
+      color: rgba(255,255,255,.82);
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
     .hide { display: none !important; }
   
 .nowbar {
@@ -613,7 +636,7 @@
       <div class="daybar" role="tablist" aria-label="Day selector">
         <button class="daybtn active" type="button" role="tab" aria-controls="panel-today" aria-selected="true" id="dayBtnToday">Today</button>
         <button class="daybtn" type="button" role="tab" aria-controls="panel-tomorrow" aria-selected="false" id="dayBtnTomorrow">Tomorrow</button>
-        <button class="daybtn" type="button" role="tab" aria-controls="panel-advanced" aria-selected="false" id="dayBtnAdvanced">Advanced Menu</button>
+        <button class="daybtn" type="button" role="tab" aria-controls="panel-advanced" aria-selected="false" id="dayBtnAdvanced">Daily Special</button>
       </div>
     </div>
 
@@ -1502,7 +1525,7 @@ function initPanel(prefix, data, isoDate, displayName) {
           if (link) window.location.href = link;
         });
         async function sharePage() {
-          const data = { title: document.title, text: "Check out Fransis!", url: window.location.href };
+          const data = { title: document.title, text: "Check out Hot Headz!", url: window.location.href };
           try {
             if (navigator.share) await navigator.share(data);
             else if (navigator.clipboard) { await navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
