@@ -14,17 +14,16 @@
       --violet:#a089ff;
       --pink:#ff7ad9;
       --line:rgba(255,255,255,.12);
-      --panel:rgba(8,14,28,.56);
+      --panel:rgba(8,14,28,.58);
       --shadow:0 24px 80px rgba(0,0,0,.42);
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-right: env(safe-area-inset-right, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --safe-left: env(safe-area-inset-left, 0px);
-      --orbit-rotation:0deg;
-      --count:8;
       --radius:260px;
-      --node-size:132px;
+      --node-size:128px;
       --tilt:62deg;
+      --spin:0deg;
     }
 
     *{box-sizing:border-box}
@@ -88,12 +87,21 @@
 
     .scene{
       position:relative;
-      width:min(900px, 100%);
+      width:min(1220px, 100%);
       height:min(900px, calc(100dvh - 36px - var(--safe-top) - var(--safe-bottom)));
       display:grid;
-      place-items:center;
+      grid-template-columns:minmax(420px, 1fr) 400px;
+      gap:22px;
+      align-items:center;
       perspective:1800px;
       user-select:none;
+    }
+
+    .left{
+      position:relative;
+      min-height:100%;
+      display:grid;
+      place-items:center;
     }
 
     .glow-aura{
@@ -106,17 +114,7 @@
         radial-gradient(circle at 60% 40%, rgba(160,137,255,.10), transparent 34%),
         radial-gradient(circle at 45% 65%, rgba(255,122,217,.08), transparent 28%);
       filter:blur(18px);
-      transform:translateZ(0);
       pointer-events:none;
-    }
-
-    .orbit-wrap{
-      position:relative;
-      width:100%;
-      height:100%;
-      display:grid;
-      place-items:center;
-      transform-style:preserve-3d;
     }
 
     .ring-shell{
@@ -128,12 +126,11 @@
       transform-style:preserve-3d;
     }
 
-    .orbit{
-      position:relative;
-      width:100%;
-      height:100%;
+    .orbit-plane{
+      position:absolute;
+      inset:0;
       transform-style:preserve-3d;
-      transform:rotateX(var(--tilt)) rotateZ(var(--orbit-rotation));
+      transform:rotateX(var(--tilt)) rotateZ(var(--spin));
       transition:transform 700ms cubic-bezier(.2,.8,.2,1);
       will-change:transform;
     }
@@ -176,6 +173,17 @@
       pointer-events:none;
     }
 
+    .node-anchor{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:0;
+      height:0;
+      transform-style:preserve-3d;
+      transition:transform 700ms cubic-bezier(.2,.8,.2,1);
+      pointer-events:none;
+    }
+
     .node{
       position:absolute;
       left:50%;
@@ -206,6 +214,7 @@
         border-color .18s ease,
         box-shadow .18s ease,
         background .18s ease;
+      pointer-events:auto;
     }
 
     .node::before{
@@ -239,6 +248,10 @@
         0 22px 40px rgba(0,0,0,.34),
         0 0 34px rgba(120,236,255,.18),
         inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .node.front{
+      transform:translate(-50%, -50%) rotateX(calc(var(--tilt) * -1)) scale(1.06);
     }
 
     .node .emoji{
@@ -324,6 +337,126 @@
       font-size:.95rem;
     }
 
+    .panel{
+      position:relative;
+      min-height:100%;
+      border-radius:28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
+        var(--panel);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);
+      backdrop-filter:blur(18px);
+      display:grid;
+      grid-template-rows:auto minmax(0, 1fr) auto;
+      overflow:hidden;
+    }
+
+    .panel-head{
+      padding:18px 18px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:grid;
+      gap:8px;
+    }
+
+    .panel-head h2{
+      margin:0;
+      font-size:1.3rem;
+      letter-spacing:-.03em;
+    }
+
+    .panel-head p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.45;
+      font-size:.92rem;
+    }
+
+    .item-list{
+      padding:14px;
+      overflow:auto;
+      display:grid;
+      gap:10px;
+      align-content:start;
+    }
+
+    .item{
+      width:100%;
+      text-align:left;
+      border:none;
+      min-height:86px;
+      padding:14px;
+      border-radius:20px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
+        rgba(7,13,28,.58);
+      border:1px solid rgba(255,255,255,.1);
+      color:var(--text);
+      cursor:pointer;
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) auto;
+      gap:12px;
+      transition:transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .item:hover,
+    .item:focus-visible{
+      outline:none;
+      transform:translateY(-1px);
+      border-color:rgba(120,236,255,.28);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025)),
+        rgba(7,13,28,.68);
+    }
+
+    .item h3{
+      margin:0;
+      font-size:1rem;
+      letter-spacing:-.02em;
+    }
+
+    .item p{
+      margin:8px 0 0;
+      color:#d4e5f5;
+      font-size:.9rem;
+      line-height:1.45;
+    }
+
+    .price{
+      color:var(--mint);
+      font-size:1rem;
+      font-weight:700;
+      white-space:nowrap;
+      align-self:start;
+    }
+
+    .meta{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      min-height:28px;
+      padding:0 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1);
+      color:#def3ff;
+      font-size:.72rem;
+    }
+
+    .panel-foot{
+      padding:14px 18px 18px;
+      border-top:1px solid rgba(255,255,255,.08);
+      color:var(--muted);
+      font-size:.85rem;
+      line-height:1.4;
+    }
+
     .controls{
       position:absolute;
       inset:auto auto 16px 50%;
@@ -354,9 +487,6 @@
       outline:none;
       transform:translateY(-1px);
       border-color:rgba(120,236,255,.34);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03)),
-        rgba(8,14,28,.74);
     }
 
     .hint{
@@ -369,31 +499,134 @@
       background:rgba(8,14,28,.48);
       color:#dcedfb;
       font-size:.84rem;
-      letter-spacing:.02em;
       backdrop-filter:blur(10px);
       z-index:5;
       text-align:center;
       white-space:nowrap;
     }
 
-    @media (max-width: 900px){
-      :root{
-        --radius:220px;
-        --node-size:118px;
-      }
-      .scene{
-        height:min(820px, calc(100dvh - 24px - var(--safe-top) - var(--safe-bottom)));
-      }
-      .core{
-        width:176px;
-        height:176px;
-      }
-      .controls{
-        bottom:10px;
-      }
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(3,6,14,.66);
+      backdrop-filter:blur(12px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:40;
     }
 
-    @media (max-width: 640px){
+    .modal.show{ display:flex; }
+
+    .modal-card{
+      width:min(760px, 100%);
+      border-radius:28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
+        rgba(8,14,28,.82);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);
+      backdrop-filter:blur(18px);
+      padding:18px;
+      display:grid;
+      gap:16px;
+    }
+
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:start;
+    }
+
+    .modal-copy h3{
+      margin:0;
+      font-size:1.5rem;
+      letter-spacing:-.03em;
+    }
+
+    .modal-copy p{
+      margin:10px 0 0;
+      color:#d3e4f3;
+      line-height:1.6;
+    }
+
+    .detail-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:10px;
+    }
+
+    .detail{
+      border-radius:18px;
+      padding:12px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+    }
+
+    .detail .label{
+      color:var(--muted);
+      font-size:.76rem;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      margin-bottom:8px;
+    }
+
+    .detail .value{
+      font-size:.95rem;
+      font-weight:600;
+    }
+
+    .modal-actions{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      min-height:44px;
+      padding:0 16px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      cursor:pointer;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    }
+
+    .btn.primary{
+      background:
+        linear-gradient(135deg, rgba(120,236,255,.16), rgba(160,137,255,.18) 58%, rgba(255,122,217,.14)),
+        rgba(7,13,28,.84);
+      border-color:rgba(120,236,255,.34);
+    }
+
+    .icon-btn{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      cursor:pointer;
+    }
+
+    @media (max-width: 1080px){
+      .scene{
+        grid-template-columns:1fr;
+        height:min(1200px, calc(100dvh - 24px - var(--safe-top) - var(--safe-bottom)));
+        overflow:auto;
+        padding-bottom:90px;
+      }
+      .left{ min-height:620px; }
+      .panel{ min-height:420px; }
+      .controls{ position:fixed; bottom:10px; }
+    }
+
+    @media (max-width: 680px){
       :root{
         --radius:180px;
         --node-size:96px;
@@ -403,44 +636,33 @@
         height:min(96vw, 520px);
       }
       .core{
-        width:144px;
-        height:144px;
+        width:146px;
+        height:146px;
         padding:18px;
       }
-      .core-text strong{
-        font-size:.92rem;
-      }
-      .core-text span{
-        font-size:.82rem;
-      }
+      .core-text strong{ font-size:.92rem; }
+      .core-text span{ font-size:.82rem; }
       .node{
         border-radius:24px;
         padding:10px;
       }
-      .node .emoji{
-        font-size:1.35rem;
-      }
-      .node strong{
-        font-size:.8rem;
-      }
-      .node span{
-        font-size:.68rem;
-        max-width:74px;
+      .node .emoji{ font-size:1.35rem; }
+      .node strong{ font-size:.8rem; }
+      .node span{ font-size:.68rem; max-width:74px; }
+      .detail-grid{ grid-template-columns:1fr 1fr; }
+      .hint{
+        font-size:.76rem;
+        white-space:normal;
+        width:min(90vw, 360px);
       }
       .controls{
-        width:100%;
-        padding:0 8px;
+        width:calc(100vw - 20px);
         gap:8px;
       }
       .ctrl{
         min-width:0;
         flex:1 1 0;
         padding:0 10px;
-      }
-      .hint{
-        font-size:.76rem;
-        white-space:normal;
-        width:min(90vw, 360px);
       }
     }
 
@@ -455,13 +677,12 @@
 <body>
   <main class="app">
     <div class="scene">
-      <div class="glow-aura" aria-hidden="true"></div>
+      <section class="left">
+        <div class="glow-aura" aria-hidden="true"></div>
+        <div class="hint">First click rotates a tile to the front. Click the front tile again to open its category.</div>
 
-      <div class="hint">Tap a tile or use the arrows. The whole orbit rotates together while every tile stays facing forward.</div>
-
-      <div class="orbit-wrap">
         <div class="ring-shell">
-          <div class="orbit" id="orbit">
+          <div class="orbit-plane" id="orbitPlane">
             <div class="ring"></div>
             <div class="ring-two"></div>
             <div class="ring-three"></div>
@@ -471,101 +692,288 @@
           <div class="core">
             <div class="core-text">
               <strong id="coreTitle">Featured</strong>
-              <span id="coreSub">Orbit navigator</span>
+              <span id="coreSub">Tap a tile to bring it forward</span>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="controls">
-        <button class="ctrl" id="prevBtn" type="button">← Previous</button>
-        <button class="ctrl" id="nextBtn" type="button">Next →</button>
-      </div>
+        <div class="controls">
+          <button class="ctrl" id="prevBtn" type="button">← Previous</button>
+          <button class="ctrl" id="nextBtn" type="button">Next →</button>
+        </div>
+      </section>
+
+      <aside class="panel" id="categoryPanel">
+        <div class="panel-head">
+          <h2 id="panelTitle">Featured</h2>
+          <p id="panelSubtitle">Click the front tile again to open this category. Then click an item to see details and pricing.</p>
+        </div>
+        <div class="item-list" id="itemList"></div>
+        <div class="panel-foot" id="panelFoot">This is placeholder menu content. Once you send your real restaurant info, I can replace every category, item, description, and price.</div>
+      </aside>
     </div>
   </main>
 
+  <div class="modal" id="itemModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-copy">
+          <h3 id="modalTitle">Item</h3>
+          <p id="modalDesc"></p>
+        </div>
+        <button class="icon-btn" id="closeModalBtn" type="button" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="detail-grid" id="modalMeta"></div>
+      <div class="modal-actions">
+        <div style="font-size:1.25rem; font-weight:700; color:var(--mint);" id="modalPrice">$0.00</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn" id="modalBackBtn" type="button">Back</button>
+          <button class="btn primary" type="button">Add to order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const nodes = [
-      { id:'featured', label:'Featured', sub:'Top signals', emoji:'✦', glow:'rgba(120,236,255,.18)' },
-      { id:'sandwiches', label:'Sandwiches', sub:'Stacked heat', emoji:'🥪', glow:'rgba(255,218,142,.16)' },
-      { id:'plates', label:'Plates', sub:'Big comfort', emoji:'🍗', glow:'rgba(255,122,217,.16)' },
-      { id:'desserts', label:'Desserts', sub:'Afterglow', emoji:'🍰', glow:'rgba(160,137,255,.18)' },
-      { id:'drinks', label:'Drinks', sub:'Cold charge', emoji:'🥤', glow:'rgba(158,255,195,.16)' },
-      { id:'specials', label:'Specials', sub:'Limited drop', emoji:'🔥', glow:'rgba(255,122,217,.18)' },
-      { id:'combos', label:'Combos', sub:'Built sets', emoji:'⚡', glow:'rgba(120,236,255,.16)' },
-      { id:'catering', label:'Catering', sub:'Large orders', emoji:'🚀', glow:'rgba(160,137,255,.16)' }
+    const categories = [
+      {
+        id:'featured',
+        label:'Featured',
+        sub:'Top signals',
+        emoji:'✦',
+        glow:'rgba(120,236,255,.18)',
+        description:'Spotlight items for the menu experience.',
+        items:[
+          {name:'Hot Honey Firebird', price:17, desc:'Crispy chicken, hot honey lacquer, pickles, comeback slaw, and toasted brioche.', prep:'10 min', spice:'Medium', calories:'790 cal'},
+          {name:'Bayou Smoke Burger', price:18, desc:'Double smash patties, smoked cheddar, onion jam, pepper mayo, and charred bun edges.', prep:'12 min', spice:'Low', calories:'920 cal'},
+          {name:'Delta Truffle Pasta', price:16, desc:'Creamy truffle sauce, black pepper, pecorino snowfall, and buttery toasted crumbs.', prep:'11 min', spice:'Low', calories:'710 cal'}
+        ]
+      },
+      {
+        id:'sandwiches',
+        label:'Sandwiches',
+        sub:'Stacked heat',
+        emoji:'🥪',
+        glow:'rgba(255,218,142,.16)',
+        description:'Fast, dramatic, stacked sandwiches.',
+        items:[
+          {name:'Comeback Shrimp Po-Boy', price:16, desc:'Crispy shrimp, comeback sauce, lettuce shred, tomato, and lemon pepper dust.', prep:'10 min', spice:'Low', calories:'690 cal'},
+          {name:'Southern Melt Deluxe', price:15, desc:'Sliced beef, caramelized onions, provolone melt, and garlic butter hoagie.', prep:'11 min', spice:'Low', calories:'760 cal'},
+          {name:'Heatwave Club', price:17, desc:'Blackened chicken, pepper jack, bacon, jalapeno aioli, and tomato jam.', prep:'12 min', spice:'High', calories:'810 cal'}
+        ]
+      },
+      {
+        id:'plates',
+        label:'Plates',
+        sub:'Big comfort',
+        emoji:'🍗',
+        glow:'rgba(255,122,217,.16)',
+        description:'Heavier dinner plates and comfort meals.',
+        items:[
+          {name:'Blackened Catfish Plate', price:19, desc:'Blackened catfish, dirty rice, green beans, and lemon pepper butter.', prep:'14 min', spice:'Medium', calories:'730 cal'},
+          {name:'Braised Rib Plate', price:23, desc:'Slow braised short rib, whipped mash, roasted carrots, and brown butter gravy.', prep:'18 min', spice:'Low', calories:'960 cal'},
+          {name:'Nashville Heat Tenders', price:18, desc:'Three giant tenders, pickles, waffle fries, and cooling white sauce.', prep:'12 min', spice:'High', calories:'890 cal'}
+        ]
+      },
+      {
+        id:'desserts',
+        label:'Desserts',
+        sub:'Afterglow',
+        emoji:'🍰',
+        glow:'rgba(160,137,255,.18)',
+        description:'Finish with premium sweet items.',
+        items:[
+          {name:'Velvet Banana Pudding', price:8, desc:'Whipped vanilla pudding, brown butter wafers, and banana cream ribbons.', prep:'5 min', spice:'None', calories:'480 cal'},
+          {name:'Midnight Lava Cake', price:9, desc:'Dark chocolate cake with molten center and cold vanilla cloud.', prep:'7 min', spice:'None', calories:'560 cal'},
+          {name:'Neon Peach Cobbler', price:9, desc:'Cobbler crust, roasted peaches, cinnamon syrup, and cool cream.', prep:'7 min', spice:'None', calories:'520 cal'}
+        ]
+      },
+      {
+        id:'drinks',
+        label:'Drinks',
+        sub:'Cold charge',
+        emoji:'🥤',
+        glow:'rgba(158,255,195,.16)',
+        description:'Cold drinks and signature refreshers.',
+        items:[
+          {name:'Laser Sweet Tea', price:4, desc:'Black tea, citrus peel, cane sugar, and plenty of ice.', prep:'2 min', spice:'None', calories:'150 cal'},
+          {name:'Berry Fizz Cooler', price:5, desc:'Blueberry syrup, lemon, soda, and mint sparkle.', prep:'3 min', spice:'None', calories:'130 cal'},
+          {name:'Peach Lemon Shock', price:5, desc:'Peach nectar, lemon punch, and a sugar rim glow.', prep:'3 min', spice:'None', calories:'160 cal'}
+        ]
+      },
+      {
+        id:'specials',
+        label:'Specials',
+        sub:'Limited drop',
+        emoji:'🔥',
+        glow:'rgba(255,122,217,.18)',
+        description:'Limited-time or rotating featured items.',
+        items:[
+          {name:'Chef Smoke Sampler', price:26, desc:'A rotating trio of smoked proteins, pickles, sauces, and cornbread crunch.', prep:'18 min', spice:'Medium', calories:'980 cal'},
+          {name:'Peach Heat Wing Window', price:15, desc:'Sticky peach heat wings with cool ranch drizzle.', prep:'11 min', spice:'High', calories:'740 cal'}
+        ]
+      },
+      {
+        id:'combos',
+        label:'Combos',
+        sub:'Built sets',
+        emoji:'⚡',
+        glow:'rgba(120,236,255,.16)',
+        description:'Meal pairings and combo deals.',
+        items:[
+          {name:'Burger + Fries Combo', price:21, desc:'Bayou Smoke Burger with fries and a fountain drink.', prep:'12 min', spice:'Low', calories:'1160 cal'},
+          {name:'Tender Basket Combo', price:20, desc:'Nashville tenders, waffle fries, and Laser Sweet Tea.', prep:'12 min', spice:'High', calories:'1090 cal'}
+        ]
+      },
+      {
+        id:'catering',
+        label:'Catering',
+        sub:'Large orders',
+        emoji:'🚀',
+        glow:'rgba(160,137,255,.16)',
+        description:'Group trays and large-format ordering.',
+        items:[
+          {name:'Party Tender Tray', price:64, desc:'Twenty hand-breaded tenders with sauces and pickles.', prep:'35 min', spice:'Medium', calories:'Shareable'},
+          {name:'Sandwich Pack', price:72, desc:'Six assorted sandwiches cut for sharing with sides.', prep:'40 min', spice:'Mixed', calories:'Shareable'}
+        ]
+      }
     ];
 
-    const state = { index: 0 };
-    const orbit = document.getElementById('orbit');
+    const state = {
+      index: 0,
+      openCategoryId: categories[0].id
+    };
+
+    const orbitPlane = document.getElementById('orbitPlane');
     const coreTitle = document.getElementById('coreTitle');
     const coreSub = document.getElementById('coreSub');
+    const itemList = document.getElementById('itemList');
+    const panelTitle = document.getElementById('panelTitle');
+    const panelSubtitle = document.getElementById('panelSubtitle');
+    const panelFoot = document.getElementById('panelFoot');
+
+    function currentCategory() {
+      return categories[state.index];
+    }
+
+    function openedCategory() {
+      return categories.find(c => c.id === state.openCategoryId) || currentCategory();
+    }
 
     function renderOrbit() {
-      orbit.querySelectorAll('.node').forEach(n => n.remove());
-      const count = nodes.length;
-      document.documentElement.style.setProperty('--count', count);
+      orbitPlane.querySelectorAll('.node-anchor').forEach(n => n.remove());
+      const count = categories.length;
+      const step = 360 / count;
+      const activeRotation = state.index * step;
+      document.documentElement.style.setProperty('--spin', `${-activeRotation}deg`);
 
-      nodes.forEach((node, index) => {
-        const el = document.createElement('button');
-        el.type = 'button';
-        el.className = 'node' + (index === state.index ? ' active' : '');
-        el.style.setProperty('--glow', node.glow);
-        el.innerHTML = `
+      categories.forEach((node, index) => {
+        const angle = index * step;
+        const anchor = document.createElement('div');
+        anchor.className = 'node-anchor';
+        anchor.style.transform = `rotate(${angle}deg) translateY(calc(var(--radius) * -1))`;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'node' + (index === state.index ? ' active front' : '');
+        btn.style.setProperty('--glow', node.glow);
+        btn.style.transform = `translate(-50%, -50%) rotateX(calc(var(--tilt) * -1)) rotate(${-activeRotation - angle}deg)`;
+        btn.innerHTML = `
           <div class="emoji">${node.emoji}</div>
           <strong>${node.label}</strong>
           <span>${node.sub}</span>
         `;
 
-        // Position each node around the ring while counter-rotating the card
-        // so it stays facing forward even as the whole orbit spins.
-        const step = 360 / count;
-        const angle = index * step;
-        const rotation = state.index * step;
-        el.style.transform = `
-          rotate(${angle}deg)
-          translateY(calc(var(--radius) * -1))
-          rotate(${-angle - rotation}deg)
-          rotateX(calc(var(--tilt) * -1))
-        `;
-
-        el.addEventListener('click', () => {
-          state.index = index;
-          update();
+        btn.addEventListener('click', () => {
+          if (state.index !== index) {
+            state.index = index;
+            update();
+          } else {
+            state.openCategoryId = node.id;
+            renderPanel();
+          }
         });
-        orbit.appendChild(el);
+
+        anchor.appendChild(btn);
+        orbitPlane.appendChild(anchor);
       });
 
-      const spin = -(state.index * (360 / count));
-      document.documentElement.style.setProperty('--orbit-rotation', `${spin}deg`);
+      coreTitle.textContent = currentCategory().label;
+      coreSub.textContent = state.openCategoryId === currentCategory().id
+        ? 'Category open'
+        : 'Click again to open category';
+    }
 
-      coreTitle.textContent = nodes[state.index].label;
-      coreSub.textContent = nodes[state.index].sub;
+    function renderPanel() {
+      const category = openedCategory();
+      panelTitle.textContent = category.label;
+      panelSubtitle.textContent = category.description;
+      panelFoot.textContent = state.openCategoryId === currentCategory().id
+        ? 'Click any item for details, pricing, and metadata.'
+        : 'Bring a tile to the front, then click it again to open that category here.';
+
+      itemList.innerHTML = '';
+      category.items.forEach((item) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'item';
+        btn.innerHTML = `
+          <div>
+            <h3>${item.name}</h3>
+            <p>${item.desc}</p>
+            <div class="meta">
+              <span class="tag">${item.prep}</span>
+              <span class="tag">${item.spice}</span>
+              <span class="tag">${item.calories}</span>
+            </div>
+          </div>
+          <div class="price">$${Number(item.price).toFixed(2)}</div>
+        `;
+        btn.addEventListener('click', () => openModal(item, category));
+        itemList.appendChild(btn);
+      });
     }
 
     function update() {
       renderOrbit();
+      renderPanel();
     }
 
-    document.getElementById('prevBtn').addEventListener('click', () => {
-      state.index = (state.index - 1 + nodes.length) % nodes.length;
+    function changeIndex(delta) {
+      state.index = (state.index + delta + categories.length) % categories.length;
       update();
-    });
+    }
 
-    document.getElementById('nextBtn').addEventListener('click', () => {
-      state.index = (state.index + 1) % nodes.length;
-      update();
-    });
+    function openModal(item, category) {
+      document.getElementById('modalTitle').textContent = item.name;
+      document.getElementById('modalDesc').textContent = item.desc;
+      document.getElementById('modalPrice').textContent = `$${Number(item.price).toFixed(2)}`;
+      document.getElementById('modalMeta').innerHTML = `
+        <div class="detail"><div class="label">Category</div><div class="value">${category.label}</div></div>
+        <div class="detail"><div class="label">Prep</div><div class="value">${item.prep}</div></div>
+        <div class="detail"><div class="label">Spice</div><div class="value">${item.spice}</div></div>
+        <div class="detail"><div class="label">Calories</div><div class="value">${item.calories}</div></div>
+      `;
+      document.getElementById('itemModal').classList.add('show');
+      document.getElementById('itemModal').setAttribute('aria-hidden', 'false');
+    }
 
+    function closeModal() {
+      document.getElementById('itemModal').classList.remove('show');
+      document.getElementById('itemModal').setAttribute('aria-hidden', 'true');
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => changeIndex(-1));
+    document.getElementById('nextBtn').addEventListener('click', () => changeIndex(1));
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') {
-        state.index = (state.index - 1 + nodes.length) % nodes.length;
-        update();
-      }
-      if (e.key === 'ArrowRight') {
-        state.index = (state.index + 1) % nodes.length;
-        update();
-      }
+      if (e.key === 'ArrowLeft') changeIndex(-1);
+      if (e.key === 'ArrowRight') changeIndex(1);
+      if (e.key === 'Escape') closeModal();
+    });
+    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+    document.getElementById('modalBackBtn').addEventListener('click', closeModal);
+    document.getElementById('itemModal').addEventListener('click', (e) => {
+      if (e.target.id === 'itemModal') closeModal();
     });
 
     update();
