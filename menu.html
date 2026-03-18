@@ -2,1598 +2,1126 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Fransis – Interactive Menu</title>
-  <meta name="description" content="Fransis interactive menu with orbit navigation, hologram cards, and daily specials." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Francis Smokehouse — Immersive Menu</title>
+  <meta name="description" content="An experimental cinematic menu experience for The Francis Smokehouse." />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { overflow-x: hidden; }
-    body {
-      font-family: Inter, system-ui, sans-serif;
-      color: rgba(255,255,255,.94);
-      background:
-        radial-gradient(900px 600px at 10% 10%, rgba(255,110,70,.18), transparent 60%),
-        radial-gradient(900px 600px at 90% 0%, rgba(42,127,98,.16), transparent 60%),
-        linear-gradient(180deg, #070604, #0b0806 45%, #050403);
-      min-height: 100vh;
-      padding-bottom: 90px;
+    :root{
+      --bg:#0a0706;
+      --bg2:#140d0a;
+      --card:rgba(255,255,255,0.07);
+      --line:rgba(255,255,255,0.12);
+      --text:#f7efe7;
+      --muted:#d1b9a6;
+      --accent:#ff8c42;
+      --accent2:#ffd166;
+      --accent3:#ff4d4d;
+      --good:#c7ffb2;
+      --shadow:0 30px 80px rgba(0,0,0,.45);
+      --radius:28px;
+      --max:1400px;
+      --cursorX:50vw;
+      --cursorY:50vh;
     }
-    .app {
-      min-height: 100vh;
-      padding: 18px 14px 80px;
-      position: relative;
-      isolation: isolate;
-    }
-    .app::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      opacity: .1;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
-    }
-    .app > * { position: relative; z-index: 1; }
 
-    .sticky { position: sticky; top: 10px; z-index: 20; margin-bottom: 14px; }
-    .daybar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 999px;
-      padding: 10px;
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:radial-gradient(circle at top, #281511 0%, var(--bg) 40%, #050404 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;scroll-behavior:smooth}
+    body{overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+
+    #smoke, #embers{
+      position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:0;
+      opacity:.95;
+    }
+
+    .noise,
+    .vignette,
+    .spotlight{
+      position:fixed; inset:0; pointer-events:none; z-index:1;
+    }
+    .noise{
+      opacity:.06;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,.7) 0 1px, transparent 1px),
+        radial-gradient(circle at 70% 60%, rgba(255,255,255,.45) 0 1px, transparent 1px),
+        radial-gradient(circle at 40% 80%, rgba(255,255,255,.4) 0 1px, transparent 1px);
+      background-size: 160px 160px, 220px 220px, 180px 180px;
+      mix-blend-mode:soft-light;
+    }
+    .vignette{
+      background:radial-gradient(circle at center, transparent 45%, rgba(0,0,0,.55) 100%);
+    }
+    .spotlight{
+      background:
+        radial-gradient(420px 420px at var(--cursorX) var(--cursorY), rgba(255,140,66,.14), transparent 65%),
+        radial-gradient(780px 780px at 20% 15%, rgba(255,209,102,.08), transparent 70%);
+      transition:background .15s linear;
+    }
+
+    .shell{position:relative; z-index:2}
+
+    .hero{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:28px;
+      position:relative;
+    }
+
+    .hero-card{
+      width:min(100%, var(--max));
+      min-height:88vh;
+      border:1px solid var(--line);
+      border-radius:42px;
+      position:relative;
+      overflow:hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+        radial-gradient(circle at top left, rgba(255,140,66,.20), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(255,77,77,.18), transparent 32%),
+        rgba(17,10,9,.55);
+      backdrop-filter:blur(18px);
+      box-shadow:var(--shadow);
+      padding:28px;
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+      isolation:isolate;
+    }
+
+    .topbar{
+      display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:16px;
+    }
+    .brand-mark{
+      width:58px;height:58px;border-radius:18px;position:relative;
+      border:1px solid rgba(255,255,255,.16);
+      background:
+        radial-gradient(circle at 50% 100%, rgba(255,209,102,.65), transparent 45%),
+        linear-gradient(160deg, rgba(255,140,66,.35), rgba(255,77,77,.15));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 10px 28px rgba(255,140,66,.16);
+      overflow:hidden;
+    }
+    .brand-mark::before,
+    .brand-mark::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      border-radius:999px;
+      background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,0));
+      filter:blur(.2px);
+    }
+    .brand-mark::before{width:4px;height:24px;top:13px;box-shadow:-12px 4px 0 rgba(255,255,255,.7), 12px -2px 0 rgba(255,255,255,.6)}
+    .brand-mark::after{width:34px;height:18px;bottom:10px;background:radial-gradient(circle at center, rgba(255,209,102,.88), rgba(255,140,66,.15) 70%, transparent 71%)}
+
+    .eyebrow{
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--accent2);
+      font-size:.72rem;
+      margin-bottom:5px;
+    }
+    .brand h1{font-size:clamp(1.2rem, 2vw, 1.7rem);margin:0}
+    .brand p{margin:2px 0 0;color:var(--muted);font-size:.92rem}
+
+    .status-pills{display:flex;gap:10px;flex-wrap:wrap}
+    .pill{
+      padding:.75rem 1rem;border:1px solid var(--line);border-radius:999px;
+      background:rgba(255,255,255,.06);
+      color:#f5e6d9;font-size:.84rem;
+      backdrop-filter:blur(10px);
+    }
+
+    .hero-main{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:28px;
+      align-items:end;
+      padding:32px 0 12px;
+    }
+
+    .headline{
+      max-width:820px;
+    }
+    .headline h2{
+      font-family: Georgia, "Times New Roman", serif;
+      font-size:clamp(3rem, 8vw, 7rem);
+      line-height:.92;
+      letter-spacing:-.04em;
+      margin:0 0 18px;
+      text-wrap:balance;
+    }
+    .headline .gradient{
+      background:linear-gradient(90deg, #fff7ee, #ffd7bf 38%, #ffb171 65%, #fff1cc);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      text-shadow: 0 0 28px rgba(255,173,103,.12);
+    }
+
+    .headline p{
+      color:#ead4c1;
+      font-size:clamp(1rem, 1.8vw, 1.15rem);
+      line-height:1.75;
+      max-width:680px;
+      margin:0 0 26px;
+    }
+
+    .action-row{display:flex;gap:12px;flex-wrap:wrap}
+    .cta{
+      padding:1rem 1.2rem;border-radius:18px;border:1px solid rgba(255,255,255,.16);
+      background:linear-gradient(180deg, rgba(255,140,66,.23), rgba(255,140,66,.10));
+      color:white;font-weight:700;letter-spacing:.02em;
+      box-shadow:0 12px 32px rgba(255,140,66,.18);
+      position:relative;overflow:hidden;
+    }
+    .cta.alt{
+      background:rgba(255,255,255,.06);
+      color:#f1dfd2;
+      box-shadow:none;
+    }
+    .cta::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background:linear-gradient(120deg, transparent 20%, rgba(255,255,255,.30), transparent 60%);
+      transform:translateX(-120%);
+      animation:glint 4.8s ease-in-out infinite;
+    }
+    @keyframes glint {
+      0%, 100% {transform:translateX(-120%)}
+      35% {transform:translateX(120%)}
+    }
+
+    .orbital{
+      display:grid;
+      place-items:center;
+      min-height:430px;
+      position:relative;
+    }
+    .orbital-core{
+      width:min(72vw, 400px); aspect-ratio:1;
+      border-radius:50%;
+      position:relative;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,214,161,.20) 0, rgba(255,140,66,.15) 22%, rgba(255,77,77,.08) 36%, transparent 60%),
+        radial-gradient(circle at 50% 55%, rgba(255,191,110,.24), transparent 54%);
+      display:grid;place-items:center;
+      transform-style:preserve-3d;
+      animation: float 8s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% {transform:translateY(0) rotateZ(0deg)}
+      50% {transform:translateY(-12px) rotateZ(2deg)}
+    }
+
+    .ring{
+      position:absolute; inset:8%;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:50%;
+      transform-style:preserve-3d;
+      animation: spin 24s linear infinite;
+    }
+    .ring.r2{inset:18%; animation-direction:reverse; animation-duration:17s}
+    .ring.r3{inset:30%; animation-duration:13s}
+    @keyframes spin { to{transform:rotate(360deg)} }
+
+    .node{
+      position:absolute; left:50%; top:50%;
+      transform-origin:0 0;
+      padding:.7rem .9rem;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
       backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 16px 40px rgba(0,0,0,.28);
+      border-radius:16px;
+      font-size:.83rem;
+      color:#ffe9d7;
+      box-shadow:0 10px 25px rgba(0,0,0,.18);
+      white-space:nowrap;
     }
 
-    .pill, .viewbtn, .actionbtn, .daybtn, .chip {
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: #fff;
-      border-radius: 999px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: .18s ease;
-      white-space: nowrap;
-    }
-    .pill:hover, .viewbtn:hover, .actionbtn:hover, .daybtn:hover, .chip:hover { transform: translateY(-1px); }
-    .daybtn, .viewbtn { padding: 10px 16px; }
-    .actionbtn { padding: 12px 18px; }
-    .chip { padding: 9px 12px; font-size: 12px; }
-
-    .daybtn.active, .viewbtn.active, .actionbtn.primary, .chip.active {
-      background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
-      border-color: rgba(255,200,130,.5);
-      box-shadow: 0 10px 28px rgba(192,90,42,.28);
-    }
-
-    .header {
-      text-align: center;
-      padding: 10px 8px 0;
-      margin-bottom: 12px;
-      display: grid;
-      gap: 8px;
-      justify-items: center;
-    }
-    .title {
-      font-size: clamp(24px, 3.2vw, 34px);
-      font-weight: 900;
-      line-height: 1.06;
-      letter-spacing: -.03em;
-      text-align: center;
-    }
-    .subline, .note {
-      text-align: center;
-      line-height: 1.5;
-      width: min(760px, 100%);
-    }
-    .subline {
-      color: rgba(255,255,255,.78);
-      font-weight: 700;
-      font-size: 14px;
-    }
-    .note {
-      color: rgba(255,255,255,.62);
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .nowbar {
-      width: min(760px, 100%);
-      white-space: normal;
-      line-height: 1.4;
-      padding: 12px 16px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 13px;
-      text-align: center;
-      border: 1px solid rgba(255,255,255,.15);
-      background: rgba(255,255,255,.06);
-    }
-    .nowbar.open { color: #5effad; box-shadow: 0 0 12px rgba(94,255,173,.4); }
-    .nowbar.warn { color: #ffd27a; box-shadow: 0 0 12px rgba(255,210,122,.4); }
-    .nowbar.closed { color: #ff8a8a; box-shadow: 0 0 12px rgba(255,138,138,.4); }
-
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin: 16px 0 8px;
-    }
-
-    .modehint {
-      color: rgba(255,255,255,.66);
-      font-size: 12px;
-      font-weight: 700;
-      text-align: center;
-      margin-top: 2px;
-    }
-
-    .wheel-stage {
-      display: grid;
-      gap: 18px;
-      justify-items: center;
-      margin-top: 16px;
-    }
-    .wheel-wrap {
-      width: 300px;
-      height: 300px;
-      position: relative;
-      touch-action: none;
-      user-select: none;
-      cursor: grab;
-    }
-    .wheel-wrap.dragging { cursor: grabbing; }
-    .wheel-arrow {
-      position: absolute;
-      left: 50%;
-      top: -2px;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 16px solid transparent;
-      border-right: 16px solid transparent;
-      border-top: 22px solid #ffb35a;
-      z-index: 5;
-      filter: drop-shadow(0 0 8px rgba(255,179,90,.8));
-    }
-    .wheel {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      border: 3px solid rgba(255,161,102,.86);
+    .orb-title{
+      position:relative;
+      width:190px;height:190px;border-radius:50%;
+      display:grid;place-items:center;
       background:
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,.08), transparent 30%),
-        radial-gradient(circle at 50% 50%, rgba(255,128,76,.08), transparent 62%),
-        rgba(13,12,12,.84);
-      box-shadow:
-        0 0 0 8px rgba(255,255,255,.03) inset,
-        0 0 34px rgba(192,90,42,.34),
-        0 18px 40px rgba(0,0,0,.45);
-      will-change: transform;
-      overflow: visible;
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,.28), transparent 30%),
+        radial-gradient(circle at center, rgba(255,140,66,.22), rgba(255,140,66,.04) 65%, transparent 66%);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 30px 70px rgba(0,0,0,.25);
+      text-align:center;
+      padding:18px;
     }
-    .wheel-item {
-      position: absolute;
-      width: 78px;
-      height: 78px;
-      left: 50%;
-      top: 50%;
-      margin-left: -39px;
-      margin-top: -39px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,161,102,.7);
-      background: linear-gradient(180deg, rgba(48,48,48,.95), rgba(22,22,22,.95));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 800;
-      line-height: 1.12;
-      padding: 7px;
-      box-shadow: 0 8px 24px rgba(0,0,0,.5);
-      transform-origin: center center;
-      color: #fff;
-      pointer-events: none;
-      will-change: transform;
+    .orb-title strong{
+      font-family: Georgia, "Times New Roman", serif;
+      display:block;font-size:1.8rem;line-height:1.03;
+      margin-bottom:6px;
     }
-    .wheel-item.selected {
-      background: linear-gradient(180deg, rgba(220,105,48,.98), rgba(170,70,32,.98));
-      border-color: #ffd4a1;
-      box-shadow: 0 0 26px rgba(255,149,91,.55);
+    .orb-title span{display:block;color:var(--muted);font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
+
+    .microcopy{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap:14px;
+      margin-top:8px;
     }
-    .wheel-center {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      background: #ffb35a;
-      border: 2px solid #fff;
-      z-index: 4;
-      box-shadow: 0 0 18px rgba(255,179,90,.7);
+    .micro{
+      padding:15px 16px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:rgba(255,255,255,.05);
+      min-height:90px;
+    }
+    .micro .label{font-size:.72rem; text-transform:uppercase; letter-spacing:.18em; color:var(--accent2); margin-bottom:8px}
+    .micro strong{display:block; font-size:1rem; margin-bottom:4px}
+    .micro span{color:var(--muted); font-size:.92rem; line-height:1.5}
+
+    .section{
+      position:relative;
+      padding:90px 22px;
+    }
+    .section-inner{
+      width:min(100%, var(--max));
+      margin:0 auto;
+    }
+    .section-head{
+      display:flex; justify-content:space-between; gap:18px; align-items:end; flex-wrap:wrap;
+      margin-bottom:24px;
+    }
+    .section-head h3{
+      font-family: Georgia, "Times New Roman", serif;
+      font-size:clamp(2.2rem, 5vw, 4rem);
+      margin:0;
+      line-height:1;
+    }
+    .section-head p{
+      max-width:720px; color:var(--muted); line-height:1.7; margin:0;
     }
 
-    .glasscard {
-      width: min(680px, calc(100vw - 28px));
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 28px;
-      padding: 20px;
+    .swirl-nav{
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0,1fr));
+      gap:16px;
+      margin-bottom:24px;
+    }
+    .swirl-btn{
+      position:relative;
+      border-radius:24px;
+      padding:18px 18px 18px 20px;
+      border:1px solid rgba(255,255,255,.13);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,140,66,.18), transparent 50%),
+        rgba(255,255,255,.05);
+      min-height:108px;
+      overflow:hidden;
+      cursor:pointer;
+      transition:transform .22s ease, border-color .22s ease, background .22s ease;
+    }
+    .swirl-btn:hover{transform:translateY(-6px); border-color:rgba(255,255,255,.22)}
+    .swirl-btn.active{
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,140,66,.26), transparent 46%),
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border-color:rgba(255,209,102,.35);
+      box-shadow:0 18px 45px rgba(255,140,66,.15);
+    }
+    .swirl-btn::after{
+      content:"";
+      position:absolute; width:140px;height:140px;border-radius:50%;
+      right:-40px;bottom:-50px;border:1px solid rgba(255,255,255,.11);
+    }
+    .swirl-btn .kicker{font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent2); margin-bottom:10px}
+    .swirl-btn strong{display:block; font-size:1.15rem; margin-bottom:6px}
+    .swirl-btn span{color:var(--muted); font-size:.9rem}
+
+    .constellation{
+      position:relative;
+      border-radius:36px;
+      border:1px solid rgba(255,255,255,.11);
+      overflow:hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
+        rgba(13,8,7,.62);
+      box-shadow:var(--shadow);
+      min-height:720px;
+      padding:22px;
+    }
+
+    .beam{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(90deg, transparent 0%, rgba(255,255,255,.06) 48%, transparent 100%),
+        linear-gradient(180deg, transparent 0%, rgba(255,140,66,.05) 50%, transparent 100%);
+      mix-blend-mode:screen;
+      opacity:.8;
+      pointer-events:none;
+      animation:beam 8s linear infinite;
+    }
+    @keyframes beam {
+      0%{transform:translateX(-10%)}
+      50%{transform:translateX(10%)}
+      100%{transform:translateX(-10%)}
+    }
+
+    .cards{
+      position:relative;
+      display:grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap:18px;
+      align-items:start;
+    }
+    .menu-card{
+      grid-column: span 4;
+      position:relative;
+      border-radius:28px;
+      padding:20px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)),
+        radial-gradient(circle at top right, rgba(255,140,66,.18), transparent 34%),
+        rgba(255,255,255,.035);
+      border:1px solid rgba(255,255,255,.12);
       backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 18px 50px rgba(0,0,0,.35);
-      text-align: center;
+      box-shadow:0 24px 60px rgba(0,0,0,.22);
+      min-height:300px;
+      transform-style:preserve-3d;
+      transition:transform .18s ease, border-color .18s ease;
     }
-    .glasscard.pulse { animation: pulseCard .85s ease 1; }
-    #todayDetailCard, #tomorrowDetailCard { max-height: 60vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    @keyframes pulseCard {
-      0% { transform: scale(1); box-shadow: 0 18px 50px rgba(0,0,0,.35); }
-      50% { transform: scale(1.015); box-shadow: 0 0 42px rgba(255,149,91,.35), 0 18px 50px rgba(0,0,0,.42); }
-      100% { transform: scale(1); }
+    .menu-card:hover{
+      border-color:rgba(255,209,102,.32);
+      transform:translateY(-8px);
     }
-
-    .cat-title {
-      font-size: clamp(24px, 4vw, 32px);
-      font-weight: 900;
-      color: #ffb35a;
-      margin-bottom: 8px;
-      border-bottom: 2px solid rgba(255,179,90,.24);
-      padding-bottom: 8px;
-      text-align: center;
+    .menu-card.large{grid-column: span 8; min-height:300px}
+    .menu-card.wide{grid-column: span 6}
+    .menu-card .top{
+      display:flex; justify-content:space-between; gap:14px; align-items:start; margin-bottom:16px;
     }
-    .section-label {
-      margin: 14px 0 8px;
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.68);
-      text-align: center;
+    .menu-card .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:.45rem .7rem;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#ffedd8; font-size:.76rem; letter-spacing:.1em; text-transform:uppercase;
     }
-    .list { list-style: none; display: grid; gap: 8px; text-align: left; }
-    .list li {
-      background: rgba(255,255,255,.06);
-      border-left: 4px solid #c05a2a;
-      border-radius: 14px;
-      padding: 11px 12px;
-      color: #f0e6d8;
-      font-size: 15px;
+    .menu-card h4{
+      font-size:1.7rem; margin:0 0 8px; font-family: Georgia, "Times New Roman", serif; line-height:1;
     }
-    .list details { width: 100%; }
-    .list details summary { cursor: pointer; font-weight: 700; list-style: none; }
-    .list details summary::-webkit-details-marker { display: none; }
-    .desc {
-      margin-top: 7px;
-      color: rgba(255,255,255,.78);
-      font-size: 13px;
-      padding-left: 4px;
-      line-height: 1.5;
+    .menu-card .lede{
+      color:var(--muted); line-height:1.7; margin:0 0 14px;
+      max-width:62ch;
+    }
+    .lines{display:grid; gap:10px}
+    .line{
+      display:grid; grid-template-columns:1fr auto; gap:14px; align-items:end;
+      padding:10px 0;
+      border-bottom:1px dashed rgba(255,255,255,.10);
+    }
+    .line:last-child{border-bottom:none}
+    .line strong{font-size:1.02rem}
+    .line span{display:block; color:#d4baa7; font-size:.9rem; margin-top:4px; line-height:1.45}
+    .price{
+      color:#fff5e6;
+      font-weight:800;
+      letter-spacing:.03em;
+      font-size:1rem;
+      padding-left:10px;
     }
 
-    .closed-note {
-      margin-top: 12px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      color: rgba(255,255,255,.82);
-      font-size: 13px;
-      font-weight: 700;
-      text-align: center;
-      line-height: 1.5;
+    .grid-note{
+      margin-top:20px;
+      color:#cdb29f;
+      font-size:.9rem;
+      line-height:1.7;
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:14px;
     }
 
-    .pick-card {
-      margin-top: 12px;
-      padding: 14px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,179,90,.3);
-      background: linear-gradient(180deg, rgba(255,160,90,.12), rgba(255,255,255,.04));
-      box-shadow: 0 10px 26px rgba(0,0,0,.22);
+    .special-portal{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
     }
-    .pick-title {
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.7);
-      margin-bottom: 8px;
-      text-align: center;
-    }
-    .pick-line {
-      font-size: 15px;
-      color: #fff;
-      margin-top: 6px;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    .swipe-shell {
-      margin-top: 20px;
-      display: grid;
-      gap: 10px;
-      justify-items: center;
-    }
-    .chipnav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: min(760px, calc(100vw - 28px));
-      margin-top: 4px;
-    }
-    .swipe-head {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .swipe-track {
-      width: min(760px, calc(100vw - 28px));
-      display: flex;
-      gap: 16px;
-      overflow-x: auto;
-      padding: 8px 4px 10px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .swipe-track::-webkit-scrollbar { display: none; }
-    .swipe-card {
-      position: relative;
-      flex: 0 0 100%;
-      scroll-snap-align: center;
-      min-height: 420px;
-      border-radius: 30px;
-      padding: 22px;
-      overflow: hidden;
+    .special{
+      border-radius:24px;
+      padding:18px;
+      border:1px solid rgba(255,255,255,.11);
       background:
-        radial-gradient(500px 240px at 10% 0%, rgba(255,148,92,.18), transparent 60%),
-        radial-gradient(500px 240px at 100% 100%, rgba(68,224,170,.14), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
-      border: 1px solid rgba(255,255,255,.15);
-      box-shadow: 0 24px 60px rgba(0,0,0,.36);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      transform-style: preserve-3d;
-      will-change: transform;
-      animation: floatCard 6s ease-in-out infinite;
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035)),
+        rgba(255,255,255,.03);
     }
-    .swipe-card.active { box-shadow: 0 0 40px rgba(255,149,91,.24), 0 24px 60px rgba(0,0,0,.42); }
-    @keyframes floatCard {
-      0%,100% { transform: translateY(0px); }
-      50% { transform: translateY(-6px); }
+    .special .small{color:var(--accent2); text-transform:uppercase; letter-spacing:.15em; font-size:.72rem; margin-bottom:10px}
+    .special strong{display:block; font-size:1.22rem; margin-bottom:6px}
+    .special p{margin:0; color:var(--muted); line-height:1.6}
+
+    .footer{
+      padding:35px 22px 70px;
     }
-    .swipe-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.15) 45%, transparent 70%);
-      transform: translateX(-120%);
-      animation: hologram 4s linear infinite;
-      pointer-events: none;
+    .footer-box{
+      width:min(100%, var(--max));
+      margin:0 auto;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:30px;
+      padding:24px;
+      background:rgba(255,255,255,.04);
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:20px;
     }
-    @keyframes hologram { to { transform: translateX(120%); } }
-    .card-meta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      font-weight: 900;
-      color: rgba(255,255,255,.7);
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.1);
-      margin-bottom: 10px;
+    .footer h5{
+      margin:0 0 10px;
+      font-size:1.4rem;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+    .footer p{
+      margin:0;color:var(--muted);line-height:1.7
+    }
+    .meta{
+      display:grid;
+      gap:12px;
+    }
+    .meta .row{
+      display:flex;justify-content:space-between; gap:14px; border-bottom:1px dashed rgba(255,255,255,.08); padding-bottom:10px;
+    }
+    .meta .row:last-child{border-bottom:none;padding-bottom:0}
+    .meta .row span{color:var(--muted)}
+
+    .reveal{
+      opacity:0;
+      transform:translateY(28px) scale(.985);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.show{
+      opacity:1;
+      transform:translateY(0) scale(1);
     }
 
-    .special-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
-      border: 1px solid rgba(255,200,130,.45);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      box-shadow: 0 10px 24px rgba(192,90,42,.24);
-    }
-    .special-off {
-      text-align: center;
-      color: rgba(255,255,255,.82);
-      font-weight: 800;
-      line-height: 1.6;
+    .signature{
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+      margin-top:18px;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+      color:#d6bca9;
+      font-size:.9rem;
     }
 
-    .state {
-      width: min(760px, calc(100vw - 28px));
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 28px;
-      padding: 20px;
-      background: rgba(255,255,255,.05);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 16px 44px rgba(0,0,0,.26);
-      text-align: center;
+    @media (max-width: 1100px){
+      .hero-main{grid-template-columns:1fr}
+      .microcopy{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .swirl-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .menu-card,.menu-card.large,.menu-card.wide{grid-column:span 12}
+      .footer-box{grid-template-columns:1fr}
+      .special-portal{grid-template-columns:1fr}
     }
 
-    .flash-overlay {
-      position: fixed;
-      inset: 0;
-      display: none;
-      place-items: center;
-      z-index: 200;
-      background: radial-gradient(circle at center, rgba(255,140,90,.18), rgba(0,0,0,.72));
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 18px;
+    @media (max-width: 720px){
+      .hero-card{min-height:auto}
+      .headline h2{font-size:clamp(2.7rem, 15vw, 4.8rem)}
+      .orbital{min-height:320px}
+      .orbital-core{width:290px}
+      .orb-title{width:150px;height:150px}
+      .microcopy{grid-template-columns:1fr}
+      .swirl-nav{grid-template-columns:1fr}
+      .section{padding:72px 16px}
+      .hero{padding:16px}
+      .hero-card{padding:18px}
     }
-    .flash-overlay.show { display: grid; }
-    .flash-card {
-      width: min(560px, calc(100vw - 24px));
-      border-radius: 30px;
-      background:
-        radial-gradient(500px 200px at 0% 0%, rgba(255,140,90,.24), transparent 60%),
-        radial-gradient(500px 220px at 100% 100%, rgba(60,220,170,.18), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.05));
-      border: 1px solid rgba(255,255,255,.18);
-      box-shadow: 0 0 60px rgba(255,149,91,.22), 0 20px 60px rgba(0,0,0,.45);
-      padding: 24px;
-      text-align: center;
-      animation: flashPop .32s ease;
-    }
-    @keyframes flashPop {
-      0% { transform: scale(.92); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .flash-title {
-      font-size: 30px;
-      font-weight: 900;
-      color: #ffb35a;
-      margin-bottom: 10px;
-      letter-spacing: -.03em;
-      text-align: center;
-    }
-    .flash-text {
-      color: rgba(255,255,255,.86);
-      font-size: 15px;
-      line-height: 1.6;
-      margin-bottom: 16px;
-      font-weight: 700;
-      text-align: center;
-    }
-    .flash-count {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 66px;
-      height: 66px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, rgba(255,160,90,.9), rgba(200,90,44,.95));
-      color: #fff;
-      font-weight: 900;
-      font-size: 26px;
-      box-shadow: 0 0 30px rgba(255,149,91,.45);
-      margin-bottom: 12px;
-    }
-    .flash-sub {
-      color: rgba(255,255,255,.68);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      text-align: center;
-    }
-
-    .nav-btn {
-      position: fixed;
-      z-index: 90;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(25,25,25,.92);
-      border: 2px solid #c05a2a;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      box-shadow: 0 0 25px rgba(192,90,42,0.32);
-      transition: .2s ease;
-      backdrop-filter: blur(8px);
-      padding: 12px 20px;
-    }
-    .nav-btn:hover { transform: translateX(-50%) scale(1.04); }
-    .btn-icon { font-size: 1.5rem; color: #c05a2a; }
-    .btn-text .main { font-weight: 800; letter-spacing: .12em; font-size: .92rem; }
-    .btn-text .sub { font-size: .62rem; opacity: .7; text-transform: uppercase; }
-
-    .circ-menu-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      background: rgba(0,0,0,.7);
-      opacity: 0;
-      transition: opacity .3s ease;
-      backdrop-filter: blur(8px);
-    }
-    .circ-menu-overlay.open { opacity: 1; pointer-events: all; }
-    .circular-menu {
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      border: 2px solid #c05a2a;
-      box-shadow: 0 0 40px rgba(192,90,42,.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      transform: scale(.6);
-      transition: transform .25s ease;
-    }
-    .circ-menu-overlay.open .circular-menu { transform: scale(1); }
-    .center-home {
-      width: 74px;
-      height: 74px;
-      background: #2a7f62;
-      border: 3px solid #c05a2a;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      cursor: pointer;
-      box-shadow: 0 0 30px rgba(192,90,42,.4);
-      z-index: 2;
-    }
-    .menu-item {
-      position: absolute;
-      width: 66px;
-      height: 66px;
-      background: #1e1b1b;
-      border: 2px solid #c05a2a;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6px;
-      color: #fff;
-      font-size: .72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(-110px) rotate(calc(var(--angle) * -1deg));
-      cursor: pointer;
-    }
-
-    .hide { display: none !important; }
   </style>
 </head>
 <body>
-  <div class="app">
-    <div class="sticky">
-      <div class="daybar" role="tablist" aria-label="Day selector">
-        <button class="daybtn active" type="button" role="tab" aria-controls="panel-today" aria-selected="true" id="dayBtnToday">Today</button>
-        <button class="daybtn" type="button" role="tab" aria-controls="panel-tomorrow" aria-selected="false" id="dayBtnTomorrow">Tomorrow</button>
-        <button class="daybtn" type="button" role="tab" aria-controls="panel-special" aria-selected="false" id="dayBtnSpecial">Daily Special</button>
-      </div>
-    </div>
+  <canvas id="smoke"></canvas>
+  <canvas id="embers"></canvas>
+  <div class="noise"></div>
+  <div class="spotlight"></div>
+  <div class="vignette"></div>
 
-    <section class="panel" id="panel-today" role="tabpanel" aria-labelledby="dayBtnToday">
-      <div class="header">
-        <div class="title" id="todayTitle">Today’s Menu</div>
-        <div class="subline" id="todayHours">Loading hours…</div>
-        <div class="note" id="todayNote"></div>
-        <div class="nowbar" id="todayNow"></div>
-      </div>
-      <div class="toolbar">
-        <button class="viewbtn" id="todayViewWheel">Orbit Navigator</button>
-        <button class="viewbtn active" id="todayViewSwipe">Hologram Cards</button>
-        <button class="actionbtn primary" id="todayAIBtn"><i class="fas fa-sparkles"></i> Choose for Me</button>
-      </div>
-      <div id="todayWheelView">
-        <div class="modehint">Spin the Orbit Navigator to move through the menu.</div>
-        <div class="wheel-stage">
-          <div class="wheel-wrap" id="todayWheelWrap">
-            <div class="wheel-arrow"></div>
-            <div class="wheel" id="todayWheel"></div>
-            <div class="wheel-center"></div>
+  <div class="shell">
+    <section class="hero">
+      <div class="hero-card reveal">
+        <div class="topbar">
+          <div class="brand">
+            <div class="brand-mark" aria-hidden="true"></div>
+            <div>
+              <div class="eyebrow">St. Francisville • Louisiana</div>
+              <h1>The Francis Smokehouse</h1>
+              <p>Immersive menu concept • cinematic single-file build</p>
+            </div>
           </div>
-          <div class="glasscard" id="todayDetailCard">
-            <div class="cat-title" id="todayDetailTitle"></div>
-            <div id="todayDetailContent"></div>
-            <div id="todayPickCard"></div>
+          <div class="status-pills">
+            <div class="pill">Open concept menu</div>
+            <div class="pill">Smoke + ember motion</div>
+            <div class="pill">Mobile responsive</div>
           </div>
         </div>
-      </div>
-      <div id="todaySwipeView" class="hide">
-        <div class="swipe-shell">
-          <div class="swipe-head">
-            <button class="pill" id="todayPrevCard"><i class="fas fa-chevron-left"></i></button>
-            <div class="subline" id="todayCardStatus">Swipe categories</div>
-            <button class="pill" id="todayNextCard"><i class="fas fa-chevron-right"></i></button>
-          </div>
-          <div class="chipnav" id="todayChipNav"></div>
-          <div class="modehint">Tap a category chip or swipe the hologram cards.</div>
-          <div class="swipe-track" id="todaySwipeTrack"></div>
-        </div>
-      </div>
-      <div class="state hide" id="todayClosed">
-        <div class="title" style="font-size:24px;">Closed</div>
-        <div class="subline" id="todayClosedMsg"></div>
-      </div>
-    </section>
 
-    <section class="panel hide" id="panel-tomorrow" role="tabpanel" aria-labelledby="dayBtnTomorrow">
-      <div class="header">
-        <div class="title" id="tomorrowTitle">Tomorrow’s Menu</div>
-        <div class="subline" id="tomorrowHours">Loading hours…</div>
-        <div class="note" id="tomorrowNote"></div>
-        <div class="nowbar" id="tomorrowNow"></div>
-      </div>
-      <div class="toolbar">
-        <button class="viewbtn" id="tomorrowViewWheel">Orbit Navigator</button>
-        <button class="viewbtn active" id="tomorrowViewSwipe">Hologram Cards</button>
-        <button class="actionbtn primary" id="tomorrowAIBtn"><i class="fas fa-sparkles"></i> Choose for Me</button>
-      </div>
-      <div id="tomorrowWheelView">
-        <div class="modehint">Spin the Orbit Navigator to move through the menu.</div>
-        <div class="wheel-stage">
-          <div class="wheel-wrap" id="tomorrowWheelWrap">
-            <div class="wheel-arrow"></div>
-            <div class="wheel" id="tomorrowWheel"></div>
-            <div class="wheel-center"></div>
+        <div class="hero-main">
+          <div class="headline">
+            <h2><span class="gradient">Not a menu.</span><br/>A live-fire atmosphere.</h2>
+            <p>
+              This concept turns the menu into an experience: floating smoke physics, ember drift, cinematic glass surfaces,
+              magnetic interactions, and a constellation-style layout that feels more like a premium trailer than a restaurant page.
+              It is built as one standalone file so you can drop it straight into a site or hand it off as-is.
+            </p>
+            <div class="action-row">
+              <a href="#menu-experience" class="cta">Enter the menu galaxy</a>
+              <a href="#visit" class="cta alt">Jump to hours & location</a>
+            </div>
           </div>
-          <div class="glasscard" id="tomorrowDetailCard">
-            <div class="cat-title" id="tomorrowDetailTitle"></div>
-            <div id="tomorrowDetailContent"></div>
-            <div id="tomorrowPickCard"></div>
-          </div>
-        </div>
-      </div>
-      <div id="tomorrowSwipeView" class="hide">
-        <div class="swipe-shell">
-          <div class="swipe-head">
-            <button class="pill" id="tomorrowPrevCard"><i class="fas fa-chevron-left"></i></button>
-            <div class="subline" id="tomorrowCardStatus">Swipe categories</div>
-            <button class="pill" id="tomorrowNextCard"><i class="fas fa-chevron-right"></i></button>
-          </div>
-          <div class="chipnav" id="tomorrowChipNav"></div>
-          <div class="modehint">Tap a category chip or swipe the hologram cards.</div>
-          <div class="swipe-track" id="tomorrowSwipeTrack"></div>
-        </div>
-      </div>
-      <div class="state hide" id="tomorrowClosed">
-        <div class="title" style="font-size:24px;">Closed</div>
-        <div class="subline" id="tomorrowClosedMsg"></div>
-      </div>
-    </section>
 
-    <section class="panel hide" id="panel-special" role="tabpanel" aria-labelledby="dayBtnSpecial">
-      <div class="header">
-        <div class="title">Daily Special</div>
-        <div class="subline" id="specialDisclaimer"></div>
-      </div>
-      <div class="swipe-shell">
-        <div class="glasscard" id="dailySpecialCard">
-          <div class="cat-title" id="dailySpecialTitle">Daily Special</div>
-          <div id="dailySpecialContent"></div>
+          <div class="orbital" aria-hidden="true">
+            <div class="orbital-core">
+              <div class="ring">
+                <div class="node" style="transform:rotate(16deg) translate(156px) rotate(-16deg)">Boudin</div>
+                <div class="node" style="transform:rotate(120deg) translate(168px) rotate(-120deg)">Brisket</div>
+                <div class="node" style="transform:rotate(228deg) translate(158px) rotate(-228deg)">Po-boys</div>
+              </div>
+              <div class="ring r2">
+                <div class="node" style="transform:rotate(55deg) translate(112px) rotate(-55deg)">Ribs</div>
+                <div class="node" style="transform:rotate(194deg) translate(104px) rotate(-194deg)">Smoke</div>
+                <div class="node" style="transform:rotate(305deg) translate(112px) rotate(-305deg)">Sides</div>
+              </div>
+              <div class="ring r3"></div>
+              <div class="orb-title">
+                <div>
+                  <strong>Flavor<br/>Orbit</strong>
+                  <span>crafted over fire</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="microcopy">
+          <div class="micro">
+            <div class="label">Signature</div>
+            <strong>Ribs, brisket, boudin</strong>
+            <span>The experience is structured around the items people remember and talk about first.</span>
+          </div>
+          <div class="micro">
+            <div class="label">Design move</div>
+            <strong>Constellation navigation</strong>
+            <span>Instead of expected tabs, categories feel like drifting worlds you explore.</span>
+          </div>
+          <div class="micro">
+            <div class="label">Built for</div>
+            <strong>Attention and recall</strong>
+            <span>Everything is designed to stop scrolling and make the brand feel larger than life.</span>
+          </div>
+          <div class="micro">
+            <div class="label">Drop-in ready</div>
+            <strong>One file, no dependencies</strong>
+            <span>All structure, style, and interaction live inside this single HTML file.</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <div class="state hide" id="loadError">
-      <div class="title" style="font-size:24px;">Menu couldn’t load</div>
-      <div class="subline" id="loadErrorMsg">Try again in a moment.</div>
-    </div>
-  </div>
+    <section class="section" id="menu-experience">
+      <div class="section-inner">
+        <div class="section-head reveal">
+          <div>
+            <div class="eyebrow">Interactive category system</div>
+            <h3>Choose a flavor dimension</h3>
+          </div>
+          <p>
+            Each tile remaps the menu below. The transitions are intentionally dramatic, tactile, and cinematic. This is
+            the opposite of a basic restaurant page.
+          </p>
+        </div>
 
-  <div class="nav-btn" id="navBtnBottom">
-    <i class="fas fa-compass btn-icon"></i>
-    <div class="btn-text"><div class="main">NAVIGATION</div><div class="sub">explore pages</div></div>
-  </div>
-  <div class="circ-menu-overlay" id="circMenuOverlay">
-    <div class="circular-menu">
-      <div class="center-home" id="homeCenter" data-link="index.html"><i class="fas fa-home"></i></div>
-      <div class="menu-item" style="--angle:0;" data-link="delivery.html">Delivery</div>
-      <div class="menu-item" style="--angle:72;" data-link="tel:3372211035">Order</div>
-      <div class="menu-item" style="--angle:144;" data-link="about.html">About</div>
-      <div class="menu-item" style="--angle:216;" data-link="https://maps.google.com/?q=2741%20US-190%2C%20DeRidder%2C%20LA%2070634">Location</div>
-      <div class="menu-item" style="--angle:288;" data-action="share">Share</div>
-    </div>
-  </div>
+        <div class="swirl-nav reveal" id="categoryNav"></div>
 
-  <div class="flash-overlay" id="luckModal">
-    <div class="flash-card">
-      <div class="flash-count" id="luckCountdown">5</div>
-      <div class="flash-title" id="luckModalTitle">Currently closed</div>
-      <div class="flash-text" id="luckModalText"></div>
-      <div class="flash-sub">Closing automatically</div>
-    </div>
+        <div class="constellation reveal">
+          <div class="beam"></div>
+          <div class="cards" id="menuGrid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="visit">
+      <div class="section-inner">
+        <div class="section-head reveal">
+          <div>
+            <div class="eyebrow">Visit & contact</div>
+            <h3>Fire, smoke, and a real front door</h3>
+          </div>
+          <p>
+            This lower section keeps practical information elevated but consistent with the immersive visual language.
+          </p>
+        </div>
+
+        <div class="footer-box reveal footer">
+          <div>
+            <h5>The Francis Smokehouse</h5>
+            <p>
+              6779 US Highway 61, St. Francisville, LA 70775<br/>
+              Phone: (225) 245-5046<br/>
+              Hours: Mon–Sat 10:00 AM–6:00 PM • Sun 10:00 AM–3:00 PM
+            </p>
+            <div class="signature">
+              <span>Concept direction: future-forward Southern fire</span>
+              <span>Built as a single-file prototype</span>
+            </div>
+          </div>
+          <div class="meta">
+            <div class="row"><strong>Experience style</strong><span>immersive / premium / cinematic</span></div>
+            <div class="row"><strong>Interaction layer</strong><span>mouse light, tilt, smoke, ember, reveal</span></div>
+            <div class="row"><strong>Best use</strong><span>home page hero or menu landing page</span></div>
+            <div class="row"><strong>Content note</strong><span>prices and items should be verified before production</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <script>
-    (function () {
-      const $ = id => document.getElementById(id);
-
-      function escapeHtml(str) {
-        return String(str ?? "")
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#039;");
-      }
-      function setText(id, text) {
-        const el = $(id);
-        if (el) el.textContent = text || "";
-      }
-      function normalizeItems(arr) {
-        return Array.isArray(arr) ? arr.map(x => String(x || "").trim()).filter(Boolean) : [];
-      }
-      function normalizeLunchItems(arr) {
-        const items = Array.isArray(arr) ? arr : [];
-        return items.map(raw => {
-          if (raw && typeof raw === "object") {
-            return { name: String(raw.name || "").trim(), desc: String(raw.desc || "").trim() };
-          }
-          const s = String(raw || "").trim();
-          if (!s) return null;
-          return { name: s, desc: "" };
-        }).filter(Boolean).filter(x => x.name);
-      }
-      function toISODateLocal(d) {
-        return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-      }
-      function formatDateNice(d) {
-        return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-      }
-      function weekdayName(d) {
-        return d.toLocaleDateString("en-US", { weekday: "long" });
-      }
-      function parseISODateToLocal(iso) {
-        const [y, m, d] = String(iso).split("-").map(Number);
-        return new Date(y, (m || 1) - 1, d || 1);
-      }
-      function normalizeDateKey(key) {
-        const m = String(key || "").trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
-        if (!m) return null;
-        return `${m[1]}-${String(Number(m[2])).padStart(2, "0")}-${String(Number(m[3])).padStart(2, "0")}`;
-      }
-      function parseTimeToMinutes(timeStr) {
-        if (!timeStr) return null;
-        const match = String(timeStr).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
-        if (!match) return null;
-        let hours = parseInt(match[1], 10);
-        const minutes = parseInt(match[2], 10);
-        const ampm = match[3].toUpperCase();
-        if (ampm === "PM" && hours !== 12) hours += 12;
-        if (ampm === "AM" && hours === 12) hours = 0;
-        return hours * 60 + minutes;
-      }
-      function rangeIncludes(nowMinutes, rangeStr) {
-        if (!rangeStr || !String(rangeStr).includes("-")) return false;
-        const [a, b] = String(rangeStr).split("-").map(s => s.trim());
-        const start = parseTimeToMinutes(a);
-        const end = parseTimeToMinutes(b);
-        if (start == null || end == null) return false;
-        return nowMinutes >= start && nowMinutes <= end;
-      }
-
-      function getBusinessHours(dayName) {
-        const lower = String(dayName || "").toLowerCase();
-        const open = lower === "sunday" ? "7:00 AM" : (lower === "saturday" ? "6:00 AM" : "5:30 AM");
-        const close = lower === "sunday" ? "3:00 PM" : "2:00 PM";
-        return {
-          day: dayName,
-          open,
-          close,
-          breakfast: `${open} - 10:30 AM`,
-          lunch: `11:00 AM - ${close}`,
-          crawfish: ["thursday", "friday", "saturday"].includes(lower) ? "4:00 PM - 8:00 PM" : ""
-        };
-      }
-      function getClosure(data, dayName) {
-        const c = data?.closures || {};
-        const key = Object.keys(c).find(k => k.toLowerCase() === String(dayName || "").toLowerCase());
-        return key ? c[key] : null;
-      }
-      function getMenuByDate(data, isoDate) {
-        return (data?.menus || {})[isoDate] || null;
-      }
-      function crawfishFor(data, menu) {
-        const def = data?.defaults?.crawfish || {};
-        const c = menu?.crawfish || {};
-        return {
-          show: c.show === false ? false : true,
-          subtitle: String(c.subtitle ?? def.subtitle ?? "").trim(),
-          items: normalizeItems(c.items ?? def.items ?? [])
-        };
-      }
-      function isPastClosingToday(_, dayName) {
-        const hours = getBusinessHours(dayName);
-        const closeMinutes = parseTimeToMinutes(hours.close);
-        if (closeMinutes == null) return false;
-        const now = new Date();
-        return (now.getHours() * 60 + now.getMinutes()) >= closeMinutes;
-      }
-      function categoryOpenNow(catName, dayName, nowDate) {
-        const hours = getBusinessHours(dayName);
-        const mins = nowDate.getHours() * 60 + nowDate.getMinutes();
-        const lower = String(catName || "").toLowerCase();
-        if (lower === "breakfast") return rangeIncludes(mins, hours.breakfast);
-        if (lower === "lunch" || lower === "salad bar" || lower === "drinks" || lower === "dessert") return rangeIncludes(mins, hours.lunch);
-        if (lower === "crawfish") return !!hours.crawfish && rangeIncludes(mins, hours.crawfish);
-        return rangeIncludes(mins, `${hours.open} - ${hours.close}`);
-      }
-      function openingMessageFor(dayName) {
-        const hours = getBusinessHours(dayName);
-        return `${dayName} opens at ${hours.open}. Breakfast ends at 10:30 AM, lunch starts at 11:00 AM${hours.crawfish ? `, and crawfish runs ${hours.crawfish}` : ""}.`;
-      }
-      function showLoadError(msg) {
-        $("loadError").classList.remove("hide");
-        setText("loadErrorMsg", msg || "Try again in a moment.");
-      }
-
-      let luckTimer = null;
-      let luckCountdownTimer = null;
-      function showLuckModal(title, text) {
-        const modal = $("luckModal");
-        const countEl = $("luckCountdown");
-        if (!modal || !countEl) return;
-
-        setText("luckModalTitle", title);
-        setText("luckModalText", text);
-
-        if (luckTimer) clearTimeout(luckTimer);
-        if (luckCountdownTimer) clearInterval(luckCountdownTimer);
-
-        let remaining = 5;
-        countEl.textContent = String(remaining);
-        modal.classList.add("show");
-
-        luckCountdownTimer = setInterval(() => {
-          remaining -= 1;
-          if (remaining > 0) {
-            countEl.textContent = String(remaining);
-          } else {
-            clearInterval(luckCountdownTimer);
-            luckCountdownTimer = null;
-          }
-        }, 1000);
-
-        luckTimer = setTimeout(() => {
-          hideLuckModal();
-        }, 5000);
-      }
-      function hideLuckModal() {
-        const modal = $("luckModal");
-        if (luckTimer) {
-          clearTimeout(luckTimer);
-          luckTimer = null;
-        }
-        if (luckCountdownTimer) {
-          clearInterval(luckCountdownTimer);
-          luckCountdownTimer = null;
-        }
-        if (modal) modal.classList.remove("show");
-      }
-
-      async function fetchHtml(url) {
-        const res = await fetch(url, { credentials: "same-origin", cache: "no-store" });
-        if (!res.ok) throw new Error(`Fetch failed ${res.status} at ${url}`);
-        return await res.text();
-      }
-      function extractJsonFromHtml(html, label) {
-        const doc = new DOMParser().parseFromString(html, "text/html");
-        const script = doc.querySelector("#hh-menu-data");
-        if (!script) throw new Error(`No #hh-menu-data found on ${label}`);
-        const raw = (script.textContent || "").trim();
-        if (!raw) throw new Error(`#hh-menu-data is empty on ${label}`);
-        return JSON.parse(raw);
-      }
-      async function readData() {
-        const urls = ["menu-data.html", "./menu-data.html", "/menu-data.html"];
-        let lastErr = null;
-        for (const url of urls) {
-          try {
-            const html = await fetchHtml(url);
-            const data = extractJsonFromHtml(html, url);
-            const rawMenus = data?.menus || {};
-            const normalizedMenus = {};
-            Object.keys(rawMenus).forEach(k => {
-              const nk = normalizeDateKey(k);
-              if (nk) normalizedMenus[nk] = rawMenus[k];
-            });
-            data.menus = normalizedMenus;
-            return data;
-          } catch (e) {
-            lastErr = e;
-          }
-        }
-        throw lastErr || new Error("Menu data could not be read from menu-data.html.");
-      }
-
-      function buildCategoryData(data, isoDate) {
-        const menu = getMenuByDate(data, isoDate) || {};
-        const defaults = data?.defaults || {};
-        const lunchItems = normalizeLunchItems(menu.lunch?.items ?? defaults.lunch?.items ?? []);
-        const cats = [
+    const menuData = {
+      bbq: {
+        kicker: "Fire boards",
+        title: "BBQ Plates",
+        subtitle: "Low, slow, and impossible to ignore.",
+        desc: "A large-format presentation centered on smokehouse core plates. These are the anchors of the whole visual story.",
+        cards: [
           {
-            name: "Breakfast",
-            meta: "Morning favorites",
-            plates: normalizeItems(menu.breakfast?.plates ?? defaults.breakfast?.plates ?? []),
-            items: normalizeItems(menu.breakfast?.items ?? defaults.breakfast?.items ?? [])
+            size:"large",
+            tag:"Smoked plates",
+            title:"Main smokehouse run",
+            lede:"Each plate is presented as a premium event rather than a static line item, reinforcing the house-special feeling.",
+            items:[
+              ["Full Rack of Ribs", "Smoked, lacquered, and built to be the centerpiece.", "$19.99"],
+              ["Half Rack of Ribs", "For a lighter fire hit without losing the drama.", "$11.99"],
+              ["Pulled Pork Plate", "Classic smokehouse comfort with deep bark flavor.", "$9.99"],
+              ["Brisket Plate", "Rich, sliced, and ideal for the hero category.", "$10.99"],
+              ["Half Chicken Plate", "Smoked chicken with Southern comfort energy.", "$9.99"],
+              ["Smoked Wings", "A sharp smoky entry point for first-time visitors.", "$7.99"]
+            ]
           },
           {
-            name: "Lunch",
-            meta: "Daily plates",
-            plates: normalizeItems(menu.lunch?.plates ?? defaults.lunch?.plates ?? []),
-            items: lunchItems
-          }
-        ];
-        const crawfish = crawfishFor(data, menu);
-        if (crawfish.show) cats.push({ name: "Crawfish", meta: "Seasonal special", items: crawfish.items });
-        cats.push(
-          {
-            name: "Salad Bar",
-            meta: "Build your own",
-            pricing: normalizeItems(menu.salad?.items ?? defaults.salad?.items ?? []),
-            lettuce: normalizeItems(menu.salad?.saladBar?.lettuce ?? defaults.salad?.saladBar?.lettuce ?? []),
-            toppings: normalizeItems(menu.salad?.saladBar?.toppings ?? defaults.salad?.saladBar?.toppings ?? []),
-            dressing: normalizeItems(menu.salad?.saladBar?.dressing ?? defaults.salad?.saladBar?.dressing ?? [])
+            size:"",
+            tag:"Side pairings",
+            title:"Choose your two",
+            lede:"Side language is intentionally elevated so the page feels editorial, not transactional.",
+            items:[
+              ["Corn Pudding", "Sweet, soft, and one of the most memorable supporting players.", "$2.75 / $6.99"],
+              ["Baked Beans", "Classic smokehouse depth and molasses comfort.", "$2.75 / $6.99"],
+              ["Potato Salad", "Cooling contrast against heavier smoked meats.", "$2.75 / $6.99"],
+              ["Cole Slaw", "Fresh, crisp, and essential for balance.", "$2.75 / $6.99"]
+            ]
           },
-          { name: "Drinks", meta: "Cold & hot", items: normalizeItems(menu.drinks?.items ?? defaults.drinks?.items ?? []) },
-          { name: "Dessert", meta: "Sweet finish", items: normalizeItems(menu.dessert?.items ?? defaults.dessert?.items ?? []) }
-        );
-        return cats.filter(cat =>
-          (cat.plates && cat.plates.length) ||
-          (cat.items && cat.items.length) ||
-          (cat.pricing && cat.pricing.length) ||
-          (cat.lettuce && cat.lettuce.length) ||
-          (cat.toppings && cat.toppings.length) ||
-          (cat.dressing && cat.dressing.length)
-        );
+          {
+            size:"",
+            tag:"Extra texture",
+            title:"Crisp finishers",
+            lede:"Use these to add punchy edge in the interface and in the meal.",
+            items:[
+              ["French Fries", "Straightforward, familiar, and comfort-heavy.", "$2.75 / $6.99"],
+              ["Sweet Potato Waffle Fries", "A more visual side with a distinct silhouette.", "$2.75 / $6.99"]
+            ]
+          }
+        ],
+        specials:[
+          ["Category mood", "This section is about gravity. Heavy cards, slow motion, glowing edges, and bold price locks make the smoked meats feel like luxury objects."],
+          ["Why it works", "Most restaurant menus flatten their best items into text. Here, signature plates become visual landmarks that frame the entire page."]
+        ]
+      },
+
+      sandwiches: {
+        kicker: "Handhelds",
+        title: "Sandwiches, burgers & po-boys",
+        subtitle: "Fast comfort, framed like icons.",
+        desc: "This category leans punchier and quicker, with tighter cards and more magnetic movement to reflect grab-and-go energy.",
+        cards: [
+          {
+            size:"wide",
+            tag:"Burger line",
+            title:"Stacked classics",
+            lede:"These cards can animate more aggressively on hover to fit the comfort-food personality.",
+            items:[
+              ["Hamburger", "Clean, direct, no-nonsense baseline burger.", "$6.99"],
+              ["Cheeseburger", "Classic melt and a familiar comfort cue.", "$7.99"],
+              ["Bacon Cheeseburger", "Smokier, richer, and a stronger visual sell.", "$8.99"]
+            ]
+          },
+          {
+            size:"wide",
+            tag:"Smoke sandwiches",
+            title:"From the pit",
+            lede:"The smoked sandwich pair creates a bridge between the burger audience and full plate audience.",
+            items:[
+              ["Pulled Pork Sandwich", "Soft roll, smoky center, high-appeal comfort.", "$7.99"],
+              ["Brisket Sandwich", "A high-intent order with premium perception.", "$8.99"],
+              ["Chicken Sandwich", "A lighter lane with wide appeal.", "$7.99"]
+            ]
+          },
+          {
+            size:"large",
+            tag:"Po-boy run",
+            title:"Louisiana-built po-boys",
+            lede:"The page can treat po-boys as a distinct visual culture zone with a slightly brighter accent and quicker ambient motion.",
+            items:[
+              ["Ribeye Po-boy", "More indulgent, more premium, more swagger.", "$10.99"],
+              ["Shrimp Po-boy", "A seafood pivot that widens the menu's emotional range.", "$8.99"],
+              ["Crawfish Po-boy", "Regional, expressive, and instantly memorable.", "$10.99"],
+              ["Catfish Po-boy", "Southern comfort with a familiar crunch profile.", "$8.99"]
+            ]
+          }
+        ],
+        specials:[
+          ["Category mood", "Faster motion, crisper hover response, and a slightly brighter orange edge treatment make this feel more energetic than the plate section."],
+          ["Why it works", "Users who are not yet committed to BBQ plates can enter through handheld options without feeling like they are in a secondary menu area."]
+        ]
+      },
+
+      cajun: {
+        kicker: "Cajun signatures",
+        title: "Boudin, pies & hot counter favorites",
+        subtitle: "The category with cult-following energy.",
+        desc: "This category is where the page gets more playful and collectible. Small-format items become addictive visual tokens.",
+        cards: [
+          {
+            size:"large",
+            tag:"Hot favorites",
+            title:"Counter legends",
+            lede:"This is a perfect place to lean into animated badges, micro-reviews, or limited-run labels in a production site.",
+            items:[
+              ["Steamed Boudin Links", "The kind of item that signals place immediately.", "Market"],
+              ["Boudin Balls", "Probably the easiest crowd-favorite to spotlight.", "Market"],
+              ["Pepper Jack Boudin Balls", "The spicier variant with stronger novelty pull.", "Market"],
+              ["Boudin Egg Rolls", "High-curiosity item with social-media potential.", "Market"],
+              ["Meat Pies", "Grab-and-go comfort with classic Louisiana identity.", "Market"],
+              ["Crawfish Pies", "Seafood-forward and highly regional.", "Market"]
+            ]
+          },
+          {
+            size:"",
+            tag:"Design move",
+            title:"Collectible item treatment",
+            lede:"Instead of plain list rows, each signature item can feel like a rare drop or featured artifact.",
+            items:[
+              ["Visual badge system", "Use hot, spicy, staff-pick, or local-favorite badges to deepen browsing.", ""],
+              ["Motion hint", "A subtle pulse on boudin cards gives them a signature behavioral identity.", ""]
+            ]
+          },
+          {
+            size:"",
+            tag:"Use case",
+            title:"Built for word-of-mouth",
+            lede:"These are the pieces visitors remember, mention, and come back to try next time.",
+            items:[
+              ["Best social hooks", "Boudin Balls, Egg Rolls, Crawfish Pies", ""],
+              ["Best design focus", "Scarcity, flavor intensity, local identity", ""]
+            ]
+          }
+        ],
+        specials:[
+          ["Category mood", "This is the most 'talked about' category, so it gets a slightly more collectible visual rhythm."],
+          ["Why it works", "Novelty items become memorable when the interface treats them like discoveries rather than footnotes."]
+        ]
+      },
+
+      sweets: {
+        kicker: "Finish the meal",
+        title: "Desserts",
+        subtitle: "A softer glow after the fire.",
+        desc: "The color palette shifts warmer and creamier here. Motion eases. Shadows lift. The energy changes like the final act of a film.",
+        cards: [
+          {
+            size:"wide",
+            tag:"House-made close",
+            title:"Southern dessert finish",
+            lede:"This zone is intentionally more elegant and less aggressive, giving the experience a satisfying landing.",
+            items:[
+              ["Homemade Bread Pudding", "Rich, nostalgic, and one of the strongest comfort signals.", "House"],
+              ["Creole Cream Cheesecake", "A more refined sweet note with regional personality.", "House"],
+              ["Chocolate Cake", "Dense, familiar, and universally legible.", "House"]
+            ]
+          },
+          {
+            size:"wide",
+            tag:"Bright finish",
+            title:"Lighter sweet energy",
+            lede:"End the page with color and softness so the entire interface doesn't stay on one smoky emotional note.",
+            items:[
+              ["Carrot Cake", "Spiced sweetness and a home-baked feel.", "House"],
+              ["Strawberry Shortcake", "The brightest dessert profile on the board.", "House"],
+              ["Miss Mud Pie", "Shown in specials imagery as a richer premium dessert.", "$7"]
+            ]
+          },
+          {
+            size:"large",
+            tag:"Design move",
+            title:"Dessert as atmosphere shift",
+            lede:"Instead of simply appending sweets at the bottom, dessert changes the mood of the experience. That contrast is part of what makes the design feel expensive.",
+            items:[
+              ["Color treatment", "Cream, gold, soft ember, and lifted glass reflections.", ""],
+              ["Motion treatment", "Slower transitions and softer parallax than meat categories.", ""],
+              ["Typography treatment", "A touch more serif elegance to signal a final course.", ""]
+            ]
+          }
+        ],
+        specials:[
+          ["Category mood", "The scene relaxes here. Fire becomes glow. Smoke becomes haze. The page exhales."],
+          ["Why it works", "A dramatic interface needs emotional contrast. Dessert gives the system a second register."]
+        ]
+      },
+
+      specials: {
+        kicker: "Spotlight features",
+        title: "Special boards & chef energy",
+        subtitle: "The zone for surprise, rotation, and flex.",
+        desc: "A future-proof slot for weekly specials, chef features, and limited-run drops. This is where the site can feel alive every visit.",
+        cards: [
+          {
+            size:"large",
+            tag:"Sample spotlight",
+            title:"Board-driven specials",
+            lede:"These sample entries are based on the special-board style captured in public imagery and are ideal for animated feature placement.",
+            items:[
+              ["Sweet Thai Chili Wings", "App-style entry with sticky heat and visual punch.", "$16"],
+              ["Eggplant Pirogue with Seafood-Style Stuffing", "A more elevated plate that expands the brand upward.", "$26"],
+              ["Blackened Lemon Fish with Cream Spinach + Grilled Crawfish Tails", "A premium special that adds theater.", "$28"],
+              ["Jack Daniel's BBQ Shrimp + 14oz Bone-In Pork Chop", "The most dramatic board item in the set.", "$26"],
+              ["Grilled Salmon with Crabmeat + Avocado Cream Sauce", "Signals versatility beyond classic smokehouse expectations.", "$28"]
+            ]
+          },
+          {
+            size:"",
+            tag:"Website potential",
+            title:"Limited-run drop system",
+            lede:"In a production build, this can become the section that changes most often and keeps the site from feeling static.",
+            items:[
+              ["Timed release cards", "Specials can appear with countdowns, glow states, or 'today only' pulses.", ""],
+              ["Photo-forward mode", "This category benefits most from large-format imagery when available.", ""]
+            ]
+          },
+          {
+            size:"",
+            tag:"Merch logic",
+            title:"Make the menu feel alive",
+            lede:"A strong specials mechanic can create repeat traffic just by changing motion and wording every week.",
+            items:[
+              ["Refresh cadence", "Weekly or twice-weekly", ""],
+              ["Best emotional hook", "scarcity + spectacle", ""]
+            ]
+          }
+        ],
+        specials:[
+          ["Category mood", "This is where the site feels most current and most dangerous—in the best way."],
+          ["Why it works", "Specials are not buried. They become an event, which makes the brand feel active instead of archival."]
+        ]
       }
+    };
 
-      function renderCategoryContent(cat, data) {
-        let html = "";
-        if (cat.plates?.length) {
-          html += `<div class="section-label">Plates</div><ul class="list">${cat.plates.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
-        }
-        if (cat.items?.length) {
-          html += `<div class="section-label">Items</div><ul class="list">` + cat.items.map(it => {
-            if (typeof it === "string") return `<li>${escapeHtml(it)}</li>`;
-            return `<li><details><summary>${escapeHtml(it.name)}</summary><div class="desc">${escapeHtml(it.desc || data?.settings?.noDescriptionText || "No description for this item.")}</div></details></li>`;
-          }).join("") + `</ul>`;
-        }
-        if (cat.pricing?.length) html += `<div class="section-label">Pricing</div><ul class="list">${cat.pricing.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
-        if (cat.lettuce?.length) html += `<div class="section-label">Lettuce</div><ul class="list">${cat.lettuce.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
-        if (cat.toppings?.length) html += `<div class="section-label">Toppings</div><ul class="list">${cat.toppings.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
-        if (cat.dressing?.length) html += `<div class="section-label">Dressing</div><ul class="list">${cat.dressing.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
-        return html || `<div class="subline">No items available.</div>`;
-      }
+    const categoryMeta = [
+      {key:"bbq", kicker:"Smoke core", title:"BBQ Plates", blurb:"The heavy hitters. Deep smoke, rich cards, premium pacing."},
+      {key:"sandwiches", kicker:"Handheld velocity", title:"Burgers & Po-boys", blurb:"More agile, more magnetic, more immediate."},
+      {key:"cajun", kicker:"Local cult favorites", title:"Boudin & Pies", blurb:"Signature small bites with collectible energy."},
+      {key:"sweets", kicker:"Soft close", title:"Desserts", blurb:"Creamier glow, lifted glass, final-course atmosphere."},
+      {key:"specials", kicker:"Live board", title:"Specials", blurb:"Chef energy, weekly drops, and surprise features."}
+    ];
 
-      function pickLunchCombo(cat) {
-        const entries = Array.isArray(cat?.items) ? cat.items.slice() : [];
-        const labels = entries.map(it => typeof it === "string" ? it : (it?.name || "")).filter(Boolean);
-        if (!labels.length) return null;
+    const nav = document.getElementById('categoryNav');
+    const grid = document.getElementById('menuGrid');
+    let current = 'bbq';
 
-        const meats = labels.filter(x => /chicken|pork|steak|fish|shrimp|hamburger|roast|sausage|turkey|beef|meatloaf|catfish|tenders|boudin/i.test(x));
-        const sides = labels.filter(x => !/chicken|pork|steak|fish|shrimp|hamburger|roast|sausage|turkey|beef|meatloaf|catfish|tenders|boudin/i.test(x));
-
-        const rand = arr => arr[Math.floor(Math.random() * arr.length)];
-        const meat = meats.length ? rand(meats) : rand(labels);
-        const sidePool = sides.length ? sides.slice() : labels.filter(x => x !== meat);
-        const side1 = sidePool.length ? rand(sidePool) : null;
-        const side2Pool = sidePool.filter(x => x !== side1);
-        const side2 = side2Pool.length ? rand(side2Pool) : (sidePool.length > 1 ? sidePool[0] : null);
-
-        return { meat, sides: [side1, side2].filter(Boolean) };
-      }
-      function renderPickCard(prefix, combo, catName) {
-        const el = $(`${prefix}PickCard`);
-        if (!el) return;
-        if (!combo) {
-          el.innerHTML = "";
-          return;
-        }
-        el.innerHTML = `
-          <div class="pick-card">
-            <div class="pick-title">Suggested ${escapeHtml(catName)} Plate</div>
-            <div class="pick-line">Meat: ${escapeHtml(combo.meat || "Chef's choice")}</div>
-            <div class="pick-line">Sides: ${escapeHtml((combo.sides || []).join(" + ") || "Chef's choice")}</div>
-          </div>
+    function renderNav() {
+      nav.innerHTML = '';
+      categoryMeta.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'swirl-btn' + (cat.key === current ? ' active' : '');
+        btn.innerHTML = `
+          <div class="kicker">${cat.kicker}</div>
+          <strong>${cat.title}</strong>
+          <span>${cat.blurb}</span>
         `;
-      }
-
-      function updateNowBar(prefix, dayName, isoDate) {
-        const el = $(`${prefix}Now`);
-        if (!el) return;
-
-        const todayISO = toISODateLocal(new Date());
-        const isActualToday = isoDate === todayISO;
-        const h = getBusinessHours(dayName);
-
-        if (!isActualToday) {
-          el.className = "nowbar warn";
-          el.textContent = `${dayName} • Opens at ${h.open}`;
-          return;
-        }
-
-        const now = new Date();
-        const mins = now.getHours() * 60 + now.getMinutes();
-        const breakfastEnd = 10 * 60 + 30;
-        const lunchStart = 11 * 60;
-
-        let text = "";
-        let cls = "";
-
-        if (!rangeIncludes(mins, `${h.open} - ${h.close}`) && !(h.crawfish && rangeIncludes(mins, h.crawfish))) {
-          text = `Closed • Opens ${h.open}`;
-          cls = "closed";
-        } else if (mins < breakfastEnd) {
-          const remaining = breakfastEnd - mins;
-          text = `Breakfast • Ends in ${remaining} min`;
-          cls = remaining < 30 ? "warn" : "open";
-        } else if (mins < lunchStart) {
-          text = "Transition • Lunch starts at 11:00 AM";
-          cls = "warn";
-        } else if (rangeIncludes(mins, h.lunch)) {
-          text = "Now Serving Lunch";
-          cls = "open";
-        } else if (h.crawfish && rangeIncludes(mins, h.crawfish)) {
-          text = "Now Serving Crawfish";
-          cls = "open";
-        } else {
-          text = `Closed • Opens ${h.open}`;
-          cls = "closed";
-        }
-
-        el.className = `nowbar ${cls}`;
-        el.textContent = text;
-      }
-
-      function initSwipe(prefix, categories, data) {
-        const track = $(`${prefix}SwipeTrack`);
-        const prev = $(`${prefix}PrevCard`);
-        const next = $(`${prefix}NextCard`);
-        const chipNav = $(`${prefix}ChipNav`);
-        if (!track) return null;
-
-        track.innerHTML = categories.map((cat, i) => `
-          <article class="swipe-card${i === 0 ? ' active' : ''}" data-index="${i}">
-            <div class="card-meta">${escapeHtml(cat.meta || "Menu category")}</div>
-            <div class="cat-title">${escapeHtml(cat.name)}</div>
-            ${renderCategoryContent(cat, data)}
-          </article>
-        `).join("");
-
-        if (chipNav) {
-          chipNav.innerHTML = categories.map((cat, i) =>
-            `<button class="chip${i === 0 ? ' active' : ''}" data-index="${i}">${escapeHtml(cat.name)}</button>`
-          ).join("");
-        }
-
-        const cards = Array.from(track.querySelectorAll(".swipe-card"));
-        const chips = Array.from((chipNav || document.createElement("div")).querySelectorAll(".chip"));
-
-        function activeIndex() {
-          const left = track.scrollLeft;
-          const width = track.clientWidth || 1;
-          return Math.round(left / width);
-        }
-        function updateStatus() {
-          const idx = Math.max(0, Math.min(categories.length - 1, activeIndex()));
-          setText(`${prefix}CardStatus`, `${categories[idx]?.name || ""} • ${idx + 1} / ${categories.length}`);
-          cards.forEach((card, i) => card.classList.toggle("active", i === idx));
-          chips.forEach((chip, i) => chip.classList.toggle("active", i === idx));
-        }
-        function goTo(idx) {
-          const clamped = Math.max(0, Math.min(categories.length - 1, idx));
-          track.scrollTo({ left: clamped * track.clientWidth, behavior: "smooth" });
-          window.setTimeout(updateStatus, 220);
-        }
-
-        prev?.addEventListener("click", () => goTo(activeIndex() - 1));
-        next?.addEventListener("click", () => goTo(activeIndex() + 1));
-        chips.forEach(chip => chip.addEventListener("click", () => goTo(Number(chip.dataset.index || 0))));
-        track.addEventListener("scroll", () => requestAnimationFrame(updateStatus));
-        window.addEventListener("resize", updateStatus);
-
-        cards.forEach(card => {
-          card.addEventListener("pointermove", e => {
-            const rect = card.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
-            const y = ((e.clientY - rect.top) / rect.height - 0.5) * -10;
-            card.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${y}deg)`;
-          });
-          card.addEventListener("pointerleave", () => {
-            card.style.transform = "perspective(1000px) rotateY(0deg) rotateX(0deg)";
-          });
+        btn.addEventListener('click', () => {
+          current = cat.key;
+          renderNav();
+          renderMenu();
         });
+        nav.appendChild(btn);
+      });
+    }
 
-        updateStatus();
+    function itemLine(item){
+      return `
+        <div class="line">
+          <div>
+            <strong>${item[0]}</strong>
+            <span>${item[1]}</span>
+          </div>
+          <div class="price">${item[2] || '&nbsp;'}</div>
+        </div>
+      `;
+    }
 
-        return {
-          selectByName(name) {
-            const idx = categories.findIndex(c => c.name === name);
-            if (idx >= 0) {
-              goTo(idx);
-              const card = cards[idx];
-              if (card) {
-                card.classList.add("pulse");
-                setTimeout(() => card.classList.remove("pulse"), 900);
-              }
-            }
-          }
-        };
-      }
-
-      function initWheel(prefix, categories, data, dayName, isTodayPanel) {
-        const wrap = $(`${prefix}WheelWrap`);
-        const wheel = $(`${prefix}Wheel`);
-        const detailTitle = $(`${prefix}DetailTitle`);
-        const detailContent = $(`${prefix}DetailContent`);
-        const detailCard = $(`${prefix}DetailCard`);
-        if (!wrap || !wheel || !detailTitle || !detailContent) return null;
-
-        const N = categories.length;
-        const step = 360 / N;
-        const radius = 112;
-        const topAngle = -90;
-        wheel.innerHTML = "";
-
-        const items = categories.map(cat => {
-          const el = document.createElement("div");
-          el.className = "wheel-item";
-          el.textContent = cat.name;
-          wheel.appendChild(el);
-          return el;
-        });
-
-        let angle = 0;
-        let velocity = 0;
-        let dragging = false;
-        let lastPointerAngle = 0;
-        let selected = 0;
-        let raf = 0;
-        let lockedByHours = false;
-
-        function shortestDelta(a, b) {
-          let diff = a - b;
-          while (diff > 180) diff -= 360;
-          while (diff < -180) diff += 360;
-          return diff;
-        }
-        function pointerAngle(e) {
-          const rect = wrap.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          return Math.atan2(e.clientY - cy, e.clientX - cx) * 180 / Math.PI;
-        }
-        function selectedIndex() {
-          let best = 0, bestDiff = Infinity;
-          for (let i = 0; i < N; i++) {
-            const a = topAngle + i * step + angle;
-            const diff = Math.abs(shortestDelta(a, topAngle));
-            if (diff < bestDiff) {
-              bestDiff = diff;
-              best = i;
-            }
-          }
-          return best;
-        }
-        function canShowCategory(cat) {
-          if (!isTodayPanel) return true;
-          return categoryOpenNow(cat.name, dayName, new Date());
-        }
-        function renderDetailFor(idx, force=false) {
-          const cat = categories[idx];
-          const allowed = canShowCategory(cat);
-          lockedByHours = !allowed;
-          detailTitle.textContent = cat.name;
-
-          const closedNowNote = isTodayPanel && !allowed
-            ? `<div class="closed-note">This is the ${escapeHtml(dayName)} menu for ${escapeHtml(cat.name)}. They are currently closed for this category. ${escapeHtml(openingMessageFor(dayName))}</div>`
-            : "";
-
-          detailContent.innerHTML = renderCategoryContent(cat, data) + closedNowNote;
-          renderPickCard(prefix, null, cat.name);
-
-          if (force) {
-            detailCard.classList.add("pulse");
-            setTimeout(() => detailCard.classList.remove("pulse"), 520);
-          }
-        }
-        function render(force=false) {
-          wheel.style.transform = `rotate(${angle}deg)`;
-          items.forEach((item, i) => {
-            const base = topAngle + i * step;
-            item.style.transform = `rotate(${base}deg) translate(${radius}px) rotate(${-base - angle}deg)`;
-          });
-          const idx = selectedIndex();
-          if (force || idx !== selected) {
-            selected = idx;
-            items.forEach((item, i) => item.classList.toggle("selected", i === idx));
-            renderDetailFor(idx, true);
-          }
-        }
-        function tick() {
-          raf = 0;
-          if (!dragging) {
-            angle += velocity;
-            velocity *= 0.965;
-            if (Math.abs(velocity) < 0.02) {
-              const target = -(selectedIndex() * step);
-              const delta = shortestDelta(target, angle);
-              angle += delta * 0.16;
-              if (Math.abs(delta) < 0.2) {
-                angle = target;
-                velocity = 0;
-                render(true);
-                return;
-              }
-            }
-          }
-          render();
-          raf = requestAnimationFrame(tick);
-        }
-        function ensureAnim() { if (!raf) raf = requestAnimationFrame(tick); }
-        function onDown(e) {
-          e.preventDefault();
-          dragging = true;
-          wrap.classList.add("dragging");
-          velocity = 0;
-          lastPointerAngle = pointerAngle(e);
-          wrap.setPointerCapture?.(e.pointerId);
-          ensureAnim();
-        }
-        function onMove(e) {
-          if (!dragging) return;
-          e.preventDefault();
-          const a = pointerAngle(e);
-          const delta = shortestDelta(a, lastPointerAngle);
-          lastPointerAngle = a;
-          angle += delta;
-          velocity = delta;
-          render();
-        }
-        function onUp(e) {
-          if (!dragging) return;
-          dragging = false;
-          wrap.classList.remove("dragging");
-          wrap.releasePointerCapture?.(e.pointerId);
-          ensureAnim();
-        }
-        function onClick() {
-          if (lockedByHours && isTodayPanel) {
-            showLuckModal("Currently closed", `${categories[selected].name} is not being served right now. ${openingMessageFor(dayName)}`);
-          }
-        }
-
-        wrap.addEventListener("pointerdown", onDown, { passive: false });
-        wrap.addEventListener("pointermove", onMove, { passive: false });
-        wrap.addEventListener("pointerup", onUp);
-        wrap.addEventListener("pointercancel", onUp);
-        detailCard.addEventListener("click", onClick);
-        render(true);
-
-        return {
-          aiPick() {
-            const lunchCat = categories.find(c => String(c.name).toLowerCase() === "lunch");
-            const targetCat = lunchCat || categories.find(c => canShowCategory(c)) || categories[0];
-            if (!targetCat) {
-              showLuckModal("Currently closed", openingMessageFor(dayName));
-              return null;
-            }
-            if (isTodayPanel && !canShowCategory(targetCat)) {
-              showLuckModal("Currently closed", `${targetCat.name} is not being served right now. ${openingMessageFor(dayName)}`);
-              return null;
-            }
-            const idx = categories.findIndex(c => c.name === targetCat.name);
-            const combo = pickLunchCombo(targetCat);
-            const target = -(idx * step);
-            const start = performance.now();
-            const startAngle = angle;
-            const extraTurns = 720 + Math.random() * 360;
-            const endAngle = target + extraTurns;
-
-            function animate(now) {
-              const t = Math.min(1, (now - start) / 2400);
-              const ease = 1 - Math.pow(1 - t, 3);
-              angle = startAngle + (endAngle - startAngle) * ease;
-              velocity = 0;
-              render();
-              if (t < 1) requestAnimationFrame(animate);
-              else {
-                angle = target;
-                render(true);
-                renderPickCard(prefix, combo, targetCat.name);
-                detailCard.classList.add("pulse");
-                setTimeout(() => detailCard.classList.remove("pulse"), 900);
-              }
-            }
-            requestAnimationFrame(animate);
-            return targetCat;
-          },
-          selectByName(name) {
-            const idx = categories.findIndex(c => c.name === name);
-            if (idx >= 0) {
-              angle = -(idx * step);
-              render(true);
-            }
-          }
-        };
-      }
-
-      function setupViewToggle(prefix) {
-        const wheelBtn = $(`${prefix}ViewWheel`);
-        const swipeBtn = $(`${prefix}ViewSwipe`);
-        const wheelView = $(`${prefix}WheelView`);
-        const swipeView = $(`${prefix}SwipeView`);
-
-        swipeBtn?.classList.add("active");
-        wheelBtn?.classList.remove("active");
-        swipeView?.classList.remove("hide");
-        wheelView?.classList.add("hide");
-
-        wheelBtn?.addEventListener("click", () => {
-          wheelBtn.classList.add("active");
-          swipeBtn?.classList.remove("active");
-          wheelView?.classList.remove("hide");
-          swipeView?.classList.add("hide");
-        });
-        swipeBtn?.addEventListener("click", () => {
-          swipeBtn.classList.add("active");
-          wheelBtn?.classList.remove("active");
-          swipeView?.classList.remove("hide");
-          wheelView?.classList.add("hide");
-        });
-      }
-
-      function setupDayTabs() {
-        const buttons = [$("dayBtnToday"), $("dayBtnTomorrow"), $("dayBtnSpecial")];
-        const panels = [$("panel-today"), $("panel-tomorrow"), $("panel-special")];
-        buttons.forEach((btn, i) => {
-          btn?.addEventListener("click", () => {
-            buttons.forEach((b, bi) => {
-              b.classList.toggle("active", bi === i);
-              b.setAttribute("aria-selected", bi === i ? "true" : "false");
-            });
-            panels.forEach((p, pi) => p.classList.toggle("hide", pi !== i));
-          });
-        });
-      }
-
-      function buildDailySpecial(data, isoDate, dayName) {
-        const titleEl = $("dailySpecialTitle");
-        const contentEl = $("dailySpecialContent");
-        const disclaimerEl = $("specialDisclaimer");
-        if (!titleEl || !contentEl || !disclaimerEl) return;
-
-        const d = parseISODateToLocal(isoDate);
-        const todayISO = toISODateLocal(new Date());
-        const menu = getMenuByDate(data, isoDate) || {};
-        const lunch = menu?.lunch || {};
-        const specialTitle = String(lunch.specialTitle ?? menu?.specialTitle ?? "").trim();
-        const specialDesc = String(lunch.specialDesc ?? menu?.specialDesc ?? "").trim();
-        const plates = normalizeItems(lunch.plates || []);
-        const items = normalizeLunchItems(lunch.items || []);
-        const closure = getClosure(data, dayName);
-
-        const isSameDay = isoDate === todayISO;
-        const afterCloseToday = isSameDay ? isPastClosingToday([], dayName) : false;
-        const hideSpecial = !!closure?.closed || afterCloseToday;
-
-        disclaimerEl.textContent = `${dayName} • ${formatDateNice(d)}`;
-
-        if (hideSpecial) {
-          titleEl.textContent = `${dayName} Daily Special`;
-          contentEl.innerHTML = `
-            <div class="special-off">
-              <div class="special-badge">Not Active</div>
-              <div>The daily special is hidden right now.</div>
-              <div>Update the date and special to show a new one.</div>
+    function renderMenu(){
+      const data = menuData[current];
+      const cards = data.cards.map(card => `
+        <article class="menu-card ${card.size || ''}" data-tilt>
+          <div class="top">
+            <div>
+              <div class="tag">${card.tag}</div>
+              <h4>${card.title}</h4>
             </div>
-          `;
-          return;
-        }
+          </div>
+          <p class="lede">${card.lede}</p>
+          <div class="lines">${card.items.map(itemLine).join('')}</div>
+        </article>
+      `).join('');
 
-        if (!specialTitle && !specialDesc && !plates.length && !items.length) {
-          titleEl.textContent = `${dayName} Daily Special`;
-          contentEl.innerHTML = `
-            <div class="special-off">
-              <div class="special-badge">No Special Posted</div>
-              <div>There is no daily special set for this date yet.</div>
+      const specials = `
+        <article class="menu-card large" data-tilt>
+          <div class="top">
+            <div>
+              <div class="tag">${data.kicker}</div>
+              <h4>${data.title}</h4>
             </div>
-          `;
-          return;
-        }
+          </div>
+          <p class="lede">${data.desc}</p>
+          <div class="special-portal">
+            ${data.specials.map(s => `
+              <div class="special">
+                <div class="small">${data.subtitle}</div>
+                <strong>${s[0]}</strong>
+                <p>${s[1]}</p>
+              </div>
+            `).join('')}
+          </div>
+          <div class="grid-note">
+            Prototype note: this concept uses menu data as content fuel, but the real innovation is the interaction model,
+            atmosphere system, and the feeling that the menu is performing in real time.
+          </div>
+        </article>
+      `;
 
-        titleEl.textContent = specialTitle || `${dayName} Daily Special`;
-        let html = `<div class="special-badge">Featured Today</div>`;
+      grid.innerHTML = specials + cards;
+      bindTilt();
+    }
 
-        if (specialDesc) {
-          html += `<div class="subline" style="margin-bottom:12px;">${escapeHtml(specialDesc)}</div>`;
+    function bindTilt(){
+      document.querySelectorAll('[data-tilt]').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width;
+          const py = (e.clientY - r.top) / r.height;
+          const rx = (py - .5) * -8;
+          const ry = (px - .5) * 10;
+          card.style.transform = `translateY(-8px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+    }
+
+    renderNav();
+    renderMenu();
+
+    // Cursor spotlight
+    window.addEventListener('pointermove', e => {
+      document.documentElement.style.setProperty('--cursorX', e.clientX + 'px');
+      document.documentElement.style.setProperty('--cursorY', e.clientY + 'px');
+    });
+
+    // Reveal on scroll
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('show');
         }
-        if (plates.length) {
-          html += `<div class="section-label">Plates</div><ul class="list">${plates.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
+      });
+    }, {threshold: .14});
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Smoke canvas
+    const smokeCanvas = document.getElementById('smoke');
+    const sctx = smokeCanvas.getContext('2d');
+    const emberCanvas = document.getElementById('embers');
+    const ectx = emberCanvas.getContext('2d');
+    let w, h, dpr;
+    let smokes = [];
+    let embers = [];
+
+    function resize(){
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = smokeCanvas.width = emberCanvas.width = innerWidth * dpr;
+      h = smokeCanvas.height = emberCanvas.height = innerHeight * dpr;
+      smokeCanvas.style.width = emberCanvas.style.width = innerWidth + 'px';
+      smokeCanvas.style.height = emberCanvas.style.height = innerHeight + 'px';
+      sctx.setTransform(dpr,0,0,dpr,0,0);
+      ectx.setTransform(dpr,0,0,dpr,0,0);
+      makeParticles();
+    }
+
+    function makeParticles(){
+      smokes = Array.from({length: Math.max(24, Math.floor(innerWidth / 55))}, () => ({
+        x: Math.random() * innerWidth,
+        y: innerHeight + Math.random() * innerHeight,
+        r: 50 + Math.random() * 180,
+        dx: -0.4 + Math.random() * 0.8,
+        dy: 0.35 + Math.random() * 1.0,
+        a: 0.03 + Math.random() * 0.055
+      }));
+      embers = Array.from({length: Math.max(38, Math.floor(innerWidth / 28))}, () => ({
+        x: Math.random() * innerWidth,
+        y: Math.random() * innerHeight,
+        r: 0.8 + Math.random() * 2.2,
+        dx: -0.55 + Math.random() * 1.1,
+        dy: -0.25 - Math.random() * 1.2,
+        a: 0.22 + Math.random() * 0.5
+      }));
+    }
+
+    function drawSmoke(){
+      sctx.clearRect(0,0,innerWidth,innerHeight);
+      for(const p of smokes){
+        const g = sctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+        g.addColorStop(0, `rgba(255,255,255,${p.a})`);
+        g.addColorStop(.35, `rgba(210,210,210,${p.a * .45})`);
+        g.addColorStop(1, 'rgba(80,80,80,0)');
+        sctx.fillStyle = g;
+        sctx.beginPath();
+        sctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        sctx.fill();
+
+        p.x += p.dx + Math.sin((performance.now() * 0.0004) + p.y * 0.004) * .25;
+        p.y -= p.dy * .18;
+        if(p.y < -p.r){
+          p.x = Math.random() * innerWidth;
+          p.y = innerHeight + p.r + Math.random() * 140;
         }
-        if (items.length) {
-          html += `<div class="section-label">Included Items</div><ul class="list">` +
-            items.map(it => `<li><strong>${escapeHtml(it.name)}</strong>${it.desc ? `<div class="desc">${escapeHtml(it.desc)}</div>` : ""}</li>`).join("") +
-            `</ul>`;
-        }
-        contentEl.innerHTML = html;
       }
+    }
 
-      function initPanel(prefix, data, isoDate, displayName) {
-        const hours = getBusinessHours(displayName);
-        const closure = getClosure(data, displayName);
-        const isTodayPanel = prefix === "today";
+    function drawEmbers(){
+      ectx.clearRect(0,0,innerWidth,innerHeight);
+      for(const p of embers){
+        ectx.beginPath();
+        ectx.fillStyle = `rgba(255, ${140 + Math.random()*80}, ${50 + Math.random()*30}, ${p.a})`;
+        ectx.shadowBlur = 14;
+        ectx.shadowColor = 'rgba(255,140,66,.45)';
+        ectx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ectx.fill();
 
-        setText(`${prefix}Title`, `${displayName} (${formatDateNice(parseISODateToLocal(isoDate))}) Menu`);
-        setText(`${prefix}Hours`,
-          closure?.closed
-            ? `${displayName} Hours: Closed`
-            : `${displayName} Hours: ${hours.open} – ${hours.close} • Breakfast ${hours.breakfast} • Lunch ${hours.lunch}${hours.crawfish ? ` • Crawfish ${hours.crawfish}` : ""}`
-        );
-
-        const todayISO = toISODateLocal(new Date());
-        const isActualToday = isoDate === todayISO;
-        const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
-
-        const noteEl = $(`${prefix}Note`);
-        let nowStatus = "";
-
-        if (closure?.closed) {
-          nowStatus = `<span class="statusdot closed"></span> CLOSED`;
-        } else if (!isActualToday) {
-          nowStatus = `<span class="statusdot closed"></span> SCHEDULED`;
-        } else {
-          const openNow = rangeIncludes(nowMinutes, `${hours.open} - ${hours.close}`) || (!!hours.crawfish && rangeIncludes(nowMinutes, hours.crawfish));
-          nowStatus = `<span class="statusdot ${openNow ? "" : "closed"}"></span>${openNow ? "OPEN NOW" : "CURRENTLY CLOSED"}`;
+        p.x += p.dx + Math.sin((performance.now() * 0.001) + p.y * 0.02) * .1;
+        p.y += p.dy;
+        if(p.y < -10 || p.x < -20 || p.x > innerWidth + 20){
+          p.x = Math.random() * innerWidth;
+          p.y = innerHeight + Math.random() * 60;
         }
-
-        if (noteEl) {
-          noteEl.innerHTML = `${escapeHtml(data?.hours?.note || "")}<div class="statusbar">${nowStatus}</div>`;
-        }
-
-        updateNowBar(prefix, displayName, isoDate);
-
-        if (closure?.closed) {
-          $(`${prefix}Closed`).classList.remove("hide");
-          setText(`${prefix}ClosedMsg`, closure.message || "See you next time!");
-        } else {
-          $(`${prefix}Closed`).classList.add("hide");
-        }
-
-        const cats = buildCategoryData(data, isoDate);
-        const wheelApi = initWheel(prefix, cats, data, displayName, isTodayPanel);
-        const swipeApi = initSwipe(prefix, cats, data);
-        setupViewToggle(prefix);
-
-        $(`${prefix}AIBtn`)?.addEventListener("click", () => {
-          const picked = wheelApi?.aiPick();
-          if (picked) swipeApi?.selectByName(picked.name);
-        });
       }
+      ectx.shadowBlur = 0;
+    }
 
-      function initNav() {
-        const overlay = $("circMenuOverlay");
-        const navBtn = $("navBtnBottom");
-        const home = $("homeCenter");
-        const items = Array.from(document.querySelectorAll(".menu-item"));
-        if (!overlay || !navBtn || !home) return;
+    function tick(){
+      drawSmoke();
+      drawEmbers();
+      requestAnimationFrame(tick);
+    }
 
-        navBtn.addEventListener("click", e => {
-          e.stopPropagation();
-          overlay.classList.toggle("open");
-        });
-        overlay.addEventListener("click", e => {
-          if (e.target === overlay) overlay.classList.remove("open");
-        });
-        home.addEventListener("click", () => {
-          overlay.classList.remove("open");
-          const link = home.getAttribute("data-link");
-          if (link) window.location.href = link;
-        });
-
-        async function sharePage() {
-          const data = { title: document.title, text: "Check out Fransis!", url: window.location.href };
-          try {
-            if (navigator.share) await navigator.share(data);
-            else if (navigator.clipboard) {
-              await navigator.clipboard.writeText(window.location.href);
-              alert("Link copied!");
-            }
-          } catch (_) {}
-        }
-
-        items.forEach(item => item.addEventListener("click", () => {
-          overlay.classList.remove("open");
-          const action = item.getAttribute("data-action");
-          const link = item.getAttribute("data-link");
-          if (action === "share") sharePage();
-          else if (link) window.location.href = link;
-        }));
-
-        document.querySelector(".circular-menu")?.addEventListener("click", e => e.stopPropagation());
-
-        const modalEl = $("luckModal");
-        const flashCard = modalEl?.querySelector(".flash-card");
-        flashCard?.addEventListener("click", e => e.stopPropagation());
-        modalEl?.addEventListener("click", () => hideLuckModal());
-        window.addEventListener("keydown", e => {
-          if (e.key === "Escape") hideLuckModal();
-        });
-      }
-
-      setupDayTabs();
-      initNav();
-
-      (async function init() {
-        try {
-          const data = await readData();
-          const now = new Date();
-          const todayISO = toISODateLocal(now);
-          const todayName = weekdayName(now);
-          const tomorrow = new Date(now);
-          tomorrow.setDate(now.getDate() + 1);
-          const tomorrowISO = toISODateLocal(tomorrow);
-          const tomorrowName = weekdayName(tomorrow);
-
-          let displayTodayISO = todayISO;
-          let displayTodayName = todayName;
-          let displayTomorrowISO = tomorrowISO;
-          let displayTomorrowName = tomorrowName;
-
-          const closureToday = getClosure(data, todayName);
-          if (isPastClosingToday([], todayName) && !closureToday?.closed) {
-            displayTodayISO = tomorrowISO;
-            displayTodayName = tomorrowName;
-            const dayAfter = new Date(now);
-            dayAfter.setDate(now.getDate() + 2);
-            displayTomorrowISO = toISODateLocal(dayAfter);
-            displayTomorrowName = weekdayName(dayAfter);
-          }
-
-          initPanel("today", data, displayTodayISO, displayTodayName);
-          initPanel("tomorrow", data, displayTomorrowISO, displayTomorrowName);
-          buildDailySpecial(data, displayTodayISO, displayTodayName);
-        } catch (e) {
-          console.error(e);
-          showLoadError(String(e?.message || e));
-        }
-      })();
-    })();
+    window.addEventListener('resize', resize);
+    resize();
+    tick();
   </script>
 </body>
 </html>
