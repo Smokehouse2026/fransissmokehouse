@@ -1444,6 +1444,129 @@
       margin:0 auto;
     }
 
+    .special-spotlight{
+      position:relative;
+      min-height:330px;
+      border-radius:30px;
+      border:1px solid rgba(255,233,209,.08);
+      background:
+        radial-gradient(circle at center, rgba(224,129,93,.08), transparent 58%),
+        linear-gradient(180deg, rgba(24,18,17,.62), rgba(12,10,10,.88));
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      padding:1rem;
+    }
+
+    .special-wheel{
+      position:relative;
+      width:min(100%, 320px);
+      aspect-ratio:1/1;
+      border-radius:50%;
+      animation:spin 16s linear infinite;
+      filter:drop-shadow(0 0 24px rgba(224,129,93,.22));
+    }
+
+    .special-wheel::before{
+      content:"";
+      position:absolute;
+      inset:16%;
+      border-radius:50%;
+      border:1px solid rgba(255,233,209,.08);
+      background:radial-gradient(circle at center, rgba(255,255,255,.03), rgba(0,0,0,0) 68%);
+      box-shadow:inset 0 0 22px rgba(224,129,93,.08);
+    }
+
+    .special-wheel::after{
+      content:"";
+      position:absolute;
+      inset:38%;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 35% 35%, #fff1de, var(--gold) 45%, var(--ember-2) 72%, transparent 74%);
+      box-shadow:0 0 34px rgba(224,129,93,.34);
+      animation:pulse 4.8s ease-in-out infinite;
+    }
+
+    .special-wheel-item{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:118px;
+      min-height:118px;
+      padding:.7rem;
+      border-radius:24px;
+      border:1px solid rgba(255,233,209,.1);
+      background:linear-gradient(180deg, rgba(30,23,22,.78), rgba(14,11,11,.94));
+      backdrop-filter:blur(10px);
+      transform:
+        translate(-50%, -50%)
+        rotate(calc(var(--angle) * 1deg))
+        translateY(-124px)
+        rotate(calc(var(--angle) * -1deg));
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      box-shadow:0 18px 26px -22px rgba(0,0,0,.9);
+    }
+
+    .special-wheel-item strong{
+      display:block;
+      font-family:var(--serif);
+      font-size:.95rem;
+      line-height:.95;
+      color:#fff1e4;
+      margin-bottom:.2rem;
+    }
+
+    .special-wheel-item span{
+      display:block;
+      font-size:.6rem;
+      color:rgba(248,240,230,.6);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      margin-bottom:.2rem;
+    }
+
+    .special-wheel-item em{
+      font-style:normal;
+      color:var(--gold);
+      font-weight:800;
+      font-size:.75rem;
+    }
+
+    .special-spotlight-copy{
+      position:absolute;
+      left:50%;
+      bottom:12px;
+      transform:translateX(-50%);
+      width:min(calc(100% - 24px), 360px);
+      padding:.85rem 1rem;
+      border-radius:18px;
+      border:1px solid rgba(255,233,209,.08);
+      background:rgba(0,0,0,.32);
+      backdrop-filter:blur(10px);
+      text-align:center;
+      box-shadow:0 16px 24px -20px rgba(0,0,0,.8);
+    }
+
+    .special-spotlight-copy strong{
+      display:block;
+      font-size:.72rem;
+      text-transform:uppercase;
+      letter-spacing:.2em;
+      color:rgba(248,240,230,.72);
+      margin-bottom:.15rem;
+    }
+
+    .special-spotlight-copy span{
+      display:block;
+      font-size:.76rem;
+      color:rgba(248,240,230,.6);
+    }
+
     @keyframes spin{ from{ transform:rotate(0); } to{ transform:rotate(360deg); } }
     @keyframes pulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.08); } }
 
@@ -1638,7 +1761,7 @@
       <div class="menu-item" style="--angle: 120;" data-link="#reviews">Reviews</div>
       <div class="menu-item" style="--angle: 180;" data-link="#contact">Visit</div>
       <div class="menu-item" style="--angle: 240;" data-link="order.html">Order</div>
-      <div class="menu-item" style="--angle: 300;" data-link="#specials">Specials</div>
+      <div class="menu-item" style="--angle: 300;" data-link="#contact">Visit</div>
     </div>
   </div>
 
@@ -1726,70 +1849,6 @@
       </div>
     </div>
   </section>
-  <section class="section section-dark" id="specials">
-    <div class="container">
-      <h2 class="section-title">Daily Specials</h2>
-      <p class="section-copy">A rotating signal from the kitchen. Premium plates, fast hits, and limited-run favorites.</p>
-
-      <div class="daily-specials-band">
-        <article class="daily-special-card">
-          <div class="daily-special-day">Monday</div>
-          <div class="daily-special-title">Sweet Thai Chili Wings</div>
-          <div class="daily-special-note">Glossy heat and fast impact.</div>
-          <div class="daily-special-price">$16</div>
-        </article>
-
-        <article class="daily-special-card">
-          <div class="daily-special-day">Tuesday</div>
-          <div class="daily-special-title">Eggplant Pirogue</div>
-          <div class="daily-special-note">Unexpected, plated, and memorable.</div>
-          <div class="daily-special-price">$26</div>
-        </article>
-
-        <article class="daily-special-card">
-          <div class="daily-special-day">Wednesday</div>
-          <div class="daily-special-title">Blackened Lemon Fish</div>
-          <div class="daily-special-note">Premium Louisiana swing with crawfish tails.</div>
-          <div class="daily-special-price">$28</div>
-        </article>
-
-        <article class="daily-special-card">
-          <div class="daily-special-day">Thursday</div>
-          <div class="daily-special-title">BBQ Shrimp + Pork Chop</div>
-          <div class="daily-special-note">Smoke, sweetness, and spectacle in one plate.</div>
-          <div class="daily-special-price">$26</div>
-        </article>
-
-        <article class="daily-special-card">
-          <div class="daily-special-day">Friday</div>
-          <div class="daily-special-title">Grilled Salmon + Crabmeat</div>
-          <div class="daily-special-note">Refined contrast against the smokehouse core.</div>
-          <div class="daily-special-price">$28</div>
-        </article>
-
-        <article class="daily-special-card">
-          <div class="daily-special-day">Saturday</div>
-          <div class="daily-special-title">Miss Mud Pie</div>
-          <div class="daily-special-note">Sweet closer with strong name energy.</div>
-          <div class="daily-special-price">$7</div>
-        </article>
-
-        <article class="daily-special-card">
-          <div class="daily-special-day">Sunday</div>
-          <div class="daily-special-title">Chef’s Smoke Plate</div>
-          <div class="daily-special-note">Brisket, ribs, and sides in one Sunday signal.</div>
-          <div class="daily-special-price">Ask In Store</div>
-        </article>
-
-        <article class="daily-special-card">
-          <div class="daily-special-day">Call Ahead</div>
-          <div class="daily-special-title">Limited Availability</div>
-          <div class="daily-special-note">Specials can rotate. Best move is to call before you drive.</div>
-          <div class="daily-special-price">(225) 245-5046</div>
-        </article>
-      </div>
-    </div>
-  </section>
 
   <section class="section" id="contact">
 
@@ -1833,8 +1892,7 @@
           <a href="#" class="js-open-menu">Menu</a>
           <a href="#story">Story</a>
           <a href="#reviews">Reviews</a>
-          <a href="#specials">Specials</a>
-          <a href="#contact">Visit</a>
+                    <a href="#contact">Visit</a>
         </div>
         <div class="footer-links">
           <h4>Info</h4>
@@ -1919,13 +1977,38 @@
         </div>
 
         <div class="menu-panel">
-          <h4>Find The Fire</h4>
-          <div class="map-panel">
-            <div class="map-content">
-              <div class="map-pulse"></div>
-              <i class="fas fa-location-dot"></i>
-              <strong>6779 US Highway 61</strong>
-              <p>St. Francisville · smokehouse · takeout · deck</p>
+          <h4>Daily Specials Spotlight</h4>
+          <div class="special-spotlight">
+            <div class="special-wheel" aria-hidden="true">
+              <div class="special-wheel-item" style="--angle:0;">
+                <span>Mon</span>
+                <strong>Thai Wings</strong>
+                <em>$16</em>
+              </div>
+              <div class="special-wheel-item" style="--angle:72;">
+                <span>Tue</span>
+                <strong>Pirogue</strong>
+                <em>$26</em>
+              </div>
+              <div class="special-wheel-item" style="--angle:144;">
+                <span>Wed</span>
+                <strong>Lemon Fish</strong>
+                <em>$28</em>
+              </div>
+              <div class="special-wheel-item" style="--angle:216;">
+                <span>Thu</span>
+                <strong>BBQ Shrimp</strong>
+                <em>$26</em>
+              </div>
+              <div class="special-wheel-item" style="--angle:288;">
+                <span>Fri</span>
+                <strong>Salmon</strong>
+                <em>$28</em>
+              </div>
+            </div>
+            <div class="special-spotlight-copy">
+              <strong>Daily Specials</strong>
+              <span>Rotating signal from the kitchen — call ahead for availability.</span>
             </div>
           </div>
         </div>
