@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
 
-  <!-- ===== PRIMARY META TAGS ===== -->
   <title>The Francis Smokehouse · St. Francisville, LA – BBQ & Southern Specialties</title>
   <meta name="description" content="Family-owned smokehouse in St. Francisville, LA serving slow-smoked BBQ, boudin, po-boys, and Southern sides. Dine-in, takeout, and catering. Visit us on Highway 61.">
   <meta name="keywords" content="smokehouse St. Francisville, BBQ Louisiana, boudin, smoked meats, Southern food, The Francis Smokehouse">
@@ -12,11 +11,9 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://thefrancismokehouse.com/">
 
-  <!-- ===== FAVICON / ICONS ===== -->
   <link rel="icon" type="image/png" href="Images/Smokehouselogo.png">
   <link rel="apple-touch-icon" href="Images/Smokehouselogo.png">
 
-  <!-- ===== OPEN GRAPH (Facebook, LinkedIn) ===== -->
   <meta property="og:title" content="The Francis Smokehouse – St. Francisville, LA">
   <meta property="og:description" content="Family-owned smokehouse serving slow-smoked BBQ, boudin, po-boys, and Southern sides. Dine-in, takeout, and catering.">
   <meta property="og:type" content="website">
@@ -26,14 +23,12 @@
   <meta property="og:site_name" content="The Francis Smokehouse">
   <meta property="og:locale" content="en_US">
 
-  <!-- ===== TWITTER CARD ===== -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The Francis Smokehouse – St. Francisville, LA">
   <meta name="twitter:description" content="Family-owned smokehouse serving slow-smoked BBQ, boudin, po-boys, and Southern sides.">
   <meta name="twitter:image" content="https://thefrancismokehouse.com/Images/Smokehouselink.png.png">
   <meta name="twitter:image:alt" content="The Francis Smokehouse logo">
 
-  <!-- ===== STRUCTURED DATA (JSON-LD) ===== -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -79,18 +74,11 @@
   }
   </script>
 
-  <!-- Font Awesome 6 (free) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts: Playfair Display for headings, Montserrat for UI -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    /* -------------------- RESET & GLOBAL -------------------- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --smoke-dark: #0b0a0a;
       --smoke-charcoal: #1e1b1b;
@@ -107,8 +95,9 @@
       --border-smoke: 1px solid rgba(255,255,240,0.1);
       --glass-bg: rgba(30,27,27,0.7);
       --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --menu-transition: 0.55s cubic-bezier(.22,1,.36,1);
     }
-
+    html { scroll-behavior: smooth; }
     body {
       background-color: var(--smoke-dark);
       color: var(--paper-cream);
@@ -116,24 +105,10 @@
       line-height: 1.6;
       overflow-x: hidden;
     }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-
-    .container {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-
-    /* -------------------- TYPOGRAPHY & UTILITIES -------------------- */
+    body.menu-dimension-open { overflow: hidden; touch-action: none; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; height: auto; }
+    .container { max-width: 1300px; margin: 0 auto; padding: 0 2rem; }
     .section-title {
       font-family: var(--font-serif);
       font-size: clamp(2.5rem, 5vw, 4rem);
@@ -143,7 +118,6 @@
       display: inline-block;
       color: var(--grain-light);
     }
-
     .section-title::after {
       content: '';
       position: absolute;
@@ -154,7 +128,6 @@
       background: linear-gradient(90deg, var(--ember-red), var(--ember-glow));
       border-radius: 4px;
     }
-
     .btn {
       display: inline-block;
       padding: 1rem 2.5rem;
@@ -169,14 +142,9 @@
       font-size: 0.9rem;
       cursor: pointer;
       backdrop-filter: blur(5px);
+      box-shadow: none;
     }
-
-    .btn-primary {
-      background: var(--ember-red);
-      color: var(--smoke-dark);
-      border-color: var(--ember-red);
-    }
-
+    .btn-primary { background: var(--ember-red); color: var(--smoke-dark); border-color: var(--ember-red); }
     .btn-primary:hover {
       background: transparent;
       color: var(--ember-glow);
@@ -184,31 +152,16 @@
       transform: translateY(-4px);
       box-shadow: 0 15px 30px -10px rgba(180,75,60,0.5);
     }
-
     .btn-outline:hover {
       background: var(--ember-red);
       color: var(--smoke-dark);
       transform: translateY(-4px);
       box-shadow: 0 15px 30px -10px rgba(180,75,60,0.5);
     }
-
-    /* -------------------- CUSTOM SCROLLBAR -------------------- */
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--smoke-dark);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--ember-red);
-      border-radius: 10px;
-      border: 2px solid var(--smoke-dark);
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--ember-glow);
-    }
-
-    /* ==================== HEADER ==================== */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--smoke-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--ember-red); border-radius: 10px; border: 2px solid var(--smoke-dark); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--ember-glow); }
     .astonishing-header {
       position: relative;
       width: 100%;
@@ -217,7 +170,6 @@
       background: url('https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=2070&auto=format&fit=crop') center/cover fixed;
       isolation: isolate;
     }
-
     .astonishing-header::before {
       content: '';
       position: absolute;
@@ -225,8 +177,6 @@
       background: radial-gradient(circle at 30% 50%, rgba(180,75,60,0.25) 0%, rgba(10,8,7,0.98) 80%);
       z-index: 1;
     }
-
-    /* top bar */
     .header-top-bar {
       position: absolute;
       top: 0;
@@ -241,7 +191,6 @@
       backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(200,140,100,0.2);
     }
-
     .logo-3d {
       font-family: var(--font-serif);
       font-size: 2.2rem;
@@ -260,20 +209,8 @@
       color: var(--grain-gold);
       -webkit-text-fill-color: var(--grain-gold);
     }
-
-    .header-top-right {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .header-top-right .phone {
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: var(--grain-light);
-    }
-
-    /* header content */
+    .header-top-right { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
+    .header-top-right .phone { font-size: 1.1rem; font-weight: 500; color: var(--grain-light); }
     .header-content {
       position: relative;
       z-index: 10;
@@ -282,13 +219,7 @@
       align-items: center;
       padding-top: 80px;
     }
-
-    .hero-text-block {
-      flex: 1;
-      padding-left: 4rem;
-      transform: translateY(-5%);
-    }
-
+    .hero-text-block { flex: 1; padding-left: 4rem; transform: translateY(-5%); }
     .hero-label {
       display: inline-block;
       background: rgba(180,75,60,0.2);
@@ -301,7 +232,6 @@
       margin-bottom: 2rem;
       text-transform: uppercase;
     }
-
     .hero-title {
       font-family: var(--font-serif);
       font-size: clamp(4rem, 8vw, 7rem);
@@ -332,15 +262,7 @@
       color: var(--grain-gold);
       margin-top: 0.5rem;
     }
-
-    .hero-quote {
-      max-width: 450px;
-      margin-top: 2rem;
-      font-style: italic;
-      opacity: 0.8;
-    }
-
-    /* 3D card */
+    .hero-quote { max-width: 450px; margin-top: 2rem; font-style: italic; opacity: 0.8; }
     .hero-card-3d {
       flex: 0 0 380px;
       margin-right: 4rem;
@@ -353,10 +275,7 @@
       transform: perspective(1200px) rotateY(-5deg) rotateX(2deg) translateZ(20px);
       transition: transform 0.4s ease;
     }
-    .hero-card-3d:hover {
-      transform: perspective(1200px) rotateY(-3deg) rotateX(1deg) translateZ(30px) translateY(-5px);
-    }
-
+    .hero-card-3d:hover { transform: perspective(1200px) rotateY(-3deg) rotateX(1deg) translateZ(30px) translateY(-5px); }
     .card-header {
       display: flex;
       justify-content: space-between;
@@ -365,25 +284,10 @@
       padding-bottom: 1rem;
       margin-bottom: 1rem;
     }
-    .card-header i {
-      font-size: 2rem;
-      color: var(--ember-red);
-    }
-    .card-item {
-      display: flex;
-      justify-content: space-between;
-      margin: 1.2rem 0;
-      font-size: 1.1rem;
-    }
-    .card-price {
-      color: var(--grain-gold);
-      font-weight: 700;
-    }
-    .card-footer {
-      margin-top: 2rem;
-    }
-
-    /* stats bar */
+    .card-header i { font-size: 2rem; color: var(--ember-red); }
+    .card-item { display: flex; justify-content: space-between; margin: 1.2rem 0; font-size: 1.1rem; }
+    .card-price { color: var(--grain-gold); font-weight: 700; }
+    .card-footer { margin-top: 2rem; }
     .header-stats {
       position: absolute;
       bottom: 3rem;
@@ -397,23 +301,9 @@
       border-radius: 60px;
       border: var(--border-smoke);
     }
-    .stat {
-      text-align: center;
-    }
-    .stat .number {
-      font-size: 2rem;
-      font-weight: 900;
-      color: var(--grain-gold);
-      line-height: 1;
-    }
-    .stat .label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      opacity: 0.8;
-    }
-
-    /* ==================== NAVIGATION BUTTONS (two) ==================== */
+    .stat { text-align: center; }
+    .stat .number { font-size: 2rem; font-weight: 900; color: var(--grain-gold); line-height: 1; }
+    .stat .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
     .nav-btn {
       position: fixed;
       z-index: 1000;
@@ -428,39 +318,15 @@
       transition: var(--transition);
       backdrop-filter: blur(8px);
     }
-
     .nav-btn:hover {
       transform: scale(1.05);
       border-color: var(--ember-glow);
       box-shadow: 0 0 35px var(--ember-red);
     }
-
-    .btn-icon {
-      font-size: 1.8rem;
-      color: var(--ember-red);
-    }
-
-    .btn-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-    }
-
-    .btn-text .main {
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: 2px;
-      color: var(--paper-cream);
-    }
-
-    .btn-text .sub {
-      font-size: 0.65rem;
-      opacity: 0.7;
-      color: var(--grain-light);
-      text-transform: uppercase;
-    }
-
-    /* left vertical button */
+    .btn-icon { font-size: 1.8rem; color: var(--ember-red); }
+    .btn-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .btn-text .main { font-weight: 700; font-size: 1rem; letter-spacing: 2px; color: var(--paper-cream); }
+    .btn-text .sub { font-size: 0.65rem; opacity: 0.7; color: var(--grain-light); text-transform: uppercase; }
     .nav-btn.left-center {
       left: 30px;
       top: 50%;
@@ -475,16 +341,8 @@
       margin: 0;
       line-height: 1.2;
     }
-    .nav-btn.left-center .btn-text .main {
-      font-size: 0.9rem;
-      letter-spacing: normal;
-    }
-    .nav-btn.left-center .btn-text .sub {
-      font-size: 0.6rem;
-      margin-top: 4px;
-    }
-
-    /* bottom center button */
+    .nav-btn.left-center .btn-text .main { font-size: 0.9rem; letter-spacing: normal; }
+    .nav-btn.left-center .btn-text .sub { font-size: 0.6rem; margin-top: 4px; }
     .nav-btn.bottom-center {
       bottom: 30px;
       left: 50%;
@@ -492,14 +350,9 @@
       flex-direction: row;
       padding: 0.8rem 1.8rem;
     }
-
-    /* ==================== CIRCULAR MENU OVERLAY ==================== */
     .circ-menu-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       z-index: 2000;
       display: flex;
       align-items: center;
@@ -510,12 +363,7 @@
       transition: opacity 0.3s ease;
       backdrop-filter: blur(8px);
     }
-
-    .circ-menu-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
-
+    .circ-menu-overlay.open { opacity: 1; pointer-events: all; }
     .circular-menu {
       width: 360px;
       height: 360px;
@@ -530,11 +378,7 @@
       transform: scale(0.3);
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-
-    .circ-menu-overlay.open .circular-menu {
-      transform: scale(1);
-    }
-
+    .circ-menu-overlay.open .circular-menu { transform: scale(1); }
     .center-home {
       width: 70px;
       height: 70px;
@@ -552,12 +396,7 @@
       transition: 0.2s;
       z-index: 1001;
     }
-    .center-home:hover {
-      background: var(--ember-red);
-      color: white;
-      transform: scale(1.05);
-    }
-
+    .center-home:hover { background: var(--ember-red); color: white; transform: scale(1.05); }
     .menu-item {
       position: absolute;
       width: 60px;
@@ -581,8 +420,8 @@
       font-family: var(--font-sans);
       letter-spacing: 1px;
       backdrop-filter: blur(4px);
+      user-select: none;
     }
-
     .menu-item:hover {
       background: var(--ember-red);
       color: black;
@@ -591,29 +430,15 @@
       width: 65px;
       height: 65px;
     }
-
-    /* ==================== MAIN CONTENT SECTIONS ==================== */
-    .section {
-      padding: 6rem 0;
-      position: relative;
-    }
-
-    .section-smoke {
-      background: linear-gradient(180deg, var(--smoke-dark) 0%, #16110f 100%);
-    }
-
-    /* welcome section */
+    .section { padding: 6rem 0; position: relative; }
+    .section-smoke { background: linear-gradient(180deg, var(--smoke-dark) 0%, #16110f 100%); }
     .welcome-title {
       font-size: clamp(2.2rem, 5vw, 3.5rem);
       font-family: var(--font-serif);
       font-weight: 900;
       text-align: center;
     }
-    .welcome-title span {
-      color: var(--ember-red);
-      position: relative;
-      display: inline-block;
-    }
+    .welcome-title span { color: var(--ember-red); position: relative; display: inline-block; }
     .welcome-title span::after {
       content: '';
       position: absolute;
@@ -630,15 +455,12 @@
       font-size: 1.2rem;
       opacity: 0.8;
     }
-
-    /* featured grid */
     .featured-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
       margin-top: 3rem;
     }
-
     .feature-card {
       background: var(--glass-bg);
       backdrop-filter: blur(10px);
@@ -666,32 +488,11 @@
       border-color: var(--ember-red);
       box-shadow: 0 30px 40px -20px rgba(180,75,60,0.5);
     }
-    .feature-card:hover::before {
-      opacity: 1;
-    }
-
-    .feature-icon {
-      font-size: 3rem;
-      color: var(--ember-red);
-      margin-bottom: 1.5rem;
-    }
-    .feature-card h3 {
-      font-family: var(--font-serif);
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    .feature-desc {
-      font-size: 0.95rem;
-      opacity: 0.7;
-      margin-bottom: 1rem;
-    }
-    .feature-price {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--grain-gold);
-    }
-
-    /* story section with parallax */
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon { font-size: 3rem; color: var(--ember-red); margin-bottom: 1.5rem; }
+    .feature-card h3 { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 0.5rem; }
+    .feature-desc { font-size: 0.95rem; opacity: 0.7; margin-bottom: 1rem; }
+    .feature-price { font-size: 1.8rem; font-weight: 700; color: var(--grain-gold); }
     .story-section {
       position: relative;
       min-height: 600px;
@@ -721,32 +522,16 @@
       font-style: italic;
       margin-bottom: 2rem;
     }
-    .story-author {
-      font-size: 1.2rem;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      opacity: 0.7;
-    }
-
-    /* reviews carousel (pure CSS) */
-    .reviews-carousel {
-      overflow: hidden;
-      padding: 2rem 0;
-      position: relative;
-    }
+    .story-author { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; opacity: 0.7; }
+    .reviews-carousel { overflow: hidden; padding: 2rem 0; position: relative; }
     .carousel-track {
       display: flex;
       gap: 2rem;
       animation: scrollReviews 25s linear infinite;
       width: max-content;
     }
-    .carousel-track:hover {
-      animation-play-state: paused;
-    }
-    @keyframes scrollReviews {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
+    .carousel-track:hover { animation-play-state: paused; }
+    @keyframes scrollReviews { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     .review-card {
       width: 350px;
       background: rgba(30,27,27,0.6);
@@ -757,28 +542,10 @@
       flex-shrink: 0;
       text-align: left;
     }
-    .review-stars {
-      color: #f5b342;
-      margin-bottom: 1rem;
-    }
-    .review-text {
-      font-style: italic;
-      margin-bottom: 1rem;
-    }
-    .review-author {
-      font-weight: 700;
-      color: var(--grain-gold);
-    }
-    .review-platform {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
-
-    /* location & hours card */
+    .review-stars { color: #f5b342; margin-bottom: 1rem; }
+    .review-text { font-style: italic; margin-bottom: 1rem; }
+    .review-author { font-weight: 700; color: var(--grain-gold); }
+    .review-platform { display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; font-size: 0.9rem; opacity: 0.7; }
     .location-card {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -790,29 +557,8 @@
       padding: 3rem;
       margin: 4rem 0;
     }
-    .info-item {
-      display: flex;
-      gap: 1rem;
-      margin: 1.5rem 0;
-      align-items: center;
-    }
-    .info-item i {
-      font-size: 2rem;
-      color: var(--ember-red);
-      width: 40px;
-    }
-    .hours-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-    .hours-row {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px dashed #3a332e;
-      padding: 0.5rem 0;
-    }
+    .info-item { display: flex; gap: 1rem; margin: 1.5rem 0; align-items: center; }
+    .info-item i { font-size: 2rem; color: var(--ember-red); width: 40px; }
     .map-placeholder {
       background: #2f2a26;
       border-radius: 40px;
@@ -823,8 +569,6 @@
       justify-content: center;
       border: 1px solid var(--ember-red);
     }
-
-    /* footer */
     .footer {
       background: #0f0d0b;
       border-top: 2px solid var(--ember-red);
@@ -849,12 +593,7 @@
       position: relative;
       z-index: 2;
     }
-    .footer-logo-sm {
-      font-family: var(--font-serif);
-      font-size: 2rem;
-      font-weight: 900;
-      line-height: 1.2;
-    }
+    .footer-logo-sm { font-family: var(--font-serif); font-size: 2rem; font-weight: 900; line-height: 1.2; }
     .footer-logo-sm span {
       color: var(--ember-red);
       font-size: 0.8rem;
@@ -862,31 +601,11 @@
       font-family: var(--font-sans);
       letter-spacing: 4px;
     }
-    .footer-links a {
-      display: block;
-      margin: 0.8rem 0;
-      opacity: 0.8;
-      transition: 0.2s;
-    }
-    .footer-links a:hover {
-      opacity: 1;
-      color: var(--ember-glow);
-      transform: translateX(5px);
-    }
-    .footer-social {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-    .footer-social a {
-      font-size: 1.8rem;
-      color: var(--grain-gold);
-      transition: 0.2s;
-    }
-    .footer-social a:hover {
-      color: var(--ember-red);
-      transform: scale(1.2);
-    }
+    .footer-links a { display: block; margin: 0.8rem 0; opacity: 0.8; transition: 0.2s; }
+    .footer-links a:hover { opacity: 1; color: var(--ember-glow); transform: translateX(5px); }
+    .footer-social { display: flex; gap: 1.5rem; margin-top: 1rem; }
+    .footer-social a { font-size: 1.8rem; color: var(--grain-gold); transition: 0.2s; }
+    .footer-social a:hover { color: var(--ember-red); transform: scale(1.2); }
     .footer-bottom {
       text-align: center;
       padding-top: 3rem;
@@ -895,23 +614,577 @@
       border-top: var(--border-smoke);
       margin-top: 3rem;
     }
-
-    /* responsive */
+    .menu-dimension {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--menu-transition);
+      overflow: hidden;
+    }
+    .menu-dimension.open { opacity: 1; pointer-events: auto; }
+    .menu-dim-backdrop {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(217,124,90,0.12) 0%, rgba(11,10,10,0.85) 36%, rgba(5,4,4,0.98) 100%);
+      backdrop-filter: blur(18px) saturate(1.08);
+    }
+    .menu-dim-grid {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 0%, rgba(0,0,0,.78) 42%, transparent 80%);
+      opacity: 0.45;
+    }
+    .menu-dim-smoke, .menu-dim-smoke::before, .menu-dim-smoke::after { position: absolute; inset: auto; content: ""; border-radius: 50%; filter: blur(80px); pointer-events: none; }
+    .menu-dim-smoke {
+      width: 42vw;
+      height: 42vw;
+      top: -10vw;
+      left: -8vw;
+      background: radial-gradient(circle, rgba(180,75,60,.22), transparent 65%);
+      animation: smokeFloatA 16s ease-in-out infinite alternate;
+    }
+    .menu-dim-smoke::before {
+      width: 34vw;
+      height: 34vw;
+      top: 46vh;
+      left: 58vw;
+      background: radial-gradient(circle, rgba(195,154,106,.16), transparent 70%);
+      animation: smokeFloatB 20s ease-in-out infinite alternate;
+    }
+    .menu-dim-smoke::after {
+      width: 28vw;
+      height: 28vw;
+      top: 64vh;
+      left: 12vw;
+      background: radial-gradient(circle, rgba(217,124,90,.12), transparent 70%);
+      animation: smokeFloatC 18s ease-in-out infinite alternate;
+    }
+    @keyframes smokeFloatA { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(9vw, 6vh, 0) scale(1.12); } }
+    @keyframes smokeFloatB { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(-7vw, -8vh, 0) scale(1.18); } }
+    @keyframes smokeFloatC { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(6vw, -5vh, 0) scale(1.14); } }
+    .menu-dim-shell {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      width: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      padding: 1.25rem 1.25rem 1.5rem;
+    }
+    .menu-dim-topbar {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.8rem 1rem;
+      border-radius: 30px;
+      border: 1px solid rgba(229,211,181,0.1);
+      background: rgba(15,12,12,0.5);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 30px -20px rgba(0,0,0,.8);
+      transform: translateY(-18px);
+      opacity: 0;
+      transition: opacity .45s ease .1s, transform .6s cubic-bezier(.22,1,.36,1) .1s;
+    }
+    .menu-dimension.open .menu-dim-topbar { transform: translateY(0); opacity: 1; }
+    .dim-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.55rem 0.8rem 0.55rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(229,211,181,0.12);
+      background: rgba(255,255,255,0.03);
+    }
+    .dim-badge .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 30% 30%, var(--grain-light), var(--grain-gold));
+      color: var(--smoke-dark);
+      box-shadow: 0 0 22px rgba(195,154,106,.25);
+      font-size: 1.1rem;
+    }
+    .dim-badge .text { display: flex; flex-direction: column; line-height: 1.1; }
+    .dim-badge .text strong { font-size: 0.95rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .dim-badge .text span {
+      font-size: 0.7rem;
+      opacity: 0.72;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--grain-light);
+    }
+    .menu-dim-status { text-align: center; font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(229,211,181,.78); }
+    .menu-dim-close {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      border: 1px solid rgba(217,124,90,0.4);
+      background: rgba(180,75,60,0.08);
+      color: var(--paper-cream);
+      padding: 0.9rem 1.15rem;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .menu-dim-close:hover {
+      background: rgba(180,75,60,0.18);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 24px -16px rgba(180,75,60,0.7);
+    }
+    .menu-dim-main {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr) 260px;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .menu-radial-dock, .menu-stage, .menu-side-stack { min-height: 0; }
+    .menu-radial-dock {
+      position: relative;
+      border-radius: 38px;
+      border: 1px solid rgba(229,211,181,0.08);
+      background: linear-gradient(180deg, rgba(28,24,22,0.72), rgba(14,12,12,0.78));
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+      box-shadow: 0 22px 36px -24px rgba(0,0,0,.82);
+      transform: translateX(-20px);
+      opacity: 0;
+      transition: opacity .55s ease .16s, transform .7s cubic-bezier(.22,1,.36,1) .16s;
+    }
+    .menu-stage {
+      position: relative;
+      border-radius: 42px;
+      border: 1px solid rgba(229,211,181,0.08);
+      background: radial-gradient(circle at 50% 28%, rgba(217,124,90,0.08), transparent 35%), linear-gradient(180deg, rgba(20,17,16,.72), rgba(10,9,9,.82));
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+      box-shadow: 0 22px 36px -24px rgba(0,0,0,.82);
+      transform: scale(.96);
+      opacity: 0;
+      transition: opacity .55s ease .22s, transform .7s cubic-bezier(.22,1,.36,1) .22s;
+    }
+    .menu-side-stack {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 1rem;
+      transform: translateX(20px);
+      opacity: 0;
+      transition: opacity .55s ease .28s, transform .7s cubic-bezier(.22,1,.36,1) .28s;
+    }
+    .menu-dimension.open .menu-radial-dock, .menu-dimension.open .menu-side-stack { transform: translateX(0); opacity: 1; }
+    .menu-dimension.open .menu-stage { transform: scale(1); opacity: 1; }
+    .radial-core {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: min(78%, 310px);
+      aspect-ratio: 1 / 1;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+    }
+    .core-ring, .core-ring::before, .core-ring::after { position: absolute; border-radius: 50%; inset: 0; }
+    .core-ring {
+      border: 1px solid rgba(229,211,181,0.08);
+      box-shadow: inset 0 0 32px rgba(217,124,90,.06), 0 0 60px rgba(217,124,90,.08);
+    }
+    .core-ring::before, .core-ring::after {
+      content: "";
+      inset: 11%;
+      border: 1px dashed rgba(229,211,181,0.12);
+      animation: spinSlow 18s linear infinite;
+    }
+    .core-ring::after {
+      inset: 22%;
+      animation-direction: reverse;
+      animation-duration: 12s;
+      border-style: solid;
+      opacity: 0.45;
+    }
+    @keyframes spinSlow { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+    .core-burst {
+      width: 44%;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(248,241,228,0.95), rgba(217,124,90,0.66) 38%, rgba(180,75,60,0.12) 62%, transparent 78%);
+      filter: drop-shadow(0 0 18px rgba(217,124,90,.55));
+      animation: corePulse 4.4s ease-in-out infinite;
+    }
+    @keyframes corePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    .radial-category {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 86px;
+      height: 86px;
+      transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(calc(-1 * var(--radius))) rotate(calc(var(--angle) * -1deg));
+      border-radius: 50%;
+      border: 1px solid rgba(229,211,181,0.14);
+      background: rgba(20,17,16,0.85);
+      color: rgba(248,241,228,.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0.2rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      box-shadow: 0 18px 20px -18px rgba(0,0,0,.85);
+      cursor: pointer;
+      transition: transform .3s ease, border-color .25s ease, background .25s ease, color .25s ease;
+      user-select: none;
+    }
+    .radial-category i { font-size: 1rem; color: var(--grain-gold); transition: color .25s ease; }
+    .radial-category:hover, .radial-category.active {
+      border-color: rgba(217,124,90,0.65);
+      background: radial-gradient(circle at 30% 20%, rgba(217,124,90,0.22), rgba(20,17,16,0.96));
+      color: #fff;
+      transform: translate(-50%, -50%) rotate(calc(var(--angle) * 1deg)) translateY(calc(-1 * var(--radius) - 10px)) rotate(calc(var(--angle) * -1deg)) scale(1.05);
+    }
+    .radial-category:hover i, .radial-category.active i { color: var(--ember-glow); }
+    .radial-label {
+      position: absolute;
+      bottom: 22px;
+      left: 22px;
+      right: 22px;
+      padding: 0.85rem 1rem;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(229,211,181,0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(229,211,181,.78);
+    }
+    .menu-stage-shell {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 1.25rem;
+      gap: 1rem;
+    }
+    .stage-head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+    .stage-head-copy small {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: rgba(229,211,181,.7);
+      margin-bottom: 0.4rem;
+    }
+    .stage-head-copy h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 3.5vw, 3.1rem);
+      line-height: 0.95;
+      color: var(--grain-light);
+    }
+    .stage-head-copy p {
+      margin-top: 0.55rem;
+      max-width: 520px;
+      color: rgba(248,241,228,.74);
+      font-size: 0.95rem;
+    }
+    .stage-utility { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: flex-end; }
+    .utility-pill {
+      padding: 0.75rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(229,211,181,0.1);
+      background: rgba(255,255,255,0.03);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(229,211,181,.82);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .featured-dish {
+      position: relative;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .featured-hero {
+      position: relative;
+      border-radius: 34px;
+      overflow: hidden;
+      min-height: 300px;
+      background: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.6));
+      border: 1px solid rgba(229,211,181,0.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    .featured-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(0,0,0,0.08), rgba(0,0,0,0.72)), var(--dish-image, linear-gradient(135deg, #4b2f28, #1a1412));
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.03);
+      transition: transform .55s ease, filter .45s ease;
+      filter: saturate(1.05) contrast(1.02);
+    }
+    .featured-hero:hover::before { transform: scale(1.08); filter: saturate(1.14) contrast(1.08); }
+    .featured-hero-overlay {
+      position: absolute;
+      inset: 0;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+      z-index: 1;
+    }
+    .hero-glint {
+      align-self: flex-start;
+      padding: 0.7rem 0.95rem;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(229,211,181,0.16);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: rgba(248,241,228,.9);
+      backdrop-filter: blur(8px);
+    }
+    .featured-copy {
+      align-self: flex-start;
+      max-width: 82%;
+      background: rgba(0,0,0,0.32);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(229,211,181,0.12);
+      border-radius: 26px;
+      padding: 1.15rem 1.15rem 1rem;
+    }
+    .featured-copy h3 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 3vw, 3.1rem);
+      line-height: 0.92;
+      margin-bottom: 0.55rem;
+      color: var(--grain-light);
+      text-shadow: 0 10px 18px rgba(0,0,0,.45);
+    }
+    .featured-copy p { font-size: 0.96rem; color: rgba(248,241,228,.8); max-width: 45ch; }
+    .featured-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; }
+    .metric-chip {
+      padding: 0.8rem 0.85rem;
+      border-radius: 22px;
+      border: 1px solid rgba(229,211,181,0.1);
+      background: rgba(255,255,255,0.03);
+      text-align: center;
+    }
+    .metric-chip strong { display: block; font-size: 1rem; color: var(--grain-light); }
+    .metric-chip span {
+      display: block;
+      margin-top: 0.15rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: rgba(229,211,181,.6);
+    }
+    .feature-orbit {
+      position: relative;
+      border-radius: 34px;
+      border: 1px solid rgba(229,211,181,0.08);
+      background: rgba(255,255,255,0.03);
+      overflow: hidden;
+      min-height: 300px;
+      padding: 1rem;
+    }
+    .orbit-title { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.8rem; }
+    .orbit-title h4 { font-family: var(--font-serif); font-size: 1.35rem; color: var(--grain-light); }
+    .orbit-title span { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(229,211,181,.6); }
+    .orbit-stack { display: grid; gap: 0.75rem; }
+    .orbit-card {
+      position: relative;
+      padding: 1rem 1rem 0.95rem;
+      border-radius: 24px;
+      border: 1px solid rgba(229,211,181,0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+      transition: transform .25s ease, border-color .25s ease, background .25s ease;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .orbit-card:hover, .orbit-card.active {
+      transform: translateY(-4px);
+      border-color: rgba(217,124,90,0.35);
+      background: linear-gradient(180deg, rgba(217,124,90,0.12), rgba(255,255,255,0.03));
+    }
+    .orbit-card-top { display: flex; justify-content: space-between; gap: 0.8rem; align-items: center; }
+    .orbit-card h5 { font-family: var(--font-serif); font-size: 1.25rem; line-height: 1; color: var(--paper-cream); }
+    .orbit-card-price { font-weight: 700; color: var(--grain-gold); font-size: 0.96rem; white-space: nowrap; }
+    .orbit-card p { margin-top: 0.45rem; font-size: 0.84rem; color: rgba(248,241,228,.68); min-height: 2.6em; }
+    .orbit-card-meta { margin-top: 0.7rem; display: flex; gap: 0.45rem; flex-wrap: wrap; }
+    .orbit-tag {
+      display: inline-flex;
+      padding: 0.36rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(229,211,181,0.08);
+      background: rgba(255,255,255,0.03);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(229,211,181,.74);
+    }
+    .stage-bottom { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center; }
+    .flavor-strip { display: flex; gap: 0.7rem; overflow: auto; scrollbar-width: none; padding-bottom: 0.1rem; }
+    .flavor-strip::-webkit-scrollbar { display: none; }
+    .flavor-pill {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.85rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(229,211,181,0.1);
+      background: rgba(255,255,255,0.03);
+      color: rgba(248,241,228,.85);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+    .flavor-pill i { color: var(--ember-glow); }
+    .quick-action {
+      border: 1px solid rgba(217,124,90,.35);
+      background: rgba(180,75,60,.1);
+      color: var(--paper-cream);
+      border-radius: 999px;
+      padding: 0.95rem 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .quick-action:hover { transform: translateY(-3px); background: rgba(180,75,60,.18); }
+    .side-card {
+      position: relative;
+      border-radius: 34px;
+      border: 1px solid rgba(229,211,181,0.08);
+      background: linear-gradient(180deg, rgba(28,24,22,0.76), rgba(12,10,10,0.82));
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+      padding: 1rem;
+      box-shadow: 0 22px 36px -24px rgba(0,0,0,.82);
+    }
+    .side-card::before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      right: -30px;
+      top: -30px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(217,124,90,.18), transparent 68%);
+      filter: blur(18px);
+      pointer-events: none;
+    }
+    .side-card h4 { position: relative; z-index: 1; font-family: var(--font-serif); font-size: 1.55rem; color: var(--grain-light); }
+    .side-card > p { position: relative; z-index: 1; margin-top: 0.35rem; font-size: 0.88rem; color: rgba(248,241,228,.66); }
+    .specials-stack { position: relative; z-index: 1; margin-top: 0.9rem; display: grid; gap: 0.7rem; }
+    .special-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.8rem;
+      padding: 0.9rem 0.95rem;
+      border-radius: 22px;
+      border: 1px solid rgba(229,211,181,0.08);
+      background: rgba(255,255,255,0.035);
+      align-items: start;
+      transition: var(--transition);
+    }
+    .special-item:hover { transform: translateY(-3px); border-color: rgba(217,124,90,.32); }
+    .special-item strong { display: block; font-size: 0.96rem; color: var(--paper-cream); }
+    .special-item span { display: block; margin-top: 0.2rem; font-size: 0.76rem; color: rgba(248,241,228,.64); line-height: 1.45; }
+    .special-item em { font-style: normal; font-weight: 700; color: var(--grain-gold); white-space: nowrap; font-size: 0.92rem; }
+    .mini-map-shell {
+      position: relative;
+      z-index: 1;
+      margin-top: 1rem;
+      height: calc(100% - 3.5rem);
+      min-height: 180px;
+      border-radius: 26px;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(195,154,106,.1), rgba(180,75,60,.12)), radial-gradient(circle at 20% 30%, rgba(217,124,90,.2), transparent 25%), radial-gradient(circle at 80% 75%, rgba(195,154,106,.12), transparent 22%), #231e1c;
+      border: 1px solid rgba(229,211,181,.08);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 1rem;
+    }
+    .mini-map-shell::before, .mini-map-shell::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+    .mini-map-shell::before {
+      background: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: .35;
+    }
+    .mini-map-shell::after {
+      background: linear-gradient(35deg, transparent 44%, rgba(217,124,90,.18) 44%, rgba(217,124,90,.18) 46%, transparent 46%), linear-gradient(115deg, transparent 58%, rgba(195,154,106,.18) 58%, rgba(195,154,106,.18) 60%, transparent 60%);
+      mix-blend-mode: screen;
+      opacity: .5;
+    }
+    .mini-map-content { position: relative; z-index: 1; display: grid; gap: 0.7rem; }
+    .mini-map-content i { font-size: 2.5rem; color: var(--ember-red); }
+    .mini-map-content strong { font-size: 1rem; text-transform: uppercase; letter-spacing: 0.16em; }
+    .mini-map-content p { font-size: 0.82rem; color: rgba(248,241,228,.72); max-width: 22ch; margin: 0 auto; }
+    .map-pulse {
+      width: 22px;
+      height: 22px;
+      margin: 0 auto;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--grain-light), var(--ember-red));
+      box-shadow: 0 0 0 rgba(217,124,90,.8);
+      animation: mapPulse 2.2s infinite;
+    }
+    @keyframes mapPulse { 0% { box-shadow: 0 0 0 0 rgba(217,124,90,.55); } 70% { box-shadow: 0 0 0 24px rgba(217,124,90,0); } 100% { box-shadow: 0 0 0 0 rgba(217,124,90,0); } }
+    .menu-dim-mobile-strip { display: none; }
+    @media (max-width: 1200px) {
+      .menu-dim-main { grid-template-columns: 250px minmax(0, 1fr); }
+      .menu-side-stack { grid-column: span 2; grid-template-columns: 1fr 1fr; grid-template-rows: none; }
+      .featured-dish { grid-template-columns: 1fr; }
+      .featured-copy { max-width: 100%; }
+    }
     @media (max-width: 1000px) {
-      .hero-card-3d {
-        flex-basis: 300px;
-        margin-right: 2rem;
+      .hero-card-3d { flex-basis: 300px; margin-right: 2rem; }
+      .hero-title { font-size: 5rem; }
+      .hero-title .line2 { font-size: 2.5rem; letter-spacing: 8px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 900px) {
+      .menu-dim-shell { padding: 0.85rem 0.85rem 1rem; }
+      .menu-dim-topbar {
+        grid-template-columns: 1fr auto;
+        grid-template-areas: "badge close" "status status";
+        row-gap: 0.8rem;
       }
-      .hero-title {
-        font-size: 5rem;
-      }
-      .hero-title .line2 {
-        font-size: 2.5rem;
-        letter-spacing: 8px;
-      }
-      .footer-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+      .menu-dim-topbar .dim-badge { grid-area: badge; }
+      .menu-dim-topbar .menu-dim-status { grid-area: status; }
+      .menu-dim-topbar .menu-dim-close { grid-area: close; }
+      .menu-dim-main { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
+      .menu-radial-dock { min-height: 270px; }
+      .menu-side-stack { grid-column: auto; grid-template-columns: 1fr; grid-template-rows: none; }
+      .radial-category { width: 70px; height: 70px; font-size: 0.63rem; }
+      .radial-core { width: min(84%, 260px); }
     }
     @media (max-width: 800px) {
       .header-content {
@@ -920,15 +1193,8 @@
         text-align: center;
         padding: 1rem;
       }
-      .hero-text-block {
-        padding-left: 0;
-        margin-bottom: 2rem;
-      }
-      .hero-card-3d {
-        margin-right: 0;
-        width: 90%;
-        max-width: 380px;
-      }
+      .hero-text-block { padding-left: 0; margin-bottom: 2rem; }
+      .hero-card-3d { margin-right: 0; width: 90%; max-width: 380px; }
       .header-stats {
         bottom: 1rem;
         left: 50%;
@@ -937,48 +1203,80 @@
         padding: 0.8rem 1.5rem;
         font-size: 0.8rem;
       }
-      .location-card {
-        grid-template-columns: 1fr;
+      .location-card { grid-template-columns: 1fr; }
+      .nav-btn.left-center { display: none; }
+    }
+    @media (max-width: 700px) {
+      .menu-dim-shell { padding: 0.7rem; }
+      .menu-dim-topbar { padding: 0.8rem; border-radius: 22px; }
+      .dim-badge .text strong { font-size: 0.78rem; }
+      .dim-badge .text span, .menu-dim-status { letter-spacing: 0.12em; }
+      .menu-radial-dock { min-height: 220px; }
+      .radial-core { width: min(80%, 220px); }
+      .radial-category { width: 56px; height: 56px; font-size: 0; }
+      .radial-category i { font-size: 0.9rem; }
+      .radial-category span { display: none; }
+      .radial-label {
+        bottom: 14px;
+        left: 14px;
+        right: 14px;
+        padding: 0.7rem 0.8rem;
+        border-radius: 18px;
+        font-size: 0.68rem;
       }
-      .nav-btn.left-center {
-        display: none; /* hide left on mobile for simplicity */
+      .menu-stage-shell { padding: 0.85rem; }
+      .stage-head { flex-direction: column; align-items: flex-start; }
+      .stage-utility { justify-content: flex-start; }
+      .featured-copy { padding: 1rem; }
+      .featured-copy h3 { font-size: 1.85rem; }
+      .featured-metrics { grid-template-columns: 1fr; }
+      .orbit-stack { gap: 0.55rem; }
+      .orbit-card { padding: 0.85rem; border-radius: 18px; }
+      .stage-bottom { grid-template-columns: 1fr; }
+      .quick-action { width: 100%; }
+      .menu-side-stack { display: none; }
+      .menu-dim-mobile-strip {
+        display: flex;
+        gap: 0.6rem;
+        overflow-x: auto;
+        padding-bottom: 0.2rem;
+        scrollbar-width: none;
       }
+      .menu-dim-mobile-strip::-webkit-scrollbar { display: none; }
+      .mobile-mini {
+        flex: 0 0 200px;
+        border-radius: 20px;
+        border: 1px solid rgba(229,211,181,0.08);
+        background: rgba(255,255,255,0.035);
+        padding: 0.85rem;
+      }
+      .mobile-mini strong { display: block; font-size: 0.92rem; color: var(--grain-light); margin-bottom: 0.25rem; }
+      .mobile-mini p { font-size: 0.74rem; color: rgba(248,241,228,.66); }
     }
     @media (max-width: 600px) {
-      .hero-title {
-        font-size: 3.5rem;
-      }
-      .hero-title .line2 {
-        font-size: 1.8rem;
-        letter-spacing: 5px;
-      }
-      .hero-title .line3 {
-        font-size: 1.2rem;
-      }
+      .hero-title { font-size: 3.5rem; }
+      .hero-title .line2 { font-size: 1.8rem; letter-spacing: 5px; }
+      .hero-title .line3 { font-size: 1.2rem; }
       .header-top-bar {
         flex-direction: column;
         align-items: flex-start;
         padding: 1rem;
       }
-      .header-top-right {
-        width: 100%;
-        justify-content: space-between;
-      }
+      .header-top-right { width: 100%; justify-content: space-between; }
+      .menu-dim-close { padding: 0.75rem 0.9rem; gap: 0.45rem; font-size: 0.72rem; }
     }
   </style>
 </head>
 <body>
-  <!-- HEADER -->
   <header class="astonishing-header">
     <div class="header-top-bar">
       <div class="logo-3d">THE FRANCIS <span>SMOKEHOUSE & MEATS</span></div>
       <div class="header-top-right">
         <span class="phone"><i class="fas fa-phone-alt"></i> (225) 245-5046</span>
-        <a href="#" class="btn btn-primary">SMOKE MENU</a>
-        <a href="#" class="btn btn-outline">FIND US</a>
+        <button class="btn btn-primary js-open-menu">SMOKE MENU</button>
+        <a href="#contact" class="btn btn-outline">FIND US</a>
       </div>
     </div>
-
     <div class="header-content container">
       <div class="hero-text-block">
         <div class="hero-label"><i class="fas fa-fire"></i> ST. FRANCISVILLE EST. 2015</div>
@@ -997,14 +1295,13 @@
         </div>
         <div class="card-item"><span>Brisket plate (2 sides)</span> <span class="card-price">$10.99</span></div>
         <div class="card-item"><span>Full rack ribs</span> <span class="card-price">$19.99</span></div>
-        <div class="card-item"><span>Boudin balls (jalapeño)</span> <span class="card-price">$6.99</span></div>
+        <div class="card-item"><span>Boudin balls</span> <span class="card-price">Market</span></div>
         <div class="card-item"><span>Corn pudding · small</span> <span class="card-price">$2.75</span></div>
         <div class="card-footer">
-          <a href="#" class="btn btn-primary" style="padding:0.6rem 1.2rem;">FULL MENU</a>
+          <button class="btn btn-primary js-open-menu" style="padding:0.6rem 1.2rem;">FULL MENU</button>
         </div>
       </div>
     </div>
-
     <div class="header-stats">
       <div class="stat"><span class="number">4.7</span> <div class="label">Google (505)</div></div>
       <div class="stat"><span class="number">4.5</span> <div class="label">Tripadvisor (143)</div></div>
@@ -1012,7 +1309,6 @@
     </div>
   </header>
 
-  <!-- NAVIGATION BUTTONS (two) -->
   <div class="nav-btn left-center" id="navBtnLeft">
     <i class="fas fa-compass btn-icon"></i>
     <div class="btn-text">
@@ -1029,117 +1325,191 @@
   </div>
 
   <div class="circ-menu-overlay" id="circMenuOverlay">
-  <div class="circular-menu">
-    <div class="center-home" id="homeCenter" data-link="index.html"><i class="fas fa-home"></i></div>
-    <div class="menu-item" style="--angle: 0;" data-link="menu.html">Menu</div>
-    <div class="menu-item" style="--angle: 60;" data-link="about.html">About</div>
-    <div class="menu-item" style="--angle: 120;" data-link="reviews.html">Reviews</div>
-    <div class="menu-item" style="--angle: 180;" data-link="contact.html">Contact</div>
-    <div class="menu-item" style="--angle: 240;" data-link="order.html">Order</div>
-    <div class="menu-item" style="--angle: 300;" data-link="catering.html">Cater</div>
+    <div class="circular-menu">
+      <div class="center-home" id="homeCenter" data-link="index.html"><i class="fas fa-home"></i></div>
+      <div class="menu-item" style="--angle: 0;" data-link="menu.html" data-action="menu-layer">Menu</div>
+      <div class="menu-item" style="--angle: 60;" data-link="about.html">About</div>
+      <div class="menu-item" style="--angle: 120;" data-link="#reviews">Reviews</div>
+      <div class="menu-item" style="--angle: 180;" data-link="#contact">Contact</div>
+      <div class="menu-item" style="--angle: 240;" data-link="order.html">Order</div>
+      <div class="menu-item" style="--angle: 300;" data-link="catering.html">Cater</div>
+    </div>
   </div>
-</div>
 
-  <!-- MAIN CONTENT -->
+  <div class="menu-dimension" id="menuDimension" aria-hidden="true">
+    <div class="menu-dim-backdrop"></div>
+    <div class="menu-dim-grid"></div>
+    <div class="menu-dim-smoke"></div>
+    <div class="menu-dim-shell">
+      <div class="menu-dim-topbar">
+        <div class="dim-badge">
+          <div class="icon"><i class="fas fa-fire-flame-curved"></i></div>
+          <div class="text">
+            <strong>Smoke Dimension</strong>
+            <span>live menu layer</span>
+          </div>
+        </div>
+        <div class="menu-dim-status" id="menuDimensionStatus">Select a flavor orbit</div>
+        <button class="menu-dim-close" id="closeMenuDimension" type="button" aria-label="Close menu layer">
+          <i class="fas fa-xmark"></i>
+          Exit Layer
+        </button>
+      </div>
+
+      <div class="menu-dim-main">
+        <aside class="menu-radial-dock">
+          <div class="radial-core">
+            <div class="core-ring"></div>
+            <div class="core-burst"></div>
+          </div>
+
+          <button class="radial-category active" data-category="bbq" style="--angle: 0; --radius: 112px;" type="button"><i class="fas fa-fire"></i><span>BBQ</span></button>
+          <button class="radial-category" data-category="sandwiches" style="--angle: 60; --radius: 112px;" type="button"><i class="fas fa-burger"></i><span>Handhelds</span></button>
+          <button class="radial-category" data-category="boudin" style="--angle: 120; --radius: 112px;" type="button"><i class="fas fa-pepper-hot"></i><span>Boudin</span></button>
+          <button class="radial-category" data-category="sides" style="--angle: 180; --radius: 112px;" type="button"><i class="fas fa-bowl-food"></i><span>Sides</span></button>
+          <button class="radial-category" data-category="sweets" style="--angle: 240; --radius: 112px;" type="button"><i class="fas fa-cake-candles"></i><span>Sweets</span></button>
+          <button class="radial-category" data-category="specials" style="--angle: 300; --radius: 112px;" type="button"><i class="fas fa-star"></i><span>Signals</span></button>
+
+          <div class="radial-label">
+            <span>Tap the orbit</span>
+            <strong id="radialLabelText">BBQ plates</strong>
+          </div>
+        </aside>
+
+        <section class="menu-stage">
+          <div class="menu-stage-shell">
+            <div class="stage-head">
+              <div class="stage-head-copy">
+                <small id="menuEyebrow">Barbecue Core</small>
+                <h2 id="menuCategoryTitle">Smoke Built Different</h2>
+                <p id="menuCategoryBlurb">Slow-smoked anchors, signature plates, and the heavyweight flavors people talk about first.</p>
+              </div>
+              <div class="stage-utility">
+                <div class="utility-pill"><i class="fas fa-clock"></i> Mon–Sat 10–6</div>
+                <div class="utility-pill"><i class="fas fa-phone"></i> (225) 245-5046</div>
+                <div class="utility-pill"><i class="fas fa-bag-shopping"></i> Takeout Ready</div>
+              </div>
+            </div>
+
+            <div class="featured-dish">
+              <div class="featured-hero" id="featuredHero">
+                <div class="featured-hero-overlay">
+                  <div class="hero-glint" id="featuredBadge">Signature Plate</div>
+                  <div class="featured-copy">
+                    <h3 id="featuredTitle">Brisket Plate</h3>
+                    <p id="featuredDescription">The review-stealing plate: tender, smoky, and built like the hero item in the whole room.</p>
+                  </div>
+                  <div class="featured-metrics">
+                    <div class="metric-chip"><strong id="featuredPrice">$10.99</strong><span>Price</span></div>
+                    <div class="metric-chip"><strong id="featuredMetaOne">Two sides</strong><span>Format</span></div>
+                    <div class="metric-chip"><strong id="featuredMetaTwo">Fan favorite</strong><span>Signal</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="feature-orbit">
+                <div class="orbit-title">
+                  <div>
+                    <span id="orbitMiniLabel">Current orbit</span>
+                    <h4 id="orbitTitle">More in this lane</h4>
+                  </div>
+                  <span id="orbitCount">01 / 04</span>
+                </div>
+                <div class="orbit-stack" id="orbitStack"></div>
+              </div>
+            </div>
+
+            <div class="menu-dim-mobile-strip" id="mobileMiniStrip"></div>
+
+            <div class="stage-bottom">
+              <div class="flavor-strip" id="flavorStrip"></div>
+              <button class="quick-action" type="button" id="callToOrder"><i class="fas fa-phone"></i> Call to Order</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="menu-side-stack">
+          <div class="side-card">
+            <h4>Signals from the Kitchen</h4>
+            <p>Rotating items and premium plates that feel like broadcasts, not boring specials.</p>
+            <div class="specials-stack" id="specialsStack"></div>
+          </div>
+          <div class="side-card">
+            <h4>Find the Fire</h4>
+            <p>6779 US Highway 61 · St. Francisville, LA · Open daily daytime hours.</p>
+            <div class="mini-map-shell">
+              <div class="mini-map-content">
+                <div class="map-pulse"></div>
+                <i class="fas fa-location-dot"></i>
+                <strong>Highway 61</strong>
+                <p>Smokehouse, takeout, outdoor deck, and local-favorite energy.</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
   <main>
-    <!-- WELCOME SECTION -->
     <section class="section section-smoke">
       <div class="container">
         <h2 class="welcome-title">WHERE <span>SMOKE</span> MEETS SOUL</h2>
         <p class="welcome-sub">Louisiana tradition, slow-smoked over pecan and oak. Every bite tells a story.</p>
-
-        <!-- FEATURED DISHES GRID -->
         <div class="featured-grid">
           <div class="feature-card">
             <div class="feature-icon"><i class="fas fa-drumstick-bite"></i></div>
             <h3>Brisket</h3>
-            <p class="feature-desc">12 hours over post oak, rubbed with our signature spice blend.</p>
+            <p class="feature-desc">12 hours over smoke, sliced for the people who know exactly why they came.</p>
             <div class="feature-price">$10.99</div>
           </div>
           <div class="feature-card">
-            <div class="feature-icon"><i class="fas fa-egg"></i></div>
+            <div class="feature-icon"><i class="fas fa-circle-dot"></i></div>
             <h3>Boudin Balls</h3>
-            <p class="feature-desc">Crispy, creamy, with a hidden kick of pepper jack.</p>
-            <div class="feature-price">$6.99</div>
+            <p class="feature-desc">Crispy outside, rich inside, and one of the easiest things to obsess over.</p>
+            <div class="feature-price">Market</div>
           </div>
           <div class="feature-card">
             <div class="feature-icon"><i class="fas fa-utensils"></i></div>
             <h3>Full Ribs</h3>
-            <p class="feature-desc">Fall-off-the-bone, glazed with bourbon molasses.</p>
+            <p class="feature-desc">Big smoke, bark, and fall-apart payoff that lands like a signature move.</p>
             <div class="feature-price">$19.99</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- STORY SECTION WITH PARALLAX -->
     <section class="story-section">
       <div class="story-content">
         <div class="story-quote">“We don't just smoke meat — we carry on a legacy.”</div>
         <div class="story-author">— THE FRANCIS FAMILY</div>
-        <a href="#" class="btn btn-primary" style="margin-top: 2rem;">READ OUR STORY</a>
+        <button class="btn btn-primary js-open-menu" style="margin-top: 2rem;">ENTER THE MENU LAYER</button>
       </div>
     </section>
 
-    <!-- REVIEWS CAROUSEL -->
     <section class="section" id="reviews">
       <div class="container">
         <h2 class="section-title">WHAT THEY'RE SAYING</h2>
         <div class="reviews-carousel">
           <div class="carousel-track">
-            <!-- duplicate for seamless scroll -->
-            <div class="review-card">
-              <div class="review-stars">★★★★★</div>
-              <div class="review-text">“Best brisket I've ever had. The corn pudding is to die for.”</div>
-              <div class="review-author">– Sarah M.</div>
-              <div class="review-platform"><i class="fab fa-google"></i> Google</div>
-            </div>
-            <div class="review-card">
-              <div class="review-stars">★★★★½</div>
-              <div class="review-text">“Incredible flavor, friendly staff. A hidden gem.”</div>
-              <div class="review-author">– John D.</div>
-              <div class="review-platform"><i class="fab fa-tripadvisor"></i> Tripadvisor</div>
-            </div>
-            <div class="review-card">
-              <div class="review-stars">★★★★★</div>
-              <div class="review-text">“Boudin balls are out of this world. Worth the drive.”</div>
-              <div class="review-author">– Lisa R.</div>
-              <div class="review-platform"><i class="fab fa-google"></i> Google</div>
-            </div>
-            <div class="review-card">
-              <div class="review-stars">★★★★★</div>
-              <div class="review-text">“The deck is dog-friendly and the ribs are perfect.”</div>
-              <div class="review-author">– Mike T.</div>
-              <div class="review-platform"><i class="fab fa-tripadvisor"></i> Tripadvisor</div>
-            </div>
-            <!-- duplicates -->
-            <div class="review-card">
-              <div class="review-stars">★★★★★</div>
-              <div class="review-text">“Best brisket I've ever had. The corn pudding is to die for.”</div>
-              <div class="review-author">– Sarah M.</div>
-              <div class="review-platform"><i class="fab fa-google"></i> Google</div>
-            </div>
-            <div class="review-card">
-              <div class="review-stars">★★★★½</div>
-              <div class="review-text">“Incredible flavor, friendly staff. A hidden gem.”</div>
-              <div class="review-author">– John D.</div>
-              <div class="review-platform"><i class="fab fa-tripadvisor"></i> Tripadvisor</div>
-            </div>
+            <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">“Best brisket I've ever had. The corn pudding is to die for.”</div><div class="review-author">– Sarah M.</div><div class="review-platform"><i class="fab fa-google"></i> Google</div></div>
+            <div class="review-card"><div class="review-stars">★★★★½</div><div class="review-text">“Incredible flavor, friendly staff. A hidden gem.”</div><div class="review-author">– John D.</div><div class="review-platform"><i class="fab fa-tripadvisor"></i> Tripadvisor</div></div>
+            <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">“Boudin balls are out of this world. Worth the drive.”</div><div class="review-author">– Lisa R.</div><div class="review-platform"><i class="fab fa-google"></i> Google</div></div>
+            <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">“The deck is dog-friendly and the ribs are perfect.”</div><div class="review-author">– Mike T.</div><div class="review-platform"><i class="fab fa-tripadvisor"></i> Tripadvisor</div></div>
+            <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">“Best brisket I've ever had. The corn pudding is to die for.”</div><div class="review-author">– Sarah M.</div><div class="review-platform"><i class="fab fa-google"></i> Google</div></div>
+            <div class="review-card"><div class="review-stars">★★★★½</div><div class="review-text">“Incredible flavor, friendly staff. A hidden gem.”</div><div class="review-author">– John D.</div><div class="review-platform"><i class="fab fa-tripadvisor"></i> Tripadvisor</div></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- LOCATION & HOURS -->
     <section class="section" id="contact">
       <div class="container">
         <div class="location-card">
           <div>
             <h2 style="font-family: var(--font-serif); font-size: 2.5rem;">VISIT US</h2>
             <div class="info-item"><i class="fas fa-location-dot"></i> 6779 US Highway 61, St. Francisville, LA 70775</div>
-            <div class="info-item"><i class="fas fa-clock"></i> 
-              <div>Mon–Sat 10am–6pm<br>Sunday 10am–3pm</div>
-            </div>
+            <div class="info-item"><i class="fas fa-clock"></i><div>Mon–Sat 10am–6pm<br>Sunday 10am–3pm</div></div>
             <div class="info-item"><i class="fas fa-phone"></i> (225) 245-5046</div>
             <div class="info-item"><i class="fas fa-envelope"></i> francissmokehouse@att.net</div>
             <div class="info-item"><i class="fas fa-wheelchair"></i> Wheelchair accessible · Takeout · Outdoor deck</div>
@@ -1148,7 +1518,7 @@
             <div class="map-placeholder">
               <i class="fas fa-map-location-dot" style="font-size: 4rem; color: var(--ember-red); margin-bottom: 1rem;"></i>
               <p>6779 US Hwy 61<br>St. Francisville, LA</p>
-              <a href="#" class="btn btn-outline" style="margin-top: 1rem;">GET DIRECTIONS</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775" class="btn btn-outline" style="margin-top: 1rem;">GET DIRECTIONS</a>
             </div>
           </div>
         </div>
@@ -1156,7 +1526,6 @@
     </section>
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
@@ -1171,10 +1540,10 @@
         </div>
         <div class="footer-links">
           <h4>EXPLORE</h4>
-          <a href="#">Menu</a>
+          <a href="#" class="js-open-menu">Menu</a>
           <a href="#">Story</a>
-          <a href="#">Reviews</a>
-          <a href="#">Contact</a>
+          <a href="#reviews">Reviews</a>
+          <a href="#contact">Contact</a>
         </div>
         <div class="footer-links">
           <h4>INFO</h4>
@@ -1197,70 +1566,378 @@
 
   <script>
     (function() {
-      // CIRCULAR MENU TOGGLE
+      const menuData = {
+        bbq: {
+          eyebrow: 'Barbecue Core',
+          title: 'Smoke Built Different',
+          blurb: 'Slow-smoked anchors, signature plates, and heavyweight flavors that land like the house classics.',
+          radialLabel: 'BBQ plates',
+          featured: {
+            badge: 'Signature Plate',
+            image: "url('https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?q=80&w=1600&auto=format&fit=crop')"
+          },
+          tags: [
+            { icon: 'fas fa-fire', text: 'slow smoked' },
+            { icon: 'fas fa-star', text: 'signature cuts' },
+            { icon: 'fas fa-utensils', text: 'two-side plates' },
+            { icon: 'fas fa-bag-shopping', text: 'takeout ready' }
+          ],
+          orbitTitle: 'Smokehouse anchors',
+          items: [
+            { title: 'Brisket Plate', price: '$10.99', desc: 'The review-stealing cut with smoke, bark, and pull.', tags: ['hero', 'two sides', 'best seller'] },
+            { title: 'Full Rack of Ribs', price: '$19.99', desc: 'Big smoke energy and a proper centerpiece order.', tags: ['signature', 'ribs', 'shareable'] },
+            { title: 'Half Rack of Ribs', price: '$11.99', desc: 'Same lane, lighter commitment, still loaded with flavor.', tags: ['balanced', 'ribs', 'two sides'] },
+            { title: 'Pulled Pork Plate', price: '$9.99', desc: 'Comfort-heavy, soft smoke, all-day easy favorite.', tags: ['classic', 'pork', 'comfort'] },
+            { title: 'Half Chicken Plate', price: '$9.99', desc: 'Cleaner profile for guests wanting less bark and more balance.', tags: ['chicken', 'lighter', 'two sides'] },
+            { title: 'Smoked Wings', price: '$7.99', desc: 'Snack energy with enough smoke to own a whole lane.', tags: ['wings', 'shareable', 'snack'] }
+          ]
+        },
+        sandwiches: {
+          eyebrow: 'Handheld Orbit',
+          title: 'Burgers, Po-Boys, And Pull',
+          blurb: 'Fast-moving handhelds that still carry the smokehouse identity instead of feeling like filler.',
+          radialLabel: 'Handhelds',
+          featured: {
+            badge: 'Handheld Hero',
+            image: "url('https://images.unsplash.com/photo-1558030006-450675393462?q=80&w=1600&auto=format&fit=crop')"
+          },
+          tags: [
+            { icon: 'fas fa-burger', text: 'burgers' },
+            { icon: 'fas fa-bread-slice', text: 'po-boys' },
+            { icon: 'fas fa-bolt', text: 'quick order' },
+            { icon: 'fas fa-hand-holding-heart', text: 'comfort lane' }
+          ],
+          orbitTitle: 'Fast grab icons',
+          items: [
+            { title: 'Brisket Sandwich', price: '$8.99', desc: 'The smokehouse hero item in handheld form.', tags: ['hero', 'brisket', 'one side'] },
+            { title: 'Pulled Pork Sandwich', price: '$7.99', desc: 'Soft, smoky, and built for repeat orders.', tags: ['pork', 'classic', 'one side'] },
+            { title: 'Cheeseburger', price: '$7.99', desc: 'Melty, grounded, and familiar in the best way.', tags: ['burger', 'comfort', 'one side'] },
+            { title: 'Bacon Cheeseburger', price: '$8.99', desc: 'Loaded, richer, and unapologetically big.', tags: ['burger', 'bacon', 'loaded'] },
+            { title: 'Shrimp Po-Boy', price: '$8.99', desc: 'Seafood lift with a distinctly Louisiana signal.', tags: ['po-boy', 'seafood', 'regional'] },
+            { title: 'Ribeye Po-Boy', price: '$10.99', desc: 'The premium swing for guests wanting more swagger.', tags: ['premium', 'po-boy', 'one side'] }
+          ]
+        },
+        boudin: {
+          eyebrow: 'Louisiana Signal',
+          title: 'Boudin, Pies, And Hot Counter Energy',
+          blurb: 'The items that make the menu feel unmistakably local, vivid, and impossible to confuse with generic barbecue.',
+          radialLabel: 'Boudin lane',
+          featured: {
+            badge: 'Local Legend',
+            image: "url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1600&auto=format&fit=crop')"
+          },
+          tags: [
+            { icon: 'fas fa-pepper-hot', text: 'regional heat' },
+            { icon: 'fas fa-circle-dot', text: 'boudin core' },
+            { icon: 'fas fa-flag', text: 'local signal' },
+            { icon: 'fas fa-user-group', text: 'shareable bites' }
+          ],
+          orbitTitle: 'Counter standouts',
+          items: [
+            { title: 'Boudin Balls', price: 'Market', desc: 'The easiest signature snack in the building.', tags: ['must try', 'crispy', 'local'] },
+            { title: 'Pepper Jack Boudin Balls', price: 'Market', desc: 'More molten, more playful, more heat-forward.', tags: ['spicy', 'cheese', 'boudin'] },
+            { title: 'Steamed Boudin Links', price: 'Market', desc: 'A foundational Louisiana move with honest counter energy.', tags: ['links', 'classic', 'regional'] },
+            { title: 'Boudin Egg Rolls', price: 'Market', desc: 'Crunch, comfort, and instant curiosity.', tags: ['crispy', 'fusion', 'shareable'] },
+            { title: 'Meat Pies', price: 'Market', desc: 'Portable savory comfort with old-school soul.', tags: ['handheld', 'savory', 'portable'] },
+            { title: 'Crawfish Pies', price: 'Market', desc: 'Regional pastry power with a local pull.', tags: ['crawfish', 'regional', 'portable'] }
+          ]
+        },
+        sides: {
+          eyebrow: 'Support System',
+          title: 'Sides With Main Character Energy',
+          blurb: 'Not throwaway add-ons. These are texture shifts, comfort anchors, and some of the most memorable bites on the board.',
+          radialLabel: 'Side dishes',
+          featured: {
+            badge: 'Most Talked About Side',
+            image: "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop')"
+          },
+          tags: [
+            { icon: 'fas fa-bowl-food', text: 'small / large' },
+            { icon: 'fas fa-heart', text: 'comfort hits' },
+            { icon: 'fas fa-layer-group', text: 'texture balance' },
+            { icon: 'fas fa-wheat-awn', text: 'southern staples' }
+          ],
+          orbitTitle: 'Plate builders',
+          items: [
+            { title: 'Corn Pudding', price: '$2.75 / $6.99', desc: 'Creamy, warm, and the side people remember by name.', tags: ['praised', 'comfort', 'small / large'] },
+            { title: 'Baked Beans', price: '$2.75 / $6.99', desc: 'Sweet-smoky grounding for louder meats.', tags: ['classic', 'beans', 'pairing'] },
+            { title: 'Potato Salad', price: '$2.75 / $6.99', desc: 'Cool balance against bark and smoke.', tags: ['cooling', 'classic', 'small / large'] },
+            { title: 'Cole Slaw', price: '$2.75 / $6.99', desc: 'Fresh crunch and a clean reset.', tags: ['fresh', 'crisp', 'small / large'] },
+            { title: 'French Fries', price: '$2.75 / $6.99', desc: 'Universal comfort, no explanation needed.', tags: ['fries', 'golden', 'small / large'] },
+            { title: 'Sweet Potato Waffle Fries', price: '$2.75 / $6.99', desc: 'The side with the biggest visual personality.', tags: ['sweet edge', 'waffle', 'photo ready'] }
+          ]
+        },
+        sweets: {
+          eyebrow: 'Sweet Exit',
+          title: 'Dessert After The Fire',
+          blurb: 'A warm Southern finish so the menu closes with contrast instead of just stopping at smoke.',
+          radialLabel: 'Dessert finish',
+          featured: {
+            badge: 'Southern Finish',
+            image: "url('https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1600&auto=format&fit=crop')"
+          },
+          tags: [
+            { icon: 'fas fa-cake-candles', text: 'dessert lane' },
+            { icon: 'fas fa-mug-hot', text: 'warm finish' },
+            { icon: 'fas fa-ice-cream', text: 'sweet contrast' },
+            { icon: 'fas fa-cloud', text: 'lighter exit' }
+          ],
+          orbitTitle: 'Final notes',
+          items: [
+            { title: 'Homemade Bread Pudding', price: 'Market', desc: 'A warm Southern landing after all the smoke and bark.', tags: ['warm', 'comfort', 'classic'] },
+            { title: 'Creole Cream Cheesecake', price: 'Market', desc: 'Silky and rich with an elegant finish.', tags: ['creole', 'rich', 'smooth'] },
+            { title: 'Chocolate & Carrot Cake', price: 'Market', desc: 'Bakery-style options with broad appeal.', tags: ['cake', 'bakery', 'double lane'] },
+            { title: 'Strawberry Shortcake', price: 'Market', desc: 'Bright and lighter for the cleanest exit.', tags: ['fresh', 'light', 'berry'] }
+          ]
+        },
+        specials: {
+          eyebrow: 'Live Signal',
+          title: 'Specials As Broadcasts',
+          blurb: 'These are the one-off transmissions — richer plates, premium swings, and the kind of updates that make the layer feel alive.',
+          radialLabel: 'Kitchen signals',
+          featured: {
+            badge: 'Featured Signal',
+            image: "url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop')"
+          },
+          tags: [
+            { icon: 'fas fa-star', text: 'limited run' },
+            { icon: 'fas fa-satellite-dish', text: 'live signal' },
+            { icon: 'fas fa-gem', text: 'premium plates' },
+            { icon: 'fas fa-burst', text: 'kitchen flex' }
+          ],
+          orbitTitle: 'Current transmissions',
+          items: [
+            { title: 'Sweet Thai Chili Wings', price: '$16', desc: 'Glossy heat with instant visual drama.', tags: ['wings', 'special', 'heat'] },
+            { title: 'Eggplant Pirogue w/ Seafood Stuffing', price: '$26', desc: 'Unexpected, plated, and memorable.', tags: ['special', 'plated', 'creative'] },
+            { title: 'Blackened Lemon Fish + Crawfish Tails', price: '$28', desc: 'A sharper Louisiana luxury lane.', tags: ['fish', 'crawfish', 'premium'] },
+            { title: 'Jack Daniel’s BBQ Shrimp + Pork Chop', price: '$26', desc: 'Smoke, sweetness, and spectacle in one order.', tags: ['hero special', 'shrimp', 'pork chop'] },
+            { title: 'Grilled Salmon + Crabmeat', price: '$28', desc: 'Refined contrast against the darker smokehouse core.', tags: ['salmon', 'crab', 'premium'] },
+            { title: 'Miss Mud Pie', price: '$7', desc: 'Compact dessert closer with strong name energy.', tags: ['dessert', 'special', 'sweet'] }
+          ]
+        }
+      };
+
+      const specialSignals = [
+        { title: 'Sweet Thai Chili Wings', note: 'Glossy heat and quick visual drama.', price: '$16' },
+        { title: 'Blackened Lemon Fish', note: 'Premium Louisiana swing with crawfish tails.', price: '$28' },
+        { title: 'Grilled Salmon + Crabmeat', note: 'Refined contrast against the smoke-heavy core.', price: '$28' },
+        { title: 'Miss Mud Pie', note: 'Simple sweet closer with strong name energy.', price: '$7' }
+      ];
+
       const overlay = document.getElementById('circMenuOverlay');
       const leftBtn = document.getElementById('navBtnLeft');
       const bottomBtn = document.getElementById('navBtnBottom');
       const homeCenter = document.getElementById('homeCenter');
       const menuItems = document.querySelectorAll('.menu-item');
+      const circularMenu = document.querySelector('.circular-menu');
+      const menuDimension = document.getElementById('menuDimension');
+      const closeMenuDimensionBtn = document.getElementById('closeMenuDimension');
+      const openMenuButtons = document.querySelectorAll('.js-open-menu');
+      const radialButtons = document.querySelectorAll('.radial-category');
+      const radialLabelText = document.getElementById('radialLabelText');
+      const menuDimensionStatus = document.getElementById('menuDimensionStatus');
+      const menuEyebrow = document.getElementById('menuEyebrow');
+      const menuCategoryTitle = document.getElementById('menuCategoryTitle');
+      const menuCategoryBlurb = document.getElementById('menuCategoryBlurb');
+      const featuredHero = document.getElementById('featuredHero');
+      const featuredBadge = document.getElementById('featuredBadge');
+      const featuredTitle = document.getElementById('featuredTitle');
+      const featuredDescription = document.getElementById('featuredDescription');
+      const featuredPrice = document.getElementById('featuredPrice');
+      const featuredMetaOne = document.getElementById('featuredMetaOne');
+      const featuredMetaTwo = document.getElementById('featuredMetaTwo');
+      const orbitTitle = document.getElementById('orbitTitle');
+      const orbitMiniLabel = document.getElementById('orbitMiniLabel');
+      const orbitCount = document.getElementById('orbitCount');
+      const orbitStack = document.getElementById('orbitStack');
+      const flavorStrip = document.getElementById('flavorStrip');
+      const specialsStack = document.getElementById('specialsStack');
+      const mobileMiniStrip = document.getElementById('mobileMiniStrip');
+      const callToOrder = document.getElementById('callToOrder');
 
-      function toggleMenu() {
-        overlay.classList.toggle('open');
-      }
+      let currentCategory = 'bbq';
+      let currentItemIndex = 0;
 
-      leftBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleMenu();
-      });
+      function toggleMenu() { overlay.classList.toggle('open'); }
+      function closeCircularMenu() { overlay.classList.remove('open'); }
 
-      bottomBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleMenu();
-      });
-
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-          overlay.classList.remove('open');
-        }
-      });
-
-      // Navigate to link
       function navigate(link) {
         if (!link) return;
-        // For tel: and http(s) links, just set location.href (works for tel, mailto, and external)
+        if (link.startsWith('#')) {
+          const target = document.querySelector(link);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+            return;
+          }
+        }
         window.location.href = link;
       }
 
+      function setActiveRadial(category) {
+        radialButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.category === category));
+      }
+
+      function createOrbitCard(item, index) {
+        const article = document.createElement('article');
+        article.className = 'orbit-card' + (index === currentItemIndex ? ' active' : '');
+        article.innerHTML = `
+          <div class="orbit-card-top">
+            <h5>${item.title}</h5>
+            <div class="orbit-card-price">${item.price}</div>
+          </div>
+          <p>${item.desc}</p>
+          <div class="orbit-card-meta">
+            ${item.tags.map(tag => `<span class="orbit-tag">${tag}</span>`).join('')}
+          </div>
+        `;
+        article.addEventListener('click', () => {
+          currentItemIndex = index;
+          renderMenuDimension(currentCategory);
+        });
+        return article;
+      }
+
+      function renderFlavorStrip(tags) {
+        flavorStrip.innerHTML = '';
+        tags.forEach(tag => {
+          const pill = document.createElement('div');
+          pill.className = 'flavor-pill';
+          pill.innerHTML = `<i class="${tag.icon}"></i><span>${tag.text}</span>`;
+          flavorStrip.appendChild(pill);
+        });
+      }
+
+      function renderMobileMinis(items) {
+        mobileMiniStrip.innerHTML = '';
+        items.slice(0, 4).forEach(item => {
+          const mini = document.createElement('div');
+          mini.className = 'mobile-mini';
+          mini.innerHTML = `<strong>${item.title}</strong><p>${item.price} · ${item.desc}</p>`;
+          mini.addEventListener('click', () => {
+            currentItemIndex = items.indexOf(item);
+            renderMenuDimension(currentCategory);
+          });
+          mobileMiniStrip.appendChild(mini);
+        });
+      }
+
+      function renderMenuDimension(categoryKey) {
+        const category = menuData[categoryKey];
+        if (!category) return;
+        if (currentItemIndex >= category.items.length) currentItemIndex = 0;
+        const item = category.items[currentItemIndex];
+        currentCategory = categoryKey;
+        setActiveRadial(categoryKey);
+        menuEyebrow.textContent = category.eyebrow;
+        menuCategoryTitle.textContent = category.title;
+        menuCategoryBlurb.textContent = category.blurb;
+        radialLabelText.textContent = category.radialLabel;
+        menuDimensionStatus.textContent = category.title + ' active';
+        orbitTitle.textContent = category.orbitTitle;
+        orbitMiniLabel.textContent = category.eyebrow;
+        orbitCount.textContent = String(currentItemIndex + 1).padStart(2, '0') + ' / ' + String(category.items.length).padStart(2, '0');
+        featuredBadge.textContent = category.featured.badge;
+        featuredTitle.textContent = item.title;
+        featuredDescription.textContent = item.desc;
+        featuredPrice.textContent = item.price;
+        featuredMetaOne.textContent = item.tags[0] || 'signature';
+        featuredMetaTwo.textContent = item.tags[1] || 'favorite';
+        featuredHero.style.setProperty('--dish-image', category.featured.image);
+        orbitStack.innerHTML = '';
+        category.items.forEach((entry, index) => orbitStack.appendChild(createOrbitCard(entry, index)));
+        renderFlavorStrip(category.tags);
+        renderMobileMinis(category.items);
+      }
+
+      function renderSignals() {
+        specialsStack.innerHTML = '';
+        specialSignals.forEach(signal => {
+          const item = document.createElement('div');
+          item.className = 'special-item';
+          item.innerHTML = `<div><strong>${signal.title}</strong><span>${signal.note}</span></div><em>${signal.price}</em>`;
+          specialsStack.appendChild(item);
+        });
+      }
+
+      function openMenuDimension(categoryKey = currentCategory) {
+        closeCircularMenu();
+        menuDimension.classList.add('open');
+        menuDimension.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('menu-dimension-open');
+        currentCategory = categoryKey;
+        currentItemIndex = 0;
+        renderMenuDimension(categoryKey);
+      }
+
+      function closeMenuDimension() {
+        menuDimension.classList.remove('open');
+        menuDimension.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('menu-dimension-open');
+      }
+
+      leftBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+      bottomBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) closeCircularMenu(); });
+      circularMenu.addEventListener('click', (e) => { e.stopPropagation(); });
       homeCenter.addEventListener('click', () => {
-        overlay.classList.remove('open');
+        closeCircularMenu();
         const link = homeCenter.getAttribute('data-link');
         if (link) navigate(link);
       });
-
       menuItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-          overlay.classList.remove('open');
+        item.addEventListener('click', () => {
+          const action = item.getAttribute('data-action');
           const link = item.getAttribute('data-link');
+          if (action === 'menu-layer') {
+            openMenuDimension('bbq');
+            return;
+          }
+          closeCircularMenu();
           if (link) navigate(link);
         });
       });
-
-      document.querySelector('.circular-menu').addEventListener('click', (e) => {
-        e.stopPropagation();
-      });
-
-      // SMOOTH SCROLL FOR ALL ANCHOR LINKS (optional)
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
           const href = this.getAttribute('href');
-          if (href === "#") return;
+          if (href === '#') return;
           const target = document.querySelector(href);
           if (target) {
             e.preventDefault();
+            closeCircularMenu();
             target.scrollIntoView({ behavior: 'smooth' });
           }
         });
       });
+      openMenuButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          openMenuDimension('bbq');
+        });
+      });
+      closeMenuDimensionBtn.addEventListener('click', closeMenuDimension);
+      menuDimension.addEventListener('click', (e) => {
+        if (e.target === menuDimension || e.target.classList.contains('menu-dim-backdrop') || e.target.classList.contains('menu-dim-grid')) {
+          closeMenuDimension();
+        }
+      });
+      radialButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentItemIndex = 0;
+          renderMenuDimension(btn.dataset.category);
+        });
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (menuDimension.classList.contains('open')) {
+            closeMenuDimension();
+            return;
+          }
+          if (overlay.classList.contains('open')) closeCircularMenu();
+        }
+      });
+      callToOrder.addEventListener('click', () => { window.location.href = 'tel:+12252455046'; });
+      renderSignals();
+      renderMenuDimension('bbq');
     })();
   </script>
 </body>
