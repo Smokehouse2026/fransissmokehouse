@@ -44,7 +44,7 @@
     .app {
       position: relative;
       width: 100vw;
-      height: 100vh;
+      height: 100dvh;
       overflow: hidden;
       background:
         radial-gradient(circle at 20% 20%, rgba(110, 231, 255, 0.12), transparent 20%),
@@ -161,14 +161,16 @@
     .reticle .v2 { top: 50%; right: 5px; width: 10px; height: 2px; transform: translateY(-50%); }
 
     .panel-wrap {
-      position: absolute;
+      position: fixed;
       left: 50%;
-      top: 53%;
-      transform: translate3d(-50%, -50%, 0);
+      top: calc(var(--safe-top) + 76px);
+      bottom: calc(var(--safe-bottom) + 92px);
+      transform: translateX(-50%);
       z-index: 6;
-      width: min(98vw, 520px);
-      max-height: min(84vh, 860px);
-      will-change: transform;
+      width: min(96vw, 560px);
+      max-width: 560px;
+      will-change: auto;
+      pointer-events: auto;
     }
 
     .menu-panel {
@@ -181,7 +183,8 @@
       touch-action: pan-y;
       display: flex;
       flex-direction: column;
-      height: min(84vh, 860px);
+      height: 100%;
+      min-height: 0;
     }
 
     .panel-header {
@@ -289,26 +292,27 @@
 
     .panel-body {
       display: grid;
-      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      grid-template-rows: auto auto auto minmax(0, 1fr) auto;
       max-height: none;
       min-height: 0;
       flex: 1 1 auto;
+      overflow: hidden;
     }
 
     .hero {
-      padding: 12px 12px 0;
+      padding: 10px 10px 0;
       display: grid;
-      gap: 10px;
+      gap: 8px;
       flex: 0 0 auto;
     }
 
     .hero-card {
-      padding: 12px;
+      padding: 10px;
       border-radius: 18px;
       background: linear-gradient(135deg, rgba(110, 231, 255, 0.14), rgba(158, 255, 168, 0.12));
       border: 1px solid rgba(255,255,255,0.12);
       display: grid;
-      gap: 8px;
+      gap: 6px;
     }
 
     .hero-top {
@@ -349,17 +353,20 @@
     .tabs {
       display: flex;
       gap: 8px;
-      padding: 10px 12px;
+      padding: 8px 10px;
       overflow-x: auto;
+      overflow-y: hidden;
       scrollbar-width: none;
       scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
     }
     .tabs::-webkit-scrollbar { display: none; }
     .tab-btn { border-radius: 999px; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); white-space: nowrap; scroll-snap-align: start; }
 
     .menu-list {
-      padding: 0 12px 12px;
-      overflow: auto;
+      padding: 0 10px 10px;
+      overflow-x: hidden;
+      overflow-y: auto;
       display: grid;
       grid-template-columns: 1fr;
       gap: 10px;
@@ -368,6 +375,7 @@
       min-height: 0;
       max-height: 100%;
       -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
     }
 
     .menu-item {
@@ -442,9 +450,9 @@
 
     .panel-footer {
       border-top: 1px solid var(--line);
-      padding: 10px 12px calc(10px + var(--safe-bottom));
+      padding: 8px 10px calc(8px + var(--safe-bottom));
       display: grid;
-      gap: 10px;
+      gap: 8px;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.14));
       flex: 0 0 auto;
     }
@@ -629,23 +637,32 @@
     .hidden { display: none !important; }
 
     @media (min-width: 880px) {
-      .panel-wrap { width: min(48vw, 580px); left: 30%; }
+      .panel-wrap { width: min(44vw, 560px); max-width: 560px; left: 30%; }
       .bottom-dock { width: min(68vw, 620px); }
       .cart-sheet { left: auto; right: 14px; width: 360px; }
       .menu-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 520px) {
-      .panel-wrap { width: min(98vw, 520px); top: 51%; }
-      .menu-panel { height: min(86vh, 860px); border-radius: 24px; }
-      .panel-header { padding: 10px; }
+      .panel-wrap {
+        width: calc(100vw - 12px);
+        max-width: none;
+        top: calc(var(--safe-top) + 64px);
+        bottom: calc(var(--safe-bottom) + 84px);
+      }
+      .menu-panel { border-radius: 20px; }
+      .panel-header { padding: 8px; }
       .control-row { align-items: stretch; flex-direction: column; }
       .chip-group, .action-group { width: 100%; }
       .chip-group > *, .action-group > * { flex: 1 1 0; text-align: center; }
-      .hero-card p { font-size: 0.84rem; }
+      .hero-card p { font-size: 0.8rem; }
+      .hero-card h2 { font-size: 1rem; }
+      .brand-copy p { font-size: 0.76rem; }
       .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .footer-actions { grid-template-columns: 1fr; }
       .bottom-dock { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .dock-btn { min-height: 56px; }
+      .menu-item { padding: 12px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -720,7 +737,7 @@
             </div>
           </div>
 
-          <div style="padding:0 12px 4px;color:var(--muted);font-size:0.8rem;">Swipe categories if needed, or scroll the item list inside the frame.</div>
+          <div style="padding:0 10px 4px;color:var(--muted);font-size:0.78rem;">Swipe the category row, then scroll the menu list inside this frame.</div>
           <nav class="tabs" id="categoryTabs" aria-label="Menu categories"></nav>
           <div class="menu-list" id="menuList" tabindex="0"></div>
 
@@ -1023,39 +1040,22 @@
     }
 
     function distanceOffset() {
-      if (state.distance === 'far') return { scale: 0.97, y: 0.47 };
-      if (state.distance === 'mid') return { scale: 1.0, y: 0.52 };
-      return { scale: 1.03, y: 0.58 };
+      if (state.distance === 'far') return { scale: 0.94, y: 0.5 };
+      if (state.distance === 'mid') return { scale: 0.98, y: 0.5 };
+      return { scale: 1, y: 0.5 };
     }
 
     function applyPanelPosition(immediate = false) {
-      const bounds = panelWrap.getBoundingClientRect();
-      const halfW = bounds.width / 2;
-      const halfH = bounds.height / 2;
-      const margin = 8;
-      const topSafe = 92;
-      const bottomSafe = 124;
-      const x = Math.max(margin + halfW, Math.min(window.innerWidth - halfW - margin, state.panelCurrent.x));
-      const y = Math.max(topSafe + halfH, Math.min(window.innerHeight - halfH - bottomSafe, state.panelCurrent.y));
       const { scale } = distanceOffset();
-      panelWrap.style.transform = `translate3d(${x - window.innerWidth / 2}px, ${y - window.innerHeight / 2}px, 0) scale(${scale})`;
+      panelWrap.style.transform = `translateX(-50%) scale(${scale})`;
+      panelWrap.style.left = '50%';
+      if (window.innerWidth >= 880 && !state.accessibleMode) {
+        panelWrap.style.left = '30%';
+      }
       if (immediate) return;
     }
 
     function animatePanel() {
-      if (!state.pinned && state.follow && !state.accessibleMode) {
-        const t = performance.now() / 1000;
-        const driftX = Math.sin(t * 0.7) * 10;
-        const driftY = Math.cos(t * 0.9) * 6;
-        const baseX = window.innerWidth / 2;
-        const baseY = window.innerHeight * distanceOffset().y;
-        state.panelTarget.x = baseX + driftX;
-        state.panelTarget.y = baseY + driftY;
-      }
-
-      const lerp = state.accessibleMode ? 0.35 : 0.12;
-      state.panelCurrent.x += (state.panelTarget.x - state.panelCurrent.x) * lerp;
-      state.panelCurrent.y += (state.panelTarget.y - state.panelCurrent.y) * lerp;
       applyPanelPosition();
       requestAnimationFrame(animatePanel);
     }
