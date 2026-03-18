@@ -1036,6 +1036,79 @@
       pointer-events:auto;
     }
 
+    .menu-items-grid.is-collapsed{
+      pointer-events:none;
+    }
+
+    .menu-items-grid.is-collapsed .item-shell{
+      opacity:0;
+      transform:scale(.86);
+      pointer-events:none;
+    }
+
+    .menu-items-grid.is-expanded .item-shell{
+      animation:itemBloom .48s var(--ease) both;
+    }
+
+    @keyframes itemBloom{
+      0%{
+        opacity:0;
+        transform:translateY(10px) scale(.9);
+      }
+      100%{
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
+    }
+
+    .category-prompt{
+      position:absolute;
+      left:50%;
+      top:50%;
+      translate:-50% -50%;
+      z-index:4;
+      width:min(420px, calc(100% - 2rem));
+      padding:1.1rem 1.2rem;
+      border-radius:28px;
+      border:1px solid rgba(255,220,190,.12);
+      background:rgba(10,8,8,.42);
+      backdrop-filter:blur(12px);
+      text-align:center;
+      box-shadow:0 24px 34px -24px rgba(0,0,0,.8);
+      transition:opacity .3s ease, transform .3s ease;
+      pointer-events:none;
+    }
+
+    .category-prompt.hidden{
+      opacity:0;
+      transform:translateY(8px);
+    }
+
+    .category-prompt small{
+      display:block;
+      margin-bottom:.4rem;
+      font-size:.64rem;
+      text-transform:uppercase;
+      letter-spacing:.24em;
+      color:rgba(248,240,230,.56);
+    }
+
+    .category-prompt strong{
+      display:block;
+      font-family:var(--serif);
+      font-size:1.7rem;
+      line-height:.95;
+      color:#fff2e5;
+      margin-bottom:.28rem;
+    }
+
+    .category-prompt span{
+      display:block;
+      font-size:.8rem;
+      color:rgba(248,240,230,.68);
+      letter-spacing:.06em;
+    }
+
     .menu-axis{
       position:absolute;
       inset:50% auto auto 50%;
@@ -1629,7 +1702,6 @@
         right:auto !important;
         top:auto !important;
         bottom:auto !important;
-        transform:none !important;
         translate:none !important;
         width:100%;
         min-width:0;
@@ -1866,7 +1938,13 @@
             </div>
           </div>
 
-          <div class="menu-items-grid" id="menuItemsGrid"></div>
+          <div class="category-prompt" id="categoryPrompt">
+            <small>Orbit Selected</small>
+            <strong>Choose A Category</strong>
+            <span>Tap a node to release the items</span>
+          </div>
+
+          <div class="menu-items-grid is-collapsed" id="menuItemsGrid"></div>
 
           <div class="menu-scroll-hint"><i class="fas fa-arrow-down"></i> scroll for more signals</div>
         </div>
@@ -2154,6 +2232,7 @@
       const openMenuButtons = document.querySelectorAll('.js-open-menu');
       const menuNodeStrip = document.getElementById('menuNodeStrip');
       const menuItemsGrid = document.getElementById('menuItemsGrid');
+      const categoryPrompt = document.getElementById('categoryPrompt');
       const menuCenterpiece = document.getElementById('menuCenterpiece');
       const menuPhaseTitle = document.getElementById('menuPhaseTitle');
       const menuPhaseMeta = document.getElementById('menuPhaseMeta');
@@ -2168,6 +2247,7 @@
 
       let currentCategory = 'bbq';
       let currentItemIndex = 0;
+      let itemsVisible = false;
 
       function toggleMenu() {
         overlay.classList.toggle('open');
@@ -2192,6 +2272,7 @@
       function openMenuDimension(category = currentCategory) {
         currentCategory = category;
         currentItemIndex = 0;
+        itemsVisible = false;
         renderDimension();
         closeCircularMenu();
         menuDimension.classList.add('open');
@@ -2256,14 +2337,28 @@
           node.style.setProperty('--radius', '340px');
           node.innerHTML = `<i class="${value.icon}"></i><strong>${value.short}</strong><span>${value.name}</span>`;
           node.addEventListener('click', () => {
+            const categoryChanged = currentCategory !== key;
             currentCategory = key;
             currentItemIndex = 0;
+            itemsVisible = true;
             renderDimension();
+            if (categoryChanged) {
+              menuItemsGrid.classList.remove('is-expanded');
+              void menuItemsGrid.offsetWidth;
+              menuItemsGrid.classList.add('is-expanded');
+              setTimeout(() => menuItemsGrid.classList.remove('is-expanded'), 520);
+            }
           });
           menuNodeStrip.appendChild(node);
         });
 
         menuItemsGrid.innerHTML = '';
+        menuItemsGrid.classList.toggle('is-collapsed', !itemsVisible);
+        menuItemsGrid.classList.toggle('is-expanded', itemsVisible);
+        categoryPrompt.classList.toggle('hidden', itemsVisible);
+        categoryPrompt.querySelector('strong').textContent = itemsVisible ? category.name : 'Choose A Category';
+        categoryPrompt.querySelector('span').textContent = itemsVisible ? 'Tap another orbit to change the release' : 'Tap a node to release the items';
+
         const pos = positionsFor(items.length);
         items.forEach((item, index) => {
           const card = document.createElement('article');
@@ -2278,6 +2373,7 @@
               ${item.tags.map(tag => `<span class="item-mini-tag">${tag}</span>`).join('')}
             </div>
           `;
+          card.style.animationDelay = itemsVisible ? `${index * 45}ms` : '0ms';
           card.addEventListener('click', () => {
             currentItemIndex = index;
             renderDimension();
@@ -2363,6 +2459,7 @@
       });
 
       renderSignals();
+      itemsVisible = false;
       renderDimension();
     })();
   </script>
