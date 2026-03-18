@@ -2,342 +2,1200 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EchoEarth Live Functional Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AR Restaurant Menu</title>
   <style>
-    :root { --bg:#07131a; --panel:rgba(8,25,35,.78); --line:rgba(130,204,255,.18); --text:#eaf7ff; --muted:#9eb8c7; --accent:#60d6ff; --accent-2:#65ffb8; --danger:#ff7c7c; --warning:#ffd166; --shadow:0 20px 50px rgba(0,0,0,.35); --radius:20px; }
-    * { box-sizing:border-box; }
-    html,body { margin:0; padding:0; background:radial-gradient(circle at top left, rgba(20,116,161,.25), transparent 28%),radial-gradient(circle at top right, rgba(54,199,154,.2), transparent 22%),linear-gradient(180deg,#051019 0%,#07131a 100%); color:var(--text); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; min-height:100%; }
-    .shell { width:min(1400px,calc(100vw - 24px)); margin:0 auto; padding:18px 0 42px; }
-    .hero { display:grid; grid-template-columns:1.25fr .95fr; gap:18px; margin-bottom:18px; }
-    .panel { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); backdrop-filter:blur(18px); overflow:hidden; }
-    .hero-copy { padding:28px; min-height:220px; }
-    .eyebrow { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; border:1px solid rgba(101,255,184,.22); background:rgba(101,255,184,.08); color:var(--accent-2); font-size:12px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; }
-    h1 { margin:16px 0 12px; font-size:clamp(2rem,4vw,3.8rem); line-height:.98; letter-spacing:-.04em; max-width:12ch; }
-    .hero-copy p,.muted,.help,.post-card p,.detail-body,.status-card span { color:var(--muted); line-height:1.55; }
-    .hero-stats,.status-grid,.form-grid { display:grid; gap:12px; }
-    .hero-stats { grid-template-columns:repeat(3,1fr); margin-top:22px; }
-    .stat,.status-card,.post-card,.empty,.check { border:1px solid var(--line); background:rgba(255,255,255,.03); border-radius:16px; padding:14px; }
-    .stat strong,.status-card strong { display:block; font-size:1.2rem; margin-bottom:6px; }
-    .hero-side { padding:22px; display:grid; gap:12px; }
-    .checklist,.feed-list,.detail-wrap { display:grid; gap:12px; }
-    .grid { display:grid; grid-template-columns:1.15fr .85fr; gap:18px; }
-    .section-title { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 20px; border-bottom:1px solid var(--line); background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)); }
-    .section-title h2,.post-card h3,.detail-wrap h3 { margin:0; }
-    .camera-stage { position:relative; aspect-ratio:16/10; background:#02070a; overflow:hidden; }
-    video { width:100%; height:100%; object-fit:cover; display:block; background:#000; }
-    .overlay { position:absolute; inset:0; pointer-events:none; background:linear-gradient(to bottom, rgba(0,0,0,.28), transparent 18%, transparent 72%, rgba(0,0,0,.35)), radial-gradient(circle at center, transparent 0 31%, rgba(96,214,255,.08) 32%, transparent 33%), linear-gradient(90deg, transparent 49.5%, rgba(96,214,255,.18) 50%, transparent 50.5%), linear-gradient(0deg, transparent 49.5%, rgba(96,214,255,.18) 50%, transparent 50.5%); }
-    .reticle { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:86px; height:86px; border-radius:50%; border:2px solid rgba(96,214,255,.55); box-shadow:0 0 0 10px rgba(96,214,255,.08), inset 0 0 18px rgba(96,214,255,.15); }
-    .hud { position:absolute; left:16px; right:16px; top:16px; display:flex; justify-content:space-between; gap:10px; font-size:12px; }
-    .tag,.pill { padding:8px 10px; border-radius:999px; background:rgba(8,25,35,.72); border:1px solid rgba(96,214,255,.18); color:#d9f6ff; white-space:nowrap; }
-    .pill { display:inline-flex; align-items:center; gap:8px; font-size:12px; background:rgba(255,255,255,.04); color:var(--muted); }
-    .pill.ok { border-color:rgba(101,255,184,.25); color:var(--accent-2); }
-    .pill.locked { border-color:rgba(255,209,102,.25); color:var(--warning); }
-    .pill.memorial { border-color:rgba(255,124,124,.25); color:#ffb0b0; }
-    .nearby-overlay { position:absolute; left:16px; right:16px; bottom:16px; display:grid; gap:10px; }
-    .nearby-chip { width:fit-content; max-width:min(100%,420px); background:rgba(8,25,35,.78); border:1px solid rgba(101,255,184,.25); border-radius:14px; padding:10px 12px; box-shadow:0 10px 30px rgba(0,0,0,.22); }
-    .controls,.form-wrap,.feed-wrap,.detail-wrap,.status-wrap { padding:18px; }
-    .controls,.inline-row,.post-meta,.detail-actions { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
-    .controls { border-top:1px solid var(--line); }
-    button { appearance:none; border:1px solid rgba(96,214,255,.25); color:var(--text); background:linear-gradient(180deg, rgba(96,214,255,.16), rgba(96,214,255,.08)); padding:12px 16px; border-radius:14px; font:inherit; cursor:pointer; box-shadow:0 10px 24px rgba(0,0,0,.18); }
-    button.secondary { background:rgba(255,255,255,.03); } button.good { background:linear-gradient(180deg, rgba(101,255,184,.18), rgba(101,255,184,.08)); border-color:rgba(101,255,184,.28); } button.warn { background:linear-gradient(180deg, rgba(255,209,102,.18), rgba(255,209,102,.08)); border-color:rgba(255,209,102,.28); } button.danger { background:linear-gradient(180deg, rgba(255,124,124,.18), rgba(255,124,124,.08)); border-color:rgba(255,124,124,.28); }
-    .status-grid { grid-template-columns:repeat(3,1fr); } .form-grid { grid-template-columns:repeat(2,1fr); gap:14px; } .field { display:grid; gap:8px; } .field.full { grid-column:1 / -1; }
-    input,textarea,select { width:100%; border:1px solid rgba(96,214,255,.18); border-radius:14px; background:rgba(255,255,255,.035); color:var(--text); padding:12px 13px; font:inherit; outline:none; } textarea { min-height:108px; resize:vertical; }
-    .image-preview,.detail-cover { border:1px dashed rgba(96,214,255,.22); background:rgba(255,255,255,.03); border-radius:16px; min-height:170px; display:grid; place-items:center; overflow:hidden; color:var(--muted); text-align:center; padding:16px; }
-    .detail-cover { min-height:240px; border-style:solid; }
-    .image-preview img,.thumb img,.detail-cover img { width:100%; height:100%; object-fit:cover; display:block; }
-    .feed-list { max-height:930px; overflow:auto; padding-right:4px; }
-    .thumb { border-radius:14px; overflow:hidden; border:1px solid rgba(96,214,255,.14); max-height:190px; }
-    .footer-note { margin-top:18px; color:var(--muted); font-size:.92rem; text-align:center; }
-    @media (max-width:1120px){ .hero,.grid{grid-template-columns:1fr;} .status-grid,.hero-stats,.form-grid{grid-template-columns:1fr 1fr;} }
-    @media (max-width:720px){ .shell{width:min(100vw - 12px,100%);} .hero-copy,.hero-side,.controls,.form-wrap,.feed-wrap,.detail-wrap,.status-wrap{padding:14px;} .status-grid,.hero-stats,.form-grid{grid-template-columns:1fr;} h1{max-width:none;} }
+    :root {
+      --bg: #081018;
+      --panel: rgba(10, 18, 28, 0.82);
+      --panel-strong: rgba(7, 12, 20, 0.92);
+      --panel-soft: rgba(255, 255, 255, 0.08);
+      --line: rgba(255, 255, 255, 0.12);
+      --text: #f7fbff;
+      --muted: #a9bfd1;
+      --accent: #6ee7ff;
+      --accent-2: #9effa8;
+      --danger: #ff8f8f;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+      --radius: 22px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #050b11;
+      color: var(--text);
+      font-family: var(--font);
+      touch-action: manipulation;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    .app {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(110, 231, 255, 0.12), transparent 20%),
+        radial-gradient(circle at 80% 30%, rgba(158, 255, 168, 0.12), transparent 22%),
+        linear-gradient(180deg, #07111a 0%, #03070b 100%);
+    }
+
+    video#camera {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: linear-gradient(180deg, #0f1820, #03070b);
+      filter: saturate(1.05) contrast(1.04);
+      z-index: 0;
+    }
+
+    .camera-fallback {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 50% 120%, rgba(255, 160, 122, 0.12), transparent 30%),
+        linear-gradient(180deg, rgba(8, 20, 32, 0.4) 0%, rgba(2, 6, 10, 0.7) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='1800' viewBox='0 0 1400 1800'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23131f2a'/%3E%3Cstop offset='1' stop-color='%23060b10'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1400' height='1800' fill='url(%23g)'/%3E%3Cpath d='M0 1220 C260 1120 520 1090 700 1135 C880 1180 1080 1170 1400 1070 L1400 1800 L0 1800 Z' fill='%23111b25'/%3E%3Cpath d='M0 1320 C290 1250 500 1230 700 1270 C920 1315 1130 1270 1400 1200 L1400 1800 L0 1800 Z' fill='%230d151d'/%3E%3Cpath d='M560 820 L845 820 L980 1270 L425 1270 Z' fill='%23161f28' stroke='%23283746' stroke-width='8'/%3E%3Crect x='640' y='430' width='120' height='390' rx='16' fill='%23131b24' stroke='%23283746' stroke-width='8'/%3E%3Cellipse cx='700' cy='1268' rx='355' ry='40' fill='rgba(0,0,0,0.3)'/%3E%3C/svg>") center/cover no-repeat;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .camera-fallback.show {
+      opacity: 1;
+    }
+
+    .scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(2, 5, 9, 0.55) 0%, rgba(2, 5, 9, 0.18) 18%, rgba(2, 5, 9, 0.08) 45%, rgba(2, 5, 9, 0.55) 100%);
+    }
+
+    .hud {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: calc(14px + var(--safe-top)) calc(14px + var(--safe-right)) 14px calc(14px + var(--safe-left));
+      pointer-events: none;
+    }
+
+    .pill {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(7, 12, 18, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .pill strong { font-weight: 700; }
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      box-shadow: 0 0 16px rgba(158, 255, 168, 0.65);
+      flex: 0 0 auto;
+    }
+
+    .reticle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 46px;
+      height: 46px;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      pointer-events: none;
+      opacity: 0.84;
+    }
+    .reticle::before,
+    .reticle::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      border-radius: 50%;
+    }
+    .reticle::after {
+      inset: 18px;
+      border-width: 2px;
+      border-color: rgba(110, 231, 255, 0.95);
+    }
+    .reticle span {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.85);
+    }
+    .reticle .h { left: 50%; top: 5px; width: 2px; height: 10px; transform: translateX(-50%); }
+    .reticle .h2 { left: 50%; bottom: 5px; width: 2px; height: 10px; transform: translateX(-50%); }
+    .reticle .v { top: 50%; left: 5px; width: 10px; height: 2px; transform: translateY(-50%); }
+    .reticle .v2 { top: 50%; right: 5px; width: 10px; height: 2px; transform: translateY(-50%); }
+
+    .panel-wrap {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      transform: translate3d(-50%, -50%, 0);
+      z-index: 6;
+      width: min(94vw, 460px);
+      max-height: min(72vh, 760px);
+      will-change: transform;
+    }
+
+    .menu-panel {
+      background: linear-gradient(180deg, rgba(12, 22, 34, 0.92), rgba(8, 14, 23, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+      touch-action: pan-y;
+    }
+
+    .panel-header {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
+    }
+
+    .brand-row, .control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(110, 231, 255, 0.25), rgba(158, 255, 168, 0.18));
+      border: 1px solid rgba(255,255,255,0.16);
+      font-size: 1.3rem;
+      flex: 0 0 auto;
+    }
+
+    .brand-copy h1 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0.01em;
+    }
+    .brand-copy p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mini-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .icon-btn, .chip-btn, .action-btn, .tab-btn, .menu-item, .qty-btn, .checkout-btn, .small-btn {
+      border: 0;
+      color: var(--text);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .icon-btn[aria-pressed="true"], .chip-btn.active, .tab-btn.active {
+      background: linear-gradient(135deg, rgba(110, 231, 255, 0.26), rgba(158, 255, 168, 0.18));
+      border-color: rgba(110, 231, 255, 0.45);
+    }
+
+    .control-row {
+      margin-top: 12px;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+
+    .chip-group, .action-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      flex: 1 1 auto;
+    }
+
+    .chip-btn, .action-btn, .small-btn, .checkout-btn {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      white-space: nowrap;
+    }
+
+    .action-btn.primary, .checkout-btn, .small-btn.primary {
+      background: linear-gradient(135deg, rgba(110, 231, 255, 0.3), rgba(158, 255, 168, 0.22));
+      border-color: rgba(110, 231, 255, 0.42);
+      color: white;
+      font-weight: 700;
+    }
+
+    .panel-body {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      max-height: min(65vh, 660px);
+      min-height: 360px;
+    }
+
+    .hero {
+      padding: 14px 14px 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .hero-card {
+      padding: 14px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(110, 231, 255, 0.14), rgba(158, 255, 168, 0.12));
+      border: 1px solid rgba(255,255,255,0.12);
+      display: grid;
+      gap: 10px;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .hero-card h2 {
+      margin: 0;
+      font-size: 1.08rem;
+    }
+
+    .hero-card p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .kpi {
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .kpi .label { color: var(--muted); font-size: 0.75rem; }
+    .kpi .value { margin-top: 4px; font-size: 0.95rem; font-weight: 700; }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding: 12px 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab-btn { border-radius: 999px; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); white-space: nowrap; }
+
+    .menu-list {
+      padding: 0 14px 14px;
+      overflow: auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      align-content: start;
+      overscroll-behavior: contain;
+    }
+
+    .menu-item {
+      text-align: left;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .menu-item:active { transform: scale(0.99); }
+    .menu-item:hover, .menu-item:focus-visible {
+      outline: none;
+      border-color: rgba(110, 231, 255, 0.38);
+      background: rgba(255,255,255,0.085);
+    }
+
+    .item-main { min-width: 0; }
+    .item-title-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .item-main h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+    .tag {
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      background: rgba(110, 231, 255, 0.13);
+      border: 1px solid rgba(110, 231, 255, 0.22);
+      color: #dbfbff;
+    }
+    .item-main p {
+      margin: 6px 0 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+      line-height: 1.36;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .item-side {
+      display: grid;
+      gap: 10px;
+      justify-items: end;
+      align-content: space-between;
+      min-width: 84px;
+    }
+
+    .price {
+      font-weight: 800;
+      font-size: 1rem;
+    }
+
+    .add-pill {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(158, 255, 168, 0.14);
+      border: 1px solid rgba(158, 255, 168, 0.22);
+      font-size: 0.84rem;
+      color: white;
+    }
+
+    .panel-footer {
+      border-top: 1px solid var(--line);
+      padding: 12px 14px calc(12px + var(--safe-bottom));
+      display: grid;
+      gap: 10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.14));
+    }
+
+    .cart-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .cart-summary h4 {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+    .cart-summary p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .footer-actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    .checkout-btn {
+      padding-inline: 18px;
+    }
+
+    .bottom-dock {
+      position: absolute;
+      left: 50%;
+      bottom: calc(12px + var(--safe-bottom));
+      transform: translateX(-50%);
+      z-index: 5;
+      width: min(96vw, 560px);
+      padding: 8px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(7, 12, 18, 0.58);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .dock-btn {
+      min-height: 54px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: grid;
+      place-items: center;
+      gap: 2px;
+      padding: 8px;
+      font-size: 0.78rem;
+      text-align: center;
+    }
+    .dock-btn strong { display: block; font-size: 0.84rem; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    dialog.modal {
+      width: min(94vw, 460px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(13, 22, 33, 0.98), rgba(8, 14, 21, 0.98));
+      color: var(--text);
+      padding: 0;
+      box-shadow: var(--shadow);
+    }
+    dialog.modal::backdrop {
+      background: rgba(1, 4, 7, 0.66);
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-content { padding: 18px; display: grid; gap: 14px; }
+    .modal-head { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+    .modal-head h3 { margin: 0; font-size: 1.15rem; }
+    .modal-body p { margin: 0; color: var(--muted); line-height: 1.45; }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .detail-chip {
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.82rem;
+    }
+    .detail-chip strong { display: block; font-size: 0.92rem; margin-bottom: 4px; }
+
+    .qty-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .qty-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .qty-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+    }
+    .qty-count { min-width: 28px; text-align: center; font-weight: 700; }
+
+    .cart-sheet {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: calc(88px + var(--safe-bottom));
+      z-index: 7;
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(13, 22, 33, 0.98), rgba(8, 14, 21, 0.98));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      display: none;
+      max-height: 50vh;
+      overflow: auto;
+    }
+    .cart-sheet.open { display: block; }
+    .cart-sheet h3 { margin: 0 0 12px; }
+    .cart-item {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .cart-item:first-of-type { border-top: 0; padding-top: 0; }
+    .cart-item p { margin: 2px 0 0; color: var(--muted); font-size: 0.82rem; }
+
+    .toast {
+      position: absolute;
+      left: 50%;
+      bottom: calc(154px + var(--safe-bottom));
+      transform: translateX(-50%) translateY(16px);
+      z-index: 9;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(7, 12, 18, 0.88);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      text-align: center;
+      max-width: min(88vw, 420px);
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .hidden { display: none !important; }
+
+    @media (min-width: 880px) {
+      .panel-wrap { width: min(44vw, 520px); left: 28%; }
+      .bottom-dock { width: min(68vw, 620px); }
+      .cart-sheet { left: auto; right: 14px; width: 360px; }
+    }
+
+    @media (max-width: 520px) {
+      .panel-wrap { width: min(96vw, 460px); }
+      .panel-body { min-height: 325px; }
+      .kpis { grid-template-columns: 1fr; }
+      .footer-actions { grid-template-columns: 1fr; }
+      .bottom-dock { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <section class="hero">
-      <div class="panel hero-copy">
-        <div class="eyebrow">EchoEarth Functional Test</div>
-        <h1>Two Worlds, One Place.</h1>
-        <p>A live one-page demo where you can open your camera, capture a real moment, attach it to GPS, and let other people unlock the experience only when they physically visit that place.</p>
-        <div class="hero-stats">
-          <div class="stat"><strong>Camera</strong><span>Use your device camera directly in-browser.</span></div>
-          <div class="stat"><strong>GPS</strong><span>Tag every post to your current real-world location.</span></div>
-          <div class="stat"><strong>Unlock</strong><span>Visitors only see the full post when nearby.</span></div>
-        </div>
-      </div>
-      <aside class="panel hero-side">
-        <div>
-          <h2 style="margin:0 0 8px;">What this demo proves</h2>
-          <div class="checklist">
-            <div class="check">People can create memorials, museum stories, restaurant reviews, and legacy posts from the camera itself.</div>
-            <div class="check">Posts are saved on-device for a clean live demo with no backend required.</div>
-            <div class="check">The app can simulate the core product before native mobile development.</div>
-          </div>
-        </div>
-        <div class="help">For camera and GPS permissions, open this on <strong>HTTPS</strong> or <strong>localhost</strong>. Some mobile browsers block camera access from plain local files.</div>
-      </aside>
-    </section>
+  <main class="app" aria-label="Augmented restaurant menu demo">
+    <video id="camera" autoplay muted playsinline aria-label="Live camera background"></video>
+    <div class="camera-fallback" id="cameraFallback" aria-hidden="true"></div>
+    <div class="scrim" aria-hidden="true"></div>
 
-    <section class="grid">
-      <div>
-        <div class="panel">
-          <div class="section-title">
-            <h2>Live Capture + Explore View</h2>
-            <small>Camera, geolocation, nearby overlays</small>
-          </div>
-          <div class="camera-stage">
-            <video id="video" autoplay playsinline muted></video>
-            <div class="overlay">
-              <div class="hud">
-                <div class="tag" id="locationHud">Location: waiting…</div>
-                <div class="tag" id="headingHud">Heading: live demo</div>
+    <header class="hud">
+      <div class="pill" id="cameraStatus"><span class="status-dot"></span><strong>AR Menu</strong> <span id="cameraStatusText">Starting camera…</span></div>
+      <button class="pill" id="accessibilityBtn" type="button" aria-pressed="false">Accessible mode</button>
+    </header>
+
+    <div class="reticle" aria-hidden="true">
+      <span class="h"></span><span class="h2"></span><span class="v"></span><span class="v2"></span>
+    </div>
+
+    <section class="panel-wrap" id="panelWrap" aria-live="polite">
+      <div class="menu-panel" id="menuPanel">
+        <div class="panel-header">
+          <div class="brand-row">
+            <div class="brand-chip">
+              <div class="brand-icon" aria-hidden="true">🍽️</div>
+              <div class="brand-copy">
+                <h1>Northstar Kitchen</h1>
+                <p>Floating mobile-first menu • tap-friendly • no forced scrolling</p>
               </div>
-              <div class="reticle"></div>
-              <div class="nearby-overlay" id="nearbyOverlay"></div>
+            </div>
+            <div class="mini-actions">
+              <button class="icon-btn" id="pinBtn" type="button" aria-pressed="false" title="Pin or unpin panel">📌</button>
+              <button class="icon-btn" id="followBtn" type="button" aria-pressed="true" title="Toggle follow mode">🧭</button>
+              <button class="icon-btn" id="cartToggleBtn" type="button" title="Open cart">🛒</button>
             </div>
           </div>
-          <div class="controls">
-            <button id="startCameraBtn">Start Camera</button>
-            <button id="switchCameraBtn" class="secondary">Switch Camera</button>
-            <button id="getLocationBtn" class="secondary">Get My GPS</button>
-            <button id="captureBtn" class="good">Capture Photo</button>
-            <button id="seedBtn" class="warn">Load Demo Posts</button>
-            <button id="clearBtn" class="danger">Clear All Local Posts</button>
-          </div>
-        </div>
-
-        <div class="panel" style="margin-top:18px;">
-          <div class="section-title">
-            <h2>Create a Real Place-Based Post</h2>
-            <small>Camera + GPS + story</small>
-          </div>
-          <div class="form-wrap">
-            <div class="form-grid">
-              <div class="field"><label for="title">Title</label><input id="title" placeholder="My grandfather’s favorite bench" /></div>
-              <div class="field"><label for="author">Author / Source</label><input id="author" placeholder="Your name, museum, or collection" /></div>
-              <div class="field"><label for="type">Post Type</label>
-                <select id="type">
-                  <option value="memory">Memory</option>
-                  <option value="memorial">Memorial</option>
-                  <option value="museum">Museum Exhibit</option>
-                  <option value="restaurant">Restaurant Review</option>
-                  <option value="legacy">Legacy Message</option>
-                </select>
-              </div>
-              <div class="field"><label for="radius">Unlock Radius (meters)</label><input id="radius" type="number" min="5" step="5" value="60" /></div>
-              <div class="field full"><label for="story">Story / Message</label><textarea id="story" placeholder="What should people feel when they arrive here? Why does this place matter?"></textarea></div>
-              <div class="field"><label for="access">Access</label>
-                <select id="access">
-                  <option value="public">Public</option>
-                  <option value="museum-pass">Museum Pass</option>
-                  <option value="family">Family / Private Demo</option>
-                </select>
-              </div>
-              <div class="field"><label for="expireDate">Optional Unlock Until</label><input id="expireDate" type="date" /></div>
-              <div class="field full"><label>Captured Image</label><div class="image-preview" id="imagePreview">Capture a photo from the live camera to attach a real-world visual to the post.</div></div>
-              <div class="field full"><div class="inline-row"><button id="savePostBtn" class="good">Save GPS Post</button><button id="saveWithoutPhotoBtn" class="secondary">Save Without Photo</button><span class="muted" id="saveHint">Your current GPS will be attached automatically.</span></div></div>
+          <div class="control-row">
+            <div class="chip-group" role="group" aria-label="Panel position controls">
+              <button class="chip-btn active" type="button" data-distance="near">Near</button>
+              <button class="chip-btn" type="button" data-distance="mid">Mid</button>
+              <button class="chip-btn" type="button" data-distance="far">Far</button>
+            </div>
+            <div class="action-group">
+              <button class="action-btn" id="recenterBtn" type="button">Recenter</button>
+              <button class="action-btn primary" id="placeBtn" type="button">Place here</button>
             </div>
           </div>
         </div>
 
-        <div class="panel" style="margin-top:18px;">
-          <div class="section-title"><h2>System Status</h2><small>What your live demo is using</small></div>
-          <div class="status-wrap">
-            <div class="status-grid">
-              <div class="status-card"><strong>Camera</strong><span id="cameraStatus">Not started yet.</span></div>
-              <div class="status-card"><strong>GPS</strong><span id="gpsStatus">No coordinates captured yet.</span></div>
-              <div class="status-card"><strong>Posts Nearby</strong><span id="nearbyStatus">No posts loaded.</span></div>
+        <div class="panel-body">
+          <div class="hero">
+            <div class="hero-card">
+              <div class="hero-top">
+                <div>
+                  <h2>Browse in AR, order by touch</h2>
+                  <p>This demo keeps the menu easy to reach on mobile. The panel can follow the guest, be pinned in place, and still remains fully usable as a normal web UI.</p>
+                </div>
+                <span class="tag">Touch-first</span>
+              </div>
+              <div class="kpis">
+                <div class="kpi"><div class="label">Mode</div><div class="value" id="modeKpi">Follow</div></div>
+                <div class="kpi"><div class="label">Distance</div><div class="value" id="distanceKpi">Near</div></div>
+                <div class="kpi"><div class="label">Cart</div><div class="value" id="cartKpi">0 items</div></div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div>
-        <div class="panel">
-          <div class="section-title"><h2>Location Feed</h2><small>Tap any post to inspect or unlock</small></div>
-          <div class="feed-wrap"><div id="feedList" class="feed-list"></div></div>
-        </div>
+          <nav class="tabs" id="categoryTabs" aria-label="Menu categories"></nav>
+          <div class="menu-list" id="menuList" tabindex="0"></div>
 
-        <div class="panel" style="margin-top:18px;">
-          <div class="section-title"><h2>Selected Experience</h2><small>What a visitor sees on arrival</small></div>
-          <div class="detail-wrap" id="detailPane"><div class="empty">Choose a post from the feed to preview the visitor experience.</div></div>
+          <div class="panel-footer">
+            <div class="cart-row">
+              <div class="cart-summary">
+                <h4 id="footerCartTitle">Cart is empty</h4>
+                <p id="footerCartSubtitle">Tap any menu item to customize and add it.</p>
+              </div>
+              <button class="small-btn" id="clearCartBtn" type="button">Clear</button>
+            </div>
+            <div class="footer-actions">
+              <button class="small-btn" id="viewCartBtn" type="button">View cart</button>
+              <button class="checkout-btn" id="checkoutBtn" type="button">Checkout • $0.00</button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <p class="footer-note">This demo stores posts in your browser using localStorage. For a production version, the next step is replacing local storage with a real backend, authentication, moderation, and cloud media storage.</p>
-  </div>
+    <aside class="cart-sheet" id="cartSheet" aria-label="Shopping cart" aria-hidden="true">
+      <div class="brand-row" style="margin-bottom:12px;">
+        <h3 style="margin:0;">Your Order</h3>
+        <button class="icon-btn" id="closeCartBtn" type="button">✕</button>
+      </div>
+      <div id="cartItems"></div>
+      <div class="control-row" style="margin-top:14px;">
+        <button class="small-btn" id="keepBrowsingBtn" type="button">Keep browsing</button>
+        <button class="small-btn primary" id="cartCheckoutBtn" type="button">Checkout • $0.00</button>
+      </div>
+    </aside>
 
-  <canvas id="captureCanvas" style="display:none;"></canvas>
+    <nav class="bottom-dock" aria-label="Quick actions">
+      <button class="dock-btn" id="dockFollow" type="button"><strong>Follow</strong><span>Menu tracks you</span></button>
+      <button class="dock-btn" id="dockPin" type="button"><strong>Pin</strong><span>Lock menu</span></button>
+      <button class="dock-btn" id="dockScan" type="button"><strong>Place</strong><span>Center reticle</span></button>
+      <button class="dock-btn" id="dockCart" type="button"><strong>Cart</strong><span>Review order</span></button>
+    </nav>
+
+    <dialog class="modal" id="itemDialog" aria-labelledby="itemDialogTitle">
+      <div class="modal-content">
+        <div class="modal-head">
+          <div>
+            <h3 id="itemDialogTitle">Menu item</h3>
+            <div id="itemDialogPrice" class="price" style="margin-top:4px;"></div>
+          </div>
+          <button class="icon-btn" id="closeDialogBtn" type="button" aria-label="Close item dialog">✕</button>
+        </div>
+        <div class="modal-body">
+          <p id="itemDialogDesc"></p>
+        </div>
+        <div class="detail-grid" id="itemDialogMeta"></div>
+        <div class="qty-row">
+          <div class="qty-control" aria-label="Quantity picker">
+            <button class="qty-btn" id="decreaseQtyBtn" type="button" aria-label="Decrease quantity">−</button>
+            <div class="qty-count" id="qtyCount">1</div>
+            <button class="qty-btn" id="increaseQtyBtn" type="button" aria-label="Increase quantity">+</button>
+          </div>
+          <button class="checkout-btn" id="addToCartBtn" type="button">Add to cart</button>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
 
   <script>
-    const STORAGE_KEY = 'echoearth_live_demo_posts_v1';
-    const DEFAULT_RADIUS = 60;
-    const state = { stream:null, facingMode:'environment', capturedImage:'', coords:null, heading:null, posts:[], selectedId:null, watchId:null };
+    const menuData = [
+      {
+        category: 'Featured',
+        items: [
+          { id: 'truffle-burger', name: 'Truffle Smash Burger', price: 16.5, desc: 'Double-seared beef, truffle aioli, aged cheddar, caramelized onion, and house pickles on a toasted brioche bun.', calories: '820 cal', prep: '10 min', badge: 'Popular' },
+          { id: 'firebird-tacos', name: 'Firebird Chicken Tacos', price: 14, desc: 'Three grilled chili-lime chicken tacos with avocado crema, cabbage slaw, cilantro, and charred salsa roja.', calories: '610 cal', prep: '8 min', badge: 'Spicy' },
+          { id: 'garden-bowl', name: 'Garden Glow Bowl', price: 13.5, desc: 'Roasted sweet potato, quinoa, cucumber, tomato, feta, hummus, herbs, and lemon vinaigrette.', calories: '540 cal', prep: '7 min', badge: 'Veggie' }
+        ]
+      },
+      {
+        category: 'Burgers',
+        items: [
+          { id: 'classic-smash', name: 'Classic Smash', price: 13.5, desc: 'Single patty, cheddar, pickles, onion, mustard, and burger sauce.', calories: '690 cal', prep: '8 min', badge: 'Classic' },
+          { id: 'mushroom-swiss', name: 'Mushroom Swiss Melt', price: 15, desc: 'Sauteed mushrooms, swiss cheese, garlic butter, and arugula.', calories: '760 cal', prep: '9 min', badge: 'Rich' },
+          { id: 'bbq-bacon', name: 'BBQ Bacon Stack', price: 16, desc: 'Bacon, crispy onion strings, smoky BBQ glaze, cheddar, and slaw.', calories: '880 cal', prep: '10 min', badge: 'Bold' }
+        ]
+      },
+      {
+        category: 'Pizza',
+        items: [
+          { id: 'margherita', name: 'Margherita Flatbread', price: 14.5, desc: 'Fresh mozzarella, basil, roasted tomato sauce, parmesan, and olive oil.', calories: '700 cal', prep: '9 min', badge: 'Fresh' },
+          { id: 'pepperoni-hot-honey', name: 'Hot Honey Pepperoni', price: 16.5, desc: 'Pepperoni, mozzarella, chili flakes, parmesan, and hot honey drizzle.', calories: '840 cal', prep: '11 min', badge: 'Top pick' },
+          { id: 'wild-greens', name: 'Wild Greens Pizza', price: 15.5, desc: 'Spinach pesto, zucchini ribbons, mushrooms, ricotta, and lemon zest.', calories: '720 cal', prep: '10 min', badge: 'Vegetarian' }
+        ]
+      },
+      {
+        category: 'Drinks',
+        items: [
+          { id: 'citrus-spark', name: 'Citrus Spark', price: 4.5, desc: 'House-made sparkling lemonade with orange, lemon, and mint.', calories: '120 cal', prep: '2 min', badge: 'Fresh' },
+          { id: 'cold-brew', name: 'Vanilla Cold Brew', price: 5.5, desc: 'Slow-steeped cold brew with vanilla cream and a hint of cinnamon.', calories: '90 cal', prep: '2 min', badge: 'Cafe' },
+          { id: 'berry-fizz', name: 'Berry Basil Fizz', price: 5, desc: 'Blackberry puree, basil syrup, sparkling water, and lime.', calories: '110 cal', prep: '2 min', badge: 'Seasonal' }
+        ]
+      },
+      {
+        category: 'Dessert',
+        items: [
+          { id: 'lava-cookie', name: 'Skillet Lava Cookie', price: 8.5, desc: 'Warm chocolate chip cookie skillet with molten center and vanilla bean gelato.', calories: '540 cal', prep: '8 min', badge: 'Warm' },
+          { id: 'cheesecake-jar', name: 'Berry Cheesecake Jar', price: 7.5, desc: 'No-bake cheesecake mousse with graham crumble and berry compote.', calories: '390 cal', prep: '3 min', badge: 'Chilled' },
+          { id: 'tiramisu-bites', name: 'Tiramisu Bites', price: 7, desc: 'Espresso-soaked cake cubes with mascarpone cream and cocoa dust.', calories: '360 cal', prep: '3 min', badge: 'Coffee' }
+        ]
+      }
+    ];
 
-    const $ = id => document.getElementById(id);
-    const video = $('video') || document.getElementById('video');
-    const captureCanvas = $('captureCanvas');
-    const imagePreview = $('imagePreview');
-    const feedList = $('feedList');
-    const detailPane = $('detailPane');
-    const nearbyOverlay = $('nearbyOverlay');
+    const state = {
+      category: menuData[0].category,
+      cart: [],
+      selectedItem: null,
+      qty: 1,
+      follow: true,
+      pinned: false,
+      accessibleMode: false,
+      distance: 'near',
+      panelTarget: { x: window.innerWidth / 2, y: window.innerHeight * 0.55 },
+      panelCurrent: { x: window.innerWidth / 2, y: window.innerHeight * 0.55 },
+      lastToast: null
+    };
 
-    const cameraStatus = $('cameraStatus');
-    const gpsStatus = $('gpsStatus');
-    const nearbyStatus = $('nearbyStatus');
-    const locationHud = $('locationHud');
-    const headingHud = $('headingHud');
-    const saveHint = $('saveHint');
+    const $ = (id) => document.getElementById(id);
+    const panelWrap = $('panelWrap');
+    const menuList = $('menuList');
+    const categoryTabs = $('categoryTabs');
+    const itemDialog = $('itemDialog');
+    const cartSheet = $('cartSheet');
 
-    const titleInput = $('title');
-    const authorInput = $('author');
-    const typeInput = $('type');
-    const radiusInput = $('radius');
-    const storyInput = $('story');
-    const accessInput = $('access');
-    const expireDateInput = $('expireDate');
+    function money(n) { return `$${n.toFixed(2)}`; }
 
-    function uuid(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
-    function escapeHtml(value){ return String(value ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
-    function getPosts(){ try { const raw = localStorage.getItem(STORAGE_KEY); const parsed = raw ? JSON.parse(raw) : []; return Array.isArray(parsed) ? parsed : []; } catch { return []; } }
-    function setPosts(posts){ state.posts = posts.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); localStorage.setItem(STORAGE_KEY, JSON.stringify(state.posts)); render(); }
-    function haversineMeters(lat1, lon1, lat2, lon2){ const toRad = deg => (deg * Math.PI)/180; const R = 6371000; const dLat = toRad(lat2-lat1); const dLon = toRad(lon2-lon1); const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2; return 2 * R * Math.asin(Math.sqrt(a)); }
-    function formatDistance(m){ if (m == null || Number.isNaN(m)) return 'Unknown distance'; if (m < 1000) return `${Math.round(m)} m away`; return `${(m/1000).toFixed(2)} km away`; }
-    function formatDate(ts){ return ts ? new Date(ts).toLocaleString() : 'Unknown date'; }
-    function getDistance(post){ if (!state.coords || post.lat == null || post.lng == null) return null; return haversineMeters(state.coords.lat, state.coords.lng, post.lat, post.lng); }
-    function isExpired(post){ if (!post.expiresAt) return false; return Date.now() > new Date(post.expiresAt).getTime() + 86400000; }
-    function canUnlock(post){ if (isExpired(post)) return false; const d = getDistance(post); if (d == null) return false; return d <= (Number(post.radius) || DEFAULT_RADIUS); }
-    function postTypeLabel(type){ return ({ museum:'Museum Exhibit', memorial:'Memorial', restaurant:'Restaurant Review', legacy:'Legacy Message' }[type]) || 'Memory'; }
-    function postTypePillClass(type){ return (type === 'memorial' || type === 'legacy') ? 'memorial' : ''; }
-
-    function updateStatusCards(){
-      cameraStatus.textContent = state.stream ? 'Live camera ready. You can capture a real image for a new post.' : 'Not started yet.';
-      gpsStatus.textContent = state.coords ? `Lat ${state.coords.lat.toFixed(6)}, Lng ${state.coords.lng.toFixed(6)}${state.coords.accuracy ? `, ±${Math.round(state.coords.accuracy)}m` : ''}` : 'No coordinates captured yet.';
-      const nearbyCount = state.posts.filter(p => canUnlock(p)).length;
-      nearbyStatus.textContent = state.posts.length ? `${nearbyCount} unlockable nearby out of ${state.posts.length} total post${state.posts.length === 1 ? '' : 's'}.` : 'No posts loaded.';
+    function currentItems() {
+      return menuData.find(section => section.category === state.category)?.items || [];
     }
 
-    function renderNearbyOverlay(){
-      const nearby = state.posts.map(post => ({ post, distance:getDistance(post) })).filter(item => item.distance != null && item.distance <= 250).sort((a,b)=>a.distance-b.distance).slice(0,3);
-      nearbyOverlay.innerHTML = nearby.length ? nearby.map(item => {
-        const unlocked = canUnlock(item.post);
-        return `<div class="nearby-chip"><strong>${escapeHtml(item.post.title)}</strong><br><span class="muted">${escapeHtml(postTypeLabel(item.post.type))} · ${formatDistance(item.distance)} · ${unlocked ? 'Unlocked now' : 'Move closer to open'}</span></div>`;
-      }).join('') : '';
+    function flatItems() {
+      return menuData.flatMap(section => section.items);
     }
 
-    function renderFeed(){
-      if (!state.posts.length){ feedList.innerHTML = '<div class="empty">No posts yet. Capture a moment, tag it to GPS, and create the first EchoEarth experience.</div>'; return; }
-      feedList.innerHTML = state.posts.map(post => {
-        const distance = getDistance(post); const unlocked = canUnlock(post); const expired = isExpired(post);
-        return `<article class="post-card" data-id="${post.id}">
-          <div class="post-top"><div><h3>${escapeHtml(post.title)}</h3><p>${escapeHtml(post.author || 'Anonymous')}</p></div><div class="pill ${expired ? 'locked' : (unlocked ? 'ok' : 'locked')} ${postTypePillClass(post.type)}">${expired ? 'Expired' : (unlocked ? 'Unlocked' : 'Locked')}</div></div>
-          ${post.image ? `<div class="thumb"><img src="${post.image}" alt="${escapeHtml(post.title)}"></div>` : ''}
-          <div class="post-meta"><span class="pill ${postTypePillClass(post.type)}">${escapeHtml(postTypeLabel(post.type))}</span><span class="pill">${escapeHtml(post.access || 'public')}</span><span class="pill">${distance == null ? 'Location needed' : formatDistance(distance)}</span><span class="pill">Radius ${Number(post.radius) || DEFAULT_RADIUS}m</span></div>
-          <p>${escapeHtml((post.story || '').slice(0,180))}${(post.story || '').length > 180 ? '…' : ''}</p>
-        </article>`;
-      }).join('');
-      feedList.querySelectorAll('.post-card').forEach(card => card.addEventListener('click', () => { state.selectedId = card.dataset.id; renderDetail(); }));
-    }
-
-    function renderDetail(){
-      const post = state.posts.find(p => p.id === state.selectedId) || state.posts[0];
-      if (!post){ detailPane.innerHTML = '<div class="empty">Choose a post from the feed to preview the visitor experience.</div>'; return; }
-      state.selectedId = post.id;
-      const distance = getDistance(post), unlocked = canUnlock(post), expired = isExpired(post);
-      detailPane.innerHTML = `<div class="detail-cover">${post.image ? `<img src="${post.image}" alt="${escapeHtml(post.title)}">` : '<div class="muted">No image attached</div>'}</div>
-        <div class="post-meta"><span class="pill ${postTypePillClass(post.type)}">${escapeHtml(postTypeLabel(post.type))}</span><span class="pill">${escapeHtml(post.access || 'public')}</span><span class="pill ${expired ? 'locked' : (unlocked ? 'ok' : 'locked')}">${expired ? 'Expired' : (unlocked ? 'Unlocked' : 'Locked')}</span></div>
-        <div><h3>${escapeHtml(post.title)}</h3><p class="muted">By ${escapeHtml(post.author || 'Anonymous')} · ${formatDate(post.createdAt)}</p></div>
-        <div class="detail-body">${expired ? 'This experience has expired.' : (unlocked ? escapeHtml(post.story || 'No story attached.') : `Move within ${Number(post.radius) || DEFAULT_RADIUS} meters to unlock this post. ${distance == null ? 'Enable location first.' : `Current distance: ${formatDistance(distance)}.`}`)}</div>
-        <div class="post-meta"><span class="pill">${distance == null ? 'Location needed' : formatDistance(distance)}</span><span class="pill">Latitude ${post.lat.toFixed(6)}</span><span class="pill">Longitude ${post.lng.toFixed(6)}</span>${post.expiresAt ? `<span class="pill">Until ${escapeHtml(post.expiresAt)}</span>` : ''}</div>
-        <div class="detail-actions"><button class="secondary" id="focusPostBtn">Focus in camera overlay</button><button class="danger" id="deletePostBtn">Delete this post</button></div>`;
-      document.getElementById('focusPostBtn').addEventListener('click', () => {
-        nearbyOverlay.innerHTML = `<div class="nearby-chip"><strong>${escapeHtml(post.title)}</strong><br><span class="muted">${escapeHtml(postTypeLabel(post.type))} · ${distance == null ? 'Location needed' : formatDistance(distance)} · ${unlocked ? 'Unlocked now' : 'Move closer to open'}</span></div>`;
+    function renderTabs() {
+      categoryTabs.innerHTML = '';
+      menuData.forEach(section => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'tab-btn' + (section.category === state.category ? ' active' : '');
+        btn.textContent = section.category;
+        btn.setAttribute('aria-pressed', String(section.category === state.category));
+        btn.addEventListener('click', () => {
+          state.category = section.category;
+          renderTabs();
+          renderItems();
+        });
+        categoryTabs.appendChild(btn);
       });
-      document.getElementById('deletePostBtn').addEventListener('click', () => {
-        const keep = state.posts.filter(p => p.id !== post.id); state.selectedId = keep[0]?.id || null; setPosts(keep);
+    }
+
+    function renderItems() {
+      menuList.innerHTML = '';
+      currentItems().forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'menu-item';
+        btn.innerHTML = `
+          <div class="item-main">
+            <div class="item-title-row">
+              <h3>${item.name}</h3>
+              <span class="tag">${item.badge}</span>
+            </div>
+            <p>${item.desc}</p>
+          </div>
+          <div class="item-side">
+            <div class="price">${money(item.price)}</div>
+            <div class="add-pill">Add</div>
+          </div>
+        `;
+        btn.addEventListener('click', () => openItemDialog(item.id));
+        menuList.appendChild(btn);
       });
     }
 
-    function renderLocationHud(){ locationHud.textContent = state.coords ? `Location: ${state.coords.lat.toFixed(5)}, ${state.coords.lng.toFixed(5)}` : 'Location: waiting…'; }
-    function renderHeading(){ headingHud.textContent = state.heading != null ? `Heading: ${Math.round(state.heading)}°` : 'Heading: live demo'; }
-    function render(){ renderLocationHud(); renderHeading(); updateStatusCards(); renderNearbyOverlay(); renderFeed(); renderDetail(); saveHint.textContent = state.coords ? `Post will be tagged to ${state.coords.lat.toFixed(6)}, ${state.coords.lng.toFixed(6)}.` : 'Your current GPS will be attached automatically.'; }
-
-    async function startCamera(){
-      try{
-        if (state.stream) state.stream.getTracks().forEach(track => track.stop());
-        const stream = await navigator.mediaDevices.getUserMedia({ audio:false, video:{ facingMode:{ ideal:state.facingMode }, width:{ ideal:1920 }, height:{ ideal:1080 } } });
-        state.stream = stream; document.getElementById('video').srcObject = stream; await document.getElementById('video').play(); render();
-      } catch(error){ cameraStatus.textContent = `Camera error: ${error.message}`; }
+    function openItemDialog(itemId) {
+      state.selectedItem = flatItems().find(item => item.id === itemId) || null;
+      state.qty = 1;
+      if (!state.selectedItem) return;
+      $('itemDialogTitle').textContent = state.selectedItem.name;
+      $('itemDialogPrice').textContent = money(state.selectedItem.price);
+      $('itemDialogDesc').textContent = state.selectedItem.desc;
+      $('qtyCount').textContent = state.qty;
+      $('itemDialogMeta').innerHTML = [
+        `<div class="detail-chip"><strong>${state.selectedItem.badge}</strong>Chef note</div>`,
+        `<div class="detail-chip"><strong>${state.selectedItem.calories}</strong>Energy</div>`,
+        `<div class="detail-chip"><strong>${state.selectedItem.prep}</strong>Prep time</div>`
+      ].join('');
+      $('addToCartBtn').textContent = `Add to cart • ${money(state.selectedItem.price * state.qty)}`;
+      itemDialog.showModal();
     }
 
-    function capturePhoto(){
-      if (!state.stream){ alert('Start the camera first.'); return; }
-      const videoEl = document.getElementById('video');
-      const width = videoEl.videoWidth || 1280, height = videoEl.videoHeight || 720;
-      captureCanvas.width = width; captureCanvas.height = height;
-      captureCanvas.getContext('2d').drawImage(videoEl, 0, 0, width, height);
-      state.capturedImage = captureCanvas.toDataURL('image/jpeg', 0.9);
-      imagePreview.innerHTML = `<img src="${state.capturedImage}" alt="Captured preview">`;
+    function closeItemDialog() {
+      if (itemDialog.open) itemDialog.close();
     }
 
-    function onPosition(position){ state.coords = { lat:position.coords.latitude, lng:position.coords.longitude, accuracy:position.coords.accuracy }; render(); }
-    function onPositionError(error){ gpsStatus.textContent = `GPS error: ${error.message}`; }
-    function getLocation(){
-      if (!navigator.geolocation){ gpsStatus.textContent = 'Geolocation is not supported on this browser.'; return; }
-      navigator.geolocation.getCurrentPosition(onPosition, onPositionError, { enableHighAccuracy:true, timeout:12000, maximumAge:0 });
-      if (state.watchId == null) state.watchId = navigator.geolocation.watchPosition(onPosition, onPositionError, { enableHighAccuracy:true, maximumAge:3000, timeout:15000 });
-    }
-
-    function buildPost(includePhoto){
-      if (!state.coords){ alert('Get your GPS location first.'); return null; }
-      const title = titleInput.value.trim(), story = storyInput.value.trim();
-      if (!title || !story){ alert('Add at least a title and a story.'); return null; }
-      return { id:uuid(), title, author:authorInput.value.trim() || 'Anonymous', type:typeInput.value, story, access:accessInput.value, radius:Math.max(5, Number(radiusInput.value || DEFAULT_RADIUS)), image:includePhoto ? state.capturedImage : '', lat:state.coords.lat, lng:state.coords.lng, createdAt:Date.now(), expiresAt:expireDateInput.value || null };
-    }
-
-    function resetForm(){ titleInput.value=''; authorInput.value=''; typeInput.value='memory'; radiusInput.value=DEFAULT_RADIUS; storyInput.value=''; accessInput.value='public'; expireDateInput.value=''; state.capturedImage=''; imagePreview.innerHTML='Capture a photo from the live camera to attach a real-world visual to the post.'; render(); }
-    function savePost(includePhoto){ const post = buildPost(includePhoto); if (!post) return; const posts = getPosts(); posts.unshift(post); state.selectedId = post.id; setPosts(posts); resetForm(); }
-
-    function seedDemoPosts(){
-      const origin = state.coords || { lat:40.748817, lng:-73.985428 };
-      const existing = getPosts();
-      if (existing.length && !confirm('This will add demo content alongside your existing posts. Continue?')) return;
-      const seeded = [
-        { id:uuid(), title:'Museum Layer: Two Worlds, One Place', author:'Metropolitan Heritage Prototype', type:'museum', story:'Stand here and imagine the street as it was a century ago. This post shows how one real place can hold multiple layers of history, memory, and institutional storytelling.', access:'museum-pass', radius:120, image:'', lat:origin.lat + 0.00035, lng:origin.lng + 0.00018, createdAt:Date.now() - 3600000, expiresAt:null },
-        { id:uuid(), title:'Final Bench Message', author:'A Father', type:'legacy', story:'If you found this, you made it to the place where I felt most at peace. Sit down for a minute and look around. That is the memory I wanted to leave behind.', access:'family', radius:45, image:'', lat:origin.lat - 0.00022, lng:origin.lng - 0.00015, createdAt:Date.now() - 7200000, expiresAt:null },
-        { id:uuid(), title:'Restaurant Truth', author:'First Visitor', type:'restaurant', story:'Order the house special. This place matters because the owner still cooks every dish like it is for family. That is why this location deserves a memory, not just a review.', access:'public', radius:75, image:'', lat:origin.lat + 0.00008, lng:origin.lng - 0.00009, createdAt:Date.now() - 1800000, expiresAt:null }
-      ];
-      setPosts([...seeded, ...existing]);
-      if (!state.selectedId && seeded[0]) state.selectedId = seeded[0].id;
-      render();
-    }
-
-    function clearAllPosts(){ if (!confirm('Delete all locally saved demo posts from this browser?')) return; localStorage.removeItem(STORAGE_KEY); state.posts = []; state.selectedId = null; render(); }
-
-    function enableHeading(){
-      const handler = event => { if (typeof event.webkitCompassHeading === 'number') state.heading = event.webkitCompassHeading; else if (typeof event.alpha === 'number') state.heading = 360 - event.alpha; renderHeading(); };
-      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-        DeviceOrientationEvent.requestPermission().then(response => { if (response === 'granted') window.addEventListener('deviceorientation', handler, true); }).catch(() => {});
+    function addSelectedToCart() {
+      if (!state.selectedItem) return;
+      const existing = state.cart.find(entry => entry.id === state.selectedItem.id);
+      if (existing) {
+        existing.qty += state.qty;
       } else {
-        window.addEventListener('deviceorientationabsolute', handler, true);
-        window.addEventListener('deviceorientation', handler, true);
+        state.cart.push({
+          id: state.selectedItem.id,
+          name: state.selectedItem.name,
+          price: state.selectedItem.price,
+          qty: state.qty
+        });
+      }
+      closeItemDialog();
+      renderCart();
+      showToast(`${state.selectedItem.name} added to cart`);
+    }
+
+    function cartCount() {
+      return state.cart.reduce((sum, item) => sum + item.qty, 0);
+    }
+
+    function cartTotal() {
+      return state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    }
+
+    function renderCart() {
+      const count = cartCount();
+      const total = cartTotal();
+      $('cartKpi').textContent = `${count} ${count === 1 ? 'item' : 'items'}`;
+      $('footerCartTitle').textContent = count ? `${count} ${count === 1 ? 'item' : 'items'} in cart` : 'Cart is empty';
+      $('footerCartSubtitle').textContent = count ? `Ready when you are • ${money(total)}` : 'Tap any menu item to customize and add it.';
+      $('checkoutBtn').textContent = `Checkout • ${money(total)}`;
+      $('cartCheckoutBtn').textContent = `Checkout • ${money(total)}`;
+
+      const cartItems = $('cartItems');
+      cartItems.innerHTML = '';
+      if (!count) {
+        cartItems.innerHTML = '<p style="margin:0;color:var(--muted);">Nothing added yet. Try one of the featured dishes.</p>';
+        return;
+      }
+
+      state.cart.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        row.innerHTML = `
+          <div>
+            <strong>${item.name}</strong>
+            <p>${item.qty} × ${money(item.price)}</p>
+          </div>
+          <div class="price">${money(item.qty * item.price)}</div>
+          <button class="small-btn" type="button" aria-label="Remove ${item.name}">Remove</button>
+        `;
+        row.querySelector('button').addEventListener('click', () => {
+          state.cart = state.cart.filter(entry => entry.id !== item.id);
+          renderCart();
+          showToast(`${item.name} removed`);
+        });
+        cartItems.appendChild(row);
+      });
+    }
+
+    function toggleCart(force) {
+      const shouldOpen = typeof force === 'boolean' ? force : !cartSheet.classList.contains('open');
+      cartSheet.classList.toggle('open', shouldOpen);
+      cartSheet.setAttribute('aria-hidden', String(!shouldOpen));
+    }
+
+    function showToast(message) {
+      const toast = $('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(state.lastToast);
+      state.lastToast = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    function updateModeUi() {
+      $('followBtn').setAttribute('aria-pressed', String(state.follow));
+      $('pinBtn').setAttribute('aria-pressed', String(state.pinned));
+      $('modeKpi').textContent = state.pinned ? 'Pinned' : (state.follow ? 'Follow' : 'Placed');
+      $('distanceKpi').textContent = state.distance.charAt(0).toUpperCase() + state.distance.slice(1);
+      document.querySelectorAll('[data-distance]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.distance === state.distance);
+      });
+      const a11y = $('accessibilityBtn');
+      a11y.setAttribute('aria-pressed', String(state.accessibleMode));
+      a11y.textContent = state.accessibleMode ? 'Standard mode' : 'Accessible mode';
+    }
+
+    function recenterPanel() {
+      state.panelTarget.x = window.innerWidth / 2;
+      state.panelTarget.y = window.innerHeight * (state.accessibleMode ? 0.52 : 0.56);
+      state.panelCurrent.x = state.panelTarget.x;
+      state.panelCurrent.y = state.panelTarget.y;
+      applyPanelPosition(true);
+    }
+
+    function distanceOffset() {
+      if (state.distance === 'far') return { scale: 0.94, y: 0.47 };
+      if (state.distance === 'mid') return { scale: 0.98, y: 0.52 };
+      return { scale: 1.02, y: 0.58 };
+    }
+
+    function applyPanelPosition(immediate = false) {
+      const bounds = panelWrap.getBoundingClientRect();
+      const halfW = bounds.width / 2;
+      const halfH = bounds.height / 2;
+      const margin = 10;
+      const x = Math.max(margin + halfW, Math.min(window.innerWidth - halfW - margin, state.panelCurrent.x));
+      const y = Math.max(120, Math.min(window.innerHeight - halfH - 100, state.panelCurrent.y));
+      const { scale } = distanceOffset();
+      panelWrap.style.transform = `translate3d(${x - window.innerWidth / 2}px, ${y - window.innerHeight / 2}px, 0) scale(${scale})`;
+      if (immediate) return;
+    }
+
+    function animatePanel() {
+      if (!state.pinned && state.follow && !state.accessibleMode) {
+        const t = performance.now() / 1000;
+        const driftX = Math.sin(t * 0.7) * 10;
+        const driftY = Math.cos(t * 0.9) * 6;
+        const baseX = window.innerWidth / 2;
+        const baseY = window.innerHeight * distanceOffset().y;
+        state.panelTarget.x = baseX + driftX;
+        state.panelTarget.y = baseY + driftY;
+      }
+
+      const lerp = state.accessibleMode ? 0.35 : 0.12;
+      state.panelCurrent.x += (state.panelTarget.x - state.panelCurrent.x) * lerp;
+      state.panelCurrent.y += (state.panelTarget.y - state.panelCurrent.y) * lerp;
+      applyPanelPosition();
+      requestAnimationFrame(animatePanel);
+    }
+
+    async function startCamera() {
+      const video = $('camera');
+      const fallback = $('cameraFallback');
+      const statusText = $('cameraStatusText');
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' } },
+          audio: false
+        });
+        video.srcObject = stream;
+        statusText.textContent = 'Camera live';
+        fallback.classList.remove('show');
+      } catch (error) {
+        console.warn('Camera not available:', error);
+        statusText.textContent = 'Camera unavailable • using fallback scene';
+        fallback.classList.add('show');
       }
     }
 
-    document.getElementById('startCameraBtn').addEventListener('click', async () => { await startCamera(); enableHeading(); });
-    document.getElementById('switchCameraBtn').addEventListener('click', async () => { state.facingMode = state.facingMode === 'environment' ? 'user' : 'environment'; await startCamera(); });
-    document.getElementById('getLocationBtn').addEventListener('click', getLocation);
-    document.getElementById('captureBtn').addEventListener('click', capturePhoto);
-    document.getElementById('savePostBtn').addEventListener('click', () => savePost(true));
-    document.getElementById('saveWithoutPhotoBtn').addEventListener('click', () => savePost(false));
-    document.getElementById('seedBtn').addEventListener('click', seedDemoPosts);
-    document.getElementById('clearBtn').addEventListener('click', clearAllPosts);
+    function setupEvents() {
+      $('closeDialogBtn').addEventListener('click', closeItemDialog);
+      $('decreaseQtyBtn').addEventListener('click', () => {
+        state.qty = Math.max(1, state.qty - 1);
+        $('qtyCount').textContent = state.qty;
+        if (state.selectedItem) $('addToCartBtn').textContent = `Add to cart • ${money(state.selectedItem.price * state.qty)}`;
+      });
+      $('increaseQtyBtn').addEventListener('click', () => {
+        state.qty += 1;
+        $('qtyCount').textContent = state.qty;
+        if (state.selectedItem) $('addToCartBtn').textContent = `Add to cart • ${money(state.selectedItem.price * state.qty)}`;
+      });
+      $('addToCartBtn').addEventListener('click', addSelectedToCart);
 
-    state.posts = getPosts();
-    state.selectedId = state.posts[0]?.id || null;
-    render();
+      $('clearCartBtn').addEventListener('click', () => {
+        state.cart = [];
+        renderCart();
+        showToast('Cart cleared');
+      });
+      $('viewCartBtn').addEventListener('click', () => toggleCart(true));
+      $('cartToggleBtn').addEventListener('click', () => toggleCart());
+      $('closeCartBtn').addEventListener('click', () => toggleCart(false));
+      $('keepBrowsingBtn').addEventListener('click', () => toggleCart(false));
+      $('checkoutBtn').addEventListener('click', () => showToast(state.cart.length ? 'Checkout flow goes here' : 'Add items before checkout'));
+      $('cartCheckoutBtn').addEventListener('click', () => showToast(state.cart.length ? 'Checkout flow goes here' : 'Add items before checkout'));
+
+      $('followBtn').addEventListener('click', () => {
+        state.follow = !state.follow;
+        if (state.follow) state.pinned = false;
+        updateModeUi();
+        showToast(state.follow ? 'Follow mode enabled' : 'Follow mode disabled');
+      });
+
+      $('pinBtn').addEventListener('click', () => {
+        state.pinned = !state.pinned;
+        if (state.pinned) state.follow = false;
+        updateModeUi();
+        showToast(state.pinned ? 'Menu pinned in place' : 'Menu unpinned');
+      });
+
+      $('recenterBtn').addEventListener('click', () => {
+        recenterPanel();
+        showToast('Menu recentered');
+      });
+
+      $('placeBtn').addEventListener('click', () => {
+        state.follow = false;
+        state.pinned = true;
+        state.panelTarget.x = window.innerWidth / 2;
+        state.panelTarget.y = window.innerHeight * distanceOffset().y;
+        updateModeUi();
+        showToast('Menu placed at reticle');
+      });
+
+      $('accessibilityBtn').addEventListener('click', () => {
+        state.accessibleMode = !state.accessibleMode;
+        document.documentElement.style.fontSize = state.accessibleMode ? '18px' : '16px';
+        recenterPanel();
+        updateModeUi();
+        showToast(state.accessibleMode ? 'Accessible mode enabled' : 'Accessible mode disabled');
+      });
+
+      document.querySelectorAll('[data-distance]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.distance = btn.dataset.distance;
+          updateModeUi();
+          recenterPanel();
+        });
+      });
+
+      $('dockFollow').addEventListener('click', () => {
+        state.follow = true;
+        state.pinned = false;
+        updateModeUi();
+        showToast('Follow mode enabled');
+      });
+      $('dockPin').addEventListener('click', () => {
+        state.pinned = true;
+        state.follow = false;
+        updateModeUi();
+        showToast('Menu pinned');
+      });
+      $('dockScan').addEventListener('click', () => {
+        state.follow = false;
+        state.pinned = true;
+        recenterPanel();
+        updateModeUi();
+        showToast('Placed at center reticle');
+      });
+      $('dockCart').addEventListener('click', () => toggleCart());
+
+      window.addEventListener('resize', recenterPanel);
+      itemDialog.addEventListener('click', (event) => {
+        const dialogRect = itemDialog.getBoundingClientRect();
+        const clickedInDialog = (
+          event.clientX >= dialogRect.left &&
+          event.clientX <= dialogRect.right &&
+          event.clientY >= dialogRect.top &&
+          event.clientY <= dialogRect.bottom
+        );
+        if (!clickedInDialog) itemDialog.close();
+      });
+
+      let pointerStart = null;
+      panelWrap.addEventListener('pointerdown', (event) => {
+        if (state.follow && !state.pinned) return;
+        pointerStart = { x: event.clientX - state.panelTarget.x, y: event.clientY - state.panelTarget.y };
+      });
+      window.addEventListener('pointermove', (event) => {
+        if (!pointerStart || (state.follow && !state.pinned)) return;
+        state.panelTarget.x = event.clientX - pointerStart.x;
+        state.panelTarget.y = event.clientY - pointerStart.y;
+      });
+      window.addEventListener('pointerup', () => { pointerStart = null; });
+    }
+
+    function init() {
+      renderTabs();
+      renderItems();
+      renderCart();
+      updateModeUi();
+      recenterPanel();
+      setupEvents();
+      startCamera();
+      animatePanel();
+
+      if (!('mediaDevices' in navigator) || !navigator.mediaDevices.getUserMedia) {
+        $('cameraFallback').classList.add('show');
+        $('cameraStatusText').textContent = 'Camera API not supported • using fallback scene';
+      }
+
+      if ('xr' in navigator) {
+        $('cameraStatusText').textContent += ' • WebXR-ready browser detected';
+      }
+    }
+
+    init();
   </script>
 </body>
 </html>
