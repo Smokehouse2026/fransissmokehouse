@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>The Francis Smokehouse – Interactive Menu</title>
-  <meta name="description" content="Interactive menu and visitor guide for The Francis Smokehouse in St. Francisville, Louisiana." />
+  <title>Hot Headz Southern Foods – Future Menu</title>
+  <meta name="description" content="Hot Headz Southern Foods interactive future menu" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -16,13 +16,12 @@
       font-family: Inter, system-ui, sans-serif;
       color: rgba(255,255,255,.94);
       background:
-        radial-gradient(900px 600px at 10% 10%, rgba(192,90,42,.22), transparent 60%),
-        radial-gradient(900px 600px at 90% 0%, rgba(255,179,90,.12), transparent 60%),
-        linear-gradient(180deg, #0a0705, #120d09 45%, #050403);
+        radial-gradient(900px 600px at 10% 10%, rgba(255,110,70,.18), transparent 60%),
+        radial-gradient(900px 600px at 90% 0%, rgba(42,127,98,.16), transparent 60%),
+        linear-gradient(180deg, #070604, #0b0806 45%, #050403);
       min-height: 100vh;
       padding-bottom: 90px;
     }
-
     .app {
       min-height: 100vh;
       padding: 18px 14px 80px;
@@ -39,8 +38,7 @@
     }
     .app > * { position: relative; z-index: 1; }
 
-    .sticky { position: sticky; top: 10px; z-index: 20; margin-bottom: 14px; }
-    .tabbar {
+    .daybar, .glassbar {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -53,7 +51,9 @@
       -webkit-backdrop-filter: blur(14px);
       box-shadow: 0 16px 40px rgba(0,0,0,.28);
     }
-    .tabbtn, .viewbtn, .actionbtn, .chip {
+    .sticky { position: sticky; top: 10px; z-index: 20; margin-bottom: 14px; }
+
+    .pill, .viewbtn, .actionbtn, .daybtn {
       border: 1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
       color: #fff;
@@ -63,13 +63,17 @@
       transition: .18s ease;
       white-space: nowrap;
     }
-    .tabbtn:hover, .viewbtn:hover, .actionbtn:hover, .chip:hover { transform: translateY(-1px); }
-    .tabbtn, .viewbtn { padding: 10px 16px; }
+    .pill:hover, .viewbtn:hover, .actionbtn:hover, .daybtn:hover { transform: translateY(-1px); }
+    .daybtn, .viewbtn { padding: 10px 16px; }
     .actionbtn { padding: 12px 18px; }
-    .tabbtn.active, .viewbtn.active, .actionbtn.primary, .chip.active {
-      background: linear-gradient(180deg, rgba(192,90,42,.82), rgba(145,61,27,.95));
-      border-color: rgba(255,205,153,.48);
-      box-shadow: 0 10px 28px rgba(192,90,42,.28);
+    .daybtn.active, .viewbtn.active, .actionbtn.primary {
+      background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
+      border-color: rgba(255,200,130,.5);
+      box-shadow: 0 10px 28px rgba(192,90,42,.32);
+    }
+    .actionbtn.secondary {
+      background: linear-gradient(180deg, rgba(42,127,98,.5), rgba(20,70,52,.86));
+      border-color: rgba(146,255,212,.35);
     }
 
     .header {
@@ -80,36 +84,23 @@
       gap: 8px;
       justify-items: center;
     }
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.1);
-      letter-spacing: .12em;
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: 900;
-      color: rgba(255,255,255,.7);
-    }
     .title {
-      font-size: clamp(28px, 4vw, 42px);
+      font-size: clamp(24px, 3.2vw, 34px);
       font-weight: 900;
-      line-height: 1.04;
-      letter-spacing: -.04em;
+      line-height: 1.06;
+      letter-spacing: -.03em;
     }
     .subline {
-      color: rgba(255,255,255,.8);
+      margin-top: 0;
+      color: rgba(255,255,255,.76);
       font-weight: 700;
       font-size: 14px;
       text-align: center;
       line-height: 1.5;
-      max-width: 900px;
     }
     .note {
-      color: rgba(255,255,255,.64);
+      margin-top: 0;
+      color: rgba(255,255,255,.6);
       font-size: 13px;
       font-weight: 600;
       text-align: center;
@@ -117,39 +108,12 @@
       width: min(760px, 100%);
     }
 
-    .nowbar {
-      margin-top: 8px;
-      padding: 12px 16px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 13px;
-      line-height: 1.4;
-      text-align: center;
-      border: 1px solid rgba(255,255,255,.15);
-      background: rgba(255,255,255,.06);
-      white-space: normal;
-      width: min(760px, 100%);
-    }
-    .nowbar.open { color: #73ffb9; box-shadow: 0 0 12px rgba(115,255,185,.24); }
-    .nowbar.warn { color: #ffd27a; box-shadow: 0 0 12px rgba(255,210,122,.2); }
-    .nowbar.closed { color: #ff9f9f; box-shadow: 0 0 12px rgba(255,159,159,.2); }
-
-    .panel.hide { display: none !important; }
-
     .toolbar {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       justify-content: center;
-      margin: 18px 0 8px;
-    }
-
-    .modehint {
-      color: rgba(255,255,255,.66);
-      font-size: 12px;
-      font-weight: 700;
-      text-align: center;
-      margin-top: 2px;
+      margin: 16px 0 8px;
     }
 
     .wheel-stage {
@@ -198,12 +162,12 @@
     }
     .wheel-item {
       position: absolute;
-      width: 82px;
-      height: 82px;
+      width: 78px;
+      height: 78px;
       left: 50%;
       top: 50%;
-      margin-left: -41px;
-      margin-top: -41px;
+      margin-left: -39px;
+      margin-top: -39px;
       border-radius: 50%;
       border: 2px solid rgba(255,161,102,.7);
       background: linear-gradient(180deg, rgba(48,48,48,.95), rgba(22,22,22,.95));
@@ -211,11 +175,12 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 800;
       line-height: 1.12;
-      padding: 8px;
+      padding: 7px;
       box-shadow: 0 8px 24px rgba(0,0,0,.5);
+      transform-origin: center center;
       color: #fff;
       pointer-events: none;
       will-change: transform;
@@ -240,7 +205,7 @@
     }
 
     .glasscard {
-      width: min(760px, calc(100vw - 28px));
+      width: min(680px, calc(100vw - 28px));
       background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
       border: 1px solid rgba(255,255,255,.14);
       border-radius: 28px;
@@ -253,8 +218,8 @@
     .glasscard.pulse {
       animation: pulseCard .85s ease 1;
     }
-    #detailCard {
-      max-height: 62vh;
+    #todayDetailCard, #tomorrowDetailCard {
+      max-height: 60vh;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -314,6 +279,155 @@
       width: min(760px, calc(100vw - 28px));
       margin-top: 4px;
     }
+    .chip {
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: #fff;
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .chip.active {
+      background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
+      border-color: rgba(255,200,130,.5);
+      box-shadow: 0 10px 22px rgba(192,90,42,.22);
+    }
+    .modehint {
+      color: rgba(255,255,255,.66);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 2px;
+    }
+    .closed-note {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.82);
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .pick-card {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,179,90,.3);
+      background: linear-gradient(180deg, rgba(255,160,90,.12), rgba(255,255,255,.04));
+      box-shadow: 0 10px 26px rgba(0,0,0,.22);
+    }
+    .pick-title {
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.7);
+      margin-bottom: 8px;
+    }
+    .pick-line {
+      font-size: 15px;
+      color: #fff;
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    .flash-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      z-index: 200;
+      background: radial-gradient(circle at center, rgba(255,140,90,.18), rgba(0,0,0,.72));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 18px;
+    }
+    .flash-overlay.show { display: grid; }
+    .flash-card {
+      width: min(560px, calc(100vw - 24px));
+      border-radius: 30px;
+      background:
+        radial-gradient(500px 200px at 0% 0%, rgba(255,140,90,.24), transparent 60%),
+        radial-gradient(500px 220px at 100% 100%, rgba(60,220,170,.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 0 60px rgba(255,149,91,.22), 0 20px 60px rgba(0,0,0,.45);
+      padding: 24px;
+      text-align: center;
+      animation: flashPop .32s ease;
+    }
+    @keyframes flashPop {
+      0% { transform: scale(.92); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .flash-title {
+      font-size: 30px;
+      font-weight: 900;
+      color: #ffb35a;
+      margin-bottom: 10px;
+      letter-spacing: -.03em;
+      text-align: center;
+    }
+    .flash-text {
+      color: rgba(255,255,255,.86);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .flash-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 66px;
+      height: 66px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,160,90,.9), rgba(200,90,44,.95));
+      color: #fff;
+      font-weight: 900;
+      font-size: 26px;
+      box-shadow: 0 0 30px rgba(255,149,91,.45);
+      margin-bottom: 12px;
+    }
+    .flash-sub {
+      color: rgba(255,255,255,.68);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .statusbar {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      color: rgba(255,255,255,.74);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-align: center;
+    }
+    .statusdot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #5effad;
+      box-shadow: 0 0 12px rgba(94,255,173,.7);
+    }
+    .statusdot.closed {
+      background: #ff8a8a;
+      box-shadow: 0 0 12px rgba(255,138,138,.7);
+    }
     .swipe-head {
       display: flex;
       gap: 10px;
@@ -332,59 +446,6 @@
       scrollbar-width: none;
     }
     .swipe-track::-webkit-scrollbar { display: none; }
-    .swipe-card {
-      position: relative;
-      flex: 0 0 100%;
-      scroll-snap-align: center;
-      min-height: 420px;
-      border-radius: 30px;
-      padding: 22px;
-      overflow: hidden;
-      background:
-        radial-gradient(500px 240px at 10% 0%, rgba(255,148,92,.18), transparent 60%),
-        radial-gradient(500px 240px at 100% 100%, rgba(68,224,170,.14), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
-      border: 1px solid rgba(255,255,255,.15);
-      box-shadow: 0 24px 60px rgba(0,0,0,.36);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      transform-style: preserve-3d;
-      will-change: transform;
-      animation: floatCard 6s ease-in-out infinite;
-    }
-    @keyframes floatCard {
-      0%,100% { transform: translateY(0px); }
-      50% { transform: translateY(-6px); }
-    }
-    .swipe-card.active {
-      box-shadow: 0 0 40px rgba(255,149,91,.24), 0 24px 60px rgba(0,0,0,.42);
-    }
-    .swipe-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.15) 45%, transparent 70%);
-      transform: translateX(-120%);
-      animation: hologram 4s linear infinite;
-      pointer-events: none;
-    }
-    @keyframes hologram { to { transform: translateX(120%); } }
-
-    .card-meta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      font-weight: 900;
-      color: rgba(255,255,255,.7);
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.1);
-      margin-bottom: 10px;
-    }
 
     .advanced-tabs {
       width: min(1100px, calc(100vw - 28px));
@@ -415,6 +476,56 @@
       width: min(760px, calc(100vw - 28px));
       padding: 8px 4px 10px;
     }
+    .swipe-card {
+      position: relative;
+      flex: 0 0 100%;
+      scroll-snap-align: center;
+      min-height: 420px;
+      border-radius: 30px;
+      padding: 22px;
+      overflow: hidden;
+      background:
+        radial-gradient(500px 240px at 10% 0%, rgba(255,148,92,.18), transparent 60%),
+        radial-gradient(500px 240px at 100% 100%, rgba(68,224,170,.14), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border: 1px solid rgba(255,255,255,.15);
+      box-shadow: 0 24px 60px rgba(0,0,0,.36);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .swipe-card.active {
+      box-shadow: 0 0 40px rgba(255,149,91,.24), 0 24px 60px rgba(0,0,0,.42);
+    }
+    .swipe-card::before {
+      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.15) 45%, transparent 70%);
+      animation: hologram 4s linear infinite;
+
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.1) 45%, transparent 70%);
+      transform: translateX(-120%);
+      animation: hologram 7s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes hologram { to { transform: translateX(120%); } }
+    .card-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: rgba(255,255,255,.7);
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      margin-bottom: 10px;
+    }
 
     .state {
       width: min(760px, calc(100vw - 28px));
@@ -425,7 +536,6 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       box-shadow: 0 16px 44px rgba(0,0,0,.26);
-      text-align: center;
     }
 
     .nav-btn {
@@ -439,7 +549,6 @@
     .btn-icon { font-size: 1.5rem; color: #c05a2a; }
     .btn-text .main { font-weight: 800; letter-spacing: .12em; font-size: .92rem; }
     .btn-text .sub { font-size: .62rem; opacity: .7; text-transform: uppercase; }
-
     .circ-menu-overlay {
       position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
       pointer-events: none; background: rgba(0,0,0,.7); opacity: 0; transition: opacity .3s ease; backdrop-filter: blur(8px);
@@ -468,92 +577,165 @@
     }
 
     .hide { display: none !important; }
+  
+.nowbar {
+  white-space: normal;
+  line-height: 1.4;
+  padding: 12px 16px;
 
-    @media (max-width: 640px) {
-      .title { font-size: clamp(26px, 8vw, 36px); }
-      .wheel-wrap { width: 280px; height: 280px; }
-      .wheel-item {
-        width: 72px; height: 72px; margin-left: -36px; margin-top: -36px; font-size: 11px;
-      }
+  margin-top: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: .05em;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.06);
+}
+.nowbar.open { color: #5effad; box-shadow: 0 0 12px rgba(94,255,173,.4); }
+.nowbar.warn { color: #ffd27a; box-shadow: 0 0 12px rgba(255,210,122,.4); }
+.nowbar.closed { color: #ff8a8a; box-shadow: 0 0 12px rgba(255,138,138,.4); }
+
+.swipe-card {
+  animation: floatCard 6s ease-in-out infinite;
+}
+@keyframes floatCard {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+
+    .special-badge {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background: linear-gradient(180deg, rgba(192,90,42,.75), rgba(160,65,28,.92));
+      border:1px solid rgba(255,200,130,.45);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+      box-shadow:0 10px 24px rgba(192,90,42,.24);
     }
-  </style>
+    .special-off {
+      text-align:center;
+      color:rgba(255,255,255,.82);
+      font-weight:800;
+      line-height:1.6;
+    }
+
+</style>
 </head>
 <body>
   <div class="app">
     <div class="sticky">
-      <div class="tabbar" role="tablist" aria-label="Page sections">
-        <button class="tabbtn active" type="button" role="tab" aria-controls="panel-menu" aria-selected="true" id="tabMenu">Menu</button>
-        <button class="tabbtn" type="button" role="tab" aria-controls="panel-visit" aria-selected="false" id="tabVisit">Visit Info</button>
-        <button class="tabbtn" type="button" role="tab" aria-controls="panel-week" aria-selected="false" id="tabWeek">Week Ahead</button>
+      <div class="daybar" role="tablist" aria-label="Day selector">
+        <button class="daybtn active" type="button" role="tab" aria-controls="panel-today" aria-selected="true" id="dayBtnToday">Today</button>
+        <button class="daybtn" type="button" role="tab" aria-controls="panel-tomorrow" aria-selected="false" id="dayBtnTomorrow">Tomorrow</button>
+        <button class="daybtn" type="button" role="tab" aria-controls="panel-advanced" aria-selected="false" id="dayBtnAdvanced">Daily Special</button>
       </div>
     </div>
 
-    <section class="panel" id="panel-menu" role="tabpanel" aria-labelledby="tabMenu">
+    <section class="panel" id="panel-today" role="tabpanel" aria-labelledby="dayBtnToday">
       <div class="header">
-        <div class="eyebrow"><i class="fas fa-fire"></i> St. Francisville Smokehouse</div>
-        <div class="title">The Francis Smokehouse</div>
-        <div class="subline">6779 US Highway 61 • St. Francisville, Louisiana • (225) 245-5046</div>
-        <div class="note">Interactive menu built from the information you provided. Orbit Navigator lets people move through the menu fast, while Hologram Cards make everything easier to browse on mobile.</div>
-        <div class="nowbar" id="nowBar">Checking current hours…</div>
+        <div class="title" id="todayTitle">Today’s Menu</div>
+        <div class="subline" id="todayHours">Loading hours…</div>
+        <div class="note" id="todayNote"></div><div class="nowbar" id="todayNow"></div>
       </div>
-
       <div class="toolbar">
-        <button class="viewbtn" id="viewWheel">Orbit Navigator</button>
-        <button class="viewbtn active" id="viewSwipe">Hologram Cards</button>
-        <button class="actionbtn primary" id="chooseBtn"><i class="fas fa-sparkles"></i> Choose for Me</button>
+        <button class="viewbtn" id="todayViewWheel">Orbit Navigator</button>
+        <button class="viewbtn active" id="todayViewSwipe">Hologram Cards</button>
+        <button class="actionbtn primary" id="todayAIBtn"><i class="fas fa-sparkles"></i> Choose for Me</button>
       </div>
-
-      <div id="wheelView" class="hide">
-        <div class="modehint">Spin the Orbit Navigator to move through menu sections.</div>
+      <div id="todayWheelView">
+        <div class="modehint">Spin the Orbit Navigator to move through the menu.</div>
         <div class="wheel-stage">
-          <div class="wheel-wrap" id="wheelWrap">
+          <div class="wheel-wrap" id="todayWheelWrap">
             <div class="wheel-arrow"></div>
-            <div class="wheel" id="wheel"></div>
+            <div class="wheel" id="todayWheel"></div>
             <div class="wheel-center"></div>
           </div>
-          <div class="glasscard" id="detailCard">
-            <div class="cat-title" id="detailTitle"></div>
-            <div id="detailContent"></div>
-            <div id="pickCard"></div>
+          <div class="glasscard" id="todayDetailCard">
+            <div class="cat-title" id="todayDetailTitle"></div>
+            <div id="todayDetailContent"></div><div id="todayPickCard"></div>
           </div>
         </div>
       </div>
-
-      <div id="swipeView">
+      <div id="todaySwipeView" class="hide">
         <div class="swipe-shell">
           <div class="swipe-head">
-            <button class="chip" id="prevCard"><i class="fas fa-chevron-left"></i></button>
-            <div class="subline" id="cardStatus">Swipe categories</div>
-            <button class="chip" id="nextCard"><i class="fas fa-chevron-right"></i></button>
+            <button class="pill" id="todayPrevCard"><i class="fas fa-chevron-left"></i></button>
+            <div class="subline" id="todayCardStatus">Swipe categories</div>
+            <button class="pill" id="todayNextCard"><i class="fas fa-chevron-right"></i></button>
           </div>
-          <div class="chipnav" id="chipNav"></div>
-          <div class="modehint">Tap a section chip or swipe the hologram cards.</div>
-          <div class="swipe-track" id="swipeTrack"></div>
+          <div class="chipnav" id="todayChipNav"></div>
+          <div class="modehint">Tap a category chip or swipe the hologram cards.</div>
+          <div class="swipe-track" id="todaySwipeTrack"></div>
         </div>
       </div>
-    </section>
-
-    <section class="panel hide" id="panel-visit" role="tabpanel" aria-labelledby="tabVisit">
-      <div class="header">
-        <div class="eyebrow"><i class="fas fa-map-marker-alt"></i> Plan Your Visit</div>
-        <div class="title">Visit The Francis Smokehouse</div>
-        <div class="subline">Hours, location, contact details, accessibility, and what people love most.</div>
-      </div>
-      <div class="glasscard">
-        <div class="cat-title">Quick Facts</div>
-        <div id="visitContent"></div>
+      <div class="state hide" id="todayClosed">
+        <div class="title" style="font-size:24px;">Closed</div>
+        <div class="subline" id="todayClosedMsg"></div>
       </div>
     </section>
 
-    <section class="panel hide" id="panel-week" role="tabpanel" aria-labelledby="tabWeek">
+    <section class="panel hide" id="panel-tomorrow" role="tabpanel" aria-labelledby="dayBtnTomorrow">
       <div class="header">
-        <div class="eyebrow"><i class="fas fa-calendar-alt"></i> Week Ahead</div>
-        <div class="title">Hours Forecast</div>
-        <div class="subline" id="weekNote">See the next 7 days of opening hours and service windows.</div>
+        <div class="title" id="tomorrowTitle">Tomorrow’s Menu</div>
+        <div class="subline" id="tomorrowHours">Loading hours…</div>
+        <div class="note" id="tomorrowNote"></div><div class="nowbar" id="tomorrowNow"></div>
+      </div>
+      <div class="toolbar">
+        <button class="viewbtn" id="tomorrowViewWheel">Orbit Navigator</button>
+        <button class="viewbtn active" id="tomorrowViewSwipe">Hologram Cards</button>
+        <button class="actionbtn primary" id="tomorrowAIBtn"><i class="fas fa-sparkles"></i> Choose for Me</button>
+      </div>
+      <div id="tomorrowWheelView">
+        <div class="modehint">Spin the Orbit Navigator to move through the menu.</div>
+        <div class="wheel-stage">
+          <div class="wheel-wrap" id="tomorrowWheelWrap">
+            <div class="wheel-arrow"></div>
+            <div class="wheel" id="tomorrowWheel"></div>
+            <div class="wheel-center"></div>
+          </div>
+          <div class="glasscard" id="tomorrowDetailCard">
+            <div class="cat-title" id="tomorrowDetailTitle"></div>
+            <div id="tomorrowDetailContent"></div><div id="tomorrowPickCard"></div>
+          </div>
+        </div>
+      </div>
+      <div id="tomorrowSwipeView" class="hide">
+        <div class="swipe-shell">
+          <div class="swipe-head">
+            <button class="pill" id="tomorrowPrevCard"><i class="fas fa-chevron-left"></i></button>
+            <div class="subline" id="tomorrowCardStatus">Swipe categories</div>
+            <button class="pill" id="tomorrowNextCard"><i class="fas fa-chevron-right"></i></button>
+          </div>
+          <div class="chipnav" id="tomorrowChipNav"></div>
+          <div class="modehint">Tap a category chip or swipe the hologram cards.</div>
+          <div class="swipe-track" id="tomorrowSwipeTrack"></div>
+        </div>
+      </div>
+      <div class="state hide" id="tomorrowClosed">
+        <div class="title" style="font-size:24px;">Closed</div>
+        <div class="subline" id="tomorrowClosedMsg"></div>
+      </div>
+    </section>
+
+    <section class="panel hide" id="panel-advanced" role="tabpanel" aria-labelledby="dayBtnAdvanced">
+      <div class="header">
+        <div class="title">Daily Special</div>
+        <div class="subline" id="advancedDisclaimer"></div>
       </div>
       <div class="swipe-shell">
-        <div class="advanced-tabs" id="advancedTabs"></div>
-        <div class="advanced-card-wrap" id="advancedTrack"></div>
+        <div class="glasscard pulse" id="dailySpecialCard">
+          <div class="cat-title" id="dailySpecialTitle">Daily Special</div>
+          <div id="dailySpecialContent"></div>
+        </div>
       </div>
     </section>
 
@@ -569,144 +751,18 @@
   </div>
   <div class="circ-menu-overlay" id="circMenuOverlay">
     <div class="circular-menu">
-      <div class="center-home" id="homeCenter"><i class="fas fa-utensils"></i></div>
-      <div class="menu-item" style="--angle:0;" data-panel="panel-menu">Menu</div>
-      <div class="menu-item" style="--angle:72;" data-panel="panel-visit">Visit</div>
-      <div class="menu-item" style="--angle:144;" data-action="call">Call</div>
-      <div class="menu-item" style="--angle:216;" data-action="map">Map</div>
+      <div class="center-home" id="homeCenter" data-link="index.html"><i class="fas fa-home"></i></div>
+      <div class="menu-item" style="--angle:0;" data-link="delivery.html">Delivery</div>
+      <div class="menu-item" style="--angle:72;" data-link="tel:3372211035">Order</div>
+      <div class="menu-item" style="--angle:144;" data-link="about.html">About</div>
+      <div class="menu-item" style="--angle:216;" data-link="https://maps.google.com/?q=2741%20US-190%2C%20DeRidder%2C%20LA%2070634">Location</div>
       <div class="menu-item" style="--angle:288;" data-action="share">Share</div>
     </div>
   </div>
 
   <script>
-    (() => {
+    (function () {
       const $ = id => document.getElementById(id);
-
-      const data = {
-        name: "The Francis Smokehouse",
-        address: "6779 US Highway 61, St. Francisville, LA 70775",
-        phone: "(225) 245-5046",
-        phoneTel: "2252455046",
-        email: "francissmokehouse@att.net",
-        website: "thefrancissmokehouse.com",
-        ratings: {
-          tripadvisor: "4.5 / 5 (143 reviews)",
-          googleSyndicated: "4.7 / 5 (505 reviews)",
-          note: "Review themes: brisket, boudin balls, corn pudding, generous portions, friendly staff."
-        },
-        categories: [
-          {
-            name: "BBQ Plates",
-            meta: "Smoked classics",
-            items: [
-              { name: "Full Rack of Ribs", desc: "$19.99 • Served with two sides." },
-              { name: "Half Rack of Ribs", desc: "$11.99 • Served with two sides." },
-              { name: "Pulled Pork Plate", desc: "$9.99 • Served with two sides." },
-              { name: "Brisket Plate", desc: "$10.99 • Served with two sides." },
-              { name: "Half Chicken Plate", desc: "$9.99 • Served with two sides." },
-              { name: "Smoked Wings", desc: "$7.99 • Smoked wing plate." }
-            ]
-          },
-          {
-            name: "Sandwiches",
-            meta: "Burgers & po-boys",
-            items: [
-              { name: "Hamburger", desc: "$6.99 • With one side." },
-              { name: "Cheeseburger", desc: "$7.99 • With one side." },
-              { name: "Bacon Cheeseburger", desc: "$8.99 • With one side." },
-              { name: "Pulled Pork Sandwich", desc: "$7.99 • With one side." },
-              { name: "Brisket Sandwich", desc: "$8.99 • With one side." },
-              { name: "Ribeye Po-Boy", desc: "$10.99 • With one side." },
-              { name: "Chicken Sandwich", desc: "$7.99 • With one side." },
-              { name: "Shrimp Po-Boy", desc: "$8.99 • With one side." },
-              { name: "Crawfish Po-Boy", desc: "$10.99 • With one side." },
-              { name: "Catfish Po-Boy", desc: "$8.99 • With one side." }
-            ]
-          },
-          {
-            name: "Sides",
-            meta: "Small or large",
-            items: [
-              { name: "Baked Beans", desc: "$2.75 small • $6.99 large." },
-              { name: "Corn Pudding", desc: "$2.75 small • $6.99 large." },
-              { name: "Potato Salad", desc: "$2.75 small • $6.99 large." },
-              { name: "Cole Slaw", desc: "$2.75 small • $6.99 large." },
-              { name: "French Fries", desc: "$2.75 small • $6.99 large." },
-              { name: "Sweet Potato Waffle Fries", desc: "$2.75 small • $6.99 large." }
-            ]
-          },
-          {
-            name: "Specialty Meats",
-            meta: "Signature extras",
-            items: [
-              { name: "Steamed Boudin Links", desc: "House favorite specialty item." },
-              { name: "Boudin Balls", desc: "Frequently praised in reviews." },
-              { name: "Pepper Jack Boudin Balls", desc: "Cheesy spicy boudin version." },
-              { name: "Boudin Egg Rolls", desc: "Crisp roll with boudin filling." },
-              { name: "Meat Pies", desc: "Savory handheld favorite." },
-              { name: "Crawfish Pies", desc: "Seafood pie specialty." }
-            ]
-          },
-          {
-            name: "Desserts",
-            meta: "Sweet finish",
-            items: [
-              { name: "Homemade Bread Pudding", desc: "A commonly mentioned take-home favorite." },
-              { name: "Creole Cream Cheesecake", desc: "Southern cheesecake option." },
-              { name: "Chocolate Cake", desc: "Classic dessert selection." },
-              { name: "Carrot Cake", desc: "House dessert option." },
-              { name: "Strawberry Shortcake", desc: "Seasonal-style sweet." },
-              { name: "Miss Mud Pie", desc: "$7 featured dessert from specials board." }
-            ]
-          },
-          {
-            name: "Reviews",
-            meta: "What people love",
-            items: [
-              { name: "Brisket", desc: "Tripadvisor reviewer said it 'practically melted in my mouth.'" },
-              { name: "Boudin Balls", desc: "Repeatedly highlighted as a must-order item." },
-              { name: "Corn Pudding", desc: "A recurring side favorite in review excerpts." },
-              { name: "Friendly Staff", desc: "Multiple reviews mention warm, local hospitality." },
-              { name: "Things to Know", desc: "Some reviews mention wait times, sell-outs, or prices during busy periods." }
-            ]
-          }
-        ],
-        visitSections: [
-          {
-            title: "Hours",
-            items: [
-              "Monday–Saturday: 10:00 AM – 6:00 PM",
-              "Sunday: 10:00 AM – 3:00 PM"
-            ]
-          },
-          {
-            title: "Contact",
-            items: [
-              "Phone: (225) 245-5046",
-              "Email: francissmokehouse@att.net",
-              "Website: thefrancissmokehouse.com"
-            ]
-          },
-          {
-            title: "Amenities",
-            items: [
-              "Takeout available",
-              "Parking available",
-              "Wheelchair accessible",
-              "Outdoor seating is often mentioned in reviews"
-            ]
-          },
-          {
-            title: "Best Known For",
-            items: [
-              "Brisket and ribs",
-              "Boudin balls and specialty meats",
-              "Corn pudding and classic sides",
-              "Friendly local atmosphere"
-            ]
-          }
-        ]
-      };
 
       function escapeHtml(str) {
         return String(str ?? "")
@@ -717,17 +773,89 @@
           .replace(/'/g, "&#039;");
       }
       function setText(id, text) { const el = $(id); if (el) el.textContent = text || ""; }
+      function normalizeItems(arr) { return Array.isArray(arr) ? arr.map(x => String(x || "").trim()).filter(Boolean) : []; }
+      function normalizeLunchItems(arr) {
+        const items = Array.isArray(arr) ? arr : [];
+        return items.map(raw => {
+          if (raw && typeof raw === "object") return { name: String(raw.name || "").trim(), desc: String(raw.desc || "").trim() };
+          const s = String(raw || "").trim();
+          if (!s) return null;
+          return { name: s, desc: "" };
+        }).filter(Boolean).filter(x => x.name);
+      }
       function toISODateLocal(d) {
-        return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${y}-${m}-${day}`;
       }
-      function weekdayName(d) {
-        return d.toLocaleDateString("en-US", { weekday: "long" });
+      function formatDateNice(d) { return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
+      function weekdayName(d) { return d.toLocaleDateString("en-US", { weekday: "long" }); }
+      function parseISODateToLocal(iso) {
+        const [y, m, d] = String(iso).split("-").map(Number);
+        return new Date(y, (m || 1) - 1, d || 1);
       }
-      function formatDateNice(d) {
-        return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      function normalizeDateKey(key) {
+        const m = String(key || "").trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+        if (!m) return null;
+        return `${m[1]}-${String(Number(m[2])).padStart(2, "0")}-${String(Number(m[3])).padStart(2, "0")}`;
+      }
+      function parseTimeToMinutes(timeStr) {
+        if (!timeStr) return null;
+        const match = timeStr.match(/(\d+):?(\d*)\s*(AM|PM)/i);
+        if (!match) return null;
+        let hours = parseInt(match[1], 10);
+        const minutes = match[2] ? parseInt(match[2], 10) : 0;
+        const ampm = match[3].toUpperCase();
+        if (ampm === "PM" && hours !== 12) hours += 12;
+        if (ampm === "AM" && hours === 12) hours = 0;
+        return hours * 60 + minutes;
+      }
+      function findHours(weekly, dayName) {
+        return getBusinessHours(dayName);
+      }
+      function getClosure(data, dayName) {
+        const c = data?.closures || {};
+        const key = Object.keys(c).find(k => k.toLowerCase() === String(dayName || "").toLowerCase());
+        return key ? c[key] : null;
+      }
+      function getMenuByDate(data, isoDate) { return (data?.menus || {})[isoDate] || null; }
+      function crawfishFor(data, menu) {
+        const def = data?.defaults?.crawfish || {};
+        const c = menu?.crawfish || {};
+        return {
+          show: c.show === false ? false : true,
+          subtitle: String(c.subtitle ?? def.subtitle ?? "").trim(),
+          items: normalizeItems(c.items ?? def.items ?? [])
+        };
+      }
+      function isPastClosingToday(weekly, todayName) {
+        const hours = findHours(weekly, todayName);
+        const closeMinutes = parseTimeToMinutes(hours.close);
+        if (closeMinutes == null) return false;
+        const now = new Date();
+        return (now.getHours() * 60 + now.getMinutes()) >= closeMinutes;
+      }
+      function showLoadError(msg) {
+        $("loadError").classList.remove("hide");
+        setText("loadErrorMsg", msg || "Try again in a moment.");
+      }
+      function getBusinessHours(dayName) {
+        const lower = String(dayName || "").toLowerCase();
+        const open = lower === "sunday" ? "7:00 AM" : (lower === "saturday" ? "6:00 AM" : "5:30 AM");
+        const close = lower === "sunday" ? "3:00 PM" : "2:00 PM";
+        return {
+          day: dayName,
+          open,
+          close,
+          breakfast: `${open} - 10:30 AM`,
+          lunch: `11:00 AM - ${close}`,
+          crawfish: ["thursday","friday","saturday"].includes(lower) ? "4:00 PM - 8:00 PM" : ""
+        };
       }
       function timeToMinutes12h(timeStr) {
-        const m = String(timeStr || "").trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+        if (!timeStr) return null;
+        const m = String(timeStr).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
         if (!m) return null;
         let h = parseInt(m[1], 10);
         const min = parseInt(m[2], 10);
@@ -737,90 +865,216 @@
         return h * 60 + min;
       }
       function rangeIncludes(nowMinutes, rangeStr) {
-        const parts = String(rangeStr || "").split("-").map(s => s.trim());
-        if (parts.length !== 2) return false;
-        const start = timeToMinutes12h(parts[0]);
-        const end = timeToMinutes12h(parts[1]);
+        if (!rangeStr || !String(rangeStr).includes("-")) return false;
+        const [a, b] = String(rangeStr).split("-").map(s => s.trim());
+        const start = timeToMinutes12h(a);
+        const end = timeToMinutes12h(b);
         if (start == null || end == null) return false;
         return nowMinutes >= start && nowMinutes <= end;
       }
-      function getHoursForDay(dayName) {
-        const lower = String(dayName || "").toLowerCase();
-        if (lower === "sunday") {
-          return { open: "10:00 AM", close: "3:00 PM" };
+      function categoryOpenNow(catName, dayName, nowDate) {
+        const hours = getBusinessHours(dayName);
+        const mins = nowDate.getHours() * 60 + nowDate.getMinutes();
+        const lower = String(catName || "").toLowerCase();
+        if (lower === "breakfast") return rangeIncludes(mins, hours.breakfast);
+        if (lower === "lunch" || lower === "salad bar" || lower === "drinks" || lower === "dessert") return rangeIncludes(mins, hours.lunch);
+        if (lower === "crawfish") return !!hours.crawfish && rangeIncludes(mins, hours.crawfish);
+        return rangeIncludes(mins, `${hours.open} - ${hours.close}`);
+      }
+      function openingMessageFor(dayName) {
+        const hours = getBusinessHours(dayName);
+        return `${dayName} opens at ${hours.open}. Breakfast runs until 10:30 AM, lunch starts at 11:00 AM${hours.crawfish ? `, and crawfish runs ${hours.crawfish}` : ""}.`;
+      }
+
+      let luckTimer = null;
+      let luckCountdownTimer = null;
+      function showLuckModal(title, text) {
+        const modal = $("luckModal");
+        const countEl = $("luckCountdown");
+        if (!modal || !countEl) return;
+        setText("luckModalTitle", title);
+        setText("luckModalText", text);
+        if (luckTimer) clearTimeout(luckTimer);
+        if (luckCountdownTimer) clearInterval(luckCountdownTimer);
+        let remaining = 5;
+        countEl.textContent = String(remaining);
+        modal.classList.add("show");
+        luckCountdownTimer = setInterval(() => {
+          remaining -= 1;
+          if (remaining > 0) {
+            countEl.textContent = String(remaining);
+          } else {
+            clearInterval(luckCountdownTimer);
+            luckCountdownTimer = null;
+          }
+        }, 1000);
+        luckTimer = setTimeout(() => {
+          hideLuckModal();
+        }, 5000);
+      }
+      function hideLuckModal() {
+        const modal = $("luckModal");
+        if (luckTimer) {
+          clearTimeout(luckTimer);
+          luckTimer = null;
         }
-        return { open: "10:00 AM", close: "6:00 PM" };
+        if (luckCountdownTimer) {
+          clearInterval(luckCountdownTimer);
+          luckCountdownTimer = null;
+        }
+        if (modal) modal.classList.remove("show");
       }
 
-      function updateNowBar() {
-        const el = $("nowBar");
+      function pickLunchCombo(cat) {
+        const entries = Array.isArray(cat?.items) ? cat.items.slice() : [];
+        const labels = entries.map(it => typeof it === "string" ? it : (it?.name || "")).filter(Boolean);
+        if (!labels.length) return null;
+        const meats = labels.filter(x => /chicken|pork|steak|fish|shrimp|hamburger|roast|sausage|turkey|beef|meatloaf|catfish|tenders|boudin/i.test(x));
+        const sides = labels.filter(x => !/chicken|pork|steak|fish|shrimp|hamburger|roast|sausage|turkey|beef|meatloaf|catfish|tenders|boudin/i.test(x));
+        const rand = arr => arr[Math.floor(Math.random() * arr.length)];
+        const meat = meats.length ? rand(meats) : rand(labels);
+        const sidePool = sides.length ? sides.slice() : labels.filter(x => x !== meat);
+        const side1 = sidePool.length ? rand(sidePool) : null;
+        const side2Pool = sidePool.filter(x => x !== side1);
+        const side2 = side2Pool.length ? rand(side2Pool) : (sidePool.length > 1 ? sidePool[0] : null);
+        return { meat, sides: [side1, side2].filter(Boolean) };
+      }
+      function renderPickCard(prefix, combo, catName) {
+        const el = $(`${prefix}PickCard`);
         if (!el) return;
-        const now = new Date();
-        const day = weekdayName(now);
-        const h = getHoursForDay(day);
-        const mins = now.getHours() * 60 + now.getMinutes();
-        const openNow = rangeIncludes(mins, `${h.open} - ${h.close}`);
-        el.className = "nowbar " + (openNow ? "open" : "closed");
-        el.textContent = openNow ? `Open Now • ${day} Hours ${h.open} – ${h.close}` : `Closed • ${day} opens at ${h.open}`;
-      }
-
-      function renderCategoryContent(cat) {
-        return `<ul class="list">` + cat.items.map(item =>
-          `<li><details><summary>${escapeHtml(item.name)}</summary><div class="desc">${escapeHtml(item.desc)}</div></details></li>`
-        ).join("") + `</ul>`;
-      }
-
-      function renderVisitContent() {
-        const html = data.visitSections.map(section => `
-          <div class="section-label">${escapeHtml(section.title)}</div>
-          <ul class="list">${section.items.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-        `).join("") + `
-          <div class="section-label">Reputation Snapshot</div>
-          <ul class="list">
-            <li>Tripadvisor: ${escapeHtml(data.ratings.tripadvisor)}</li>
-            <li>Google-review excerpts via directories: ${escapeHtml(data.ratings.googleSyndicated)}</li>
-            <li>${escapeHtml(data.ratings.note)}</li>
-          </ul>
+        if (!combo) {
+          el.innerHTML = "";
+          return;
+        }
+        el.innerHTML = `
+          <div class="pick-card">
+            <div class="pick-title">Suggested ${escapeHtml(catName)} Plate</div>
+            <div class="pick-line">Meat: ${escapeHtml(combo.meat || "Chef's choice")}</div>
+            <div class="pick-line">Sides: ${escapeHtml((combo.sides || []).join(" + ") || "Chef's choice")}</div>
+          </div>
         `;
-        $("visitContent").innerHTML = html;
       }
 
-      function initSwipe(categories) {
-        const track = $("swipeTrack");
-        const chipNav = $("chipNav");
-        const prev = $("prevCard");
-        const next = $("nextCard");
-        if (!track || !chipNav) return null;
+      async function fetchHtml(url) {
+        const res = await fetch(url, { credentials: "same-origin", cache: "no-store" });
+        if (!res.ok) throw new Error(`Fetch failed ${res.status} at ${url}`);
+        return await res.text();
+      }
+      function extractJsonFromHtml(html, label) {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const script = doc.querySelector("#hh-menu-data");
+        if (!script) throw new Error(`No #hh-menu-data found on ${label}`);
+        const raw = (script.textContent || "").trim();
+        if (!raw) throw new Error(`#hh-menu-data is empty on ${label}`);
+        return JSON.parse(raw);
+      }
+      async function readData() {
+        const urls = ["menu-data.html", "./menu-data.html", "/menu-data.html"];
+        let lastErr = null;
+        for (const url of urls) {
+          try {
+            const html = await fetchHtml(url);
+            const data = extractJsonFromHtml(html, url);
+            const rawMenus = data?.menus || {};
+            const normalizedMenus = {};
+            Object.keys(rawMenus).forEach(k => {
+              const nk = normalizeDateKey(k);
+              if (nk) normalizedMenus[nk] = rawMenus[k];
+            });
+            data.menus = normalizedMenus;
+            return data;
+          } catch (e) {
+            lastErr = e;
+          }
+        }
+        throw lastErr || new Error("Menu data could not be read from menu-data.html.");
+      }
 
+      function buildCategoryData(data, isoDate) {
+        const menu = getMenuByDate(data, isoDate) || {};
+        const defaults = data?.defaults || {};
+        const lunchItems = normalizeLunchItems(menu.lunch?.items ?? defaults.lunch?.items ?? []);
+        const cats = [
+          {
+            name: "Breakfast",
+            meta: "Morning favorites",
+            plates: normalizeItems(menu.breakfast?.plates ?? defaults.breakfast?.plates ?? []),
+            items: normalizeItems(menu.breakfast?.items ?? defaults.breakfast?.items ?? [])
+          },
+          {
+            name: "Lunch",
+            meta: "Daily plates",
+            plates: normalizeItems(menu.lunch?.plates ?? defaults.lunch?.plates ?? []),
+            items: lunchItems
+          }
+        ];
+        const crawfish = crawfishFor(data, menu);
+        if (crawfish.show) cats.push({ name: "Crawfish", meta: "Seasonal special", items: crawfish.items });
+        cats.push(
+          {
+            name: "Salad Bar",
+            meta: "Build your own",
+            pricing: normalizeItems(menu.salad?.items ?? defaults.salad?.items ?? []),
+            lettuce: normalizeItems(menu.salad?.saladBar?.lettuce ?? defaults.salad?.saladBar?.lettuce ?? []),
+            toppings: normalizeItems(menu.salad?.saladBar?.toppings ?? defaults.salad?.saladBar?.toppings ?? []),
+            dressing: normalizeItems(menu.salad?.saladBar?.dressing ?? defaults.salad?.saladBar?.dressing ?? [])
+          },
+          { name: "Drinks", meta: "Cold & hot", items: normalizeItems(menu.drinks?.items ?? defaults.drinks?.items ?? []) },
+          { name: "Dessert", meta: "Sweet finish", items: normalizeItems(menu.dessert?.items ?? defaults.dessert?.items ?? []) }
+        );
+        return cats.filter(cat => (cat.plates && cat.plates.length) || (cat.items && cat.items.length) || (cat.pricing && cat.pricing.length) || (cat.lettuce && cat.lettuce.length) || (cat.toppings && cat.toppings.length) || (cat.dressing && cat.dressing.length));
+      }
+
+      function renderCategoryContent(cat, data) {
+        let html = "";
+        if (cat.plates?.length) html += `<div class="section-label">Plates</div><ul class="list">${cat.plates.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
+        if (cat.items?.length) {
+          html += `<div class="section-label">Items</div><ul class="list">` + cat.items.map(it => {
+            if (typeof it === "string") return `<li>${escapeHtml(it)}</li>`;
+            return `<li><details><summary>${escapeHtml(it.name)}</summary><div class="desc">${escapeHtml(it.desc || data?.settings?.noDescriptionText || "No description for this item.")}</div></details></li>`;
+          }).join("") + `</ul>`;
+        }
+        if (cat.pricing?.length) html += `<div class="section-label">Pricing</div><ul class="list">${cat.pricing.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
+        if (cat.lettuce?.length) html += `<div class="section-label">Lettuce</div><ul class="list">${cat.lettuce.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
+        if (cat.toppings?.length) html += `<div class="section-label">Toppings</div><ul class="list">${cat.toppings.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
+        if (cat.dressing?.length) html += `<div class="section-label">Dressing</div><ul class="list">${cat.dressing.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
+        return html || `<div class="subline">No items available.</div>`;
+      }
+
+      function initSwipe(prefix, categories, data) {
+        const track = $(`${prefix}SwipeTrack`);
+        const prev = $(`${prefix}PrevCard`);
+        const next = $(`${prefix}NextCard`);
+        const chipNav = $(`${prefix}ChipNav`);
+        if (!track) return;
         track.innerHTML = categories.map((cat, i) => `
           <article class="swipe-card${i === 0 ? " active" : ""}" data-index="${i}">
-            <div class="card-meta">${escapeHtml(cat.meta)}</div>
+            <div class="card-meta">${escapeHtml(cat.meta || "Menu category")}</div>
             <div class="cat-title">${escapeHtml(cat.name)}</div>
-            ${renderCategoryContent(cat)}
+            ${renderCategoryContent(cat, data)}
           </article>
         `).join("");
-
-        chipNav.innerHTML = categories.map((cat, i) =>
-          `<button class="chip${i === 0 ? " active" : ""}" data-index="${i}">${escapeHtml(cat.name)}</button>`
-        ).join("");
-
+        if (chipNav) {
+          chipNav.innerHTML = categories.map((cat, i) => `<button class="chip${i === 0 ? " active" : ""}" data-index="${i}">${escapeHtml(cat.name)}</button>`).join("");
+        }
         const cards = Array.from(track.querySelectorAll(".swipe-card"));
-        const chips = Array.from(chipNav.querySelectorAll(".chip"));
+        const chips = Array.from((chipNav || document.createElement("div")).querySelectorAll(".chip"));
 
         function activeIndex() {
+          const left = track.scrollLeft;
           const width = track.clientWidth || 1;
-          return Math.round(track.scrollLeft / width);
+          return Math.round(left / width);
         }
         function updateStatus() {
           const idx = Math.max(0, Math.min(categories.length - 1, activeIndex()));
-          setText("cardStatus", `${categories[idx].name} • ${idx + 1} / ${categories.length}`);
+          setText(`${prefix}CardStatus`, `${categories[idx]?.name || ""} • ${idx + 1} / ${categories.length}`);
           cards.forEach((card, i) => card.classList.toggle("active", i === idx));
           chips.forEach((chip, i) => chip.classList.toggle("active", i === idx));
         }
         function goTo(idx) {
           const clamped = Math.max(0, Math.min(categories.length - 1, idx));
           track.scrollTo({ left: clamped * track.clientWidth, behavior: "smooth" });
-          setTimeout(updateStatus, 220);
+          window.setTimeout(updateStatus, 220);
         }
 
         prev?.addEventListener("click", () => goTo(activeIndex() - 1));
@@ -840,38 +1094,29 @@
             card.style.transform = "perspective(1000px) rotateY(0deg) rotateX(0deg)";
           });
         });
-
         updateStatus();
-
         return {
           selectByName(name) {
             const idx = categories.findIndex(c => c.name === name);
-            if (idx >= 0) goTo(idx);
+            if (idx >= 0) {
+              goTo(idx);
+              const card = cards[idx];
+              if (card) {
+                card.classList.add("pulse");
+                setTimeout(() => card.classList.remove("pulse"), 900);
+              }
+            }
           }
         };
       }
 
-      function renderPickCard(choice) {
-        const el = $("pickCard");
-        if (!el) return;
-        if (!choice) { el.innerHTML = ""; return; }
-        el.innerHTML = `
-          <div class="glasscard" style="margin-top:12px; padding:14px;">
-            <div class="section-label">Suggested Pick</div>
-            <div class="subline" style="font-size:16px;">${escapeHtml(choice.name)}</div>
-            <div class="note">${escapeHtml(choice.desc)}</div>
-          </div>
-        `;
-      }
-
-      function initWheel(categories, swipeApi) {
-        const wrap = $("wheelWrap");
-        const wheel = $("wheel");
-        const detailTitle = $("detailTitle");
-        const detailContent = $("detailContent");
-        const detailCard = $("detailCard");
+      function initWheel(prefix, categories, data, dayName, isTodayPanel) {
+        const wrap = $(`${prefix}WheelWrap`);
+        const wheel = $(`${prefix}Wheel`);
+        const detailTitle = $(`${prefix}DetailTitle`);
+        const detailContent = $(`${prefix}DetailContent`);
+        const detailCard = $(`${prefix}DetailCard`);
         if (!wrap || !wheel || !detailTitle || !detailContent) return null;
-
         const N = categories.length;
         const step = 360 / N;
         const radius = 112;
@@ -886,12 +1131,7 @@
           return el;
         });
 
-        let angle = 0;
-        let velocity = 0;
-        let dragging = false;
-        let lastPointerAngle = 0;
-        let selected = 0;
-        let raf = 0;
+        let angle = 0, velocity = 0, dragging = false, lastPointerAngle = 0, selected = 0, raf = 0, lockedByHours = false;
 
         function shortestDelta(a, b) {
           let diff = a - b;
@@ -914,12 +1154,21 @@
           }
           return best;
         }
-        function renderDetailFor(idx, pulse=false) {
+        function canShowCategory(cat) {
+          if (!isTodayPanel) return true;
+          return categoryOpenNow(cat.name, dayName, new Date());
+        }
+        function renderDetailFor(idx, force=false) {
           const cat = categories[idx];
+          const allowed = canShowCategory(cat);
+          lockedByHours = !allowed;
           detailTitle.textContent = cat.name;
-          detailContent.innerHTML = renderCategoryContent(cat);
-          renderPickCard(null);
-          if (pulse) {
+          const closedNowNote = isTodayPanel && !allowed
+            ? `<div class="closed-note">This is the ${escapeHtml(dayName)} menu for ${escapeHtml(cat.name)}. They are currently closed for this category. ${escapeHtml(openingMessageFor(dayName))}</div>`
+            : "";
+          detailContent.innerHTML = renderCategoryContent(cat, data) + closedNowNote;
+          renderPickCard(prefix, null, cat.name);
+          if (force) {
             detailCard.classList.add("pulse");
             setTimeout(() => detailCard.classList.remove("pulse"), 520);
           }
@@ -984,102 +1233,74 @@
           wrap.releasePointerCapture?.(e.pointerId);
           ensureAnim();
         }
-
+        function onClick() {
+          if (lockedByHours && isTodayPanel) {
+            showLuckModal("Currently closed", `${categories[selected].name} is not being served right now. ${openingMessageFor(dayName)}`);
+          }
+        }
         wrap.addEventListener("pointerdown", onDown, { passive: false });
         wrap.addEventListener("pointermove", onMove, { passive: false });
         wrap.addEventListener("pointerup", onUp);
         wrap.addEventListener("pointercancel", onUp);
-
+        detailCard.addEventListener("click", onClick);
         render(true);
 
         return {
-          chooseForMe() {
-            const all = categories.flatMap(c => c.items.map(item => ({ ...item, category: c.name })));
-            const choice = all[Math.floor(Math.random() * all.length)];
-            const idx = categories.findIndex(c => c.name === choice.category);
+          aiPick() {
+            const lunchCat = categories.find(c => String(c.name).toLowerCase() === "lunch");
+            const targetCat = lunchCat || categories.find(c => canShowCategory(c)) || categories[0];
+            if (!targetCat) {
+              showLuckModal("Currently closed", openingMessageFor(dayName));
+              return null;
+            }
+            if (isTodayPanel && !canShowCategory(targetCat)) {
+              showLuckModal("Currently closed", `${targetCat.name} is not being served right now. ${openingMessageFor(dayName)}`);
+              return null;
+            }
+            const idx = categories.findIndex(c => c.name === targetCat.name);
+            const combo = pickLunchCombo(targetCat);
+            const target = -(idx * step);
+            const start = performance.now();
+            const startAngle = angle;
+            const extraTurns = 720 + Math.random() * 360;
+            const endAngle = target + extraTurns;
+            function animate(now) {
+              const t = Math.min(1, (now - start) / 2400);
+              const ease = 1 - Math.pow(1 - t, 3);
+              angle = startAngle + (endAngle - startAngle) * ease;
+              velocity = 0;
+              render();
+              if (t < 1) requestAnimationFrame(animate);
+              else {
+                angle = target;
+                render(true);
+                renderPickCard(prefix, combo, targetCat.name);
+                detailCard.classList.add("pulse");
+                setTimeout(() => detailCard.classList.remove("pulse"), 900);
+              }
+            }
+            requestAnimationFrame(animate);
+            return targetCat;
+          },
+          selectByName(name) {
+            const idx = categories.findIndex(c => c.name === name);
             if (idx >= 0) {
               angle = -(idx * step);
               render(true);
-              renderPickCard(choice);
-              swipeApi?.selectByName(choice.category);
             }
           }
         };
       }
 
-      function buildWeekAhead() {
-        const tabs = $("advancedTabs");
-        const track = $("advancedTrack");
-        if (!tabs || !track) return;
-        tabs.innerHTML = "";
-        track.innerHTML = "";
-
-        const cards = [];
-        const start = new Date();
-
-        for (let i = 0; i < 7; i++) {
-          const d = new Date(start);
-          d.setDate(start.getDate() + i);
-          const dayName = weekdayName(d);
-          const hours = getHoursForDay(dayName);
-
-          const tab = document.createElement("button");
-          tab.className = "advanced-tab" + (i === 0 ? " active" : "");
-          tab.type = "button";
-          tab.textContent = `${dayName.slice(0,3)} ${d.getMonth()+1}/${d.getDate()}`;
-          tabs.appendChild(tab);
-
-          const card = document.createElement("article");
-          card.className = "swipe-card active" + (i === 0 ? "" : " hide");
-          card.innerHTML = `
-            <div class="card-meta">${escapeHtml(formatDateNice(d))}</div>
-            <div class="cat-title">${escapeHtml(dayName)}</div>
-            <div class="subline">Open ${escapeHtml(hours.open)} – ${escapeHtml(hours.close)}</div>
-            <div class="section-label">Good to Know</div>
-            <ul class="list">
-              <li>BBQ plates, burgers, po-boys, boudin items, and desserts are the core menu highlights.</li>
-              <li>Hours are based on the public source material you provided.</li>
-              <li>Call ahead for current specials or availability.</li>
-            </ul>
-          `;
-          track.appendChild(card);
-          cards.push({ tab, card });
-        }
-
-        cards.forEach((entry, idx) => {
-          entry.tab.addEventListener("click", () => {
-            cards.forEach((item, i) => {
-              item.tab.classList.toggle("active", i === idx);
-              item.card.classList.toggle("hide", i !== idx);
-            });
-          });
-        });
-      }
-
-      function setupPanels() {
-        const buttons = [$("tabMenu"), $("tabVisit"), $("tabWeek")];
-        const panels = [$("panel-menu"), $("panel-visit"), $("panel-week")];
-        buttons.forEach((btn, i) => {
-          btn?.addEventListener("click", () => {
-            buttons.forEach((b, bi) => {
-              b.classList.toggle("active", bi === i);
-              b.setAttribute("aria-selected", bi === i ? "true" : "false");
-            });
-            panels.forEach((p, pi) => p.classList.toggle("hide", pi !== i));
-          });
-        });
-      }
-
-      function setupViewToggle() {
-        const wheelBtn = $("viewWheel");
-        const swipeBtn = $("viewSwipe");
-        const wheelView = $("wheelView");
-        const swipeView = $("swipeView");
-        swipeView.classList.remove("hide");
-        wheelView.classList.add("hide");
-        swipeBtn.classList.add("active");
-        wheelBtn.classList.remove("active");
-
+      function setupViewToggle(prefix) {
+        const wheelBtn = $(`${prefix}ViewWheel`);
+        const swipeBtn = $(`${prefix}ViewSwipe`);
+        const wheelView = $(`${prefix}WheelView`);
+        const swipeView = $(`${prefix}SwipeView`);
+        swipeBtn?.classList.add("active");
+        wheelBtn?.classList.remove("active");
+        swipeView?.classList.remove("hide");
+        wheelView?.classList.add("hide");
         wheelBtn?.addEventListener("click", () => {
           wheelBtn.classList.add("active");
           swipeBtn?.classList.remove("active");
@@ -1094,63 +1315,268 @@
         });
       }
 
+      function setupDayTabs() {
+        const buttons = [$("dayBtnToday"), $("dayBtnTomorrow"), $("dayBtnAdvanced")];
+        const panels = [$("panel-today"), $("panel-tomorrow"), $("panel-advanced")];
+        buttons.forEach((btn, i) => {
+          btn?.addEventListener("click", () => {
+            buttons.forEach((b, bi) => {
+              b.classList.toggle("active", bi === i);
+              b.setAttribute("aria-selected", bi === i ? "true" : "false");
+            });
+            panels.forEach((p, pi) => p.classList.toggle("hide", pi !== i));
+          });
+        });
+      }
+
+      function buildAdvanced(data, startISO) {
+        const titleEl = $("dailySpecialTitle");
+        const contentEl = $("dailySpecialContent");
+        const disclaimerEl = $("advancedDisclaimer");
+        if (!titleEl || !contentEl || !disclaimerEl) return;
+
+        const d = parseISODateToLocal(startISO);
+        const iso = toISODateLocal(d);
+        const dayName = weekdayName(d);
+        const menu = getMenuByDate(data, iso) || {};
+        const lunch = menu?.lunch || {};
+        const specialTitle = (lunch.specialTitle || menu?.specialTitle || "").trim();
+        const specialDesc = (lunch.specialDesc || menu?.specialDesc || "").trim();
+        const plates = normalizeItems(lunch.plates || []);
+        const items = normalizeLunchItems(lunch.items || []);
+        const closure = getClosure(data, dayName);
+        const closedForDay = !!closure?.closed || isPastClosingToday([], dayName) && iso === toISODateLocal(new Date());
+        const hasSpecial = !!specialTitle || !!specialDesc || plates.length > 0 || items.length > 0;
+
+        disclaimerEl.textContent = `${dayName} • ${formatDateNice(d)}`;
+
+        if (closedForDay || !hasSpecial) {
+          titleEl.textContent = `${dayName} Daily Special`;
+          contentEl.innerHTML = `
+            <div class="special-off">
+              <div class="special-badge">Not Active</div>
+              <div>The daily special is not being shown right now.</div>
+              <div>It will stay hidden until someone updates the date and special.</div>
+            </div>
+          `;
+          return;
+        }
+
+        titleEl.textContent = specialTitle || `${dayName} Daily Special`;
+
+        let html = `<div class="special-badge">Featured Today</div>`;
+        if (specialDesc) {
+          html += `<div class="subline" style="margin-bottom:12px;">${escapeHtml(specialDesc)}</div>`;
+        }
+
+        if (plates.length) {
+          html += `<div class="section-label">Plates</div><ul class="list">${plates.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
+        }
+
+        if (items.length) {
+          html += `<div class="section-label">Included Items</div><ul class="list">` +
+            items.map(it => {
+              const desc = it.desc ? `<div class="desc">${escapeHtml(it.desc)}</div>` : "";
+              return `<li><strong>${escapeHtml(it.name)}</strong>${desc}</li>`;
+            }).join("") +
+            `</ul>`;
+        }
+
+        contentEl.innerHTML = html;
+      }
+
+      
+function updateNowBar(prefix, dayName, isoDate) {
+  const el = document.getElementById(prefix + "Now");
+  if (!el) return;
+
+  const todayISO = (function(){
+    const d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  })();
+
+  const isActualToday = isoDate === todayISO;
+
+  const h = getBusinessHours(dayName);
+
+  if (!isActualToday) {
+    el.className = "nowbar warn";
+    el.textContent = dayName + " • Opens at " + h.open;
+    return;
+  }
+
+  const now = new Date();
+  const mins = now.getHours()*60 + now.getMinutes();
+
+  const breakfastEnd = 10*60+30;
+  const lunchStart = 11*60;
+
+  let text = "";
+  let cls = "";
+
+  if (!rangeIncludes(mins, h.open + " - " + h.close) && !(h.crawfish && rangeIncludes(mins, h.crawfish))) {
+    text = "Closed • Opens " + h.open;
+    cls = "closed";
+  } else if (mins < breakfastEnd) {
+    const remaining = breakfastEnd - mins;
+    text = "Breakfast • Ends in " + remaining + " min";
+    cls = remaining < 30 ? "warn" : "open";
+  } else if (mins < lunchStart) {
+    text = "Transition • Lunch starts at 11:00 AM";
+    cls = "warn";
+  } else if (rangeIncludes(mins, h.lunch)) {
+    text = "Now Serving Lunch";
+    cls = "open";
+  } else if (h.crawfish && rangeIncludes(mins, h.crawfish)) {
+    text = "Now Serving Crawfish";
+    cls = "open";
+  } else {
+    text = "Closed • Opens " + h.open;
+    cls = "closed";
+  }
+
+  el.className = "nowbar " + cls;
+  el.textContent = text;
+}
+
+function initPanel(prefix, data, isoDate, displayName) {
+        const hours = getBusinessHours(displayName);
+        const closure = getClosure(data, displayName);
+        const isTodayPanel = prefix === "today";
+
+        setText(`${prefix}Title`, `${displayName} (${formatDateNice(parseISODateToLocal(isoDate))}) Menu`);
+        setText(`${prefix}Hours`,
+          closure?.closed
+            ? `${displayName} Hours: Closed`
+            : `${displayName} Hours: ${hours.open} – ${hours.close} • Breakfast ${hours.breakfast} • Lunch ${hours.lunch}${hours.crawfish ? ` • Crawfish ${hours.crawfish}` : ""}`
+        );
+
+        const todayISO = toISODateLocal(new Date());
+        const isActualToday = isoDate === todayISO;
+        const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
+
+        const noteEl = $(`${prefix}Note`);
+        let nowStatus = "";
+
+        if (closure?.closed) {
+          nowStatus = `<span class="statusdot closed"></span> CLOSED`;
+        } else if (!isActualToday) {
+          nowStatus = `<span class="statusdot closed"></span> SCHEDULED`;
+        } else {
+          const openNow =
+            rangeIncludes(nowMinutes, `${hours.open} - ${hours.close}`) ||
+            (!!hours.crawfish && rangeIncludes(nowMinutes, hours.crawfish));
+
+          nowStatus = `<span class="statusdot ${openNow ? "" : "closed"}"></span>${openNow ? "OPEN NOW" : "CURRENTLY CLOSED"}`;
+        }
+
+        if (noteEl) {
+          noteEl.innerHTML = `${escapeHtml(data?.hours?.note || "")}<div class="statusbar">${nowStatus}</div>`;
+        }
+
+        updateNowBar(prefix, displayName, isoDate);
+
+        if (closure?.closed) {
+          $(`${prefix}Closed`).classList.remove("hide");
+          setText(`${prefix}ClosedMsg`, closure.message || "See you next time!");
+        } else {
+          $(`${prefix}Closed`).classList.add("hide");
+        }
+
+        const cats = buildCategoryData(data, isoDate);
+        const wheelApi = initWheel(prefix, cats, data, displayName, isTodayPanel);
+        const swipeApi = initSwipe(prefix, cats, data);
+        setupViewToggle(prefix);
+
+        $(`${prefix}AIBtn`)?.addEventListener("click", () => {
+          const picked = wheelApi?.aiPick();
+          if (picked) swipeApi?.selectByName(picked.name);
+        });
+      }
+
       function initNav() {
         const overlay = $("circMenuOverlay");
         const navBtn = $("navBtnBottom");
         const home = $("homeCenter");
         const items = Array.from(document.querySelectorAll(".menu-item"));
         if (!overlay || !navBtn || !home) return;
-
         navBtn.addEventListener("click", e => { e.stopPropagation(); overlay.classList.toggle("open"); });
         overlay.addEventListener("click", e => { if (e.target === overlay) overlay.classList.remove("open"); });
         home.addEventListener("click", () => {
           overlay.classList.remove("open");
-          $("tabMenu")?.click();
+          const link = home.getAttribute("data-link");
+          if (link) window.location.href = link;
         });
-
         async function sharePage() {
-          const shareData = { title: document.title, text: "Check out The Francis Smokehouse!", url: window.location.href };
+          const data = { title: document.title, text: "Check out Hot Headz!", url: window.location.href };
           try {
-            if (navigator.share) await navigator.share(shareData);
-            else if (navigator.clipboard) {
-              await navigator.clipboard.writeText(window.location.href);
-              alert("Link copied!");
-            }
+            if (navigator.share) await navigator.share(data);
+            else if (navigator.clipboard) { await navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
           } catch (_) {}
         }
-
         items.forEach(item => item.addEventListener("click", () => {
           overlay.classList.remove("open");
-          const panel = item.getAttribute("data-panel");
           const action = item.getAttribute("data-action");
-          if (panel === "panel-menu") $("tabMenu")?.click();
-          else if (panel === "panel-visit") $("tabVisit")?.click();
-          else if (action === "call") window.location.href = `tel:${data.phoneTel}`;
-          else if (action === "map") window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.address)}`, "_blank");
-          else if (action === "share") sharePage();
+          const link = item.getAttribute("data-link");
+          if (action === "share") sharePage();
+          else if (link) window.location.href = link;
         }));
-
         document.querySelector(".circular-menu")?.addEventListener("click", e => e.stopPropagation());
+        const modalEl = $("luckModal");
+        const flashCard = modalEl?.querySelector(".flash-card");
+        flashCard?.addEventListener("click", e => e.stopPropagation());
+        modalEl?.addEventListener("click", () => hideLuckModal());
+        window.addEventListener("keydown", e => { if (e.key === "Escape") hideLuckModal(); });
       }
 
-      try {
-        updateNowBar();
-        renderVisitContent();
-        buildWeekAhead();
-        setupPanels();
-        setupViewToggle();
-        initNav();
+      setupDayTabs();
+      initNav();
 
-        const swipeApi = initSwipe(data.categories);
-        const wheelApi = initWheel(data.categories, swipeApi);
+      (async function init() {
+        try {
+          const data = await readData();
+          const now = new Date();
+          const todayISO = toISODateLocal(now);
+          const todayName = weekdayName(now);
+          const tomorrow = new Date(now); tomorrow.setDate(now.getDate() + 1);
+          const tomorrowISO = toISODateLocal(tomorrow);
+          const tomorrowName = weekdayName(tomorrow);
 
-        $("chooseBtn")?.addEventListener("click", () => wheelApi?.chooseForMe());
-      } catch (e) {
-        console.error(e);
-        $("loadError")?.classList.remove("hide");
-        setText("loadErrorMsg", String(e?.message || e));
-      }
+          let displayTodayISO = todayISO;
+          let displayTodayName = todayName;
+          let displayTomorrowISO = tomorrowISO;
+          let displayTomorrowName = tomorrowName;
+
+          const closureToday = getClosure(data, todayName);
+          if (isPastClosingToday([], todayName) && !closureToday?.closed) {
+            displayTodayISO = tomorrowISO;
+            displayTodayName = tomorrowName;
+            const dayAfter = new Date(now); dayAfter.setDate(now.getDate() + 2);
+            displayTomorrowISO = toISODateLocal(dayAfter);
+            displayTomorrowName = weekdayName(dayAfter);
+          }
+
+          setText("dayBtnToday", displayTodayName);
+          setText("dayBtnTomorrow", displayTomorrowName);
+
+          initPanel("today", data, displayTodayISO, displayTodayName);
+          initPanel("tomorrow", data, displayTomorrowISO, displayTomorrowName);
+          buildAdvanced(data, displayTodayISO);
+        } catch (e) {
+          console.error(e);
+          showLoadError(String(e?.message || e));
+        }
+      })();
     })();
   </script>
+
+  <div class="flash-overlay" id="luckModal">
+    <div class="flash-card">
+      <div class="flash-count" id="luckCountdown">5</div>
+      <div class="flash-title" id="luckModalTitle">Currently closed</div>
+      <div class="flash-text" id="luckModalText"></div>
+      <div class="flash-sub">Closing automatically</div>
+    </div>
+  </div>
 </body>
 </html>
