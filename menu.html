@@ -28,7 +28,7 @@ body.cur-drag #cur-svg{width:44px;height:44px}
 body.cur-click #cur-svg{width:20px;height:20px}
 body.cur-search #cur-svg{width:36px;height:36px}
 #cur-outer{fill:none;stroke:var(--fire);stroke-width:1;opacity:.7;transform-origin:center;transition:stroke .3s,opacity .3s,stroke-dasharray .4s}
-body.cur-hover #cur-outer{stroke:var(--gold);opacity:1;stroke-dasharray:80 40}
+body.cur-hover #cur-outer{stroke:var(--gold);opacity:0;stroke-dasharray:80 40}
 body.cur-drag #cur-outer{stroke:var(--ember);opacity:.9;stroke-dasharray:120 0}
 body.cur-click #cur-outer{stroke:var(--fire);opacity:1;stroke-dasharray:10 200}
 body.cur-search #cur-outer{stroke:var(--gold-light);opacity:.8;stroke-dasharray:40 20}
@@ -604,7 +604,7 @@ body.no-touch #popup-close{cursor:none}
 
     <!-- Center: home / close -->
     <div class="center-home" id="circHomeBtn" title="Back to top">
-      <i class="fas fa-utensils"></i>
+      <i class="fas fa-home"></i>
     </div>
 
     <button class="circ-close" id="circClose">&#10005; close</button>
@@ -879,7 +879,10 @@ let rafId=null,searchActive=false,searchQuery='';
 
 function buildCatRing(){
   wg.innerHTML='';
-  const n=MENU.length,oR=242,nR=52;
+  const mob=window.innerWidth<=640;
+  const n=MENU.length;
+  const oR=mob?220:242;
+  const nR=mob?62:52;
   wg.appendChild(el('circle',{r:oR,class:'orbit-ring'}));
   wg.appendChild(el('circle',{r:oR+nR+18,class:'orbit-ring-outer'}));
   for(let i=0;i<n*4;i++){const[x1,y1]=polar(i*(360/(n*4)),oR+nR+6);const[x2,y2]=polar(i*(360/(n*4)),oR+nR+14);const t=el('line',{x1,y1,x2,y2,class:'tick-line'});if(i%4!==0)t.setAttribute('opacity','.4');wg.appendChild(t);}
@@ -891,9 +894,11 @@ function buildCatRing(){
     g.appendChild(el('circle',{r:nR,cx:0,cy:0,class:'node-circle-rim',stroke:cat.rimColor}));
     g.appendChild(el('circle',{r:nR-8,cx:0,cy:0,class:'node-circle-inner',stroke:cat.color}));
     g.appendChild(el('circle',{r:nR,cx:0,cy:0,fill:cat.color,opacity:'.12'}));
-    const ic=el('text',{x:0,y:-10,class:'cat-icon-text','text-anchor':'middle','dominant-baseline':'central'});ic.textContent=cat.icon;g.appendChild(ic);
-    const lb=el('text',{x:0,y:14,class:'cat-label-text'});lb.textContent=cat.label;g.appendChild(lb);
-    const ct=el('text',{x:0,y:26,class:'cat-count-text'});ct.textContent=cat.items.length+' ITEMS';g.appendChild(ct);
+    // Icon: bigger on mobile
+    const ic=el('text',{x:0,y:mob?-13:-10,class:'cat-icon-text','font-size':mob?'24':'20','text-anchor':'middle','dominant-baseline':'central'});ic.textContent=cat.icon;g.appendChild(ic);
+    // Label: bigger font on mobile
+    const lb=el('text',{x:0,y:mob?16:14,class:'cat-label-text','font-size':mob?'12':'10'});lb.textContent=cat.label;g.appendChild(lb);
+    const ct=el('text',{x:0,y:mob?29:26,class:'cat-count-text','font-size':mob?'9':'8'});ct.textContent=cat.items.length+' ITEMS';g.appendChild(ct);
     let tm=false;
     g.addEventListener('touchstart',()=>{tm=false;},{passive:true});
     g.addEventListener('touchmove',()=>{tm=true;},{passive:true});
@@ -905,14 +910,20 @@ function buildCatRing(){
 }
 
 function handleCatSel(cat,i,n){
-  const[sx,sy]=nodeSP((i/n)*360+angle,242);
+  const mob=window.innerWidth<=640;
+  const[sx,sy]=nodeSP((i/n)*360+angle,mob?220:242);
   triggerBurst(sx,sy);
   setTimeout(()=>selectCat(cat),120);
 }
 
 function buildItemRing(cat){
   wg.innerHTML='';
-  const items=cat.items,n=items.length,oR=226,nR=n<=4?58:n<=6?50:42;
+  const mob=window.innerWidth<=640;
+  const items=cat.items,n=items.length;
+  // On mobile: tighter orbit so nodes fit the viewbox, but bigger nodes
+  const oR=mob?200:226;
+  const baseNR=mob?(n<=4?68:n<=6?60:52):(n<=4?58:n<=6?50:42);
+  const nR=baseNR;
   wg.appendChild(el('circle',{r:oR,class:'orbit-ring'}));
   wg.appendChild(el('circle',{r:oR+nR+16,class:'orbit-ring-outer'}));
   for(let i=0;i<n*4;i++){const[x1,y1]=polar(i*(360/(n*4)),oR+nR+5);const[x2,y2]=polar(i*(360/(n*4)),oR+nR+13);const t=el('line',{x1,y1,x2,y2,class:'tick-line'});if(i%4!==0)t.setAttribute('opacity','.35');wg.appendChild(t);}
@@ -925,12 +936,16 @@ function buildItemRing(cat){
     g.appendChild(el('circle',{r:nR-7,cx:0,cy:0,class:'node-circle-inner',stroke:cat.color}));
     g.appendChild(el('circle',{r:nR,cx:0,cy:0,fill:cat.color,opacity:'.1'}));
     const words=item.name.split(' ');let lines=[],cur='';
-    const mC=nR<46?9:nR<52?11:13;
+    // More chars per line on mobile since nodes are bigger
+    const mC=mob?(nR<56?10:nR<64?12:14):(nR<46?9:nR<52?11:13);
     words.forEach(w=>{const t=cur?cur+' '+w:w;if(t.length>mC&&cur){lines.push(cur);cur=w;}else cur=t;});
     if(cur)lines.push(cur);lines=lines.slice(0,3);
-    const fs=nR<46?9:nR<52?10:11,lh=fs+2.5,tH=lines.length*lh,sY=-(tH/2)-(item.price?6:0);
+    // Font sizes: meaningfully bigger on mobile
+    const fs=mob?(nR<56?12:nR<64?13:14):(nR<46?9:nR<52?10:11);
+    const pfs=mob?(nR<56?11:13):(nR<46?9:11);
+    const lh=fs+3,tH=lines.length*lh,sY=-(tH/2)-(item.price?7:0);
     lines.forEach((ln,li)=>{const t=el('text',{x:0,y:sY+li*lh,class:'item-name-text','font-size':fs,'text-anchor':'middle','dominant-baseline':'central'});t.textContent=ln;g.appendChild(t);});
-    if(item.price){const pt=el('text',{x:0,y:sY+lines.length*lh+4,class:'item-price-text','font-size':nR<46?9:11,'text-anchor':'middle','dominant-baseline':'central'});pt.textContent=item.price==='Market'?'Ask Staff':item.price;g.appendChild(pt);}
+    if(item.price){const pt=el('text',{x:0,y:sY+lines.length*lh+5,class:'item-price-text','font-size':pfs,'text-anchor':'middle','dominant-baseline':'central'});pt.textContent=item.price==='Market'?'Ask Staff':item.price;g.appendChild(pt);}
     let tm=false;
     g.addEventListener('touchstart',()=>{tm=false;},{passive:true});
     g.addEventListener('touchmove',()=>{tm=true;},{passive:true});
@@ -1069,7 +1084,7 @@ document.getElementById('circClose').addEventListener('click',closeCircNav);
 // Center icon: scroll to top / go to categories
 document.getElementById('circHomeBtn').addEventListener('click',()=>{
   closeCircNav();
-  if(mode!=='categories')goBack();
+  window.open('https://www.thefrancissmokehouse.com', '_blank');
 });
 
 // Nav items
