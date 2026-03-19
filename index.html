@@ -1345,36 +1345,6 @@ function enableNav(){
 }
 
 // ═══════════════════════════════════════════
-//  CIRCULAR NAV
-// ═══════════════════════════════════════════
-// Circular nav handled below
-
-// Close when clicking outside the menu circle
-circOverlay.addEventListener('click',e=>{if(e.target===circOverlay)closeCirc();});
-
-document.getElementById('circ-close').addEventListener('click',closeCirc);
-
-// Center icon: scroll to top / go to categories
-document.getElementById('circ-home').addEventListener('click',()=>{
-  closeCirc();
-  window.open('https://www.thefrancissmokehouse.com', '_blank');
-});
-
-// Nav items
-document.querySelectorAll('.circ-menu-item').forEach(item=>{
-  item.addEventListener('click',()=>{
-    const action=item.getAttribute('data-action');
-    closeCirc();
-    if(action==='menu'){if(mode!=='categories')goBack();}
-    else if(action==='home'){window.location.href='index.html';}
-    else if(action==='story'){window.location.href='story.html';}
-    else if(action==='visit'){openPanel();}
-    else if(action==='order'){window.location.href='tel:+12252455046';}
-    else if(action==='list'){openList();}
-  });
-});
-
-// ═══════════════════════════════════════════
 //  DRAG TO SPIN
 // ═══════════════════════════════════════════
 
