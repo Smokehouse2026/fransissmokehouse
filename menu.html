@@ -3,7 +3,71 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>The Francis Smokehouse</title>
+
+<!-- ── SEO ── -->
+<title>The Francis Smokehouse Menu | BBQ, Boudin &amp; Po-Boys · St. Francisville, LA</title>
+<meta name="description" content="Interactive menu for The Francis Smokehouse in St. Francisville, Louisiana. Explore pit-smoked BBQ, boudin balls, po-boys, Cajun specialties and Southern sides. Open Mon–Sat 10am–6pm, Sun 10am–3pm."/>
+<meta name="keywords" content="Francis Smokehouse menu, BBQ St. Francisville, boudin balls Louisiana, po-boys, smoked brisket, ribs, Cajun food, smokehouse Louisiana"/>
+<meta name="author" content="The Francis Smokehouse"/>
+<link rel="canonical" href="https://www.thefrancissmokehouse.com/menu.html"/>
+
+<!-- Open Graph -->
+<meta property="og:type" content="restaurant.menu"/>
+<meta property="og:title" content="The Francis Smokehouse Menu | St. Francisville, Louisiana"/>
+<meta property="og:description" content="Pit-smoked BBQ, boudin, po-boys and Southern sides. Spin the wheel to explore our full menu."/>
+<meta property="og:url" content="https://www.thefrancissmokehouse.com/menu.html"/>
+<meta property="og:image" content="https://www.thefrancissmokehouse.com/Images/Smokehouselogo.png"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:site_name" content="The Francis Smokehouse"/>
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="The Francis Smokehouse — Interactive Menu"/>
+<meta name="twitter:description" content="Spin the wheel to explore BBQ, boudin, po-boys and more in St. Francisville, LA."/>
+<meta name="twitter:image" content="https://www.thefrancissmokehouse.com/Images/Smokehouselogo.png"/>
+
+<!-- Local Business Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "The Francis Smokehouse",
+  "image": "https://www.thefrancissmokehouse.com/Images/Smokehouselogo.png",
+  "url": "https://www.thefrancissmokehouse.com",
+  "menu": "https://www.thefrancissmokehouse.com/menu.html",
+  "telephone": "(225) 245-5046",
+  "email": "francissmokehouse@att.net",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "6779 US Highway 61",
+    "addressLocality": "St. Francisville",
+    "addressRegion": "LA",
+    "postalCode": "70775",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 30.7778,
+    "longitude": -91.3760
+  },
+  "servesCuisine": ["BBQ", "Cajun", "Southern", "American"],
+  "priceRange": "$$",
+  "openingHours": ["Mo-Sa 10:00-18:00", "Su 10:00-15:00"],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.7",
+    "reviewCount": "200",
+    "bestRating": "5"
+  },
+  "hasMap": "https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775",
+  "acceptsReservations": "False",
+  "amenityFeature": ["Takeout", "Outdoor Seating", "Wheelchair Accessible", "Dog Friendly", "Parking", "Catering"]
+}
+</script>
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="Images/Smokehouselogo.png"/>
+<link rel="apple-touch-icon" href="Images/Smokehouselogo.png"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Barlow+Condensed:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
@@ -667,11 +731,10 @@ body.no-touch #popup-close{cursor:none}
 
     <!-- 6 nav items evenly spaced at 60deg each -->
     <div class="circ-menu-item" style="--angle:0"   data-action="menu"><span class="circ-item-icon">&#x1F525;</span><span class="circ-item-label">Menu</span></div>
-    <div class="circ-menu-item" style="--angle:60"  data-action="story"><span class="circ-item-icon">&#x1F4D6;</span><span class="circ-item-label">Story</span></div>
-    <div class="circ-menu-item" style="--angle:120" data-action="reviews"><span class="circ-item-icon">&#x2B50;</span><span class="circ-item-label">Reviews</span></div>
-    <div class="circ-menu-item" style="--angle:180" data-action="visit"><span class="circ-item-icon">&#x1F4CD;</span><span class="circ-item-label">Visit</span></div>
-    <div class="circ-menu-item" style="--angle:240" data-action="order"><span class="circ-item-icon">&#x1F4F1;</span><span class="circ-item-label">Order</span></div>
-    <div class="circ-menu-item" style="--angle:300" data-action="list"><span class="circ-item-icon">&#x1F4CB;</span><span class="circ-item-label">Full List</span></div>
+    <div class="circ-menu-item" style="--angle:72"  data-action="home"><span class="circ-item-icon">&#x1F3E0;</span><span class="circ-item-label">Home</span></div>
+    <div class="circ-menu-item" style="--angle:144" data-action="visit"><span class="circ-item-icon">&#x1F4CD;</span><span class="circ-item-label">Visit</span></div>
+    <div class="circ-menu-item" style="--angle:216" data-action="order"><span class="circ-item-icon">&#x1F4DE;</span><span class="circ-item-label">Call</span></div>
+    <div class="circ-menu-item" style="--angle:288" data-action="list"><span class="circ-item-icon">&#x1F4CB;</span><span class="circ-item-label">Full List</span></div>
   </div>
 </div>
 
@@ -1158,10 +1221,9 @@ document.querySelectorAll('.circ-menu-item').forEach(item=>{
     const action=item.getAttribute('data-action');
     closeCircNav();
     if(action==='menu'){if(mode!=='categories')goBack();}
-    else if(action==='story'){alert('Story page coming soon!');}
-    else if(action==='reviews'){alert('Reviews page coming soon!');}
+    else if(action==='home'){window.location.href='index.html';}
     else if(action==='visit'){openPanel();}
-    else if(action==='order'){alert('Online ordering coming soon! Call (225) 245-5046 to order now.');}
+    else if(action==='order'){window.location.href='tel:+12252455046';}
     else if(action==='list'){openList();}
   });
 });
