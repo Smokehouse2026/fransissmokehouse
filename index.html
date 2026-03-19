@@ -261,17 +261,13 @@
     }
 
     .hero-logo {
-      width: clamp(160px, 28vw, 220px);
-      height: clamp(160px, 28vw, 220px);
-      border-radius: 50%;
-      object-fit: contain;
+      width: clamp(140px, 24vw, 200px);
+      height: auto;
+      display: block;
       margin: 0 auto 28px;
-      background: radial-gradient(circle at 40% 35%, #2A1A0A, #1A0E06);
-      border: 2px solid rgba(232,83,42,.55);
-      box-shadow:
-        0 0 0 5px rgba(232,83,42,.08),
-        0 0 28px rgba(232,83,42,.4),
-        0 0 60px rgba(232,83,42,.16);
+      filter:
+        drop-shadow(0 0 18px rgba(232,83,42,.55))
+        drop-shadow(0 0 40px rgba(232,83,42,.25));
     }
 
     .hero-kicker {
