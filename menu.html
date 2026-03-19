@@ -123,6 +123,62 @@ body.no-touch .bottom-btn{cursor:none}
 #info-btn{right:28px}
 #info-btn-label{right:28px}
 
+/* ── ZOOM CONTROL (right side, vertical) ── */
+#zoom-wrap{
+  position:fixed;right:28px;top:50%;transform:translateY(-50%);
+  z-index:20;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  background:rgba(14,10,5,.88);
+  border:1px solid rgba(232,83,42,.28);
+  padding:14px 8px;border-radius:999px;
+  backdrop-filter:blur(10px);
+  transition:border-color .3s;
+}
+#zoom-wrap:hover{border-color:rgba(232,83,42,.55)}
+#zoom-label{
+  font-family:'Barlow Condensed',sans-serif;font-size:.52rem;
+  letter-spacing:.28em;color:var(--ash);text-transform:uppercase;
+  writing-mode:vertical-rl;text-orientation:mixed;
+  transform:rotate(180deg);
+  white-space:nowrap;margin:4px 0;
+}
+#zoom-out,#zoom-in{
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(232,83,42,.08);border:1px solid rgba(232,83,42,.3);
+  color:var(--cream);font-size:1rem;line-height:1;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s,border-color .2s;flex-shrink:0;
+}
+body.no-touch #zoom-out,body.no-touch #zoom-in{cursor:none}
+#zoom-out:hover,#zoom-in:hover{background:rgba(232,83,42,.22);border-color:var(--fire)}
+#zoom-slider{
+  -webkit-appearance:none;appearance:none;
+  writing-mode:vertical-lr;direction:rtl;
+  width:4px;height:110px;
+  background:rgba(107,92,66,.3);border-radius:2px;outline:none;cursor:pointer;
+}
+body.no-touch #zoom-slider{cursor:none}
+#zoom-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:var(--fire);border:2px solid var(--gold);cursor:pointer;
+}
+#zoom-slider::-moz-range-thumb{
+  width:16px;height:16px;border-radius:50%;
+  background:var(--fire);border:2px solid var(--gold);cursor:pointer;
+}
+#zoom-pct{
+  font-family:'Bebas Neue',sans-serif;font-size:.82rem;
+  letter-spacing:.06em;color:var(--gold);text-align:center;
+}
+/* On mobile: keep same position but nudge left of the info button */
+@media(max-width:640px){
+  #zoom-wrap{
+    right:82px;
+  }
+  #zoom-slider{height:80px}
+  #zoom-label{display:none}
+}
+
 /* ── CIRCULAR NAV BUTTON (right side, vertical pill) ── */
 .circ-nav-trigger{
   position:fixed;left:28px;top:50%;transform:translateY(-50%);
@@ -620,6 +676,15 @@ body.no-touch #popup-close{cursor:none}
 </div>
 
 <!-- List panel -->
+<!-- Zoom control -->
+<div id="zoom-wrap">
+  <span id="zoom-label">ZOOM</span>
+  <button id="zoom-out" aria-label="Zoom out">&#8722;</button>
+  <input id="zoom-slider" type="range" min="1" max="3" step="0.05" value="1" aria-label="Zoom level"/>
+  <button id="zoom-in" aria-label="Zoom in">&#43;</button>
+  <span id="zoom-pct">100%</span>
+</div>
+
 <div id="list-backdrop" class="backdrop"></div>
 <div id="list-panel" class="side-panel" role="dialog" aria-label="Full menu">
   <div class="panel-fire-top"></div>
@@ -1084,7 +1149,7 @@ document.getElementById('circClose').addEventListener('click',closeCircNav);
 // Center icon: scroll to top / go to categories
 document.getElementById('circHomeBtn').addEventListener('click',()=>{
   closeCircNav();
-  window.open('https://www.thefrancismokehouse.com', '_blank');
+  window.open('https://www.thefrancissmokehouse.com', '_blank');
 });
 
 // Nav items
@@ -1138,7 +1203,44 @@ window.addEventListener('touchend',endDrag);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePopup();closePanel();closeList();closeSearch();closeCircNav();}});
 
 // ═══════════════════════════════════════════
-//
+//  ZOOM (viewBox-based)
+// ═══════════════════════════════════════════
+const wheelSvg=document.getElementById('wheel-svg');
+const zoomSlider=document.getElementById('zoom-slider');
+const zoomOutBtn=document.getElementById('zoom-out');
+const zoomInBtn=document.getElementById('zoom-in');
+const zoomPct=document.getElementById('zoom-pct');
+let zoomLevel=1;
+const BASE_VB=720;
+
+function applyZoom(z){
+  zoomLevel=Math.max(1,Math.min(3,z));
+  const half=(BASE_VB/2)/zoomLevel;
+  wheelSvg.setAttribute('viewBox',-half+' '+-half+' '+(half*2)+' '+(half*2));
+  zoomSlider.value=zoomLevel;
+  zoomPct.textContent=Math.round(zoomLevel*100)+'%';
+}
+
+zoomSlider.addEventListener('input',()=>applyZoom(parseFloat(zoomSlider.value)));
+zoomOutBtn.addEventListener('click',()=>applyZoom(zoomLevel-0.25));
+zoomInBtn.addEventListener('click',()=>applyZoom(zoomLevel+0.25));
+
+// Pinch-to-zoom on mobile
+let pinchDist0=0,pinchZoom0=1;
+document.getElementById('stage').addEventListener('touchstart',e=>{
+  if(e.touches.length===2){
+    pinchDist0=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    pinchZoom0=zoomLevel;
+  }
+},{passive:true});
+document.getElementById('stage').addEventListener('touchmove',e=>{
+  if(e.touches.length===2){
+    const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    applyZoom(pinchZoom0*(d/pinchDist0));
+  }
+},{passive:true});
+
+// ═══════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════
 buildCatRing();
