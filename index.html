@@ -904,6 +904,91 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
   </div>
 </section>
 
+<!-- Search bar -->
+<div id="search-wrap">
+  <input id="search-input" type="text" placeholder="SEARCH MENU..." autocomplete="off" spellcheck="false"/>
+  <button id="search-clear" aria-label="Clear">&#10005;</button>
+</div>
+
+<!-- Bottom icon buttons -->
+<button id="search-btn" class="bottom-btn" aria-label="Search">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--fire)" stroke-width="1.4">
+    <circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.2" y1="10.2" x2="14" y2="14"/>
+  </svg>
+</button>
+<div id="search-btn-label" class="bottom-label">SEARCH</div>
+
+<button id="list-btn" class="bottom-btn" aria-label="Full menu list">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--fire)" stroke-width="1.4">
+    <line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/>
+  </svg>
+</button>
+<div id="list-btn-label" class="bottom-label">LIST</div>
+
+<button id="info-btn" class="bottom-btn" aria-label="Hours and info">
+  <svg viewBox="0 0 16 16" fill="none" stroke="var(--fire)" stroke-width="1.4" width="16" height="16">
+    <circle cx="8" cy="8" r="6.5"/>
+    <line x1="8" y1="7" x2="8" y2="11.5"/>
+    <circle cx="8" cy="4.8" r=".8" fill="var(--fire)" stroke="none"/>
+  </svg>
+</button>
+<div id="info-btn-label" class="bottom-label">INFO</div>
+
+<div id="list-backdrop" class="backdrop"></div>
+<div id="list-panel" class="side-panel" role="dialog" aria-label="Full menu">
+  <div class="panel-fire-top"></div>
+  <div class="list-scroll">
+    <div class="panel-eyebrow">The Francis Smokehouse</div>
+    <div class="panel-title">FULL MENU</div>
+    <input class="list-filter" id="list-filter" type="text" placeholder="Filter items..." autocomplete="off"/>
+    <div id="list-content"></div>
+  </div>
+  <button class="panel-close-btn" id="list-close">&#10005; Close</button>
+</div>
+
+<!-- Info panel -->
+<div id="panel-backdrop" class="backdrop"></div>
+<div id="info-panel" class="side-panel" role="dialog" aria-label="Hours and info">
+  <div class="panel-fire-top"></div>
+  <div class="panel-scroll">
+    <div class="panel-eyebrow">The Francis Smokehouse</div>
+    <div class="panel-title">HOURS <em>&amp;</em><br/>INFO</div>
+    <div class="panel-sub">St. Francisville, Louisiana</div>
+    <div id="panel-hours-status"></div>
+    <div class="hours-block" id="panel-hours-rows"></div>
+    <div class="hours-note">Hours may vary on holidays. Call ahead to confirm availability.</div>
+    <div class="panel-rule"></div>
+    <div class="contact-item">
+      <div class="contact-icon">&#x1F4CD;</div>
+      <div><div class="contact-label">Address</div><div class="contact-value">6779 US Highway 61<br/>St. Francisville, LA 70775</div></div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">&#x1F4DE;</div>
+      <div><div class="contact-label">Phone</div><div class="contact-value"><a href="tel:2252455046">(225) 245-5046</a></div></div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">&#x2709;</div>
+      <div><div class="contact-label">Email</div><div class="contact-value"><a href="/cdn-cgi/l/email-protection#583e2a39363b312b2b3537333d30372d2b3d18392c2c76363d2c"><span class="__cf_email__" data-cfemail="a3c5d1c2cdc0cad0d0ceccc8c6cbccd6d0c6e3c2d7d78dcdc6d7">[email&#160;protected]</span></a></div></div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">&#x2B50;</div>
+      <div><div class="contact-label">Rating</div><div class="contact-value">4.5 / 5 &nbsp;&middot;&nbsp; Tripadvisor Travellers' Choice</div></div>
+    </div>
+    <div class="panel-rule"></div>
+    <div class="panel-eyebrow" style="margin-bottom:14px">What we offer</div>
+    <div class="features-list">
+      <span class="feat-tag">Dine In</span><span class="feat-tag">Takeout</span><span class="feat-tag">Catering</span>
+      <span class="feat-tag">Parking</span><span class="feat-tag">Wheelchair Accessible</span>
+      <span class="feat-tag">Outdoor Seating</span><span class="feat-tag">Dog Friendly</span><span class="feat-tag">Local Favorites</span>
+    </div>
+    <div class="drinks-block">
+      <div class="drinks-title">&#x1F964; Drinks</div>
+      <div class="drinks-body">Soft drinks, sweet tea, lemonade &amp; seasonal specials. Ask your server about today's drink offerings.</div>
+    </div>
+  </div>
+  <button class="panel-close-btn" id="panel-close">&#10005; Close</button>
+</div>
+
 <!-- ── POPUP (same as menu.html) ── -->
 <!-- Item popup -->
 <div id="popup-overlay" role="dialog" aria-modal="true">
@@ -971,9 +1056,51 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-<script src="specials-data.js"></script>
 <script>
-// SPECIALS loaded from specials-data.js
+// ═══════════════════════════════════════════════════════════════
+//  DAILY SPECIALS  ← EDIT HERE EVERY DAY
+//  Change "date" to today (YYYY-MM-DD). Items whose date doesn't
+//  match today are hidden automatically. Add or remove items
+//  freely — the wheel adjusts to whatever count you have.
+// ═══════════════════════════════════════════════════════════════
+const SPECIALS = [
+  {
+    date:  "2026-03-19",
+    name:  "Blackened Lemon Fish",
+    price: "$28",
+    desc:  "Blackened fillet with cream spinach and grilled crawfish tails. Elegant Southern seafood at its absolute peak."
+  },
+  {
+    date:  "2026-03-19",
+    name:  "Thai Chili Wings",
+    price: "$16",
+    desc:  "Smoked wings tossed in sweet Thai chili sauce. A bold East-meets-South mashup that works surprisingly, undeniably well."
+  },
+  {
+    date:  "2026-03-19",
+    name:  "Eggplant Pirogue",
+    price: "$26",
+    desc:  "Eggplant hollowed into a pirogue and filled with a rich Cajun seafood stuffing. A true Louisiana original."
+  },
+  {
+    date:  "2026-03-19",
+    name:  "BBQ Shrimp & Pork Chop",
+    price: "$26",
+    desc:  "Jack Daniel's BBQ shrimp alongside a 14oz bone-in pork chop with mac and cheese and green beans."
+  },
+  {
+    date:  "2026-03-19",
+    name:  "Grilled Salmon",
+    price: "$28",
+    desc:  "Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious, and worth every cent."
+  },
+  {
+    date:  "2026-03-19",
+    name:  "Miss Mud Pie",
+    price: "$7",
+    desc:  "The house dessert special. Chocolate, cream, crunch. We will let it speak for itself."
+  }
+];
 
 // Build a fake "category" object that the existing wheel engine expects
 // We wrap today's specials as a single cat so buildItemRing works unchanged
@@ -1029,7 +1156,7 @@ buildStatus();
 
 function buildHours(){
   const now=new Date(),di=now.getDay(),ti=di===0?6:di-1;
-  const rows=document.getElementById('hours-rows');
+  const rows=document.getElementById('panel-hours-rows');
   if(!rows)return;rows.innerHTML='';
   HOURS.forEach((h,i)=>{
     const[oh2,om2]=h.open.split(':').map(Number),[ch2,cm2]=h.close.split(':').map(Number);
@@ -1065,10 +1192,194 @@ function setHub(m,s){
   if(hm)hm.textContent=m;
   if(hs)hs.textContent=s;
 }
-function applySearch(){} // stub - no search on homepage
+function applySearch(){} // stub - no search on specials wheel
+
+function buildPanelHours(){
+  const now=new Date(),di=now.getDay(),ti=di===0?6:di-1;
+  const hm=now.getHours()*60+now.getMinutes(),th=HOURS[ti];
+  const[oh,om]=th.open.split(':').map(Number),[ch,cm]=th.close.split(':').map(Number);
+  const isOpen=hm>=oh*60+om&&hm<ch*60+cm;
+  const badge=document.getElementById('panel-hours-status');
+  if(badge){badge.className='hours-status '+(isOpen?'open-now':'closed-now');badge.innerHTML='<span class="status-dot"></span>'+(isOpen?'Open Now':'Currently Closed');}
+  const block=document.getElementById('panel-hours-rows');
+  if(!block)return;block.innerHTML='';
+  function fmt2(h,m){const ap=h>=12?'PM':'AM',h12=h%12||12;return h12+(m?':'+String(m).padStart(2,'0'):'')+' '+ap;}
+  HOURS.forEach((h,i)=>{
+    const[oh2,om2]=h.open.split(':').map(Number),[ch2,cm2]=h.close.split(':').map(Number);
+    const row=document.createElement('div');row.className='hours-row'+(i===ti?' today':'');
+    row.innerHTML='<span class="hours-day'+(i===ti?' today':'')+'">'+h.day+'</span><span class="hours-time">'+fmt2(oh2,om2)+' – '+fmt2(ch2,cm2)+'</span>';
+    block.appendChild(row);
+  });
+}
+
+
+const MENU=[
+  {id:'bbq',label:'BBQ PLATES',icon:'🔥',color:'#C43C10',rimColor:'rgba(232,83,42,.55)',note:'Every plate served with your choice of two sides',
+   items:[
+    {name:'Full Rack of Ribs',price:'$19.99',desc:'Our crown jewel. Smoked low-and-slow over hardwood for hours until the meat falls clean off the bone. Sweet, smoky, and built for sharing — or not.'},
+    {name:'Half Rack of Ribs',price:'$11.99',desc:'Same pit. Same patience. Same fall-off-the-bone tenderness. Half the rack, all the glory.'},
+    {name:'Pulled Pork Plate',price:'$9.99',desc:'Pork shoulder smoked low and slow then pulled by hand. Rich, tender, and kissed with our house seasoning.'},
+    {name:'Brisket Plate',price:'$10.99',desc:'The one regulars drive miles for. Slow-smoked until it practically melts — fork-tender with a deep, beautiful smoke ring.'},
+    {name:'Half Chicken Plate',price:'$9.99',desc:'A half bird with smoke-crisp skin and impossibly juicy meat inside. The pit does all the work.'},
+    {name:'Smoked Wings',price:'$7.99',desc:'Pit-seasoned wings, smoked low then finished hot for crispy skin. Tender, smoky, and dangerously snackable.'}
+  ]},
+  {id:'burgers',label:'BURGERS',icon:'🍔',color:'#8C4A12',rimColor:'rgba(180,100,30,.55)',note:'Includes one side · dressed with lettuce & tomato',
+   items:[
+    {name:'Hamburger',price:'$6.99',desc:'A straight-up half-pound patty on a toasted bun. Simple, dressed right, no fuss needed.'},
+    {name:'Cheeseburger',price:'$7.99',desc:'American or cheddar melted perfectly on our classic half-pound patty. A true Smokehouse staple.'},
+    {name:'Bacon Cheeseburger',price:'$8.99',desc:'Thick-cut bacon, melted cheese, and our half-pound patty stacked together. The full picture.'},
+    {name:'Chicken Sandwich',price:'$7.99',desc:'Crispy Southern-fried chicken on a toasted bun, dressed clean with lettuce and tomato.'}
+  ]},
+  {id:'poboys',label:'PO-BOYS',icon:'🥖',color:'#7A5010',rimColor:'rgba(180,130,40,.5)',note:'Includes one side · Louisiana-style dressed',
+   items:[
+    {name:'Ribeye Po-Boy',price:'$10.99',desc:'Shaved ribeye piled high on toasted French bread, dressed Louisiana-style. Messy in the best possible way.'},
+    {name:'Pulled Pork Sub',price:'$7.99',desc:'House-pulled pork on a toasted roll — the same pit-smoked pork from our plates, sandwiched up beautifully.'},
+    {name:'Brisket Sandwich',price:'$8.99',desc:'Sliced pit brisket on toasted bread. Smoke-forward, tender, worth every single bite.'},
+    {name:'Shrimp Po-Boy',price:'$8.99',desc:'Gulf shrimp battered and golden-fried, loaded onto French bread and dressed right. Classic Louisiana.'},
+    {name:'Crawfish Po-Boy',price:'$10.99',desc:'Louisiana crawfish tails, seasoned and fried crisp. This one tastes like the bayou on a good day.'},
+    {name:'Catfish Po-Boy',price:'$8.99',desc:'Southern-fried catfish on French bread — dressed, crispy, and unmistakably Louisiana.'}
+  ]},
+  {id:'sides',label:'SIDES',icon:'🫙',color:'#5A3C14',rimColor:'rgba(150,100,40,.5)',note:'Small $2.75 · Large $6.99 · Made in-house daily',
+   items:[
+    {name:'Baked Beans',price:'$2.75–$6.99',desc:'Slow-cooked beans in a smoky-sweet sauce. The kind you want a second scoop of without admitting it.'},
+    {name:'Corn Pudding',price:'$2.75–$6.99',desc:'A Smokehouse signature that customers rave about. Creamy, sweet, and savory all at once — order the large.'},
+    {name:'Potato Salad',price:'$2.75–$6.99',desc:'House-made Southern potato salad. Creamy, simple, and exactly what a great BBQ plate needs alongside it.'},
+    {name:'Cole Slaw',price:'$2.75–$6.99',desc:'Crisp and creamy slaw. The right cool contrast to a plate of hot smoked meat.'},
+    {name:'French Fries',price:'$2.75–$6.99',desc:'Hot, golden, and seasoned just right. The reliable choice that never disappoints.'},
+    {name:'Sweet Potato Waffle Fries',price:'$2.75–$6.99',desc:'Sweet potato waffled and fried — a little sweet, a little crispy, and a lot of fun.'}
+  ]},
+  {id:'cajun',label:'CAJUN',icon:'🌶',color:'#7A1A0A',rimColor:'rgba(200,60,20,.55)',note:"Deli-style specialty items · ask about daily availability",extra:"Cajun specialties are priced at market rate. Ask your server for today's prices.",
+   items:[
+    {name:'Steamed Boudin Links',price:'Market',desc:'Classic Louisiana boudin — seasoned rice and pork stuffed in a natural casing and steamed. Ask what is fresh today.'},
+    {name:'Boudin Balls',price:'Market',desc:'The item every first-timer orders and every regular comes back for. Deep-fried, crispy outside, creamy boudin inside.'},
+    {name:'Pepper Jack Boudin Balls',price:'Market',desc:'Our famous boudin balls with molten pepper jack inside. Spicy, creamy, deeply addictive.'},
+    {name:'Boudin Egg Rolls',price:'Market',desc:'Louisiana boudin wrapped in an egg roll skin and fried golden. Cajun-fusion done exactly right.'},
+    {name:'Meat Pies',price:'Market',desc:'Old Creole comfort — seasoned meat in a golden pastry shell. A slice of Louisiana culinary history.'},
+    {name:'Crawfish Pies',price:'Market',desc:'Gulf Coast crawfish tails in a buttery pastry shell. The flavors of South Louisiana in every bite.'}
+  ]},
+  {id:'specials',label:'SPECIALS',icon:'⭐',color:'#2A1A6B',rimColor:'rgba(100,80,200,.45)',note:"Chef's rotating specials",extra:'These are dinner specials reflecting seasonal ingredients and chef creativity. Availability varies — call ahead or ask your server.',
+   items:[
+    {name:'Thai Chili Wings',price:'$16',desc:'Smoked wings tossed in sweet Thai chili sauce. A bold East-meets-South mashup that works surprisingly, undeniably well.'},
+    {name:'Eggplant Pirogue',price:'$26',desc:'Eggplant hollowed into a pirogue and filled with a rich Cajun seafood stuffing. A true Louisiana original.'},
+    {name:'Blackened Lemon Fish',price:'$28',desc:'Blackened fillet with cream spinach and grilled crawfish tails. Elegant Southern seafood at its absolute peak.'},
+    {name:'BBQ Shrimp & Pork Chop',price:'$26',desc:"Jack Daniel's BBQ shrimp alongside a 14oz bone-in pork chop with mac and cheese and green beans."},
+    {name:'Grilled Salmon',price:'$28',desc:'Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious, and worth every cent.'},
+    {name:'Miss Mud Pie',price:'$7',desc:'The house dessert special. Chocolate, cream, crunch. We will let it speak for itself.'}
+  ]},
+  {id:'desserts',label:'DESSERTS',icon:'🍰',color:'#3A1A08',rimColor:'rgba(180,80,20,.4)',note:'House-made fresh daily',
+   items:[
+    {name:'Bread Pudding',price:'House-made',desc:'Old-school Louisiana bread pudding baked fresh in-house. Rich, custardy, and deeply comforting.'},
+    {name:'Creole Cream Cheesecake',price:'House-made',desc:'A Southern take on cheesecake using Creole cream cheese. Tangy, rich, and unlike any you have tried before.'},
+    {name:'Chocolate & Carrot Cake',price:'House-made',desc:'Two classics done right. Moist chocolate or classic carrot — both are worthy finishes to a great meal.'},
+    {name:'Strawberry Shortcake',price:'House-made',desc:'Light biscuit, fresh strawberries, and whipped cream. Simple, beautiful, and perfect when done this well.'}
+  ]}
+];
+
+
+function openPanel(){document.getElementById('info-panel').classList.add('open');document.getElementById('panel-backdrop').classList.add('open');buildPanelHours();disableNav('all');}
+function closePanel(){document.getElementById('info-panel').classList.remove('open');document.getElementById('panel-backdrop').classList.remove('open');enableNav();}
+document.getElementById('info-btn').addEventListener('click',openPanel);
+document.getElementById('panel-close').addEventListener('click',closePanel);
+document.getElementById('panel-backdrop').addEventListener('click',closePanel);
 
 // ═══════════════════════════════════════════
-//  WHEEL ENGINE (from menu.html — unchanged)
+//  LIST PANEL
+// ═══════════════════════════════════════════
+function buildList(q=''){
+  const cont=document.getElementById('list-content');cont.innerHTML='';
+  const sq=q.toLowerCase().trim();let total=0;
+  MENU.forEach(cat=>{
+    const its=cat.items.filter(it=>!sq||it.name.toLowerCase().includes(sq)||it.desc.toLowerCase().includes(sq)||cat.label.toLowerCase().includes(sq));
+    if(!its.length)return;total+=its.length;
+    const h=document.createElement('div');h.className='list-cat-hdr';h.innerHTML='<span>'+cat.icon+'</span>'+cat.label;cont.appendChild(h);
+    its.forEach(item=>{
+      const r=document.createElement('div');r.className='list-item-row';
+      r.innerHTML='<span class="list-item-name">'+item.name+'</span><span class="list-item-price">'+(item.price==='Market'?'Mkt Price':item.price)+'</span>';
+      r.addEventListener('click',()=>openPopup(item,cat));
+      cont.appendChild(r);
+    });
+  });
+  if(sq&&!total){const nr=document.createElement('div');nr.className='list-no-results';nr.textContent='No items match your search.';cont.appendChild(nr);}
+}
+function openList(){document.getElementById('list-panel').classList.add('open');document.getElementById('list-backdrop').classList.add('open');document.getElementById('list-btn').classList.add('active');buildList();disableNav('left');}
+function closeList(){document.getElementById('list-panel').classList.remove('open');document.getElementById('list-backdrop').classList.remove('open');document.getElementById('list-btn').classList.remove('active');enableNav();}
+document.getElementById('list-btn').addEventListener('click',()=>document.getElementById('list-panel').classList.contains('open')?closeList():openList());
+document.getElementById('list-close').addEventListener('click',closeList);
+document.getElementById('list-backdrop').addEventListener('click',closeList);
+document.getElementById('list-filter').addEventListener('input',e=>buildList(e.target.value));
+
+// ═══════════════════════════════════════════
+//  SEARCH
+// ═══════════════════════════════════════════
+const sIn=document.getElementById('search-input'),sCl=document.getElementById('search-clear'),sWr=document.getElementById('search-wrap'),sBt=document.getElementById('search-btn');
+function openSearch(){searchActive=true;sBt.classList.add('active');sWr.classList.add('visible');document.body.classList.add('cur-search');setTimeout(()=>sIn.focus(),80);}
+function closeSearch(){searchActive=false;sBt.classList.remove('active');sWr.classList.remove('visible');document.body.classList.remove('cur-search');sIn.value='';searchQuery='';applySearch();}
+sBt.addEventListener('click',()=>searchActive?closeSearch():openSearch());
+sIn.addEventListener('input',()=>{searchQuery=sIn.value.trim().toLowerCase();sCl.classList.toggle('show',searchQuery.length>0);applySearch();});
+sCl.addEventListener('click',()=>{sIn.value='';searchQuery='';applySearch();sCl.classList.remove('show');sIn.focus();});
+sIn.addEventListener('mousedown',e=>e.stopPropagation());
+function applySearch(){
+  const q=searchQuery,nodes=wg.querySelectorAll('.node-g');
+  if(!q){nodes.forEach(n=>{n.classList.remove('dimmed','highlighted');});return;}
+  nodes.forEach(n=>{
+    const id=n.getAttribute('data-id'),name=(n.getAttribute('data-name')||'').toLowerCase(),cat2=(n.getAttribute('data-cat')||'').toLowerCase();
+    let m=false;
+    if(id){const co=MENU.find(c=>c.id===id);if(co)m=co.label.toLowerCase().includes(q)||co.items.some(it=>it.name.toLowerCase().includes(q)||it.desc.toLowerCase().includes(q));}
+    else m=name.includes(q)||cat2.includes(q);
+    n.classList.toggle('dimmed',!m);n.classList.toggle('highlighted',m);
+  });
+}
+
+// ═══════════════════════════════════════════
+//  NAV ENABLE / DISABLE
+// ═══════════════════════════════════════════
+function disableNav(side){
+  const left=document.getElementById('ct-left');
+  const bottom=document.getElementById('ct-bottom');
+  if(side==='left'||side==='all'){left.classList.add('nav-disabled');}
+  if(side==='all'){bottom.classList.add('nav-disabled');}
+}
+function enableNav(){
+  document.getElementById('ct-left').classList.remove('nav-disabled');
+  document.getElementById('ct-bottom').classList.remove('nav-disabled');
+}
+
+// ═══════════════════════════════════════════
+//  CIRCULAR NAV
+// ═══════════════════════════════════════════
+// Circular nav handled below
+
+// Close when clicking outside the menu circle
+circOverlay.addEventListener('click',e=>{if(e.target===circOverlay)closeCirc();});
+
+document.getElementById('circ-close').addEventListener('click',closeCirc);
+
+// Center icon: scroll to top / go to categories
+document.getElementById('circ-home').addEventListener('click',()=>{
+  closeCirc();
+  window.open('https://www.thefrancissmokehouse.com', '_blank');
+});
+
+// Nav items
+document.querySelectorAll('.circ-menu-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    const action=item.getAttribute('data-action');
+    closeCirc();
+    if(action==='menu'){if(mode!=='categories')goBack();}
+    else if(action==='home'){window.location.href='index.html';}
+    else if(action==='story'){window.location.href='story.html';}
+    else if(action==='visit'){openPanel();}
+    else if(action==='order'){window.location.href='tel:+12252455046';}
+    else if(action==='list'){openList();}
+  });
+});
+
+// ═══════════════════════════════════════════
+//  DRAG TO SPIN
+// ═══════════════════════════════════════════
+
+// ═══════════════════════════════════════════
+//  WHEEL ENGINE
 // ═══════════════════════════════════════════
 const isTouch=('ontouchstart' in window)||navigator.maxTouchPoints>0;
 if(!isTouch)document.body.classList.add('no-touch');
@@ -1082,9 +1393,9 @@ function buildHours(){
   const[oh,om]=th.open.split(':').map(Number),[ch,cm]=th.close.split(':').map(Number);
   const isOpen=hm>=oh*60+om&&hm<ch*60+cm;
   const badge=document.getElementById('hero-status');
-  badge.className='hours-status '+(isOpen?'open-now':'closed-now');
+  badge.className='status-badge '+(isOpen?'open':'closed');
   badge.innerHTML='<span class="status-dot"></span>'+(isOpen?'Open Now':'Currently Closed');
-  const block=document.getElementById('hours-rows');block.innerHTML='';
+  const block=document.getElementById('panel-hours-rows');block.innerHTML='';
   function fmt(h,m){const ap=h>=12?'PM':'AM',h12=h%12||12;return h12+(m?':'+String(m).padStart(2,'0'):'')+' '+ap;}
   HOURS.forEach((h,i)=>{
     const[oh2,om2]=h.open.split(':').map(Number),[ch2,cm2]=h.close.split(':').map(Number);
@@ -1324,7 +1635,7 @@ document.querySelectorAll('.circ-item').forEach(item=>item.addEventListener('cli
 
 // ── ESC ──
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeCirc();closePopup();}
+  if(e.key==='Escape'){closeCirc();closePopup();if(typeof closePanel==='function')closePanel();if(typeof closeList==='function')closeList();if(typeof closeSearch==='function')closeSearch();}
 });
 
 // ── INIT SPECIALS WHEEL ──
@@ -1334,60 +1645,33 @@ if(todayItems.length > 0){
   setHub("SPECIALS","TAP TO VIEW");
 }
 
-// ── SCROLL LOCK for specials wheel area ──
+// ── SCROLL LOCK — only while actively dragging the wheel ──
 (function(){
-  const section  = document.getElementById('specials-section');
-  const backdrop = document.getElementById('scroll-lock-backdrop');
-  if(!section || !backdrop) return;
+  const stage = document.getElementById('stage');
+  if(!stage) return;
 
-  let locked = false;
+  // We hook into the existing drag events:
+  // Lock scroll on touchstart on the wheel SVG (drag begins)
+  // Unlock on touchend anywhere (drag ends)
 
-  function lockScroll(){
-    if(locked) return;
-    locked = true;
+  stage.addEventListener('touchstart', e => {
+    // Only lock if touching the wheel itself, not buttons
+    if(e.target.closest('button, a')) return;
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
-    section.classList.add('scroll-locked');
-    backdrop.classList.add('active');
-    // Set backdrop z-index BELOW the wheel but ABOVE the rest of the page
-    // so touches outside the wheel section unlock, but the wheel still works
-    backdrop.style.zIndex = '5';
-  }
-
-  function unlockScroll(){
-    if(!locked) return;
-    locked = false;
-    document.body.style.overflow = '';
-    document.documentElement.style.overflow = '';
-    section.classList.remove('scroll-locked');
-    backdrop.classList.remove('active');
-  }
-
-  // Lock when touching anywhere in the specials section
-  section.addEventListener('touchstart', e => {
-    lockScroll();
-    // Don't stop propagation — let the wheel drag still work
   }, { passive: true });
 
-  // Unlock when tapping the backdrop (outside the section)
-  backdrop.addEventListener('touchstart', unlockScroll, { passive: true });
-  backdrop.addEventListener('click', unlockScroll);
+  // Unlock when finger lifts — whether drag completed or just a tap
+  document.addEventListener('touchend', () => {
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+  }, { passive: true });
 
-  // Unlock on ESC
-  document.addEventListener('keydown', e => {
-    if(e.key === 'Escape') unlockScroll();
-  });
-
-  // Auto-unlock when user scrolls away from the section
-  // using IntersectionObserver — if section leaves viewport, unlock
-  if('IntersectionObserver' in window){
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(en => {
-        if(!en.isIntersecting) unlockScroll();
-      });
-    }, { threshold: 0.1 });
-    obs.observe(section);
-  }
+  // Also unlock if they cancel the touch (e.g. incoming call)
+  document.addEventListener('touchcancel', () => {
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+  }, { passive: true });
 })();
 
 </script>
