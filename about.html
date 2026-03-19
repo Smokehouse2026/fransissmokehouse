@@ -410,13 +410,13 @@
 </section>
 
 <!-- ====== CIRCULAR NAV ====== -->
-<div class="circ-nav-trigger" id="ct-left">
+<div class="circ-nav-trigger" id="circNavLeft">
   <i class="fas fa-compass cnt-icon"></i>
   <span class="cnt-text">NAVIGATE</span>
   <span class="cnt-sub">explore</span>
 </div>
 
-<div class="circ-nav-bottom" id="ct-bottom">
+<div class="circ-nav-bottom" id="circNavBottom">
   <i class="fas fa-compass cnt-icon"></i>
   <div>
     <div class="cnt-main">NAVIGATE</div>
@@ -424,13 +424,13 @@
   </div>
 </div>
 
-<div class="circ-menu-overlay" id="circ-overlay">
+<div class="circ-menu-overlay" id="circMenuOverlay">
   <div class="circular-menu">
     <div class="circ-menu-ring"></div>
-    <div class="center-home" id="circ-home" title="Home">
+    <div class="center-home" id="circHomeBtn" title="Home">
       <i class="fas fa-home"></i>
     </div>
-    <button class="circ-close" id="circ-close">&#10005; close</button>
+    <button class="circ-close" id="circClose">&#10005; close</button>
     <div class="circ-menu-item" style="--angle:0" data-href="menu.html"><span class="circ-item-icon"><i class="fas fa-utensils"></i></span><span class="circ-item-label">Menu</span></div>
     <div class="circ-menu-item" style="--angle:60" data-href="story.html"><span class="circ-item-icon"><i class="fas fa-book-open"></i></span><span class="circ-item-label">Story</span></div>
     <div class="circ-menu-item" style="--angle:120" data-href="about.html"><span class="circ-item-icon"><i class="fas fa-circle-info"></i></span><span class="circ-item-label">About</span></div>
@@ -439,6 +439,8 @@
     <div class="circ-menu-item" style="--angle:300" data-href="index.html#specials-section"><span class="circ-item-icon"><i class="fas fa-star"></i></span><span class="circ-item-label">Specials</span></div>
   </div>
 </div>
+
+
 
 <!-- ── FOOTER ── -->
 <footer role="contentinfo">
@@ -464,25 +466,38 @@
 
 <script>
 (function(){
-  // Circular nav
-  const overlay = document.getElementById('circ-overlay');
-  function openCirc(){ overlay.classList.add('open'); }
-  function closeCirc(){ overlay.classList.remove('open'); }
+  // ── Circular Nav ──
+  const overlay  = document.getElementById('circMenuOverlay');
+  const trigL    = document.getElementById('circNavLeft');
+  const trigB    = document.getElementById('circNavBottom');
+  const closeBtn = document.getElementById('circClose');
+  const homeBtn  = document.getElementById('circHomeBtn');
+  if(!overlay) return;
 
-  document.getElementById('ct-left').addEventListener('click', e => { e.stopPropagation(); openCirc(); });
-  document.getElementById('ct-bottom').addEventListener('click', e => { e.stopPropagation(); openCirc(); });
-  overlay.addEventListener('click', e => { if(e.target === overlay) closeCirc(); });
-  document.getElementById('circ-close').addEventListener('click', closeCirc);
-  document.getElementById('circ-home').addEventListener('click', e => {
+  function openNav()  { overlay.classList.add('open'); }
+  function closeNav() { overlay.classList.remove('open'); }
+
+  trigL.addEventListener('click',  e => { e.stopPropagation(); openNav(); });
+  trigB.addEventListener('click',  e => { e.stopPropagation(); openNav(); });
+  overlay.addEventListener('click', e => { if(e.target === overlay) closeNav(); });
+  closeBtn.addEventListener('click', closeNav);
+  homeBtn.addEventListener('click', e => {
     e.stopPropagation();
-    closeCirc();
+    closeNav();
     window.location.href = 'index.html';
   });
-  document.querySelectorAll('.circ-item').forEach(item => item.addEventListener('click', closeCirc));
 
-  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeCirc(); });
+  document.querySelectorAll('.circ-menu-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const href = item.getAttribute('data-href');
+      closeNav();
+      if(href) window.location.href = href;
+    });
+  });
 
-  // Scroll reveal
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeNav(); });
+
+  // ── Scroll reveal ──
   const obs = new IntersectionObserver(entries => {
     entries.forEach(en => {
       if(en.isIntersecting){ en.target.classList.add('visible'); obs.unobserve(en.target); }
@@ -490,8 +505,6 @@
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 })();
-
-
 </script>
 </body>
 </html>
