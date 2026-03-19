@@ -3,170 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Navigation System (standalone)</title>
-  <!-- Font Awesome & Google Fonts -->
+  <title>Circle Navigation (standalone)</title>
+  <!-- Font Awesome & Google Fonts (only what the circle uses) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* === root variables (only what the nav needs) === */
+    /* === minimal root variables (only needed for the circle) === */
     :root {
-      --bg: #080606;
-      --bg-2: #120d0c;
-      --panel: rgba(23,17,16,.64);
-      --panel-2: rgba(34,25,23,.68);
-      --line: rgba(255,233,209,.09);
-      --line-strong: rgba(224,129,93,.34);
       --text: #f8f0e6;
       --muted: #d0b39a;
       --gold: #d7a56d;
       --ember: #b44b3c;
       --ember-2: #e0815d;
-      --shadow: 0 28px 80px rgba(0,0,0,.48);
-      --serif: 'Playfair Display', serif;
-      --sans: 'Montserrat', sans-serif;
       --ease: cubic-bezier(.22,1,.36,1);
-      --max: 1360px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: var(--sans);
+      font-family: 'Montserrat', sans-serif;
+      background: #090707; /* dark background so the white text is visible */
       color: var(--text);
-      background: linear-gradient(180deg,#090707,#120d0c 35%,#0c0909 100%);
       min-height: 100vh;
       padding: 0;
-      margin: 0;
-      overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
-    button { font: inherit; cursor: pointer; background: none; border: none; }
-
-    /* === top bar === */
-    .topbar {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      z-index: 10;
-      padding: 1rem 1.25rem;
-    }
-    .topbar-inner {
-      width: min(calc(100% - 4px), 1320px);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.95rem 1rem;
-      border-radius: 30px;
-      border: 1px solid rgba(255,233,209,.08);
-      background: rgba(12,10,10,.32);
-      backdrop-filter: blur(16px);
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-    }
-    .brand-orb {
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      background: conic-gradient(from 180deg, var(--ember), var(--gold), var(--ember-2), var(--ember));
-      box-shadow: 0 0 24px rgba(224,129,93,.28);
-      position: relative;
-    }
-    .brand-orb::after {
-      content: "";
-      position: absolute;
-      inset: 8px;
-      border-radius: 50%;
-      background: #140f0d;
-      box-shadow: inset 0 0 12px rgba(224,129,93,.35);
-    }
-    .brand-copy {
-      display: flex; flex-direction: column; line-height: 1;
-    }
-    .brand-copy strong {
-      font-family: var(--serif);
-      font-size: 1.2rem;
-      letter-spacing: .06em;
-    }
-    .brand-copy span {
-      font-size: .64rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .32em;
-      margin-top: .3rem;
     }
 
-    .top-links {
-      display: flex;
-      justify-content: center;
-      gap: .55rem;
-      flex-wrap: wrap;
-    }
-    .top-link {
-      padding: .75rem .95rem;
-      border-radius: 999px;
-      border: 1px solid rgba(255,233,209,.07);
-      background: rgba(255,255,255,.03);
-      font-size: .68rem;
-      text-transform: uppercase;
-      letter-spacing: .15em;
-      color: rgba(248,240,230,.82);
-      transition: .22s ease;
-      cursor: pointer;
-    }
-    .top-link:hover {
-      background: rgba(180,75,60,.12);
-      border-color: rgba(224,129,93,.28);
-      transform: translateY(-2px);
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    .top-phone {
-      font-size: .9rem;
-      color: var(--muted);
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: .7rem;
-      padding: 1rem 1.6rem;
-      border-radius: 999px;
-      border: 1px solid var(--line-strong);
-      background: rgba(255,255,255,.03);
-      color: var(--text);
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      font-size: .74rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: .25s ease;
-      backdrop-filter: blur(10px);
-    }
-    .btn:hover {
-      transform: translateY(-3px);
-      background: rgba(180,75,60,.14);
-      box-shadow: 0 16px 30px -20px rgba(180,75,60,.65);
-    }
-    .btn-primary {
-      background: linear-gradient(180deg, rgba(192,88,63,.98), rgba(150,57,44,.98));
-      color: #140f0d;
-    }
-    .btn-primary:hover {
-      color: #fff4ea;
-      background: linear-gradient(180deg, rgba(220,118,86,.98), rgba(180,75,60,.98));
-    }
-
-    /* === floating nav buttons === */
+    /* === floating nav buttons (the two compasses) === */
     .nav-btn {
       position: fixed;
       z-index: 1200;
@@ -203,6 +64,8 @@
       color: var(--muted);
       opacity: .8;
     }
+
+    /* left button (vertical) */
     .nav-btn.left-center {
       left: 28px;
       top: 50%;
@@ -218,6 +81,7 @@
     .nav-btn.left-center .main { letter-spacing: normal; font-size: .8rem; }
     .nav-btn.left-center .sub { margin-top: 4px; }
 
+    /* bottom button (horizontal) */
     .nav-btn.bottom-center {
       left: 50%;
       bottom: 28px;
@@ -321,56 +185,26 @@
 
     /* small responsive adjustments */
     @media (max-width: 860px) {
-      .topbar-inner {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
       .nav-btn.left-center { display: none; }
-      .brand, .top-actions { justify-content: center; }
-      .top-phone { width: 100%; text-align: center; }
     }
     @media (max-width: 640px) {
       .circular-menu { width: 300px; height: 300px; }
       .menu-item { width: 55px; height: 55px; font-size: .65rem; }
     }
 
-    /* placeholder content to make scrolling possible */
-    .dummy-content {
-      padding: 200px 20px;
-      text-align: center;
-      color: rgba(255,255,255,0.3);
+    /* dummy content so you can see scrolling and fixed positioning */
+    .dummy {
+      height: 200vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.2);
       font-size: 3rem;
-      line-height: 2;
     }
   </style>
 </head>
 <body>
-  <!-- ========== TOP BAR ========== -->
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="brand-orb"></div>
-        <div class="brand-copy">
-          <strong>THE FRANCIS</strong>
-          <span>SMOKEHOUSE & MEATS</span>
-        </div>
-      </div>
-
-      <div class="top-links">
-        <button class="top-link js-open-menu">Menu</button>
-        <a class="top-link" href="#story">Story</a>
-        <a class="top-link" href="#reviews">Reviews</a>
-        <a class="top-link" href="#contact">Visit</a>
-      </div>
-
-      <div class="top-actions">
-        <span class="top-phone"><i class="fas fa-phone-alt"></i> (225) 245-5046</span>
-        <button class="btn btn-primary js-open-menu">Smoke Menu</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========== FLOATING NAVIGATION BUTTONS ========== -->
+  <!-- ===== TWO FLOATING BUTTONS ===== -->
   <div class="nav-btn left-center" id="navBtnLeft">
     <i class="fas fa-compass btn-icon"></i>
     <div class="btn-text">
@@ -387,7 +221,7 @@
     </div>
   </div>
 
-  <!-- ========== CIRCULAR MENU OVERLAY ========== -->
+  <!-- ===== CIRCULAR MENU OVERLAY ===== -->
   <div class="circ-menu-overlay" id="circMenuOverlay">
     <div class="circular-menu">
       <div class="center-home" id="homeCenter" data-link="#"><i class="fas fa-home"></i></div>
@@ -400,23 +234,19 @@
     </div>
   </div>
 
-  <!-- dummy content so you can see scrolling and fixed positioning -->
-  <div class="dummy-content">
-    <div>↓ scroll down ↓</div>
-    <div style="margin-top: 100vh;">↑ scroll up ↑</div>
-  </div>
+  <!-- dummy tall content to make scrolling possible -->
+  <div class="dummy">↓ scroll down & click the compasses ↓</div>
 
   <script>
     (function() {
-      // Get references
+      // get references
       const navBtnLeft = document.getElementById('navBtnLeft');
       const navBtnBottom = document.getElementById('navBtnBottom');
       const circMenuOverlay = document.getElementById('circMenuOverlay');
       const homeCenter = document.getElementById('homeCenter');
-      const circleMenuItems = document.querySelectorAll('.menu-item');
-      const openButtons = document.querySelectorAll('.js-open-menu');
+      const menuItems = document.querySelectorAll('.menu-item');
 
-      // Toggle circular menu
+      // toggle the circular menu
       function toggleCircleNav() {
         circMenuOverlay.classList.toggle('open');
       }
@@ -425,7 +255,7 @@
         circMenuOverlay.classList.remove('open');
       }
 
-      // Navigate to link or scroll to section
+      // navigate to a link (scroll to section or redirect)
       function navigateTo(link) {
         if (!link) return;
         if (link === '#') {
@@ -437,22 +267,21 @@
           if (target) {
             target.scrollIntoView({ behavior: 'smooth' });
           } else {
-            // if the target doesn't exist, just scroll to top (or do nothing)
             console.warn('Element not found:', link);
           }
           return;
         }
-        // external link
+        // external or relative link
         window.location.href = link;
       }
 
-      // Handle "Menu" action from circular menu (no full menu layer in this demo)
+      // handle "Menu" action – here we just close and alert (no full menu layer in this demo)
       function handleMenuAction() {
         closeCircleNav();
-        alert('Menu layer would open here. (This is a standalone navigation demo.)');
+        alert('Menu layer would open. (This is the standalone circle demo.)');
       }
 
-      // Floating buttons
+      // add click listeners to floating buttons
       navBtnLeft.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleCircleNav();
@@ -463,19 +292,19 @@
         toggleCircleNav();
       });
 
-      // Close overlay when clicking outside
+      // close overlay when clicking outside the circular menu
       circMenuOverlay.addEventListener('click', (e) => {
         if (e.target === circMenuOverlay) closeCircleNav();
       });
 
-      // Home button
+      // home button
       homeCenter.addEventListener('click', () => {
         closeCircleNav();
         navigateTo(homeCenter.getAttribute('data-link'));
       });
 
-      // Circular menu items
-      circleMenuItems.forEach(item => {
+      // circular menu items
+      menuItems.forEach(item => {
         item.addEventListener('click', () => {
           const action = item.getAttribute('data-action');
           const link = item.getAttribute('data-link');
@@ -490,15 +319,7 @@
         });
       });
 
-      // Top bar buttons that would open the menu layer
-      openButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          alert('Menu layer would open here. (Standalone navigation demo.)');
-        });
-      });
-
-      // Close with Escape key
+      // close with Escape key
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && circMenuOverlay.classList.contains('open')) {
           closeCircleNav();
