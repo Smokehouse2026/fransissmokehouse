@@ -55,5 +55,11 @@ const SPECIALS = [
     name:  "Miss Mud Pie",
     price: "$7",
     desc:  "The house dessert special. Chocolate, cream, crunch. We will let it speak for itself."
+  },
+  {
+    date:  "2026-03-19",
+    name:  "Grilled Salmon",
+    price: "$28",
+    desc:  "Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious, and worth every cent."
   }
 ];
