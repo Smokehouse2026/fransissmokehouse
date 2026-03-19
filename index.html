@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-
-  <!-- SEO -->
   <title>The Francis Smokehouse | BBQ &amp; Cajun &middot; St. Francisville, Louisiana</title>
   <meta name="description" content="Award-winning pit-smoked BBQ, boudin, po-boys and Southern sides on Highway 61 in St. Francisville, LA. Open Mon&ndash;Sat 10am&ndash;6pm, Sun 10am&ndash;3pm. Call (225) 245-5046."/>
   <meta name="keywords" content="Francis Smokehouse, BBQ, St. Francisville, Louisiana, brisket, boudin, po-boys, smokehouse, ribs, Cajun food"/>
@@ -20,13 +18,12 @@
   <meta name="twitter:title" content="The Francis Smokehouse"/>
   <meta name="twitter:description" content="Award-winning BBQ and Cajun on Highway 61, St. Francisville, LA."/>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Restaurant","name":"The Francis Smokehouse","image":"https://www.thefrancissmokehouse.com/Images/Smokehouselogo.png","url":"https://www.thefrancissmokehouse.com","menu":"https://www.thefrancissmokehouse.com/menu.html","telephone":"(225) 245-5046","email":"francissmokehouse@att.net","address":{"@type":"PostalAddress","streetAddress":"6779 US Highway 61","addressLocality":"St. Francisville","addressRegion":"LA","postalCode":"70775","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":30.7778,"longitude":-91.3760},"servesCuisine":["BBQ","Cajun","Southern","American"],"priceRange":"$$","openingHours":["Mo-Sa 10:00-18:00","Su 10:00-15:00"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.7","reviewCount":"200","bestRating":"5"},"hasMap":"https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775","acceptsReservations":"False"}
+  {"@context":"https://schema.org","@type":"Restaurant","name":"The Francis Smokehouse","image":"https://www.thefrancissmokehouse.com/Images/Smokehouselogo.png","url":"https://www.thefrancissmokehouse.com","menu":"https://www.thefrancissmokehouse.com/menu.html","telephone":"(225) 245-5046","email":"francissmokehouse@att.net","address":{"@type":"PostalAddress","streetAddress":"6779 US Highway 61","addressLocality":"St. Francisville","addressRegion":"LA","postalCode":"70775","addressCountry":"US"},"servesCuisine":["BBQ","Cajun","Southern","American"],"priceRange":"$$","openingHours":["Mo-Sa 10:00-18:00","Su 10:00-15:00"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.7","reviewCount":"200","bestRating":"5"}}
   </script>
   <link rel="icon" type="image/png" href="Images/Smokehouselogo.png"/>
   <link rel="apple-touch-icon" href="Images/Smokehouselogo.png"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -34,8 +31,7 @@
       --cream:#F0E6D0;--bone:#D4C5A0;--ash:#6B5C42;
       --char:#0C0905;--char2:#141009;--char3:#1C1510;
     }
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.spark{display:none!important}.reveal{opacity:1!important;transform:none!important}}
-
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.spark{display:none!important}}
     html{scroll-behavior:smooth}
     body{font-family:'Barlow Condensed',sans-serif;background:var(--char);color:var(--cream);overflow-x:hidden;line-height:1.5}
     a{color:inherit;text-decoration:none}
@@ -46,114 +42,37 @@
 
     /* ── NAV ── */
     nav{
-      position:sticky;top:0;z-index:200;
+      position:sticky;top:0;z-index:100;
       background:rgba(12,9,5,.96);backdrop-filter:blur(12px);
       border-bottom:1px solid rgba(232,83,42,.15);
       padding:0 clamp(20px,5vw,60px);
       display:flex;align-items:center;justify-content:space-between;
       height:70px;gap:20px;
     }
-    .nav-brand{display:flex;align-items:center;gap:13px;flex-shrink:0;cursor:pointer}
-    .nav-logo{
-      width:44px;height:44px;border-radius:50%;object-fit:contain;
-      background:radial-gradient(circle at 40% 35%,#2A1A0A,#1A0E06);
-      border:1px solid rgba(232,83,42,.5);box-shadow:0 0 14px rgba(232,83,42,.25);
-    }
-    .nav-logo-fallback{
-      width:44px;height:44px;border-radius:50%;flex-shrink:0;
-      background:conic-gradient(from 180deg,var(--ember),var(--gold-lt),var(--fire),var(--ember));
-      box-shadow:0 0 16px rgba(232,83,42,.3);position:relative;display:none;
-    }
+    .nav-brand{display:flex;align-items:center;gap:13px;flex-shrink:0}
+    .nav-logo{width:44px;height:44px;border-radius:50%;object-fit:contain;background:radial-gradient(circle at 40% 35%,#2A1A0A,#1A0E06);border:1px solid rgba(232,83,42,.5);box-shadow:0 0 14px rgba(232,83,42,.25)}
+    .nav-logo-fallback{width:44px;height:44px;border-radius:50%;flex-shrink:0;background:conic-gradient(from 180deg,var(--ember),var(--gold-lt),var(--fire),var(--ember));box-shadow:0 0 16px rgba(232,83,42,.3);position:relative;display:none}
     .nav-logo-fallback::after{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--char)}
     .nav-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.12em;color:var(--cream);line-height:1}
     .nav-name small{display:block;font-family:'Barlow Condensed',sans-serif;font-size:.52rem;letter-spacing:.38em;color:var(--ash);font-weight:300;margin-top:3px}
     .nav-links{display:flex;align-items:center;gap:2px}
-    .nav-link{
-      font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
-      color:rgba(240,230,208,.65);padding:.55rem .85rem;border-radius:999px;
-      transition:color .2s,background .2s;cursor:pointer;background:none;border:none;
-      font-family:'Barlow Condensed',sans-serif;
-    }
-    .nav-link:hover,.nav-link.active{color:var(--cream);background:rgba(232,83,42,.1)}
-    .nav-link.active{color:var(--fire)}
-    .nav-cta{
-      font-family:'Bebas Neue',sans-serif;font-size:.82rem;letter-spacing:.16em;
-      color:var(--char);background:linear-gradient(135deg,var(--fire),var(--ember));
-      padding:.6rem 1.4rem;border-radius:999px;border:none;cursor:pointer;
-      transition:box-shadow .2s,transform .2s;white-space:nowrap;flex-shrink:0;
-    }
+    .nav-link{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,230,208,.65);padding:.55rem .85rem;border-radius:999px;transition:color .2s,background .2s}
+    .nav-link:hover{color:var(--cream);background:rgba(232,83,42,.1)}
+    .nav-cta{font-family:'Bebas Neue',sans-serif;font-size:.82rem;letter-spacing:.16em;color:var(--char);background:linear-gradient(135deg,var(--fire),var(--ember));padding:.6rem 1.4rem;border-radius:999px;border:none;cursor:pointer;transition:box-shadow .2s,transform .2s;white-space:nowrap;flex-shrink:0}
     .nav-cta:hover{box-shadow:0 0 24px rgba(232,83,42,.45);transform:translateY(-1px)}
     .nav-toggle{display:none;background:none;border:1px solid rgba(232,83,42,.35);color:var(--fire);padding:.45rem .65rem;border-radius:8px;cursor:pointer;font-size:1rem}
-    .nav-drawer{
-      display:none;position:fixed;inset:0;z-index:190;
-      background:rgba(12,9,5,.98);backdrop-filter:blur(12px);
-      flex-direction:column;align-items:center;justify-content:center;gap:1.8rem;
-    }
+    .nav-drawer{display:none;position:fixed;inset:0;z-index:90;background:rgba(12,9,5,.98);backdrop-filter:blur(12px);flex-direction:column;align-items:center;justify-content:center;gap:1.8rem}
     .nav-drawer.open{display:flex}
     .drawer-close{position:absolute;top:22px;right:24px;background:none;border:none;color:var(--ash);font-size:1.3rem;cursor:pointer}
-    .drawer-link{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.08em;color:var(--cream);transition:color .2s;cursor:pointer;background:none;border:none}
+    .drawer-link{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.08em;color:var(--cream);transition:color .2s}
     .drawer-link:hover{color:var(--fire)}
 
-    /* ── LAYERS SYSTEM ── */
-    /* All layers sit fixed over the page */
-    .layer{
-      position:fixed;inset:0;z-index:300;
-      background:var(--char);
-      transform:translateX(100%);
-      transition:transform .5s cubic-bezier(.16,.9,.3,1);
-      overflow-y:auto;
-      overflow-x:hidden;
-      scrollbar-width:thin;
-      scrollbar-color:rgba(232,83,42,.25) transparent;
-    }
-    .layer::-webkit-scrollbar{width:4px}
-    .layer::-webkit-scrollbar-thumb{background:rgba(232,83,42,.25);border-radius:2px}
-    .layer.open{transform:translateX(0)}
-    .layer-close{
-      position:sticky;top:0;z-index:10;
-      display:flex;align-items:center;justify-content:space-between;
-      padding:14px clamp(20px,5vw,60px);
-      background:rgba(12,9,5,.95);backdrop-filter:blur(12px);
-      border-bottom:1px solid rgba(232,83,42,.15);
-    }
-    .layer-close-btn{
-      font-family:'Barlow Condensed',sans-serif;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;
-      color:var(--ash);background:none;border:1px solid rgba(107,92,66,.3);
-      padding:6px 14px;cursor:pointer;transition:color .2s,border-color .2s;border-radius:999px;
-    }
-    .layer-close-btn:hover{color:var(--fire);border-color:rgba(232,83,42,.5)}
-    .layer-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.14em;color:var(--cream)}
-    .layer-fire-top{height:2px;flex-shrink:0;background:linear-gradient(90deg,transparent,var(--ember),var(--gold),var(--ember),transparent)}
-
-    /* ── HOME PAGE ── */
-    .home-page{position:relative;min-height:100vh}
-
-    /* Hero */
-    .hero{
-      position:relative;min-height:90vh;
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      text-align:center;padding:80px clamp(20px,5vw,80px) 100px;overflow:hidden;
-    }
-    .hero-bg{
-      position:absolute;inset:0;z-index:0;
-      background:
-        radial-gradient(ellipse 70% 50% at 50% 60%,rgba(232,83,42,.1),transparent 60%),
-        radial-gradient(ellipse 40% 40% at 20% 30%,rgba(201,136,26,.07),transparent 55%),
-        var(--char);
-    }
-    .hero-bg::after{
-      content:"";position:absolute;inset:0;
-      background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
-      background-size:44px 44px;
-      mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 75%);
-      opacity:.4;
-    }
+    /* ── HERO ── */
+    .hero{position:relative;min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px clamp(20px,5vw,80px) 120px;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 70% 50% at 50% 60%,rgba(232,83,42,.1),transparent 60%),radial-gradient(ellipse 40% 40% at 20% 30%,rgba(201,136,26,.07),transparent 55%),var(--char)}
+    .hero-bg::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 75%);opacity:.4}
     .hero-inner{position:relative;z-index:1;max-width:760px}
-    .hero-logo{
-      width:clamp(140px,24vw,200px);height:auto;display:block;
-      margin:0 auto 28px;
-      filter:drop-shadow(0 0 18px rgba(232,83,42,.55)) drop-shadow(0 0 40px rgba(232,83,42,.25));
-    }
+    .hero-logo{width:clamp(140px,24vw,200px);height:auto;display:block;margin:0 auto 28px;filter:drop-shadow(0 0 18px rgba(232,83,42,.55)) drop-shadow(0 0 40px rgba(232,83,42,.25))}
     .hero-kicker{font-size:.62rem;letter-spacing:.5em;text-transform:uppercase;color:var(--fire);margin-bottom:16px;display:block}
     .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.2rem,8vw,6.5rem);letter-spacing:.06em;line-height:.88;color:var(--cream)}
     .hero-title .sub{display:block;font-size:clamp(1rem,2.5vw,1.8rem);letter-spacing:.35em;color:rgba(212,197,160,.5);margin-top:8px}
@@ -163,20 +82,17 @@
     .btn-primary:hover{box-shadow:0 0 40px rgba(232,83,42,.55);transform:translateY(-2px)}
     .btn-outline{font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:.18em;color:var(--cream);background:transparent;padding:.82rem 1.8rem;border-radius:999px;border:1px solid rgba(232,83,42,.4);cursor:pointer;transition:border-color .2s,background .2s;display:inline-flex;align-items:center;gap:8px}
     .btn-outline:hover{border-color:var(--fire);background:rgba(232,83,42,.08)}
-
-    /* Open/closed status */
     .status-wrap{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:1}
     .status-badge{display:inline-flex;align-items:center;gap:8px;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;padding:7px 16px;border-radius:999px;border:1px solid;white-space:nowrap}
     .status-badge.open{color:#7EC87E;border-color:rgba(126,200,126,.3);background:rgba(126,200,126,.07)}
     .status-badge.closed{color:var(--fire);border-color:rgba(232,83,42,.3);background:rgba(232,83,42,.07)}
-    .dot{width:7px;height:7px;border-radius:50%;animation:blink 2s ease-in-out infinite}
+    .dot{width:7px;height:7px;border-radius:50%;animation:blink 2s ease-in-out infinite;flex-shrink:0}
     .open .dot{background:#7EC87E}.closed .dot{background:var(--fire)}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 
-    /* Divider */
     .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(232,83,42,.2) 30%,rgba(232,83,42,.2) 70%,transparent)}
 
-    /* Shared section styles */
+    /* ── SECTION SHARED ── */
     section{padding:80px clamp(20px,5vw,80px)}
     .section-dark{background:var(--char2)}
     .section-label{font-size:.58rem;letter-spacing:.52em;text-transform:uppercase;color:var(--fire);margin-bottom:12px;display:flex;align-items:center;gap:10px}
@@ -184,29 +100,66 @@
     .section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4.5vw,3.8rem);letter-spacing:.06em;color:var(--cream);line-height:.9}
     .section-title em{color:var(--fire);font-style:normal}
 
-    /* Specials */
-    .specials-header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:40px;max-width:1200px;margin-inline:auto}
-    .specials-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--ash)}
-    .specials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;max-width:1200px;margin:0 auto}
-    .special-card{padding:28px 26px;border-radius:3px;border:1px solid rgba(232,83,42,.12);background:var(--char3);position:relative;overflow:hidden;transition:border-color .25s,transform .25s}
-    .special-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ember),transparent);opacity:0;transition:opacity .25s}
-    .special-card:hover{border-color:rgba(232,83,42,.3);transform:translateY(-4px)}
+    /* ── SPECIALS SECTION ── */
+    .specials-header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:36px}
+    .specials-meta{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--ash)}
+    .specials-date{font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:.2em;color:var(--gold);margin-top:4px}
+
+    /* ── SPECIAL CARDS — menu-wheel style ── */
+    .specials-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+      gap:14px;
+      max-width:1200px;margin:0 auto;
+    }
+
+    /* Active (today's) special */
+    .special-card{
+      position:relative;padding:26px 22px;border-radius:3px;
+      border:1px solid rgba(232,83,42,.18);
+      background:var(--char3);
+      overflow:hidden;
+      transition:border-color .25s,transform .25s;
+      cursor:pointer;
+    }
+    .special-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--fire),transparent);opacity:0;transition:opacity .25s}
+    .special-card:hover{border-color:rgba(232,83,42,.4);transform:translateY(-5px)}
     .special-card:hover::before{opacity:1}
-    .special-card.featured{grid-column:span 2;display:flex;gap:32px;align-items:center;background:linear-gradient(135deg,rgba(30,18,10,.9),var(--char3))}
-    .sc-cat{font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;color:var(--fire);margin-bottom:10px}
-    .sc-name{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(1.3rem,2.5vw,1.65rem);color:var(--cream);line-height:1.1;margin-bottom:8px}
-    .sc-desc{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:rgba(212,197,160,.65);line-height:1.65;margin-bottom:16px;min-height:52px}
-    .sc-price{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:.06em;color:var(--gold)}
-    .special-card.featured .sc-price{font-size:2.6rem;color:var(--fire)}
-    .sc-badge{display:inline-block;font-size:.54rem;letter-spacing:.22em;text-transform:uppercase;color:var(--fire);border:1px solid rgba(232,83,42,.3);padding:3px 9px;border-radius:999px;margin-top:8px}
-    .avail-note{max-width:1200px;margin:20px auto 0;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ash);padding:10px 14px;border-left:2px solid rgba(232,83,42,.25);background:rgba(232,83,42,.04)}
+    .sc-tag{font-size:.56rem;letter-spacing:.4em;text-transform:uppercase;color:var(--fire);margin-bottom:10px;display:block}
+    .sc-name{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(1.15rem,2vw,1.4rem);color:var(--cream);line-height:1.1;margin-bottom:8px}
+    .sc-desc{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(212,197,160,.65);line-height:1.65;margin-bottom:14px}
+    .sc-price{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:var(--gold-lt)}
 
-    /* Menu link */
-    #menu-link{text-align:center;background:var(--char);padding:70px clamp(20px,5vw,80px)}
-    .menu-link-inner{max-width:560px;margin:0 auto}
-    .menu-link-inner p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--ash);margin-top:14px;margin-bottom:28px;line-height:1.7}
+    /* Locked / not-posted card */
+    .special-card.locked{
+      border-color:rgba(107,92,66,.15);
+      background:rgba(18,13,8,.5);
+      cursor:default;
+      opacity:.55;
+    }
+    .special-card.locked:hover{transform:none;border-color:rgba(107,92,66,.15)}
+    .special-card.locked::before{display:none}
+    .locked-icon{font-size:1.4rem;margin-bottom:10px;display:block;opacity:.5}
+    .locked-label{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.12em;color:var(--ash);margin-bottom:6px}
+    .locked-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.82rem;color:rgba(107,92,66,.6);line-height:1.6}
 
-    /* Hours & info */
+    /* Popup for special detail */
+    #popup-overlay{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;background:rgba(8,6,4,.78);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .4s}
+    #popup-overlay.open{opacity:1;pointer-events:all}
+    #popup-card{position:relative;background:var(--char2);max-width:480px;width:92%;overflow:hidden;transform:scale(.84) translateY(32px);transition:transform .42s cubic-bezier(.16,.9,.3,1.05);border:1px solid rgba(232,83,42,.25)}
+    #popup-overlay.open #popup-card{transform:scale(1) translateY(0)}
+    .popup-fire{height:3px;background:linear-gradient(90deg,var(--ember),var(--gold-lt),var(--gold),var(--ember));width:100%}
+    .popup-inner{padding:28px 32px 32px}
+    .popup-eyebrow{font-size:.6rem;letter-spacing:.45em;color:var(--fire);text-transform:uppercase;font-weight:600;margin-bottom:8px}
+    .popup-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,4vw,2.1rem);font-weight:600;color:var(--cream);line-height:1.05;margin-bottom:4px}
+    .popup-price{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,2.8rem);color:var(--fire);letter-spacing:.1em;margin-bottom:18px}
+    .popup-rule{height:1px;background:rgba(232,83,42,.15);margin-bottom:18px}
+    .popup-desc{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;font-weight:300;color:var(--bone);line-height:1.75}
+    .popup-note{margin-top:14px;font-size:.66rem;letter-spacing:.22em;color:var(--ash);text-transform:uppercase;line-height:1.6}
+    #popup-close{position:absolute;top:12px;right:14px;background:none;border:none;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(107,92,66,.7);cursor:pointer;padding:6px 8px;transition:color .2s}
+    #popup-close:hover{color:var(--fire)}
+
+    /* ── HOURS / INFO ── */
     .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:40px auto 0}
     .info-card{padding:30px 28px;border-radius:3px;border:1px solid rgba(232,83,42,.12);background:var(--char3)}
     .info-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.12em;color:var(--cream);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(107,92,66,.2)}
@@ -225,68 +178,9 @@
     .amenities{margin-top:18px;display:flex;flex-wrap:wrap;gap:7px}
     .amenity{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);border:1px solid rgba(107,92,66,.25);padding:4px 9px}
 
-    /* ── STORY LAYER STYLES ── */
-    .reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
-    .reveal.visible{opacity:1;transform:translateY(0)}
-    .reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}
-    .story-hero{position:relative;min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px clamp(20px,6vw,80px) 60px;overflow:hidden}
-    .story-hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 70% 55% at 50% 60%,rgba(232,83,42,.1),transparent 58%),var(--char)}
-    .story-hero-bg::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 75%);opacity:.35}
-    .story-hero-inner{position:relative;z-index:1;max-width:680px}
-    .hero-eyebrow{font-size:.62rem;letter-spacing:.52em;text-transform:uppercase;color:var(--fire);margin-bottom:18px;display:block}
-    .story-title-main{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,7rem);letter-spacing:.05em;line-height:.88;color:var(--cream)}
-    .story-title-main em{display:block;font-style:normal;-webkit-text-stroke:1.5px var(--fire);color:transparent}
-    .hero-divider{width:48px;height:1px;margin:22px auto;background:linear-gradient(90deg,transparent,var(--fire),transparent)}
-    .story-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,1.8vw,1.2rem);color:rgba(212,197,160,.65);line-height:1.75;max-width:44ch;margin:0 auto}
-    .pull-quote-wrap{padding:60px clamp(20px,8vw,120px);background:var(--char3);border-top:1px solid rgba(232,83,42,.1);border-bottom:1px solid rgba(232,83,42,.1);text-align:center;position:relative;overflow:hidden}
-    .pull-quote-wrap::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(232,83,42,.06),transparent 65%)}
-    .pull-quote{position:relative;z-index:1;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(1.4rem,3vw,2.4rem);color:var(--cream);line-height:1.4;max-width:720px;margin:0 auto 16px}
-    .pull-open,.pull-close{font-family:'Cormorant Garamond',serif;font-size:5rem;line-height:0;vertical-align:-.38em;color:rgba(232,83,42,.3)}
-    .pull-author{position:relative;z-index:1;font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:var(--fire)}
-    .story-row{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,6vw,88px);align-items:center;max-width:1100px;margin:0 auto}
-    .story-row.flip>:first-child{order:2}.story-row.flip>:last-child{order:1}
-    .story-img{position:relative;border-radius:3px;overflow:hidden;border:1px solid rgba(232,83,42,.14)}
-    .story-img img{width:100%;display:block;filter:sepia(.1) contrast(.97)}
-    .story-img::before,.story-img::after{content:"";position:absolute;width:28px;height:28px;z-index:1;border-color:var(--fire);border-style:solid;opacity:.35}
-    .story-img::before{top:10px;left:10px;border-width:1px 0 0 1px}
-    .story-img::after{bottom:10px;right:10px;border-width:0 1px 1px 0}
-    .stat-row{display:flex;gap:clamp(16px,3vw,40px);flex-wrap:wrap;margin:28px 0;padding:20px 0;border-top:1px solid rgba(232,83,42,.14);border-bottom:1px solid rgba(232,83,42,.14)}
-    .stat strong{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold-lt);letter-spacing:.05em;display:block;line-height:1}
-    .stat span{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ash);margin-top:4px;display:block}
-    .timeline-inner{max-width:680px;margin:0 auto}
-    .timeline{position:relative;padding-left:clamp(28px,5vw,52px);margin-top:44px}
-    .timeline::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,rgba(232,83,42,.35) 10%,rgba(232,83,42,.35) 90%,transparent)}
-    .t-item{position:relative;margin-bottom:36px;padding-bottom:36px;border-bottom:1px solid rgba(107,92,66,.15)}
-    .t-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
-    .t-item::before{content:"";position:absolute;left:calc(-1 * clamp(28px,5vw,52px) - 5px);top:5px;width:11px;height:11px;border-radius:50%;background:var(--char2);border:2px solid var(--fire);box-shadow:0 0 8px rgba(232,83,42,.3)}
-    .t-year{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--fire);letter-spacing:.08em;line-height:1;margin-bottom:4px}
-    .t-title{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--cream);letter-spacing:.1em;margin-bottom:8px}
-    .t-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.97rem;color:rgba(212,197,160,.68);line-height:1.75}
-    .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1100px;margin:40px auto 0}
-    .value-card{padding:28px 22px;border-radius:3px;border:1px solid rgba(232,83,42,.12);background:var(--char3);position:relative;overflow:hidden;transition:border-color .25s,transform .25s}
-    .value-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--fire),transparent);opacity:0;transition:opacity .25s}
-    .value-card:hover{border-color:rgba(232,83,42,.32);transform:translateY(-4px)}
-    .value-card:hover::before{opacity:1}
-    .value-icon{font-size:1.6rem;margin-bottom:12px;display:block}
-    .value-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.1em;color:var(--cream);margin-bottom:8px}
-    .value-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:rgba(212,197,160,.65);line-height:1.7}
-    .cta-band{padding:72px clamp(20px,6vw,80px);text-align:center;background:var(--char3);border-top:1px solid rgba(232,83,42,.12);border-bottom:1px solid rgba(232,83,42,.12);position:relative;overflow:hidden}
-    .cta-band::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(232,83,42,.07),transparent 65%)}
-    .cta-band-eyebrow{position:relative;z-index:1;font-size:.6rem;letter-spacing:.5em;text-transform:uppercase;color:var(--fire);margin-bottom:14px;display:block}
-    .cta-band-title{position:relative;z-index:1;font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,5vw,4rem);letter-spacing:.06em;color:var(--cream);line-height:.9;margin-bottom:8px}
-    .cta-band-sub{position:relative;z-index:1;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ash);margin-bottom:32px}
-    .cta-buttons{position:relative;z-index:1;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-
     /* ── CIRCULAR NAV ── */
-    .circ-trigger{
-      position:fixed;z-index:250;display:flex;flex-direction:column;align-items:center;gap:7px;
-      background:rgba(14,10,6,.88);border:1px solid rgba(232,83,42,.32);
-      box-shadow:0 0 20px rgba(180,75,60,.2);backdrop-filter:blur(12px);
-      padding:13px 8px;border-radius:999px;cursor:pointer;
-      transition:border-color .25s,box-shadow .25s,opacity .3s,transform .25s;user-select:none;
-    }
+    .circ-trigger{position:fixed;z-index:200;display:flex;flex-direction:column;align-items:center;gap:7px;background:rgba(14,10,6,.88);border:1px solid rgba(232,83,42,.32);box-shadow:0 0 20px rgba(180,75,60,.2);backdrop-filter:blur(12px);padding:13px 8px;border-radius:999px;cursor:pointer;transition:border-color .25s,box-shadow .25s,transform .25s;user-select:none}
     .circ-trigger:hover{border-color:rgba(232,83,42,.65);box-shadow:0 0 32px rgba(180,75,60,.38);transform:scale(1.04)}
-    .circ-trigger.off{opacity:0;pointer-events:none}
     .ct-icon{font-size:1.15rem;color:var(--fire)}
     .ct-text{font-family:'Bebas Neue',sans-serif;font-size:.6rem;letter-spacing:.08em;writing-mode:vertical-rl;text-orientation:upright;color:var(--cream)}
     .ct-sub{font-size:.46rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);writing-mode:vertical-rl;text-orientation:mixed}
@@ -296,7 +190,7 @@
     #ct-bottom .ct-text{writing-mode:initial;text-orientation:initial;font-size:.75rem}
     #ct-bottom .ct-sub{writing-mode:initial;text-orientation:initial}
     #ct-bottom:hover{transform:translateX(-50%) scale(1.04)}
-    .circ-overlay{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;background:rgba(6,4,2,.82);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .3s ease}
+    .circ-overlay{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(6,4,2,.82);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .3s ease}
     .circ-overlay.open{opacity:1;pointer-events:all}
     .circ-menu{width:380px;height:380px;border-radius:50%;position:relative;border:1px solid rgba(232,83,42,.38);box-shadow:0 0 70px rgba(180,75,60,.38),inset 0 0 40px rgba(0,0,0,.5);background:radial-gradient(circle at center,rgba(180,75,60,.07),transparent 70%);transform:scale(.3);transition:transform .45s cubic-bezier(.22,1,.36,1)}
     .circ-overlay.open .circ-menu{transform:scale(1)}
@@ -317,7 +211,7 @@
     .footer-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.12em;color:var(--cream)}
     .footer-name small{display:block;font-family:'Barlow Condensed',sans-serif;font-size:.5rem;letter-spacing:.4em;color:var(--ash);margin-top:2px}
     .footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
-    .footer-link{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,197,160,.5);padding:.45rem .8rem;border-radius:999px;transition:color .2s,background .2s;cursor:pointer;background:none;border:none;font-family:'Barlow Condensed',sans-serif}
+    .footer-link{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,197,160,.5);padding:.45rem .8rem;border-radius:999px;transition:color .2s,background .2s}
     .footer-link:hover{color:var(--cream);background:rgba(232,83,42,.08)}
     .footer-copy{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(107,92,66,.4)}
 
@@ -325,15 +219,10 @@
     @media(max-width:860px){
       .nav-links,.nav-cta{display:none}.nav-toggle{display:block}
       #ct-left{display:none}#ct-bottom{display:flex}
-      .special-card.featured{grid-column:span 1;flex-direction:column}
       .info-grid{grid-template-columns:1fr}
-      .story-row{grid-template-columns:1fr;gap:32px}
-      .story-row.flip>:first-child{order:1}.story-row.flip>:last-child{order:2}
-      .values-grid{grid-template-columns:1fr 1fr}
     }
     @media(max-width:600px){
       .specials-grid{grid-template-columns:1fr}
-      .values-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -343,18 +232,17 @@
 
 <!-- ── NAV ── -->
 <nav role="navigation" aria-label="Main navigation">
-  <div class="nav-brand" id="nav-brand-btn" aria-label="Go to home" role="button" tabindex="0">
+  <a href="index.html" class="nav-brand" aria-label="Home">
     <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse logo" class="nav-logo"
          onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
     <div class="nav-logo-fallback" aria-hidden="true"></div>
     <div class="nav-name">The Francis Smokehouse<small>St. Francisville, LA</small></div>
-  </div>
+  </a>
   <div class="nav-links" role="list">
-    <button class="nav-link active" id="nav-home">Home</button>
-    <button class="nav-link" id="nav-story">Our Story</button>
-    <button class="nav-link" id="nav-specials">Specials</button>
+    <a class="nav-link" href="story.html">Our Story</a>
     <a class="nav-link" href="menu.html">Menu</a>
-    <button class="nav-link" id="nav-visit">Hours &amp; Visit</button>
+    <a class="nav-link" href="index.html#info">Hours &amp; Visit</a>
+    <a class="nav-link" href="tel:+12252455046">(225) 245-5046</a>
   </div>
   <a class="nav-cta" href="menu.html">Full Menu</a>
   <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false">&#9776;</button>
@@ -362,246 +250,140 @@
 
 <div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Mobile navigation">
   <button class="drawer-close" id="drawer-close" aria-label="Close">&#10005;</button>
-  <button class="drawer-link" data-layer="">Home</button>
-  <button class="drawer-link" data-layer="story">Our Story</button>
-  <button class="drawer-link" data-layer="specials">Specials</button>
+  <a class="drawer-link" href="story.html">Our Story</a>
   <a class="drawer-link" href="menu.html">Menu</a>
-  <button class="drawer-link" data-layer="visit">Hours &amp; Visit</button>
+  <a class="drawer-link" href="index.html#info">Hours &amp; Visit</a>
   <a class="drawer-link" href="tel:+12252455046">Call Us</a>
 </div>
 
-<!-- ═══════════════════════════════════════ HOME ═══════════════════════════════════════ -->
-<main id="home-page">
-  <header class="hero" role="banner">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="hero-inner">
-      <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="hero-logo"
-           onerror="this.style.display='none'"/>
-      <p class="hero-kicker">St. Francisville, Louisiana &nbsp;&middot;&nbsp; Highway 61</p>
-      <h1 class="hero-title">
-        The Francis Smokehouse
-        <span class="sub">Low &amp; Slow Since 2015</span>
-      </h1>
-      <p class="hero-tagline">Louisiana smokehouse tradition &mdash; pit-fired brisket, boudin, po-boys, and Southern sides that taste like the bayou on a good day.</p>
-      <div class="hero-actions">
-        <button class="btn-primary" onclick="openLayer('specials')">&#x1F525; Today's Specials</button>
-        <a class="btn-outline" href="menu.html">Full Menu</a>
-        <button class="btn-outline" onclick="openLayer('visit')">&#x1F4CD; Find Us</button>
-      </div>
-    </div>
-    <div class="status-wrap" aria-live="polite">
-      <div class="status-badge" id="hero-status">
-        <span class="dot"></span>
-        <span id="hero-status-text">Checking hours&hellip;</span>
-      </div>
-    </div>
-  </header>
-
-  <footer role="contentinfo">
-    <div class="footer-inner">
-      <div class="footer-logo-wrap">
-        <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="footer-logo"
-             onerror="this.style.display='none'"/>
-        <div class="footer-name">The Francis Smokehouse<small>St. Francisville, Louisiana</small></div>
-      </div>
-      <nav class="footer-links" aria-label="Footer navigation">
-        <button class="footer-link" onclick="openLayer('')">Home</button>
-        <button class="footer-link" onclick="openLayer('story')">Our Story</button>
-        <button class="footer-link" onclick="openLayer('specials')">Specials</button>
-        <a class="footer-link" href="menu.html">Full Menu</a>
-        <button class="footer-link" onclick="openLayer('visit')">Hours &amp; Visit</button>
-        <a class="footer-link" href="tel:+12252455046">(225) 245-5046</a>
-      </nav>
-      <p class="footer-copy">&copy; 2025 The Francis Smokehouse &amp; Specialty Meats &nbsp;&middot;&nbsp; 6779 US Hwy 61, St. Francisville, LA</p>
-    </div>
-  </footer>
-</main>
-
-<!-- ═══════════════════════════════════════ STORY LAYER ═══════════════════════════════ -->
-<div class="layer" id="layer-story" role="dialog" aria-label="Our Story" aria-hidden="true">
-  <div class="layer-fire-top"></div>
-  <div class="layer-close">
-    <span class="layer-title">Our Story</span>
-    <button class="layer-close-btn" onclick="closeLayer('story')">&#10005; Close</button>
-  </div>
-
-  <section class="story-hero">
-    <div class="story-hero-bg" aria-hidden="true"></div>
-    <div class="story-hero-inner">
-      <span class="hero-eyebrow">Est. 2015 &nbsp;&middot;&nbsp; Highway 61 &nbsp;&middot;&nbsp; St. Francisville, Louisiana</span>
-      <h2 class="story-title-main">Our<br/><em>Story</em></h2>
-      <div class="hero-divider" aria-hidden="true"></div>
-      <p class="story-sub">A family, a fire, and a stretch of Highway 61 &mdash; the story behind the smoke.</p>
-    </div>
-  </section>
-
-  <div class="pull-quote-wrap">
-    <blockquote class="pull-quote">
-      <span class="pull-open" aria-hidden="true">&#x201C;</span>We don&rsquo;t just smoke meat &mdash; we carry on a legacy.<span class="pull-close" aria-hidden="true">&#x201D;</span>
-    </blockquote>
-    <p class="pull-author">&mdash; The Francis Family</p>
-  </div>
-
-  <section style="padding:80px clamp(20px,6vw,80px)">
-    <div class="story-row">
-      <div class="story-img">
-        <img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?q=80&w=1400&auto=format&fit=crop" alt="Slow-smoked BBQ" loading="lazy" width="700" height="500"/>
-      </div>
-      <div>
-        <div class="section-label">Where It Started</div>
-        <h3 class="section-title">Highway 61<br/><em>Runs Through Everything</em></h3>
-        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,1.6vw,1.15rem);color:rgba(212,197,160,.7);line-height:1.8;margin-top:16px">When the doors opened in 2015, the mission was simple: cook honest food the way it was meant to be cooked. No shortcuts. Real wood. Real smoke. Real patience. What started as a passion for Louisiana pit BBQ grew into something the community claimed as their own.</p>
-        <div class="stat-row">
-          <div class="stat"><strong>2015</strong><span>Founded</span></div>
-          <div class="stat"><strong>4.7&#9733;</strong><span>Google</span></div>
-          <div class="stat"><strong>40+</strong><span>Menu Items</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section style="padding:80px clamp(20px,6vw,80px);background:var(--char2)">
-    <div class="story-row flip">
-      <div class="story-img">
-        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1400&auto=format&fit=crop" alt="The smokehouse kitchen" loading="lazy" width="700" height="500"/>
-      </div>
-      <div>
-        <div class="section-label">The Method</div>
-        <h3 class="section-title">Low &amp; Slow<br/><em>Is the Only Way</em></h3>
-        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,1.6vw,1.15rem);color:rgba(212,197,160,.7);line-height:1.8;margin-top:16px">Every rack of ribs, every brisket, every pulled pork shoulder starts the same way &mdash; seasoned, loaded into the pit, and left alone. Real smoke takes time. Beyond the BBQ, the kitchen extends into the Louisiana Cajun tradition &mdash; fresh boudin, crawfish pies, and egg rolls that bring the bayou straight to the table.</p>
-      </div>
-    </div>
-  </section>
-
-  <section style="padding:80px clamp(20px,6vw,80px)">
-    <div class="timeline-inner">
-      <div class="section-label" style="justify-content:center">The Journey</div>
-      <h3 class="section-title" style="text-align:center">Milestones</h3>
-      <div class="timeline">
-        <div class="t-item"><div class="t-year">2015</div><div class="t-title">The Doors Open</div><p class="t-body">The Francis Smokehouse fires up the pit for the first time on Highway 61 in St. Francisville.</p></div>
-        <div class="t-item"><div class="t-year">Early Years</div><div class="t-title">A Community Staple</div><p class="t-body">Locals start returning weekly. The corn pudding becomes legendary. The menu grows to include po-boys, Cajun specialties, and rotating chef specials.</p></div>
-        <div class="t-item"><div class="t-year">Recognition</div><div class="t-title">Tripadvisor Travellers&rsquo; Choice</div><p class="t-body">The smokehouse earns a Tripadvisor Travellers&rsquo; Choice award. Visitors from across the country start making the drive.</p></div>
-        <div class="t-item"><div class="t-year">Today</div><div class="t-title">Still Burning</div><p class="t-body">The pit runs every day. 40+ items on the menu. The family is still at the center of everything.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section style="padding:80px clamp(20px,6vw,80px);background:var(--char2)">
-    <div style="max-width:1100px;margin:0 auto">
-      <div class="section-label">What Drives Us</div>
-      <h3 class="section-title">What We <em>Stand For</em></h3>
-      <div class="values-grid">
-        <div class="value-card"><span class="value-icon">&#x1F525;</span><div class="value-name">Real Fire, Real Smoke</div><p class="value-text">We use hardwood and time. No shortcuts. The pit gets all the credit because we give it all the time it needs.</p></div>
-        <div class="value-card"><span class="value-icon">&#x1F33F;</span><div class="value-name">Louisiana Roots</div><p class="value-text">Cajun flavors and Southern tradition run through everything we make &mdash; from the brisket to the boudin balls.</p></div>
-        <div class="value-card"><span class="value-icon">&#x1F91D;</span><div class="value-name">Community First</div><p class="value-text">We&rsquo;re a local place built for the people of West Feliciana Parish. Visitors are always welcome &mdash; but this is home ground.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <div class="cta-band">
-    <span class="cta-band-eyebrow">Come Experience It</span>
-    <h3 class="cta-band-title">The Food Tells <em>the Rest</em></h3>
-    <p class="cta-band-sub">Open Mon&ndash;Sat 10am&ndash;6pm &nbsp;&middot;&nbsp; Sun 10am&ndash;3pm &nbsp;&middot;&nbsp; Highway 61</p>
-    <div class="cta-buttons">
+<!-- ── HERO ── -->
+<header class="hero" role="banner">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="hero-logo"
+         onerror="this.style.display='none'"/>
+    <p class="hero-kicker">St. Francisville, Louisiana &nbsp;&middot;&nbsp; Highway 61</p>
+    <h1 class="hero-title">
+      The Francis Smokehouse
+      <span class="sub">Low &amp; Slow Since 2015</span>
+    </h1>
+    <p class="hero-tagline">Louisiana smokehouse tradition &mdash; pit-fired brisket, boudin, po-boys, and Southern sides that taste like the bayou on a good day.</p>
+    <div class="hero-actions">
       <a class="btn-primary" href="menu.html">&#x1F525; Explore the Menu</a>
-      <button class="btn-outline" onclick="closeLayer('story');openLayer('visit')">&#x1F4CD; Get Directions</button>
+      <a class="btn-outline" href="index.html#info">&#x1F4CD; Find Us</a>
     </div>
   </div>
-</div>
+  <div class="status-wrap" aria-live="polite">
+    <div class="status-badge" id="hero-status">
+      <span class="dot"></span>
+      <span id="hero-status-text">Checking hours&hellip;</span>
+    </div>
+  </div>
+</header>
 
-<!-- ═══════════════════════════════════════ SPECIALS LAYER ════════════════════════════ -->
-<div class="layer" id="layer-specials" role="dialog" aria-label="Daily Specials" aria-hidden="true">
-  <div class="layer-fire-top"></div>
-  <div class="layer-close">
-    <span class="layer-title">Chef's Daily Specials</span>
-    <button class="layer-close-btn" onclick="closeLayer('specials')">&#10005; Close</button>
-  </div>
-  <section id="specials" style="background:var(--char2)" aria-labelledby="specials-heading">
-    <div class="specials-header">
-      <div>
-        <div class="section-label">Rotating Kitchen</div>
-        <h2 class="section-title" id="specials-heading">Chef&rsquo;s Daily Specials</h2>
-      </div>
-      <p class="specials-note">Call ahead &mdash; availability changes daily</p>
-    </div>
-    <div class="specials-grid">
-      <div class="special-card featured">
-        <div class="sc-content">
-          <div class="sc-cat">Featured Special</div>
-          <div class="sc-name">Blackened Lemon Fish</div>
-          <div class="sc-desc">Blackened fillet with cream spinach and grilled crawfish tails. Elegant Southern seafood at its absolute peak.</div>
-          <div class="sc-price">$28</div>
-          <span class="sc-badge">Premium Plate</span>
-        </div>
-      </div>
-      <div class="special-card"><div class="sc-cat">Wings</div><div class="sc-name">Thai Chili Wings</div><div class="sc-desc">Smoked wings tossed in sweet Thai chili sauce. East meets Louisiana, and it works.</div><div class="sc-price">$16</div></div>
-      <div class="special-card"><div class="sc-cat">Entree</div><div class="sc-name">Eggplant Pirogue</div><div class="sc-desc">Eggplant hollowed into a pirogue and filled with rich Cajun seafood stuffing. A true Louisiana original.</div><div class="sc-price">$26</div></div>
-      <div class="special-card"><div class="sc-cat">Combo Plate</div><div class="sc-name">BBQ Shrimp &amp; Pork Chop</div><div class="sc-desc">Jack Daniel&rsquo;s BBQ shrimp with a 14oz bone-in pork chop, mac and cheese and green beans.</div><div class="sc-price">$26</div></div>
-      <div class="special-card"><div class="sc-cat">Seafood</div><div class="sc-name">Grilled Salmon</div><div class="sc-desc">Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious.</div><div class="sc-price">$28</div></div>
-      <div class="special-card"><div class="sc-cat">Dessert Special</div><div class="sc-name">Miss Mud Pie</div><div class="sc-desc">Chocolate, cream, crunch. The house dessert special.</div><div class="sc-price">$7</div></div>
-    </div>
-    <p class="avail-note">Specials rotate and vary by day &mdash; call (225) 245-5046 to confirm today&rsquo;s availability before visiting.</p>
-  </section>
-  <div style="text-align:center;padding:48px clamp(20px,5vw,80px)">
-    <a class="btn-primary" href="menu.html">&#x1F9ED; Open Full Interactive Menu</a>
-  </div>
-</div>
+<div class="divider"></div>
 
-<!-- ═══════════════════════════════════════ VISIT LAYER ══════════════════════════════ -->
-<div class="layer" id="layer-visit" role="dialog" aria-label="Hours and Visit" aria-hidden="true">
-  <div class="layer-fire-top"></div>
-  <div class="layer-close">
-    <span class="layer-title">Hours &amp; Visit</span>
-    <button class="layer-close-btn" onclick="closeLayer('visit')">&#10005; Close</button>
+<!-- ═══════════════════════════════════════════════════════════
+     DAILY SPECIALS
+     ─────────────────────────────────────────────────────────
+     HOW TO UPDATE: Change the "date" field to today's date
+     in YYYY-MM-DD format and update the name, desc, price.
+     Slots with no matching date will show as "Not Posted Yet".
+     Keep exactly 6 slots — add/remove items within the array.
+══════════════════════════════════════════════════════════════ -->
+<section class="section-dark" id="specials" aria-labelledby="specials-heading">
+  <div class="specials-header">
+    <div>
+      <div class="section-label">Fresh From the Kitchen</div>
+      <h2 class="section-title" id="specials-heading">Today&rsquo;s <em>Specials</em></h2>
+    </div>
+    <div style="text-align:right">
+      <div class="specials-meta">Updated daily by the kitchen</div>
+      <div class="specials-date" id="today-date"></div>
+    </div>
   </div>
-  <section id="info" style="background:var(--char2)" aria-labelledby="info-heading">
-    <div style="max-width:900px;margin:0 auto 0">
-      <div class="section-label">Find Us</div>
-      <h2 class="section-title" id="info-heading">Hours &amp; Location</h2>
+  <div class="specials-grid" id="specials-grid"></div>
+  <p id="specials-note" style="max-width:1200px;margin:20px auto 0;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ash);padding:10px 14px;border-left:2px solid rgba(232,83,42,.25);background:rgba(232,83,42,.04)"></p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── MENU LINK ── -->
+<section style="text-align:center;padding:70px clamp(20px,5vw,80px)">
+  <div style="max-width:560px;margin:0 auto">
+    <div class="section-label" style="justify-content:center">The Full Menu</div>
+    <h2 class="section-title">BBQ &middot; Burgers &middot; Po-Boys<br/>Cajun &middot; Sides &middot; Desserts</h2>
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--ash);margin:14px 0 28px;line-height:1.7">Explore all 40+ items across 7 categories on our interactive spinning menu.</p>
+    <a class="btn-primary" href="menu.html">&#x1F9ED; Open Full Menu</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── HOURS & INFO ── -->
+<section class="section-dark" id="info" aria-labelledby="info-heading">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="section-label">Find Us</div>
+    <h2 class="section-title" id="info-heading">Hours &amp; Location</h2>
+  </div>
+  <div class="info-grid">
+    <div class="info-card">
+      <h3>&#x1F550; Hours</h3>
+      <div id="hours-status-badge" style="margin-bottom:16px"></div>
+      <div id="hours-rows"></div>
+      <p style="font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);margin-top:14px;padding:8px 10px;border-left:2px solid rgba(232,83,42,.25);background:rgba(232,83,42,.04);line-height:1.7">Hours may vary on holidays &mdash; call ahead to confirm</p>
     </div>
-    <div class="info-grid">
-      <div class="info-card">
-        <h3>&#x1F550; Hours</h3>
-        <div id="hours-status-badge" style="margin-bottom:16px"></div>
-        <div id="hours-rows"></div>
-        <p style="font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);margin-top:14px;padding:8px 10px;border-left:2px solid rgba(232,83,42,.25);background:rgba(232,83,42,.04);line-height:1.7">Hours may vary on holidays &mdash; call ahead to confirm</p>
+    <div class="info-card">
+      <h3>&#x1F4CD; Location &amp; Contact</h3>
+      <div class="c-row">
+        <div class="c-icon"><i class="fas fa-location-dot"></i></div>
+        <div><div class="c-label">Address</div><div class="c-value"><a href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775" target="_blank" rel="noopener">6779 US Highway 61<br/>St. Francisville, LA 70775</a></div></div>
       </div>
-      <div class="info-card">
-        <h3>&#x1F4CD; Location &amp; Contact</h3>
-        <div class="c-row">
-          <div class="c-icon"><i class="fas fa-location-dot" aria-hidden="true"></i></div>
-          <div><div class="c-label">Address</div><div class="c-value"><a href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775" target="_blank" rel="noopener">6779 US Highway 61<br/>St. Francisville, LA 70775</a></div></div>
-        </div>
-        <div class="c-row">
-          <div class="c-icon"><i class="fas fa-phone" aria-hidden="true"></i></div>
-          <div><div class="c-label">Phone</div><div class="c-value"><a href="tel:+12252455046">(225) 245-5046</a></div></div>
-        </div>
-        <div class="c-row">
-          <div class="c-icon"><i class="fas fa-envelope" aria-hidden="true"></i></div>
-          <div><div class="c-label">Email</div><div class="c-value"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div></div>
-        </div>
-        <div class="c-row">
-          <div class="c-icon"><i class="fas fa-star" aria-hidden="true"></i></div>
-          <div><div class="c-label">Rating</div><div class="c-value">4.5&nbsp;/ 5 &nbsp;&middot;&nbsp; Tripadvisor Travellers&rsquo; Choice</div></div>
-        </div>
-        <div class="amenities" role="list" aria-label="Amenities">
-          <span class="amenity">Dine In</span><span class="amenity">Takeout</span><span class="amenity">Catering</span>
-          <span class="amenity">Parking</span><span class="amenity">Wheelchair Access</span>
-          <span class="amenity">Outdoor Seating</span><span class="amenity">Dog Friendly</span>
-        </div>
+      <div class="c-row">
+        <div class="c-icon"><i class="fas fa-phone"></i></div>
+        <div><div class="c-label">Phone</div><div class="c-value"><a href="tel:+12252455046">(225) 245-5046</a></div></div>
+      </div>
+      <div class="c-row">
+        <div class="c-icon"><i class="fas fa-envelope"></i></div>
+        <div><div class="c-label">Email</div><div class="c-value"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div></div>
+      </div>
+      <div class="c-row">
+        <div class="c-icon"><i class="fas fa-star"></i></div>
+        <div><div class="c-label">Rating</div><div class="c-value">4.5&nbsp;/ 5 &nbsp;&middot;&nbsp; Tripadvisor Travellers&rsquo; Choice</div></div>
+      </div>
+      <div class="amenities">
+        <span class="amenity">Dine In</span><span class="amenity">Takeout</span><span class="amenity">Catering</span>
+        <span class="amenity">Parking</span><span class="amenity">Wheelchair Access</span>
+        <span class="amenity">Outdoor Seating</span><span class="amenity">Dog Friendly</span>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
+<!-- ── ITEM POPUP ── -->
+<div id="popup-overlay" role="dialog" aria-modal="true">
+  <div id="popup-card">
+    <div class="popup-fire"></div>
+    <div class="popup-inner">
+      <div class="popup-eyebrow" id="p-tag"></div>
+      <div class="popup-title" id="p-name"></div>
+      <div class="popup-price" id="p-price"></div>
+      <div class="popup-rule"></div>
+      <div class="popup-desc" id="p-desc"></div>
+      <div class="popup-note">Chef&rsquo;s rotating special &nbsp;&middot;&nbsp; Availability may vary &mdash; call ahead to confirm</div>
+    </div>
+    <button id="popup-close" aria-label="Close">&#10005; Close</button>
+  </div>
 </div>
 
 <!-- ── CIRCULAR NAV ── -->
-<div class="circ-trigger" id="ct-left" aria-label="Open navigation" role="button" tabindex="0">
-  <i class="fas fa-compass ct-icon" aria-hidden="true"></i>
+<div class="circ-trigger" id="ct-left" role="button" tabindex="0" aria-label="Open navigation">
+  <i class="fas fa-compass ct-icon"></i>
   <span class="ct-text">NAV</span>
   <span class="ct-sub">menu</span>
 </div>
-<div class="circ-trigger" id="ct-bottom" aria-label="Open navigation" role="button" tabindex="0">
-  <i class="fas fa-compass ct-icon" aria-hidden="true"></i>
+<div class="circ-trigger" id="ct-bottom" role="button" tabindex="0" aria-label="Open navigation">
+  <i class="fas fa-compass ct-icon"></i>
   <div>
     <div class="ct-text" style="writing-mode:initial">NAVIGATE</div>
     <div class="ct-sub" style="writing-mode:initial">explore</div>
@@ -612,36 +394,140 @@
     <div class="circ-ring"></div>
     <div class="circ-center" id="circ-home">&#x1F3E0;</div>
     <button class="circ-close-btn" id="circ-close">&#10005; close</button>
-    <div class="circ-item" style="--a:0"   data-nav=""><span class="ci-icon">&#x1F525;</span><span>Home</span></div>
-    <div class="circ-item" style="--a:60"  data-nav="story"><span class="ci-icon">&#x1F4D6;</span><span>Story</span></div>
-    <div class="circ-item" style="--a:120" data-nav="specials"><span class="ci-icon">&#x2B50;</span><span>Specials</span></div>
-    <div class="circ-item" style="--a:180" data-nav="visit"><span class="ci-icon">&#x1F4CD;</span><span>Visit</span></div>
-    <div class="circ-item" style="--a:240" data-href="menu.html"><span class="ci-icon">&#x1F9ED;</span><span>Menu</span></div>
-    <div class="circ-item" style="--a:300" data-href="tel:+12252455046"><span class="ci-icon">&#x1F4DE;</span><span>Call</span></div>
+    <a class="circ-item" style="--a:0"   href="menu.html"><span class="ci-icon">&#x1F525;</span><span>Menu</span></a>
+    <a class="circ-item" style="--a:72"  href="story.html"><span class="ci-icon">&#x1F4D6;</span><span>Story</span></a>
+    <a class="circ-item" style="--a:144" href="index.html#specials"><span class="ci-icon">&#x2B50;</span><span>Specials</span></a>
+    <a class="circ-item" style="--a:216" href="index.html#info"><span class="ci-icon">&#x1F4CD;</span><span>Visit</span></a>
+    <a class="circ-item" style="--a:288" href="tel:+12252455046"><span class="ci-icon">&#x1F4DE;</span><span>Call</span></a>
   </div>
 </div>
 
+<!-- ── FOOTER ── -->
+<footer role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-logo-wrap">
+      <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="footer-logo"
+           onerror="this.style.display='none'"/>
+      <div class="footer-name">The Francis Smokehouse<small>St. Francisville, Louisiana</small></div>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a class="footer-link" href="story.html">Our Story</a>
+      <a class="footer-link" href="menu.html">Full Menu</a>
+      <a class="footer-link" href="index.html#specials">Specials</a>
+      <a class="footer-link" href="index.html#info">Hours</a>
+      <a class="footer-link" href="index.html#info">Visit</a>
+      <a class="footer-link" href="tel:+12252455046">(225) 245-5046</a>
+    </nav>
+    <p class="footer-copy">&copy; 2025 The Francis Smokehouse &amp; Specialty Meats &nbsp;&middot;&nbsp; 6779 US Hwy 61, St. Francisville, LA</p>
+  </div>
+</footer>
+
 <script>
+// ═══════════════════════════════════════════════════════════════
+//  DAILY SPECIALS DATA
+//  ─────────────────────────────────────────────────────────────
+//  To update: change the "date" to today in YYYY-MM-DD format
+//  and fill in name, tag, price, desc.
+//  Any slot whose date doesn't match today shows as locked.
+//  Keep 6 slots. To leave a slot empty just set date: ""
+// ═══════════════════════════════════════════════════════════════
+const SPECIALS = [
+  {
+    date: "2026-03-19",
+    tag:  "Featured Special",
+    name: "Blackened Lemon Fish",
+    price:"$28",
+    desc: "Blackened fillet with cream spinach and grilled crawfish tails. Elegant Southern seafood at its absolute peak."
+  },
+  {
+    date: "2026-03-19",
+    tag:  "Wings",
+    name: "Thai Chili Wings",
+    price:"$16",
+    desc: "Smoked wings tossed in sweet Thai chili sauce. East meets Louisiana, and it works."
+  },
+  {
+    date: "2026-03-19",
+    tag:  "Entree",
+    name: "Eggplant Pirogue",
+    price:"$26",
+    desc: "Eggplant hollowed into a pirogue and filled with rich Cajun seafood stuffing. A true Louisiana original."
+  },
+  {
+    date: "2026-03-19",
+    tag:  "Combo Plate",
+    name: "BBQ Shrimp & Pork Chop",
+    price:"$26",
+    desc: "Jack Daniel's BBQ shrimp alongside a 14oz bone-in pork chop with mac and cheese and green beans."
+  },
+  {
+    date: "2026-03-19",
+    tag:  "Seafood",
+    name: "Grilled Salmon",
+    price:"$28",
+    desc: "Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious, and worth every cent."
+  },
+  {
+    date: "2026-03-19",
+    tag:  "Dessert Special",
+    name: "Miss Mud Pie",
+    price:"$7",
+    desc: "Chocolate, cream, crunch. The house dessert special. We'll let it speak for itself."
+  }
+];
+
+// ═══════════════════════════════════════════════════════════════
+//  HOURS
+// ═══════════════════════════════════════════════════════════════
+const HOURS = [
+  {day:'Monday',   open:'10:00',close:'18:00'},
+  {day:'Tuesday',  open:'10:00',close:'18:00'},
+  {day:'Wednesday',open:'10:00',close:'18:00'},
+  {day:'Thursday', open:'10:00',close:'18:00'},
+  {day:'Friday',   open:'10:00',close:'18:00'},
+  {day:'Saturday', open:'10:00',close:'18:00'},
+  {day:'Sunday',   open:'10:00',close:'15:00'}
+];
+
 (function(){
-  // ── Hours ──
-  const HOURS=[
-    {day:'Monday',open:'10:00',close:'18:00'},{day:'Tuesday',open:'10:00',close:'18:00'},
-    {day:'Wednesday',open:'10:00',close:'18:00'},{day:'Thursday',open:'10:00',close:'18:00'},
-    {day:'Friday',open:'10:00',close:'18:00'},{day:'Saturday',open:'10:00',close:'18:00'},
-    {day:'Sunday',open:'10:00',close:'15:00'}
-  ];
-  function fmt(h,m){const ap=h>=12?'PM':'AM',h12=h%12||12;return h12+(m?':'+String(m).padStart(2,'0'):'')+'\u202f'+ap;}
-  function buildHours(){
-    const now=new Date(),di=now.getDay(),ti=di===0?6:di-1;
-    const hm=now.getHours()*60+now.getMinutes(),th=HOURS[ti];
+
+  // ── Helpers ──
+  function fmt(h,m){
+    const ap=h>=12?'PM':'AM', h12=h%12||12;
+    return h12+(m?':'+String(m).padStart(2,'0'):'')+'\u202f'+ap;
+  }
+
+  function todayStr(){
+    const d=new Date();
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+
+  function isOpenNow(){
+    const now=new Date(), di=now.getDay(), ti=di===0?6:di-1;
+    const hm=now.getHours()*60+now.getMinutes(), th=HOURS[ti];
     const[oh,om]=th.open.split(':').map(Number),[ch,cm]=th.close.split(':').map(Number);
-    const isOpen=hm>=oh*60+om&&hm<ch*60+cm;
-    const hs=document.getElementById('hero-status'),ht=document.getElementById('hero-status-text');
-    if(hs){hs.className='status-badge '+(isOpen?'open':'closed');ht.textContent=isOpen?'Open Now':'Currently Closed';}
+    return hm>=oh*60+om && hm<ch*60+cm;
+  }
+
+  // ── Status badge ──
+  function buildStatus(){
+    const open = isOpenNow();
+    const badge = document.getElementById('hero-status');
+    const text  = document.getElementById('hero-status-text');
+    badge.className = 'status-badge '+(open?'open':'closed');
+    text.textContent = open ? 'Open Now' : 'Currently Closed';
+  }
+  buildStatus();
+
+  // ── Hours panel ──
+  function buildHours(){
+    const now=new Date(), di=now.getDay(), ti=di===0?6:di-1;
+    const hm=now.getHours()*60+now.getMinutes();
+    const open=isOpenNow();
     const ib=document.getElementById('hours-status-badge');
-    if(ib){ib.className='status-badge '+(isOpen?'open':'closed');ib.innerHTML='<span class="dot"></span>'+(isOpen?'Open Now':'Currently Closed');}
-    const rows=document.getElementById('hours-rows');
-    if(!rows)return;rows.innerHTML='';
+    ib.className='status-badge '+(open?'open':'closed');
+    ib.innerHTML='<span class="dot"></span>'+(open?'Open Now':'Currently Closed');
+    const rows=document.getElementById('hours-rows');rows.innerHTML='';
     HOURS.forEach((h,i)=>{
       const[oh2,om2]=h.open.split(':').map(Number),[ch2,cm2]=h.close.split(':').map(Number);
       const row=document.createElement('div');row.className='h-row';
@@ -651,93 +537,93 @@
   }
   buildHours();
 
-  // ── Layer system ──
-  let activeLayer = '';
+  // ── Today's date display ──
+  const today = new Date();
+  const dateLabel = today.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('today-date').textContent = dateLabel;
 
-  window.openLayer = function(name){
-    // Close any open layer first
-    if(activeLayer) _closeLayer(activeLayer, false);
-    if(name === ''){
-      // just go home — nothing to open
-      updateNav('');
-      activeLayer = '';
-      return;
+  // ── Specials grid ──
+  const ts = todayStr();
+  const grid = document.getElementById('specials-grid');
+  const noteEl = document.getElementById('specials-note');
+  let liveCount = 0;
+
+  SPECIALS.forEach(s => {
+    const card = document.createElement('div');
+    const isToday = s.date === ts;
+    if(isToday) liveCount++;
+
+    if(isToday){
+      card.className = 'special-card';
+      card.innerHTML =
+        '<span class="sc-tag">'+s.tag+'</span>'+
+        '<div class="sc-name">'+s.name+'</div>'+
+        '<div class="sc-desc">'+s.desc+'</div>'+
+        '<div class="sc-price">'+s.price+'</div>';
+      card.addEventListener('click', () => openPopup(s));
+    } else {
+      card.className = 'special-card locked';
+      card.innerHTML =
+        '<span class="locked-icon">&#x1F512;</span>'+
+        '<div class="locked-label">Not Posted Yet</div>'+
+        '<div class="locked-sub">Check back when the kitchen posts today\u2019s special for this slot.</div>';
     }
-    const el = document.getElementById('layer-'+name);
-    if(!el) return;
-    el.classList.add('open');
-    el.setAttribute('aria-hidden','false');
-    el.scrollTop = 0;
-    activeLayer = name;
-    updateNav(name);
-    // Re-run hours in visit layer
-    if(name === 'visit') buildHours();
-  };
+    grid.appendChild(card);
+  });
 
-  window.closeLayer = function(name){
-    _closeLayer(name, true);
-  };
+  noteEl.textContent = liveCount > 0
+    ? 'Showing '+liveCount+' special'+(liveCount!==1?'s':'')+' posted for today \u00b7 Call (225) 245-5046 to confirm availability before visiting.'
+    : 'No specials posted for today yet \u2014 check back soon or call (225) 245-5046.';
 
-  function _closeLayer(name, resetActive){
-    const el = document.getElementById('layer-'+name);
-    if(el){ el.classList.remove('open'); el.setAttribute('aria-hidden','true'); }
-    if(resetActive){ activeLayer=''; updateNav(''); }
+  // ── Popup ──
+  function openPopup(s){
+    document.getElementById('p-tag').textContent   = s.tag;
+    document.getElementById('p-name').textContent  = s.name;
+    document.getElementById('p-price').textContent = s.price;
+    document.getElementById('p-desc').textContent  = s.desc;
+    document.getElementById('popup-overlay').classList.add('open');
   }
+  function closePopup(){ document.getElementById('popup-overlay').classList.remove('open'); }
+  document.getElementById('popup-close').addEventListener('click', closePopup);
+  document.getElementById('popup-overlay').addEventListener('click', e=>{
+    if(e.target===document.getElementById('popup-overlay')) closePopup();
+  });
 
-  function updateNav(active){
-    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    const map = {'':'nav-home','story':'nav-story','specials':'nav-specials','visit':'nav-visit'};
-    const target = map[active];
-    if(target){ const el=document.getElementById(target); if(el) el.classList.add('active'); }
-  }
-
-  // Nav buttons
-  document.getElementById('nav-brand-btn').addEventListener('click', ()=>{ closeLayer(activeLayer); updateNav(''); });
-  document.getElementById('nav-brand-btn').addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); closeLayer(activeLayer); }});
-  document.getElementById('nav-home').addEventListener('click', ()=>openLayer(''));
-  document.getElementById('nav-story').addEventListener('click', ()=>openLayer('story'));
-  document.getElementById('nav-specials').addEventListener('click', ()=>openLayer('specials'));
-  document.getElementById('nav-visit').addEventListener('click', ()=>openLayer('visit'));
-
-  // Mobile drawer
-  const toggle=document.getElementById('nav-toggle'),drawer=document.getElementById('nav-drawer'),dClose=document.getElementById('drawer-close');
+  // ── Mobile nav ──
+  const toggle=document.getElementById('nav-toggle');
+  const drawer=document.getElementById('nav-drawer');
+  const dClose=document.getElementById('drawer-close');
   function openD(){drawer.classList.add('open');toggle.setAttribute('aria-expanded','true');}
   function closeD(){drawer.classList.remove('open');toggle.setAttribute('aria-expanded','false');}
   toggle.addEventListener('click',openD);
   dClose.addEventListener('click',closeD);
-  drawer.querySelectorAll('.drawer-link[data-layer]').forEach(l=>{
-    l.addEventListener('click',()=>{closeD();openLayer(l.getAttribute('data-layer'));});
-  });
+  drawer.querySelectorAll('.drawer-link').forEach(l=>l.addEventListener('click',closeD));
 
-  // Circular nav
-  const circOverlay=document.getElementById('circ-overlay');
-  function openCirc(){circOverlay.classList.add('open');}
-  function closeCirc(){circOverlay.classList.remove('open');}
+  // ── Circular nav ──
+  const overlay=document.getElementById('circ-overlay');
+  function openCirc(){overlay.classList.add('open');}
+  function closeCirc(){overlay.classList.remove('open');}
   document.getElementById('ct-left').addEventListener('click',e=>{e.stopPropagation();openCirc();});
   document.getElementById('ct-bottom').addEventListener('click',e=>{e.stopPropagation();openCirc();});
-  circOverlay.addEventListener('click',e=>{if(e.target===circOverlay)closeCirc();});
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeCirc();});
   document.getElementById('circ-close').addEventListener('click',closeCirc);
-  document.getElementById('circ-home').addEventListener('click',()=>{closeCirc();openLayer('');});
+  document.getElementById('circ-home').addEventListener('click',()=>{
+    closeCirc();window.scrollTo({top:0,behavior:'smooth'});
+  });
   document.querySelectorAll('.circ-item').forEach(item=>{
-    item.addEventListener('click',()=>{
-      closeCirc();
-      if(item.hasAttribute('data-nav')){openLayer(item.getAttribute('data-nav'));}
-      else if(item.hasAttribute('data-href')){window.location.href=item.getAttribute('data-href');}
-    });
+    item.addEventListener('click',closeCirc);
   });
 
-  // ESC closes everything
+  // ── ESC ──
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){
-      closeCirc();closeD();
-      if(activeLayer){closeLayer(activeLayer);}
-    }
+    if(e.key==='Escape'){closeCirc();closeD();closePopup();}
   });
 
-  // Keyboard nav triggers
+  // ── Keyboard for nav triggers ──
   [document.getElementById('ct-left'),document.getElementById('ct-bottom')].forEach(el=>{
     el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCirc();}});
   });
+
 })();
 </script>
 </body>
