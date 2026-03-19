@@ -67,7 +67,7 @@ const SPECIALS = [
 //  FULL MENU  ← Edit items, prices, and descriptions here
 // ─────────────────────────────────────────────────────────────
 const MENU=[
-  {id:'bbq',label:'BBQ PLATES',icon:'🔥',color:'#C43C10',rimColor:'rgba(232,83,42,.55)',note:'Every plate served with your choice of two sides',
+  {id:'bbq',label:'BBQ PLATE',icon:'🔥',color:'#C43C10',rimColor:'rgba(232,83,42,.55)',note:'Every plate served with your choice of two sides',
    items:[
     {name:'Full Rack of Ribs',price:'$19.99',desc:'Our crown jewel. Smoked low-and-slow over hardwood for hours until the meat falls clean off the bone. Sweet, smoky, and built for sharing — or not.'},
     {name:'Half Rack of Ribs',price:'$11.99',desc:'Same pit. Same patience. Same fall-off-the-bone tenderness. Half the rack, all the glory.'},
