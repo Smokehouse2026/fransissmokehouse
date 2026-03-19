@@ -705,7 +705,42 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
   #ct-left{display:none}#ct-bottom{display:flex}
   .info-grid{grid-template-columns:1fr}
 }
-  </style>
+  
+/* ── SCROLL LOCK when spinning the wheel ── */
+#specials-section.scroll-locked {
+  outline: 1px solid rgba(232,83,42,.18);
+}
+#scroll-lock-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .55rem;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: rgba(232,83,42,.5);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .4s;
+  white-space: nowrap;
+  z-index: 20;
+}
+#specials-section.scroll-locked #scroll-lock-hint {
+  opacity: 1;
+}
+#scroll-lock-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  cursor: pointer;
+}
+#scroll-lock-backdrop.active {
+  display: block;
+}
+
+</style>
 </head>
 <body>
 
@@ -771,6 +806,7 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
        Keep up to 7 items. Remove items you don't want shown.
 ════════════════════════════════════════════════════════════════ -->
 <section id="specials-section" aria-labelledby="specials-heading">
+  <div id="scroll-lock-hint">&#x1F512; screen locked for spinning &nbsp;&middot;&nbsp; tap outside to unlock</div>
 
   <!-- Wheel renders here when specials are live -->
   <div class="wheel-wrapper" id="specials-wheel-wrap" style="position:relative">
@@ -885,6 +921,9 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
     <button id="popup-close" aria-label="Close">&#10005; Close</button>
   </div>
 </div>
+
+<!-- Scroll lock backdrop -->
+<div id="scroll-lock-backdrop" aria-hidden="true"></div>
 
 <!-- ── CIRCULAR NAV ── -->
 <div class="circ-trigger" id="ct-left" role="button" tabindex="0" aria-label="Open navigation">
@@ -1206,8 +1245,7 @@ function startDrag(ex,ey){
   if(document.getElementById('popup-overlay').classList.contains('open'))return;
   if(document.getElementById('info-panel')&&document.getElementById('info-panel').classList.contains('open'))return;
   if(document.getElementById('list-panel')&&document.getElementById('list-panel').classList.contains('open'))return;
-  if(circOverlay.classList.contains('open'))return;
-  if(searchActive&&document.activeElement===sIn)return;
+  const _co=document.getElementById('circ-overlay');if(_co&&_co.classList.contains('open'))return;
   cancelAnimationFrame(rafId);isDragging=true;velocity=0;
   dragStartA=getA(ex,ey);dragStartW=angle;lastDA=dragStartA;lastDT=Date.now();
   document.body.classList.add('cur-drag');
@@ -1289,8 +1327,69 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){closeCirc();closePopup();}
 });
 
-// ── INIT SPECIALS W
+// ── INIT SPECIALS WHEEL ──
+// Only init if we have specials to show
+if(todayItems.length > 0){
+  buildItemRing(SPECIALS_CAT);
+  setHub("SPECIALS","TAP TO VIEW");
+}
+
+// ── SCROLL LOCK for specials wheel area ──
+(function(){
+  const section  = document.getElementById('specials-section');
+  const backdrop = document.getElementById('scroll-lock-backdrop');
+  if(!section || !backdrop) return;
+
+  let locked = false;
+
+  function lockScroll(){
+    if(locked) return;
+    locked = true;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    section.classList.add('scroll-locked');
+    backdrop.classList.add('active');
+    // Set backdrop z-index BELOW the wheel but ABOVE the rest of the page
+    // so touches outside the wheel section unlock, but the wheel still works
+    backdrop.style.zIndex = '5';
+  }
+
+  function unlockScroll(){
+    if(!locked) return;
+    locked = false;
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+    section.classList.remove('scroll-locked');
+    backdrop.classList.remove('active');
+  }
+
+  // Lock when touching anywhere in the specials section
+  section.addEventListener('touchstart', e => {
+    lockScroll();
+    // Don't stop propagation — let the wheel drag still work
+  }, { passive: true });
+
+  // Unlock when tapping the backdrop (outside the section)
+  backdrop.addEventListener('touchstart', unlockScroll, { passive: true });
+  backdrop.addEventListener('click', unlockScroll);
+
+  // Unlock on ESC
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') unlockScroll();
+  });
+
+  // Auto-unlock when user scrolls away from the section
+  // using IntersectionObserver — if section leaves viewport, unlock
+  if('IntersectionObserver' in window){
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if(!en.isIntersecting) unlockScroll();
+      });
+    }, { threshold: 0.1 });
+    obs.observe(section);
+  }
 })();
+
 </script>
 </body>
 </html>
