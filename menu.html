@@ -406,7 +406,7 @@ body.no-touch .circ-menu-item{cursor:none}
     scale(1.08);
   box-shadow:0 0 28px rgba(232,83,42,.5);
 }
-.circ-item-icon{font-size:1.1rem;line-height:1}
+.circ-item-icon{font-size:1rem;line-height:1;display:block;margin-bottom:2px}
 .circ-item-label{font-size:.6rem;letter-spacing:.08em}
 @media(max-width:640px){
   .circular-menu{width:300px;height:300px}
@@ -711,15 +711,13 @@ body.no-touch #popup-close{cursor:none}
 </button>
 <div id="info-btn-label" class="bottom-label">INFO</div>
 
-<!-- ====== CIRCULAR NAV TRIGGERS ====== -->
-<!-- Desktop: right-side vertical pill -->
+<!-- ====== CIRCULAR NAV ====== -->
 <div class="circ-nav-trigger" id="circNavLeft">
   <i class="fas fa-compass cnt-icon"></i>
   <span class="cnt-text">NAVIGATE</span>
   <span class="cnt-sub">explore</span>
 </div>
 
-<!-- Mobile: bottom center pill -->
 <div class="circ-nav-bottom" id="circNavBottom">
   <i class="fas fa-compass cnt-icon"></i>
   <div>
@@ -728,25 +726,19 @@ body.no-touch #popup-close{cursor:none}
   </div>
 </div>
 
-<!-- ====== CIRCULAR MENU OVERLAY ====== -->
 <div class="circ-menu-overlay" id="circMenuOverlay">
   <div class="circular-menu">
     <div class="circ-menu-ring"></div>
-
-    <!-- Center: home / close -->
-    <div class="center-home" id="circHomeBtn" title="Back to top">
+    <div class="center-home" id="circHomeBtn" title="Home">
       <i class="fas fa-home"></i>
     </div>
-
     <button class="circ-close" id="circClose">&#10005; close</button>
-
-    <!-- 6 nav items evenly spaced at 60deg each -->
-    <div class="circ-menu-item" style="--angle:0"   data-action="menu"><span class="circ-item-icon">&#x1F525;</span><span class="circ-item-label">Menu</span></div>
-    <div class="circ-menu-item" style="--angle:60"  data-action="home"><span class="circ-item-icon">&#x1F3E0;</span><span class="circ-item-label">Home</span></div>
-    <div class="circ-menu-item" style="--angle:120" data-action="story"><span class="circ-item-icon">&#x1F4D6;</span><span class="circ-item-label">Story</span></div>
-    <div class="circ-menu-item" style="--angle:180" data-action="visit"><span class="circ-item-icon">&#x1F4CD;</span><span class="circ-item-label">Visit</span></div>
-    <div class="circ-menu-item" style="--angle:240" data-action="order"><span class="circ-item-icon">&#x1F4DE;</span><span class="circ-item-label">Call</span></div>
-    <div class="circ-menu-item" style="--angle:300" data-action="list"><span class="circ-item-icon">&#x1F4CB;</span><span class="circ-item-label">Full List</span></div>
+    <div class="circ-menu-item" style="--angle:0"   data-action="menu"><span class="circ-item-icon"><i class="fas fa-fire"></i></span><span class="circ-item-label">Menu</span></div>
+    <div class="circ-menu-item" style="--angle:60"  data-action="home"><span class="circ-item-icon"><i class="fas fa-house"></i></span><span class="circ-item-label">Home</span></div>
+    <div class="circ-menu-item" style="--angle:120" data-action="story"><span class="circ-item-icon"><i class="fas fa-book-open"></i></span><span class="circ-item-label">Story</span></div>
+    <div class="circ-menu-item" style="--angle:180" data-action="about"><span class="circ-item-icon"><i class="fas fa-circle-info"></i></span><span class="circ-item-label">About</span></div>
+    <div class="circ-menu-item" style="--angle:240" data-action="visit"><span class="circ-item-icon"><i class="fas fa-location-dot"></i></span><span class="circ-item-label">Visit</span></div>
+    <div class="circ-menu-item" style="--angle:300" data-action="list"><span class="circ-item-icon"><i class="fas fa-list"></i></span><span class="circ-item-label">Full List</span></div>
   </div>
 </div>
 
@@ -1256,10 +1248,13 @@ document.getElementById('circHomeBtn').addEventListener('click', e => {
 document.querySelectorAll('.circ-menu-item').forEach(item=>{
   item.addEventListener('click',()=>{
     const action=item.getAttribute('data-action');
+    const href=item.getAttribute('data-href');
     closeCircNav();
+    if(href){ window.location.href=href; return; }
     if(action==='menu'){if(mode!=='categories')goBack();}
     else if(action==='home'){window.location.href='index.html';}
-    else if(action==='story'){window.location.href='about.html';}
+    else if(action==='story'){window.location.href='story.html';}
+    else if(action==='about'){window.location.href='about.html';}
     else if(action==='visit'){openPanel();}
     else if(action==='order'){window.location.href='tel:+12252455046';}
     else if(action==='list'){openList();}
