@@ -119,9 +119,8 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      object-fit: cover;
+      object-fit: contain;
       background: radial-gradient(circle at 40% 35%, #2A1A0A, #1A0E06);
-      padding: 5px;
       border: 1px solid rgba(232,83,42,.5);
       box-shadow: 0 0 14px rgba(232,83,42,.25);
     }
@@ -265,16 +264,15 @@
       width: clamp(90px, 18vw, 130px);
       height: clamp(90px, 18vw, 130px);
       border-radius: 50%;
-      object-fit: cover;
+      object-fit: contain;
       margin: 0 auto 28px;
-      /* Warm background so transparent logo pops on dark page */
+      /* Background fills exactly the logo circle — no padding inflation */
       background: radial-gradient(circle at 40% 35%, #2A1A0A, #1A0E06);
-      padding: 10px;
       border: 2px solid rgba(232,83,42,.55);
       box-shadow:
-        0 0 0 6px rgba(232,83,42,.08),
-        0 0 32px rgba(232,83,42,.4),
-        0 0 70px rgba(232,83,42,.18);
+        0 0 0 5px rgba(232,83,42,.08),
+        0 0 28px rgba(232,83,42,.4),
+        0 0 60px rgba(232,83,42,.16);
     }
 
     .hero-kicker {
@@ -616,9 +614,8 @@
       display: flex; flex-direction: column; align-items: center; gap: 10px;
     }
     .footer-logo {
-      width: 52px; height: 52px; border-radius: 50%; object-fit: cover;
+      width: 52px; height: 52px; border-radius: 50%; object-fit: contain;
       background: radial-gradient(circle at 40% 35%, #2A1A0A, #1A0E06);
-      padding: 6px;
       border: 1px solid rgba(232,83,42,.4);
       box-shadow: 0 0 16px rgba(232,83,42,.2);
     }
@@ -987,12 +984,11 @@
   <div class="circ-menu">
     <div class="circ-center" id="circ-home" aria-label="Visit main website">&#x1F3E0;</div>
     <button class="circ-close-btn" id="circ-close">&#10005; close</button>
-    <div class="circ-item" style="--a:0"   data-href="menu.html"   role="link" tabindex="0"><span class="ci-icon">&#x1F525;</span><span>Menu</span></div>
-    <div class="circ-item" style="--a:60"  data-href="#specials"   role="link" tabindex="0"><span class="ci-icon">&#x2B50;</span><span>Specials</span></div>
-    <div class="circ-item" style="--a:120" data-href="#info"       role="link" tabindex="0"><span class="ci-icon">&#x1F550;</span><span>Hours</span></div>
-    <div class="circ-item" style="--a:180" data-href="#info"       role="link" tabindex="0"><span class="ci-icon">&#x1F4CD;</span><span>Visit</span></div>
-    <div class="circ-item" style="--a:240" data-href="tel:+12252455046" role="link" tabindex="0"><span class="ci-icon">&#x1F4DE;</span><span>Call</span></div>
-    <div class="circ-item" style="--a:300" data-href="/"           role="link" tabindex="0"><span class="ci-icon">&#x1F3E0;</span><span>Home</span></div>
+    <div class="circ-item" style="--a:0"   data-href="menu.html"          role="link" tabindex="0"><span class="ci-icon">&#x1F525;</span><span>Menu</span></div>
+    <div class="circ-item" style="--a:72"  data-href="#specials"           role="link" tabindex="0"><span class="ci-icon">&#x2B50;</span><span>Specials</span></div>
+    <div class="circ-item" style="--a:144" data-href="#info"               role="link" tabindex="0"><span class="ci-icon">&#x1F550;</span><span>Hours</span></div>
+    <div class="circ-item" style="--a:216" data-href="tel:+12252455046"    role="link" tabindex="0"><span class="ci-icon">&#x1F4DE;</span><span>Call</span></div>
+    <div class="circ-item" style="--a:288" data-href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775" role="link" tabindex="0"><span class="ci-icon">&#x1F4CD;</span><span>Visit</span></div>
   </div>
 </div>
 
