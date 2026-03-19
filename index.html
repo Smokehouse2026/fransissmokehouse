@@ -347,7 +347,7 @@ body.no-touch .circ-menu-item{cursor:none}
     scale(1.08);
   box-shadow:0 0 28px rgba(232,83,42,.5);
 }
-.circ-item-icon{font-size:1.1rem;line-height:1}
+.circ-item-icon{font-size:1rem;line-height:1;display:block;margin-bottom:2px}
 .circ-item-label{font-size:.6rem;letter-spacing:.08em}
 @media(max-width:640px){
   .circular-menu{width:300px;height:300px}
@@ -1012,31 +1012,38 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 <!-- Scroll lock backdrop -->
 <div id="scroll-lock-backdrop" aria-hidden="true"></div>
 
-<!-- ── CIRCULAR NAV ── -->
-<div class="circ-trigger" id="ct-left" role="button" tabindex="0" aria-label="Open navigation">
-  <i class="fas fa-compass ct-icon"></i>
-  <span class="ct-text">NAV</span>
-  <span class="ct-sub">menu</span>
+<!-- ====== CIRCULAR NAV ====== -->
+<div class="circ-nav-trigger" id="circNavLeft">
+  <i class="fas fa-compass cnt-icon"></i>
+  <span class="cnt-text">NAVIGATE</span>
+  <span class="cnt-sub">explore</span>
 </div>
-<div class="circ-trigger" id="ct-bottom" role="button" tabindex="0" aria-label="Open navigation">
-  <i class="fas fa-compass ct-icon"></i>
+
+<div class="circ-nav-bottom" id="circNavBottom">
+  <i class="fas fa-compass cnt-icon"></i>
   <div>
-    <div class="ct-text" style="writing-mode:initial">NAVIGATE</div>
-    <div class="ct-sub" style="writing-mode:initial">explore</div>
+    <div class="cnt-main">NAVIGATE</div>
+    <div class="cnt-sub2">explore pages</div>
   </div>
 </div>
-<div class="circ-overlay" id="circ-overlay" role="dialog" aria-label="Navigation" aria-modal="true">
-  <div class="circ-menu">
-    <div class="circ-ring"></div>
-    <div class="circ-center" id="circ-home">&#x1F3E0;</div>
-    <button class="circ-close-btn" id="circ-close">&#10005; close</button>
-    <a class="circ-item" style="--a:0"   href="menu.html"><span class="ci-icon">&#x1F525;</span><span>Menu</span></a>
-    <a class="circ-item" style="--a:72"  href="about.html"><span class="ci-icon">&#x1F4D6;</span><span>about</span></a>
-    <a class="circ-item" style="--a:144" href="index.html#specials-section"><span class="ci-icon">&#x2B50;</span><span>Specials</span></a>
-    <a class="circ-item" style="--a:216" href="index.html#info-section"><span class="ci-icon">&#x1F4CD;</span><span>Visit</span></a>
-    <a class="circ-item" style="--a:288" href="tel:+12252455046"><span class="ci-icon">&#x1F4DE;</span><span>Call</span></a>
+
+<div class="circ-menu-overlay" id="circMenuOverlay">
+  <div class="circular-menu">
+    <div class="circ-menu-ring"></div>
+    <div class="center-home" id="circHomeBtn" title="Home">
+      <i class="fas fa-home"></i>
+    </div>
+    <button class="circ-close" id="circClose">&#10005; close</button>
+    <div class="circ-menu-item" style="--angle:0" data-href="menu.html"><span class="circ-item-icon"><i class="fas fa-utensils"></i></span><span class="circ-item-label">Menu</span></div>
+    <div class="circ-menu-item" style="--angle:60" data-href="story.html"><span class="circ-item-icon"><i class="fas fa-book-open"></i></span><span class="circ-item-label">Story</span></div>
+    <div class="circ-menu-item" style="--angle:120" data-href="about.html"><span class="circ-item-icon"><i class="fas fa-circle-info"></i></span><span class="circ-item-label">About</span></div>
+    <div class="circ-menu-item" style="--angle:180" data-href="index.html#info-section"><span class="circ-item-icon"><i class="fas fa-location-dot"></i></span><span class="circ-item-label">Visit</span></div>
+    <div class="circ-menu-item" style="--angle:240" data-href="tel:+12252455046"><span class="circ-item-icon"><i class="fas fa-phone"></i></span><span class="circ-item-label">Call</span></div>
+    <div class="circ-menu-item" style="--angle:300" data-href="index.html#specials-section"><span class="circ-item-icon"><i class="fas fa-star"></i></span><span class="circ-item-label">Specials</span></div>
   </div>
 </div>
+
+
 
 <!-- ── FOOTER ── -->
 <footer role="contentinfo">
@@ -1046,7 +1053,7 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
       <div class="footer-name">The Francis Smokehouse<small>St. Francisville, Louisiana</small></div>
     </div>
     <nav class="footer-links" aria-label="Footer navigation">
-      <a class="footer-link" href="about.html">About Us</a>
+      <a class="footer-link" href="story.html">Our Story</a>
       <a class="footer-link" href="menu.html">Full Menu</a>
       <a class="footer-link" href="index.html#specials-section">Specials</a>
       <a class="footer-link" href="index.html#info-section">Hours</a>
@@ -1307,14 +1314,10 @@ function applySearch(){
 //  NAV ENABLE / DISABLE
 // ═══════════════════════════════════════════
 function disableNav(side){
-  const left=document.getElementById('ct-left');
-  const bottom=document.getElementById('ct-bottom');
   if(side==='left'||side==='all'){left.classList.add('nav-disabled');}
   if(side==='all'){bottom.classList.add('nav-disabled');}
 }
 function enableNav(){
-  document.getElementById('ct-left').classList.remove('nav-disabled');
-  document.getElementById('ct-bottom').classList.remove('nav-disabled');
 }
 
 // ═══════════════════════════════════════════
@@ -1482,7 +1485,6 @@ function startDrag(ex,ey){
   if(document.getElementById('popup-overlay').classList.contains('open'))return;
   if(document.getElementById('info-panel')&&document.getElementById('info-panel').classList.contains('open'))return;
   if(document.getElementById('list-panel')&&document.getElementById('list-panel').classList.contains('open'))return;
-  const _co=document.getElementById('circ-overlay');if(_co&&_co.classList.contains('open'))return;
   cancelAnimationFrame(rafId);isDragging=true;velocity=0;
   dragStartA=getA(ex,ey);dragStartW=angle;lastDA=dragStartA;lastDT=Date.now();
   document.body.classList.add('cur-drag');
@@ -1548,22 +1550,6 @@ document.getElementById('stage').addEventListener('touchmove',e=>{
 
 // Site nav removed — using circular nav only
 
-// ── Circular nav ──
-const circOverlay=document.getElementById('circ-overlay');
-function openCirc(){circOverlay.classList.add('open');}
-function closeCirc(){circOverlay.classList.remove('open');}
-document.getElementById('ct-left').addEventListener('click',e=>{e.stopPropagation();openCirc();});
-document.getElementById('ct-bottom').addEventListener('click',e=>{e.stopPropagation();openCirc();});
-circOverlay.addEventListener('click',e=>{if(e.target===circOverlay)closeCirc();});
-document.getElementById('circ-close').addEventListener('click',closeCirc);
-document.getElementById('circ-home').addEventListener('click',()=>{closeCirc();window.scrollTo({top:0,behavior:'smooth'});});
-document.querySelectorAll('.circ-item').forEach(item=>item.addEventListener('click',closeCirc));
-
-// ── ESC ──
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeCirc();closePopup();if(typeof closePanel==='function')closePanel();if(typeof closeList==='function')closeList();if(typeof closeSearch==='function')closeSearch();}
-});
-
 
 // ── SCROLL LOCK — only while actively dragging the wheel ──
 (function(){
@@ -1594,6 +1580,38 @@ document.addEventListener('keydown',e=>{
   }, { passive: true });
 })();
 
+// ── Circular Nav ──
+(function(){
+  const overlay  = document.getElementById('circMenuOverlay');
+  const trigL    = document.getElementById('circNavLeft');
+  const trigB    = document.getElementById('circNavBottom');
+  const closeBtn = document.getElementById('circClose');
+  const homeBtn  = document.getElementById('circHomeBtn');
+  if(!overlay) return;
+
+  function openNav()  { overlay.classList.add('open'); }
+  function closeNav() { overlay.classList.remove('open'); }
+
+  trigL.addEventListener('click',  e => { e.stopPropagation(); openNav(); });
+  trigB.addEventListener('click',  e => { e.stopPropagation(); openNav(); });
+  overlay.addEventListener('click', e => { if(e.target === overlay) closeNav(); });
+  closeBtn.addEventListener('click', closeNav);
+  homeBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    closeNav();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.querySelectorAll('.circ-menu-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const href = item.getAttribute('data-href');
+      closeNav();
+      if(href) window.location.href = href;
+    });
+  });
+
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeNav(); });
+})();
 </script>
 </body>
 </html>
