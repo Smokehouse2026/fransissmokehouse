@@ -1387,24 +1387,7 @@ if(!isTouch)document.body.classList.add('no-touch');
 // ═══════════════════════════════════════════
 //  HOURS
 // ═══════════════════════════════════════════
-function buildHours(){
-  const now=new Date(),di=now.getDay(),todayI=di===0?6:di-1;
-  const hm=now.getHours()*60+now.getMinutes(),th=HOURS[todayI];
-  const[oh,om]=th.open.split(':').map(Number),[ch,cm]=th.close.split(':').map(Number);
-  const isOpen=hm>=oh*60+om&&hm<ch*60+cm;
-  const badge=document.getElementById('hero-status');
-  badge.className='status-badge '+(isOpen?'open':'closed');
-  badge.innerHTML='<span class="status-dot"></span>'+(isOpen?'Open Now':'Currently Closed');
-  const block=document.getElementById('panel-hours-rows');block.innerHTML='';
-  function fmt(h,m){const ap=h>=12?'PM':'AM',h12=h%12||12;return h12+(m?':'+String(m).padStart(2,'0'):'')+' '+ap;}
-  HOURS.forEach((h,i)=>{
-    const[oh2,om2]=h.open.split(':').map(Number),[ch2,cm2]=h.close.split(':').map(Number);
-    const row=document.createElement('div');row.className='hours-row'+(i===todayI?' today':'');
-    row.innerHTML='<span class="hours-day'+(i===todayI?' today':'')+'">'+h.day+'</span><span class="hours-time">'+fmt(oh2,om2)+' – '+fmt(ch2,cm2)+'</span>';
-    block.appendChild(row);
-  });
-}
-buildHours();
+// buildHours handled by buildPanelHours() above
 
 // ═══════════════════════════════════════════
 //  TUTORIAL
