@@ -1,881 +1,1275 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Francis Smokehouse & Specialty Meats — St. Francisville, LA</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>The Francis Smokehouse</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Barlow+Condensed:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --ember:    #ff6a1a;
-    --gold:     #e8a835;
-    --smoke:    #b0b8c8;
-    --ash:      #3a3f4a;
-    --coal:     #0e0f12;
-    --deep:     #080a0d;
-    --panel:    rgba(20,16,12,0.72);
-    --border:   rgba(232,168,53,0.2);
-    --glow-e:   rgba(255,106,26,0.35);
-    --glow-g:   rgba(232,168,53,0.25);
-    --text-dim: rgba(176,184,200,0.6);
-  }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --fire:#E8532A;--ember:#C43C10;--gold:#C9881A;--gold-light:#E5A830;
+  --cream:#F0E6D0;--smoke:#080604;--char:#141009;--char2:#1C1510;
+  --ash:#6B5C42;--bone:#D4C5A0;--dim:#3A2E1E;
+}
 
-  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior: smooth; }
+html,body{width:100%;height:100%;overflow:hidden;background:var(--smoke)}
+body{font-family:'Barlow Condensed',sans-serif;color:var(--cream);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;cursor:none}
 
-  body {
-    background: var(--deep);
-    color: #d8dce8;
-    font-family: 'Barlow', sans-serif;
-    font-weight: 300;
-    overflow-x: hidden;
-    cursor: none;
-  }
+/* ══ CURSOR ══════════════════════════════════════════════════ */
+#cur-wrap{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;will-change:transform}
+#cur-svg{
+  position:absolute;transform:translate(-50%,-50%);overflow:visible;
+  transition:width .3s cubic-bezier(.2,.8,.3,1),height .3s cubic-bezier(.2,.8,.3,1);
+  width:28px;height:28px;
+}
+body.cur-hover #cur-svg{width:64px;height:64px}
+body.cur-drag  #cur-svg{width:44px;height:44px}
+body.cur-click #cur-svg{width:20px;height:20px}
+body.cur-search #cur-svg{width:36px;height:36px}
+#cur-outer{fill:none;stroke:var(--fire);stroke-width:1;opacity:.7;transform-origin:center;
+  transition:stroke .3s,opacity .3s,stroke-dasharray .4s}
+body.cur-hover  #cur-outer{stroke:var(--gold);opacity:1;stroke-dasharray:80 40}
+body.cur-drag   #cur-outer{stroke:var(--ember);opacity:.9;stroke-dasharray:120 0}
+body.cur-click  #cur-outer{stroke:var(--fire);opacity:1;stroke-dasharray:10 200}
+body.cur-search #cur-outer{stroke:var(--gold-light);opacity:.8;stroke-dasharray:40 20}
+#cur-inner{fill:var(--fire);opacity:.85;transform-origin:center;transition:fill .3s,opacity .3s}
+body.cur-hover  #cur-inner{fill:var(--gold);opacity:1}
+body.cur-drag   #cur-inner{fill:var(--ember);opacity:.7}
+body.cur-click  #cur-inner{fill:var(--cream);opacity:1}
+body.cur-search #cur-inner{fill:var(--gold-light);opacity:.9}
+#cur-cross{stroke:var(--fire);stroke-width:.8;opacity:0;transition:opacity .3s}
+body.cur-hover  #cur-cross{opacity:.5}
+body.cur-search #cur-cross{opacity:.35}
 
-  /* ── CURSOR ── */
-  #cur  { position:fixed; width:10px; height:10px; border-radius:50%; background:var(--ember); pointer-events:none; z-index:9999; transform:translate(-50%,-50%); box-shadow:0 0 14px var(--ember),0 0 28px rgba(255,106,26,.4); mix-blend-mode:screen; transition:transform .08s; }
-  #ring { position:fixed; width:34px; height:34px; border-radius:50%; border:1px solid rgba(232,168,53,.55); pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:transform .18s, width .2s, height .2s, border-color .2s; }
+/* Cursor magnifier ring (search state) */
+#cur-mag{opacity:0;transition:opacity .3s}
+body.cur-search #cur-mag{opacity:.6}
 
-  /* ── BACKGROUND ── */
-  .bg-wrap { position:fixed; inset:0; z-index:0; overflow:hidden; }
-  .bg-grid {
-    position:absolute; inset:0;
-    background-image:
-      linear-gradient(rgba(232,168,53,.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(232,168,53,.03) 1px, transparent 1px);
-    background-size:70px 70px;
-    animation: gridDrift 25s linear infinite;
-  }
-  @keyframes gridDrift { to { background-position:70px 70px; } }
+.spark{
+  position:fixed;width:4px;height:4px;border-radius:50%;background:var(--fire);
+  pointer-events:none;z-index:9998;animation:sparkFade .5s ease forwards;
+  transform:translate(-50%,-50%);
+}
+@keyframes sparkFade{
+  0%{opacity:.9;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(calc(-50% + var(--dx,0px)),calc(-50% + var(--dy,-20px))) scale(0)}
+}
 
-  .bg-orb { position:absolute; border-radius:50%; filter:blur(100px); opacity:.14; }
-  .bg-orb-1 { width:700px; height:700px; background:radial-gradient(var(--ember),transparent); top:-200px; left:-200px; animation:orbf 14s ease-in-out infinite alternate; }
-  .bg-orb-2 { width:500px; height:500px; background:radial-gradient(#8b3a00,transparent); bottom:-100px; right:-100px; animation:orbf 10s ease-in-out infinite alternate-reverse; }
-  .bg-orb-3 { width:350px; height:350px; background:radial-gradient(var(--gold),transparent); top:45%; left:55%; animation:orbf 18s ease-in-out infinite alternate; opacity:.09; }
-  @keyframes orbf { from{transform:translate(0,0) scale(1);} to{transform:translate(25px,-35px) scale(1.06);} }
+/* ══ CANVASES ════════════════════════════════════════════════ */
+#bg-smoke{position:fixed;inset:0;z-index:0;pointer-events:none}
+#bg-ash  {position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.7}
+/* Flame burst canvas — sits over wheel for brief bursts */
+#flame-canvas{position:fixed;inset:0;z-index:5;pointer-events:none}
 
-  /* scanlines */
-  body::after { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.07) 3px,rgba(0,0,0,.07) 4px); pointer-events:none; z-index:900; }
+/* ══ AMBIENT ═════════════════════════════════════════════════ */
+#ambient{position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(196,60,16,.05) 0%,transparent 70%)}
 
-  /* ── STATUS BAR ── */
-  .status-bar { position:fixed; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--ember),var(--gold),var(--ember)); z-index:800; box-shadow:0 0 12px var(--ember); }
-  .status-label { position:fixed; top:12px; right:80px; font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:3px; color:var(--gold); opacity:.65; z-index:801; }
-  .pulse { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--ember); margin-right:6px; box-shadow:0 0 6px var(--ember); animation:pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.15} }
+/* ══ STAGE ═══════════════════════════════════════════════════ */
+#stage{
+  position:relative;z-index:3;
+  width:min(92vw,92vh);height:min(92vw,92vh);
+  max-width:720px;max-height:720px;
+}
 
-  /* HUD corners */
-  .hud { position:fixed; width:50px; height:50px; pointer-events:none; z-index:801; opacity:.45; }
-  .hud.tl{top:18px;left:18px;border-top:1px solid var(--gold);border-left:1px solid var(--gold);}
-  .hud.tr{top:18px;right:18px;border-top:1px solid var(--gold);border-right:1px solid var(--gold);}
-  .hud.bl{bottom:18px;left:18px;border-bottom:1px solid var(--gold);border-left:1px solid var(--gold);}
-  .hud.br{bottom:18px;right:18px;border-bottom:1px solid var(--gold);border-right:1px solid var(--gold);}
+/* ══ WORDMARK ════════════════════════════════════════════════ */
+#wordmark{
+  position:absolute;top:-2%;left:50%;transform:translateX(-50%);
+  text-align:center;pointer-events:none;white-space:nowrap;z-index:10;
+}
+.wm-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(1.2rem,3.5vw,2.4rem);
+  letter-spacing:.12em;color:var(--cream);line-height:1;
+}
+.wm-name em{-webkit-text-stroke:.5px var(--fire);color:transparent;font-style:normal}
+.wm-sub{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(.55rem,1.2vw,.82rem);
+  color:var(--ash);letter-spacing:.14em;margin-top:3px;
+}
 
-  /* ── NAV ── */
-  nav {
-    position:fixed; top:0; left:0; right:0; z-index:700;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:18px 40px;
-    background:linear-gradient(to bottom, rgba(8,10,13,.95), transparent);
-    backdrop-filter:blur(4px);
-  }
-  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:4px; color:var(--gold); text-shadow:0 0 20px var(--glow-g); }
-  .nav-links { display:flex; gap:32px; }
-  .nav-links a { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:3px; color:var(--text-dim); text-decoration:none; text-transform:uppercase; transition:color .2s; cursor:none; }
-  .nav-links a:hover { color:var(--gold); }
-  .nav-order { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:3px; padding:8px 18px; border:1px solid var(--ember); color:var(--ember); text-decoration:none; border-radius:2px; cursor:none; transition:all .2s; }
-  .nav-order:hover { background:var(--ember); color:#fff; box-shadow:0 0 20px var(--glow-e); }
+/* ══ SVG WHEEL ═══════════════════════════════════════════════ */
+#wheel-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 
-  /* ── PAGE ── */
-  .page { position:relative; z-index:1; max-width:1140px; margin:0 auto; padding:0 36px 80px; }
+/* Hub rings */
+.hub-ring-1{fill:none;stroke:rgba(232,83,42,.18);stroke-width:1}
+.hub-ring-2{fill:none;stroke:rgba(232,83,42,.08);stroke-width:1}
+.hub-ring-3{fill:none;stroke:rgba(201,136,26,.06);stroke-width:.5;stroke-dasharray:3 6}
 
-  /* ── HERO ── */
-  .hero {
-    min-height:100vh;
-    display:flex; flex-direction:column; justify-content:center; align-items:center;
-    text-align:center;
-    padding-top:80px;
-  }
+/* Orbit decoration */
+.orbit-ring      {fill:none;stroke:rgba(232,83,42,.1);stroke-width:1}
+.orbit-ring-outer{fill:none;stroke:rgba(232,83,42,.04);stroke-width:1}
+.tick-line       {stroke:rgba(232,83,42,.2);stroke-width:.8}
 
-  .hero-eyebrow { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:8px; color:var(--ember); text-transform:uppercase; margin-bottom:20px; animation:fadeD .8s ease both; opacity:.9; }
+/* ══ NODES ═══════════════════════════════════════════════════ */
+.node-g{cursor:pointer;transition:opacity .35s}
+.node-g.dimmed{opacity:.18}
+.node-g.highlighted .node-circle-bg{fill:#281C0C}
+.node-g.highlighted .node-circle-rim{stroke-width:2}
+.node-g.highlighted .node-circle-inner{opacity:1}
 
-  .hero-title {
-    font-family:'Bebas Neue',sans-serif;
-    font-size:clamp(72px,13vw,160px);
-    line-height:.88;
-    letter-spacing:2px;
-    background:linear-gradient(160deg, #fff 0%, var(--gold) 45%, var(--ember) 80%);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    animation:fadeD .8s .1s ease both;
-    position:relative;
-  }
-  .hero-title::after {
-    content:'THE FRANCIS\ASMOKEHOUSE';
-    white-space:pre;
-    position:absolute; inset:0;
-    background:linear-gradient(160deg, #fff 0%, var(--gold) 45%, var(--ember) 80%);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    filter:blur(24px); opacity:.3;
-  }
+.node-circle-bg  {fill:var(--char2);transition:fill .28s}
+.node-circle-rim {fill:none;stroke-width:1;transition:stroke .28s,stroke-width .28s}
+.node-circle-inner{fill:none;stroke-width:.5;opacity:.4;transition:opacity .28s}
+.node-g:hover .node-circle-bg   {fill:#281C0C}
+.node-g:hover .node-circle-rim  {stroke-width:1.8}
+.node-g:hover .node-circle-inner{opacity:1}
 
-  .hero-sub { font-size:13px; letter-spacing:6px; color:var(--text-dim); margin-top:18px; text-transform:uppercase; animation:fadeD .8s .2s ease both; }
+.cat-icon-text{font-size:20px;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.cat-label-text{
+  font-family:'Bebas Neue',sans-serif;fill:var(--cream);letter-spacing:.1em;
+  text-anchor:middle;dominant-baseline:central;pointer-events:none;font-size:10px;
+}
+.cat-count-text{
+  font-family:'Barlow Condensed',sans-serif;fill:var(--ash);font-size:8px;
+  letter-spacing:.2em;text-anchor:middle;dominant-baseline:central;pointer-events:none;
+}
+.item-name-text{
+  font-family:'Cormorant Garamond',serif;fill:var(--cream);font-weight:600;
+  text-anchor:middle;dominant-baseline:central;pointer-events:none;
+}
+.item-price-text{
+  font-family:'Bebas Neue',sans-serif;fill:var(--gold);letter-spacing:.08em;
+  text-anchor:middle;dominant-baseline:central;pointer-events:none;transition:fill .25s;
+}
+.node-g:hover .item-price-text{fill:var(--fire)}
+.connector{fill:none;stroke:rgba(232,83,42,.1);stroke-width:.8;stroke-dasharray:2 5}
 
-  .hero-divider { display:flex; align-items:center; gap:16px; margin:32px 0; width:min(500px,90%); animation:fadeD .8s .3s ease both; }
-  .hero-divider::before,.hero-divider::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
-  .hero-divider span { font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--gold); letter-spacing:4px; white-space:nowrap; }
+/* Hub text */
+.hub-main-text{
+  font-family:'Bebas Neue',sans-serif;fill:var(--cream);font-size:17px;
+  letter-spacing:.14em;text-anchor:middle;dominant-baseline:central;pointer-events:none;
+}
+.hub-sub-text{
+  font-family:'Barlow Condensed',sans-serif;fill:var(--ash);font-size:8.5px;
+  letter-spacing:.3em;text-anchor:middle;dominant-baseline:central;pointer-events:none;
+}
 
-  .hero-badges { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:36px; animation:fadeD .8s .35s ease both; }
-  .badge { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:3px; padding:6px 14px; border:1px solid var(--border); color:var(--text-dim); border-radius:2px; backdrop-filter:blur(8px); }
-  .badge.hot { border-color:rgba(255,106,26,.4); color:var(--ember); }
-  .badge.award { border-color:rgba(232,168,53,.4); color:var(--gold); }
+/* ══ BACK BUTTON ═════════════════════════════════════════════ */
+#back-btn{cursor:pointer;pointer-events:none;opacity:0;transition:opacity .4s}
+#back-btn.show{pointer-events:all;opacity:1}
+#back-btn .back-circle{
+  fill:rgba(232,83,42,.07);stroke:rgba(232,83,42,.22);stroke-width:1;transition:fill .2s;
+}
+#back-btn:hover .back-circle{fill:rgba(232,83,42,.18)}
+#back-btn .back-arrow{
+  font-family:'Bebas Neue',sans-serif;fill:var(--bone);
+  font-size:24px;text-anchor:middle;dominant-baseline:central;pointer-events:none;
+}
+#back-btn .back-label{
+  font-family:'Barlow Condensed',sans-serif;fill:var(--ash);
+  font-size:8px;letter-spacing:.3em;text-anchor:middle;pointer-events:none;
+}
 
-  .hero-cta { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; animation:fadeD .8s .4s ease both; }
-  .btn-primary { font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:3px; padding:14px 32px; background:linear-gradient(135deg,var(--ember),#c44a00); color:#fff; border:none; border-radius:2px; cursor:none; text-decoration:none; transition:all .25s; box-shadow:0 4px 20px var(--glow-e); }
-  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px var(--glow-e); }
-  .btn-ghost { font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:3px; padding:14px 32px; border:1px solid var(--border); color:var(--text-dim); border-radius:2px; cursor:none; text-decoration:none; transition:all .25s; backdrop-filter:blur(8px); }
-  .btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
+/* ══ DRAG HINT & ADDRESS ══════════════════════════════════════ */
+#drag-hint{
+  position:absolute;bottom:2%;left:50%;transform:translateX(-50%);
+  font-family:'Barlow Condensed',sans-serif;font-size:clamp(.5rem,1.1vw,.72rem);
+  letter-spacing:.35em;color:var(--ash);text-transform:uppercase;
+  opacity:.65;pointer-events:none;z-index:10;transition:opacity .7s;white-space:nowrap;
+}
+#addr-strip{
+  position:absolute;bottom:-4%;left:50%;transform:translateX(-50%);
+  font-family:'Barlow Condensed',sans-serif;font-size:clamp(.45rem,.9vw,.62rem);
+  letter-spacing:.3em;color:rgba(107,92,66,.45);text-transform:uppercase;
+  white-space:nowrap;pointer-events:none;z-index:10;
+}
 
-  .hero-scroll { position:absolute; bottom:40px; left:50%; transform:translateX(-50%); font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:4px; color:var(--text-dim); animation:fadeD 1s .8s ease both, bob 2.5s 1.8s ease-in-out infinite; }
-  @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+/* ══ INFO BUTTON (bottom-right) ══════════════════════════════ */
+#info-btn{
+  position:fixed;bottom:28px;right:28px;z-index:20;
+  width:42px;height:42px;border-radius:50%;
+  background:rgba(20,16,9,.9);
+  border:1px solid rgba(232,83,42,.3);
+  cursor:none;display:flex;align-items:center;justify-content:center;
+  transition:border-color .25s,background .25s;
+}
+#info-btn:hover{background:rgba(232,83,42,.12);border-color:rgba(232,83,42,.7)}
+#info-btn svg{width:16px;height:16px;overflow:visible}
+#info-btn-label{
+  position:fixed;bottom:76px;right:28px;z-index:20;
+  font-family:'Barlow Condensed',sans-serif;font-size:.58rem;
+  letter-spacing:.3em;color:rgba(107,92,66,.5);text-transform:uppercase;
+  pointer-events:none;text-align:center;width:42px;
+}
 
-  /* ── SECTION SHARED ── */
-  section { padding:90px 0 30px; }
-  .sec-label { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:6px; color:var(--ember); text-transform:uppercase; margin-bottom:10px; }
-  .sec-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(36px,5vw,56px); letter-spacing:2px; color:#fff; line-height:1; margin-bottom:8px; }
-  .sec-rule { height:1px; background:linear-gradient(90deg,var(--border),transparent); margin:20px 0 40px; }
+/* ══ INFO PANEL ══════════════════════════════════════════════ */
+#info-panel{
+  position:fixed;top:0;right:0;bottom:0;
+  width:min(420px,92vw);z-index:150;
+  background:rgba(10,7,4,.96);
+  border-left:1px solid rgba(232,83,42,.2);
+  transform:translateX(100%);
+  transition:transform .5s cubic-bezier(.16,.9,.3,1);
+  display:flex;flex-direction:column;
+  backdrop-filter:blur(12px);
+  overflow:hidden;
+}
+#info-panel.open{transform:translateX(0)}
 
-  /* ── INFO STRIP ── */
-  .info-strip {
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px;
-    background:var(--border); border:1px solid var(--border);
-    border-radius:4px; overflow:hidden;
-    margin-bottom:80px;
-    animation:fadeU .8s .2s ease both;
-  }
-  .info-cell { background:var(--panel); padding:28px 24px; backdrop-filter:blur(16px); transition:background .25s; }
-  .info-cell:hover { background:rgba(30,22,14,.85); }
-  .info-cell-icon { font-size:22px; margin-bottom:10px; filter:drop-shadow(0 0 6px var(--ember)); }
-  .info-cell-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:4px; color:var(--text-dim); text-transform:uppercase; margin-bottom:6px; }
-  .info-cell-val { font-size:14px; font-weight:400; color:#d8dce8; line-height:1.6; }
-  .info-cell-val a { color:var(--gold); text-decoration:none; }
-  .info-cell-val a:hover { text-decoration:underline; }
+/* Panel fire line top */
+.panel-fire-top{
+  height:2px;flex-shrink:0;
+  background:linear-gradient(90deg,transparent,var(--ember),var(--gold),var(--ember),transparent);
+}
 
-  /* ── RATINGS ── */
-  .ratings-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-bottom:60px; }
-  .rating-card { background:var(--panel); border:1px solid var(--border); border-radius:4px; padding:28px; backdrop-filter:blur(16px); position:relative; overflow:hidden; transition:transform .25s,box-shadow .25s; }
-  .rating-card::before { content:''; position:absolute; top:0;left:0;right:0; height:2px; background:linear-gradient(90deg,var(--ember),var(--gold)); opacity:0; transition:opacity .3s; }
-  .rating-card:hover { transform:translateY(-3px); box-shadow:0 12px 40px rgba(0,0,0,.4); }
-  .rating-card:hover::before { opacity:1; }
-  .rating-platform { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:4px; color:var(--text-dim); margin-bottom:12px; }
-  .rating-score { font-family:'Bebas Neue',sans-serif; font-size:56px; color:var(--gold); line-height:1; text-shadow:0 0 20px var(--glow-g); }
-  .rating-max { font-size:18px; color:var(--text-dim); }
-  .rating-count { font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--text-dim); margin-top:4px; }
-  .rating-stars { font-size:16px; margin-top:8px; letter-spacing:2px; }
-  .rating-badge { display:inline-block; margin-top:12px; font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; padding:4px 10px; border:1px solid rgba(232,168,53,.35); color:var(--gold); border-radius:1px; }
+.panel-scroll{
+  flex:1;overflow-y:auto;padding:36px 36px 48px;
+  scrollbar-width:thin;scrollbar-color:rgba(232,83,42,.25) transparent;
+}
+.panel-scroll::-webkit-scrollbar{width:3px}
+.panel-scroll::-webkit-scrollbar-track{background:transparent}
+.panel-scroll::-webkit-scrollbar-thumb{background:rgba(232,83,42,.25);border-radius:2px}
 
-  /* REVIEW QUOTES */
-  .quotes-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:16px; }
-  .quote-card { background:rgba(14,11,8,.6); border:1px solid var(--border); border-left:2px solid var(--ember); padding:20px 22px; border-radius:2px; backdrop-filter:blur(12px); }
-  .quote-text { font-size:14px; font-style:italic; color:#c0c8d8; line-height:1.65; margin-bottom:12px; }
-  .quote-meta { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--text-dim); }
-  .quote-stars { color:var(--gold); font-size:11px; margin-bottom:6px; }
+.panel-eyebrow{
+  font-family:'Barlow Condensed',sans-serif;font-size:.58rem;
+  letter-spacing:.45em;color:var(--fire);text-transform:uppercase;
+  font-weight:600;margin-bottom:10px;
+}
+.panel-title{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,5vw,3.2rem);
+  letter-spacing:.1em;color:var(--cream);line-height:.95;margin-bottom:4px;
+}
+.panel-title em{color:var(--fire);font-style:normal}
+.panel-sub{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.95rem;color:var(--ash);margin-bottom:28px;letter-spacing:.06em;
+}
 
-  /* ── MENU ── */
-  .menu-nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:40px; }
-  .mtab { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:3px; text-transform:uppercase; padding:10px 20px; border:1px solid var(--border); border-radius:2px; background:var(--panel); color:var(--text-dim); cursor:none; transition:all .2s; backdrop-filter:blur(10px); }
-  .mtab:hover,.mtab.active { color:var(--ember); border-color:var(--ember); box-shadow:0 0 16px var(--glow-e); background:rgba(255,106,26,.06); }
+/* Hours block */
+.hours-block{margin-bottom:28px}
+.hours-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:10px 0;border-bottom:1px solid rgba(107,92,66,.15);
+  gap:12px;
+}
+.hours-day{
+  font-family:'Barlow Condensed',sans-serif;font-size:.85rem;
+  letter-spacing:.12em;color:var(--bone);text-transform:uppercase;
+}
+.hours-time{
+  font-family:'Bebas Neue',sans-serif;font-size:1.05rem;
+  color:var(--gold);letter-spacing:.08em;white-space:nowrap;
+}
 
-  .menu-section-wrap { margin-bottom:60px; }
-  .msec-head { display:flex; align-items:baseline; gap:16px; margin-bottom:24px; }
-  .msec-name { font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:5px; color:var(--ember); }
-  .msec-rule { flex:1; height:1px; background:linear-gradient(90deg,var(--glow-e),transparent); }
-  .msec-ct { font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--text-dim); letter-spacing:2px; }
+.panel-rule{height:1px;background:rgba(232,83,42,.15);margin:24px 0}
 
-  .menu-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
-  .mcard {
-    background:var(--panel); border:1px solid var(--border); border-radius:3px;
-    padding:22px; position:relative; overflow:hidden; cursor:none;
-    backdrop-filter:blur(14px);
-    transition:transform .28s,box-shadow .28s,border-color .28s;
-    animation:fadeU .5s ease both;
-  }
-  .mcard::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at var(--mx,50%) var(--my,50%),rgba(255,106,26,.07) 0%,transparent 55%); opacity:0; transition:opacity .3s; pointer-events:none; }
-  .mcard::before { content:''; position:absolute; top:0;left:0;right:0; height:1px; background:linear-gradient(90deg,transparent,var(--ember),transparent); opacity:0; transition:opacity .3s; }
-  .mcard:hover { transform:translateY(-3px); border-color:rgba(255,106,26,.45); box-shadow:0 8px 36px rgba(0,0,0,.45); }
-  .mcard:hover::after,.mcard:hover::before { opacity:1; }
+/* Contact block */
+.contact-item{
+  display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;
+}
+.contact-icon{
+  width:28px;height:28px;flex-shrink:0;
+  border:1px solid rgba(232,83,42,.25);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--fire);
+  font-family:'Barlow Condensed',sans-serif;letter-spacing:0;
+}
+.contact-label{
+  font-family:'Barlow Condensed',sans-serif;font-size:.62rem;
+  letter-spacing:.3em;color:var(--ash);text-transform:uppercase;margin-bottom:2px;
+}
+.contact-value{
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  color:var(--cream);font-weight:400;
+}
+.contact-value a{color:var(--cream);text-decoration:none}
+.contact-value a:hover{color:var(--fire)}
 
-  .mcard.featured { grid-column:span 2; background:linear-gradient(135deg,rgba(30,16,8,.75),rgba(15,10,5,.6)); border-color:rgba(255,106,26,.3); }
-  @media(max-width:660px){.mcard.featured{grid-column:span 1;}}
+/* Features list */
+.features-list{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;
+}
+.feat-tag{
+  font-family:'Barlow Condensed',sans-serif;font-size:.68rem;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ash);border:1px solid rgba(107,92,66,.3);
+  padding:5px 12px;transition:border-color .2s,color .2s;
+}
+.feat-tag:hover{border-color:rgba(232,83,42,.4);color:var(--bone)}
 
-  .mcard-badge { display:inline-block; font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; padding:3px 9px; border-radius:1px; margin-bottom:12px; color:var(--coal); background:var(--ember); }
-  .mcard-badge.sig { background:var(--gold); }
-  .mcard-badge.new { background:#a78bfa; }
+/* Panel close */
+#panel-close{
+  position:absolute;top:14px;right:16px;
+  background:none;border:none;cursor:none;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(107,92,66,.6);padding:6px 8px;transition:color .2s;
+}
+#panel-close:hover{color:var(--fire)}
 
-  .mcard-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px; }
-  .mcard-name { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:1px; color:#fff; flex:1; line-height:1.1; }
-  .mcard-price { font-family:'Share Tech Mono',monospace; font-size:17px; color:var(--gold); white-space:nowrap; text-shadow:0 0 12px var(--glow-g); }
-  .mcard-price-range { font-family:'Share Tech Mono',monospace; font-size:12px; color:var(--gold); opacity:.75; white-space:nowrap; }
+/* Panel overlay */
+#panel-backdrop{
+  position:fixed;inset:0;z-index:140;
+  background:rgba(8,6,4,.4);backdrop-filter:blur(2px);
+  opacity:0;pointer-events:none;transition:opacity .4s;
+}
+#panel-backdrop.open{opacity:1;pointer-events:all}
 
-  .mcard-desc { font-size:13px; line-height:1.65; color:var(--text-dim); margin:8px 0 14px; }
-  .mcard-tags { display:flex; flex-wrap:wrap; gap:6px; }
-  .mtag { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; padding:3px 7px; border:1px solid rgba(232,168,53,.25); color:rgba(232,168,53,.75); border-radius:1px; }
-  .mtag.sp { color:#f87171; border-color:rgba(248,113,113,.3); }
-  .mtag.ca { color:#34d399; border-color:rgba(52,211,153,.3); }
+/* ══ SEARCH BAR ══════════════════════════════════════════════ */
+#search-wrap{
+  position:fixed;top:24px;left:50%;transform:translateX(-50%);
+  z-index:20;width:min(340px,80vw);
+  opacity:0;pointer-events:none;
+  transition:opacity .4s,transform .4s;
+  transform:translateX(-50%) translateY(-8px);
+}
+#search-wrap.visible{
+  opacity:1;pointer-events:all;
+  transform:translateX(-50%) translateY(0);
+}
+#search-input{
+  width:100%;
+  background:rgba(12,9,5,.9);
+  border:1px solid rgba(232,83,42,.3);
+  border-bottom:1px solid rgba(232,83,42,.5);
+  color:var(--cream);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:1rem;letter-spacing:.18em;
+  padding:10px 40px 10px 16px;
+  outline:none;transition:border-color .25s,background .25s;
+  cursor:none;
+}
+#search-input::placeholder{color:var(--ash);letter-spacing:.2em}
+#search-input:focus{
+  background:rgba(20,14,7,.95);
+  border-color:rgba(232,83,42,.7);
+}
+#search-clear{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:none;
+  color:var(--ash);font-size:.75rem;padding:4px;
+  transition:color .2s;opacity:0;pointer-events:none;
+}
+#search-clear.show{opacity:1;pointer-events:all}
+#search-clear:hover{color:var(--fire)}
+#search-count{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:.88rem;
+  color:var(--gold);letter-spacing:.1em;pointer-events:none;
+  opacity:0;transition:opacity .2s;
+}
 
-  /* Sides price note */
-  .sides-note { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--text-dim); margin-bottom:16px; padding:10px 14px; border:1px solid var(--border); border-radius:2px; display:inline-block; }
+/* Search toggle button (magnifier, bottom-left) */
+#search-btn{
+  position:fixed;bottom:28px;left:28px;z-index:20;
+  width:42px;height:42px;border-radius:50%;
+  background:rgba(20,16,9,.9);border:1px solid rgba(232,83,42,.3);
+  cursor:none;display:flex;align-items:center;justify-content:center;
+  transition:border-color .25s,background .25s;
+}
+#search-btn:hover{background:rgba(232,83,42,.12);border-color:rgba(232,83,42,.7)}
+#search-btn.active{background:rgba(232,83,42,.15);border-color:var(--fire)}
+#search-btn-label{
+  position:fixed;bottom:76px;left:28px;z-index:20;
+  font-family:'Barlow Condensed',sans-serif;font-size:.58rem;
+  letter-spacing:.3em;color:rgba(107,92,66,.5);text-transform:uppercase;
+  pointer-events:none;text-align:center;width:42px;
+}
 
-  /* specials */
-  .specials-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
-  .spec-card { background:var(--panel); border:1px solid var(--border); border-top:2px solid var(--gold); border-radius:3px; padding:22px; backdrop-filter:blur(14px); transition:transform .25s; }
-  .spec-card:hover { transform:translateY(-3px); }
-  .spec-name { font-family:'Bebas Neue',sans-serif; font-size:19px; color:#fff; margin-bottom:6px; }
-  .spec-price { font-family:'Share Tech Mono',monospace; font-size:16px; color:var(--gold); margin-bottom:8px; }
-  .spec-desc { font-size:13px; color:var(--text-dim); line-height:1.6; }
+/* ══ POPUP ═══════════════════════════════════════════════════ */
+#popup-overlay{
+  position:fixed;inset:0;z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(8,6,4,.78);backdrop-filter:blur(10px) saturate(.7);
+  opacity:0;pointer-events:none;transition:opacity .4s;
+}
+#popup-overlay.open{opacity:1;pointer-events:all}
+#popup-card{
+  position:relative;background:var(--char);
+  max-width:480px;width:92%;overflow:hidden;
+  transform:scale(.84) translateY(32px);
+  transition:transform .42s cubic-bezier(.16,.9,.3,1.05);
+  border:1px solid rgba(232,83,42,.25);
+}
+#popup-overlay.open #popup-card{transform:scale(1) translateY(0)}
+.popup-fire{height:3px;background:linear-gradient(90deg,var(--ember),var(--gold-light),var(--gold),var(--ember));width:100%}
+.popup-inner{padding:28px 36px 32px 38px}
+.popup-eyebrow{
+  font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.45em;
+  color:var(--fire);text-transform:uppercase;font-weight:600;margin-bottom:8px;
+}
+.popup-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,4vw,2.1rem);font-weight:600;
+  color:var(--cream);line-height:1.05;margin-bottom:4px;
+}
+.popup-price{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,2.8rem);
+  color:var(--fire);letter-spacing:.1em;margin-bottom:18px;
+}
+.popup-rule{height:1px;background:rgba(232,83,42,.15);margin-bottom:18px}
+.popup-desc{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(.95rem,2vw,1.1rem);
+  font-style:italic;font-weight:300;color:var(--bone);line-height:1.75;
+}
+.popup-note{
+  margin-top:16px;font-family:'Barlow Condensed',sans-serif;
+  font-size:.68rem;letter-spacing:.22em;color:var(--ash);
+  text-transform:uppercase;line-height:1.6;
+}
+#popup-close{
+  position:absolute;top:12px;right:14px;background:none;border:none;
+  font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.3em;
+  text-transform:uppercase;color:rgba(107,92,66,.7);cursor:none;
+  padding:6px 8px;transition:color .2s;
+}
+#popup-close:hover{color:var(--fire)}
 
-  /* ── HOURS SECTION ── */
-  .hours-wrap { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  @media(max-width:600px){ .hours-wrap{grid-template-columns:1fr;} }
-
-  .hours-card { background:var(--panel); border:1px solid var(--border); border-radius:3px; padding:28px; backdrop-filter:blur(14px); }
-  .hours-card-title { font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:4px; color:var(--ember); margin-bottom:18px; }
-  .hours-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(232,168,53,.08); }
-  .hours-row:last-child { border-bottom:none; }
-  .hours-day { font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:2px; color:var(--smoke); }
-  .hours-time { font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--gold); }
-  .hours-closed { color:#f87171; }
-
-  .access-list { list-style:none; }
-  .access-list li { display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid rgba(232,168,53,.08); font-size:14px; color:var(--smoke); }
-  .access-list li:last-child{border-bottom:none;}
-  .access-list li::before { content:'◈'; color:var(--ember); font-size:10px; flex-shrink:0; }
-
-  /* ── CONTACT / MAP SECTION ── */
-  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
-  @media(max-width:700px){ .contact-grid{grid-template-columns:1fr;} }
-
-  .contact-card { background:var(--panel); border:1px solid var(--border); border-radius:3px; padding:32px; backdrop-filter:blur(14px); }
-  .contact-item { display:flex; gap:16px; padding:14px 0; border-bottom:1px solid rgba(232,168,53,.08); align-items:flex-start; }
-  .contact-item:last-child { border-bottom:none; }
-  .contact-icon { font-size:18px; flex-shrink:0; margin-top:2px; filter:drop-shadow(0 0 5px var(--ember)); }
-  .contact-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:3px; color:var(--text-dim); text-transform:uppercase; margin-bottom:4px; }
-  .contact-val { font-size:14px; color:#d8dce8; line-height:1.5; }
-  .contact-val a { color:var(--gold); text-decoration:none; }
-  .contact-val a:hover { text-decoration:underline; }
-
-  .map-placeholder {
-    background:linear-gradient(135deg,rgba(20,14,8,.9),rgba(10,8,5,.9));
-    border:1px solid var(--border); border-radius:3px;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    min-height:300px; gap:14px; text-align:center; padding:30px;
-  }
-  .map-placeholder-icon { font-size:40px; filter:drop-shadow(0 0 12px var(--ember)); }
-  .map-placeholder-title { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:3px; color:var(--gold); }
-  .map-placeholder-addr { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:2px; color:var(--text-dim); line-height:1.7; }
-  .map-link { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:3px; padding:12px 24px; border:1px solid var(--ember); color:var(--ember); border-radius:2px; text-decoration:none; cursor:none; transition:all .2s; margin-top:8px; display:inline-block; }
-  .map-link:hover { background:var(--ember); color:#fff; box-shadow:0 0 18px var(--glow-e); }
-
-  /* ── FOOTER ── */
-  footer { border-top:1px solid var(--border); padding:50px 0 30px; text-align:center; margin-top:60px; }
-  .footer-logo { font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,5vw,44px); letter-spacing:4px; background:linear-gradient(135deg,var(--gold),var(--ember)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:8px; }
-  .footer-sub { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:5px; color:var(--text-dim); margin-bottom:28px; }
-  .footer-links { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; margin-bottom:28px; }
-  .footer-links a { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:3px; color:var(--text-dim); text-decoration:none; text-transform:uppercase; transition:color .2s; cursor:none; }
-  .footer-links a:hover { color:var(--gold); }
-  .footer-copy { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:3px; color:rgba(176,184,200,.3); }
-
-  /* ── DIVIDER ── */
-  .holo-div { height:1px; background:linear-gradient(90deg,transparent,var(--gold),var(--ember),transparent); margin:80px 0; opacity:.25; position:relative; }
-  .holo-div::before { content:'◈'; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); background:var(--deep); padding:0 12px; color:var(--gold); font-size:11px; opacity:.7; }
-
-  /* ANIMATIONS */
-  @keyframes fadeD { from{opacity:0;transform:translateY(-14px);} to{opacity:1;transform:translateY(0);} }
-  @keyframes fadeU { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
-  .mcard:nth-child(1){animation-delay:.04s}.mcard:nth-child(2){animation-delay:.08s}.mcard:nth-child(3){animation-delay:.12s}.mcard:nth-child(4){animation-delay:.16s}.mcard:nth-child(5){animation-delay:.2s}.mcard:nth-child(6){animation-delay:.24s}
-
-  /* RESPONSIVE */
-  @media(max-width:768px){
-    nav{padding:14px 20px;}
-    .nav-links{display:none;}
-    .page{padding:0 18px 60px;}
-    .hero{padding-top:70px;}
-  }
+/* ══ WHEEL HINT ANIM ════════════════════════════════════════ */
+@keyframes rotateHint{
+  0%{transform:rotate(0deg)}30%{transform:rotate(18deg)}
+  70%{transform:rotate(-6deg)}100%{transform:rotate(0deg)}
+}
+.hint-spin{animation:rotateHint 2s ease 1.2s both}
 </style>
 </head>
 <body>
 
-<div class="status-bar"></div>
-<div class="status-label"><span class="pulse"></span>LIVE · ST. FRANCISVILLE, LA</div>
-<div class="hud tl"></div><div class="hud tr"></div><div class="hud bl"></div><div class="hud br"></div>
-<div id="cur"></div><div id="ring"></div>
-
-<div class="bg-wrap">
-  <div class="bg-grid"></div>
-  <div class="bg-orb bg-orb-1"></div>
-  <div class="bg-orb bg-orb-2"></div>
-  <div class="bg-orb bg-orb-3"></div>
+<!-- Custom cursor -->
+<div id="cur-wrap">
+  <svg id="cur-svg" viewBox="-32 -32 64 64" xmlns="http://www.w3.org/2000/svg">
+    <circle id="cur-outer" r="26" cx="0" cy="0" stroke-dasharray="60 20" stroke-dashoffset="0">
+      <animateTransform attributeName="transform" type="rotate"
+        from="0 0 0" to="360 0 0" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <g id="cur-cross">
+      <line x1="-20" y1="0" x2="-8" y2="0" stroke="var(--fire)" stroke-width=".8"/>
+      <line x1="8" y1="0" x2="20" y2="0" stroke="var(--fire)" stroke-width=".8"/>
+      <line x1="0" y1="-20" x2="0" y2="-8" stroke="var(--fire)" stroke-width=".8"/>
+      <line x1="0" y1="8" x2="0" y2="20" stroke="var(--fire)" stroke-width=".8"/>
+    </g>
+    <!-- Magnifier extra ring for search state -->
+    <circle id="cur-mag" r="18" cx="4" cy="4" fill="none" stroke="var(--gold-light)" stroke-width=".8"/>
+    <circle id="cur-inner" r="3" cx="0" cy="0"/>
+  </svg>
 </div>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">Francis</div>
-  <div class="nav-links">
-    <a href="#menu">Menu</a>
-    <a href="#specials">Specials</a>
-    <a href="#reviews">Reviews</a>
-    <a href="#hours">Hours</a>
-    <a href="#contact">Contact</a>
-  </div>
-  <a href="tel:2252455046" class="nav-order">☎ Order Now</a>
-</nav>
+<!-- Canvases -->
+<canvas id="bg-smoke"></canvas>
+<canvas id="bg-ash"></canvas>
+<canvas id="flame-canvas"></canvas>
+<div id="ambient"></div>
 
-<div class="page">
-
-  <!-- HERO -->
-  <div class="hero" style="position:relative;">
-    <div class="hero-eyebrow">6779 US Highway 61 · St. Francisville, Louisiana</div>
-    <div class="hero-title">THE FRANCIS<br>SMOKEHOUSE</div>
-    <div class="hero-sub">& Specialty Meats · Established 2015</div>
-    <div class="hero-divider"><span>◈ AWARD-WINNING BBQ ◈</span></div>
-    <div class="hero-badges">
-      <div class="badge award">🏆 Tripadvisor Travellers' Choice</div>
-      <div class="badge hot">4.7 ★ Google · 505 Reviews</div>
-      <div class="badge">4.5 ★ Tripadvisor · 143 Reviews</div>
-      <div class="badge">Takeout Available</div>
-      <div class="badge">Wheelchair Accessible</div>
-    </div>
-    <div class="hero-cta">
-      <a href="#menu" class="btn-primary">VIEW MENU</a>
-      <a href="#contact" class="btn-ghost">GET DIRECTIONS</a>
-    </div>
-    <div class="hero-scroll">▾ SCROLL TO EXPLORE</div>
+<!-- STAGE -->
+<div id="stage">
+  <div id="wordmark">
+    <div class="wm-name">THE FRANCIS <em>SMOKEHOUSE</em></div>
+    <div class="wm-sub">St. Francisville, Louisiana &nbsp;·&nbsp; Spin to explore</div>
   </div>
 
-  <!-- INFO STRIP -->
-  <div class="info-strip">
-    <div class="info-cell">
-      <div class="info-cell-icon">📍</div>
-      <div class="info-cell-label">Location</div>
-      <div class="info-cell-val">6779 US Highway 61<br>St. Francisville, LA 70775</div>
+  <svg id="wheel-svg" viewBox="-360 -360 720 720">
+    <defs>
+      <radialGradient id="hubGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#221508"/>
+        <stop offset="100%" stop-color="#080604"/>
+      </radialGradient>
+      <radialGradient id="nodeGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#1E1208"/>
+        <stop offset="100%" stop-color="#0E0A05"/>
+      </radialGradient>
+      <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="2.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <circle r="348" fill="none" stroke="rgba(232,83,42,.04)" stroke-width="1"/>
+    <circle r="335" fill="none" stroke="rgba(232,83,42,.03)" stroke-width="1"/>
+
+    <g id="wheel-group" class="hint-spin"></g>
+
+    <!-- 12 o'clock pointer -->
+    <polygon points="0,-322 -6,-307 6,-307" fill="var(--fire)" opacity=".75"/>
+    <line x1="0" y1="-297" x2="0" y2="-262"
+      stroke="rgba(232,83,42,.18)" stroke-width=".8" stroke-dasharray="2 4"/>
+
+    <!-- Hub -->
+    <g id="hub">
+      <circle r="90" fill="url(#hubGrad)"/>
+      <circle r="90" class="hub-ring-1"/>
+      <circle r="84" class="hub-ring-2"/>
+      <circle r="78" class="hub-ring-3"/>
+      <polygon points="0,-18 -10,8 10,8" fill="var(--ember)" opacity=".15" filter="url(#glow)"/>
+      <text id="hub-main" class="hub-main-text" y="-6">MENU</text>
+      <text id="hub-sub"  class="hub-sub-text"  y="14">SPIN &amp; SELECT</text>
+    </g>
+
+    <!-- Back button -->
+    <g id="back-btn">
+      <circle class="back-circle" r="90" cx="0" cy="0"/>
+      <text class="back-arrow" x="0" y="-8">&#8592;</text>
+      <text class="back-label" x="0" y="16">CATEGORIES</text>
+    </g>
+  </svg>
+
+  <div id="drag-hint">&#8635; drag to spin &nbsp;·&nbsp; tap to select</div>
+  <div id="addr-strip">6779 US-61 · St. Francisville, LA · (225) 245-5046</div>
+</div>
+
+<!-- Search bar -->
+<div id="search-wrap">
+  <input id="search-input" type="text" placeholder="SEARCH MENU..." autocomplete="off" spellcheck="false"/>
+  <button id="search-clear" aria-label="Clear">✕</button>
+</div>
+
+<!-- Search toggle -->
+<button id="search-btn" aria-label="Search menu" title="Search">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--fire)" stroke-width="1.4">
+    <circle cx="6.5" cy="6.5" r="4.5"/>
+    <line x1="10.2" y1="10.2" x2="14" y2="14"/>
+  </svg>
+</button>
+<div id="search-btn-label">SEARCH</div>
+
+<!-- Info button -->
+<button id="info-btn" aria-label="Hours and info" title="Info">
+  <svg viewBox="0 0 16 16" fill="none" stroke="var(--fire)" stroke-width="1.4">
+    <circle cx="8" cy="8" r="6.5"/>
+    <line x1="8" y1="7" x2="8" y2="11.5"/>
+    <circle cx="8" cy="4.8" r=".8" fill="var(--fire)" stroke="none"/>
+  </svg>
+</button>
+<div id="info-btn-label">INFO</div>
+
+<!-- Info panel -->
+<div id="panel-backdrop"></div>
+<div id="info-panel" role="dialog" aria-label="Hours and info">
+  <div class="panel-fire-top"></div>
+  <div class="panel-scroll">
+
+    <div class="panel-eyebrow">The Francis Smokehouse</div>
+    <div class="panel-title">HOURS <em>&amp;</em><br/>INFO</div>
+    <div class="panel-sub">St. Francisville, Louisiana</div>
+
+    <div class="hours-block">
+      <div class="hours-row">
+        <span class="hours-day">Monday</span>
+        <span class="hours-time">10:00 AM – 6:00 PM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Tuesday</span>
+        <span class="hours-time">10:00 AM – 6:00 PM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Wednesday</span>
+        <span class="hours-time">10:00 AM – 6:00 PM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Thursday</span>
+        <span class="hours-time">10:00 AM – 6:00 PM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Friday</span>
+        <span class="hours-time">10:00 AM – 6:00 PM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Saturday</span>
+        <span class="hours-time">10:00 AM – 6:00 PM</span>
+      </div>
+      <div class="hours-row" style="border-bottom:none">
+        <span class="hours-day" style="color:var(--fire)">Sunday</span>
+        <span class="hours-time">10:00 AM – 3:00 PM</span>
+      </div>
     </div>
-    <div class="info-cell">
-      <div class="info-cell-icon">📞</div>
-      <div class="info-cell-label">Phone</div>
-      <div class="info-cell-val"><a href="tel:2252455046">(225) 245-5046</a></div>
+
+    <div class="panel-rule"></div>
+
+    <div class="contact-item">
+      <div class="contact-icon">📍</div>
+      <div>
+        <div class="contact-label">Address</div>
+        <div class="contact-value">6779 US Highway 61<br/>St. Francisville, LA 70775</div>
+      </div>
     </div>
-    <div class="info-cell">
-      <div class="info-cell-icon">🕙</div>
-      <div class="info-cell-label">Hours</div>
-      <div class="info-cell-val">Mon–Sat: 10am – 6pm<br>Sun: 10am – 3pm</div>
+    <div class="contact-item">
+      <div class="contact-icon">📞</div>
+      <div>
+        <div class="contact-label">Phone</div>
+        <div class="contact-value"><a href="tel:2252455046">(225) 245-5046</a></div>
+      </div>
     </div>
-    <div class="info-cell">
-      <div class="info-cell-icon">✉</div>
-      <div class="info-cell-label">Email</div>
-      <div class="info-cell-val"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div>
+    <div class="contact-item">
+      <div class="contact-icon">✉</div>
+      <div>
+        <div class="contact-label">Email</div>
+        <div class="contact-value"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div>
+      </div>
     </div>
+    <div class="contact-item">
+      <div class="contact-icon">⭐</div>
+      <div>
+        <div class="contact-label">Rating</div>
+        <div class="contact-value">4.5 / 5 &nbsp;·&nbsp; Tripadvisor Travellers' Choice</div>
+      </div>
+    </div>
+
+    <div class="panel-rule"></div>
+
+    <div class="panel-eyebrow" style="margin-bottom:14px">What we offer</div>
+    <div class="features-list">
+      <span class="feat-tag">Dine In</span>
+      <span class="feat-tag">Takeout</span>
+      <span class="feat-tag">Catering</span>
+      <span class="feat-tag">Parking</span>
+      <span class="feat-tag">Wheelchair Accessible</span>
+      <span class="feat-tag">Outdoor Seating</span>
+      <span class="feat-tag">Dog Friendly</span>
+      <span class="feat-tag">Local Favorites</span>
+    </div>
+
   </div>
+  <button id="panel-close">✕ Close</button>
+</div>
 
-  <!-- REVIEWS SECTION -->
-  <section id="reviews">
-    <div class="sec-label">What People Are Saying</div>
-    <div class="sec-title">Reviews & Reputation</div>
-    <div class="sec-rule"></div>
-
-    <div class="ratings-row">
-      <div class="rating-card">
-        <div class="rating-platform">TRIPADVISOR</div>
-        <div><span class="rating-score">4.5</span><span class="rating-max"> /5</span></div>
-        <div class="rating-stars">🔥🔥🔥🔥🔥</div>
-        <div class="rating-count">Based on 143 reviews</div>
-        <div class="rating-badge">🏆 TRAVELLERS' CHOICE</div>
-      </div>
-      <div class="rating-card">
-        <div class="rating-platform">GOOGLE REVIEWS</div>
-        <div><span class="rating-score">4.7</span><span class="rating-max"> /5</span></div>
-        <div class="rating-stars">🔥🔥🔥🔥🔥</div>
-        <div class="rating-count">Based on 505 reviews</div>
-        <div class="rating-badge">TOP-RATED LOCAL</div>
-      </div>
-      <div class="rating-card">
-        <div class="rating-platform">PRICE RANGE</div>
-        <div><span class="rating-score">$$</span><span class="rating-max">–$$$</span></div>
-        <div style="margin-top:16px;font-size:13px;color:var(--text-dim);line-height:1.7;">Sandwiches from $6.99<br>Plates up to $19.99<br>Specials in the $20s</div>
-      </div>
+<!-- Item popup -->
+<div id="popup-overlay" role="dialog" aria-modal="true">
+  <div id="popup-card">
+    <div class="popup-fire"></div>
+    <div class="popup-inner">
+      <div class="popup-eyebrow" id="p-cat"></div>
+      <div class="popup-title"   id="p-name"></div>
+      <div class="popup-price"   id="p-price"></div>
+      <div class="popup-rule"></div>
+      <div class="popup-desc"    id="p-desc"></div>
+      <div class="popup-note"    id="p-note"></div>
     </div>
-
-    <div class="quotes-grid">
-      <div class="quote-card">
-        <div class="quote-stars">★★★★★</div>
-        <div class="quote-text">"Brisket practically melted in my mouth alongside ribs described as tender and smokey."</div>
-        <div class="quote-meta">TRIPADVISOR REVIEWER</div>
-      </div>
-      <div class="quote-card">
-        <div class="quote-stars">★★★★★</div>
-        <div class="quote-text">"Boudin balls were AMAZING! Service was fantastic and everyone was incredibly friendly."</div>
-        <div class="quote-meta">GOOGLE REVIEWER</div>
-      </div>
-      <div class="quote-card">
-        <div class="quote-stars">★★★★★</div>
-        <div class="quote-text">"Good food, friendly staff, and a cozy outdoor deck built around a tree — truly one of a kind."</div>
-        <div class="quote-meta">TRIPADVISOR REVIEWER</div>
-      </div>
-      <div class="quote-card">
-        <div class="quote-stars">★★★★☆</div>
-        <div class="quote-text">"Corn pudding and the pulled pork are must-tries. Lots of locals mixed with travelers — great vibe."</div>
-        <div class="quote-meta">GOOGLE REVIEWER</div>
-      </div>
-    </div>
-  </section>
-
-  <div class="holo-div"></div>
-
-  <!-- MENU SECTION -->
-  <section id="menu">
-    <div class="sec-label">Full Menu</div>
-    <div class="sec-title">What We Smoke</div>
-    <div class="sec-rule"></div>
-
-    <div class="menu-nav">
-      <div class="mtab active" onclick="filterMenu('all',this)">All Items</div>
-      <div class="mtab" onclick="filterMenu('bbq',this)">BBQ Plates</div>
-      <div class="mtab" onclick="filterMenu('burgers',this)">Burgers & Sandwiches</div>
-      <div class="mtab" onclick="filterMenu('boudin',this)">Boudin & Deli</div>
-      <div class="mtab" onclick="filterMenu('sides',this)">Sides</div>
-      <div class="mtab" onclick="filterMenu('desserts',this)">Desserts</div>
-    </div>
-
-    <!-- BBQ PLATES -->
-    <div class="menu-section-wrap" data-cat="bbq">
-      <div class="msec-head">
-        <div class="msec-name">BBQ Plates</div>
-        <div class="msec-rule"></div>
-        <div class="msec-ct">ALL WITH TWO SIDES</div>
-      </div>
-      <div class="menu-grid">
-        <div class="mcard featured">
-          <div class="mcard-badge sig">Signature</div>
-          <div class="mcard-top">
-            <div class="mcard-name">Full Rack of Ribs</div>
-            <div class="mcard-price">$19.99</div>
-          </div>
-          <div class="mcard-desc">Our crown jewel — a full rack of slow-smoked ribs, fall-off-the-bone tender with our house BBQ glaze. Served with your choice of two sides. This is what St. Francisville comes back for.</div>
-          <div class="mcard-tags"><span class="mtag">SLOW SMOKED</span><span class="mtag sp">🌶 SMOKY HEAT</span><span class="mtag">BEST SELLER</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top">
-            <div class="mcard-name">Half Rack of Ribs</div>
-            <div class="mcard-price">$11.99</div>
-          </div>
-          <div class="mcard-desc">Half rack of our signature smoked ribs with two sides. A lighter take on the full experience.</div>
-          <div class="mcard-tags"><span class="mtag">SLOW SMOKED</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top">
-            <div class="mcard-name">Brisket Plate</div>
-            <div class="mcard-price">$10.99</div>
-          </div>
-          <div class="mcard-desc">Hand-sliced smoked brisket — reviewers say it "practically melts in your mouth." Served with two sides.</div>
-          <div class="mcard-tags"><span class="mtag">CROWD FAVORITE</span><span class="mtag">SMOKY</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top">
-            <div class="mcard-name">Pulled Pork Plate</div>
-            <div class="mcard-price">$9.99</div>
-          </div>
-          <div class="mcard-desc">Slow-pulled smoked pork, tender and smoky, served with two sides of your choice.</div>
-          <div class="mcard-tags"><span class="mtag">PULLED</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top">
-            <div class="mcard-name">Half Chicken Plate</div>
-            <div class="mcard-price">$9.99</div>
-          </div>
-          <div class="mcard-desc">Juicy smoked half chicken with crispy skin, served with two sides.</div>
-          <div class="mcard-tags"><span class="mtag">SMOKED</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top">
-            <div class="mcard-name">Smoked Wings</div>
-            <div class="mcard-price">$7.99</div>
-          </div>
-          <div class="mcard-desc">Smoky, catered wings with a perfectly seasoned crust — a crowd pleaser.</div>
-          <div class="mcard-tags"><span class="mtag sp">🌶 SEASONED</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BURGERS & SANDWICHES -->
-    <div class="menu-section-wrap" data-cat="burgers">
-      <div class="msec-head">
-        <div class="msec-name">Burgers & Sandwiches</div>
-        <div class="msec-rule"></div>
-        <div class="msec-ct">SERVED DRESSED · WITH ONE SIDE</div>
-      </div>
-      <div class="menu-grid">
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Hamburger</div><div class="mcard-price">$6.99</div></div>
-          <div class="mcard-desc">Classic house burger, dressed with lettuce and tomato, served with one side.</div>
-          <div class="mcard-tags"><span class="mtag">DRESSED</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Cheeseburger</div><div class="mcard-price">$7.99</div></div>
-          <div class="mcard-desc">House burger with melted cheese, dressed with lettuce and tomato, with one side.</div>
-          <div class="mcard-tags"><span class="mtag">CHEESE</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Bacon Cheeseburger</div><div class="mcard-price">$8.99</div></div>
-          <div class="mcard-desc">Loaded with crispy bacon and melted cheese. Dressed, with one side.</div>
-          <div class="mcard-tags"><span class="mtag">BACON</span><span class="mtag">CHEESE</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Pulled Pork Sandwich</div><div class="mcard-price">$7.99</div></div>
-          <div class="mcard-desc">Slow-smoked pulled pork piled high, dressed with lettuce and tomato, with one side.</div>
-          <div class="mcard-tags"><span class="mtag">SMOKED</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Brisket Sandwich</div><div class="mcard-price">$8.99</div></div>
-          <div class="mcard-desc">Sliced smoked brisket sandwich, dressed with lettuce and tomato, with one side.</div>
-          <div class="mcard-tags"><span class="mtag">SMOKED</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-badge">Po-Boy</div>
-          <div class="mcard-top"><div class="mcard-name">Ribeye Po-Boy</div><div class="mcard-price">$10.99</div></div>
-          <div class="mcard-desc">Hearty ribeye po-boy dressed Louisiana-style, with one side.</div>
-          <div class="mcard-tags"><span class="mtag">LOUISIANA</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Shrimp Po-Boy</div><div class="mcard-price">$8.99</div></div>
-          <div class="mcard-desc">Gulf shrimp po-boy, dressed and served with one side.</div>
-          <div class="mcard-tags"><span class="mtag">SEAFOOD</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Crawfish Po-Boy</div><div class="mcard-price">$10.99</div></div>
-          <div class="mcard-desc">Louisiana crawfish po-boy, dressed, with one side. A true local classic.</div>
-          <div class="mcard-tags"><span class="mtag">LOUISIANA</span><span class="mtag">CRAWFISH</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Catfish Po-Boy</div><div class="mcard-price">$8.99</div></div>
-          <div class="mcard-desc">Southern-style catfish po-boy, dressed and served with one side.</div>
-          <div class="mcard-tags"><span class="mtag">SEAFOOD</span><span class="mtag">SOUTHERN</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Chicken Sandwich</div><div class="mcard-price">$7.99</div></div>
-          <div class="mcard-desc">Juicy chicken sandwich dressed with lettuce and tomato, with one side.</div>
-          <div class="mcard-tags"><span class="mtag">CHICKEN</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BOUDIN & DELI -->
-    <div class="menu-section-wrap" data-cat="boudin">
-      <div class="msec-head">
-        <div class="msec-name">Boudin & Deli Favorites</div>
-        <div class="msec-rule"></div>
-        <div class="msec-ct">SPECIALTY ITEMS</div>
-      </div>
-      <div class="menu-grid">
-        <div class="mcard featured">
-          <div class="mcard-badge sig">Fan Favorite</div>
-          <div class="mcard-top"><div class="mcard-name">Boudin Balls</div><div class="mcard-price-range">MARKET PRICE</div></div>
-          <div class="mcard-desc">Our legendary boudin balls — reviewers consistently call them "AMAZING." Crispy golden exterior, perfectly seasoned Cajun rice and pork filling. A St. Francisville staple.</div>
-          <div class="mcard-tags"><span class="mtag">CAJUN</span><span class="mtag">#1 REVIEWED ITEM</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Steamed Boudin Links</div><div class="mcard-price-range">MARKET PRICE</div></div>
-          <div class="mcard-desc">Classic Louisiana steamed boudin links, packed with seasoned rice and pork.</div>
-          <div class="mcard-tags"><span class="mtag">CAJUN</span><span class="mtag">TRADITIONAL</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Pepper Jack Boudin Balls</div><div class="mcard-price-range">MARKET PRICE</div></div>
-          <div class="mcard-desc">Boudin balls loaded with melted pepper jack cheese for an extra kick.</div>
-          <div class="mcard-tags"><span class="mtag sp">🌶 SPICY</span><span class="mtag">CHEESE</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Boudin Egg Rolls</div><div class="mcard-price-range">MARKET PRICE</div></div>
-          <div class="mcard-desc">Cajun boudin wrapped in crispy egg roll wrappers and fried golden. A fusion classic.</div>
-          <div class="mcard-tags"><span class="mtag">FUSION</span><span class="mtag">CAJUN</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Meat Pies</div><div class="mcard-price-range">MARKET PRICE</div></div>
-          <div class="mcard-desc">Traditional Louisiana meat pies with seasoned ground meat in a flaky pastry crust.</div>
-          <div class="mcard-tags"><span class="mtag">LOUISIANA</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Crawfish Pies</div><div class="mcard-price-range">MARKET PRICE</div></div>
-          <div class="mcard-desc">Flaky pies stuffed with seasoned Louisiana crawfish filling. A regional delicacy.</div>
-          <div class="mcard-tags"><span class="mtag">CRAWFISH</span><span class="mtag">CAJUN</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SIDES -->
-    <div class="menu-section-wrap" data-cat="sides">
-      <div class="msec-head">
-        <div class="msec-name">Sides</div>
-        <div class="msec-rule"></div>
-        <div class="msec-ct">6 ITEMS</div>
-      </div>
-      <div class="sides-note">SMALL: $2.75 &nbsp;·&nbsp; LARGE: $6.99</div>
-      <div class="menu-grid">
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Corn Pudding</div><div class="mcard-price-range">$2.75 / $6.99</div></div>
-          <div class="mcard-desc">A customer favorite — rich, creamy corn pudding that reviewers rave about.</div>
-          <div class="mcard-tags"><span class="mtag">REVIEWER FAV</span><span class="mtag ca">VEGETARIAN</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Baked Beans</div><div class="mcard-price-range">$2.75 / $6.99</div></div>
-          <div class="mcard-desc">Slow-cooked smoky baked beans, the perfect companion to any BBQ plate.</div>
-          <div class="mcard-tags"><span class="mtag">SMOKY</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Potato Salad</div><div class="mcard-price-range">$2.75 / $6.99</div></div>
-          <div class="mcard-desc">Southern-style house potato salad, classic comfort at its finest.</div>
-          <div class="mcard-tags"><span class="mtag ca">VEGETARIAN</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Cole Slaw</div><div class="mcard-price-range">$2.75 / $6.99</div></div>
-          <div class="mcard-desc">Crisp and creamy house-made coleslaw — a classic BBQ pairing.</div>
-          <div class="mcard-tags"><span class="mtag ca">VEGETARIAN</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">French Fries</div><div class="mcard-price-range">$2.75 / $6.99</div></div>
-          <div class="mcard-desc">Golden, crispy fries — a reliable crowd-pleaser on any menu.</div>
-          <div class="mcard-tags"><span class="mtag ca">VEGAN</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-badge new">Popular</div>
-          <div class="mcard-top"><div class="mcard-name">Sweet Potato Waffle Fries</div><div class="mcard-price-range">$2.75 / $6.99</div></div>
-          <div class="mcard-desc">Crispy waffle-cut sweet potato fries — the unexpected upgrade your plate deserves.</div>
-          <div class="mcard-tags"><span class="mtag ca">VEGAN</span><span class="mtag">SWEET POTATO</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DESSERTS -->
-    <div class="menu-section-wrap" data-cat="desserts">
-      <div class="msec-head">
-        <div class="msec-name">The Sweet</div>
-        <div class="msec-rule"></div>
-        <div class="msec-ct">HOMEMADE DESSERTS</div>
-      </div>
-      <div class="menu-grid">
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Homemade Bread Pudding</div><div class="mcard-price-range">DAILY SPECIAL</div></div>
-          <div class="mcard-desc">Classic Southern bread pudding made in-house — reviewers have taken whole trays home.</div>
-          <div class="mcard-tags"><span class="mtag">HOMEMADE</span><span class="mtag">SOUTHERN</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Creole Cream Cheesecake</div><div class="mcard-price-range">DAILY SPECIAL</div></div>
-          <div class="mcard-desc">A Louisiana-inspired cheesecake made with rich Creole cream cheese. Uniquely local.</div>
-          <div class="mcard-tags"><span class="mtag">CREOLE</span><span class="mtag">LOUISIANA</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Chocolate & Carrot Cake</div><div class="mcard-price-range">DAILY SPECIAL</div></div>
-          <div class="mcard-desc">Two beloved classics — decadent chocolate cake or moist homemade carrot cake, ask what's available today.</div>
-          <div class="mcard-tags"><span class="mtag">HOMEMADE</span></div>
-        </div>
-        <div class="mcard">
-          <div class="mcard-top"><div class="mcard-name">Strawberry Shortcake</div><div class="mcard-price-range">DAILY SPECIAL</div></div>
-          <div class="mcard-desc">Fresh strawberry shortcake — light, sweet, and the perfect ending to a smoke-filled meal.</div>
-          <div class="mcard-tags"><span class="mtag">SEASONAL</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="holo-div"></div>
-
-  <!-- SPECIALS -->
-  <section id="specials">
-    <div class="sec-label">Chef's Board</div>
-    <div class="sec-title">Daily Specials</div>
-    <div class="sec-rule"></div>
-    <p style="font-size:14px;color:var(--text-dim);margin-bottom:28px;line-height:1.7;">Our specials board changes regularly. Below are featured items spotted on recent boards — call ahead at <a href="tel:2252455046" style="color:var(--gold);">(225) 245-5046</a> to check what's on today.</p>
-    <div class="specials-grid">
-      <div class="spec-card">
-        <div class="spec-name">Sweet Thai Chili Wings</div>
-        <div class="spec-price">$16</div>
-        <div class="spec-desc">Appetizer portion of wings tossed in sweet Thai chili glaze — sticky, bright, and addictive.</div>
-      </div>
-      <div class="spec-card">
-        <div class="spec-name">Eggplant Pirogue</div>
-        <div class="spec-price">$26</div>
-        <div class="spec-desc">Louisiana-style eggplant boat with a rich seafood-style stuffing. A showstopper entrée.</div>
-      </div>
-      <div class="spec-card">
-        <div class="spec-name">Blackened Lemon Fish</div>
-        <div class="spec-price">$28</div>
-        <div class="spec-desc">Blackened fish with cream spinach and grilled crawfish tails. Bold Southern flavors.</div>
-      </div>
-      <div class="spec-card">
-        <div class="spec-name">Jack Daniel's BBQ Shrimp & Pork Chop</div>
-        <div class="spec-price">$26</div>
-        <div class="spec-desc">14oz bone-in pork chop with JD BBQ shrimp, mac & cheese, and green beans.</div>
-      </div>
-      <div class="spec-card">
-        <div class="spec-name">Grilled Salmon</div>
-        <div class="spec-price">$28</div>
-        <div class="spec-desc">Grilled salmon topped with crabmeat and avocado cream sauce with sides.</div>
-      </div>
-      <div class="spec-card">
-        <div class="spec-name">Miss Mud Pie</div>
-        <div class="spec-price">$7</div>
-        <div class="spec-desc">Beloved house dessert — the famous "Miss Mud Pie" that keeps people coming back.</div>
-      </div>
-    </div>
-  </section>
-
-  <div class="holo-div"></div>
-
-  <!-- HOURS & ACCESS -->
-  <section id="hours">
-    <div class="sec-label">Plan Your Visit</div>
-    <div class="sec-title">Hours & Access</div>
-    <div class="sec-rule"></div>
-    <div class="hours-wrap">
-      <div class="hours-card">
-        <div class="hours-card-title">Operating Hours</div>
-        <div class="hours-row"><span class="hours-day">Monday</span><span class="hours-time">10:00 AM – 6:00 PM</span></div>
-        <div class="hours-row"><span class="hours-day">Tuesday</span><span class="hours-time">10:00 AM – 6:00 PM</span></div>
-        <div class="hours-row"><span class="hours-day">Wednesday</span><span class="hours-time">10:00 AM – 6:00 PM</span></div>
-        <div class="hours-row"><span class="hours-day">Thursday</span><span class="hours-time">10:00 AM – 6:00 PM</span></div>
-        <div class="hours-row"><span class="hours-day">Friday</span><span class="hours-time">10:00 AM – 6:00 PM</span></div>
-        <div class="hours-row"><span class="hours-day">Saturday</span><span class="hours-time">10:00 AM – 6:00 PM</span></div>
-        <div class="hours-row"><span class="hours-day">Sunday</span><span class="hours-time" style="color:var(--ember);">10:00 AM – 3:00 PM</span></div>
-        <p style="margin-top:16px;font-size:12px;color:var(--text-dim);line-height:1.6;">⚠ Popular items may sell out near closing. Arrive early for best selection.</p>
-      </div>
-      <div class="hours-card">
-        <div class="hours-card-title">Accessibility & Services</div>
-        <ul class="access-list">
-          <li>Takeout Available</li>
-          <li>Wheelchair Accessible Entrance</li>
-          <li>Accessible Parking Lot</li>
-          <li>Accessible Restrooms</li>
-          <li>Accessible Seating</li>
-          <li>Parking Available On-Site</li>
-          <li>Outdoor Deck Seating (dog-friendly area)</li>
-          <li>Large Orders & Catering Supported</li>
-          <li>No Reservations Required (walk-in)</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <div class="holo-div"></div>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="sec-label">Find Us</div>
-    <div class="sec-title">Contact & Location</div>
-    <div class="sec-rule"></div>
-    <div class="contact-grid">
-      <div class="contact-card">
-        <div class="contact-item">
-          <div class="contact-icon">📍</div>
-          <div>
-            <div class="contact-label">Address</div>
-            <div class="contact-val">6779 US Highway 61<br>St. Francisville, LA 70775</div>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">📞</div>
-          <div>
-            <div class="contact-label">Phone</div>
-            <div class="contact-val"><a href="tel:2252455046">(225) 245-5046</a></div>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">✉</div>
-          <div>
-            <div class="contact-label">Email</div>
-            <div class="contact-val"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">🌐</div>
-          <div>
-            <div class="contact-label">Website</div>
-            <div class="contact-val"><a href="http://thefrancissmokehouse.com" target="_blank">thefrancissmokehouse.com</a></div>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">📘</div>
-          <div>
-            <div class="contact-label">Facebook</div>
-            <div class="contact-val"><a href="https://www.facebook.com/1547733028788117/" target="_blank">The Francis Smokehouse & Specialty Meats</a></div>
-          </div>
-        </div>
-      </div>
-      <div class="map-placeholder">
-        <div class="map-placeholder-icon">🗺</div>
-        <div class="map-placeholder-title">Get Directions</div>
-        <div class="map-placeholder-addr">6779 US Highway 61<br>St. Francisville, LA 70775<br><br>Located on US-61 — easily accessible<br>with on-site parking available.</div>
-        <a href="https://www.google.com/maps/search/?api=1&query=The+Francis+Smokehouse%2C+St+Francisville%2C+LA" target="_blank" class="map-link">OPEN IN GOOGLE MAPS ↗</a>
-      </div>
-    </div>
-  </section>
-
-</div><!-- /page -->
-
-<!-- FOOTER -->
-<footer>
-  <div class="page" style="padding-bottom:0;">
-    <div class="footer-logo">THE FRANCIS SMOKEHOUSE</div>
-    <div class="footer-sub">& Specialty Meats · St. Francisville, Louisiana · Est. 2015</div>
-    <div class="footer-links">
-      <a href="#menu">Menu</a>
-      <a href="#specials">Specials</a>
-      <a href="#reviews">Reviews</a>
-      <a href="#hours">Hours</a>
-      <a href="#contact">Contact</a>
-      <a href="https://www.tripadvisor.com/Restaurant_Review-g40411-d7851018-Reviews-The_Francis_Smokehouse-Saint_Francisville_Louisiana.html" target="_blank">Tripadvisor</a>
-    </div>
-    <div class="footer-copy">© THE FRANCIS SMOKEHOUSE · (225) 245-5046 · ALL ITEMS SUBJECT TO AVAILABILITY · PRICES MAY CHANGE</div>
+    <button id="popup-close" aria-label="Close">&#10005; Close</button>
   </div>
-</footer>
+</div>
 
 <script>
-  // CURSOR
-  const cur = document.getElementById('cur');
-  const ring = document.getElementById('ring');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove', e => {
-    mx=e.clientX; my=e.clientY;
-    cur.style.left=mx+'px'; cur.style.top=my+'px';
-  });
-  (function animRing(){
-    rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
-    ring.style.left=rx+'px'; ring.style.top=ry+'px';
-    requestAnimationFrame(animRing);
-  })();
+// ════════════════════════════════════════════════════════════
+//  DATA
+// ════════════════════════════════════════════════════════════
+const MENU = [
+  {
+    id:'bbq', label:'BBQ PLATES', icon:'🔥', color:'#C43C10', rimColor:'rgba(232,83,42,.55)',
+    note:'Every plate served with your choice of two sides',
+    items:[
+      {name:'Full Rack of Ribs',     price:'$19.99', desc:'Our crown jewel. Smoked low-and-slow over hardwood for hours until the meat falls clean off the bone. Sweet, smoky, and built for sharing — or not.'},
+      {name:'Half Rack of Ribs',     price:'$11.99', desc:'Same pit. Same patience. Same fall-off-the-bone tenderness. Half the rack, all the glory.'},
+      {name:'Pulled Pork Plate',     price:'$9.99',  desc:'Pork shoulder smoked low and slow then pulled by hand. Rich, tender, and kissed with our house seasoning.'},
+      {name:'Brisket Plate',         price:'$10.99', desc:'The one regulars drive miles for. Slow-smoked until it practically melts — fork-tender with a deep, beautiful smoke ring.'},
+      {name:'Half Chicken Plate',    price:'$9.99',  desc:'A half bird with smoke-crisp skin and impossibly juicy meat inside. The pit does all the work.'},
+      {name:'Smoked Wings',          price:'$7.99',  desc:'Pit-seasoned wings, smoked low then finished hot for crispy skin. Tender, smoky, and dangerously snackable.'},
+    ]
+  },
+  {
+    id:'burgers', label:'BURGERS', icon:'🍔', color:'#8C4A12', rimColor:'rgba(180,100,30,.55)',
+    note:'Includes one side · dressed with lettuce & tomato',
+    items:[
+      {name:'Hamburger',         price:'$6.99', desc:'A straight-up half-pound patty on a toasted bun. Simple, dressed right, no fuss needed.'},
+      {name:'Cheeseburger',      price:'$7.99', desc:'American or cheddar melted perfectly on our classic half-pound patty. A true Smokehouse staple.'},
+      {name:'Bacon Cheeseburger',price:'$8.99', desc:'Thick-cut bacon, melted cheese, and our half-pound patty stacked together. The full picture.'},
+      {name:'Chicken Sandwich',  price:'$7.99', desc:'Crispy Southern-fried chicken on a toasted bun, dressed clean with lettuce and tomato.'},
+    ]
+  },
+  {
+    id:'poboys', label:'PO-BOYS', icon:'🥖', color:'#7A5010', rimColor:'rgba(180,130,40,.5)',
+    note:'Includes one side · Louisiana-style dressed',
+    items:[
+      {name:'Ribeye Po-Boy',    price:'$10.99', desc:'Shaved ribeye piled high on toasted French bread, dressed Louisiana-style. Messy in the best possible way.'},
+      {name:'Pulled Pork Sub',  price:'$7.99',  desc:'House-pulled pork on a toasted roll — the same pit-smoked pork from our plates, sandwiched up beautifully.'},
+      {name:'Brisket Sandwich', price:'$8.99',  desc:'Sliced pit brisket on toasted bread. Smoke-forward, tender, worth every single bite.'},
+      {name:'Shrimp Po-Boy',    price:'$8.99',  desc:'Gulf shrimp battered and golden-fried, loaded onto French bread and dressed right. Classic Louisiana.'},
+      {name:'Crawfish Po-Boy',  price:'$10.99', desc:'Louisiana crawfish tails, seasoned and fried crisp. This one tastes like the bayou on a good day.'},
+      {name:'Catfish Po-Boy',   price:'$8.99',  desc:'Southern-fried catfish on French bread — dressed, crispy, and unmistakably Louisiana.'},
+    ]
+  },
+  {
+    id:'sides', label:'SIDES', icon:'🫙', color:'#5A3C14', rimColor:'rgba(150,100,40,.5)',
+    note:'Small $2.75 · Large $6.99 · Made in-house daily',
+    items:[
+      {name:'Baked Beans',              price:'$2.75–$6.99', desc:'Slow-cooked beans in a smoky-sweet sauce. The kind you want a second scoop of without admitting it.'},
+      {name:'Corn Pudding',             price:'$2.75–$6.99', desc:'A Smokehouse signature that customers rave about. Creamy, sweet, and savory all at once — order the large.'},
+      {name:'Potato Salad',             price:'$2.75–$6.99', desc:'House-made Southern potato salad. Creamy, simple, and exactly what a great BBQ plate needs alongside it.'},
+      {name:'Cole Slaw',                price:'$2.75–$6.99', desc:'Crisp and creamy slaw. The right cool contrast to a plate of hot smoked meat.'},
+      {name:'French Fries',             price:'$2.75–$6.99', desc:'Hot, golden, and seasoned just right. The reliable choice that never disappoints.'},
+      {name:'Sweet Potato Waffle Fries',price:'$2.75–$6.99', desc:'Sweet potato waffled and fried — a little sweet, a little crispy, and a lot of fun.'},
+    ]
+  },
+  {
+    id:'cajun', label:'CAJUN', icon:'🌶', color:'#7A1A0A', rimColor:'rgba(200,60,20,.55)',
+    note:'Deli-style specialty items · ask about daily availability',
+    items:[
+      {name:'Steamed Boudin Links',     price:'Market', desc:'Classic Louisiana boudin — seasoned rice and pork stuffed in a natural casing and steamed. Ask what is fresh today.'},
+      {name:'Boudin Balls',             price:'Market', desc:'The item every first-timer orders and every regular comes back for. Deep-fried, crispy outside, creamy boudin inside.'},
+      {name:'Pepper Jack Boudin Balls', price:'Market', desc:'Our famous boudin balls with molten pepper jack inside. Spicy, creamy, deeply addictive.'},
+      {name:'Boudin Egg Rolls',         price:'Market', desc:'Louisiana boudin wrapped in an egg roll skin and fried golden. Cajun-fusion done exactly right.'},
+      {name:'Meat Pies',                price:'Market', desc:'Old Creole comfort — seasoned meat in a golden pastry shell. A slice of Louisiana culinary history.'},
+      {name:'Crawfish Pies',            price:'Market', desc:'Gulf Coast crawfish tails in a buttery pastry shell. The flavors of South Louisiana in every bite.'},
+    ]
+  },
+  {
+    id:'specials', label:'SPECIALS', icon:'⭐', color:'#2A1A6B', rimColor:'rgba(100,80,200,.45)',
+    note:"Chef's rotating specials · prices as listed",
+    items:[
+      {name:'Thai Chili Wings',         price:'$16', desc:'Smoked wings tossed in sweet Thai chili sauce. A bold East-meets-South mashup that works surprisingly, undeniably well.'},
+      {name:'Eggplant Pirogue',         price:'$26', desc:'Eggplant hollowed into a pirogue and filled with a rich Cajun seafood stuffing. A true Louisiana original.'},
+      {name:'Blackened Lemon Fish',     price:'$28', desc:'Blackened fillet with cream spinach and grilled crawfish tails. Elegant Southern seafood at its absolute peak.'},
+      {name:'BBQ Shrimp & Pork Chop',  price:'$26', desc:"Jack Daniel's BBQ shrimp alongside a 14oz bone-in pork chop with mac and cheese and green beans."},
+      {name:'Grilled Salmon',           price:'$28', desc:'Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious, and worth every cent.'},
+      {name:'Miss Mud Pie',             price:'$7',  desc:'The house dessert special. Chocolate, cream, crunch. We will let it speak for itself.'},
+    ]
+  },
+  {
+    id:'desserts', label:'DESSERTS', icon:'🍰', color:'#3A1A08', rimColor:'rgba(180,80,20,.4)',
+    note:'House-made fresh daily',
+    items:[
+      {name:'Bread Pudding',           price:'House-made', desc:'Old-school Louisiana bread pudding baked fresh in-house. Rich, custardy, and deeply comforting.'},
+      {name:'Creole Cream Cheesecake', price:'House-made', desc:'A Southern take on cheesecake using Creole cream cheese. Tangy, rich, and unlike any you have tried before.'},
+      {name:'Chocolate & Carrot Cake', price:'House-made', desc:'Two classics done right. Moist chocolate or classic carrot — both are worthy finishes to a great meal.'},
+      {name:'Strawberry Shortcake',    price:'House-made', desc:'Light biscuit, fresh strawberries, and whipped cream. Simple, beautiful, and perfect when done this well.'},
+    ]
+  },
+];
 
-  document.querySelectorAll('a,button,.mtab,.mcard,.btn-primary,.btn-ghost,.nav-order,.map-link').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{ ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(255,106,26,.9)'; });
-    el.addEventListener('mouseleave',()=>{ ring.style.width='34px';ring.style.height='34px';ring.style.borderColor='rgba(232,168,53,.55)'; });
-  });
+// ════════════════════════════════════════════════════════════
+//  CURSOR
+// ════════════════════════════════════════════════════════════
+const curWrap = document.getElementById('cur-wrap');
+let curX = window.innerWidth/2, curY = window.innerHeight/2;
+let prevCurX = curX, prevCurY = curY;
 
-  // CARD GLOW TRACKING
-  document.querySelectorAll('.mcard,.rating-card,.spec-card').forEach(card=>{
-    card.addEventListener('mousemove',e=>{
-      const r=card.getBoundingClientRect();
-      card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
-      card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
-    });
-  });
+document.addEventListener('mousemove', e => {
+  curX = e.clientX; curY = e.clientY;
+  curWrap.style.transform = `translate(${curX}px,${curY}px)`;
+  const dx = curX - prevCurX, dy = curY - prevCurY;
+  if (Math.sqrt(dx*dx+dy*dy) > 18) { spawnSpark(curX, curY); prevCurX=curX; prevCurY=curY; }
+});
 
-  // MENU FILTER
-  function filterMenu(cat, el) {
-    document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
-    el.classList.add('active');
-    document.querySelectorAll('.menu-section-wrap').forEach(s=>{
-      s.style.display = (cat==='all'||s.dataset.cat===cat)?'':'none';
-    });
+function spawnSpark(x, y) {
+  const s = document.createElement('div');
+  s.className = 'spark';
+  const a = Math.random()*Math.PI*2, sp = 8+Math.random()*16;
+  s.style.setProperty('--dx', (Math.cos(a)*sp)+'px');
+  s.style.setProperty('--dy', (Math.sin(a)*sp-20)+'px');
+  s.style.left = x+'px'; s.style.top = y+'px';
+  s.style.width = s.style.height = (2+Math.random()*3)+'px';
+  s.style.background = Math.random()>.5 ? 'var(--fire)' : 'var(--gold)';
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),520);
+}
+
+document.addEventListener('mousedown', ()=>{
+  document.body.classList.add('cur-click');
+  setTimeout(()=>document.body.classList.remove('cur-click'),200);
+});
+document.addEventListener('mouseover', e=>{
+  if (e.target.closest('.node-g,#back-btn,#popup-close,#panel-close,button,a'))
+    document.body.classList.add('cur-hover');
+});
+document.addEventListener('mouseout', e=>{
+  if (e.target.closest('.node-g,#back-btn,#popup-close,#panel-close,button,a'))
+    document.body.classList.remove('cur-hover');
+});
+
+// ════════════════════════════════════════════════════════════
+//  SMOKE BACKGROUND
+// ════════════════════════════════════════════════════════════
+const smokeCanvas = document.getElementById('bg-smoke');
+const smokeCtx    = smokeCanvas.getContext('2d');
+let BW, BH;
+function bgResize(){ BW=smokeCanvas.width=window.innerWidth; BH=smokeCanvas.height=window.innerHeight; }
+bgResize(); window.addEventListener('resize', bgResize);
+
+class SmokeP {
+  constructor(){ this.reset(true); }
+  reset(rand=false){
+    this.x=Math.random()*BW; this.y=rand?Math.random()*BH:BH+20;
+    this.vx=(Math.random()-.5)*.3; this.vy=-(Math.random()*.55+.12);
+    this.r=25+Math.random()*90; this.life=0; this.maxLife=260+Math.random()*380;
+    this.hue=20+Math.random()*20;
   }
+  step(){ this.x+=this.vx; this.y+=this.vy; this.vx+=Math.sin(this.life*.022)*.012; this.life++; if(this.life>this.maxLife||this.y<-150)this.reset(); }
+  draw(){
+    const a=Math.max(0,(1-this.life/this.maxLife)*.13);
+    const g=smokeCtx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r);
+    g.addColorStop(0,`hsla(${this.hue},40%,28%,${a})`);
+    g.addColorStop(1,`hsla(${this.hue},20%,10%,0)`);
+    smokeCtx.fillStyle=g; smokeCtx.beginPath(); smokeCtx.arc(this.x,this.y,this.r,0,Math.PI*2); smokeCtx.fill();
+  }
+}
+class EmberP {
+  constructor(){ this.reset(); }
+  reset(){ this.x=BW/2+(Math.random()-.5)*140; this.y=BH*.7+Math.random()*BH*.3; this.vx=(Math.random()-.5)*.8; this.vy=-(Math.random()*1.2+.4); this.r=.8+Math.random()*1.6; this.life=0; this.maxLife=60+Math.random()*120; }
+  step(){ this.x+=this.vx+Math.sin(this.life*.1)*.2; this.y+=this.vy; this.vy*=.98; this.life++; if(this.life>this.maxLife)this.reset(); }
+  draw(){ const a=Math.max(0,(1-this.life/this.maxLife)*.7); smokeCtx.beginPath(); smokeCtx.arc(this.x,this.y,this.r,0,Math.PI*2); smokeCtx.fillStyle=`rgba(232,140,40,${a})`; smokeCtx.fill(); }
+}
+const smokePs=[],emberPs=[];
+for(let i=0;i<55;i++) smokePs.push(new SmokeP());
+for(let i=0;i<32;i++){ const ep=new EmberP(); ep.life=Math.random()*ep.maxLife; emberPs.push(ep); }
+(function smLoop(){ smokeCtx.clearRect(0,0,BW,BH); smokePs.forEach(p=>{p.step();p.draw();}); emberPs.forEach(p=>{p.step();p.draw();}); requestAnimationFrame(smLoop); })();
 
-  // SCROLL REVEAL
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting) e.target.style.opacity='1'; });
-  },{threshold:0.1});
-  document.querySelectorAll('section').forEach(s=>{ s.style.opacity='0'; s.style.transition='opacity .7s ease'; obs.observe(s); });
+// ════════════════════════════════════════════════════════════
+//  ASH STARFIELD
+// ════════════════════════════════════════════════════════════
+const ashCanvas = document.getElementById('bg-ash');
+const ashCtx    = ashCanvas.getContext('2d');
+function ashResize(){ ashCanvas.width=window.innerWidth; ashCanvas.height=window.innerHeight; }
+ashResize(); window.addEventListener('resize', ashResize);
+
+class AshFlake {
+  constructor(){ this.reset(true); }
+  reset(rand=false){
+    this.x  = Math.random() * window.innerWidth;
+    this.y  = rand ? Math.random() * window.innerHeight : -6;
+    this.r  = .4 + Math.random() * 1.4;
+    this.vx = (Math.random() - .5) * .4;
+    this.vy = .15 + Math.random() * .55;
+    this.wobble = Math.random() * Math.PI * 2;
+    this.wobbleSpeed = .008 + Math.random() * .018;
+    this.alpha = .08 + Math.random() * .35;
+    this.twinkleSpeed = .015 + Math.random() * .03;
+    this.twinklePhase = Math.random() * Math.PI * 2;
+    this.life = 0;
+    // Vary sizes: most tiny, some bigger
+    this.isStar = Math.random() < .12;
+    if (this.isStar) this.r = .8 + Math.random() * 2.2;
+  }
+  step(){
+    this.wobble += this.wobbleSpeed;
+    this.twinklePhase += this.twinkleSpeed;
+    this.x += this.vx + Math.sin(this.wobble) * .3;
+    this.y += this.vy;
+    this.life++;
+    if (this.y > window.innerHeight + 10) this.reset();
+  }
+  draw(){
+    const twinkle = .6 + .4 * Math.sin(this.twinklePhase);
+    const a = this.alpha * twinkle;
+    if (this.isStar) {
+      // Draw a tiny 4-point star
+      ashCtx.save();
+      ashCtx.translate(this.x, this.y);
+      ashCtx.fillStyle = `rgba(212,197,160,${a})`;
+      for (let i=0;i<4;i++){
+        const angle = i*Math.PI/2;
+        const len = this.r*2.2;
+        ashCtx.beginPath();
+        ashCtx.ellipse(0,0, this.r*.35, len, angle, 0, Math.PI*2);
+        ashCtx.fill();
+      }
+      ashCtx.restore();
+    } else {
+      ashCtx.beginPath();
+      ashCtx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+      ashCtx.fillStyle = `rgba(180,160,120,${a})`;
+      ashCtx.fill();
+    }
+  }
+}
+
+const ashFlakes = [];
+for (let i=0; i<220; i++) ashFlakes.push(new AshFlake());
+
+(function ashLoop(){
+  ashCtx.clearRect(0,0,ashCanvas.width,ashCanvas.height);
+  ashFlakes.forEach(f=>{ f.step(); f.draw(); });
+  requestAnimationFrame(ashLoop);
+})();
+
+// ════════════════════════════════════════════════════════════
+//  FLAME BURST (canvas overlay, triggered on category select)
+// ════════════════════════════════════════════════════════════
+const flameCanvas = document.getElementById('flame-canvas');
+const flameCtx    = flameCanvas.getContext('2d');
+function flameResize(){ flameCanvas.width=window.innerWidth; flameCanvas.height=window.innerHeight; }
+flameResize(); window.addEventListener('resize', flameResize);
+
+let flameParticles = [];
+let flameActive    = false;
+let flameRaf       = null;
+
+class FlameParticle {
+  constructor(x, y, burst=false){
+    this.x = x; this.y = y;
+    const angle = (Math.random()*Math.PI*2);
+    const spd   = burst ? (4 + Math.random()*18) : (1+Math.random()*6);
+    this.vx = Math.cos(angle)*spd;
+    this.vy = Math.sin(angle)*spd - (burst ? 6 : 2);
+    this.life = 0;
+    this.maxLife = burst ? (30 + Math.random()*40) : (20+Math.random()*25);
+    this.r = burst ? (2 + Math.random()*5) : (1+Math.random()*3);
+    this.hue = Math.random() < .5 ? 15 : 38; // fire or gold
+    this.sat = 90 + Math.random()*10;
+  }
+  step(){ this.x+=this.vx; this.y+=this.vy; this.vy+=.18; this.vx*=.95; this.life++; }
+  isDead(){ return this.life>=this.maxLife; }
+  draw(){
+    const t = this.life/this.maxLife;
+    const a = Math.max(0,(1-t)*(1-t)*0.9);
+    const r = this.r*(1-t*.5);
+    flameCtx.beginPath();
+    flameCtx.arc(this.x, this.y, r, 0, Math.PI*2);
+    flameCtx.fillStyle = `hsla(${this.hue},${this.sat}%,${55+t*20}%,${a})`;
+    flameCtx.fill();
+  }
+}
+
+// Ring-of-fire burst: spawns from each node position
+function triggerFlameBurst(nodeCenterX, nodeCenterY) {
+  // nodeCenterX/Y are in screen space
+  for (let i=0; i<120; i++) {
+    flameParticles.push(new FlameParticle(nodeCenterX, nodeCenterY, true));
+  }
+  // Secondary smaller sparks
+  for (let i=0; i<60; i++){
+    const fp = new FlameParticle(
+      nodeCenterX + (Math.random()-.5)*80,
+      nodeCenterY + (Math.random()-.5)*80,
+      false
+    );
+    fp.maxLife = 15+Math.random()*20;
+    flameParticles.push(fp);
+  }
+  if (!flameActive) { flameActive=true; runFlameLoop(); }
+}
+
+function runFlameLoop(){
+  flameCtx.clearRect(0,0,flameCanvas.width,flameCanvas.height);
+  flameParticles = flameParticles.filter(p=>{ p.step(); p.draw(); return !p.isDead(); });
+  if (flameParticles.length > 0) {
+    requestAnimationFrame(runFlameLoop);
+  } else {
+    flameActive = false;
+    flameCtx.clearRect(0,0,flameCanvas.width,flameCanvas.height);
+  }
+}
+
+// Get screen position of a node at angle deg on orbit radius orbitR
+function nodeScreenPos(deg, orbitR) {
+  const stagEl = document.getElementById('stage');
+  const rect   = stagEl.getBoundingClientRect();
+  const cx     = rect.left + rect.width/2;
+  const cy     = rect.top  + rect.height/2;
+  // SVG viewBox is 720x720 mapped to stage element
+  const scale  = rect.width / 720;
+  const rad    = (deg - 90) * Math.PI / 180;
+  const sx     = Math.cos(rad) * orbitR * scale;
+  const sy     = Math.sin(rad) * orbitR * scale;
+  return [cx + sx, cy + sy];
+}
+
+// ════════════════════════════════════════════════════════════
+//  SVG HELPERS
+// ════════════════════════════════════════════════════════════
+const SVGNS = 'http://www.w3.org/2000/svg';
+const wheelGroup = document.getElementById('wheel-group');
+function el(tag, attrs){
+  const e = document.createElementNS(SVGNS,tag);
+  if(attrs) for(const[k,v] of Object.entries(attrs)) e.setAttribute(k,v);
+  return e;
+}
+function polar(deg,r){
+  const rad=(deg-90)*Math.PI/180;
+  return [r*Math.cos(rad), r*Math.sin(rad)];
+}
+
+// ════════════════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════════════════
+let mode='categories', currentCat=null;
+let angle=0, targetAngle=0, velocity=0;
+let isDragging=false, dragStartA=0, dragStartWheel=0, lastDragA=0, lastDragT=0;
+let rafId=null;
+let searchActive=false, searchQuery='';
+
+// ════════════════════════════════════════════════════════════
+//  BUILD CATEGORY RING
+// ════════════════════════════════════════════════════════════
+function buildCategoryRing(){
+  wheelGroup.innerHTML='';
+  const n=MENU.length, orbitR=242, nodeR=52;
+  wheelGroup.appendChild(el('circle',{r:orbitR,class:'orbit-ring'}));
+  wheelGroup.appendChild(el('circle',{r:orbitR+nodeR+18,class:'orbit-ring-outer'}));
+  for(let i=0;i<n*4;i++){
+    const [x1,y1]=polar(i*(360/(n*4)),orbitR+nodeR+6);
+    const [x2,y2]=polar(i*(360/(n*4)),orbitR+nodeR+14);
+    const t=el('line',{x1,y1,x2,y2,class:'tick-line'});
+    if(i%4!==0) t.setAttribute('opacity','.4');
+    wheelGroup.appendChild(t);
+  }
+  MENU.forEach((cat,i)=>{
+    const deg=(i/n)*360;
+    const[cx,cy]=polar(deg,orbitR);
+    const g=el('g',{class:'node-g','data-id':cat.id,transform:`translate(${cx},${cy})`});
+    g.appendChild(el('line',{x1:0,y1:0,x2:-cx*.88,y2:-cy*.88,class:'connector'}));
+    g.appendChild(el('circle',{r:nodeR,cx:0,cy:0,class:'node-circle-bg',fill:'url(#nodeGrad)'}));
+    const rim=el('circle',{r:nodeR,cx:0,cy:0,class:'node-circle-rim',stroke:cat.rimColor});
+    g.appendChild(rim);
+    g.appendChild(el('circle',{r:nodeR-8,cx:0,cy:0,class:'node-circle-inner',stroke:cat.color}));
+    g.appendChild(el('circle',{r:nodeR,cx:0,cy:0,fill:cat.color,opacity:'.12'}));
+    const icon=el('text',{x:0,y:-10,class:'cat-icon-text','text-anchor':'middle','dominant-baseline':'central'});
+    icon.textContent=cat.icon; g.appendChild(icon);
+    const lbl=el('text',{x:0,y:14,class:'cat-label-text'}); lbl.textContent=cat.label; g.appendChild(lbl);
+    const cnt=el('text',{x:0,y:26,class:'cat-count-text'}); cnt.textContent=cat.items.length+' ITEMS'; g.appendChild(cnt);
+
+    let touchMoved=false;
+    g.addEventListener('touchstart',()=>{touchMoved=false;},{passive:true});
+    g.addEventListener('touchmove', ()=>{touchMoved=true; },{passive:true});
+    g.addEventListener('touchend',  ()=>{ if(!touchMoved) handleCatSelect(cat,i,n); });
+    g.addEventListener('click',()=>handleCatSelect(cat,i,n));
+    wheelGroup.appendChild(g);
+  });
+  applySearch();
+}
+
+function handleCatSelect(cat,i,n){
+  // Find node screen position BEFORE transition
+  const currentDeg = (i/n)*360 + angle;
+  const[sx,sy] = nodeScreenPos(currentDeg, 242);
+  // Fire burst at that screen position
+  triggerFlameBurst(sx, sy);
+  // Small delay then transition
+  setTimeout(()=>selectCategory(cat),120);
+}
+
+// ════════════════════════════════════════════════════════════
+//  BUILD ITEM RING
+// ════════════════════════════════════════════════════════════
+function buildItemRing(cat){
+  wheelGroup.innerHTML='';
+  const items=cat.items, n=items.length, orbitR=226;
+  const nodeR=n<=4?58:n<=6?50:42;
+  wheelGroup.appendChild(el('circle',{r:orbitR,class:'orbit-ring'}));
+  wheelGroup.appendChild(el('circle',{r:orbitR+nodeR+16,class:'orbit-ring-outer'}));
+  for(let i=0;i<n*4;i++){
+    const[x1,y1]=polar(i*(360/(n*4)),orbitR+nodeR+5);
+    const[x2,y2]=polar(i*(360/(n*4)),orbitR+nodeR+13);
+    const t=el('line',{x1,y1,x2,y2,class:'tick-line'});
+    if(i%4!==0) t.setAttribute('opacity','.35');
+    wheelGroup.appendChild(t);
+  }
+  items.forEach((item,i)=>{
+    const deg=(i/n)*360;
+    const[cx,cy]=polar(deg,orbitR);
+    const g=el('g',{class:'node-g','data-name':item.name,'data-cat':cat.label,transform:`translate(${cx},${cy})`});
+    g.appendChild(el('line',{x1:0,y1:0,x2:-cx*.88,y2:-cy*.88,class:'connector'}));
+    g.appendChild(el('circle',{r:nodeR,cx:0,cy:0,class:'node-circle-bg',fill:'url(#nodeGrad)'}));
+    g.appendChild(el('circle',{r:nodeR,cx:0,cy:0,class:'node-circle-rim',stroke:cat.rimColor}));
+    g.appendChild(el('circle',{r:nodeR-7,cx:0,cy:0,class:'node-circle-inner',stroke:cat.color}));
+    g.appendChild(el('circle',{r:nodeR,cx:0,cy:0,fill:cat.color,opacity:'.1'}));
+
+    const words=item.name.split(' ');
+    let lines=[],cur='';
+    const maxChars=nodeR<46?9:nodeR<52?11:13;
+    words.forEach(w=>{ const t=cur?cur+' '+w:w; if(t.length>maxChars&&cur){lines.push(cur);cur=w;}else cur=t; });
+    if(cur)lines.push(cur); lines=lines.slice(0,3);
+    const fs=nodeR<46?9:nodeR<52?10:11, lh=fs+2.5, totalH=lines.length*lh;
+    const startY=-(totalH/2)-(item.price?6:0);
+    lines.forEach((ln,li)=>{ const t=el('text',{x:0,y:startY+li*lh,class:'item-name-text','font-size':fs,'text-anchor':'middle','dominant-baseline':'central'}); t.textContent=ln; g.appendChild(t); });
+    if(item.price){ const pt=el('text',{x:0,y:startY+lines.length*lh+4,class:'item-price-text','font-size':nodeR<46?9:11,'text-anchor':'middle','dominant-baseline':'central'}); pt.textContent=item.price; g.appendChild(pt); }
+
+    let touchMoved=false;
+    g.addEventListener('touchstart',()=>{touchMoved=false;},{passive:true});
+    g.addEventListener('touchmove', ()=>{touchMoved=true; },{passive:true});
+    g.addEventListener('touchend',  ()=>{ if(!touchMoved) openPopup(item,cat); });
+    g.addEventListener('click',()=>openPopup(item,cat));
+    wheelGroup.appendChild(g);
+  });
+  applySearch();
+}
+
+// ════════════════════════════════════════════════════════════
+//  TRANSITIONS
+// ════════════════════════════════════════════════════════════
+function transitionWheel(buildFn, onBefore){
+  cancelAnimationFrame(rafId);
+  wheelGroup.style.transition='opacity .28s ease,transform .28s ease';
+  wheelGroup.style.opacity='0';
+  wheelGroup.style.transform=`rotate(${angle}deg) scale(.65)`;
+  setTimeout(()=>{
+    if(onBefore) onBefore();
+    buildFn();
+    angle=0; targetAngle=0; velocity=0;
+    wheelGroup.setAttribute('transform','rotate(0)');
+    void wheelGroup.offsetWidth;
+    wheelGroup.style.transition='opacity .38s ease,transform .38s cubic-bezier(.2,.9,.3,1)';
+    wheelGroup.style.opacity='1';
+    wheelGroup.style.transform='rotate(0) scale(1)';
+  },290);
+}
+
+function selectCategory(cat){
+  currentCat=cat; mode='items';
+  document.body.classList.add('cur-hover');
+  setTimeout(()=>document.body.classList.remove('cur-hover'),400);
+  transitionWheel(()=>buildItemRing(cat),()=>{
+    setHub(cat.label,'TAP AN ITEM');
+    document.getElementById('back-btn').classList.add('show');
+    document.getElementById('drag-hint').style.opacity='0';
+  });
+}
+
+function goBack(){
+  mode='categories'; currentCat=null;
+  transitionWheel(()=>buildCategoryRing(),()=>{
+    setHub('MENU','SPIN & SELECT');
+    document.getElementById('back-btn').classList.remove('show');
+    document.getElementById('drag-hint').style.opacity='.65';
+  });
+}
+function setHub(main,sub){
+  document.getElementById('hub-main').textContent=main;
+  document.getElementById('hub-sub').textContent=sub;
+}
+document.getElementById('back-btn').addEventListener('click',goBack);
+
+// ════════════════════════════════════════════════════════════
+//  POPUP
+// ════════════════════════════════════════════════════════════
+function openPopup(item,cat){
+  document.getElementById('p-cat').textContent=cat.label;
+  document.getElementById('p-name').textContent=item.name;
+  document.getElementById('p-price').textContent=item.price;
+  document.getElementById('p-desc').textContent=item.desc;
+  document.getElementById('p-note').textContent=cat.note||'';
+  document.getElementById('popup-overlay').classList.add('open');
+}
+function closePopup(){ document.getElementById('popup-overlay').classList.remove('open'); }
+document.getElementById('popup-close').addEventListener('click',closePopup);
+document.getElementById('popup-overlay').addEventListener('click',e=>{ if(e.target===document.getElementById('popup-overlay'))closePopup(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closePopup();closePanel();closeSearch();} });
+
+// ════════════════════════════════════════════════════════════
+//  INFO PANEL
+// ════════════════════════════════════════════════════════════
+function openPanel(){
+  document.getElementById('info-panel').classList.add('open');
+  document.getElementById('panel-backdrop').classList.add('open');
+}
+function closePanel(){
+  document.getElementById('info-panel').classList.remove('open');
+  document.getElementById('panel-backdrop').classList.remove('open');
+}
+document.getElementById('info-btn').addEventListener('click',openPanel);
+document.getElementById('panel-close').addEventListener('click',closePanel);
+document.getElementById('panel-backdrop').addEventListener('click',closePanel);
+
+// ════════════════════════════════════════════════════════════
+//  SEARCH
+// ════════════════════════════════════════════════════════════
+const searchInput = document.getElementById('search-input');
+const searchClear = document.getElementById('search-clear');
+const searchWrap  = document.getElementById('search-wrap');
+const searchBtn   = document.getElementById('search-btn');
+
+function openSearch(){
+  searchActive=true;
+  searchBtn.classList.add('active');
+  searchWrap.classList.add('visible');
+  document.body.classList.add('cur-search');
+  setTimeout(()=>searchInput.focus(),80);
+}
+function closeSearch(){
+  searchActive=false;
+  searchBtn.classList.remove('active');
+  searchWrap.classList.remove('visible');
+  document.body.classList.remove('cur-search');
+  searchInput.value='';
+  searchQuery='';
+  applySearch();
+}
+function toggleSearch(){ searchActive ? closeSearch() : openSearch(); }
+
+searchBtn.addEventListener('click',toggleSearch);
+
+searchInput.addEventListener('input',()=>{
+  searchQuery = searchInput.value.trim().toLowerCase();
+  searchClear.classList.toggle('show', searchQuery.length>0);
+  applySearch();
+});
+
+searchClear.addEventListener('click',()=>{
+  searchInput.value=''; searchQuery=''; applySearch();
+  searchClear.classList.remove('show');
+  searchInput.focus();
+});
+
+// Prevent wheel drag when typing
+searchInput.addEventListener('mousedown',e=>e.stopPropagation());
+
+function applySearch(){
+  const q = searchQuery;
+  const nodes = wheelGroup.querySelectorAll('.node-g');
+  if(!q){
+    nodes.forEach(n=>{ n.classList.remove('dimmed','highlighted'); });
+    return;
+  }
+  let matchCount=0;
+  nodes.forEach(n=>{
+    // For category nodes: match cat label + all item names
+    const id   = n.getAttribute('data-id');
+    const name = (n.getAttribute('data-name')||'').toLowerCase();
+    const cat  = (n.getAttribute('data-cat')||'').toLowerCase();
+    let matches=false;
+    if(id){
+      // Category node — match label or any item name
+      const catObj = MENU.find(c=>c.id===id);
+      if(catObj){
+        matches = catObj.label.toLowerCase().includes(q) ||
+                  catObj.items.some(it=>it.name.toLowerCase().includes(q)||it.desc.toLowerCase().includes(q));
+      }
+    } else {
+      matches = name.includes(q) || cat.includes(q);
+    }
+    n.classList.toggle('dimmed',!matches);
+    n.classList.toggle('highlighted',matches);
+    if(matches) matchCount++;
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+//  DRAG-TO-SPIN
+// ════════════════════════════════════════════════════════════
+const svg = document.getElementById('wheel-svg');
+function getSVGCenter(){ const r=svg.getBoundingClientRect(); return[r.left+r.width/2,r.top+r.height/2]; }
+function getAngleFromCenter(ex,ey){ const[cx,cy]=getSVGCenter(); return Math.atan2(ey-cy,ex-cx)*180/Math.PI; }
+
+function startDrag(ex,ey){
+  if(document.getElementById('popup-overlay').classList.contains('open')) return;
+  if(document.getElementById('info-panel').classList.contains('open')) return;
+  if(searchActive && document.activeElement===searchInput) return;
+  cancelAnimationFrame(rafId);
+  isDragging=true; velocity=0;
+  dragStartA=getAngleFromCenter(ex,ey);
+  dragStartWheel=angle; lastDragA=dragStartA; lastDragT=Date.now();
+  document.body.classList.add('cur-drag');
+}
+function moveDrag(ex,ey){
+  if(!isDragging) return;
+  const a=getAngleFromCenter(ex,ey);
+  let d=a-dragStartA; while(d>180)d-=360; while(d<-180)d+=360;
+  const now=Date.now(),dt=now-lastDragT;
+  if(dt>0) velocity=(a-lastDragA)/dt*16;
+  lastDragA=a; lastDragT=now; angle=dragStartWheel+d;
+  wheelGroup.setAttribute('transform',`rotate(${angle})`);
+}
+function endDrag(){ if(!isDragging)return; isDragging=false; document.body.classList.remove('cur-drag'); targetAngle=angle+velocity*22; spinCoast(); }
+function spinCoast(){
+  const d=targetAngle-angle; angle+=d*.075; velocity*=.96;
+  wheelGroup.setAttribute('transform',`rotate(${angle})`);
+  if(Math.abs(d)>.04) rafId=requestAnimationFrame(spinCoast);
+}
+
+svg.addEventListener('mousedown',e=>{ if(e.target.closest('#hub,#back-btn'))return; e.preventDefault(); startDrag(e.clientX,e.clientY); });
+window.addEventListener('mousemove',e=>moveDrag(e.clientX,e.clientY));
+window.addEventListener('mouseup',endDrag);
+svg.addEventListener('touchstart',e=>{ if(e.target.closest('#hub,#back-btn'))return; const t=e.touches[0]; startDrag(t.clientX,t.clientY); },{passive:true});
+window.addEventListener('touchmove',e=>{ const t=e.touches[0]; moveDrag(t.clientX,t.clientY); },{passive:true});
+window.addEventListener('touchend',endDrag);
+
+// ════════════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════════════
+buildCategoryRing();
+setTimeout(()=>{ wheelGroup.classList&&wheelGroup.classList.remove('hint-spin'); },4000);
 </script>
 </body>
 </html>
