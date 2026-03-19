@@ -11,14 +11,14 @@
 <meta name="description" content="Interactive menu for The Francis Smokehouse in St. Francisville, Louisiana. Explore pit-smoked BBQ, boudin balls, po-boys, Cajun specialties and Southern sides. Open Mon–Sat 10am–6pm, Sun 10am–3pm."/>
 <meta name="keywords" content="Francis Smokehouse menu, BBQ St. Francisville, boudin balls Louisiana, po-boys, smoked brisket, ribs, Cajun food, smokehouse Louisiana"/>
 <meta name="author" content="The Francis Smokehouse"/>
-<link rel="canonical" href="https://www.thefrancismokehouse.com/menu.html"/>
+<link rel="canonical" href="https://www.thefrancissmokehouse.com/menu.html"/>
 
 <!-- Open Graph -->
 <meta property="og:type" content="restaurant.menu"/>
 <meta property="og:title" content="The Francis Smokehouse Menu | St. Francisville, Louisiana"/>
 <meta property="og:description" content="Pit-smoked BBQ, boudin, po-boys and Southern sides. Spin the wheel to explore our full menu."/>
-<meta property="og:url" content="https://www.thefrancismokehouse.com/menu.html"/>
-<meta property="og:image" content="https://www.thefrancismokehouse.com/Images/Smokehouselogo.png"/>
+<meta property="og:url" content="https://www.thefrancissmokehouse.com/menu.html"/>
+<meta property="og:image" content="https://www.thefrancissmokehouse.com/Images/Smokehouselogo.png"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="The Francis Smokehouse"/>
 
@@ -26,7 +26,7 @@
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="The Francis Smokehouse — Interactive Menu"/>
 <meta name="twitter:description" content="Spin the wheel to explore BBQ, boudin, po-boys and more in St. Francisville, LA."/>
-<meta name="twitter:image" content="https://www.thefrancismokehouse.com/Images/Smokehouselogo.png"/>
+<meta name="twitter:image" content="https://www.thefrancissmokehouse.com/Images/Smokehouselogo.png"/>
 
 <!-- Local Business Schema -->
 <script type="application/ld+json">
@@ -34,9 +34,9 @@
   "@context": "https://schema.org",
   "@type": "Restaurant",
   "name": "The Francis Smokehouse",
-  "image": "https://www.thefrancismokehouse.com/Images/Smokehouselogo.png",
-  "url": "https://www.thefrancismokehouse.com",
-  "menu": "https://www.thefrancismokehouse.com/menu.html",
+  "image": "https://www.thefrancissmokehouse.com/Images/Smokehouselogo.png",
+  "url": "https://www.thefrancissmokehouse.com",
+  "menu": "https://www.thefrancissmokehouse.com/menu.html",
   "telephone": "(225) 245-5046",
   "email": "francissmokehouse@att.net",
   "address": {
@@ -1246,9 +1246,10 @@ circOverlay.addEventListener('click',e=>{if(e.target===circOverlay)closeCircNav(
 document.getElementById('circClose').addEventListener('click',closeCircNav);
 
 // Center icon: scroll to top / go to categories
-document.getElementById('circHomeBtn').addEventListener('click',()=>{
+document.getElementById('circHomeBtn').addEventListener('click', e => {
+  e.stopPropagation();
   closeCircNav();
-  window.location.href='index.html';
+  window.location.href = 'index.html';
 });
 
 // Nav items
