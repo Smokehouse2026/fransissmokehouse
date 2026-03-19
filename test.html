@@ -162,7 +162,7 @@ body.no-touch .circ-nav-trigger{cursor:none}
 
 /* ── CIRCULAR NAV — BOTTOM PILL (mobile) ── */
 .circ-nav-bottom{
-  position:fixed;bottom:82px;left:50%;transform:translateX(-50%);
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);
   z-index:900;
   display:none;
   flex-direction:row;align-items:center;gap:.7rem;
@@ -375,7 +375,94 @@ body.no-touch #popup-close{cursor:none}
 #popup-close:hover{color:var(--fire)}
 @keyframes rotateHint{0%{transform:rotate(0deg)}30%{transform:rotate(18deg)}70%{transform:rotate(-6deg)}100%{transform:rotate(0deg)}}
 .hint-spin{animation:rotateHint 2s ease 1.8s both}
-@media(max-width:480px){#addr-strip{font-size:.36rem;letter-spacing:.12em}}
+/* ── MOBILE OVERRIDES ── */
+@media(max-width:640px){
+
+  /* Stage: shrink wheel a little to leave room for UI chrome */
+  #stage{
+    width:min(88vw,82vh);
+    height:min(88vw,82vh);
+  }
+
+  /* Wordmark: larger on mobile so it's actually readable */
+  .wm-name{font-size:clamp(1.4rem,6vw,2.2rem)}
+  .wm-sub{font-size:clamp(.65rem,2.8vw,.9rem);letter-spacing:.08em}
+
+  /* Wordmark sits further up so it clears the top nav pill */
+  #wordmark{top:-14%}
+
+  /* Address strip — cleaner on mobile */
+  #addr-strip{font-size:.5rem;letter-spacing:.12em;bottom:-8%}
+
+  /* Drag hint — bigger */
+  #drag-hint{font-size:.65rem;letter-spacing:.18em}
+
+  /* Bottom icon buttons — bigger tap targets, spread out */
+  .bottom-btn{width:48px;height:48px}
+  .bottom-label{font-size:.55rem;bottom:80px}
+  #search-btn{left:16px}
+  #search-btn-label{left:16px;width:48px}
+  #list-btn{left:74px}
+  #list-btn-label{left:74px;width:48px}
+  #info-btn{right:16px}
+  #info-btn-label{right:16px;width:48px}
+
+  /* Popup — bigger text throughout */
+  .popup-inner{padding:22px 24px 28px}
+  .popup-eyebrow{font-size:.7rem;letter-spacing:.35em}
+  .popup-title{font-size:clamp(1.6rem,7vw,2.2rem)}
+  .popup-price{font-size:clamp(1.8rem,8vw,2.6rem)}
+  .popup-market{font-size:.75rem;letter-spacing:.18em;padding:6px 14px}
+  .popup-desc{font-size:clamp(1rem,3.8vw,1.15rem);line-height:1.7}
+  .popup-note{font-size:.72rem;letter-spacing:.16em;margin-top:12px}
+  .popup-extra-note{font-size:.65rem}
+
+  /* Panels — more padding, bigger text */
+  .panel-scroll,.list-scroll{padding:24px 20px 48px}
+  .panel-eyebrow,.list-panel-eyebrow{font-size:.65rem}
+  .panel-title{font-size:clamp(1.8rem,8vw,2.6rem)}
+  .panel-sub{font-size:1rem}
+  .hours-day{font-size:.9rem}
+  .hours-time{font-size:1.1rem}
+  .contact-label{font-size:.68rem}
+  .contact-value{font-size:1.05rem}
+  .feat-tag{font-size:.72rem;padding:6px 13px}
+  .drinks-title{font-size:1.05rem}
+  .drinks-body{font-size:.95rem}
+
+  /* List panel */
+  .list-filter{font-size:1rem;padding:10px 14px}
+  .list-cat-hdr{font-size:1.15rem}
+  .list-item-name{font-size:1.05rem}
+  .list-item-price{font-size:.95rem}
+  .list-item-row{padding:11px 8px}
+
+  /* Hours status badge */
+  .hours-status{font-size:.72rem;padding:6px 14px}
+
+  /* Circular menu — bigger on mobile */
+  .circular-menu{width:320px;height:320px}
+  .circ-menu-item{
+    width:62px;height:62px;font-size:.65rem;
+    transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-118px) rotate(calc(var(--angle)*-1deg));
+  }
+  .circ-menu-item:hover{
+    transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-126px) rotate(calc(var(--angle)*-1deg)) scale(1.06);
+  }
+  .circ-item-icon{font-size:1.2rem}
+  .circ-item-label{font-size:.62rem}
+  .center-home{width:68px;height:68px;font-size:1.4rem}
+}
+
+/* Tiny phones */
+@media(max-width:380px){
+  .wm-name{font-size:5.2vw}
+  .wm-sub{font-size:2.5vw}
+  #wordmark{top:-16%}
+  .popup-title{font-size:6.5vw}
+  .popup-price{font-size:7.5vw}
+  .popup-desc{font-size:3.6vw}
+}
 </style>
 </head>
 <body>
@@ -567,7 +654,7 @@ body.no-touch #popup-close{cursor:none}
     </div>
     <div class="contact-item">
       <div class="contact-icon">&#x2709;</div>
-      <div><div class="contact-label">Email</div><div class="contact-value"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div></div>
+      <div><div class="contact-label">Email</div><div class="contact-value"><a href="/cdn-cgi/l/email-protection#583e2a39363b312b2b3537333d30372d2b3d18392c2c76363d2c"><span class="__cf_email__" data-cfemail="a3c5d1c2cdc0cad0d0ceccc8c6cbccd6d0c6e3c2d7d78dcdc6d7">[email&#160;protected]</span></a></div></div>
     </div>
     <div class="contact-item">
       <div class="contact-icon">&#x2B50;</div>
@@ -605,7 +692,7 @@ body.no-touch #popup-close{cursor:none}
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ═══════════════════════════════════════════
 //  DATA
 // ═══════════════════════════════════════════
@@ -1036,6 +1123,7 @@ window.addEventListener('touchend',endDrag);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePopup();closePanel();closeList();closeSearch();closeCircNav();}});
 
 // ═══════════════════════════════════════════
+//
 //  INIT
 // ═══════════════════════════════════════════
 buildCatRing();
