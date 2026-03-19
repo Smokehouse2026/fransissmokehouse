@@ -861,7 +861,7 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
       <h3>&#x1F4CD; Location &amp; Contact</h3>
       <div class="c-row"><div class="c-icon"><i class="fas fa-location-dot"></i></div><div><div class="c-label">Address</div><div class="c-value"><a href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775" target="_blank" rel="noopener">6779 US Highway 61<br/>St. Francisville, LA 70775</a></div></div></div>
       <div class="c-row"><div class="c-icon"><i class="fas fa-phone"></i></div><div><div class="c-label">Phone</div><div class="c-value"><a href="tel:+12252455046">(225) 245-5046</a></div></div></div>
-      <div class="c-row"><div class="c-icon"><i class="fas fa-envelope"></i></div><div><div class="c-label">Email</div><div class="c-value"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div></div></div>
+      <div class="c-row"><div class="c-icon"><i class="fas fa-envelope"></i></div><div><div class="c-label">Email</div><div class="c-value"><a href="/cdn-cgi/l/email-protection#600612010e030913130d0f0b05080f151305200114144e0e0514"><span class="__cf_email__" data-cfemail="036571626d606a70706e6c68666b6c767066436277772d6d6677">[email&#160;protected]</span></a></div></div></div>
       <div class="c-row"><div class="c-icon"><i class="fas fa-star"></i></div><div><div class="c-label">Rating</div><div class="c-value">4.5&nbsp;/ 5 &nbsp;&middot;&nbsp; Tripadvisor Travellers&rsquo; Choice</div></div></div>
       <div class="amenities"><span class="amenity">Dine In</span><span class="amenity">Takeout</span><span class="amenity">Catering</span><span class="amenity">Parking</span><span class="amenity">Wheelchair Access</span><span class="amenity">Outdoor Seating</span><span class="amenity">Dog Friendly</span></div>
     </div>
@@ -931,59 +931,10 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
   </div>
 </footer>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="specials-data.js"></script>
 <script>
-// ═══════════════════════════════════════════════════════════════
-//  DAILY SPECIALS DATA
-//  ─────────────────────────────────────────────────────────────
-//  To update: change the "date" to today's date (YYYY-MM-DD)
-//  on any items you want shown. Items with a different date
-//  are automatically hidden — the wheel only shows today's items.
-//  Up to 7 items recommended for the best wheel layout.
-// ═══════════════════════════════════════════════════════════════
-const SPECIALS = [
-  {
-    date:  "2026-03-19",
-    name:  "Blackened Lemon Fish",
-    price: "$28",
-    desc:  "Blackened fillet with cream spinach and grilled crawfish tails. Elegant Southern seafood at its absolute peak.",
-    note:  "Chef's rotating special · Call ahead to confirm availability"
-  },
-  {
-    date:  "2026-03-19",
-    name:  "Thai Chili Wings",
-    price: "$16",
-    desc:  "Smoked wings tossed in sweet Thai chili sauce. A bold East-meets-South mashup that works surprisingly, undeniably well.",
-    note:  "Chef's rotating special · Call ahead to confirm availability"
-  },
-  {
-    date:  "2026-03-19",
-    name:  "Eggplant Pirogue",
-    price: "$26",
-    desc:  "Eggplant hollowed into a pirogue and filled with a rich Cajun seafood stuffing. A true Louisiana original.",
-    note:  "Chef's rotating special · Call ahead to confirm availability"
-  },
-  {
-    date:  "2026-03-19",
-    name:  "BBQ Shrimp & Pork Chop",
-    price: "$26",
-    desc:  "Jack Daniel's BBQ shrimp alongside a 14oz bone-in pork chop with mac and cheese and green beans.",
-    note:  "Chef's rotating special · Call ahead to confirm availability"
-  },
-  {
-    date:  "2026-03-19",
-    name:  "Grilled Salmon",
-    price: "$28",
-    desc:  "Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious, and worth every cent.",
-    note:  "Chef's rotating special · Call ahead to confirm availability"
-  },
-  {
-    date:  "2026-03-19",
-    name:  "Miss Mud Pie",
-    price: "$7",
-    desc:  "The house dessert special. Chocolate, cream, crunch. We will let it speak for itself.",
-    note:  "Chef's rotating special · Call ahead to confirm availability"
-  }
-];
+// SPECIALS loaded from specials-data.js
 
 // Build a fake "category" object that the existing wheel engine expects
 // We wrap today's specials as a single cat so buildItemRing works unchanged
@@ -1338,14 +1289,8 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){closeCirc();closePopup();}
 });
 
-// ── INIT SPECIALS WHEEL ──
-// Only init if we have specials to show
-if(todayItems.length > 0){
-  // Build the item ring directly with today's specials cat
-  buildItemRing(SPECIALS_CAT);
-  // Update hub text
-  setHub("SPECIALS","TAP TO VIEW");
-}
+// ── INIT SPECIALS W
+})();
 </script>
 </body>
 </html>
