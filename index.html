@@ -1054,7 +1054,7 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
       <a class="footer-link" href="tel:+12252455046">(225) 245-5046</a>
     </nav>
     <p class="footer-copy">&copy; 2025 The Francis Smokehouse &amp; Specialty Meats &nbsp;&middot;&nbsp; 6779 US Hwy 61, St. Francisville, LA</p>
-    <p class="footer-made-by">Site designed &amp; built by <span>NorthStar Digital LLC</span> &nbsp;&middot;&nbsp; Designer Westyn Ardoin</p>
+    <p class="footer-made-by">Site designed &amp; built by <span>NorthStar Digital LLC</span> &nbsp;&middot;&nbsp; Founder Westyn Ardoin</p>
   </div>
 </footer>
 
@@ -1092,7 +1092,7 @@ function initSpecials(SPECIALS){
 }
 
 // Fetch specials-data.js from the server
-fetch('specials-data.js')
+fetch('site-data.js')
   .then(r => {
     if(!r.ok) throw new Error('fetch failed');
     return r.text();
