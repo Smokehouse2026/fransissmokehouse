@@ -357,7 +357,7 @@ body.no-touch .circ-menu-item{cursor:none}
 }
 
 /* ── DRAG HINT / ADDRESS ── */
-#drag-hint{position:absolute;bottom:2%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:clamp(.75rem,1.6vw,1rem);letter-spacing:.28em;color:var(--bone);text-transform:uppercase;opacity:.8;pointer-events:none;z-index:10;transition:opacity .7s;white-space:nowrap}
+#drag-hint{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:clamp(.75rem,1.6vw,1rem);letter-spacing:.28em;color:var(--bone);text-transform:uppercase;opacity:.8;pointer-events:none;z-index:10;transition:opacity .7s;white-space:nowrap}
 #addr-strip{position:absolute;bottom:-6%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:clamp(.4rem,.82vw,.58rem);letter-spacing:.22em;color:rgba(107,92,66,.38);text-transform:uppercase;white-space:nowrap;pointer-events:none;z-index:10;text-align:center;width:100%;padding:0 8px}
 
 /* ── SEARCH ── */
@@ -605,11 +605,7 @@ body.no-touch { cursor:none; overflow-x:hidden; }
   padding:0 0 60px;
   overflow:hidden;
 }
-.specials-header{
-  text-align:center;
-  padding:56px clamp(20px,5vw,80px) 0;
-  position:relative;z-index:10;
-}
+#specials-section{padding-top:40px}
 .specials-eyebrow{font-size:.58rem;letter-spacing:.52em;text-transform:uppercase;color:var(--fire);margin-bottom:12px;display:flex;align-items:center;gap:10px;justify-content:center}
 .specials-eyebrow::before,.specials-eyebrow::after{content:"";display:block;width:22px;height:1px;background:var(--fire)}
 .specials-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4.5vw,3.8rem);letter-spacing:.06em;color:var(--cream);line-height:.9;margin-bottom:8px}
@@ -713,33 +709,6 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 </head>
 <body>
 
-<div class="fire-line" role="presentation"></div>
-
-<!-- ── SITE NAV ── -->
-<nav id="site-nav" role="navigation" aria-label="Main navigation">
-  <a href="index.html" class="nav-brand" aria-label="Home">
-    <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse logo" class="nav-logo"
-         onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
-    <div class="nav-logo-fallback" aria-hidden="true"></div>
-    <div class="nav-name">The Francis Smokehouse<small>St. Francisville, LA</small></div>
-  </a>
-  <div class="site-nav-links" role="list">
-    <a class="site-nav-link" href="story.html">Our Story</a>
-    <a class="site-nav-link" href="menu.html">Menu</a>
-    <a class="site-nav-link" href="index.html#info-section">Hours &amp; Visit</a>
-    <a class="site-nav-link" href="tel:+12252455046">(225) 245-5046</a>
-  </div>
-  <a class="site-nav-cta" href="menu.html">Full Menu</a>
-  <button class="site-nav-toggle" id="site-nav-toggle" aria-label="Open navigation" aria-expanded="false">&#9776;</button>
-</nav>
-
-<div class="site-nav-drawer" id="site-nav-drawer" role="dialog" aria-label="Mobile navigation">
-  <button class="drawer-close-btn" id="site-drawer-close" aria-label="Close">&#10005;</button>
-  <a class="drawer-nav-link" href="story.html">Our Story</a>
-  <a class="drawer-nav-link" href="menu.html">Menu</a>
-  <a class="drawer-nav-link" href="index.html#info-section">Hours &amp; Visit</a>
-  <a class="drawer-nav-link" href="tel:+12252455046">Call Us</a>
-</div>
 
 <!-- ── CURSOR ── -->
 <!-- Custom cursor -->
@@ -765,9 +734,6 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 <canvas id="flame-canvas"></canvas>
 <div id="ambient"></div>
 
-<div id="ambient"></div>
-
-<!-- ── HERO ── -->
 <header class="hero-section" role="banner">
   <div class="hero-bg-div" aria-hidden="true"></div>
   <div class="hero-inner-div">
@@ -805,12 +771,6 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
        Keep up to 7 items. Remove items you don't want shown.
 ════════════════════════════════════════════════════════════════ -->
 <section id="specials-section" aria-labelledby="specials-heading">
-  <div class="specials-header">
-    <div class="specials-eyebrow">Fresh From the Kitchen</div>
-    <h2 class="specials-title" id="specials-heading">Today&rsquo;s <em>Specials</em></h2>
-    <div class="specials-date-badge" id="specials-date-badge">&#x1F4C5; Loading&hellip;</div>
-    <p class="specials-note-bar" id="specials-note-bar"></p>
-  </div>
 
   <!-- Wheel renders here when specials are live -->
   <div class="wheel-wrapper" id="specials-wheel-wrap" style="position:relative">
@@ -848,7 +808,6 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
     </g>
   </svg>
   <div id="drag-hint">&#x1F446; tap to select</div>
-  <div id="addr-strip">6779 US-61 &middot; St. Francisville, LA &middot; (225) 245-5046</div>
 </div>
 
     <!-- Zoom control -->
@@ -1361,15 +1320,7 @@ document.getElementById('stage').addEventListener('touchmove',e=>{
   }
 },{passive:true});
 
-// ── Site nav ──
-const sToggle=document.getElementById('site-nav-toggle');
-const sDrawer=document.getElementById('site-nav-drawer');
-const sDClose=document.getElementById('site-drawer-close');
-function openSD(){sDrawer.classList.add('open');sToggle.setAttribute('aria-expanded','true');}
-function closeSD(){sDrawer.classList.remove('open');sToggle.setAttribute('aria-expanded','false');}
-sToggle.addEventListener('click',openSD);
-sDClose.addEventListener('click',closeSD);
-sDrawer.querySelectorAll('.drawer-nav-link').forEach(l=>l.addEventListener('click',closeSD));
+// Site nav removed — using circular nav only
 
 // ── Circular nav ──
 const circOverlay=document.getElementById('circ-overlay');
@@ -1384,7 +1335,7 @@ document.querySelectorAll('.circ-item').forEach(item=>item.addEventListener('cli
 
 // ── ESC ──
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeCirc();closeSD();closePopup();}
+  if(e.key==='Escape'){closeCirc();closePopup();}
 });
 
 // ── INIT SPECIALS WHEEL ──
