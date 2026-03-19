@@ -120,7 +120,10 @@
       height: 44px;
       border-radius: 50%;
       object-fit: cover;
-      border: 1px solid rgba(232,83,42,.3);
+      background: radial-gradient(circle at 40% 35%, #2A1A0A, #1A0E06);
+      padding: 5px;
+      border: 1px solid rgba(232,83,42,.5);
+      box-shadow: 0 0 14px rgba(232,83,42,.25);
     }
 
     /* Fallback orb if logo doesn't load */
@@ -264,8 +267,14 @@
       border-radius: 50%;
       object-fit: cover;
       margin: 0 auto 28px;
-      border: 2px solid rgba(232,83,42,.35);
-      box-shadow: 0 0 40px rgba(232,83,42,.25), 0 0 80px rgba(232,83,42,.1);
+      /* Warm background so transparent logo pops on dark page */
+      background: radial-gradient(circle at 40% 35%, #2A1A0A, #1A0E06);
+      padding: 10px;
+      border: 2px solid rgba(232,83,42,.55);
+      box-shadow:
+        0 0 0 6px rgba(232,83,42,.08),
+        0 0 32px rgba(232,83,42,.4),
+        0 0 70px rgba(232,83,42,.18);
     }
 
     .hero-kicker {
@@ -608,8 +617,10 @@
     }
     .footer-logo {
       width: 52px; height: 52px; border-radius: 50%; object-fit: cover;
-      border: 1px solid rgba(232,83,42,.25);
-      opacity: .85;
+      background: radial-gradient(circle at 40% 35%, #2A1A0A, #1A0E06);
+      padding: 6px;
+      border: 1px solid rgba(232,83,42,.4);
+      box-shadow: 0 0 16px rgba(232,83,42,.2);
     }
     .footer-name {
       font-family: 'Bebas Neue', sans-serif;
