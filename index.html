@@ -1105,7 +1105,7 @@
   circClose.addEventListener('click', closeNav);
   circHome.addEventListener('click', () => {
     closeNav();
-    window.open('https://www.thefrancissmokehouse.com', '_blank');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
   document.querySelectorAll('.circ-item').forEach(item => {
