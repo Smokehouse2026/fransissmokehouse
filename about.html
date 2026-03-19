@@ -410,13 +410,13 @@
 </section>
 
 <!-- ====== CIRCULAR NAV ====== -->
-<div class="circ-nav-trigger" id="circNavLeft">
+<div class="circ-nav-trigger" id="ct-left">
   <i class="fas fa-compass cnt-icon"></i>
   <span class="cnt-text">NAVIGATE</span>
   <span class="cnt-sub">explore</span>
 </div>
 
-<div class="circ-nav-bottom" id="circNavBottom">
+<div class="circ-nav-bottom" id="ct-bottom">
   <i class="fas fa-compass cnt-icon"></i>
   <div>
     <div class="cnt-main">NAVIGATE</div>
@@ -424,13 +424,13 @@
   </div>
 </div>
 
-<div class="circ-menu-overlay" id="circMenuOverlay">
+<div class="circ-menu-overlay" id="circ-overlay">
   <div class="circular-menu">
     <div class="circ-menu-ring"></div>
-    <div class="center-home" id="circHomeBtn" title="Home">
+    <div class="center-home" id="circ-home" title="Home">
       <i class="fas fa-home"></i>
     </div>
-    <button class="circ-close" id="circClose">&#10005; close</button>
+    <button class="circ-close" id="circ-close">&#10005; close</button>
     <div class="circ-menu-item" style="--angle:0" data-href="menu.html"><span class="circ-item-icon"><i class="fas fa-utensils"></i></span><span class="circ-item-label">Menu</span></div>
     <div class="circ-menu-item" style="--angle:60" data-href="story.html"><span class="circ-item-icon"><i class="fas fa-book-open"></i></span><span class="circ-item-label">Story</span></div>
     <div class="circ-menu-item" style="--angle:120" data-href="about.html"><span class="circ-item-icon"><i class="fas fa-circle-info"></i></span><span class="circ-item-label">About</span></div>
@@ -491,37 +491,6 @@
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 })();
 
-// ── Circular Nav ──
-(function(){
-  const overlay  = document.getElementById('circMenuOverlay');
-  const triggerL = document.getElementById('circNavLeft');
-  const triggerB = document.getElementById('circNavBottom');
-  const closeBtn = document.getElementById('circClose');
-  const homeBtn  = document.getElementById('circHomeBtn');
-
-  function openNav()  { overlay.classList.add('open'); }
-  function closeNav() { overlay.classList.remove('open'); }
-
-  triggerL.addEventListener('click', e => { e.stopPropagation(); openNav(); });
-  triggerB.addEventListener('click', e => { e.stopPropagation(); openNav(); });
-  overlay.addEventListener('click', e => { if(e.target === overlay) closeNav(); });
-  closeBtn.addEventListener('click', closeNav);
-  homeBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    closeNav();
-    window.location.href = 'index.html';
-  });
-
-  document.querySelectorAll('.circ-menu-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const href = item.getAttribute('data-href');
-      closeNav();
-      if(href) window.location.href = href;
-    });
-  });
-
-  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeNav(); });
-})();
 
 </script>
 </body>
