@@ -1057,13 +1057,60 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
-// ═══════════════════════════════════════════════════════════════
-//  DAILY SPECIALS  ← EDIT HERE EVERY DAY
-//  Change "date" to today (YYYY-MM-DD). Items whose date doesn't
-//  match today are hidden automatically. Add or remove items
-//  freely — the wheel adjusts to whatever count you have.
-// ═══════════════════════════════════════════════════════════════
-const SPECIALS = [
+// ── Load specials from specials-data.js ──
+function initSpecials(SPECIALS){
+  function todayStr(){
+    const d=new Date();
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+
+  const todayItems = SPECIALS.filter(s => s.date === todayStr());
+
+  const SPECIALS_CAT = {
+    id:       'specials',
+    label:    "TODAY'S SPECIALS",
+    color:    '#C43C10',
+    rimColor: 'rgba(232,83,42,.55)',
+    note:     "Chef's rotating specials \u00b7 Call (225) 245-5046 to confirm availability",
+    extra:    null,
+    items:    todayItems
+  };
+
+  // Show/hide wheel vs locked notice
+  const wheelWrap    = document.getElementById('specials-wheel-wrap');
+  const lockedNotice = document.getElementById('specials-locked');
+  if(todayItems.length === 0){
+    if(wheelWrap)    wheelWrap.style.display='none';
+    if(lockedNotice) lockedNotice.style.display='block';
+  } else {
+    buildItemRing(SPECIALS_CAT);
+    setHub("SPECIALS","TAP TO VIEW");
+  }
+}
+
+// Fetch specials-data.js from the server
+fetch('specials-data.js')
+  .then(r => {
+    if(!r.ok) throw new Error('fetch failed');
+    return r.text();
+  })
+  .then(src => {
+    // Safely evaluate the SPECIALS array using a sandboxed Function
+    try {
+      const fn = new Function(src + '; return SPECIALS;');
+      initSpecials(fn());
+    } catch(e) {
+      console.warn('Could not load specials-data.js:', e);
+      initSpecials(INLINE_SPECIALS);
+    }
+  })
+  .catch(() => {
+    // Fallback: if fetch fails (e.g. local file:// preview), use inline data
+    initSpecials(INLINE_SPECIALS);
+  });
+
+// Inline fallback specials (used only when running from local file, not a server)
+const INLINE_SPECIALS = [
   {
     date:  "2026-03-19",
     name:  "Blackened Lemon Fish",
@@ -1107,83 +1154,6 @@ const SPECIALS = [
 function todayStr(){
   const d=new Date();
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-}
-
-const todayItems = SPECIALS.filter(s => s.date === todayStr());
-
-// The wheel engine needs a cat object with .items, .color, .rimColor, .label, .note
-const SPECIALS_CAT = {
-  id:       'specials',
-  label:    "TODAY'S SPECIALS",
-  color:    '#C43C10',
-  rimColor: 'rgba(232,83,42,.55)',
-  note:     "Chef's rotating specials · Call (225) 245-5046 to confirm availability",
-  extra:    null,
-  items:    todayItems
-};
-
-// ═══════════════════════════════════════════
-//  HOURS
-// ═══════════════════════════════════════════
-const HOURS=[
-  {day:'Monday',   open:'10:00',close:'18:00'},
-  {day:'Tuesday',  open:'10:00',close:'18:00'},
-  {day:'Wednesday',open:'10:00',close:'18:00'},
-  {day:'Thursday', open:'10:00',close:'18:00'},
-  {day:'Friday',   open:'10:00',close:'18:00'},
-  {day:'Saturday', open:'10:00',close:'18:00'},
-  {day:'Sunday',   open:'10:00',close:'15:00'}
-];
-
-function fmt(h,m){const ap=h>=12?'PM':'AM',h12=h%12||12;return h12+(m?':'+String(m).padStart(2,'0'):'')+' '+ap;}
-
-function isOpenNow(){
-  const now=new Date(),di=now.getDay(),ti=di===0?6:di-1;
-  const hm=now.getHours()*60+now.getMinutes(),th=HOURS[ti];
-  const[oh,om]=th.open.split(':').map(Number),[ch,cm]=th.close.split(':').map(Number);
-  return hm>=oh*60+om&&hm<ch*60+cm;
-}
-
-function buildStatus(){
-  const open=isOpenNow();
-  const badge=document.getElementById('hero-status');
-  const text=document.getElementById('hero-status-text');
-  if(badge){badge.className='status-badge '+(open?'open':'closed');text.textContent=open?'Open Now':'Currently Closed';}
-  const ib=document.getElementById('hours-status-badge');
-  if(ib){ib.className='status-badge '+(open?'open':'closed');ib.innerHTML='<span class="s-dot"></span>'+(open?'Open Now':'Currently Closed');}
-}
-buildStatus();
-
-function buildHours(){
-  const now=new Date(),di=now.getDay(),ti=di===0?6:di-1;
-  const rows=document.getElementById('panel-hours-rows');
-  if(!rows)return;rows.innerHTML='';
-  HOURS.forEach((h,i)=>{
-    const[oh2,om2]=h.open.split(':').map(Number),[ch2,cm2]=h.close.split(':').map(Number);
-    const row=document.createElement('div');row.className='h-row';
-    row.innerHTML='<span class="h-day'+(i===ti?' today':'')+'">'+h.day+'</span><span class="h-time">'+fmt(oh2,om2)+' – '+fmt(ch2,cm2)+'</span>';
-    rows.appendChild(row);
-  });
-}
-buildHours();
-
-// ── Date display ──
-const todayFull = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-const dateBadge = document.getElementById('specials-date-badge');
-if(dateBadge) dateBadge.innerHTML = '&#x1F4C5; '+todayFull;
-const noteBar = document.getElementById('specials-note-bar');
-if(todayItems.length > 0 && noteBar){
-  noteBar.textContent = todayItems.length+' special'+(todayItems.length!==1?'s':'')+' posted today · tap any item for details · call (225) 245-5046 to confirm availability';
-} else if(noteBar) {
-  noteBar.textContent = 'No specials posted today — check back soon or call (225) 245-5046';
-}
-
-// ── Show/hide wheel vs locked notice ──
-const wheelWrap = document.getElementById('specials-wheel-wrap');
-const lockedNotice = document.getElementById('specials-locked');
-if(todayItems.length === 0){
-  if(wheelWrap) wheelWrap.style.display='none';
-  if(lockedNotice) lockedNotice.style.display='block';
 }
 
 function setHub(m,s){
@@ -1591,12 +1561,6 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){closeCirc();closePopup();if(typeof closePanel==='function')closePanel();if(typeof closeList==='function')closeList();if(typeof closeSearch==='function')closeSearch();}
 });
 
-// ── INIT SPECIALS WHEEL ──
-// Only init if we have specials to show
-if(todayItems.length > 0){
-  buildItemRing(SPECIALS_CAT);
-  setHub("SPECIALS","TAP TO VIEW");
-}
 
 // ── SCROLL LOCK — only while actively dragging the wheel ──
 (function(){
