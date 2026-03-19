@@ -40,30 +40,6 @@
     .reveal.visible{opacity:1;transform:translateY(0)}
     .reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}
 
-    /* ── FIRE LINE ── */
-    .fire-line{height:3px;background:linear-gradient(90deg,transparent,var(--ember) 20%,var(--gold) 50%,var(--ember) 80%,transparent)}
-
-    /* ── NAV ── */
-    nav{position:sticky;top:0;z-index:100;background:rgba(12,9,5,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,83,42,.15);padding:0 clamp(20px,5vw,60px);display:flex;align-items:center;justify-content:space-between;height:70px;gap:20px}
-    .nav-brand{display:flex;align-items:center;gap:13px;flex-shrink:0}
-    .nav-logo{width:44px;height:44px;border-radius:50%;object-fit:contain;background:radial-gradient(circle at 40% 35%,#2A1A0A,#1A0E06);border:1px solid rgba(232,83,42,.5);box-shadow:0 0 14px rgba(232,83,42,.25)}
-    .nav-logo-fallback{width:44px;height:44px;border-radius:50%;flex-shrink:0;background:conic-gradient(from 180deg,var(--ember),var(--gold-lt),var(--fire),var(--ember));position:relative;display:none}
-    .nav-logo-fallback::after{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--char)}
-    .nav-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.12em;color:var(--cream);line-height:1}
-    .nav-name small{display:block;font-family:'Barlow Condensed',sans-serif;font-size:.52rem;letter-spacing:.38em;color:var(--ash);font-weight:300;margin-top:3px}
-    .nav-links{display:flex;align-items:center;gap:2px}
-    .nav-link{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,230,208,.65);padding:.55rem .85rem;border-radius:999px;transition:color .2s,background .2s}
-    .nav-link:hover{color:var(--cream);background:rgba(232,83,42,.1)}
-    .nav-link.active{color:var(--fire)}
-    .nav-cta{font-family:'Bebas Neue',sans-serif;font-size:.82rem;letter-spacing:.16em;color:var(--char);background:linear-gradient(135deg,var(--fire),var(--ember));padding:.6rem 1.4rem;border-radius:999px;border:none;cursor:pointer;transition:box-shadow .2s,transform .2s;white-space:nowrap;flex-shrink:0}
-    .nav-cta:hover{box-shadow:0 0 24px rgba(232,83,42,.45);transform:translateY(-1px)}
-    .nav-toggle{display:none;background:none;border:1px solid rgba(232,83,42,.35);color:var(--fire);padding:.45rem .65rem;border-radius:8px;cursor:pointer;font-size:1rem}
-    .nav-drawer{display:none;position:fixed;inset:0;z-index:90;background:rgba(12,9,5,.98);backdrop-filter:blur(12px);flex-direction:column;align-items:center;justify-content:center;gap:1.8rem}
-    .nav-drawer.open{display:flex}
-    .drawer-close{position:absolute;top:22px;right:24px;background:none;border:none;color:var(--ash);font-size:1.3rem;cursor:pointer}
-    .drawer-link{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.08em;color:var(--cream);transition:color .2s}
-    .drawer-link:hover{color:var(--fire)}
-
     /* ── HERO ── */
     .hero{position:relative;min-height:72vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px clamp(20px,6vw,80px) 60px;overflow:hidden}
     .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 70% 55% at 50% 60%,rgba(232,83,42,.1),transparent 58%),var(--char)}
@@ -179,40 +155,38 @@
       .team-grid{grid-template-columns:1fr}
       .stats-grid{grid-template-columns:repeat(2,1fr)}
     }
+  
+    /* ── CIRCULAR NAV ── */
+    .circ-trigger{position:fixed;z-index:200;display:flex;flex-direction:column;align-items:center;gap:7px;background:rgba(14,10,6,.88);border:1px solid rgba(232,83,42,.32);box-shadow:0 0 20px rgba(180,75,60,.2);backdrop-filter:blur(12px);padding:13px 8px;border-radius:999px;cursor:pointer;transition:border-color .25s,box-shadow .25s,transform .25s;user-select:none}
+    .circ-trigger:hover{border-color:rgba(232,83,42,.65);box-shadow:0 0 32px rgba(180,75,60,.38);transform:scale(1.04)}
+    .ct-icon{font-size:1.15rem;color:var(--fire)}
+    .ct-text{font-family:'Bebas Neue',sans-serif;font-size:.6rem;letter-spacing:.08em;writing-mode:vertical-rl;text-orientation:upright;color:var(--cream)}
+    .ct-sub{font-size:.46rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);writing-mode:vertical-rl;text-orientation:mixed}
+    #ct-left{left:22px;top:50%;transform:translateY(-50%)}
+    #ct-left:hover{transform:translateY(-50%) scale(1.04)}
+    #ct-bottom{bottom:22px;left:50%;transform:translateX(-50%);flex-direction:row;padding:10px 16px;display:none}
+    #ct-bottom .ct-text{writing-mode:initial;text-orientation:initial;font-size:.75rem}
+    #ct-bottom .ct-sub{writing-mode:initial;text-orientation:initial}
+    #ct-bottom:hover{transform:translateX(-50%) scale(1.04)}
+    .circ-overlay{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(6,4,2,.82);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .3s ease}
+    .circ-overlay.open{opacity:1;pointer-events:all}
+    .circ-menu{width:380px;height:380px;border-radius:50%;position:relative;border:1px solid rgba(232,83,42,.38);box-shadow:0 0 70px rgba(180,75,60,.38),inset 0 0 40px rgba(0,0,0,.5);background:radial-gradient(circle at center,rgba(180,75,60,.07),transparent 70%);transform:scale(.3);transition:transform .45s cubic-bezier(.22,1,.36,1)}
+    .circ-overlay.open .circ-menu{transform:scale(1)}
+    .circ-ring{position:absolute;inset:12px;border-radius:50%;border:1px solid rgba(232,83,42,.1);pointer-events:none}
+    .circ-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,#fff1de,var(--gold));color:#160f0d;border:2px solid var(--ember);box-shadow:0 0 28px rgba(224,129,93,.4);cursor:pointer;transition:.22s ease;z-index:2;font-size:1.5rem}
+    .circ-center:hover{transform:translate(-50%,-50%) scale(1.08)}
+    .circ-close-btn{position:absolute;top:16px;right:18px;background:none;border:1px solid rgba(232,83,42,.25);color:var(--ash);font-family:'Barlow Condensed',sans-serif;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;padding:5px 10px;cursor:pointer;transition:color .2s,border-color .2s;z-index:3}
+    .circ-close-btn:hover{color:var(--fire);border-color:rgba(232,83,42,.6)}
+    .circ-item{position:absolute;top:50%;left:50%;width:68px;height:68px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(18,13,8,.92);border:1px solid rgba(232,83,42,.32);color:var(--cream);font-family:'Bebas Neue',sans-serif;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;text-align:center;box-shadow:0 0 16px rgba(0,0,0,.6);transform:translate(-50%,-50%) rotate(calc(var(--a)*1deg)) translateY(-142px) rotate(calc(var(--a)*-1deg));transition:.22s ease;cursor:pointer;backdrop-filter:blur(8px)}
+    .circ-item:hover{background:rgba(232,83,42,.88);border-color:var(--gold);transform:translate(-50%,-50%) rotate(calc(var(--a)*1deg)) translateY(-152px) rotate(calc(var(--a)*-1deg)) scale(1.08);box-shadow:0 0 26px rgba(232,83,42,.5)}
+    .ci-icon{font-size:1.1rem;line-height:1}
+    @media(max-width:860px){#ct-left{display:none}#ct-bottom{display:flex}}
+
   </style>
 </head>
 <body>
 
-<div class="fire-line" role="presentation"></div>
-
-<!-- ── NAV ── -->
-<nav role="navigation" aria-label="Main navigation">
-  <a href="index.html" class="nav-brand" aria-label="The Francis Smokehouse - Home">
-    <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse logo" class="nav-logo"
-         onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
-    <div class="nav-logo-fallback" aria-hidden="true"></div>
-    <div class="nav-name">The Francis Smokehouse<small>St. Francisville, LA</small></div>
-  </a>
-  <div class="nav-links" role="list">
-    <a class="nav-link" href="index.html">Home</a>
-    <a class="nav-link active" href="about.html">About</a>
-    <a class="nav-link" href="story.html">Our Story</a>
-    <a class="nav-link" href="menu.html">Menu</a>
-    <a class="nav-link" href="index.html#info-section">Visit</a>
-  </div>
-  <a class="nav-cta" href="menu.html" aria-label="Open full menu">Full Menu</a>
-  <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false">&#9776;</button>
-</nav>
-
-<div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Mobile navigation">
-  <button class="drawer-close" id="drawer-close" aria-label="Close">&#10005;</button>
-  <a class="drawer-link" href="index.html">Home</a>
-  <a class="drawer-link" href="about.html">About</a>
-  <a class="drawer-link" href="story.html">Our Story</a>
-  <a class="drawer-link" href="menu.html">Menu</a>
-  <a class="drawer-link" href="index.html#info-section">Visit</a>
-  <a class="drawer-link" href="tel:+12252455046">Call Us</a>
-</div>
+>
 
 <!-- ── HERO ── -->
 <header class="hero" role="banner">
@@ -385,6 +359,33 @@
   </div>
 </section>
 
+<!-- ── CIRCULAR NAV ── -->
+<div class="circ-trigger" id="ct-left" role="button" tabindex="0" aria-label="Open navigation">
+  <i class="fas fa-compass ct-icon"></i>
+  <span class="ct-text">NAV</span>
+  <span class="ct-sub">menu</span>
+</div>
+<div class="circ-trigger" id="ct-bottom" role="button" tabindex="0" aria-label="Open navigation">
+  <i class="fas fa-compass ct-icon"></i>
+  <div>
+    <div class="ct-text" style="writing-mode:initial">NAVIGATE</div>
+    <div class="ct-sub" style="writing-mode:initial">explore</div>
+  </div>
+</div>
+<div class="circ-overlay" id="circ-overlay" role="dialog" aria-label="Navigation" aria-modal="true">
+  <div class="circ-menu">
+    <div class="circ-ring"></div>
+    <div class="circ-center" id="circ-home">&#x1F3E0;</div>
+    <button class="circ-close-btn" id="circ-close">&#10005; close</button>
+    <a class="circ-item" style="--a:0"   href="menu.html"><span class="ci-icon">&#x1F525;</span><span>Menu</span></a>
+    <a class="circ-item" style="--a:72"  href="story.html"><span class="ci-icon">&#x1F4D6;</span><span>Story</span></a>
+    <a class="circ-item" style="--a:144" href="index.html#specials-section"><span class="ci-icon">&#x2B50;</span><span>Specials</span></a>
+    <a class="circ-item" style="--a:216" href="index.html#info-section"><span class="ci-icon">&#x1F4CD;</span><span>Visit</span></a>
+    <a class="circ-item" style="--a:288" href="tel:+12252455046"><span class="ci-icon">&#x1F4DE;</span><span>Call</span></a>
+  </div>
+</div>
+
+
 <!-- ── FOOTER ── -->
 <footer role="contentinfo">
   <div class="footer-inner">
@@ -409,16 +410,23 @@
 
 <script>
 (function(){
-  // Mobile nav
-  const toggle  = document.getElementById('nav-toggle');
-  const drawer  = document.getElementById('nav-drawer');
-  const dClose  = document.getElementById('drawer-close');
-  function openD(){ drawer.classList.add('open'); toggle.setAttribute('aria-expanded','true'); }
-  function closeD(){ drawer.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }
-  toggle.addEventListener('click', openD);
-  dClose.addEventListener('click', closeD);
-  drawer.querySelectorAll('.drawer-link').forEach(l => l.addEventListener('click', closeD));
-  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeD(); });
+  // Circular nav
+  const overlay = document.getElementById('circ-overlay');
+  function openCirc(){ overlay.classList.add('open'); }
+  function closeCirc(){ overlay.classList.remove('open'); }
+
+  document.getElementById('ct-left').addEventListener('click', e => { e.stopPropagation(); openCirc(); });
+  document.getElementById('ct-bottom').addEventListener('click', e => { e.stopPropagation(); openCirc(); });
+  overlay.addEventListener('click', e => { if(e.target === overlay) closeCirc(); });
+  document.getElementById('circ-close').addEventListener('click', closeCirc);
+  document.getElementById('circ-home').addEventListener('click', e => {
+    e.stopPropagation();
+    closeCirc();
+    window.location.href = 'index.html';
+  });
+  document.querySelectorAll('.circ-item').forEach(item => item.addEventListener('click', closeCirc));
+
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeCirc(); });
 
   // Scroll reveal
   const obs = new IntersectionObserver(entries => {
