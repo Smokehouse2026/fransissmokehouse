@@ -1,1909 +1,697 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EchoEarth — Two Worlds, One Place</title>
-  <meta name="description" content="EchoEarth is a location-based memory layer for the world where people, museums, and communities leave stories behind for others to discover in the places that matter most." />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+  <!-- SEO -->
+  <title>Our Story | The Francis Smokehouse &middot; St. Francisville, Louisiana</title>
+  <meta name="description" content="The story behind The Francis Smokehouse &mdash; a family-run BBQ and Cajun institution on Highway 61 in St. Francisville, Louisiana since 2015. Low and slow, with soul."/>
+  <meta name="keywords" content="Francis Smokehouse story, St. Francisville BBQ history, Louisiana smokehouse family, Highway 61 restaurant, about Francis Smokehouse"/>
+  <meta name="author" content="The Francis Smokehouse"/>
+  <link rel="canonical" href="https://www.thefrancissmokehouse.com/story.html"/>
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Our Story | The Francis Smokehouse"/>
+  <meta property="og:description" content="Family-run BBQ and Cajun institution on Highway 61 in St. Francisville, Louisiana since 2015."/>
+  <meta property="og:url" content="https://www.thefrancissmokehouse.com/story.html"/>
+  <meta property="og:image" content="https://www.thefrancissmokehouse.com/Images/Smokehouselogo.png"/>
+  <meta property="og:site_name" content="The Francis Smokehouse"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Our Story | The Francis Smokehouse"/>
+  <meta name="twitter:description" content="Low and slow since 2015 on Highway 61, St. Francisville, LA."/>
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org","@type":"Restaurant",
+    "name":"The Francis Smokehouse","url":"https://www.thefrancissmokehouse.com",
+    "telephone":"(225) 245-5046","email":"francissmokehouse@att.net",
+    "address":{"@type":"PostalAddress","streetAddress":"6779 US Highway 61","addressLocality":"St. Francisville","addressRegion":"LA","postalCode":"70775","addressCountry":"US"},
+    "servesCuisine":["BBQ","Cajun","Southern","American"],
+    "openingHours":["Mo-Sa 10:00-18:00","Su 10:00-15:00"],
+    "aggregateRating":{"@type":"AggregateRating","ratingValue":"4.7","reviewCount":"200","bestRating":"5"}
+  }
+  </script>
+
+  <link rel="icon" type="image/png" href="Images/Smokehouselogo.png"/>
+  <link rel="apple-touch-icon" href="Images/Smokehouselogo.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg: #081018;
-      --bg-2: #0e1b27;
-      --card: rgba(255,255,255,0.08);
-      --card-strong: rgba(255,255,255,0.12);
-      --text: #edf5ff;
-      --muted: #b7c8dc;
-      --line: rgba(255,255,255,0.14);
-      --brand: #73e0c1;
-      --brand-2: #6ca7ff;
-      --accent: #ffd36f;
-      --danger: #ff9ea8;
-      --shadow: 0 24px 60px rgba(0,0,0,0.35);
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --max: 1220px;
+      --fire: #E8532A;
+      --ember: #C43C10;
+      --gold: #C9881A;
+      --gold-lt: #E5A830;
+      --cream: #F0E6D0;
+      --bone: #D4C5A0;
+      --ash: #6B5C42;
+      --char: #0C0905;
+      --char2: #141009;
+      --char3: #1C1510;
     }
 
-    * { box-sizing: border-box; }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation:none!important;transition:none!important}
+      .reveal{opacity:1!important;transform:none!important}
+    }
+
     html { scroll-behavior: smooth; }
+
     body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 20% 20%, rgba(108,167,255,0.22), transparent 28%),
-        radial-gradient(circle at 80% 10%, rgba(115,224,193,0.18), transparent 24%),
-        radial-gradient(circle at 50% 80%, rgba(255,211,111,0.08), transparent 18%),
-        linear-gradient(180deg, #071018 0%, #0a1420 42%, #09111a 100%);
-      min-height: 100vh;
+      font-family: 'Barlow Condensed', sans-serif;
+      background: var(--char);
+      color: var(--cream);
       overflow-x: hidden;
+      line-height: 1.5;
     }
 
     a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
+    img { display: block; max-width: 100%; }
 
-    .container { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
-
-    .bg-grid::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(circle at center, black 45%, transparent 88%);
-      opacity: 0.35;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(18px);
-      background: rgba(6, 13, 20, 0.62);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 0;
-      gap: 20px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-    }
-
-    .brand-badge {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      background:
-        radial-gradient(circle at 30% 30%, #91f2d7, transparent 35%),
-        radial-gradient(circle at 70% 70%, #7eb6ff, transparent 35%),
-        linear-gradient(135deg, rgba(115,224,193,0.25), rgba(108,167,255,0.25));
-      border: 1px solid rgba(255,255,255,0.16);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.25);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .brand-badge::after {
-      content: "";
-      position: absolute;
-      inset: 7px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.25);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .nav-links a:hover { color: white; }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      border: 1px solid transparent;
-      border-radius: 999px;
-      padding: 14px 20px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 180ms ease;
-      white-space: nowrap;
-    }
-
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      color: #061018;
-      box-shadow: 0 16px 36px rgba(108,167,255,0.22);
-    }
-    .btn-secondary {
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(255,255,255,0.13);
-      color: var(--text);
-    }
-    .btn-ghost {
-      background: transparent;
-      border-color: rgba(255,255,255,0.12);
-      color: var(--text);
-    }
-
-    .hero {
-      padding: 72px 0 48px;
-      position: relative;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 30px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.05);
-      padding: 10px 14px;
-      border-radius: 999px;
-      color: #d8e8fb;
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
-
-    .eyebrow-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      background: var(--brand);
-      box-shadow: 0 0 0 6px rgba(115,224,193,0.12);
-    }
-
-    h1 {
-      font-size: clamp(42px, 8vw, 78px);
-      line-height: 0.96;
-      margin: 0;
-      letter-spacing: -0.04em;
-      max-width: 12ch;
-    }
-
-    .hero h1 span {
-      display: block;
-      background: linear-gradient(135deg, #ffffff, #bfe5ff 55%, #a6ffe4 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .subcopy {
-      margin: 22px 0 30px;
-      max-width: 640px;
-      font-size: 19px;
-      line-height: 1.7;
-      color: var(--muted);
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 26px;
-    }
-
-    .hero-points {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .point {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 18px;
-      padding: 16px;
-    }
-
-    .point strong { display: block; font-size: 14px; margin-bottom: 6px; }
-    .point span { font-size: 13px; color: var(--muted); line-height: 1.5; }
-
-    .hero-visual {
-      position: relative;
-      min-height: 650px;
-    }
-
-    .phone-shell {
-      width: min(100%, 420px);
-      margin-left: auto;
-      border-radius: 38px;
-      padding: 12px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.06));
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(255,255,255,0.15);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .phone-shell::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), transparent 30%);
-      pointer-events: none;
-    }
-
-    .phone-screen {
-      border-radius: 30px;
-      overflow: hidden;
-      min-height: 620px;
-      background:
-        radial-gradient(circle at 25% 15%, rgba(115,224,193,0.18), transparent 18%),
-        radial-gradient(circle at 70% 30%, rgba(108,167,255,0.18), transparent 20%),
-        linear-gradient(180deg, #122031 0%, #0e1823 100%);
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .status {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 18px 0;
-      color: rgba(255,255,255,0.72);
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .camera-scene {
-      position: relative;
-      height: 460px;
-      margin: 12px 14px 0;
-      border-radius: 24px;
-      overflow: hidden;
-      background:
-        linear-gradient(180deg, rgba(164,221,255,0.9) 0%, rgba(100,162,222,0.82) 32%, rgba(39,71,98,0.8) 33%, rgba(20,32,46,0.9) 100%),
-        linear-gradient(135deg, #364b63, #1b2a39);
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .mountain, .mountain::before, .mountain::after {
-      position: absolute;
-      bottom: 0;
-      content: "";
-      background: linear-gradient(180deg, rgba(30,52,69,0.7), rgba(15,25,35,0.95));
-      clip-path: polygon(0% 100%, 16% 72%, 28% 82%, 42% 54%, 62% 78%, 80% 46%, 100% 100%);
-      width: 100%;
-      height: 48%;
-    }
-
-    .mountain::before {
-      left: -10%;
-      width: 78%;
-      height: 42%;
-      opacity: 0.8;
-      clip-path: polygon(0 100%, 18% 66%, 43% 84%, 66% 34%, 100% 100%);
-    }
-
-    .mountain::after {
-      right: -12%;
-      width: 76%;
-      height: 38%;
-      opacity: 0.7;
-      clip-path: polygon(0 100%, 24% 52%, 44% 75%, 75% 22%, 100% 100%);
-    }
-
-    .ar-card {
-      position: absolute;
-      background: rgba(9,16,24,0.68);
-      border: 1px solid rgba(255,255,255,0.14);
-      backdrop-filter: blur(14px);
-      border-radius: 18px;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-      padding: 14px;
-    }
-
-    .ar-card.small { width: 180px; }
-    .ar-card.medium { width: 230px; }
-    .ar-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .ar-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      background: rgba(115,224,193,0.12);
-      color: #baf5e4;
-    }
-
-    .ar-title { font-weight: 700; margin: 0 0 6px; font-size: 15px; }
-    .ar-body { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
-
-    .ar-card.one { left: 18px; top: 28px; animation: float 6s ease-in-out infinite; }
-    .ar-card.two { right: 18px; top: 94px; animation: float 7s ease-in-out infinite 1s; }
-    .ar-card.three { left: 50%; transform: translateX(-50%); bottom: 24px; animation: float 6.5s ease-in-out infinite 0.5s; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .mini-map {
-      margin: 12px 14px 16px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 14px;
-    }
-
-    .mini-map-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .mini-grid {
-      position: relative;
-      border-radius: 16px;
-      min-height: 120px;
-      background:
-        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(108,167,255,0.14), rgba(115,224,193,0.08));
-      background-size: 24px 24px, 24px 24px, auto;
-      overflow: hidden;
-    }
-
-    .pin {
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--accent), #ff9b76);
-      border: 2px solid rgba(0,0,0,0.3);
-      box-shadow: 0 10px 18px rgba(0,0,0,0.2);
-    }
-
-    .pin:nth-child(1) { left: 20%; top: 28%; }
-    .pin:nth-child(2) { left: 48%; top: 54%; background: linear-gradient(135deg, var(--brand), #7dd7f6); }
-    .pin:nth-child(3) { left: 72%; top: 32%; background: linear-gradient(135deg, #d2b6ff, #7c9dff); }
-
-    .stats {
-      padding: 26px 0 12px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .stat-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 22px;
-      padding: 22px;
-      box-shadow: var(--shadow);
-    }
-
-    .stat-card h3 {
-      margin: 0 0 8px;
-      font-size: clamp(28px, 5vw, 42px);
-      letter-spacing: -0.04em;
-    }
-
-    .stat-card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    section {
-      padding: 72px 0;
-    }
-
-    .section-head {
-      max-width: 780px;
-      margin-bottom: 28px;
-    }
-
-    .section-head .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 800;
-      color: #d2e3f9;
-      margin-bottom: 16px;
-    }
-
-    .section-head h2 {
-      margin: 0 0 12px;
-      font-size: clamp(32px, 5vw, 56px);
-      line-height: 1.02;
-      letter-spacing: -0.04em;
-    }
-
-    .section-head p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.75;
-      font-size: 18px;
-    }
-
-    .cards-3, .cards-4, .pricing-grid, .steps, .museum-layout, .demo-grid, .faq-grid {
-      display: grid;
-      gap: 18px;
-    }
-
-    .cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .cards-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .pricing-grid { grid-template-columns: 1fr 1.1fr 1fr; align-items: start; }
-    .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .museum-layout { grid-template-columns: 1.15fr 0.85fr; align-items: stretch; }
-    .demo-grid { grid-template-columns: 0.95fr 1.05fr; align-items: start; }
-    .faq-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      padding: 22px;
-      box-shadow: var(--shadow);
-    }
-
-    .card strong.kicker {
-      display: inline-flex;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #bfe6ff;
-      margin-bottom: 14px;
-    }
-
-    .card h3 {
-      margin: 0 0 10px;
-      font-size: 22px;
-      letter-spacing: -0.03em;
-    }
-
-    .card p, .card li {
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 15px;
-    }
-
-    .feature-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(115,224,193,0.18), rgba(108,167,255,0.18));
-      border: 1px solid rgba(255,255,255,0.1);
-      display: grid;
-      place-items: center;
-      font-size: 22px;
-      margin-bottom: 18px;
-    }
-
-    ul.clean {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    ul.clean li {
-      position: relative;
-      padding-left: 24px;
-      margin: 12px 0;
-    }
-
-    ul.clean li::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 9px;
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      box-shadow: 0 0 0 5px rgba(115,224,193,0.09);
-    }
-
-    .museum-shell {
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 28px;
-      padding: 22px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .museum-shell::after {
-      content: "";
-      position: absolute;
-      inset: auto -10% -36% auto;
-      width: 260px;
-      height: 260px;
-      background: radial-gradient(circle, rgba(115,224,193,0.18), transparent 60%);
-      filter: blur(10px);
-    }
-
-    .museum-window {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 16px;
-    }
-
-    .museum-sidebar, .museum-panel, .museum-stat, .museum-exhibit {
-      background: rgba(8,14,22,0.7);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-    }
-
-    .museum-sidebar { padding: 16px; }
-    .museum-panel { padding: 18px; }
-
-    .museum-logo {
-      width: 54px;
-      height: 54px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(255,211,111,0.3), rgba(108,167,255,0.22));
-      display: grid;
-      place-items: center;
-      font-size: 22px;
-      margin-bottom: 14px;
-      border: 1px solid rgba(255,255,255,0.12);
-    }
-
-    .museum-nav {
-      display: grid;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .museum-nav span {
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.04);
-      color: #d7e6f8;
-      font-size: 13px;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .museum-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-
-    .museum-top h3 { margin: 0 0 6px; }
-    .museum-top p { margin: 0; }
-
-    .museum-badge {
-      display: inline-flex;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      background: rgba(115,224,193,0.12);
-      color: #baf5e4;
-      border: 1px solid rgba(115,224,193,0.18);
-    }
-
-    .museum-stats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .museum-stat {
-      padding: 14px;
-    }
-
-    .museum-stat strong {
-      display: block;
-      font-size: 26px;
-      margin-bottom: 4px;
-    }
-
-    .museum-stat span {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .museum-exhibits {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .museum-exhibit { padding: 14px; }
-
-    .museum-exhibit .mini-tag {
-      display: inline-flex;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #ffdca0;
-      margin-bottom: 8px;
-      font-weight: 700;
-    }
-
-    .pricing-card {
-      position: relative;
-      overflow: hidden;
-      min-height: 100%;
-    }
-
-    .pricing-card.featured {
-      background: linear-gradient(180deg, rgba(108,167,255,0.16), rgba(115,224,193,0.12));
-      border-color: rgba(255,255,255,0.18);
-      transform: translateY(-8px);
-    }
-
-    .pricing-card .price {
-      font-size: 44px;
-      font-weight: 800;
-      letter-spacing: -0.05em;
-      margin: 10px 0 6px;
-    }
-
-    .pricing-card .sub {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
-
-    .pricing-pill {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: rgba(255,211,111,0.16);
-      color: #ffe6ae;
-      border: 1px solid rgba(255,211,111,0.18);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-    }
-
-    .step-card {
-      position: relative;
-      padding-top: 56px;
-    }
-
-    .step-num {
-      position: absolute;
-      top: 18px;
-      left: 20px;
-      width: 28px;
-      height: 28px;
-      display: grid;
-      place-items: center;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      color: #061018;
-      font-weight: 800;
-      font-size: 14px;
-    }
-
-    .demo-preview {
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 28px;
-      padding: 18px;
-      box-shadow: var(--shadow);
+    /* ── FIRE LINE ── */
+    .fire-line {
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--ember) 20%, var(--gold) 50%, var(--ember) 80%, transparent);
     }
-
-    .map-stage {
-      min-height: 560px;
-      border-radius: 22px;
-      overflow: hidden;
-      position: relative;
-      background:
-        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
-        radial-gradient(circle at 18% 24%, rgba(115,224,193,0.18), transparent 18%),
-        radial-gradient(circle at 74% 36%, rgba(108,167,255,0.22), transparent 24%),
-        radial-gradient(circle at 44% 78%, rgba(255,211,111,0.12), transparent 20%),
-        linear-gradient(180deg, #102032 0%, #0a1420 100%);
-      background-size: 36px 36px, 36px 36px, auto, auto, auto, auto;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .map-toolbar {
-      position: absolute;
-      top: 18px;
-      left: 18px;
-      right: 18px;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      z-index: 2;
-    }
-
-    .glass {
-      background: rgba(8,14,22,0.72);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 16px;
-      backdrop-filter: blur(14px);
-      box-shadow: 0 12px 26px rgba(0,0,0,0.28);
-    }
-
-    .tabs, .filter-row, .legend-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .chip {
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
-      color: #eaf4ff;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 13px;
-      transition: 180ms ease;
-    }
-
-    .chip.active, .chip:hover {
-      background: linear-gradient(135deg, rgba(115,224,193,0.18), rgba(108,167,255,0.18));
-      border-color: rgba(255,255,255,0.18);
-    }
-
-    .demo-search {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      min-width: 280px;
-    }
-
-    .demo-search input, .composer input, .composer textarea, .composer select {
-      width: 100%;
-      background: rgba(255,255,255,0.05);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      padding: 13px 14px;
-      font: inherit;
-      outline: none;
-    }
-
-    .composer textarea { min-height: 108px; resize: vertical; }
-    .composer label { display: grid; gap: 8px; font-size: 13px; color: #d7e6f7; }
-    .composer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .composer-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-
-    .location-pin {
-      position: absolute;
-      transform: translate(-50%, -100%);
-      cursor: pointer;
-      z-index: 1;
-    }
-
-    .location-pin button {
-      all: unset;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      min-width: 24px;
-      min-height: 24px;
-    }
-
-    .pin-core {
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      border: 3px solid rgba(255,255,255,0.8);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.28);
-      transition: 180ms ease;
-    }
-
-    .location-pin.active .pin-core,
-    .location-pin:hover .pin-core { transform: scale(1.12); }
 
-    .pin-label {
-      position: absolute;
-      left: 50%;
-      top: -10px;
-      transform: translate(-50%, -100%);
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(6,10,16,0.82);
-      border: 1px solid rgba(255,255,255,0.1);
-      white-space: nowrap;
-      font-size: 12px;
+    /* ── SCROLL REVEAL ── */
+    .reveal {
       opacity: 0;
-      transition: 180ms ease;
-      pointer-events: none;
+      transform: translateY(24px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(12,9,5,.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(232,83,42,.15);
+      padding: 0 clamp(20px,5vw,60px);
+      display: flex; align-items: center; justify-content: space-between;
+      height: 70px; gap: 20px;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 13px; flex-shrink: 0;
+    }
+    .nav-logo {
+      width: 44px; height: 44px; border-radius: 50%;
+      object-fit: contain;
+      background: radial-gradient(circle at 40% 35%, #2A1A0A, #1A0E06);
+      border: 1px solid rgba(232,83,42,.5);
+      box-shadow: 0 0 14px rgba(232,83,42,.25);
+    }
+    .nav-logo-fallback {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      background: conic-gradient(from 180deg, var(--ember), var(--gold-lt), var(--fire), var(--ember));
+      box-shadow: 0 0 16px rgba(232,83,42,.3); position: relative; display: none;
+    }
+    .nav-logo-fallback::after {
+      content: ""; position: absolute; inset: 8px; border-radius: 50%; background: var(--char);
+    }
+    .nav-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; letter-spacing: .12em; color: var(--cream); line-height: 1;
+    }
+    .nav-name small {
+      display: block; font-family: 'Barlow Condensed', sans-serif;
+      font-size: .52rem; letter-spacing: .38em; color: var(--ash);
+      font-weight: 300; margin-top: 3px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link {
+      font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+      color: rgba(240,230,208,.65); padding: .55rem .85rem; border-radius: 999px;
+      transition: color .2s, background .2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--cream); background: rgba(232,83,42,.1);
+    }
+    .nav-link.active { color: var(--fire); }
+    .nav-cta {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .82rem; letter-spacing: .16em; color: var(--char);
+      background: linear-gradient(135deg, var(--fire), var(--ember));
+      padding: .6rem 1.4rem; border-radius: 999px; border: none; cursor: pointer;
+      transition: box-shadow .2s, transform .2s; white-space: nowrap; flex-shrink: 0;
+    }
+    .nav-cta:hover { box-shadow: 0 0 24px rgba(232,83,42,.45); transform: translateY(-1px); }
+    .nav-toggle {
+      display: none; background: none; border: 1px solid rgba(232,83,42,.35);
+      color: var(--fire); padding: .45rem .65rem; border-radius: 8px; cursor: pointer; font-size: 1rem;
+    }
+    .nav-drawer {
+      display: none; position: fixed; inset: 0; z-index: 90;
+      background: rgba(12,9,5,.98); backdrop-filter: blur(12px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 1.8rem;
+    }
+    .nav-drawer.open { display: flex; }
+    .drawer-close {
+      position: absolute; top: 22px; right: 24px;
+      background: none; border: none; color: var(--ash); font-size: 1.3rem; cursor: pointer;
+    }
+    .drawer-link {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem; letter-spacing: .08em; color: var(--cream); transition: color .2s;
+    }
+    .drawer-link:hover { color: var(--fire); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 72vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px clamp(20px,6vw,80px) 80px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 60%, rgba(232,83,42,.1), transparent 58%),
+        radial-gradient(ellipse 40% 40% at 20% 20%, rgba(201,136,26,.06), transparent 52%),
+        var(--char);
+    }
+    .hero-bg::after {
+      content: ""; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 75%);
+      opacity: .35;
+    }
+    .hero-fire-line {
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--ember) 25%, var(--gold) 50%, var(--ember) 75%, transparent);
+    }
+    .hero-inner { position: relative; z-index: 1; max-width: 680px; }
+    .hero-eyebrow {
+      font-size: .62rem; letter-spacing: .52em; text-transform: uppercase;
+      color: var(--fire); margin-bottom: 18px; display: block;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      letter-spacing: .05em; line-height: .88; color: var(--cream);
+    }
+    .hero-title em {
+      display: block; font-style: normal;
+      -webkit-text-stroke: 1.5px var(--fire); color: transparent;
+    }
+    .hero-divider {
+      width: 48px; height: 1px; margin: 22px auto;
+      background: linear-gradient(90deg, transparent, var(--fire), transparent);
+    }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      color: rgba(212,197,160,.65); line-height: 1.75; max-width: 44ch; margin: 0 auto;
     }
 
-    .location-pin:hover .pin-label,
-    .location-pin.active .pin-label { opacity: 1; }
-
-    .panel-stack {
-      display: grid;
-      gap: 18px;
+    /* ── SHARED SECTION STYLES ── */
+    .section { padding: 90px clamp(20px,6vw,80px); }
+    .section-dark { background: var(--char2); }
+    .section-label {
+      font-size: .58rem; letter-spacing: .52em; text-transform: uppercase;
+      color: var(--fire); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::before { content: ""; display: block; width: 22px; height: 1px; background: var(--fire); }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      letter-spacing: .06em; color: var(--cream); line-height: .9;
+    }
+    .section-title em { color: var(--fire); font-style: normal; }
+    .section-body {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: clamp(1rem, 1.6vw, 1.15rem);
+      color: rgba(212,197,160,.7); line-height: 1.8;
+      max-width: 52ch; margin-top: 16px;
     }
 
-    .detail-card {
-      min-height: 320px;
+    /* ── PULL QUOTE ── */
+    .pull-quote-wrap {
+      padding: 72px clamp(20px,8vw,120px);
+      background: var(--char3);
+      text-align: center;
+      border-top: 1px solid rgba(232,83,42,.1);
+      border-bottom: 1px solid rgba(232,83,42,.1);
+      position: relative; overflow: hidden;
+    }
+    .pull-quote-wrap::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(232,83,42,.06), transparent 65%);
+    }
+    .pull-quote {
+      position: relative; z-index: 1;
+      font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300;
+      font-size: clamp(1.4rem, 3vw, 2.4rem);
+      color: var(--cream); line-height: 1.4; max-width: 720px; margin: 0 auto 16px;
+    }
+    .pull-open, .pull-close {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem; line-height: 0; vertical-align: -.38em;
+      color: rgba(232,83,42,.3);
+    }
+    .pull-open { margin-right: 4px; }
+    .pull-close { margin-left: 2px; }
+    .pull-author {
+      position: relative; z-index: 1;
+      font-size: .62rem; letter-spacing: .42em; text-transform: uppercase; color: var(--fire);
     }
 
-    .detail-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
+    /* ── TWO-COL STORY ROWS ── */
+    .story-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: clamp(36px,6vw,88px); align-items: center;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .story-row.flip > :first-child { order: 2; }
+    .story-row.flip > :last-child  { order: 1; }
+
+    .story-img {
+      position: relative; border-radius: 3px; overflow: hidden;
+      border: 1px solid rgba(232,83,42,.14);
+    }
+    .story-img img {
+      width: 100%; display: block;
+      filter: sepia(.1) contrast(.97);
+    }
+    .story-img::before, .story-img::after {
+      content: ""; position: absolute;
+      width: 28px; height: 28px; z-index: 1;
+      border-color: var(--fire); border-style: solid; opacity: .35;
+    }
+    .story-img::before { top: 10px; left: 10px; border-width: 1px 0 0 1px; }
+    .story-img::after  { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+
+    .story-copy {}
+
+    /* Stat row inside copy */
+    .stat-row {
+      display: flex; gap: clamp(16px,3vw,40px); flex-wrap: wrap;
+      margin: 28px 0; padding: 20px 0;
+      border-top: 1px solid rgba(232,83,42,.14);
+      border-bottom: 1px solid rgba(232,83,42,.14);
+    }
+    .stat strong {
+      font-family: 'Bebas Neue', sans-serif; font-size: 2rem;
+      color: var(--gold-lt); letter-spacing: .05em; display: block; line-height: 1;
+    }
+    .stat span {
+      font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--ash); margin-top: 4px; display: block;
     }
 
-    .detail-head h3 { margin: 0 0 6px; }
-    .detail-head p { margin: 0; }
-
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 14px 0;
+    /* ── TIMELINE ── */
+    .timeline-inner { max-width: 680px; margin: 0 auto; }
+    .timeline { position: relative; padding-left: clamp(28px,5vw,52px); margin-top: 44px; }
+    .timeline::before {
+      content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(232,83,42,.35) 10%, rgba(232,83,42,.35) 90%, transparent);
+    }
+    .t-item {
+      position: relative; margin-bottom: 36px; padding-bottom: 36px;
+      border-bottom: 1px solid rgba(107,92,66,.15);
+    }
+    .t-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .t-item::before {
+      content: ""; position: absolute;
+      left: calc(-1 * clamp(28px,5vw,52px) - 5px); top: 5px;
+      width: 11px; height: 11px; border-radius: 50%;
+      background: var(--char2); border: 2px solid var(--fire);
+      box-shadow: 0 0 8px rgba(232,83,42,.3);
+    }
+    .t-year {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+      color: var(--fire); letter-spacing: .08em; line-height: 1; margin-bottom: 4px;
+    }
+    .t-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem;
+      color: var(--cream); letter-spacing: .1em; margin-bottom: 8px;
+    }
+    .t-body {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: .97rem; color: rgba(212,197,160,.68); line-height: 1.75;
     }
 
-    .meta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 8px 10px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      font-size: 12px;
-      color: #d7e8fb;
+    /* ── VALUES ── */
+    .values-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; max-width: 1100px; margin: 40px auto 0;
+    }
+    .value-card {
+      padding: 28px 22px; border-radius: 3px;
+      border: 1px solid rgba(232,83,42,.12);
+      background: var(--char3);
+      position: relative; overflow: hidden;
+      transition: border-color .25s, transform .25s;
+    }
+    .value-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--fire), transparent);
+      opacity: 0; transition: opacity .25s;
+    }
+    .value-card:hover { border-color: rgba(232,83,42,.32); transform: translateY(-4px); }
+    .value-card:hover::before { opacity: 1; }
+    .value-icon { font-size: 1.6rem; margin-bottom: 12px; display: block; }
+    .value-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem;
+      letter-spacing: .1em; color: var(--cream); margin-bottom: 8px;
+    }
+    .value-text {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: .9rem; color: rgba(212,197,160,.65); line-height: 1.7;
     }
 
-    .detail-message {
-      padding: 16px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      line-height: 1.8;
-      color: #edf5ff;
-      margin-bottom: 14px;
+    /* ── CTA BAND ── */
+    .cta-band {
+      padding: 80px clamp(20px,6vw,80px); text-align: center;
+      background: var(--char3);
+      border-top: 1px solid rgba(232,83,42,.12);
+      border-bottom: 1px solid rgba(232,83,42,.12);
+      position: relative; overflow: hidden;
     }
-
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 16px;
+    .cta-band::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(232,83,42,.07), transparent 65%);
     }
-
-    .badge {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
-      color: #d9e8fb;
+    .cta-band-eyebrow {
+      position: relative; z-index: 1;
+      font-size: .6rem; letter-spacing: .5em; text-transform: uppercase;
+      color: var(--fire); margin-bottom: 14px; display: block;
     }
-
-    .museum, .public, .legacy, .food {
-      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    .cta-band-title {
+      position: relative; z-index: 1;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      letter-spacing: .06em; color: var(--cream); line-height: .9; margin-bottom: 8px;
     }
-
-    .museum .pin-core { background: linear-gradient(135deg, #ffd36f, #ff9f67); }
-    .public .pin-core { background: linear-gradient(135deg, #73e0c1, #67c8ef); }
-    .legacy .pin-core { background: linear-gradient(135deg, #d7b7ff, #7f9fff); }
-    .food .pin-core { background: linear-gradient(135deg, #ffa8ad, #ffcf73); }
-
-    .revenue-strip {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 18px;
-      align-items: stretch;
+    .cta-band-title em { color: var(--fire); font-style: normal; }
+    .cta-band-sub {
+      position: relative; z-index: 1;
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 1rem; color: var(--ash); margin-bottom: 32px;
     }
-
-    .revenue-math {
-      display: grid;
-      gap: 12px;
+    .cta-buttons {
+      position: relative; z-index: 1;
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
     }
-
-    .equation {
-      display: grid;
-      gap: 10px;
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
+    .btn-primary {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .9rem; letter-spacing: .18em; color: var(--char);
+      background: linear-gradient(135deg, var(--fire), var(--ember));
+      padding: .85rem 2rem; border-radius: 999px; border: none; cursor: pointer;
+      box-shadow: 0 0 24px rgba(232,83,42,.3);
+      transition: box-shadow .2s, transform .2s;
+      display: inline-flex; align-items: center; gap: 8px;
     }
-
-    .equation strong { font-size: 28px; letter-spacing: -0.04em; }
-
-    details {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 18px;
-      padding: 18px 18px;
+    .btn-primary:hover { box-shadow: 0 0 40px rgba(232,83,42,.55); transform: translateY(-2px); }
+    .btn-outline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .85rem; letter-spacing: .18em; color: var(--cream);
+      background: transparent; padding: .82rem 1.8rem; border-radius: 999px;
+      border: 1px solid rgba(232,83,42,.4); cursor: pointer;
+      transition: border-color .2s, background .2s;
+      display: inline-flex; align-items: center; gap: 8px;
     }
+    .btn-outline:hover { border-color: var(--fire); background: rgba(232,83,42,.08); }
 
-    summary {
-      cursor: pointer;
-      font-weight: 700;
-      list-style: none;
-    }
-
-    summary::-webkit-details-marker { display: none; }
-    details p { color: var(--muted); line-height: 1.7; margin: 12px 0 0; }
-
-    .cta {
-      padding-bottom: 88px;
-    }
-
-    .cta-card {
-      padding: 34px;
-      border-radius: 30px;
-      background: linear-gradient(180deg, rgba(108,167,255,0.18), rgba(115,224,193,0.12));
-      border: 1px solid rgba(255,255,255,0.14);
-      box-shadow: var(--shadow);
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 20px;
-      align-items: center;
-    }
-
-    .cta-card h2 { margin: 0 0 10px; font-size: clamp(30px, 5vw, 54px); letter-spacing: -0.04em; }
-    .cta-card p { margin: 0; color: #e1eefc; line-height: 1.75; font-size: 18px; max-width: 760px; }
-
+    /* ── FOOTER ── */
     footer {
-      padding: 28px 0 40px;
-      color: var(--muted);
-      font-size: 14px;
+      background: #080604;
+      border-top: 1px solid rgba(232,83,42,.15);
+      padding: 44px clamp(20px,5vw,80px) 28px;
+    }
+    .footer-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center;
+    }
+    .footer-logo-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .footer-logo {
+      width: 52px; height: 52px; border-radius: 50%; object-fit: contain;
+      background: radial-gradient(circle at 40% 35%, #2A1A0A, #1A0E06);
+      border: 1px solid rgba(232,83,42,.4);
+      box-shadow: 0 0 16px rgba(232,83,42,.2);
+    }
+    .footer-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem;
+      letter-spacing: .12em; color: var(--cream);
+    }
+    .footer-name small {
+      display: block; font-family: 'Barlow Condensed', sans-serif;
+      font-size: .5rem; letter-spacing: .4em; color: var(--ash); margin-top: 2px;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+    .footer-link {
+      font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+      color: rgba(212,197,160,.5); padding: .45rem .8rem; border-radius: 999px;
+      transition: color .2s, background .2s;
+    }
+    .footer-link:hover { color: var(--cream); background: rgba(232,83,42,.08); }
+    .footer-copy {
+      font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(107,92,66,.4);
     }
 
-    .footer-line {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      padding-top: 24px;
-      flex-wrap: wrap;
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .story-row { grid-template-columns: 1fr; gap: 32px; }
+      .story-row.flip > :first-child { order: 1; }
+      .story-row.flip > :last-child  { order: 2; }
+      .values-grid { grid-template-columns: 1fr 1fr; }
     }
-
-    @media (max-width: 1100px) {
-      .hero-grid,
-      .museum-layout,
-      .demo-grid,
-      .revenue-strip,
-      .cta-card,
-      .pricing-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .cards-4,
-      .steps,
-      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .cards-3,
-      .faq-grid { grid-template-columns: 1fr; }
-      .phone-shell { margin: 0 auto; }
-      .hero-visual { min-height: auto; }
-    }
-
-    @media (max-width: 760px) {
-      .nav { flex-wrap: wrap; }
-      .nav-links { order: 2; width: 100%; overflow-x: auto; }
-      .hero { padding-top: 40px; }
-      .hero-points,
-      .cards-4,
-      .steps,
-      .stats-grid,
-      .museum-window,
-      .museum-stats,
-      .museum-exhibits,
-      .composer-grid,
-      .faq-grid { grid-template-columns: 1fr; }
-      h1 { max-width: none; }
-      .subcopy { font-size: 17px; }
-      .cta-card { padding: 24px; }
-      .map-stage { min-height: 460px; }
-      .phone-screen { min-height: 560px; }
-      .camera-scene { height: 380px; }
+    @media(max-width:680px){
+      .nav-links, .nav-cta { display: none; }
+      .nav-toggle { display: block; }
+      .values-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-<body class="bg-grid">
-  <header class="topbar">
-    <div class="container nav">
-      <a href="#top" class="brand" aria-label="EchoEarth home">
-        <div class="brand-badge" aria-hidden="true"></div>
-        <div>
-          <div>EchoEarth</div>
-          <div style="font-size:12px;color:var(--muted);font-weight:600;">Two Worlds, One Place</div>
-        </div>
-      </a>
-      <nav class="nav-links">
-        <a href="#vision">Vision</a>
-        <a href="#how">How It Works</a>
-        <a href="#museums">Museums</a>
-        <a href="#demo">Demo</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#faq">FAQ</a>
-      </nav>
-      <a class="btn btn-primary" href="#contact">Book a Museum Pilot</a>
+<body>
+
+<div class="fire-line" role="presentation"></div>
+
+<!-- ── NAV ── -->
+<nav role="navigation" aria-label="Main navigation">
+  <a href="index.html" class="nav-brand" aria-label="The Francis Smokehouse - Home">
+    <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse logo" class="nav-logo"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+    <div class="nav-logo-fallback" aria-hidden="true"></div>
+    <div class="nav-name">The Francis Smokehouse<small>St. Francisville, LA</small></div>
+  </a>
+  <div class="nav-links" role="list">
+    <a class="nav-link" href="index.html">Home</a>
+    <a class="nav-link active" href="story.html">Our Story</a>
+    <a class="nav-link" href="menu.html">Menu</a>
+    <a class="nav-link" href="index.html#info">Visit</a>
+  </div>
+  <a class="nav-cta" href="menu.html" aria-label="Open full menu">Full Menu</a>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false">&#9776;</button>
+</nav>
+
+<div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Mobile navigation">
+  <button class="drawer-close" id="drawer-close" aria-label="Close">&#10005;</button>
+  <a class="drawer-link" href="index.html">Home</a>
+  <a class="drawer-link" href="story.html">Our Story</a>
+  <a class="drawer-link" href="menu.html">Menu</a>
+  <a class="drawer-link" href="index.html#specials">Specials</a>
+  <a class="drawer-link" href="index.html#info">Visit</a>
+  <a class="drawer-link" href="tel:+12252455046">Call Us</a>
+</div>
+
+<!-- ── HERO ── -->
+<header class="hero" role="banner">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-fire-line" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <span class="hero-eyebrow reveal">Est. 2015 &nbsp;&middot;&nbsp; Highway 61 &nbsp;&middot;&nbsp; St. Francisville, Louisiana</span>
+    <h1 class="hero-title reveal reveal-delay-1">
+      Our<br/>
+      <em>Story</em>
+    </h1>
+    <div class="hero-divider reveal reveal-delay-2" aria-hidden="true"></div>
+    <p class="hero-sub reveal reveal-delay-3">
+      A family, a fire, and a stretch of Highway 61 &mdash; the story behind the smoke.
+    </p>
+  </div>
+</header>
+
+<!-- ── PULL QUOTE ── -->
+<div class="pull-quote-wrap">
+  <blockquote class="pull-quote reveal">
+    <span class="pull-open" aria-hidden="true">&#x201C;</span>We don&rsquo;t just smoke meat &mdash; we carry on a legacy.<span class="pull-close" aria-hidden="true">&#x201D;</span>
+  </blockquote>
+  <p class="pull-author reveal reveal-delay-1">&mdash; The Francis Family</p>
+</div>
+
+<!-- ── SECTION 1: WHERE IT STARTED ── -->
+<section class="section" aria-labelledby="origin-heading">
+  <div class="story-row">
+    <div class="story-img reveal">
+      <img
+        src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?q=80&w=1400&auto=format&fit=crop"
+        alt="Slow-smoked BBQ at The Francis Smokehouse"
+        loading="lazy" width="700" height="500"
+      />
     </div>
-  </header>
-
-  <main id="top">
-    <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <div class="eyebrow"><span class="eyebrow-dot"></span> A living memory layer for the planet</div>
-          <h1>
-            <span>Leave stories</span>
-            <span>inside the</span>
-            <span>real world.</span>
-          </h1>
-          <p class="subcopy">
-            EchoEarth lets people, museums, and communities attach memories, history, and meaning to real GPS locations.
-            Visitors must physically go there to unlock what was left behind — from final legacy messages to museum-built AR exhibits.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#demo">Launch Live Demo</a>
-            <a class="btn btn-secondary" href="#museums">See the Museum Model</a>
-          </div>
-          <div class="hero-points">
-            <div class="point">
-              <strong>Legacy</strong>
-              <span>People can leave something behind in a place that mattered to them.</span>
-            </div>
-            <div class="point">
-              <strong>Discovery</strong>
-              <span>Users unlock human experiences only by visiting in real time.</span>
-            </div>
-            <div class="point">
-              <strong>Museums</strong>
-              <span>Institutions can place many museums inside one city, street, trail, or landmark.</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-visual" aria-hidden="true">
-          <div class="phone-shell">
-            <div class="phone-screen">
-              <div class="status"><span>9:41</span><span>EchoEarth Live</span></div>
-              <div class="camera-scene">
-                <div class="mountain"></div>
-                <div class="ar-card small one">
-                  <div class="ar-top"><span class="ar-pill">Legacy Post</span><span>0.1 mi</span></div>
-                  <p class="ar-title">A message left at the overlook</p>
-                  <p class="ar-body">“This was the place I felt most alive. Come here at sunset and stand still for one minute.”</p>
-                </div>
-                <div class="ar-card small two">
-                  <div class="ar-top"><span class="ar-pill">Museum Layer</span><span>On site</span></div>
-                  <p class="ar-title">What stood here in 1876</p>
-                  <p class="ar-body">Reconstructed storefront, oral history, and photo overlay from the city archive.</p>
-                </div>
-                <div class="ar-card medium three">
-                  <div class="ar-top"><span class="ar-pill">Unlocked Now</span><span>Real-time</span></div>
-                  <p class="ar-title">Two Worlds, One Place</p>
-                  <p class="ar-body">The same location holds a memorial, a restaurant recommendation, and an institution-grade historical layer — all in the same spot.</p>
-                </div>
-              </div>
-              <div class="mini-map">
-                <div class="mini-map-top">
-                  <div>
-                    <strong style="display:block;font-size:15px;">Nearby layers</strong>
-                    <span style="color:var(--muted);font-size:13px;">Memory posts, museum trails, and legacy markers</span>
-                  </div>
-                  <span class="ar-pill">Live GPS</span>
-                </div>
-                <div class="mini-grid">
-                  <div class="pin"></div>
-                  <div class="pin"></div>
-                  <div class="pin"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="story-copy reveal reveal-delay-1">
+      <div class="section-label">Where It Started</div>
+      <h2 class="section-title" id="origin-heading">Highway 61<br/><em>Runs Through Everything</em></h2>
+      <p class="section-body">
+        The Francis Smokehouse sits on US Highway 61 &mdash; the old Blues Highway that carries history through the heart of Louisiana. When the doors opened in 2015, the mission was simple: cook honest food the way it was meant to be cooked. No shortcuts. Real wood. Real smoke. Real patience.
+      </p>
+      <p class="section-body" style="margin-top:12px">
+        What started as a passion for Louisiana pit BBQ grew into something the community claimed as their own. A place regulars return to every week, and visitors drive across the state to find.
+      </p>
+      <div class="stat-row">
+        <div class="stat"><strong>2015</strong><span>Founded</span></div>
+        <div class="stat"><strong>4.7&#9733;</strong><span>Google</span></div>
+        <div class="stat"><strong>40+</strong><span>Menu Items</span></div>
       </div>
-    </section>
-
-    <section class="stats">
-      <div class="container stats-grid">
-        <div class="stat-card">
-          <h3>1 place</h3>
-          <p>can hold a memorial, a museum reconstruction, a family story, and a restaurant review at the same time.</p>
-        </div>
-        <div class="stat-card">
-          <h3>0 ads</h3>
-          <p>because the platform is designed around culture, institutions, and meaningful place-based experiences.</p>
-        </div>
-        <div class="stat-card">
-          <h3>∞ reach</h3>
-          <p>because museums can publish exhibits beyond their walls and into the exact places where history happened.</p>
-        </div>
-        <div class="stat-card">
-          <h3>1 world</h3>
-          <p>made deeper by letting people experience someone else’s moment where it actually took place.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="vision">
-      <div class="container">
-        <div class="section-head">
-          <div class="tag">Vision</div>
-          <h2>A website demo for a product that turns the physical world into a discoverable archive of human experience.</h2>
-          <p>
-            EchoEarth is not just another social platform. It is a place-based layer for memory, culture, education, and legacy.
-            Users visit locations in real life to unlock what others chose to leave behind there.
-          </p>
-        </div>
-
-        <div class="cards-3">
-          <article class="card">
-            <div class="feature-icon">📍</div>
-            <strong class="kicker">Location Memory</strong>
-            <h3>Posts live in real places</h3>
-            <p>Every story, review, memorial, or museum layer is attached to GPS coordinates and meant to be experienced on-site.</p>
-          </article>
-          <article class="card">
-            <div class="feature-icon">🕊️</div>
-            <strong class="kicker">Legacy</strong>
-            <h3>Leave something behind</h3>
-            <p>People facing the end of life — or simply wanting to preserve a moment — can create a message for the future in a meaningful place.</p>
-          </article>
-          <article class="card">
-            <div class="feature-icon">🏛️</div>
-            <strong class="kicker">Institutions</strong>
-            <h3>Museums beyond their buildings</h3>
-            <p>One museum can create 30 digital museum moments in 30 different places and open new ways to teach history in context.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="how">
-      <div class="container">
-        <div class="section-head">
-          <div class="tag">How it works</div>
-          <h2>Experience someone else’s experience by physically going where it happened.</h2>
-          <p>
-            The magic is simple: the message is not fully accessible until the user reaches the location. That turns passive content into real-world discovery.
-          </p>
-        </div>
-
-        <div class="steps">
-          <article class="card step-card">
-            <div class="step-num">1</div>
-            <h3>Create a memory</h3>
-            <p>A person, museum, or business writes, records, or publishes a story tied to a real location.</p>
-          </article>
-          <article class="card step-card">
-            <div class="step-num">2</div>
-            <h3>Tag the place</h3>
-            <p>The creator pins it to precise GPS coordinates so the message belongs to that place forever.</p>
-          </article>
-          <article class="card step-card">
-            <div class="step-num">3</div>
-            <h3>Visit in real time</h3>
-            <p>Users walk there, stand in that space, and unlock the post once they are physically present.</p>
-          </article>
-          <article class="card step-card">
-            <div class="step-num">4</div>
-            <h3>See the hidden layer</h3>
-            <p>They discover a memorial, a memory, a museum reconstruction, or a recommendation that changes how they see the place.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="museums">
-      <div class="container">
-        <div class="section-head">
-          <div class="tag">Museum platform</div>
-          <h2>Two Worlds, One Place: the museum layout that helps institutions say yes.</h2>
-          <p>
-            Museums do not need another app. They need a way to extend education, history, and cultural memory into the exact places where stories happened.
-            This layout shows them how their presence would work inside EchoEarth.
-          </p>
-        </div>
-
-        <div class="museum-layout">
-          <div class="museum-shell">
-            <div class="museum-window">
-              <aside class="museum-sidebar">
-                <div class="museum-logo">🏛️</div>
-                <strong style="display:block;font-size:18px;">Museum Dashboard</strong>
-                <p style="margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.6;">Your digital headquarters inside EchoEarth.</p>
-                <div class="museum-nav">
-                  <span>Overview</span>
-                  <span>Location Exhibits</span>
-                  <span>Historical Trails</span>
-                  <span>AR Layers</span>
-                  <span>Education Access</span>
-                  <span>Visitor Analytics</span>
-                </div>
-              </aside>
-              <div class="museum-panel">
-                <div class="museum-top">
-                  <div>
-                    <h3>Chicago City History Museum</h3>
-                    <p>Publishing a living archive across streets, landmarks, and neighborhoods where history actually happened.</p>
-                  </div>
-                  <span class="museum-badge">Verified Institution</span>
-                </div>
-                <div class="museum-stats">
-                  <div class="museum-stat">
-                    <strong>30</strong>
-                    <span>active location exhibits</span>
-                  </div>
-                  <div class="museum-stat">
-                    <strong>4</strong>
-                    <span>guided city trails</span>
-                  </div>
-                  <div class="museum-stat">
-                    <strong>12.8k</strong>
-                    <span>visits this month</span>
-                  </div>
-                </div>
-                <div class="museum-exhibits">
-                  <div class="museum-exhibit">
-                    <span class="mini-tag">Trail</span>
-                    <h4 style="margin:0 0 8px;">Civil Rights Path</h4>
-                    <p style="margin:0;">An 8-stop educational trail with on-site oral histories, photos, and AR reconstructions.</p>
-                  </div>
-                  <div class="museum-exhibit">
-                    <span class="mini-tag">AR Exhibit</span>
-                    <h4 style="margin:0 0 8px;">What stood here in 1910</h4>
-                    <p style="margin:0;">Visitors point their phones at the block and see a layered historical reconstruction.</p>
-                  </div>
-                  <div class="museum-exhibit">
-                    <span class="mini-tag">School Access</span>
-                    <h4 style="margin:0 0 8px;">Field Trip Mode</h4>
-                    <p style="margin:0;">Teachers unlock guided educational routes for students in the city.</p>
-                  </div>
-                  <div class="museum-exhibit">
-                    <span class="mini-tag">Membership</span>
-                    <h4 style="margin:0 0 8px;">Digital Pass Layer</h4>
-                    <p style="margin:0;">Premium museum content sits inside the public map with ticketed access options.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel-stack">
-            <article class="card">
-              <strong class="kicker">What museums get</strong>
-              <h3>One museum can become thirty</h3>
-              <ul class="clean">
-                <li>A branded museum profile inside the app.</li>
-                <li>GPS-tagged exhibits placed wherever history happened.</li>
-                <li>Paid digital trails, city passes, or premium educational layers.</li>
-                <li>Analytics on visits, unlocks, and engagement.</li>
-                <li>Verified institutional credibility in a public discovery map.</li>
-              </ul>
-            </article>
-            <article class="card">
-              <strong class="kicker">Pitch line</strong>
-              <h3>Expand the museum into the real world</h3>
-              <p>
-                Through EchoEarth, museums can teach history in the exact spaces where it happened,
-                preserve local memory in place, and reach audiences far beyond their building walls.
-              </p>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="demo">
-      <div class="container">
-        <div class="section-head">
-          <div class="tag">Interactive website demo</div>
-          <h2>Click the map pins, switch categories, and preview the live experience.</h2>
-          <p>
-            This one-page demo shows how public stories, museum exhibits, legacy messages, and food recommendations can all exist in the same place.
-          </p>
-        </div>
-
-        <div class="demo-grid">
-          <div class="demo-preview">
-            <div class="map-stage" id="mapStage">
-              <div class="map-toolbar">
-                <div class="glass" style="padding:10px 12px;">
-                  <div class="tabs" id="tabs"></div>
-                </div>
-                <div class="glass demo-search">
-                  <span>🔎</span>
-                  <input id="searchInput" type="text" placeholder="Search places, memories, museums..." />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel-stack">
-            <article class="card detail-card" id="detailCard">
-              <div class="detail-head">
-                <div>
-                  <h3>Welcome to EchoEarth</h3>
-                  <p>Select a location pin to preview what users would discover on site.</p>
-                </div>
-                <span class="museum-badge">Live Demo</span>
-              </div>
-              <div class="detail-message">
-                In the real product, this content would unlock only when the person reaches the location. For the website demo, it opens instantly so museums and partners can understand the experience.
-              </div>
-              <div class="badge-row">
-                <span class="badge">GPS-tagged</span>
-                <span class="badge">On-site unlock</span>
-                <span class="badge">Museum-ready</span>
-                <span class="badge">Legacy-friendly</span>
-              </div>
-              <p style="color:var(--muted);line-height:1.8;">Use the category chips or search field to filter the map. Then click a pin to load the content preview here.</p>
-            </article>
-
-            <article class="card composer">
-              <strong class="kicker">Create a sample post</strong>
-              <h3>Show how simple publishing can feel</h3>
-              <div class="composer-grid">
-                <label>
-                  Title
-                  <input id="composeTitle" placeholder="Sunset Overlook Memory" />
-                </label>
-                <label>
-                  Type
-                  <select id="composeType">
-                    <option value="public">Public Memory</option>
-                    <option value="legacy">Legacy Message</option>
-                    <option value="museum">Museum Exhibit</option>
-                    <option value="food">Restaurant Review</option>
-                  </select>
-                </label>
-              </div>
-              <label style="margin-top:12px;display:grid;gap:8px;">
-                Message
-                <textarea id="composeMessage" placeholder="Leave something meaningful tied to a real place..."></textarea>
-              </label>
-              <div class="composer-actions">
-                <button class="btn btn-primary" id="addPostBtn" type="button">Add Demo Post</button>
-                <button class="btn btn-ghost" id="seedBtn" type="button">Reset Demo Data</button>
-              </div>
-              <p style="margin:14px 0 0;color:var(--muted);font-size:13px;line-height:1.6;">New demo posts are added near the center of the map and stored only in this browser session.</p>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="pricing">
-      <div class="container">
-        <div class="section-head">
-          <div class="tag">Revenue model</div>
-          <h2>No ads. No clutter. A business model built around museums, culture, and place-based access.</h2>
-          <p>
-            The cleanest version of this company is a cultural infrastructure platform: museums and institutions fund premium layers,
-            while public memories keep the world emotionally alive.
-          </p>
-        </div>
-
-        <div class="pricing-grid">
-          <article class="card pricing-card">
-            <strong class="kicker">Starter</strong>
-            <h3>Local Museum Pilot</h3>
-            <div class="price">$1,500</div>
-            <div class="sub">per year / institution</div>
-            <ul class="clean">
-              <li>1 museum profile</li>
-              <li>Up to 10 location exhibits</li>
-              <li>Basic historical trail access</li>
-              <li>Simple visitor analytics</li>
-            </ul>
-          </article>
-
-          <article class="card pricing-card featured">
-            <div class="pricing-pill">Best fit</div>
-            <strong class="kicker">Growth</strong>
-            <h3>Two Worlds Institutional Plan</h3>
-            <div class="price">$6,000</div>
-            <div class="sub">per year / institution</div>
-            <ul class="clean">
-              <li>Unlimited branded museum profile</li>
-              <li>30+ GPS-tagged exhibits</li>
-              <li>Premium city trails and museum passes</li>
-              <li>Education mode for schools and tours</li>
-              <li>Priority support and launch setup</li>
-            </ul>
-          </article>
-
-          <article class="card pricing-card">
-            <strong class="kicker">Public add-on</strong>
-            <h3>Cultural Pass</h3>
-            <div class="price">$8</div>
-            <div class="sub">per user / month</div>
-            <ul class="clean">
-              <li>Unlock premium museum trails</li>
-              <li>Access curated city experiences</li>
-              <li>Support ad-free exploration</li>
-              <li>Keep public memories free</li>
-            </ul>
-          </article>
-        </div>
-
-        <div class="revenue-strip" style="margin-top:18px;">
-          <article class="card">
-            <strong class="kicker">Why this works</strong>
-            <h3>A revenue model that matches the mission</h3>
-            <p>
-              Ads would destroy the emotional value of memorials, history, and place. Museum licensing, digital passes,
-              and cultural partnerships keep the platform aligned with what makes it meaningful.
-            </p>
-            <div class="badge-row" style="margin-top:14px;">
-              <span class="badge">Museum licensing</span>
-              <span class="badge">City passes</span>
-              <span class="badge">Educational trails</span>
-              <span class="badge">Legacy preservation</span>
-            </div>
-          </article>
-          <div class="revenue-math">
-            <div class="equation">
-              <span style="color:var(--muted);font-size:13px;">Scenario A</span>
-              <strong>500 museums × $6,000 = $3,000,000/year</strong>
-              <span style="color:var(--muted);">A lean operation can stay ad-free and still scale into strong revenue with institutional adoption.</span>
-            </div>
-            <div class="equation">
-              <span style="color:var(--muted);font-size:13px;">Scenario B</span>
-              <strong>25,000 users × $8 × 12 = $2,400,000/year</strong>
-              <span style="color:var(--muted);">A modest paid cultural audience can support expansion without damaging the product experience.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="container">
-        <div class="section-head">
-          <div class="tag">Partnership offer</div>
-          <h2>What museums are actually buying when they join.</h2>
-          <p>
-            The offer should feel clear, practical, and mission-aligned: not experimental tech for its own sake, but a new distribution model for culture and history.
-          </p>
-        </div>
-
-        <div class="cards-4">
-          <article class="card">
-            <strong class="kicker">Profile</strong>
-            <h3>Branded presence</h3>
-            <p>A verified museum page inside EchoEarth with logo, description, trails, exhibits, and institutional trust.</p>
-          </article>
-          <article class="card">
-            <strong class="kicker">Publishing</strong>
-            <h3>Location-based exhibits</h3>
-            <p>Curators can publish historical stories directly onto real streets, landmarks, battlefields, and neighborhoods.</p>
-          </article>
-          <article class="card">
-            <strong class="kicker">Education</strong>
-            <h3>Field trip mode</h3>
-            <p>Teachers and student groups can unlock guided, museum-authored educational routes in the real world.</p>
-          </article>
-          <article class="card">
-            <strong class="kicker">Revenue</strong>
-            <h3>Digital passes</h3>
-            <p>Museums can sell premium access to city trails, thematic routes, and special collections layered into public spaces.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="faq">
-      <div class="container">
-        <div class="section-head">
-          <div class="tag">FAQ</div>
-          <h2>Questions partners and users will ask first.</h2>
-          <p>This section helps you handle early objections during museum outreach and live demos.</p>
-        </div>
-        <div class="faq-grid">
-          <details open>
-            <summary>Why does the content unlock only on-site?</summary>
-            <p>Because that is what makes the experience feel real. EchoEarth turns a place into part of the message. The person must physically arrive to fully experience what was left there.</p>
-          </details>
-          <details>
-            <summary>Why would museums care?</summary>
-            <p>It expands their reach far beyond their walls, creates new educational experiences, and allows them to teach history exactly where it happened.</p>
-          </details>
-          <details>
-            <summary>Can multiple layers exist in one place?</summary>
-            <p>Yes. That is the core concept: one location can hold public memories, legacy messages, museum exhibits, and commercial recommendations at the same time.</p>
-          </details>
-          <details>
-            <summary>How does the platform make money without ads?</summary>
-            <p>Through museum licensing, cultural passes, institutional partnerships, educational experiences, and optional premium preservation features.</p>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <section class="cta" id="contact">
-      <div class="container">
-        <div class="cta-card">
-          <div>
-            <h2>Ready to pitch this live?</h2>
-            <p>
-              Use this one-page website as a launch demo, outreach page, or museum presentation site.
-              Replace the placeholder name and contact details, then host it on GitHub Pages, Netlify, or any basic web server.
-            </p>
-          </div>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end;">
-            <a class="btn btn-primary" href="mailto:hello@echoearthdemo.com?subject=EchoEarth%20Museum%20Pilot">Email Museum Partners</a>
-            <a class="btn btn-secondary" href="#top">Back to Top</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container footer-line">
-      <div>EchoEarth demo site — built as a single HTML file for easy launch and sharing.</div>
-      <div>Tagline: <strong style="color:#eef6ff;">Two Worlds, One Place</strong></div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <script>
-    const seedPosts = [
-      {
-        id: 1,
-        title: 'Last Message at the Lake',
-        type: 'legacy',
-        category: 'Legacy Message',
-        author: 'A father leaving something behind',
-        location: 'North Shore Overlook',
-        distance: 'On site',
-        access: 'Unlock when standing at the railing',
-        x: 24,
-        y: 62,
-        message: 'If you are seeing this, then you made it to the place that gave me peace. I wanted to leave one quiet reminder here: slow down, breathe deeper, and keep loving people while you still can.',
-        badges: ['Legacy', 'Emotional', 'On-site only']
-      },
-      {
-        id: 2,
-        title: 'What This Block Looked Like in 1912',
-        type: 'museum',
-        category: 'Museum Exhibit',
-        author: 'Chicago City History Museum',
-        location: 'Old Market Street',
-        distance: '47 ft away',
-        access: 'Included with Museum Pass',
-        x: 52,
-        y: 34,
-        message: 'Stand in the center of the block and view a museum-curated reconstruction showing storefronts, horse-drawn traffic, and an audio story pulled from archived oral histories.',
-        badges: ['Verified Institution', 'AR Reconstruction', 'Premium']
-      },
-      {
-        id: 3,
-        title: 'Order the Spicy Ramen',
-        type: 'food',
-        category: 'Restaurant Review',
-        author: 'A traveler who found the perfect meal',
-        location: 'Lantern Alley Noodle House',
-        distance: '0.2 mi',
-        access: 'Unlock at restaurant entrance',
-        x: 72,
-        y: 48,
-        message: 'Skip the menu panic. Order the spicy ramen, ask for the egg, and sit by the window if it is raining. This is the meal I still think about when I miss this city.',
-        badges: ['Food', 'Travel', 'Recommendation']
-      },
-      {
-        id: 4,
-        title: 'The Spot Where I Proposed',
-        type: 'public',
-        category: 'Public Memory',
-        author: 'Local Explorer',
-        location: 'Riverwalk Bridge',
-        distance: '140 ft away',
-        access: 'Public unlock',
-        x: 38,
-        y: 22,
-        message: 'This bridge is where my life changed. I wanted to pin the joy here so other people could feel that places can hold beginnings, not just history.',
-        badges: ['Public', 'Love', 'Free']
-      },
-      {
-        id: 5,
-        title: 'Civil Rights Trail Stop 3',
-        type: 'museum',
-        category: 'Museum Exhibit',
-        author: 'Regional Justice Archive',
-        location: 'Courthouse Steps',
-        distance: '0.4 mi',
-        access: 'Digital Trail Pass',
-        x: 62,
-        y: 70,
-        message: 'Visitors unlock a curator-led story, archive photography, and an oral history segment that explains why this address became a turning point for local organizing.',
-        badges: ['Trail', 'Education', 'Premium']
-      },
-      {
-        id: 6,
-        title: 'A Quiet Place After the Funeral',
-        type: 'legacy',
-        category: 'Legacy Message',
-        author: 'Family remembrance post',
-        location: 'Willow Garden Bench',
-        distance: '0.1 mi',
-        access: 'Family circle or public memorial mode',
-        x: 18,
-        y: 36,
-        message: 'We sat here after the service because it was the first place the world felt calm again. This marker exists to say that grief and beauty can live in the same place.',
-        badges: ['Memorial', 'Healing', 'On-site only']
-      }
-    ];
+<!-- ── SECTION 2: THE PIT ── -->
+<section class="section section-dark" aria-labelledby="pit-heading">
+  <div class="story-row flip">
+    <div class="story-img reveal">
+      <img
+        src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1400&auto=format&fit=crop"
+        alt="The smokehouse kitchen"
+        loading="lazy" width="700" height="500"
+      />
+    </div>
+    <div class="story-copy reveal reveal-delay-1">
+      <div class="section-label">The Method</div>
+      <h2 class="section-title" id="pit-heading">Low &amp; Slow<br/><em>Is the Only Way</em></h2>
+      <p class="section-body">
+        Every rack of ribs, every brisket, every pulled pork shoulder starts the same way &mdash; seasoned, loaded into the pit, and left alone. Real smoke takes time. You cannot rush hardwood.
+      </p>
+      <p class="section-body" style="margin-top:12px">
+        The result is a smoke ring that goes deep. Bark that holds. Meat that pulls cleanly. Beyond the BBQ, the kitchen extends into the Louisiana Cajun tradition &mdash; fresh boudin, crawfish pies, and egg rolls that bring the bayou straight to the table.
+      </p>
+    </div>
+  </div>
+</section>
 
-    const mapStage = document.getElementById('mapStage');
-    const detailCard = document.getElementById('detailCard');
-    const tabsEl = document.getElementById('tabs');
-    const searchInput = document.getElementById('searchInput');
-    const addPostBtn = document.getElementById('addPostBtn');
-    const seedBtn = document.getElementById('seedBtn');
-    const composeTitle = document.getElementById('composeTitle');
-    const composeType = document.getElementById('composeType');
-    const composeMessage = document.getElementById('composeMessage');
+<!-- ── TIMELINE ── -->
+<section class="section" aria-labelledby="timeline-heading">
+  <div class="timeline-inner">
+    <div class="section-label reveal" style="justify-content:center">The Journey</div>
+    <h2 class="section-title reveal" id="timeline-heading" style="text-align:center">Milestones</h2>
+    <div class="timeline">
+      <div class="t-item reveal">
+        <div class="t-year">2015</div>
+        <div class="t-title">The Doors Open</div>
+        <p class="t-body">The Francis Smokehouse fires up the pit for the first time on Highway 61 in St. Francisville. Word travels fast down the road.</p>
+      </div>
+      <div class="t-item reveal">
+        <div class="t-year">Early Years</div>
+        <div class="t-title">A Community Staple</div>
+        <p class="t-body">Locals start returning weekly. The corn pudding becomes legendary. The menu grows to include po-boys, Cajun specialties, and rotating chef specials.</p>
+      </div>
+      <div class="t-item reveal">
+        <div class="t-year">Recognition</div>
+        <div class="t-title">Tripadvisor Travellers&rsquo; Choice</div>
+        <p class="t-body">The smokehouse earns a Tripadvisor Travellers&rsquo; Choice award. Visitors from across the country start making the drive to Highway 61.</p>
+      </div>
+      <div class="t-item reveal">
+        <div class="t-year">Today</div>
+        <div class="t-title">Still Burning</div>
+        <p class="t-body">The pit runs every day. 40+ items on the menu. The family is still at the center of everything &mdash; same commitment, same fire, same food.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    const filters = [
-      { key: 'all', label: 'All Layers' },
-      { key: 'museum', label: 'Museums' },
-      { key: 'legacy', label: 'Legacy' },
-      { key: 'public', label: 'Public' },
-      { key: 'food', label: 'Food' }
-    ];
+<!-- ── VALUES ── -->
+<section class="section section-dark" aria-labelledby="values-heading">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-label reveal">What Drives Us</div>
+    <h2 class="section-title reveal" id="values-heading">What We<br/><em>Stand For</em></h2>
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <span class="value-icon">&#x1F525;</span>
+        <div class="value-name">Real Fire, Real Smoke</div>
+        <p class="value-text">We use hardwood and time. No shortcuts. The pit gets all the credit because we give it all the time it needs.</p>
+      </div>
+      <div class="value-card reveal reveal-delay-1">
+        <span class="value-icon">&#x1F33F;</span>
+        <div class="value-name">Louisiana Roots</div>
+        <p class="value-text">Cajun flavors and Southern tradition run through everything we make &mdash; from the brisket to the boudin balls to the bread pudding.</p>
+      </div>
+      <div class="value-card reveal reveal-delay-2">
+        <span class="value-icon">&#x1F91D;</span>
+        <div class="value-name">Community First</div>
+        <p class="value-text">We&rsquo;re a local place built for the people of West Feliciana Parish. Visitors are always welcome &mdash; but this is home ground.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    let currentFilter = 'all';
-    let currentQuery = '';
-    let posts = JSON.parse(sessionStorage.getItem('echoearth-demo-posts') || 'null') || seedPosts.slice();
-    let activeId = null;
+<!-- ── CTA ── -->
+<section class="cta-band" aria-label="Come visit">
+  <span class="cta-band-eyebrow">Come Experience It</span>
+  <h2 class="cta-band-title reveal">The Food Tells<br/><em>the Rest</em></h2>
+  <p class="cta-band-sub reveal">Open Mon&ndash;Sat 10am&ndash;6pm &nbsp;&middot;&nbsp; Sun 10am&ndash;3pm &nbsp;&middot;&nbsp; Highway 61, St. Francisville</p>
+  <div class="cta-buttons reveal">
+    <a class="btn-primary" href="menu.html">&#x1F525; Explore the Menu</a>
+    <a class="btn-outline" href="index.html#info">&#x1F4CD; Get Directions</a>
+    <a class="btn-outline" href="tel:+12252455046">&#x1F4DE; (225) 245-5046</a>
+  </div>
+</section>
 
-    function savePosts() {
-      sessionStorage.setItem('echoearth-demo-posts', JSON.stringify(posts));
-    }
+<!-- ── FOOTER ── -->
+<footer role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-logo-wrap">
+      <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="footer-logo"
+           onerror="this.style.display='none'"/>
+      <div class="footer-name">The Francis Smokehouse<small>St. Francisville, Louisiana</small></div>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a class="footer-link" href="index.html">Home</a>
+      <a class="footer-link" href="story.html">Our Story</a>
+      <a class="footer-link" href="menu.html">Full Menu</a>
+      <a class="footer-link" href="index.html#specials">Specials</a>
+      <a class="footer-link" href="index.html#info">Visit</a>
+      <a class="footer-link" href="tel:+12252455046">(225) 245-5046</a>
+    </nav>
+    <p class="footer-copy">&copy; 2025 The Francis Smokehouse &amp; Specialty Meats &nbsp;&middot;&nbsp; 6779 US Hwy 61, St. Francisville, LA</p>
+  </div>
+</footer>
 
-    function renderTabs() {
-      tabsEl.innerHTML = '';
-      filters.forEach(filter => {
-        const button = document.createElement('button');
-        button.className = 'chip' + (currentFilter === filter.key ? ' active' : '');
-        button.type = 'button';
-        button.textContent = filter.label;
-        button.addEventListener('click', () => {
-          currentFilter = filter.key;
-          renderTabs();
-          renderMap();
-        });
-        tabsEl.appendChild(button);
-      });
-    }
+<script>
+(function(){
+  // Mobile nav
+  const toggle = document.getElementById('nav-toggle');
+  const drawer = document.getElementById('nav-drawer');
+  const dClose = document.getElementById('drawer-close');
+  function openD(){ drawer.classList.add('open'); toggle.setAttribute('aria-expanded','true'); }
+  function closeD(){ drawer.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }
+  toggle.addEventListener('click', openD);
+  dClose.addEventListener('click', closeD);
+  drawer.querySelectorAll('.drawer-link').forEach(l => l.addEventListener('click', closeD));
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeD(); });
 
-    function getFilteredPosts() {
-      return posts.filter(post => {
-        const matchesFilter = currentFilter === 'all' ? true : post.type === currentFilter;
-        const query = currentQuery.trim().toLowerCase();
-        const matchesQuery = !query ? true : [post.title, post.author, post.location, post.message, post.category]
-          .join(' ')
-          .toLowerCase()
-          .includes(query);
-        return matchesFilter && matchesQuery;
-      });
-    }
-
-    function renderMap() {
-      mapStage.querySelectorAll('.location-pin').forEach(el => el.remove());
-      const filtered = getFilteredPosts();
-
-      filtered.forEach(post => {
-        const pin = document.createElement('div');
-        pin.className = `location-pin ${post.type}` + (activeId === post.id ? ' active' : '');
-        pin.style.left = post.x + '%';
-        pin.style.top = post.y + '%';
-
-        pin.innerHTML = `
-          <div class="pin-label">${post.title}</div>
-          <button type="button" aria-label="Open ${post.title}">
-            <div class="pin-core"></div>
-          </button>
-        `;
-
-        pin.addEventListener('click', () => {
-          activeId = post.id;
-          renderMap();
-          renderDetail(post);
-        });
-
-        mapStage.appendChild(pin);
-      });
-
-      if (!filtered.length) {
-        renderEmptyState();
-      } else if (activeId && !filtered.some(post => post.id === activeId)) {
-        activeId = filtered[0].id;
-        renderDetail(filtered[0]);
-        renderMap();
-      }
-    }
-
-    function renderDetail(post) {
-      detailCard.innerHTML = `
-        <div class="detail-head">
-          <div>
-            <h3>${escapeHtml(post.title)}</h3>
-            <p>${escapeHtml(post.category)} by ${escapeHtml(post.author)}</p>
-          </div>
-          <span class="museum-badge">${escapeHtml(post.type)}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta">📍 ${escapeHtml(post.location)}</span>
-          <span class="meta">🧭 ${escapeHtml(post.distance)}</span>
-          <span class="meta">🔓 ${escapeHtml(post.access)}</span>
-        </div>
-        <div class="detail-message">${escapeHtml(post.message)}</div>
-        <div class="badge-row">
-          ${post.badges.map(b => `<span class="badge">${escapeHtml(b)}</span>`).join('')}
-        </div>
-        <p style="color:var(--muted);line-height:1.8;margin:0;">In the full app, this panel could also show video, audio playback, AR overlays, route guidance, memorial settings, museum branding, and pass requirements.</p>
-      `;
-    }
-
-    function renderEmptyState() {
-      detailCard.innerHTML = `
-        <div class="detail-head">
-          <div>
-            <h3>No matching posts found</h3>
-            <p>Try a different filter or search phrase.</p>
-          </div>
-          <span class="museum-badge">Filtered</span>
-        </div>
-        <div class="detail-message">This demo lets you quickly show how different categories of place-based content can live together inside one product.</div>
-      `;
-    }
-
-    function addDemoPost() {
-      const title = composeTitle.value.trim();
-      const type = composeType.value;
-      const message = composeMessage.value.trim();
-      if (!title || !message) {
-        alert('Please add both a title and a message.');
-        return;
-      }
-
-      const typeMap = {
-        public: { category: 'Public Memory', author: 'Demo user', access: 'Public unlock', badges: ['Public', 'New', 'Free'] },
-        legacy: { category: 'Legacy Message', author: 'Legacy creator', access: 'On-site legacy unlock', badges: ['Legacy', 'Personal', 'On-site only'] },
-        museum: { category: 'Museum Exhibit', author: 'Partner Museum', access: 'Museum Pass', badges: ['Institution', 'Curated', 'Premium'] },
-        food: { category: 'Restaurant Review', author: 'Food explorer', access: 'Unlock at venue', badges: ['Food', 'Recommendation', 'Local'] }
-      };
-
-      const extra = typeMap[type];
-      const newPost = {
-        id: Date.now(),
-        title,
-        type,
-        category: extra.category,
-        author: extra.author,
-        location: 'Demo Plaza Center',
-        distance: 'New',
-        access: extra.access,
-        x: 50 + Math.round((Math.random() * 16) - 8),
-        y: 54 + Math.round((Math.random() * 16) - 8),
-        message,
-        badges: extra.badges
-      };
-
-      posts = [newPost, ...posts];
-      activeId = newPost.id;
-      savePosts();
-      composeTitle.value = '';
-      composeMessage.value = '';
-      renderTabs();
-      renderMap();
-      renderDetail(newPost);
-    }
-
-    function resetDemo() {
-      posts = seedPosts.slice();
-      activeId = null;
-      currentFilter = 'all';
-      currentQuery = '';
-      searchInput.value = '';
-      sessionStorage.removeItem('echoearth-demo-posts');
-      renderTabs();
-      renderMap();
-      detailCard.innerHTML = `
-        <div class="detail-head">
-          <div>
-            <h3>Welcome to EchoEarth</h3>
-            <p>Select a location pin to preview what users would discover on site.</p>
-          </div>
-          <span class="museum-badge">Live Demo</span>
-        </div>
-        <div class="detail-message">
-          In the real product, this content would unlock only when the person reaches the location. For the website demo, it opens instantly so museums and partners can understand the experience.
-        </div>
-        <div class="badge-row">
-          <span class="badge">GPS-tagged</span>
-          <span class="badge">On-site unlock</span>
-          <span class="badge">Museum-ready</span>
-          <span class="badge">Legacy-friendly</span>
-        </div>
-        <p style="color:var(--muted);line-height:1.8;">Use the category chips or search field to filter the map. Then click a pin to load the content preview here.</p>
-      `;
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
-    searchInput.addEventListener('input', (event) => {
-      currentQuery = event.target.value;
-      renderMap();
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if(en.isIntersecting){ en.target.classList.add('visible'); obs.unobserve(en.target); }
     });
-
-    addPostBtn.addEventListener('click', addDemoPost);
-    seedBtn.addEventListener('click', resetDemo);
-
-    renderTabs();
-    renderMap();
-  </script>
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+})();
+</script>
 </body>
 </html>
