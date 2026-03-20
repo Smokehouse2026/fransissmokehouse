@@ -358,6 +358,200 @@ body.no-touch .circ-menu-item{cursor:none}
 
 
 
+
+/* ══════════════════════════════════════════════════════════════
+   LOGO NAV TRIGGER
+   ══════════════════════════════════════════════════════════════ */
+.logo-nav-wrap{
+  position:relative;
+  display:inline-block;
+  cursor:pointer;
+  margin:0 auto 28px;
+  /* Remove the old margin from hero-logo-img since wrapper handles it */
+}
+body.no-touch .logo-nav-wrap{cursor:none}
+
+/* The logo itself — inherit existing style */
+.logo-nav-wrap .hero-logo-img{
+  margin:0 auto;
+  position:relative;z-index:2;
+  transition:transform .4s cubic-bezier(.22,1,.36,1),
+             filter .4s ease;
+}
+.logo-nav-wrap:hover .hero-logo-img,
+.logo-nav-wrap.open .hero-logo-img{
+  transform:scale(1.08);
+  filter:drop-shadow(0 0 28px rgba(232,83,42,.85)) drop-shadow(0 0 55px rgba(232,83,42,.4));
+}
+
+/* Slowly rotating dashed orbit ring */
+.logo-orbit-ring{
+  position:absolute;
+  inset:-18px;
+  border-radius:50%;
+  border:1px dashed rgba(232,83,42,.35);
+  pointer-events:none;
+  z-index:1;
+  animation:logoOrbit 12s linear infinite;
+}
+@keyframes logoOrbit{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+
+/* Pulse ring — breathes in and out */
+.logo-pulse-ring{
+  position:absolute;
+  inset:-8px;
+  border-radius:50%;
+  border:1px solid rgba(232,83,42,.2);
+  pointer-events:none;
+  z-index:1;
+  animation:logoPulse 2.8s ease-in-out infinite;
+}
+@keyframes logoPulse{
+  0%,100%{transform:scale(1);opacity:.5}
+  50%{transform:scale(1.12);opacity:.15}
+}
+
+/* NAVIGATE label below logo */
+.logo-nav-label{
+  position:absolute;
+  bottom:-28px;
+  left:50%;
+  transform:translateX(-50%);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:.56rem;
+  letter-spacing:.38em;
+  text-transform:uppercase;
+  color:rgba(232,83,42,.6);
+  white-space:nowrap;
+  pointer-events:none;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  transition:opacity .4s, color .3s;
+}
+.logo-nav-label i{font-size:.58rem;animation:logoSpin 4s linear infinite}
+@keyframes logoSpin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+/* Hide label after first use */
+.logo-nav-label.hidden{opacity:0}
+
+/* ── LOGO NAV OVERLAY ── */
+#logoNavOverlay{
+  position:fixed;inset:0;z-index:2000;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(6,4,2,.88);
+  backdrop-filter:blur(16px);
+  opacity:0;pointer-events:none;
+  transition:opacity .4s ease;
+}
+#logoNavOverlay.open{opacity:1;pointer-events:all}
+
+/* Center logo in overlay */
+.lno-center{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.lno-logo{
+  width:clamp(100px,18vw,150px);
+  height:auto;
+  display:block;
+  filter:drop-shadow(0 0 24px rgba(232,83,42,.7));
+  position:relative;z-index:2;
+  animation:lnoLogoIn .5s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes lnoLogoIn{
+  from{transform:scale(.6);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+/* Nav items radiating from logo */
+.lno-item{
+  position:absolute;
+  top:50%;left:50%;
+  width:72px;height:72px;
+  border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  background:rgba(16,11,6,.95);
+  border:1px solid rgba(232,83,42,.38);
+  color:var(--cream);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:.68rem;letter-spacing:.1em;
+  text-transform:uppercase;
+  text-align:center;
+  cursor:pointer;
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 20px rgba(0,0,0,.7);
+  transition:background .2s, border-color .2s, box-shadow .2s, transform .2s;
+  /* Start at center, animate outward */
+  transform:translate(-50%,-50%);
+  opacity:0;
+}
+body.no-touch .lno-item{cursor:none}
+.lno-item.placed{
+  /* JS sets --tx --ty for each item */
+  transform:translate(calc(-50% + var(--tx,0px)), calc(-50% + var(--ty,0px)));
+  opacity:1;
+  transition:
+    transform .55s cubic-bezier(.22,1,.36,1),
+    opacity .4s ease,
+    background .2s,
+    border-color .2s,
+    box-shadow .2s;
+}
+.lno-item:hover{
+  background:rgba(232,83,42,.88);
+  border-color:var(--gold);
+  box-shadow:0 0 32px rgba(232,83,42,.55);
+  transform:translate(calc(-50% + var(--tx,0px)), calc(-50% + var(--ty,0px))) scale(1.1);
+}
+.lno-icon{font-size:1.1rem;line-height:1;display:block}
+.lno-label{font-size:.58rem;letter-spacing:.08em}
+
+/* Close button */
+.lno-close{
+  position:absolute;top:22px;right:26px;
+  background:none;border:1px solid rgba(232,83,42,.28);
+  color:var(--ash);font-family:'Barlow Condensed',sans-serif;
+  font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;
+  padding:6px 12px;cursor:pointer;
+  transition:color .2s,border-color .2s;z-index:3;
+}
+body.no-touch .lno-close{cursor:none}
+.lno-close:hover{color:var(--fire);border-color:rgba(232,83,42,.6)}
+
+/* Decorative rings around center logo in overlay */
+.lno-ring-1{
+  position:absolute;
+  width:clamp(160px,28vw,220px);height:clamp(160px,28vw,220px);
+  border-radius:50%;
+  border:1px solid rgba(232,83,42,.15);
+  pointer-events:none;z-index:1;
+  animation:lnoRingIn .6s ease both;
+}
+.lno-ring-2{
+  position:absolute;
+  width:clamp(260px,44vw,360px);height:clamp(260px,44vw,360px);
+  border-radius:50%;
+  border:1px dashed rgba(232,83,42,.08);
+  pointer-events:none;z-index:1;
+  animation:lnoRingIn .7s ease both;
+}
+@keyframes lnoRingIn{
+  from{transform:scale(.3);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+@media(max-width:640px){
+  .lno-item{width:60px;height:60px;font-size:.6rem}
+  .lno-icon{font-size:.95rem}
+}
+
 /* ── DRAG HINT / ADDRESS ── */
 #drag-hint{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:clamp(.75rem,1.6vw,1rem);letter-spacing:.28em;color:var(--bone);text-transform:uppercase;opacity:.8;pointer-events:none;z-index:10;transition:opacity .7s;white-space:nowrap}
 #addr-strip{position:absolute;bottom:-6%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:clamp(.4rem,.82vw,.58rem);letter-spacing:.22em;color:rgba(107,92,66,.38);text-transform:uppercase;white-space:nowrap;pointer-events:none;z-index:10;text-align:center;width:100%;padding:0 8px}
@@ -776,8 +970,19 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 <header class="hero-section" role="banner">
   <div class="hero-bg-div" aria-hidden="true"></div>
   <div class="hero-inner-div">
-    <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="hero-logo-img"
-         onerror="this.style.display='none'"/>
+    <!-- ── LOGO NAV TRIGGER ── -->
+    <div class="logo-nav-wrap" id="logoNavTrigger" role="button" tabindex="0" aria-label="Open navigation menu">
+      <!-- Orbiting dashed ring -->
+      <div class="logo-orbit-ring"></div>
+      <!-- Pulse ring -->
+      <div class="logo-pulse-ring"></div>
+      <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="hero-logo-img"
+           onerror="this.style.display='none'"/>
+      <!-- Navigate label -->
+      <div class="logo-nav-label" id="logoNavLabel">
+        <i class="fas fa-compass"></i> NAVIGATE
+      </div>
+    </div>
     <p class="hero-kicker">St. Francisville, Louisiana &nbsp;&middot;&nbsp; Highway 61</p>
     <h1 class="hero-title-h1">
       The Francis Smokehouse
@@ -1013,6 +1218,21 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 
 <!-- Scroll lock backdrop -->
 <div id="scroll-lock-backdrop" aria-hidden="true"></div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     LOGO NAV OVERLAY
+     ══════════════════════════════════════════════════════════════ -->
+<div id="logoNavOverlay" role="dialog" aria-modal="true" aria-label="Navigation">
+  <button class="lno-close" id="lnoClose">&#10005; close</button>
+  <div class="lno-center" id="lnoCenter">
+    <div class="lno-ring-1"></div>
+    <div class="lno-ring-2"></div>
+    <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="lno-logo"
+         onerror="this.style.display='none'"/>
+    <!-- Nav items injected by JS -->
+  </div>
+</div>
 
 <!-- ====== CIRCULAR NAV ====== -->
 <div class="circ-nav-trigger" id="circNavLeft">
@@ -1664,7 +1884,201 @@ document.getElementById('stage').addEventListener('touchmove',e=>{
 })();
 </script>
 </body>
-</html/* ── DRAG HINT / ADDRESS ── */
+</html
+/* ══════════════════════════════════════════════════════════════
+   LOGO NAV TRIGGER
+   ══════════════════════════════════════════════════════════════ */
+.logo-nav-wrap{
+  position:relative;
+  display:inline-block;
+  cursor:pointer;
+  margin:0 auto 28px;
+  /* Remove the old margin from hero-logo-img since wrapper handles it */
+}
+body.no-touch .logo-nav-wrap{cursor:none}
+
+/* The logo itself — inherit existing style */
+.logo-nav-wrap .hero-logo-img{
+  margin:0 auto;
+  position:relative;z-index:2;
+  transition:transform .4s cubic-bezier(.22,1,.36,1),
+             filter .4s ease;
+}
+.logo-nav-wrap:hover .hero-logo-img,
+.logo-nav-wrap.open .hero-logo-img{
+  transform:scale(1.08);
+  filter:drop-shadow(0 0 28px rgba(232,83,42,.85)) drop-shadow(0 0 55px rgba(232,83,42,.4));
+}
+
+/* Slowly rotating dashed orbit ring */
+.logo-orbit-ring{
+  position:absolute;
+  inset:-18px;
+  border-radius:50%;
+  border:1px dashed rgba(232,83,42,.35);
+  pointer-events:none;
+  z-index:1;
+  animation:logoOrbit 12s linear infinite;
+}
+@keyframes logoOrbit{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+
+/* Pulse ring — breathes in and out */
+.logo-pulse-ring{
+  position:absolute;
+  inset:-8px;
+  border-radius:50%;
+  border:1px solid rgba(232,83,42,.2);
+  pointer-events:none;
+  z-index:1;
+  animation:logoPulse 2.8s ease-in-out infinite;
+}
+@keyframes logoPulse{
+  0%,100%{transform:scale(1);opacity:.5}
+  50%{transform:scale(1.12);opacity:.15}
+}
+
+/* NAVIGATE label below logo */
+.logo-nav-label{
+  position:absolute;
+  bottom:-28px;
+  left:50%;
+  transform:translateX(-50%);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:.56rem;
+  letter-spacing:.38em;
+  text-transform:uppercase;
+  color:rgba(232,83,42,.6);
+  white-space:nowrap;
+  pointer-events:none;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  transition:opacity .4s, color .3s;
+}
+.logo-nav-label i{font-size:.58rem;animation:logoSpin 4s linear infinite}
+@keyframes logoSpin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+/* Hide label after first use */
+.logo-nav-label.hidden{opacity:0}
+
+/* ── LOGO NAV OVERLAY ── */
+#logoNavOverlay{
+  position:fixed;inset:0;z-index:2000;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(6,4,2,.88);
+  backdrop-filter:blur(16px);
+  opacity:0;pointer-events:none;
+  transition:opacity .4s ease;
+}
+#logoNavOverlay.open{opacity:1;pointer-events:all}
+
+/* Center logo in overlay */
+.lno-center{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.lno-logo{
+  width:clamp(100px,18vw,150px);
+  height:auto;
+  display:block;
+  filter:drop-shadow(0 0 24px rgba(232,83,42,.7));
+  position:relative;z-index:2;
+  animation:lnoLogoIn .5s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes lnoLogoIn{
+  from{transform:scale(.6);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+/* Nav items radiating from logo */
+.lno-item{
+  position:absolute;
+  top:50%;left:50%;
+  width:72px;height:72px;
+  border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  background:rgba(16,11,6,.95);
+  border:1px solid rgba(232,83,42,.38);
+  color:var(--cream);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:.68rem;letter-spacing:.1em;
+  text-transform:uppercase;
+  text-align:center;
+  cursor:pointer;
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 20px rgba(0,0,0,.7);
+  transition:background .2s, border-color .2s, box-shadow .2s, transform .2s;
+  /* Start at center, animate outward */
+  transform:translate(-50%,-50%);
+  opacity:0;
+}
+body.no-touch .lno-item{cursor:none}
+.lno-item.placed{
+  /* JS sets --tx --ty for each item */
+  transform:translate(calc(-50% + var(--tx,0px)), calc(-50% + var(--ty,0px)));
+  opacity:1;
+  transition:
+    transform .55s cubic-bezier(.22,1,.36,1),
+    opacity .4s ease,
+    background .2s,
+    border-color .2s,
+    box-shadow .2s;
+}
+.lno-item:hover{
+  background:rgba(232,83,42,.88);
+  border-color:var(--gold);
+  box-shadow:0 0 32px rgba(232,83,42,.55);
+  transform:translate(calc(-50% + var(--tx,0px)), calc(-50% + var(--ty,0px))) scale(1.1);
+}
+.lno-icon{font-size:1.1rem;line-height:1;display:block}
+.lno-label{font-size:.58rem;letter-spacing:.08em}
+
+/* Close button */
+.lno-close{
+  position:absolute;top:22px;right:26px;
+  background:none;border:1px solid rgba(232,83,42,.28);
+  color:var(--ash);font-family:'Barlow Condensed',sans-serif;
+  font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;
+  padding:6px 12px;cursor:pointer;
+  transition:color .2s,border-color .2s;z-index:3;
+}
+body.no-touch .lno-close{cursor:none}
+.lno-close:hover{color:var(--fire);border-color:rgba(232,83,42,.6)}
+
+/* Decorative rings around center logo in overlay */
+.lno-ring-1{
+  position:absolute;
+  width:clamp(160px,28vw,220px);height:clamp(160px,28vw,220px);
+  border-radius:50%;
+  border:1px solid rgba(232,83,42,.15);
+  pointer-events:none;z-index:1;
+  animation:lnoRingIn .6s ease both;
+}
+.lno-ring-2{
+  position:absolute;
+  width:clamp(260px,44vw,360px);height:clamp(260px,44vw,360px);
+  border-radius:50%;
+  border:1px dashed rgba(232,83,42,.08);
+  pointer-events:none;z-index:1;
+  animation:lnoRingIn .7s ease both;
+}
+@keyframes lnoRingIn{
+  from{transform:scale(.3);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+@media(max-width:640px){
+  .lno-item{width:60px;height:60px;font-size:.6rem}
+  .lno-icon{font-size:.95rem}
+}
+
+/* ── DRAG HINT / ADDRESS ── */
 #drag-hint{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:clamp(.75rem,1.6vw,1rem);letter-spacing:.28em;color:var(--bone);text-transform:uppercase;opacity:.8;pointer-events:none;z-index:10;transition:opacity .7s;white-space:nowrap}
 #addr-strip{position:absolute;bottom:-6%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:clamp(.4rem,.82vw,.58rem);letter-spacing:.22em;color:rgba(107,92,66,.38);text-transform:uppercase;white-space:nowrap;pointer-events:none;z-index:10;text-align:center;width:100%;padding:0 8px}
 
