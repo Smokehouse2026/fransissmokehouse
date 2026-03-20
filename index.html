@@ -829,21 +829,6 @@ body.no-touch .panel-close-btn{cursor:none}
   </svg>
 </div>
 
-<!-- Tutorial -->
-<div id="tutorial-overlay">
-  <div class="tut-card">
-    <div class="tut-fire"></div>
-    <span class="tut-icon">&#x1F525;</span>
-    <div class="tut-title">WELCOME IN</div>
-    <div class="tut-body">Explore our full menu by spinning the wheel, or use the navigation to explore.</div>
-    <div class="tut-steps">
-      <div class="tut-step"><span class="tut-step-icon">&#x1F504;</span><span>Spin the wheel</span></div>
-      <div class="tut-step"><span class="tut-step-icon">&#x1F446;</span><span>Tap a category</span></div>
-      <div class="tut-step"><span class="tut-step-icon">&#x1F9ED;</span><span>Use the compass nav</span></div>
-    </div>
-    <button class="tut-btn" id="tut-go">LET'S EAT</button>
-    <button class="tut-skip" id="tut-skip">Skip intro</button>
-  </div>
 </div>
 
 <!-- Canvases -->
@@ -1538,16 +1523,16 @@ fetch('site-data.js')
       const fn = new Function(src + '; return MENU;');
       MENU = fn();
       // Rebuild the wheel with loaded data
-      if(typeof buildCatRing === 'function') buildCatRing();
+      // buildCatRing not used on homepage
     } catch(e) {
       console.warn('Could not load menu-data.js:', e);
       MENU = INLINE_MENU;
-      if(typeof buildCatRing === 'function') buildCatRing();
+      // buildCatRing not used on homepage
     }
   })
   .catch(() => {
     MENU = INLINE_MENU;
-    if(typeof buildCatRing === 'function') buildCatRing();
+    // buildCatRing not used on homepage
   });
 
 
@@ -1651,10 +1636,7 @@ buildHours();
 // ═══════════════════════════════════════════
 //  TUTORIAL
 // ═══════════════════════════════════════════
-function dismissTut(){const o=document.getElementById('tutorial-overlay');o.classList.add('done');setTimeout(()=>o.style.display='none',550);}
-document.getElementById('tut-go').addEventListener('click',dismissTut);
-document.getElementById('tut-skip').addEventListener('click',dismissTut);
-setTimeout(dismissTut,9000);
+// Tutorial not used on homepage
 
 // ═══════════════════════════════════════════
 //  CURSOR
@@ -1971,7 +1953,7 @@ window.addEventListener('touchcancel',()=>{
 });
 
 // Global ESC key
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePopup();closePanel();closeList();closeSearch();closeCircNav();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePopup();closePanel();closeList();closeSearch();}});
 
 // ═══════════════════════════════════════════
 //  ZOOM (viewBox-based)
