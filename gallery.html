@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Gallery | The Francis Smokehouse &middot; St. Francisville, Louisiana</title>
+  <meta name="description" content="Photos from The Francis Smokehouse in St. Francisville, Louisiana. See our pit-smoked BBQ, Cajun specialties, and the people behind the food."/>
+  <meta name="keywords" content="Francis Smokehouse photos, BBQ gallery, St. Francisville restaurant photos"/>
+  <meta name="author" content="The Francis Smokehouse"/>
+  <link rel="canonical" href="https://www.thefrancissmokehouse.com/gallery.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Gallery | The Francis Smokehouse"/>
+  <meta property="og:description" content="Photos from The Francis Smokehouse — pit-smoked BBQ, Cajun food, and Louisiana soul."/>
+  <meta property="og:url" content="https://www.thefrancissmokehouse.com/gallery.html"/>
+  <meta property="og:image" content="https://www.thefrancissmokehouse.com/Images/Smokehouselogo.png"/>
+  <link rel="icon" type="image/png" href="Images/Smokehouselogo.png"/>
+  <link rel="apple-touch-icon" href="Images/Smokehouselogo.png"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --fire:#E8532A;--ember:#C43C10;--gold:#C9881A;--gold-lt:#E5A830;
+      --cream:#F0E6D0;--bone:#D4C5A0;--ash:#6B5C42;
+      --char:#0C0905;--char2:#141009;--char3:#1C1510;
+    }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}}
+    html{scroll-behavior:smooth}
+    body{font-family:'Barlow Condensed',sans-serif;background:var(--char);color:var(--cream);overflow-x:hidden;line-height:1.5}
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+
+    
+    /* ── FIRE LINE ── */
+    .fire-line{height:3px;background:linear-gradient(90deg,transparent,var(--ember) 20%,var(--gold) 50%,var(--ember) 80%,transparent)}
+
+    /* ── NAV ── */
+    nav.site-nav{position:sticky;top:0;z-index:100;background:rgba(12,9,5,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,83,42,.15);padding:0 clamp(20px,5vw,60px);display:flex;align-items:center;justify-content:space-between;height:70px;gap:20px}
+    .nav-brand{display:flex;align-items:center;gap:13px;flex-shrink:0}
+    .nav-logo{width:44px;height:44px;border-radius:50%;object-fit:contain;background:radial-gradient(circle at 40% 35%,#2A1A0A,#1A0E06);border:1px solid rgba(232,83,42,.5);box-shadow:0 0 14px rgba(232,83,42,.25)}
+    .nav-logo-fallback{width:44px;height:44px;border-radius:50%;flex-shrink:0;background:conic-gradient(from 180deg,var(--ember),var(--gold-lt),var(--fire),var(--ember));position:relative;display:none}
+    .nav-logo-fallback::after{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--char)}
+    .nav-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.12em;color:var(--cream);line-height:1}
+    .nav-name small{display:block;font-family:'Barlow Condensed',sans-serif;font-size:.52rem;letter-spacing:.38em;color:var(--ash);font-weight:300;margin-top:3px}
+    .nav-links{display:flex;align-items:center;gap:2px}
+    .nav-link{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,230,208,.65);padding:.55rem .85rem;border-radius:999px;transition:color .2s,background .2s}
+    .nav-link:hover{color:var(--cream);background:rgba(232,83,42,.1)}
+    .nav-link.active{color:var(--fire)}
+    .nav-cta{font-family:'Bebas Neue',sans-serif;font-size:.82rem;letter-spacing:.16em;color:var(--char);background:linear-gradient(135deg,var(--fire),var(--ember));padding:.6rem 1.4rem;border-radius:999px;border:none;cursor:pointer;transition:box-shadow .2s,transform .2s;white-space:nowrap;flex-shrink:0}
+    .nav-cta:hover{box-shadow:0 0 24px rgba(232,83,42,.45);transform:translateY(-1px)}
+
+    /* ── SCROLL REVEAL ── */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}
+
+    /* ── HERO ── */
+    .hero{position:relative;min-height:72vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px clamp(20px,6vw,80px) 60px;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 70% 55% at 50% 60%,rgba(232,83,42,.1),transparent 58%),var(--char)}
+    .hero-bg::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 75%);opacity:.35}
+    .hero-fire-line{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ember) 25%,var(--gold) 50%,var(--ember) 75%,transparent)}
+    .hero-inner{position:relative;z-index:1;max-width:680px}
+    .hero-eyebrow{font-size:.62rem;letter-spacing:.52em;text-transform:uppercase;color:var(--fire);margin-bottom:18px;display:block}
+    .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,7rem);letter-spacing:.05em;line-height:.88;color:var(--cream)}
+    .hero-title em{display:block;font-style:normal;-webkit-text-stroke:1.5px var(--fire);color:transparent}
+    .hero-divider{width:48px;height:1px;margin:22px auto;background:linear-gradient(90deg,transparent,var(--fire),transparent)}
+    .hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,1.8vw,1.2rem);color:rgba(212,197,160,.65);line-height:1.75;max-width:44ch;margin:0 auto}
+
+    /* ── SHARED SECTION ── */
+    .section{padding:80px clamp(20px,6vw,80px)}
+    .section-dark{background:var(--char2)}
+    .section-label{font-size:.58rem;letter-spacing:.52em;text-transform:uppercase;color:var(--fire);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+    .section-label::before{content:"";display:block;width:22px;height:1px;background:var(--fire)}
+    .section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4.5vw,3.8rem);letter-spacing:.06em;color:var(--cream);line-height:.9;margin-bottom:16px}
+    .section-title em{color:var(--fire);font-style:normal}
+    .section-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,1.6vw,1.15rem);color:rgba(212,197,160,.7);line-height:1.85;margin-bottom:18px;max-width:56ch}
+
+    /* ── PULL QUOTE ── */
+    .pull-quote-wrap{padding:60px clamp(20px,8vw,120px);background:var(--char3);border-top:1px solid rgba(232,83,42,.1);border-bottom:1px solid rgba(232,83,42,.1);text-align:center;position:relative;overflow:hidden}
+    .pull-quote-wrap::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(232,83,42,.06),transparent 65%)}
+    .pull-quote{position:relative;z-index:1;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(1.4rem,3vw,2.4rem);color:var(--cream);line-height:1.4;max-width:720px;margin:0 auto 16px}
+    .pull-open,.pull-close{font-family:'Cormorant Garamond',serif;font-size:5rem;line-height:0;vertical-align:-.38em;color:rgba(232,83,42,.3)}
+    .pull-author{position:relative;z-index:1;font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:var(--fire)}
+
+    /* ── TWO COL ── */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,6vw,88px);align-items:center;max-width:1100px;margin:0 auto}
+    .two-col.flip>:first-child{order:2}.two-col.flip>:last-child{order:1}
+    .story-img{position:relative;border-radius:3px;overflow:hidden;border:1px solid rgba(232,83,42,.14)}
+    .story-img img{width:100%;display:block;filter:sepia(.1) contrast(.97)}
+    .story-img::before,.story-img::after{content:"";position:absolute;width:28px;height:28px;z-index:1;border-color:var(--fire);border-style:solid;opacity:.35}
+    .story-img::before{top:10px;left:10px;border-width:1px 0 0 1px}
+    .story-img::after{bottom:10px;right:10px;border-width:0 1px 1px 0}
+
+    /* ── STATS ── */
+    .stats-strip{padding:60px clamp(20px,6vw,80px);background:var(--char3);border-top:1px solid rgba(232,83,42,.1);border-bottom:1px solid rgba(232,83,42,.1)}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:900px;margin:0 auto;text-align:center}
+    .stat-item{}
+    .stat-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,5vw,4rem);letter-spacing:.05em;color:var(--fire);line-height:1;display:block}
+    .stat-label{font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--ash);margin-top:6px;display:block}
+
+    /* ── TEAM ── */
+    .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;max-width:1100px;margin:36px auto 0}
+    .team-card{padding:28px 24px;border:1px solid rgba(232,83,42,.12);background:var(--char3);position:relative;overflow:hidden;transition:border-color .25s,transform .25s}
+    .team-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--fire),transparent);opacity:0;transition:opacity .25s}
+    .team-card:hover{border-color:rgba(232,83,42,.32);transform:translateY(-4px)}
+    .team-card:hover::before{opacity:1}
+    .team-role{font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;color:var(--fire);margin-bottom:10px;display:block}
+    .team-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.1em;color:var(--cream);margin-bottom:8px}
+    .team-bio{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:rgba(212,197,160,.65);line-height:1.7}
+
+    /* ── VALUES ── */
+    .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1100px;margin:36px auto 0}
+    .value-card{padding:28px 22px;border:1px solid rgba(232,83,42,.12);background:var(--char3);position:relative;overflow:hidden;transition:border-color .25s,transform .25s}
+    .value-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--fire),transparent);opacity:0;transition:opacity .25s}
+    .value-card:hover{border-color:rgba(232,83,42,.32);transform:translateY(-4px)}
+    .value-card:hover::before{opacity:1}
+    .value-icon{font-size:1.6rem;margin-bottom:12px;display:block}
+    .value-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.1em;color:var(--cream);margin-bottom:8px}
+    .value-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:rgba(212,197,160,.65);line-height:1.7}
+
+    /* ── TIMELINE ── */
+    .timeline-inner{max-width:680px;margin:0 auto}
+    .timeline{position:relative;padding-left:clamp(28px,5vw,52px);margin-top:44px}
+    .timeline::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,rgba(232,83,42,.35) 10%,rgba(232,83,42,.35) 90%,transparent)}
+    .t-item{position:relative;margin-bottom:36px;padding-bottom:36px;border-bottom:1px solid rgba(107,92,66,.15)}
+    .t-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+    .t-item::before{content:"";position:absolute;left:calc(-1 * clamp(28px,5vw,52px) - 5px);top:5px;width:11px;height:11px;border-radius:50%;background:var(--char2);border:2px solid var(--fire);box-shadow:0 0 8px rgba(232,83,42,.3)}
+    .t-year{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--fire);letter-spacing:.08em;line-height:1;margin-bottom:4px}
+    .t-title{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--cream);letter-spacing:.1em;margin-bottom:8px}
+    .t-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.97rem;color:rgba(212,197,160,.68);line-height:1.75}
+
+    /* ── CTA ── */
+    .cta-band{padding:72px clamp(20px,6vw,80px);text-align:center;background:var(--char3);border-top:1px solid rgba(232,83,42,.12);position:relative;overflow:hidden}
+    .cta-band::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(232,83,42,.07),transparent 65%)}
+    .cta-eyebrow{position:relative;z-index:1;font-size:.6rem;letter-spacing:.5em;text-transform:uppercase;color:var(--fire);margin-bottom:14px;display:block}
+    .cta-title{position:relative;z-index:1;font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,5vw,4rem);letter-spacing:.06em;color:var(--cream);line-height:.9;margin-bottom:8px}
+    .cta-title em{color:var(--fire);font-style:normal}
+    .cta-sub{position:relative;z-index:1;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ash);margin-bottom:32px}
+    .cta-btns{position:relative;z-index:1;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn-primary{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:.18em;color:var(--char);background:linear-gradient(135deg,var(--fire),var(--ember));padding:.85rem 2rem;border-radius:999px;border:none;cursor:pointer;box-shadow:0 0 24px rgba(232,83,42,.3);transition:box-shadow .2s,transform .2s;display:inline-flex;align-items:center;gap:8px}
+    .btn-primary:hover{box-shadow:0 0 40px rgba(232,83,42,.55);transform:translateY(-2px)}
+    .btn-outline{font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:.18em;color:var(--cream);background:transparent;padding:.82rem 1.8rem;border-radius:999px;border:1px solid rgba(232,83,42,.4);cursor:pointer;transition:border-color .2s,background .2s;display:inline-flex;align-items:center;gap:8px}
+    .btn-outline:hover{border-color:var(--fire);background:rgba(232,83,42,.08)}
+
+    /* ── FOOTER ── */
+    footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px clamp(20px,5vw,80px) 28px}
+    .footer-inner{max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+    .footer-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+    .footer-logo{width:52px;height:52px;border-radius:50%;object-fit:contain;background:radial-gradient(circle at 40% 35%,#2A1A0A,#1A0E06);border:1px solid rgba(232,83,42,.4);box-shadow:0 0 16px rgba(232,83,42,.2)}
+    .footer-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.12em;color:var(--cream)}
+    .footer-name small{display:block;font-family:'Barlow Condensed',sans-serif;font-size:.5rem;letter-spacing:.4em;color:var(--ash);margin-top:2px}
+    .footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
+    .footer-link{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,197,160,.5);padding:.45rem .8rem;border-radius:999px;transition:color .2s,background .2s}
+    .footer-link:hover{color:var(--cream);background:rgba(232,83,42,.08)}
+    .footer-copy{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(107,92,66,.4)}
+    .footer-made-by{font-family:'Barlow Condensed',sans-serif;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(107,92,66,.28);margin-top:4px}
+    .footer-made-by span{color:rgba(232,83,42,.4);letter-spacing:.14em}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .two-col{grid-template-columns:1fr;gap:32px}
+      .two-col.flip>:first-child{order:1}.two-col.flip>:last-child{order:2}
+      .values-grid{grid-template-columns:1fr 1fr}
+      .stats-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:680px){
+      .nav-links,.nav-cta{display:none}.nav-toggle{display:none}/* always show desktop nav */
+      .values-grid{grid-template-columns:1fr}
+      .team-grid{grid-template-columns:1fr}
+      .stats-grid{grid-template-columns:repeat(2,1fr)}
+    }
+  
+    /* ── CIRCULAR NAV ── */
+    .circ-trigger{position:fixed;z-index:200;display:flex;flex-direction:column;align-items:center;gap:7px;background:rgba(14,10,6,.88);border:1px solid rgba(232,83,42,.32);box-shadow:0 0 20px rgba(180,75,60,.2);backdrop-filter:blur(12px);padding:13px 8px;border-radius:999px;cursor:pointer;transition:border-color .25s,box-shadow .25s,transform .25s;user-select:none}
+    .circ-trigger:hover{border-color:rgba(232,83,42,.65);box-shadow:0 0 32px rgba(180,75,60,.38);transform:scale(1.04)}
+    .ct-icon{font-size:1.15rem;color:var(--fire)}
+    .ct-text{font-family:'Bebas Neue',sans-serif;font-size:.6rem;letter-spacing:.08em;writing-mode:vertical-rl;text-orientation:upright;color:var(--cream)}
+    .ct-sub{font-size:.46rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);writing-mode:vertical-rl;text-orientation:mixed}
+    #ct-left{left:22px;top:50%;transform:translateY(-50%)}
+    #ct-left:hover{transform:translateY(-50%) scale(1.04)}
+    #ct-bottom{bottom:22px;left:50%;transform:translateX(-50%);flex-direction:row;padding:10px 16px;display:none}
+    #ct-bottom .ct-text{writing-mode:initial;text-orientation:initial;font-size:.75rem}
+    #ct-bottom .ct-sub{writing-mode:initial;text-orientation:initial}
+    #ct-bottom:hover{transform:translateX(-50%) scale(1.04)}
+    .circ-overlay{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(6,4,2,.82);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .3s ease}
+    .circ-overlay.open{opacity:1;pointer-events:all}
+    .circ-menu{width:380px;height:380px;border-radius:50%;position:relative;border:1px solid rgba(232,83,42,.38);box-shadow:0 0 70px rgba(180,75,60,.38),inset 0 0 40px rgba(0,0,0,.5);background:radial-gradient(circle at center,rgba(180,75,60,.07),transparent 70%);transform:scale(.3);transition:transform .45s cubic-bezier(.22,1,.36,1)}
+    .circ-overlay.open .circ-menu{transform:scale(1)}
+    .circ-ring{position:absolute;inset:12px;border-radius:50%;border:1px solid rgba(232,83,42,.1);pointer-events:none}
+    .circ-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,#fff1de,var(--gold));color:#160f0d;border:2px solid var(--ember);box-shadow:0 0 28px rgba(224,129,93,.4);cursor:pointer;transition:.22s ease;z-index:2;font-size:1.5rem}
+    .circ-center:hover{transform:translate(-50%,-50%) scale(1.08)}
+    .circ-close-btn{position:absolute;top:16px;right:18px;background:none;border:1px solid rgba(232,83,42,.25);color:var(--ash);font-family:'Barlow Condensed',sans-serif;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;padding:5px 10px;cursor:pointer;transition:color .2s,border-color .2s;z-index:3}
+    .circ-close-btn:hover{color:var(--fire);border-color:rgba(232,83,42,.6)}
+    .circ-item{position:absolute;top:50%;left:50%;width:68px;height:68px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(18,13,8,.92);border:1px solid rgba(232,83,42,.32);color:var(--cream);font-family:'Bebas Neue',sans-serif;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;text-align:center;box-shadow:0 0 16px rgba(0,0,0,.6);transform:translate(-50%,-50%) rotate(calc(var(--a)*1deg)) translateY(-142px) rotate(calc(var(--a)*-1deg));transition:.22s ease;cursor:pointer;backdrop-filter:blur(8px)}
+    .circ-item:hover{background:rgba(232,83,42,.88);border-color:var(--gold);transform:translate(-50%,-50%) rotate(calc(var(--a)*1deg)) translateY(-152px) rotate(calc(var(--a)*-1deg)) scale(1.08);box-shadow:0 0 26px rgba(232,83,42,.5)}
+    .ci-icon{font-size:1.1rem;line-height:1}
+    @media(max-width:860px){#ct-left{display:none}#ct-bottom{display:flex}}
+    /* Nav stays full on all screen sizes — no hamburger menu */
+    @media(max-width:680px){
+      nav.site-nav{padding:0 clamp(12px,3vw,30px);gap:10px}
+      .nav-links{gap:0}
+      .nav-link{padding:.5rem .5rem;font-size:.6rem;letter-spacing:.12em}
+      .nav-cta{padding:.5rem 1rem;font-size:.72rem}
+      .nav-name small{display:none}
+    }
+    @media(max-width:480px){
+      .nav-link{padding:.45rem .35rem;font-size:.55rem;letter-spacing:.08em}
+      .nav-cta{display:none}
+    }
+
+  
+    /* ── CIRCULAR NAV ── */
+    .circ-nav-trigger{
+      position:fixed;left:28px;top:50%;transform:translateY(-50%);
+      z-index:900;
+      display:flex;flex-direction:column;align-items:center;gap:.6rem;
+      background:rgba(20,16,9,.82);
+      border:1px solid rgba(232,83,42,.38);
+      color:var(--cream);
+      box-shadow:0 0 24px rgba(180,75,60,.28);
+      cursor:pointer;
+      transition:.25s ease;
+      backdrop-filter:blur(10px);
+      padding:.9rem .5rem;
+      border-radius:999px;
+      user-select:none;
+    }
+    body.no-touch .circ-nav-trigger{cursor:none}
+    .circ-nav-trigger:hover{
+      transform:translateY(-50%) scale(1.04);
+      box-shadow:0 0 38px rgba(180,75,60,.42);
+      border-color:rgba(232,83,42,.7);
+    }
+    .circ-nav-trigger .cnt-icon{font-size:1.3rem;color:var(--fire)}
+    .circ-nav-trigger .cnt-text{
+      writing-mode:vertical-rl;text-orientation:upright;
+      font-family:'Bebas Neue',sans-serif;
+      font-size:.72rem;letter-spacing:.08em;
+      color:var(--cream);line-height:1;
+    }
+    .circ-nav-trigger .cnt-sub{
+      writing-mode:vertical-rl;text-orientation:mixed;
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:.52rem;letter-spacing:.18em;
+      color:var(--ash);text-transform:uppercase;margin-top:4px;
+    }
+    @media(max-width:860px){.circ-nav-trigger{display:none}}
+    
+    /* ── CIRCULAR NAV — BOTTOM PILL (mobile) ── */
+    .circ-nav-bottom{
+      position:fixed;top:16px;left:50%;transform:translateX(-50%);
+      z-index:900;
+      display:none;
+      flex-direction:row;align-items:center;gap:.7rem;
+      background:rgba(20,16,9,.82);
+      border:1px solid rgba(232,83,42,.38);
+      color:var(--cream);
+      box-shadow:0 0 24px rgba(180,75,60,.28);
+      cursor:pointer;
+      transition:.25s ease;
+      backdrop-filter:blur(10px);
+      padding:.7rem 1.3rem;
+      border-radius:999px;
+      user-select:none;
+    }
+    @media(max-width:860px){.circ-nav-bottom{display:flex}}
+    .circ-nav-bottom:hover{box-shadow:0 0 38px rgba(180,75,60,.42);border-color:rgba(232,83,42,.7)}
+    .circ-nav-bottom .cnt-icon{font-size:1.2rem;color:var(--fire)}
+    .circ-nav-bottom .cnt-main{font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:.18em;color:var(--cream)}
+    .circ-nav-bottom .cnt-sub2{font-family:'Barlow Condensed',sans-serif;font-size:.55rem;letter-spacing:.16em;color:var(--ash);text-transform:uppercase;opacity:.8}
+    
+    /* ── CIRCULAR MENU OVERLAY ── */
+    .circ-menu-overlay{
+      position:fixed;inset:0;z-index:2000;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(6,4,2,.8);
+      backdrop-filter:blur(14px);
+      opacity:0;pointer-events:none;
+      transition:opacity .3s ease;
+    }
+    .circ-menu-overlay.open{opacity:1;pointer-events:auto}
+    
+    .circular-menu{
+      width:380px;height:380px;border-radius:50%;
+      position:relative;
+      border:1px solid rgba(232,83,42,.4);
+      box-shadow:0 0 70px rgba(180,75,60,.4),inset 0 0 40px rgba(0,0,0,.5);
+      background:radial-gradient(circle at center,rgba(180,75,60,.07),rgba(0,0,0,0) 70%);
+      transform:scale(.3);
+      transition:transform .45s var(--ease);
+    }
+    .circ-menu-overlay.open .circular-menu{transform:scale(1)}
+    
+    /* Decorative ring */
+    .circ-menu-ring{
+      position:absolute;inset:12px;border-radius:50%;
+      border:1px solid rgba(232,83,42,.12);
+      pointer-events:none;
+    }
+    
+    .center-home{
+      position:absolute;left:50%;top:50%;
+      transform:translate(-50%,-50%);
+      width:76px;height:76px;border-radius:50%;
+      display:grid;place-items:center;
+      background:radial-gradient(circle at 30% 30%,#fff1de,var(--gold));
+      color:#160f0d;
+      border:2px solid var(--ember);
+      box-shadow:0 0 28px rgba(224,129,93,.4);
+      cursor:pointer;transition:.22s ease;z-index:2;
+      font-size:1.5rem;
+    }
+    body.no-touch .center-home{cursor:none}
+    .center-home:hover{transform:translate(-50%,-50%) scale(1.08)}
+    
+    /* Close button inside circle */
+    .circ-nav-trigger.nav-disabled,.circ-nav-bottom.nav-disabled{
+      opacity:0;pointer-events:none;transition:opacity .3s ease;
+    }
+    .circ-close{
+      position:absolute;top:16px;right:16px;
+      background:none;border:1px solid rgba(232,83,42,.28);
+      color:var(--ash);font-family:'Barlow Condensed',sans-serif;
+      font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;
+      padding:5px 10px;cursor:pointer;transition:color .2s,border-color .2s;
+      z-index:3;
+    }
+    body.no-touch .circ-close{cursor:none}
+    .circ-close:hover{color:var(--fire);border-color:rgba(232,83,42,.6)}
+    
+    .circ-menu-item{
+      position:absolute;top:50%;left:50%;
+      width:70px;height:70px;border-radius:50%;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+      background:rgba(20,15,10,.92);
+      border:1px solid rgba(232,83,42,.35);
+      color:var(--cream);
+      font-family:'Bebas Neue',sans-serif;
+      font-size:.7rem;letter-spacing:.1em;
+      text-transform:uppercase;
+      box-shadow:0 0 18px rgba(0,0,0,.65);
+      transform:
+        translate(-50%,-50%)
+        rotate(calc(var(--angle) * 1deg))
+        translateY(-140px)
+        rotate(calc(var(--angle) * -1deg));
+      transition:.22s ease;cursor:pointer;
+      backdrop-filter:blur(8px);
+      text-align:center;
+    }
+    body.no-touch .circ-menu-item{cursor:none}
+    .circ-menu-item:hover{
+      background:rgba(232,83,42,.9);
+      color:var(--cream);
+      border-color:var(--gold);
+      transform:
+        translate(-50%,-50%)
+        rotate(calc(var(--angle) * 1deg))
+        translateY(-150px)
+        rotate(calc(var(--angle) * -1deg))
+        scale(1.08);
+      box-shadow:0 0 28px rgba(232,83,42,.5);
+    }
+    .circ-item-icon{font-size:1rem;line-height:1;display:block;margin-bottom:2px}
+    .circ-item-label{font-size:.6rem;letter-spacing:.08em}
+    @media(max-width:640px){
+      .circular-menu{width:300px;height:300px}
+      .circ-menu-item{width:58px;height:58px;font-size:.62rem;
+        transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-110px) rotate(calc(var(--angle)*-1deg))}
+      .circ-menu-item:hover{transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-118px) rotate(calc(var(--angle)*-1deg)) scale(1.06)}
+    }
+  
+
+    /* ── GALLERY ── */
+    .gallery-filters{
+      display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+      max-width:800px;margin:40px auto 36px;
+    }
+    .filter-btn{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;
+      color:var(--ash);background:transparent;
+      border:1px solid rgba(107,92,66,.3);padding:.5rem 1.1rem;
+      cursor:pointer;border-radius:999px;
+      transition:color .2s,border-color .2s,background .2s;
+    }
+    .filter-btn:hover,.filter-btn.active{
+      color:var(--cream);border-color:var(--fire);
+      background:rgba(232,83,42,.1);
+    }
+    .filter-btn.active{color:var(--fire)}
+
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:4px;
+      max-width:1200px;
+      margin:0 auto;
+    }
+    .gallery-item{
+      position:relative;overflow:hidden;
+      aspect-ratio:1;
+      cursor:pointer;
+      background:var(--char3);
+    }
+    .gallery-item img{
+      width:100%;height:100%;object-fit:cover;
+      filter:sepia(.08) contrast(.95);
+      transition:transform .5s ease,filter .5s ease;
+      display:block;
+    }
+    .gallery-item:hover img{
+      transform:scale(1.06);
+      filter:sepia(0) contrast(1);
+    }
+    .gallery-item-overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(to top,rgba(8,6,4,.85) 0%,transparent 60%);
+      opacity:0;transition:opacity .35s;
+      display:flex;align-items:flex-end;padding:16px;
+    }
+    .gallery-item:hover .gallery-item-overlay{opacity:1}
+    .gallery-item-label{
+      font-family:'Bebas Neue',sans-serif;
+      font-size:.9rem;letter-spacing:.1em;color:var(--cream);line-height:1;
+    }
+    .gallery-item-cat{
+      font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;
+      color:var(--fire);margin-bottom:4px;display:block;
+    }
+
+    /* Wide item spans 2 columns */
+    .gallery-item.wide{
+      grid-column:span 2;
+      aspect-ratio:2/1;
+    }
+    .gallery-item.tall{
+      grid-row:span 2;
+      aspect-ratio:.5/1;
+    }
+
+    /* Lightbox */
+    #lightbox{
+      position:fixed;inset:0;z-index:2000;
+      background:rgba(6,4,2,.95);backdrop-filter:blur(12px);
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:opacity .35s;
+    }
+    #lightbox.open{opacity:1;pointer-events:all}
+    #lb-img{
+      max-width:92vw;max-height:88vh;
+      object-fit:contain;
+      border:1px solid rgba(232,83,42,.2);
+      box-shadow:0 0 60px rgba(0,0,0,.8);
+      transform:scale(.92);transition:transform .4s cubic-bezier(.16,.9,.3,1);
+    }
+    #lightbox.open #lb-img{transform:scale(1)}
+    #lb-caption{
+      position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+      text-align:center;
+    }
+    #lb-cap-label{
+      font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.12em;
+      color:var(--cream);display:block;
+    }
+    #lb-cap-cat{
+      font-size:.56rem;letter-spacing:.32em;text-transform:uppercase;
+      color:var(--fire);
+    }
+    #lb-close{
+      position:absolute;top:20px;right:24px;
+      background:none;border:1px solid rgba(232,83,42,.3);
+      color:var(--ash);font-family:'Barlow Condensed',sans-serif;
+      font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;
+      padding:6px 12px;cursor:pointer;transition:color .2s,border-color .2s;
+    }
+    #lb-close:hover{color:var(--fire);border-color:rgba(232,83,42,.6)}
+    #lb-prev,#lb-next{
+      position:absolute;top:50%;transform:translateY(-50%);
+      background:rgba(20,16,9,.7);border:1px solid rgba(232,83,42,.25);
+      color:var(--bone);font-size:1.2rem;width:44px;height:44px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;transition:background .2s,border-color .2s;border-radius:50%;
+    }
+    #lb-prev{left:20px}
+    #lb-next{right:20px}
+    #lb-prev:hover,#lb-next:hover{background:rgba(232,83,42,.2);border-color:var(--fire)}
+
+    /* Upload section */
+    .upload-note{
+      max-width:680px;margin:40px auto 0;
+      padding:24px 28px;
+      border:1px dashed rgba(232,83,42,.25);
+      background:rgba(232,83,42,.03);
+      text-align:center;
+    }
+    .upload-note-title{
+      font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.1em;
+      color:var(--ash);margin-bottom:8px;
+    }
+    .upload-note-body{
+      font-family:'Cormorant Garamond',serif;font-style:italic;
+      font-size:.92rem;color:rgba(107,92,66,.6);line-height:1.65;
+    }
+
+    @media(max-width:860px){
+      .gallery-grid{grid-template-columns:repeat(2,1fr)}
+      .gallery-item.wide{grid-column:span 2;aspect-ratio:2/1}
+      .gallery-item.tall{grid-row:span 1;aspect-ratio:1}
+    }
+    @media(max-width:520px){
+      .gallery-grid{grid-template-columns:repeat(2,1fr);gap:2px}
+      .gallery-item.wide{grid-column:span 2}
+    }
+  </style>
+</head>
+<body>
+
+<div class="fire-line" role="presentation"></div>
+
+<!-- ── NAV ── -->
+<nav class="site-nav" role="navigation" aria-label="Main navigation">
+  <a href="index.html" class="nav-brand" aria-label="The Francis Smokehouse - Home">
+    <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse logo" class="nav-logo"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+    <div class="nav-logo-fallback" aria-hidden="true"></div>
+    <div class="nav-name">The Francis Smokehouse<small>St. Francisville, LA</small></div>
+  </a>
+  <div class="nav-links" role="list">
+    <a class="nav-link" href="index.html">Home</a>
+    <a class="nav-link" href="about.html">About</a>
+    <a class="nav-link" href="story.html">Our Story</a>
+    <a class="nav-link" href="menu.html">Menu</a>
+    <a class="nav-link" href="index.html#info-section">Visit</a>
+    <a class="nav-link" href="tel:+12252455046">(225) 245-5046</a>
+  </div>
+  <a class="nav-cta" href="menu.html" aria-label="Open full menu">Full Menu</a>
+</nav>
+
+<!-- ── HERO ── -->
+<header class="hero" role="banner">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-fire-line" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <span class="hero-eyebrow reveal">The Francis Smokehouse &nbsp;&middot;&nbsp; St. Francisville, Louisiana</span>
+    <h1 class="hero-title reveal reveal-d1">
+      The<br/><em>Gallery</em>
+    </h1>
+    <div class="hero-divider reveal reveal-d2" aria-hidden="true"></div>
+    <p class="hero-sub reveal reveal-d3">
+      A look inside the pit, the kitchen, and the food that keeps people coming back.
+    </p>
+  </div>
+</header>
+
+<!-- ── GALLERY ── -->
+<section class="section section-dark" id="gallery" aria-labelledby="gallery-heading">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="section-label reveal" style="justify-content:center">Our Photos</div>
+    <h2 class="section-title reveal" id="gallery-heading" style="text-align:center">The Food. <em>The Fire.</em></h2>
+  </div>
+
+  <!-- Filter buttons -->
+  <div class="gallery-filters reveal">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="bbq">BBQ &amp; Pit</button>
+    <button class="filter-btn" data-filter="cajun">Cajun</button>
+    <button class="filter-btn" data-filter="food">Food</button>
+    <button class="filter-btn" data-filter="restaurant">Restaurant</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       GALLERY IMAGES
+       ──────────────────────────────────────────────────────────
+       TO ADD YOUR OWN PHOTOS:
+       1. Upload images to your Images/ folder
+       2. Replace the src="https://images.unsplash..." with
+          src="Images/your-photo.jpg"
+       3. Update the data-label and data-cat attributes
+       4. Add or remove .wide / .tall classes for layout variety
+  ══════════════════════════════════════════════════════════ -->
+  <div class="gallery-grid" id="gallery-grid">
+
+    <div class="gallery-item wide" data-cat="bbq" data-label="Slow-Smoked Ribs">
+      <img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?q=80&w=1400&auto=format&fit=crop" alt="Slow-smoked ribs" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">BBQ &amp; Pit</span><div class="gallery-item-label">Slow-Smoked Ribs</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-label="Pulled Pork Plate">
+      <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop" alt="Pulled pork plate" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">Food</span><div class="gallery-item-label">Pulled Pork Plate</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-cat="cajun" data-label="Boudin Balls">
+      <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop" alt="Cajun kitchen" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">Cajun</span><div class="gallery-item-label">Kitchen &amp; Cajun</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-cat="bbq" data-label="The Pit">
+      <img src="https://images.unsplash.com/photo-1558030006-450675393462?q=80&w=800&auto=format&fit=crop" alt="The smokehouse pit" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">BBQ &amp; Pit</span><div class="gallery-item-label">The Pit</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-label="Brisket Plate">
+      <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=800&auto=format&fit=crop" alt="Brisket plate" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">Food</span><div class="gallery-item-label">Brisket Plate</div></div></div>
+    </div>
+
+    <div class="gallery-item wide" data-cat="restaurant" data-label="The Smokehouse">
+      <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1400&auto=format&fit=crop" alt="The Francis Smokehouse restaurant" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">Restaurant</span><div class="gallery-item-label">The Francis Smokehouse</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-label="Smoked Wings">
+      <img src="https://images.unsplash.com/photo-1527477396000-e27163b481c2?q=80&w=800&auto=format&fit=crop" alt="Smoked wings" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">Food</span><div class="gallery-item-label">Smoked Wings</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-cat="bbq" data-label="Low &amp; Slow">
+      <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop" alt="BBQ low and slow" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">BBQ &amp; Pit</span><div class="gallery-item-label">Low &amp; Slow</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-cat="cajun" data-label="Louisiana Flavors">
+      <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?q=80&w=800&auto=format&fit=crop" alt="Louisiana Cajun food" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">Cajun</span><div class="gallery-item-label">Louisiana Flavors</div></div></div>
+    </div>
+
+    <div class="gallery-item wide" data-cat="food" data-label="Southern Sides">
+      <img src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=1400&auto=format&fit=crop" alt="Southern sides spread" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">Food</span><div class="gallery-item-label">Southern Sides</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-cat="restaurant" data-label="Highway 61">
+      <img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?q=80&w=800&auto=format&fit=crop" alt="Restaurant exterior" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">Restaurant</span><div class="gallery-item-label">Highway 61</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-cat="food" data-label="House-Made Desserts">
+      <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=800&auto=format&fit=crop" alt="House-made desserts" loading="lazy"/>
+      <div class="gallery-item-overlay"><div><span class="gallery-item-cat">Food</span><div class="gallery-item-label">House-Made Desserts</div></div></div>
+    </div>
+
+  </div>
+
+  <!-- Upload note -->
+  <div class="upload-note reveal">
+    <div class="upload-note-title">&#x1F4F7; Your Photos Here</div>
+    <div class="upload-note-body">Replace the placeholder images with your own photos by uploading them to your <code style="color:var(--fire);font-style:normal">Images/</code> folder and updating the <code style="color:var(--fire);font-style:normal">src</code> attributes in the HTML. See the comments in the code for instructions.</div>
+  </div>
+</section>
+
+<!-- ── LIGHTBOX ── -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button id="lb-close" aria-label="Close">&#10005; Close</button>
+  <button id="lb-prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+  <img id="lb-img" src="" alt=""/>
+  <button id="lb-next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+  <div id="lb-caption">
+    <span id="lb-cap-cat"></span>
+    <span id="lb-cap-label"></span>
+  </div>
+</div>
+
+<!-- ── CTA ── -->
+<section class="cta-band" aria-label="Visit us">
+  <span class="cta-eyebrow">Come See It In Person</span>
+  <h2 class="cta-title reveal">The Food Tells <em>the Rest</em></h2>
+  <p class="cta-sub reveal">Open Mon&ndash;Sat 10am&ndash;6pm &nbsp;&middot;&nbsp; Sun 10am&ndash;3pm &nbsp;&middot;&nbsp; Highway 61, St. Francisville</p>
+  <div class="cta-btns reveal">
+    <a class="btn-primary" href="menu.html"><i class="fas fa-fire" style="margin-right:8px"></i> View the Menu</a>
+    <a class="btn-outline" href="index.html#info-section"><i class="fas fa-location-dot" style="margin-right:8px"></i> Get Directions</a>
+    <a class="btn-outline" href="tel:+12252455046"><i class="fas fa-phone" style="margin-right:8px"></i> (225) 245-5046</a>
+  </div>
+</section>
+
+<!-- ====== CIRCULAR NAV ====== -->
+<div class="circ-nav-trigger" id="circNavLeft">
+  <i class="fas fa-compass cnt-icon"></i>
+  <span class="cnt-text">NAVIGATE</span>
+  <span class="cnt-sub">explore</span>
+</div>
+
+<div class="circ-nav-bottom" id="circNavBottom">
+  <i class="fas fa-compass cnt-icon"></i>
+  <div>
+    <div class="cnt-main">NAVIGATE</div>
+    <div class="cnt-sub2">explore pages</div>
+  </div>
+</div>
+
+<div class="circ-menu-overlay" id="circMenuOverlay">
+  <div class="circular-menu">
+    <div class="circ-menu-ring"></div>
+    <div class="center-home" id="circHomeBtn" title="Home">
+      <i class="fas fa-home"></i>
+    </div>
+    <button class="circ-close" id="circClose">&#10005; close</button>
+    <div class="circ-menu-item" style="--angle:0" data-href="menu.html"><span class="circ-item-icon"><i class="fas fa-utensils"></i></span><span class="circ-item-label">Menu</span></div>
+    <div class="circ-menu-item" style="--angle:60" data-href="story.html"><span class="circ-item-icon"><i class="fas fa-book-open"></i></span><span class="circ-item-label">Story</span></div>
+    <div class="circ-menu-item" style="--angle:120" data-href="about.html"><span class="circ-item-icon"><i class="fas fa-circle-info"></i></span><span class="circ-item-label">About</span></div>
+    <div class="circ-menu-item" style="--angle:180" data-href="index.html#info-section"><span class="circ-item-icon"><i class="fas fa-location-dot"></i></span><span class="circ-item-label">Visit</span></div>
+    <div class="circ-menu-item" style="--angle:240" data-href="tel:+12252455046"><span class="circ-item-icon"><i class="fas fa-phone"></i></span><span class="circ-item-label">Call</span></div>
+    <div class="circ-menu-item" style="--angle:300" data-href="index.html#specials-section"><span class="circ-item-icon"><i class="fas fa-star"></i></span><span class="circ-item-label">Specials</span></div>
+  </div>
+</div>
+
+
+
+<!-- ── FOOTER ── -->
+<footer role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-logo-wrap">
+      <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="footer-logo"
+           onerror="this.style.display='none'"/>
+      <div class="footer-name">The Francis Smokehouse<small>St. Francisville, Louisiana</small></div>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a class="footer-link" href="index.html">Home</a>
+      <a class="footer-link" href="about.html">About</a>
+      <a class="footer-link" href="gallery.html">Gallery</a>
+      <a class="footer-link" href="story.html">Our Story</a>
+      <a class="footer-link" href="menu.html">Full Menu</a>
+      <a class="footer-link" href="index.html#specials-section">Specials</a>
+      <a class="footer-link" href="index.html#info-section">Visit</a>
+      <a class="footer-link" href="tel:+12252455046">(225) 245-5046</a>
+    </nav>
+    <p class="footer-copy">&copy; 2025 The Francis Smokehouse &amp; Specialty Meats &nbsp;&middot;&nbsp; 6779 US Hwy 61, St. Francisville, LA</p>
+    <p class="footer-made-by">Site designed &amp; built by <span>NorthStar Digital LLC</span> &nbsp;&middot;&nbsp; Founder Westyn Ardoin</p>
+  </div>
+</footer>
+
+<script>
+
+(function(){
+  // ── Circular Nav ──
+  const overlay  = document.getElementById('circMenuOverlay');
+  const trigL    = document.getElementById('circNavLeft');
+  const trigB    = document.getElementById('circNavBottom');
+  const closeBtn = document.getElementById('circClose');
+  const homeBtn  = document.getElementById('circHomeBtn');
+  if(!overlay) return;
+
+  function openNav()  { overlay.classList.add('open'); }
+  function closeNav() { overlay.classList.remove('open'); }
+
+  trigL.addEventListener('click',  e => { e.stopPropagation(); openNav(); });
+  trigB.addEventListener('click',  e => { e.stopPropagation(); openNav(); });
+  overlay.addEventListener('click', e => { if(e.target === overlay) closeNav(); });
+  closeBtn.addEventListener('click', closeNav);
+  homeBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    closeNav();
+    window.location.href = 'index.html';
+  });
+
+  document.querySelectorAll('.circ-menu-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const href = item.getAttribute('data-href');
+      closeNav();
+      if(href) window.location.href = href;
+    });
+  });
+
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeNav(); });
+
+  // ── Scroll reveal ──
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if(en.isIntersecting){ en.target.classList.add('visible'); obs.unobserve(en.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+})();
+
+
+// ── Gallery filter ──
+const filterBtns = document.querySelectorAll('.filter-btn');
+const galleryItems = document.querySelectorAll('.gallery-item');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.getAttribute('data-filter');
+    galleryItems.forEach(item => {
+      const match = filter === 'all' || item.getAttribute('data-cat') === filter;
+      item.style.display = match ? '' : 'none';
+    });
+  });
+});
+
+// ── Lightbox ──
+const lightbox  = document.getElementById('lightbox');
+const lbImg     = document.getElementById('lb-img');
+const lbClose   = document.getElementById('lb-close');
+const lbPrev    = document.getElementById('lb-prev');
+const lbNext    = document.getElementById('lb-next');
+const lbCapLbl  = document.getElementById('lb-cap-label');
+const lbCapCat  = document.getElementById('lb-cap-cat');
+
+let currentIndex = 0;
+let visibleItems = [];
+
+function openLightbox(index) {
+  visibleItems = [...galleryItems].filter(el => el.style.display !== 'none');
+  currentIndex = index;
+  showSlide(currentIndex);
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  lightbox.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function showSlide(i) {
+  const item = visibleItems[i];
+  if(!item) return;
+  const img = item.querySelector('img');
+  lbImg.src = img.src;
+  lbImg.alt = img.alt;
+  lbCapLbl.textContent = item.getAttribute('data-label') || '';
+  lbCapCat.textContent = item.getAttribute('data-cat') || '';
+}
+
+galleryItems.forEach((item, i) => {
+  item.addEventListener('click', () => {
+    visibleItems = [...galleryItems].filter(el => el.style.display !== 'none');
+    const visIdx = visibleItems.indexOf(item);
+    openLightbox(visIdx);
+  });
+});
+
+lbClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', e => { if(e.target === lightbox) closeLightbox(); });
+
+lbPrev.addEventListener('click', e => {
+  e.stopPropagation();
+  currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+  showSlide(currentIndex);
+});
+
+lbNext.addEventListener('click', e => {
+  e.stopPropagation();
+  currentIndex = (currentIndex + 1) % visibleItems.length;
+  showSlide(currentIndex);
+});
+
+document.addEventListener('keydown', e => {
+  if(!lightbox.classList.contains('open')) return;
+  if(e.key === 'ArrowLeft')  { currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length; showSlide(currentIndex); }
+  if(e.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % visibleItems.length; showSlide(currentIndex); }
+  if(e.key === 'Escape')     closeLightbox();
+});
+</script>
+</body>
+</html>
