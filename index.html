@@ -267,7 +267,7 @@ body.no-touch .circ-nav-trigger{cursor:none}
 .circ-menu-overlay.open{opacity:1;pointer-events:auto}
 
 .circular-menu{
-  width:380px;height:380px;border-radius:50%;
+  width:520px;height:520px;border-radius:50%;
   position:relative;
   border:1px solid rgba(232,83,42,.4);
   box-shadow:0 0 70px rgba(180,75,60,.4),inset 0 0 40px rgba(0,0,0,.5);
@@ -354,6 +354,81 @@ body.no-touch .circ-menu-item{cursor:none}
   .circ-menu-item{width:58px;height:58px;font-size:.62rem;
     transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-110px) rotate(calc(var(--angle)*-1deg))}
   .circ-menu-item:hover{transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-118px) rotate(calc(var(--angle)*-1deg)) scale(1.06)}
+}
+
+
+/* ── OUTER RING NAV ITEMS ── */
+.circ-menu-item-outer{
+  position:absolute;top:50%;left:50%;
+  width:62px;height:62px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  background:rgba(14,10,6,.88);
+  border:1px solid rgba(232,83,42,.22);
+  color:var(--cream);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:.62rem;letter-spacing:.08em;
+  text-transform:uppercase;
+  box-shadow:0 0 14px rgba(0,0,0,.6);
+  transform:
+    translate(-50%,-50%)
+    rotate(calc(var(--angle) * 1deg))
+    translateY(-220px)
+    rotate(calc(var(--angle) * -1deg));
+  transition:.22s ease;cursor:pointer;
+  backdrop-filter:blur(8px);
+  text-align:center;
+}
+body.no-touch .circ-menu-item-outer{cursor:none}
+.circ-menu-item-outer:hover{
+  background:rgba(201,136,26,.25);
+  color:var(--cream);
+  border-color:var(--gold);
+  transform:
+    translate(-50%,-50%)
+    rotate(calc(var(--angle) * 1deg))
+    translateY(-228px)
+    rotate(calc(var(--angle) * -1deg))
+    scale(1.08);
+  box-shadow:0 0 22px rgba(201,136,26,.4);
+}
+
+/* Second decorative ring for outer items */
+.circ-outer-ring{
+  position:absolute;
+  width:440px;height:440px;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:1px solid rgba(232,83,42,.08);
+  pointer-events:none;
+}
+.circ-outer-ring-2{
+  position:absolute;
+  width:460px;height:460px;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:1px dashed rgba(201,136,26,.06);
+  pointer-events:none;
+}
+
+@media(max-width:640px){
+  .circular-menu{width:360px!important;height:360px!important}
+  .circ-menu-item-outer{
+    width:52px;height:52px;font-size:.56rem;
+    transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-155px) rotate(calc(var(--angle)*-1deg));
+  }
+  .circ-menu-item-outer:hover{
+    transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-161px) rotate(calc(var(--angle)*-1deg)) scale(1.06);
+  }
+  .circ-outer-ring{width:310px;height:310px}
+  .circ-outer-ring-2{width:326px;height:326px}
+}
+@media(max-width:380px){
+  .circular-menu{width:310px!important;height:310px!important}
+  .circ-menu-item-outer{
+    transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-132px) rotate(calc(var(--angle)*-1deg));
+  }
 }
 
 /* ── DRAG HINT / ADDRESS ── */
@@ -1030,20 +1105,24 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 <div class="circ-menu-overlay" id="circMenuOverlay">
   <div class="circular-menu">
     <div class="circ-menu-ring"></div>
+    <div class="circ-outer-ring"></div>
+    <div class="circ-outer-ring-2"></div>
     <div class="center-home" id="circHomeBtn" title="Home">
       <i class="fas fa-home"></i>
     </div>
     <button class="circ-close" id="circClose">&#10005; close</button>
-    <div class="circ-menu-item" style="--angle:0" data-href="menu.html"><span class="circ-item-icon"><i class="fas fa-utensils"></i></span><span class="circ-item-label">Menu</span></div>
-    <div class="circ-menu-item" style="--angle:40" data-href="catering.html"><span class="circ-item-icon"><i class="fas fa-book-open"></i></span><span class="circ-item-label">Catering</span></div>
-    <div class="circ-menu-item" style="--angle:80" data-href="about.html"><span class="circ-item-icon"><i class="fas fa-circle-info"></i></span><span class="circ-item-label">About</span></div>
-    <div class="circ-menu-item" style="--angle:120" data-href="index.html#info-section"><span class="circ-item-icon"><i class="fas fa-location-dot"></i></span><span class="circ-item-label">Visit</span></div>
-    <div class="circ-menu-item" style="--angle:160" data-href="tel:+12252455046"><span class="circ-item-icon"><i class="fas fa-phone"></i></span><span class="circ-item-label">Call</span></div>
-    <div class="circ-menu-item" style="--angle:200" data-href="index.html#specials-section"><span class="circ-item-icon"><i class="fas fa-star"></i></span><span class="circ-item-label">Specials</span></div>
-    <div class="circ-menu-item" style="--angle:240" data-href="index.html#info-section"><span class="circ-item-icon"><i class="fas fa-location-dot"></i></span><span class="circ-item-label">Visit</span></div>
-    <div class="circ-menu-item" style="--angle:280" data-href="tel:+12252455046"><span class="circ-item-icon"><i class="fas fa-phone"></i></span><span class="circ-item-label">Call</span></div>
-    <div class="circ-menu-item" style="--angle:320" data-href="index.html#specials-section"><span class="circ-item-icon"><i class="fas fa-star"></i></span><span class="circ-item-label">Specials</span></div>
-    <!-- ADD MORE ITEMS HERE — copy a block above and change --angle, data-href, icon and label -->
+    <!-- ── INNER RING — 5 items at 72° each ── -->
+    <div class="circ-menu-item" style="--angle:0"   data-href="menu.html"><span class="circ-item-icon"><i class="fas fa-utensils"></i></span><span class="circ-item-label">Menu</span></div>
+    <div class="circ-menu-item" style="--angle:72"  data-href="catering.html"><span class="circ-item-icon"><i class="fas fa-fire-burner"></i></span><span class="circ-item-label">Catering</span></div>
+    <div class="circ-menu-item" style="--angle:144" data-href="about.html"><span class="circ-item-icon"><i class="fas fa-circle-info"></i></span><span class="circ-item-label">About</span></div>
+    <div class="circ-menu-item" style="--angle:216" data-href="index.html#info-section"><span class="circ-item-icon"><i class="fas fa-location-dot"></i></span><span class="circ-item-label">Visit</span></div>
+    <div class="circ-menu-item" style="--angle:288" data-href="tel:+12252455046"><span class="circ-item-icon"><i class="fas fa-phone"></i></span><span class="circ-item-label">Call</span></div>
+
+    <!-- ── OUTER RING — 4 items at 90° each ── -->
+    <div class="circ-menu-item-outer" style="--angle:0"   data-href="story.html"><span class="circ-item-icon"><i class="fas fa-book-open"></i></span><span class="circ-item-label">Story</span></div>
+    <div class="circ-menu-item-outer" style="--angle:90"  data-href="gallery.html"><span class="circ-item-icon"><i class="fas fa-images"></i></span><span class="circ-item-label">Gallery</span></div>
+    <div class="circ-menu-item-outer" style="--angle:180" data-href="contact.html"><span class="circ-item-icon"><i class="fas fa-envelope"></i></span><span class="circ-item-label">Contact</span></div>
+    <div class="circ-menu-item-outer" style="--angle:270" data-href="index.html#specials-section"><span class="circ-item-icon"><i class="fas fa-star"></i></span><span class="circ-item-label">Specials</span></div>
   </div>
 </div>
 
@@ -1606,7 +1685,7 @@ document.getElementById('stage').addEventListener('touchmove',e=>{
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  document.querySelectorAll('.circ-menu-item').forEach(item => {
+  document.querySelectorAll('.circ-menu-item, .circ-menu-item-outer').forEach(item => {
     item.addEventListener('click', () => {
       const href = item.getAttribute('data-href');
       closeNav();
