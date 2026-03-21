@@ -87,20 +87,13 @@ body.cur-search #cur-mag{opacity:.6}
 .site-nav-cta:hover{box-shadow:0 0 24px rgba(232,83,42,.45);transform:translateY(-1px)}
 .site-nav-toggle{display:none;background:none;border:1px solid rgba(232,83,42,.35);color:var(--fire);padding:.45rem .65rem;border-radius:8px;cursor:pointer;font-size:1rem}
 
-/* ── MOBILE DRAWER ── */
-.site-nav-drawer{position:fixed;top:0;right:0;bottom:0;width:260px;background:rgba(10,7,4,.98);border-left:1px solid rgba(232,83,42,.2);z-index:500;display:flex;flex-direction:column;padding:70px 24px 40px;gap:4px;transform:translateX(100%);transition:transform .4s cubic-bezier(.16,.9,.3,1)}
-.site-nav-drawer.open{transform:translateX(0)}
-.drawer-close-btn{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--ash);cursor:pointer;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;padding:6px 10px;transition:color .2s}
-.drawer-close-btn:hover{color:var(--fire)}
-.drawer-nav-link{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.14em;color:var(--cream);padding:.9rem 0;border-bottom:1px solid rgba(107,92,66,.15);text-decoration:none;transition:color .2s}
-.drawer-nav-link:hover{color:var(--fire)}
-
 /* ── HERO ── */
 .hero-section{position:relative;min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px clamp(20px,5vw,80px) 120px;overflow:hidden}
 .hero-bg-div{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 70% 50% at 50% 60%,rgba(232,83,42,.1),transparent 60%),radial-gradient(ellipse 40% 40% at 20% 30%,rgba(201,136,26,.07),transparent 55%),var(--char)}
 .hero-bg-div::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 75%);opacity:.4}
 .hero-inner-div{position:relative;z-index:1;max-width:760px}
 .hero-logo-img{width:clamp(140px,24vw,200px);height:auto;display:block;margin:0 auto;filter:drop-shadow(0 0 18px rgba(232,83,42,.55)) drop-shadow(0 0 40px rgba(232,83,42,.25));transition:transform .4s,filter .4s}
+#logoNavTrigger:hover .hero-logo-img{transform:scale(1.07);filter:drop-shadow(0 0 28px rgba(232,83,42,.9)) drop-shadow(0 0 55px rgba(232,83,42,.4))}
 .hero-kicker{font-size:.62rem;letter-spacing:.5em;text-transform:uppercase;color:var(--fire);margin-bottom:16px;display:block}
 .hero-title-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.2rem,8vw,6.5rem);letter-spacing:.06em;line-height:.88;color:var(--cream)}
 .hero-title-sub{display:block;font-size:clamp(1rem,2.5vw,1.8rem);letter-spacing:.35em;color:rgba(212,197,160,.5);margin-top:8px}
@@ -119,44 +112,20 @@ body.cur-search #cur-mag{opacity:.6}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 .page-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(232,83,42,.2) 30%,rgba(232,83,42,.2) 70%,transparent)}
 
-/* ── LOGO NAV ── */
-#logoNavTrigger{position:relative;display:inline-block;cursor:pointer;margin:0 auto 20px}
-#logoNavTrigger:hover .hero-logo-img{transform:scale(1.07);filter:drop-shadow(0 0 28px rgba(232,83,42,.9)) drop-shadow(0 0 55px rgba(232,83,42,.4))}
-@keyframes logoOrbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes logoPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.14);opacity:.15}}
-
-/* ── LOGO NAV OVERLAY ── */
-#logoNavOverlay{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(6,4,2,.9);backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .4s ease}
-#logoNavOverlay.open{opacity:1;pointer-events:all}
-.lno-center{position:relative;display:flex;align-items:center;justify-content:center}
-.lno-logo{width:clamp(90px,16vw,130px);height:auto;display:block;filter:drop-shadow(0 0 22px rgba(232,83,42,.7));position:relative;z-index:2}
-.lno-ring-1{position:absolute;width:clamp(160px,26vw,210px);height:clamp(160px,26vw,210px);border-radius:50%;border:1px solid rgba(232,83,42,.18);pointer-events:none;z-index:1}
-.lno-ring-2{position:absolute;width:clamp(280px,46vw,380px);height:clamp(280px,46vw,380px);border-radius:50%;border:1px dashed rgba(232,83,42,.08);pointer-events:none;z-index:1}
-.lno-item{position:absolute;top:50%;left:50%;width:70px;height:70px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(16,11,6,.95);border:1px solid rgba(232,83,42,.38);color:var(--cream);font-family:'Bebas Neue',sans-serif;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;text-align:center;cursor:pointer;backdrop-filter:blur(10px);box-shadow:0 0 20px rgba(0,0,0,.7);transform:translate(-50%,-50%);opacity:0;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .4s ease,background .2s,border-color .2s,box-shadow .2s}
-body.no-touch .lno-item{cursor:none}
-.lno-item.placed{opacity:1;transform:translate(calc(-50% + var(--tx,0px)),calc(-50% + var(--ty,0px)))}
-.lno-item:hover{background:rgba(232,83,42,.88);border-color:var(--gold);box-shadow:0 0 32px rgba(232,83,42,.55)}
-.lno-item.placed:hover{transform:translate(calc(-50% + var(--tx,0px)),calc(-50% + var(--ty,0px))) scale(1.1)}
-.lno-icon{font-size:1.05rem;line-height:1;display:block}
-.lno-label{font-size:.56rem;letter-spacing:.08em}
-.lno-close{position:absolute;top:22px;right:26px;background:none;border:1px solid rgba(232,83,42,.28);color:var(--ash);font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:color .2s,border-color .2s;z-index:3}
-body.no-touch .lno-close{cursor:none}
-.lno-close:hover{color:var(--fire);border-color:rgba(232,83,42,.6)}
-
 /* ── SPECIALS SECTION ── */
-#specials-section{position:relative;background:var(--char2);padding:60px 0;overflow:hidden;text-align:center}
-.specials-header{padding:0 clamp(20px,5vw,80px) 30px}
+#specials-section{position:relative;background:var(--char2);padding:40px 0 60px;overflow:hidden}
+.specials-header{text-align:center;padding:0 20px 20px}
 .specials-eyebrow{font-size:.58rem;letter-spacing:.52em;text-transform:uppercase;color:var(--fire);margin-bottom:12px;display:flex;align-items:center;gap:10px;justify-content:center}
 .specials-eyebrow::before,.specials-eyebrow::after{content:"";display:block;width:22px;height:1px;background:var(--fire)}
 .specials-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4.5vw,3.8rem);letter-spacing:.06em;color:var(--cream);line-height:.9;margin-bottom:8px}
 .specials-title em{color:var(--fire);font-style:normal}
-.wheel-wrapper{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:20px 0 8px}
 .locked-notice{max-width:560px;margin:40px auto;text-align:center;padding:32px;border:1px solid rgba(107,92,66,.2);background:rgba(18,13,8,.5)}
 .locked-notice-icon{font-size:2rem;margin-bottom:12px;opacity:.5}
 .locked-notice-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.1em;color:var(--ash);margin-bottom:8px}
 .locked-notice-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(107,92,66,.7);line-height:1.7}
+.wheel-wrapper{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:20px 0 8px}
 
-/* ── STAGE / WHEEL ── */
+/* ── STAGE ── */
 #stage{position:relative;z-index:3;width:min(92vw,92vh);height:min(92vw,92vh);max-width:720px;max-height:720px;margin:0 auto}
 #wordmark{position:absolute;top:-2%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;white-space:nowrap;z-index:10}
 .wm-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.2rem,3.5vw,2.4rem);letter-spacing:.12em;color:var(--cream);line-height:1}
@@ -197,51 +166,22 @@ body.no-touch .lno-close{cursor:none}
 #back-btn .back-label{font-family:'Barlow Condensed',sans-serif;fill:var(--ash);font-size:8px;letter-spacing:.3em;text-anchor:middle;pointer-events:none}
 #drag-hint{position:absolute;bottom:2%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:clamp(.5rem,1.1vw,.72rem);letter-spacing:.35em;color:var(--ash);text-transform:uppercase;opacity:.65;pointer-events:none;z-index:10;transition:opacity .7s;white-space:nowrap}
 #addr-strip{position:absolute;bottom:-6%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:clamp(.4rem,.82vw,.58rem);letter-spacing:.22em;color:rgba(107,92,66,.38);text-transform:uppercase;white-space:nowrap;pointer-events:none;z-index:10;text-align:center;width:100%;padding:0 8px}
+@keyframes rotateHint{0%{transform:rotate(0deg)}30%{transform:rotate(18deg)}70%{transform:rotate(-6deg)}100%{transform:rotate(0deg)}}
+.hint-spin{animation:rotateHint 2s ease 1.8s both}
 
-/* ── ZOOM ── */
+/* ── ZOOM CONTROL ── */
 #zoom-wrap{display:flex;flex-direction:row;align-items:center;gap:10px;background:rgba(14,10,5,.88);border:1px solid rgba(232,83,42,.28);padding:10px 16px;border-radius:999px;backdrop-filter:blur(10px);transition:border-color .3s;margin-top:16px}
 #zoom-wrap:hover{border-color:rgba(232,83,42,.55)}
 #zoom-label{font-family:'Barlow Condensed',sans-serif;font-size:.52rem;letter-spacing:.28em;color:var(--ash);text-transform:uppercase;white-space:nowrap}
 #zoom-out,#zoom-in{width:26px;height:26px;border-radius:50%;background:rgba(232,83,42,.08);border:1px solid rgba(232,83,42,.3);color:var(--cream);font-size:.95rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;flex-shrink:0}
-body.no-touch #zoom-out,body.no-touch #zoom-in{cursor:none}
 #zoom-out:hover,#zoom-in:hover{background:rgba(232,83,42,.22);border-color:var(--fire)}
 #zoom-slider{-webkit-appearance:none;appearance:none;width:100px;height:3px;background:rgba(107,92,66,.3);border-radius:2px;outline:none;cursor:pointer}
-body.no-touch #zoom-slider{cursor:none}
 #zoom-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--fire);border:2px solid var(--gold);cursor:pointer}
 #zoom-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--fire);border:2px solid var(--gold);cursor:pointer}
 #zoom-pct{font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:.06em;color:var(--gold);min-width:36px;text-align:center}
 
-/* ── MENU LINK SECTION ── */
-#menu-link-section{text-align:center;padding:70px clamp(20px,5vw,80px);background:var(--char)}
-.menu-link-body{max-width:560px;margin:0 auto}
-.section-label{font-size:.58rem;letter-spacing:.52em;text-transform:uppercase;color:var(--fire);margin-bottom:12px;display:flex;align-items:center;gap:10px;justify-content:center}
-.section-label::before,.section-label::after{content:"";display:block;width:22px;height:1px;background:var(--fire)}
-.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4.5vw,3.8rem);letter-spacing:.06em;color:var(--cream);line-height:.9}
-.section-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--ash);margin:14px 0 28px;line-height:1.7}
-
-/* ── INFO / HOURS SECTION ── */
-#info-section{background:var(--char2);padding:80px clamp(20px,5vw,80px)}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:40px auto 0}
-.info-card{padding:30px 28px;border:1px solid rgba(232,83,42,.12);background:rgba(20,15,9,.5)}
-.info-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.12em;color:var(--cream);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(107,92,66,.2)}
-.h-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid rgba(107,92,66,.1);gap:12px}
-.h-row:last-child{border-bottom:none}
-.h-day{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bone)}
-.h-day.today{color:var(--gold)}
-.h-time{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.05em;color:var(--gold);white-space:nowrap}
-.c-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
-.c-row:last-child{margin-bottom:0}
-.c-icon{width:30px;height:30px;flex-shrink:0;border-radius:50%;border:1px solid rgba(232,83,42,.22);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--fire)}
-.c-label{font-size:.56rem;letter-spacing:.32em;text-transform:uppercase;color:var(--ash);margin-bottom:2px}
-.c-value{font-family:'Cormorant Garamond',serif;font-size:.98rem;color:var(--cream)}
-.c-value a{color:var(--cream);transition:color .2s;text-decoration:none}
-.c-value a:hover{color:var(--fire)}
-.amenities{margin-top:18px;display:flex;flex-wrap:wrap;gap:7px}
-.amenity{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);border:1px solid rgba(107,92,66,.25);padding:4px 9px}
-
 /* ── BOTTOM ICON BUTTONS ── */
 .bottom-btn{position:fixed;bottom:28px;z-index:20;width:42px;height:42px;border-radius:50%;background:rgba(20,16,9,.9);border:1px solid rgba(232,83,42,.3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .25s,background .25s}
-body.no-touch .bottom-btn{cursor:none}
 .bottom-btn:hover{background:rgba(232,83,42,.12);border-color:rgba(232,83,42,.7)}
 .bottom-btn.active{background:rgba(232,83,42,.15);border-color:var(--fire)}
 .bottom-label{position:fixed;bottom:76px;z-index:20;font-family:'Barlow Condensed',sans-serif;font-size:.58rem;letter-spacing:.3em;color:rgba(107,92,66,.5);text-transform:uppercase;pointer-events:none;text-align:center;width:42px}
@@ -252,11 +192,45 @@ body.no-touch .bottom-btn{cursor:none}
 #info-btn{right:28px}
 #info-btn-label{right:28px}
 
+/* ── CIRCULAR NAV ── */
+.circ-nav-trigger{position:fixed;left:28px;top:50%;transform:translateY(-50%);z-index:900;display:flex;flex-direction:column;align-items:center;gap:.6rem;background:rgba(20,16,9,.82);border:1px solid rgba(232,83,42,.38);color:var(--cream);box-shadow:0 0 24px rgba(180,75,60,.28);cursor:pointer;transition:.25s ease;backdrop-filter:blur(10px);padding:.9rem .5rem;border-radius:999px;user-select:none}
+.circ-nav-trigger:hover{transform:translateY(-50%) scale(1.04);box-shadow:0 0 38px rgba(180,75,60,.42);border-color:rgba(232,83,42,.7)}
+.circ-nav-trigger .cnt-icon{font-size:1.3rem;color:var(--fire)}
+.circ-nav-trigger .cnt-text{writing-mode:vertical-rl;text-orientation:upright;font-family:'Bebas Neue',sans-serif;font-size:.72rem;letter-spacing:.08em;color:var(--cream);line-height:1}
+.circ-nav-trigger .cnt-sub{writing-mode:vertical-rl;text-orientation:mixed;font-family:'Barlow Condensed',sans-serif;font-size:.52rem;letter-spacing:.18em;color:var(--ash);text-transform:uppercase;margin-top:4px}
+@media(max-width:860px){.circ-nav-trigger{display:none}}
+.circ-nav-bottom{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:900;display:none;flex-direction:row;align-items:center;gap:.7rem;background:rgba(20,16,9,.82);border:1px solid rgba(232,83,42,.38);color:var(--cream);box-shadow:0 0 24px rgba(180,75,60,.28);cursor:pointer;transition:.25s ease;backdrop-filter:blur(10px);padding:.7rem 1.3rem;border-radius:999px;user-select:none}
+@media(max-width:860px){.circ-nav-bottom{display:flex}}
+.circ-nav-bottom:hover{box-shadow:0 0 38px rgba(180,75,60,.42);border-color:rgba(232,83,42,.7)}
+.circ-nav-bottom .cnt-icon{font-size:1.2rem;color:var(--fire)}
+.circ-nav-bottom .cnt-main{font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:.18em;color:var(--cream)}
+.circ-nav-bottom .cnt-sub2{font-family:'Barlow Condensed',sans-serif;font-size:.55rem;letter-spacing:.16em;color:var(--ash);text-transform:uppercase;opacity:.8}
+.circ-nav-trigger.nav-disabled,.circ-nav-bottom.nav-disabled{opacity:0;pointer-events:none;transition:opacity .3s ease}
+
+/* ── CIRCULAR MENU OVERLAY ── */
+.circ-menu-overlay{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(6,4,2,.8);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .3s ease}
+.circ-menu-overlay.open{opacity:1;pointer-events:auto}
+.circular-menu{width:380px;height:380px;border-radius:50%;position:relative;border:1px solid rgba(232,83,42,.4);box-shadow:0 0 70px rgba(180,75,60,.4),inset 0 0 40px rgba(0,0,0,.5);background:radial-gradient(circle at center,rgba(180,75,60,.07),rgba(0,0,0,0) 70%);transform:scale(.3);transition:transform .45s var(--ease)}
+.circ-menu-overlay.open .circular-menu{transform:scale(1)}
+.circ-menu-ring{position:absolute;inset:12px;border-radius:50%;border:1px solid rgba(232,83,42,.12);pointer-events:none}
+.center-home{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,#fff1de,var(--gold));color:#160f0d;border:2px solid var(--ember);box-shadow:0 0 28px rgba(224,129,93,.4);cursor:pointer;transition:.22s ease;z-index:2;font-size:1.5rem}
+.center-home:hover{transform:translate(-50%,-50%) scale(1.08)}
+.circ-close{position:absolute;top:16px;right:16px;background:none;border:1px solid rgba(232,83,42,.28);color:var(--ash);font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;padding:5px 10px;cursor:pointer;transition:color .2s,border-color .2s;z-index:3}
+.circ-close:hover{color:var(--fire);border-color:rgba(232,83,42,.6)}
+.circ-menu-item{position:absolute;top:50%;left:50%;width:70px;height:70px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(20,15,10,.92);border:1px solid rgba(232,83,42,.35);color:var(--cream);font-family:'Bebas Neue',sans-serif;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 0 18px rgba(0,0,0,.65);transform:translate(-50%,-50%) rotate(calc(var(--angle) * 1deg)) translateY(-140px) rotate(calc(var(--angle) * -1deg));transition:.22s ease;cursor:pointer;backdrop-filter:blur(8px);text-align:center}
+.circ-menu-item:hover{background:rgba(232,83,42,.9);color:var(--cream);border-color:var(--gold);transform:translate(-50%,-50%) rotate(calc(var(--angle) * 1deg)) translateY(-150px) rotate(calc(var(--angle) * -1deg)) scale(1.08);box-shadow:0 0 28px rgba(232,83,42,.5)}
+.circ-item-icon{font-size:1rem;line-height:1;display:block;margin-bottom:2px}
+.circ-item-label{font-size:.6rem;letter-spacing:.08em}
+@media(max-width:640px){
+  .circular-menu{width:300px;height:300px}
+  .circ-menu-item{width:58px;height:58px;font-size:.62rem;transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-110px) rotate(calc(var(--angle)*-1deg))}
+  .circ-menu-item:hover{transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-118px) rotate(calc(var(--angle)*-1deg)) scale(1.06)}
+}
+
 /* ── SEARCH ── */
-#search-wrap{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-8px);z-index:500;width:min(340px,80vw);opacity:0;pointer-events:none;transition:opacity .4s,transform .4s}
+#search-wrap{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-8px);z-index:20;width:min(340px,80vw);opacity:0;pointer-events:none;transition:opacity .4s,transform .4s}
 #search-wrap.visible{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0)}
 #search-input{width:100%;background:rgba(12,9,5,.9);border:1px solid rgba(232,83,42,.3);border-bottom:1px solid rgba(232,83,42,.5);color:var(--cream);font-family:'Barlow Condensed',sans-serif;font-size:1rem;letter-spacing:.18em;padding:10px 40px 10px 16px;outline:none;transition:border-color .25s,background .25s}
-body.no-touch #search-input{cursor:none}
 #search-input::placeholder{color:var(--ash);letter-spacing:.2em}
 #search-input:focus{background:rgba(20,14,7,.95);border-color:rgba(232,83,42,.7)}
 #search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--ash);font-size:.75rem;padding:4px;transition:color .2s;opacity:0;pointer-events:none}
@@ -264,7 +238,7 @@ body.no-touch #search-input{cursor:none}
 #search-clear:hover{color:var(--fire)}
 
 /* ── SIDE PANELS ── */
-.side-panel{position:fixed;top:0;bottom:0;z-index:450;background:rgba(10,7,4,.97);display:flex;flex-direction:column;backdrop-filter:blur(12px);overflow:hidden}
+.side-panel{position:fixed;top:0;bottom:0;z-index:150;background:rgba(10,7,4,.97);display:flex;flex-direction:column;backdrop-filter:blur(12px);overflow:hidden}
 #info-panel{right:0;width:min(420px,92vw);border-left:1px solid rgba(232,83,42,.2);transform:translateX(100%);transition:transform .5s cubic-bezier(.16,.9,.3,1)}
 #info-panel.open{transform:translateX(0)}
 #list-panel{left:0;width:min(500px,100vw);border-right:1px solid rgba(232,83,42,.2);transform:translateX(-100%);transition:transform .5s cubic-bezier(.16,.9,.3,1)}
@@ -305,9 +279,8 @@ body.no-touch #search-input{cursor:none}
 .drinks-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.1em;color:var(--gold);margin-bottom:4px}
 .drinks-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ash);line-height:1.6}
 .panel-close-btn{position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(107,92,66,.6);padding:6px 8px;transition:color .2s}
-body.no-touch .panel-close-btn{cursor:none}
 .panel-close-btn:hover{color:var(--fire)}
-.backdrop{position:fixed;inset:0;z-index:440;background:rgba(8,6,4,.4);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .4s}
+.backdrop{position:fixed;inset:0;z-index:140;background:rgba(8,6,4,.4);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .4s}
 .backdrop.open{opacity:1;pointer-events:all}
 .list-filter{width:100%;background:rgba(232,83,42,.05);border:1px solid rgba(232,83,42,.2);color:var(--cream);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;letter-spacing:.1em;padding:8px 14px;outline:none;transition:border-color .2s;margin-bottom:18px}
 .list-filter::placeholder{color:var(--ash)}
@@ -318,38 +291,6 @@ body.no-touch .panel-close-btn{cursor:none}
 .list-item-name{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-weight:600;color:var(--cream)}
 .list-item-price{font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--gold);white-space:nowrap;flex-shrink:0}
 .list-no-results{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--ash);font-size:1rem;padding:20px 0}
-
-/* ── CIRCULAR NAV ── */
-.circ-nav-trigger{position:fixed;left:28px;top:50%;transform:translateY(-50%);z-index:300;display:flex;flex-direction:column;align-items:center;gap:.6rem;background:rgba(20,16,9,.82);border:1px solid rgba(232,83,42,.38);color:var(--cream);box-shadow:0 0 24px rgba(180,75,60,.28);cursor:pointer;transition:.25s ease;backdrop-filter:blur(10px);padding:.9rem .5rem;border-radius:999px;user-select:none}
-body.no-touch .circ-nav-trigger{cursor:none}
-.circ-nav-trigger:hover{transform:translateY(-50%) scale(1.04);box-shadow:0 0 38px rgba(180,75,60,.42);border-color:rgba(232,83,42,.7)}
-.circ-nav-trigger .cnt-icon{font-size:1.3rem;color:var(--fire)}
-.circ-nav-trigger .cnt-text{writing-mode:vertical-rl;text-orientation:upright;font-family:'Bebas Neue',sans-serif;font-size:.72rem;letter-spacing:.08em;color:var(--cream);line-height:1}
-.circ-nav-trigger .cnt-sub{writing-mode:vertical-rl;text-orientation:mixed;font-family:'Barlow Condensed',sans-serif;font-size:.52rem;letter-spacing:.18em;color:var(--ash);text-transform:uppercase;margin-top:4px}
-@media(max-width:860px){.circ-nav-trigger{display:none}}
-.circ-nav-bottom{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:300;display:none;flex-direction:row;align-items:center;gap:.7rem;background:rgba(20,16,9,.82);border:1px solid rgba(232,83,42,.38);color:var(--cream);box-shadow:0 0 24px rgba(180,75,60,.28);cursor:pointer;transition:.25s ease;backdrop-filter:blur(10px);padding:.7rem 1.3rem;border-radius:999px;user-select:none}
-@media(max-width:860px){.circ-nav-bottom{display:flex}}
-.circ-nav-bottom:hover{box-shadow:0 0 38px rgba(180,75,60,.42);border-color:rgba(232,83,42,.7)}
-.circ-nav-bottom .cnt-icon{font-size:1.2rem;color:var(--fire)}
-.circ-nav-bottom .cnt-main{font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:.18em;color:var(--cream)}
-.circ-nav-bottom .cnt-sub2{font-family:'Barlow Condensed',sans-serif;font-size:.55rem;letter-spacing:.16em;color:var(--ash);text-transform:uppercase;opacity:.8}
-.circ-nav-trigger.nav-disabled,.circ-nav-bottom.nav-disabled{opacity:0;pointer-events:none}
-.circ-menu-overlay{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(6,4,2,.8);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .3s ease}
-.circ-menu-overlay.open{opacity:1;pointer-events:auto}
-.circular-menu{width:380px;height:380px;border-radius:50%;position:relative;border:1px solid rgba(232,83,42,.4);box-shadow:0 0 70px rgba(180,75,60,.4),inset 0 0 40px rgba(0,0,0,.5);background:radial-gradient(circle at center,rgba(180,75,60,.07),rgba(0,0,0,0) 70%);transform:scale(.3);transition:transform .45s var(--ease)}
-.circ-menu-overlay.open .circular-menu{transform:scale(1)}
-.circ-menu-ring{position:absolute;inset:12px;border-radius:50%;border:1px solid rgba(232,83,42,.12);pointer-events:none}
-.center-home{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,#fff1de,var(--gold));color:#160f0d;border:2px solid var(--ember);box-shadow:0 0 28px rgba(224,129,93,.4);cursor:pointer;transition:.22s ease;z-index:2;font-size:1.5rem}
-body.no-touch .center-home{cursor:none}
-.center-home:hover{transform:translate(-50%,-50%) scale(1.08)}
-.circ-close{position:absolute;top:16px;right:16px;background:none;border:1px solid rgba(232,83,42,.28);color:var(--ash);font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;padding:5px 10px;cursor:pointer;transition:color .2s,border-color .2s;z-index:3}
-body.no-touch .circ-close{cursor:none}
-.circ-close:hover{color:var(--fire);border-color:rgba(232,83,42,.6)}
-.circ-menu-item{position:absolute;top:50%;left:50%;width:70px;height:70px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(20,15,10,.92);border:1px solid rgba(232,83,42,.35);color:var(--cream);font-family:'Bebas Neue',sans-serif;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 0 18px rgba(0,0,0,.65);transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-140px) rotate(calc(var(--angle)*-1deg));transition:.22s ease;cursor:pointer;backdrop-filter:blur(8px);text-align:center}
-body.no-touch .circ-menu-item{cursor:none}
-.circ-menu-item:hover{background:rgba(232,83,42,.9);color:var(--cream);border-color:var(--gold);transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-150px) rotate(calc(var(--angle)*-1deg)) scale(1.08);box-shadow:0 0 28px rgba(232,83,42,.5)}
-.circ-item-icon{font-size:1rem;line-height:1;display:block;margin-bottom:2px}
-.circ-item-label{font-size:.6rem;letter-spacing:.08em}
 
 /* ── POPUP ── */
 #popup-overlay{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;background:rgba(8,6,4,.78);backdrop-filter:blur(10px) saturate(.7);opacity:0;pointer-events:none;transition:opacity .4s}
@@ -367,8 +308,35 @@ body.no-touch .circ-menu-item{cursor:none}
 .popup-note{margin-top:14px;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:.22em;color:var(--ash);text-transform:uppercase;line-height:1.6}
 .popup-extra-note{margin-top:10px;padding-top:10px;border-top:1px solid rgba(232,83,42,.1);font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.18em;color:rgba(107,92,66,.6);text-transform:uppercase;line-height:1.7}
 #popup-close{position:absolute;top:12px;right:14px;background:none;border:none;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(107,92,66,.7);cursor:pointer;padding:6px 8px;transition:color .2s}
-body.no-touch #popup-close{cursor:none}
 #popup-close:hover{color:var(--fire)}
+
+/* ── MENU LINK SECTION ── */
+#menu-link-section{text-align:center;padding:70px clamp(20px,5vw,80px);background:var(--char)}
+.menu-link-body{max-width:560px;margin:0 auto}
+.section-label{font-size:.58rem;letter-spacing:.52em;text-transform:uppercase;color:var(--fire);margin-bottom:12px;display:flex;align-items:center;gap:10px;justify-content:center}
+.section-label::before,.section-label::after{content:"";display:block;width:22px;height:1px;background:var(--fire)}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4.5vw,3.8rem);letter-spacing:.06em;color:var(--cream);line-height:.9}
+.section-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--ash);margin:14px 0 28px;line-height:1.7}
+
+/* ── INFO SECTION ── */
+#info-section{background:var(--char2);padding:80px clamp(20px,5vw,80px)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:40px auto 0}
+.info-card{padding:30px 28px;border:1px solid rgba(232,83,42,.12);background:var(--char)}
+.info-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.12em;color:var(--cream);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(107,92,66,.2)}
+.h-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid rgba(107,92,66,.1);gap:12px}
+.h-row:last-child{border-bottom:none}
+.h-day{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bone)}
+.h-day.today{color:var(--gold)}
+.h-time{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.05em;color:var(--gold);white-space:nowrap}
+.c-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+.c-row:last-child{margin-bottom:0}
+.c-icon{width:30px;height:30px;flex-shrink:0;border-radius:50%;border:1px solid rgba(232,83,42,.22);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--fire)}
+.c-label{font-size:.56rem;letter-spacing:.32em;text-transform:uppercase;color:var(--ash);margin-bottom:2px}
+.c-value{font-family:'Cormorant Garamond',serif;font-size:.98rem;color:var(--cream)}
+.c-value a{color:var(--cream);transition:color .2s;text-decoration:none}
+.c-value a:hover{color:var(--fire)}
+.amenities{margin-top:18px;display:flex;flex-wrap:wrap;gap:7px}
+.amenity{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);border:1px solid rgba(107,92,66,.25);padding:4px 9px}
 
 /* ── FOOTER ── */
 footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px clamp(20px,5vw,80px) 28px}
@@ -381,10 +349,28 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 .footer-link{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,197,160,.5);padding:.45rem .8rem;border-radius:999px;transition:color .2s,background .2s;text-decoration:none}
 .footer-link:hover{color:var(--cream);background:rgba(232,83,42,.08)}
 .footer-copy{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(107,92,66,.4)}
-.footer-made-by{font-family:'Barlow Condensed',sans-serif;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(107,92,66,.28);margin-top:4px}
-.footer-made-by span{color:rgba(232,83,42,.4);letter-spacing:.14em}
 
-/* ── RESPONSIVE ── */
+/* ── LOGO NAV OVERLAY ── */
+#logoNavOverlay{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(6,4,2,.9);backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .4s ease}
+#logoNavOverlay.open{opacity:1;pointer-events:all}
+.lno-center{position:relative;display:flex;align-items:center;justify-content:center}
+.lno-logo{width:clamp(90px,16vw,130px);height:auto;display:block;filter:drop-shadow(0 0 22px rgba(232,83,42,.7));position:relative;z-index:2}
+.lno-ring-1{position:absolute;width:clamp(160px,26vw,210px);height:clamp(160px,26vw,210px);border-radius:50%;border:1px solid rgba(232,83,42,.18);pointer-events:none;z-index:1}
+.lno-ring-2{position:absolute;width:clamp(280px,46vw,380px);height:clamp(280px,46vw,380px);border-radius:50%;border:1px dashed rgba(232,83,42,.08);pointer-events:none;z-index:1}
+.lno-item{position:absolute;top:50%;left:50%;width:70px;height:70px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(16,11,6,.95);border:1px solid rgba(232,83,42,.38);color:var(--cream);font-family:'Bebas Neue',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;text-align:center;cursor:pointer;backdrop-filter:blur(10px);box-shadow:0 0 20px rgba(0,0,0,.7);transform:translate(-50%,-50%);opacity:0;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .4s ease,background .2s,border-color .2s,box-shadow .2s}
+.lno-item.placed{opacity:1;transform:translate(calc(-50% + var(--tx,0px)),calc(-50% + var(--ty,0px)))}
+.lno-item:hover{background:rgba(232,83,42,.88);border-color:var(--gold);box-shadow:0 0 32px rgba(232,83,42,.55)}
+.lno-item.placed:hover{transform:translate(calc(-50% + var(--tx,0px)),calc(-50% + var(--ty,0px))) scale(1.1)}
+.lno-icon{font-size:1.05rem;line-height:1;display:block}
+.lno-label{font-size:.56rem;letter-spacing:.08em}
+.lno-close{position:absolute;top:22px;right:26px;background:none;border:1px solid rgba(232,83,42,.28);color:var(--ash);font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:color .2s,border-color .2s;z-index:3}
+.lno-close:hover{color:var(--fire);border-color:rgba(232,83,42,.6)}
+
+/* ── LOGO ANIMATIONS ── */
+@keyframes logoOrbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes logoPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.14);opacity:.15}}
+
+/* ── MOBILE ── */
 @media(max-width:860px){
   .site-nav-links,.site-nav-cta{display:none}
   .site-nav-toggle{display:block}
@@ -396,7 +382,6 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
   .wm-sub{font-size:clamp(.65rem,2.8vw,.9rem);letter-spacing:.08em}
   #wordmark{top:-14%}
   #addr-strip{font-size:.5rem;letter-spacing:.12em;bottom:-8%}
-  #drag-hint{font-size:.65rem;letter-spacing:.18em}
   .bottom-btn{width:48px;height:48px}
   .bottom-label{font-size:.55rem;bottom:80px}
   #search-btn{left:16px}
@@ -408,23 +393,27 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
   .popup-inner{padding:22px 24px 28px}
   .popup-title{font-size:clamp(1.6rem,7vw,2.2rem)}
   .popup-price{font-size:clamp(1.8rem,8vw,2.6rem)}
-  .popup-desc{font-size:clamp(1rem,3.8vw,1.15rem);line-height:1.7}
+  .popup-desc{font-size:clamp(1rem,3.8vw,1.15rem)}
   .panel-scroll,.list-scroll{padding:24px 20px 48px}
-  .hours-day{font-size:.9rem}
-  .hours-time{font-size:1.1rem}
-  .circular-menu{width:300px;height:300px}
-  .circ-menu-item{width:58px;height:58px;font-size:.62rem;transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-110px) rotate(calc(var(--angle)*-1deg))}
-  .circ-menu-item:hover{transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-118px) rotate(calc(var(--angle)*-1deg)) scale(1.06)}
   .lno-item{width:58px;height:58px;font-size:.58rem}
   .lno-icon{font-size:.9rem}
+  .circular-menu{width:320px;height:320px}
+  .circ-menu-item{width:62px;height:62px;font-size:.65rem;transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-118px) rotate(calc(var(--angle)*-1deg))}
+  .circ-menu-item:hover{transform:translate(-50%,-50%) rotate(calc(var(--angle)*1deg)) translateY(-126px) rotate(calc(var(--angle)*-1deg)) scale(1.06)}
+  #zoom-slider{width:70px}
+  #zoom-label{display:none}
 }
-@keyframes rotateHint{0%{transform:rotate(0deg)}30%{transform:rotate(18deg)}70%{transform:rotate(-6deg)}100%{transform:rotate(0deg)}}
-.hint-spin{animation:rotateHint 2s ease 1.8s both}
+@media(max-width:380px){
+  .wm-name{font-size:5.2vw}
+  #wordmark{top:-16%}
+  .popup-title{font-size:6.5vw}
+  .popup-price{font-size:7.5vw}
+}
   </style>
 </head>
 <body>
 
-<!-- ── CURSOR ── -->
+<!-- Custom cursor -->
 <div id="cur-wrap">
   <svg id="cur-svg" viewBox="-32 -32 64 64" xmlns="http://www.w3.org/2000/svg">
     <circle id="cur-outer" r="26" cx="0" cy="0" stroke-dasharray="60 20"/>
@@ -439,16 +428,16 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
   </svg>
 </div>
 
-<!-- ── CANVASES ── -->
+<!-- Background canvases -->
 <canvas id="bg-smoke"></canvas>
 <canvas id="bg-ash"></canvas>
 <canvas id="flame-canvas"></canvas>
 <div id="ambient"></div>
 
-<!-- ── FIRE LINE ── -->
+<!-- FIRE LINE -->
 <div class="fire-line" role="presentation"></div>
 
-<!-- ── SITE NAV ── -->
+<!-- NAV -->
 <nav id="site-nav" role="navigation" aria-label="Main navigation">
   <a href="index.html" class="nav-brand" aria-label="Home">
     <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse logo" class="nav-logo"
@@ -466,26 +455,15 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
   <button class="site-nav-toggle" id="site-nav-toggle" aria-label="Open navigation" aria-expanded="false">&#9776;</button>
 </nav>
 
-<div class="site-nav-drawer" id="site-nav-drawer" role="dialog" aria-label="Mobile navigation">
-  <button class="drawer-close-btn" id="site-drawer-close" aria-label="Close">&#10005;</button>
-  <a class="drawer-nav-link" href="story.html">Our Story</a>
-  <a class="drawer-nav-link" href="menu.html">Menu</a>
-  <a class="drawer-nav-link" href="#info-section">Hours &amp; Visit</a>
-  <a class="drawer-nav-link" href="tel:+12252455046">Call Us</a>
-</div>
-
-<!-- ── HERO ── -->
+<!-- HERO -->
 <header class="hero-section" role="banner">
   <div class="hero-bg-div" aria-hidden="true"></div>
   <div class="hero-inner-div">
-    <div id="logoNavTrigger" tabindex="0" role="button" aria-label="Open navigation">
+    <div id="logoNavTrigger" style="position:relative;display:inline-block;cursor:pointer;margin:0 auto 28px;">
       <div id="logoOrbitRing" style="position:absolute;inset:-16px;border-radius:50%;border:1px dashed rgba(232,83,42,.4);animation:logoOrbit 10s linear infinite;pointer-events:none;"></div>
       <div id="logoPulseRing" style="position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(232,83,42,.22);animation:logoPulse 2.6s ease-in-out infinite;pointer-events:none;"></div>
-      <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="hero-logo-img"
-           onerror="this.style.display='none'"/>
-      <div id="logoNavLabel" style="position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:.54rem;letter-spacing:.38em;text-transform:uppercase;color:rgba(232,83,42,.65);white-space:nowrap;pointer-events:none;display:flex;align-items:center;gap:5px;transition:opacity .4s;">
-        <i class="fas fa-compass" style="animation:logoOrbit 4s linear infinite;font-size:.54rem;"></i> NAVIGATE
-      </div>
+      <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="hero-logo-img" style="position:relative;z-index:2;" onerror="this.style.display='none'"/>
+      <div id="logoNavLabel" style="position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:.54rem;letter-spacing:.38em;text-transform:uppercase;color:rgba(232,83,42,.65);white-space:nowrap;pointer-events:none;display:flex;align-items:center;gap:5px;transition:opacity .4s;"><i class="fas fa-compass" style="animation:logoOrbit 4s linear infinite;font-size:.54rem;"></i> NAVIGATE</div>
     </div>
     <p class="hero-kicker">St. Francisville, Louisiana &nbsp;&middot;&nbsp; Highway 61</p>
     <h1 class="hero-title-h1">
@@ -508,7 +486,7 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 
 <div class="page-divider"></div>
 
-<!-- ══ DAILY SPECIALS WHEEL ══ -->
+<!-- DAILY SPECIALS WHEEL -->
 <section id="specials-section" aria-labelledby="specials-heading">
   <div class="specials-header">
     <div class="specials-eyebrow">Fresh From the Kitchen</div>
@@ -569,18 +547,17 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
     </div>
   </div>
 
+  <!-- Shows when no specials are posted for today -->
   <div class="locked-notice" id="specials-locked" style="display:none">
     <div class="locked-notice-icon">&#x1F512;</div>
     <div class="locked-notice-title">No Specials Posted Yet</div>
-    <div class="locked-notice-body">Check back soon &mdash; the kitchen posts daily specials each morning.<br/>
-      Call <a href="tel:+12252455046" style="color:var(--fire)">(225) 245-5046</a> to ask what&rsquo;s on today.
-    </div>
+    <div class="locked-notice-body">Check back soon &mdash; the kitchen posts daily specials each morning.<br/>Call <a href="tel:+12252455046" style="color:var(--fire)">(225) 245-5046</a> to ask what&rsquo;s on today.</div>
   </div>
 </section>
 
 <div class="page-divider"></div>
 
-<!-- ── MENU LINK ── -->
+<!-- MENU LINK -->
 <section id="menu-link-section" aria-label="Full menu">
   <div class="menu-link-body">
     <div class="section-label">The Full Menu</div>
@@ -592,13 +569,13 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 
 <div class="page-divider"></div>
 
-<!-- ── HOURS & INFO ── -->
+<!-- HOURS & INFO -->
 <section id="info-section" aria-labelledby="info-heading">
-  <div style="max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,80px);padding-top:80px">
+  <div style="max-width:900px;margin:0 auto">
     <div class="section-label">Find Us</div>
     <h2 class="section-title" id="info-heading">Hours &amp; Location</h2>
   </div>
-  <div class="info-grid" style="padding:0 clamp(20px,5vw,80px) 80px">
+  <div class="info-grid">
     <div class="info-card">
       <h3>&#x1F550; Hours</h3>
       <div id="hours-status-badge" style="margin-bottom:16px"></div>
@@ -607,39 +584,22 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
     </div>
     <div class="info-card">
       <h3>&#x1F4CD; Location &amp; Contact</h3>
-      <div class="c-row">
-        <div class="c-icon"><i class="fas fa-location-dot"></i></div>
-        <div><div class="c-label">Address</div>
-        <div class="c-value"><a href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775" target="_blank" rel="noopener">6779 US Highway 61<br/>St. Francisville, LA 70775</a></div></div>
-      </div>
-      <div class="c-row">
-        <div class="c-icon"><i class="fas fa-phone"></i></div>
-        <div><div class="c-label">Phone</div><div class="c-value"><a href="tel:+12252455046">(225) 245-5046</a></div></div>
-      </div>
-      <div class="c-row">
-        <div class="c-icon"><i class="fas fa-envelope"></i></div>
-        <div><div class="c-label">Email</div><div class="c-value"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div></div>
-      </div>
-      <div class="c-row">
-        <div class="c-icon"><i class="fas fa-star"></i></div>
-        <div><div class="c-label">Rating</div><div class="c-value">4.5&nbsp;/ 5 &nbsp;&middot;&nbsp; Tripadvisor Travellers&rsquo; Choice</div></div>
-      </div>
-      <div class="amenities">
-        <span class="amenity">Dine In</span><span class="amenity">Takeout</span><span class="amenity">Catering</span>
-        <span class="amenity">Parking</span><span class="amenity">Wheelchair Access</span>
-        <span class="amenity">Outdoor Seating</span><span class="amenity">Dog Friendly</span>
-      </div>
+      <div class="c-row"><div class="c-icon"><i class="fas fa-location-dot"></i></div><div><div class="c-label">Address</div><div class="c-value"><a href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775" target="_blank" rel="noopener">6779 US Highway 61<br/>St. Francisville, LA 70775</a></div></div></div>
+      <div class="c-row"><div class="c-icon"><i class="fas fa-phone"></i></div><div><div class="c-label">Phone</div><div class="c-value"><a href="tel:+12252455046">(225) 245-5046</a></div></div></div>
+      <div class="c-row"><div class="c-icon"><i class="fas fa-envelope"></i></div><div><div class="c-label">Email</div><div class="c-value"><a href="/cdn-cgi/l/email-protection#2640544748454f55554b494d434e495355436647525208484352"><span class="__cf_email__" data-cfemail="492f3b28272a203a3a2426222c21263c3a2c09283d3d67272c3d">[email&#160;protected]</span></a></div></div></div>
+      <div class="c-row"><div class="c-icon"><i class="fas fa-star"></i></div><div><div class="c-label">Rating</div><div class="c-value">4.5&nbsp;/ 5 &nbsp;&middot;&nbsp; Tripadvisor Travellers&rsquo; Choice</div></div></div>
+      <div class="amenities"><span class="amenity">Dine In</span><span class="amenity">Takeout</span><span class="amenity">Catering</span><span class="amenity">Parking</span><span class="amenity">Wheelchair Access</span><span class="amenity">Outdoor Seating</span><span class="amenity">Dog Friendly</span></div>
     </div>
   </div>
 </section>
 
-<!-- ── SEARCH BAR ── -->
+<!-- SEARCH BAR -->
 <div id="search-wrap">
-  <input id="search-input" type="text" placeholder="SEARCH SPECIALS..." autocomplete="off" spellcheck="false"/>
+  <input id="search-input" type="text" placeholder="SEARCH MENU..." autocomplete="off" spellcheck="false"/>
   <button id="search-clear" aria-label="Clear">&#10005;</button>
 </div>
 
-<!-- ── BOTTOM BUTTONS ── -->
+<!-- BOTTOM ICON BUTTONS -->
 <button id="search-btn" class="bottom-btn" aria-label="Search">
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--fire)" stroke-width="1.4">
     <circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.2" y1="10.2" x2="14" y2="14"/>
@@ -663,12 +623,14 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 </button>
 <div id="info-btn-label" class="bottom-label">INFO</div>
 
-<!-- ── CIRCULAR NAV ── -->
+<!-- CIRCULAR NAV (desktop left pill) -->
 <div class="circ-nav-trigger" id="circNavLeft">
   <i class="fas fa-compass cnt-icon"></i>
   <span class="cnt-text">NAVIGATE</span>
   <span class="cnt-sub">explore</span>
 </div>
+
+<!-- CIRCULAR NAV (mobile top pill) -->
 <div class="circ-nav-bottom" id="circNavBottom">
   <i class="fas fa-compass cnt-icon"></i>
   <div>
@@ -676,10 +638,14 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
     <div class="cnt-sub2">explore pages</div>
   </div>
 </div>
+
+<!-- CIRCULAR MENU OVERLAY -->
 <div class="circ-menu-overlay" id="circMenuOverlay">
   <div class="circular-menu">
     <div class="circ-menu-ring"></div>
-    <div class="center-home" id="circHomeBtn" title="Home"><i class="fas fa-home"></i></div>
+    <div class="center-home" id="circHomeBtn" title="Home">
+      <i class="fas fa-home"></i>
+    </div>
     <button class="circ-close" id="circClose">&#10005; close</button>
     <div class="circ-menu-item" style="--angle:0"   data-href="menu.html"><span class="circ-item-icon"><i class="fas fa-utensils"></i></span><span class="circ-item-label">Menu</span></div>
     <div class="circ-menu-item" style="--angle:40"  data-href="about.html"><span class="circ-item-icon"><i class="fas fa-circle-info"></i></span><span class="circ-item-label">About</span></div>
@@ -693,20 +659,20 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
   </div>
 </div>
 
-<!-- ── LIST PANEL ── -->
+<!-- LIST PANEL -->
 <div id="list-backdrop" class="backdrop"></div>
-<div id="list-panel" class="side-panel" role="dialog" aria-label="Specials list">
+<div id="list-panel" class="side-panel" role="dialog" aria-label="Full menu">
   <div class="panel-fire-top"></div>
   <div class="list-scroll">
     <div class="panel-eyebrow">The Francis Smokehouse</div>
-    <div class="panel-title">TODAY&rsquo;S SPECIALS</div>
+    <div class="panel-title">FULL MENU</div>
     <input class="list-filter" id="list-filter" type="text" placeholder="Filter items..." autocomplete="off"/>
     <div id="list-content"></div>
   </div>
   <button class="panel-close-btn" id="list-close">&#10005; Close</button>
 </div>
 
-<!-- ── INFO PANEL ── -->
+<!-- INFO PANEL -->
 <div id="panel-backdrop" class="backdrop"></div>
 <div id="info-panel" class="side-panel" role="dialog" aria-label="Hours and info">
   <div class="panel-fire-top"></div>
@@ -724,11 +690,11 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
     </div>
     <div class="contact-item">
       <div class="contact-icon">&#x1F4DE;</div>
-      <div><div class="contact-label">Phone</div><div class="contact-value"><a href="tel:+12252455046">(225) 245-5046</a></div></div>
+      <div><div class="contact-label">Phone</div><div class="contact-value"><a href="tel:2252455046">(225) 245-5046</a></div></div>
     </div>
     <div class="contact-item">
       <div class="contact-icon">&#x2709;</div>
-      <div><div class="contact-label">Email</div><div class="contact-value"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div></div>
+      <div><div class="contact-label">Email</div><div class="contact-value"><a href="/cdn-cgi/l/email-protection#1a7c687b74797369697775717f72756f697f5a7b6e6e34747f6e"><span class="__cf_email__" data-cfemail="a0c6d2c1cec3c9d3d3cdcfcbc5c8cfd5d3c5e0c1d4d48ecec5d4">[email&#160;protected]</span></a></div></div>
     </div>
     <div class="contact-item">
       <div class="contact-icon">&#x2B50;</div>
@@ -749,7 +715,7 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
   <button class="panel-close-btn" id="panel-close">&#10005; Close</button>
 </div>
 
-<!-- ── ITEM POPUP ── -->
+<!-- ITEM POPUP -->
 <div id="popup-overlay" role="dialog" aria-modal="true">
   <div id="popup-card">
     <div class="popup-fire"></div>
@@ -766,7 +732,7 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
   </div>
 </div>
 
-<!-- ── LOGO NAV OVERLAY ── -->
+<!-- LOGO NAV OVERLAY -->
 <div id="logoNavOverlay" role="dialog" aria-modal="true" aria-label="Navigation">
   <button class="lno-close" id="lnoClose">&#10005; close</button>
   <div class="lno-center" id="lnoCenter">
@@ -776,7 +742,7 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
   </div>
 </div>
 
-<!-- ── FOOTER ── -->
+<!-- FOOTER -->
 <footer role="contentinfo">
   <div class="footer-inner">
     <div class="footer-logo-wrap">
@@ -792,15 +758,17 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
       <a class="footer-link" href="tel:+12252455046">(225) 245-5046</a>
     </nav>
     <p class="footer-copy">&copy; 2025 The Francis Smokehouse &amp; Specialty Meats &nbsp;&middot;&nbsp; 6779 US Hwy 61, St. Francisville, LA</p>
-    <p class="footer-made-by">Site designed &amp; built by <span>NorthStar Digital LLC</span> &nbsp;&middot;&nbsp; Founder Westyn Ardoin</p>
+    <p style="font-family:'Barlow Condensed',sans-serif;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(107,92,66,.28);margin-top:4px">Site designed &amp; built by <span style="color:rgba(232,83,42,.4)">NorthStar Digital LLC</span> &nbsp;&middot;&nbsp; Founder Westyn Ardoin</p>
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+'use strict';
+
 // ═══════════════════════════════════════════
 //  CONSTANTS
 // ═══════════════════════════════════════════
-const HOURS_DATA = [
+const HOURS = [
   {day:'Monday',    open:'10:00', close:'18:00'},
   {day:'Tuesday',   open:'10:00', close:'18:00'},
   {day:'Wednesday', open:'10:00', close:'18:00'},
@@ -810,13 +778,75 @@ const HOURS_DATA = [
   {day:'Sunday',    open:'10:00', close:'15:00'}
 ];
 
+const INLINE_MENU = [
+  {id:'bbq',label:'BBQ PLATES',icon:'🔥',color:'#C43C10',rimColor:'rgba(232,83,42,.55)',note:'Every plate served with your choice of two sides',
+   items:[
+    {name:'Full Rack of Ribs',price:'$19.99',desc:'Our crown jewel. Smoked low-and-slow over hardwood for hours until the meat falls clean off the bone. Sweet, smoky, and built for sharing — or not.'},
+    {name:'Half Rack of Ribs',price:'$11.99',desc:'Same pit. Same patience. Same fall-off-the-bone tenderness. Half the rack, all the glory.'},
+    {name:'Pulled Pork Plate',price:'$9.99',desc:'Pork shoulder smoked low and slow then pulled by hand. Rich, tender, and kissed with our house seasoning.'},
+    {name:'Brisket Plate',price:'$10.99',desc:'The one regulars drive miles for. Slow-smoked until it practically melts — fork-tender with a deep, beautiful smoke ring.'},
+    {name:'Half Chicken Plate',price:'$9.99',desc:'A half bird with smoke-crisp skin and impossibly juicy meat inside. The pit does all the work.'},
+    {name:'Smoked Wings',price:'$7.99',desc:'Pit-seasoned wings, smoked low then finished hot for crispy skin. Tender, smoky, and dangerously snackable.'}
+  ]},
+  {id:'burgers',label:'BURGERS',icon:'🍔',color:'#8C4A12',rimColor:'rgba(180,100,30,.55)',note:'Includes one side · dressed with lettuce & tomato',
+   items:[
+    {name:'Hamburger',price:'$6.99',desc:'A straight-up half-pound patty on a toasted bun. Simple, dressed right, no fuss needed.'},
+    {name:'Cheeseburger',price:'$7.99',desc:'American or cheddar melted perfectly on our classic half-pound patty. A true Smokehouse staple.'},
+    {name:'Bacon Cheeseburger',price:'$8.99',desc:'Thick-cut bacon, melted cheese, and our half-pound patty stacked together. The full picture.'},
+    {name:'Chicken Sandwich',price:'$7.99',desc:'Crispy Southern-fried chicken on a toasted bun, dressed clean with lettuce and tomato.'}
+  ]},
+  {id:'poboys',label:"PO-BOYS",icon:'🥖',color:'#7A5010',rimColor:'rgba(180,130,40,.5)',note:"Includes one side · Louisiana-style dressed",
+   items:[
+    {name:'Ribeye Po-Boy',price:'$10.99',desc:'Shaved ribeye piled high on toasted French bread, dressed Louisiana-style. Messy in the best possible way.'},
+    {name:'Pulled Pork Sub',price:'$7.99',desc:'House-pulled pork on a toasted roll — the same pit-smoked pork from our plates, sandwiched up beautifully.'},
+    {name:'Brisket Sandwich',price:'$8.99',desc:'Sliced pit brisket on toasted bread. Smoke-forward, tender, worth every single bite.'},
+    {name:'Shrimp Po-Boy',price:'$8.99',desc:'Gulf shrimp battered and golden-fried, loaded onto French bread and dressed right. Classic Louisiana.'},
+    {name:'Crawfish Po-Boy',price:'$10.99',desc:'Louisiana crawfish tails, seasoned and fried crisp. This one tastes like the bayou on a good day.'},
+    {name:'Catfish Po-Boy',price:'$8.99',desc:'Southern-fried catfish on French bread — dressed, crispy, and unmistakably Louisiana.'}
+  ]},
+  {id:'sides',label:'SIDES',icon:'🫙',color:'#5A3C14',rimColor:'rgba(150,100,40,.5)',note:'Small $2.75 · Large $6.99 · Made in-house daily',
+   items:[
+    {name:'Baked Beans',price:'$2.75–$6.99',desc:'Slow-cooked beans in a smoky-sweet sauce. The kind you want a second scoop of without admitting it.'},
+    {name:'Corn Pudding',price:'$2.75–$6.99',desc:'A Smokehouse signature that customers rave about. Creamy, sweet, and savory all at once — order the large.'},
+    {name:'Potato Salad',price:'$2.75–$6.99',desc:'House-made Southern potato salad. Creamy, simple, and exactly what a great BBQ plate needs alongside it.'},
+    {name:'Cole Slaw',price:'$2.75–$6.99',desc:'Crisp and creamy slaw. The right cool contrast to a plate of hot smoked meat.'},
+    {name:'French Fries',price:'$2.75–$6.99',desc:'Hot, golden, and seasoned just right. The reliable choice that never disappoints.'},
+    {name:'Sweet Potato Waffle Fries',price:'$2.75–$6.99',desc:'Sweet potato waffled and fried — a little sweet, a little crispy, and a lot of fun.'}
+  ]},
+  {id:'cajun',label:'CAJUN',icon:'🌶',color:'#7A1A0A',rimColor:'rgba(200,60,20,.55)',note:"Deli-style specialty items · ask about daily availability",extra:"Cajun specialties are priced at market rate. Ask your server for today's prices.",
+   items:[
+    {name:'Steamed Boudin Links',price:'Market',desc:'Classic Louisiana boudin — seasoned rice and pork stuffed in a natural casing and steamed. Ask what is fresh today.'},
+    {name:'Boudin Balls',price:'Market',desc:'The item every first-timer orders and every regular comes back for. Deep-fried, crispy outside, creamy boudin inside.'},
+    {name:'Pepper Jack Boudin Balls',price:'Market',desc:'Our famous boudin balls with molten pepper jack inside. Spicy, creamy, deeply addictive.'},
+    {name:'Boudin Egg Rolls',price:'Market',desc:'Louisiana boudin wrapped in an egg roll skin and fried golden. Cajun-fusion done exactly right.'},
+    {name:'Meat Pies',price:'Market',desc:'Old Creole comfort — seasoned meat in a golden pastry shell. A slice of Louisiana culinary history.'},
+    {name:'Crawfish Pies',price:'Market',desc:'Gulf Coast crawfish tails in a buttery pastry shell. The flavors of South Louisiana in every bite.'}
+  ]},
+  {id:'specials',label:'SPECIALS',icon:'⭐',color:'#2A1A6B',rimColor:'rgba(100,80,200,.45)',note:"Chef's rotating specials",extra:'These are dinner specials reflecting seasonal ingredients and chef creativity. Availability varies — call ahead or ask your server.',
+   items:[
+    {name:'Thai Chili Wings',price:'$16',desc:'Smoked wings tossed in sweet Thai chili sauce. A bold East-meets-South mashup that works surprisingly, undeniably well.'},
+    {name:'Eggplant Pirogue',price:'$26',desc:'Eggplant hollowed into a pirogue and filled with a rich Cajun seafood stuffing. A true Louisiana original.'},
+    {name:'Blackened Lemon Fish',price:'$28',desc:'Blackened fillet with cream spinach and grilled crawfish tails. Elegant Southern seafood at its absolute peak.'},
+    {name:'BBQ Shrimp & Pork Chop',price:'$26',desc:"Jack Daniel's BBQ shrimp alongside a 14oz bone-in pork chop with mac and cheese and green beans."},
+    {name:'Grilled Salmon',price:'$28',desc:'Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious, and worth every cent.'},
+    {name:'Miss Mud Pie',price:'$7',desc:'The house dessert special. Chocolate, cream, crunch. We will let it speak for itself.'}
+  ]},
+  {id:'desserts',label:'DESSERTS',icon:'🍰',color:'#3A1A08',rimColor:'rgba(180,80,20,.4)',note:'House-made fresh daily',
+   items:[
+    {name:'Bread Pudding',price:'House-made',desc:'Old-school Louisiana bread pudding baked fresh in-house. Rich, custardy, and deeply comforting.'},
+    {name:'Creole Cream Cheesecake',price:'House-made',desc:'A Southern take on cheesecake using Creole cream cheese. Tangy, rich, and unlike any you have tried before.'},
+    {name:'Chocolate & Carrot Cake',price:'House-made',desc:'Two classics done right. Moist chocolate or classic carrot — both are worthy finishes to a great meal.'},
+    {name:'Strawberry Shortcake',price:'House-made',desc:'Light biscuit, fresh strawberries, and whipped cream. Simple, beautiful, and perfect when done this well.'}
+  ]}
+];
+
 const INLINE_SPECIALS = [
-  {date:"2026-03-19",name:"Blackened Lemon Fish",price:"$28",desc:"Blackened fillet with cream spinach and grilled crawfish tails. Elegant Southern seafood at its absolute peak."},
-  {date:"2026-03-19",name:"Thai Chili Wings",price:"$16",desc:"Smoked wings tossed in sweet Thai chili sauce. A bold East-meets-South mashup that works surprisingly, undeniably well."},
-  {date:"2026-03-19",name:"Eggplant Pirogue",price:"$26",desc:"Eggplant hollowed into a pirogue and filled with a rich Cajun seafood stuffing. A true Louisiana original."},
-  {date:"2026-03-19",name:"BBQ Shrimp & Pork Chop",price:"$26",desc:"Jack Daniel's BBQ shrimp alongside a 14oz bone-in pork chop with mac and cheese and green beans."},
-  {date:"2026-03-19",name:"Grilled Salmon",price:"$28",desc:"Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious, and worth every cent."},
-  {date:"2026-03-19",name:"Miss Mud Pie",price:"$7",desc:"The house dessert special. Chocolate, cream, crunch. We will let it speak for itself."}
+  {date:'2026-03-19',name:'Blackened Lemon Fish',price:'$28',desc:'Blackened fillet with cream spinach and grilled crawfish tails. Elegant Southern seafood at its absolute peak.'},
+  {date:'2026-03-19',name:'Thai Chili Wings',price:'$16',desc:'Smoked wings tossed in sweet Thai chili sauce. A bold East-meets-South mashup that works surprisingly, undeniably well.'},
+  {date:'2026-03-19',name:'Eggplant Pirogue',price:'$26',desc:'Eggplant hollowed into a pirogue and filled with a rich Cajun seafood stuffing. A true Louisiana original.'},
+  {date:'2026-03-19',name:"BBQ Shrimp & Pork Chop",price:'$26',desc:"Jack Daniel's BBQ shrimp alongside a 14oz bone-in pork chop with mac and cheese and green beans."},
+  {date:'2026-03-19',name:'Grilled Salmon',price:'$28',desc:'Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious, and worth every cent.'},
+  {date:'2026-03-19',name:'Miss Mud Pie',price:'$7',desc:'The house dessert special. Chocolate, cream, crunch. We will let it speak for itself.'}
 ];
 
 // ═══════════════════════════════════════════
@@ -828,84 +858,75 @@ if (!isTouch) document.body.classList.add('no-touch');
 // ═══════════════════════════════════════════
 //  HELPERS
 // ═══════════════════════════════════════════
-function todayStr() {
-  const d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+function fmt(h, m) {
+  const ap = h >= 12 ? 'PM' : 'AM', h12 = h % 12 || 12;
+  return h12 + (m ? ':' + String(m).padStart(2, '0') : '') + ' ' + ap;
 }
 
-function fmtTime(h, m) {
-  const ap = h >= 12 ? 'PM' : 'AM', h12 = h % 12 || 12;
-  return h12 + (m ? ':' + String(m).padStart(2,'0') : '') + ' ' + ap;
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function getTodayIndex() {
+  const di = new Date().getDay();
+  return di === 0 ? 6 : di - 1;
 }
 
 function isOpenNow() {
-  const now = new Date(), di = now.getDay(), ti = di === 0 ? 6 : di - 1;
-  const hm = now.getHours() * 60 + now.getMinutes(), th = HOURS_DATA[ti];
+  const now = new Date(), ti = getTodayIndex();
+  const hm = now.getHours() * 60 + now.getMinutes(), th = HOURS[ti];
   const [oh, om] = th.open.split(':').map(Number), [ch, cm] = th.close.split(':').map(Number);
   return hm >= oh * 60 + om && hm < ch * 60 + cm;
-}
-
-function todayIndex() {
-  const di = new Date().getDay();
-  return di === 0 ? 6 : di - 1;
 }
 
 // ═══════════════════════════════════════════
 //  HOURS UI
 // ═══════════════════════════════════════════
-function buildHoursStatus() {
+function buildStatus() {
   const open = isOpenNow();
-  const ti = todayIndex();
+  const cls = open ? 'open' : 'closed';
+  const txt = open ? 'Open Now' : 'Currently Closed';
 
   // Hero badge
-  const heroB = document.getElementById('hero-status');
-  const heroT = document.getElementById('hero-status-text');
-  if (heroB) heroB.className = 'status-badge ' + (open ? 'open' : 'closed');
-  if (heroT) heroT.textContent = open ? 'Open Now' : 'Currently Closed';
+  const badge = document.getElementById('hero-status');
+  const textEl = document.getElementById('hero-status-text');
+  if (badge) badge.className = 'status-badge ' + cls;
+  if (textEl) textEl.textContent = txt;
 
-  // Hours section badge
-  const hBadge = document.getElementById('hours-status-badge');
-  if (hBadge) {
-    hBadge.className = 'status-badge ' + (open ? 'open' : 'closed');
-    hBadge.innerHTML = '<span class="s-dot"></span>' + (open ? 'Open Now' : 'Currently Closed');
+  // Info section badge
+  const ib = document.getElementById('hours-status-badge');
+  if (ib) {
+    ib.className = 'status-badge ' + cls;
+    ib.innerHTML = '<span class="s-dot"></span>' + txt;
   }
 
-  // Info panel badge
-  const pBadge = document.getElementById('panel-hours-status');
-  if (pBadge) {
-    pBadge.className = 'hours-status ' + (open ? 'open-now' : 'closed-now');
-    pBadge.innerHTML = '<span class="status-dot"></span>' + (open ? 'Open Now' : 'Currently Closed');
-  }
-
-  // Section hours rows
-  const hRows = document.getElementById('hours-rows');
-  if (hRows) {
-    hRows.innerHTML = '';
-    HOURS_DATA.forEach((h, i) => {
-      const [oh, om] = h.open.split(':').map(Number), [ch, cm] = h.close.split(':').map(Number);
-      const row = document.createElement('div');
-      row.className = 'h-row';
-      row.innerHTML = '<span class="h-day' + (i === ti ? ' today' : '') + '">' + h.day + '</span>'
-        + '<span class="h-time">' + fmtTime(oh, om) + ' &ndash; ' + fmtTime(ch, cm) + '</span>';
-      hRows.appendChild(row);
-    });
-  }
-
-  // Panel hours rows
-  const pRows = document.getElementById('panel-hours-rows');
-  if (pRows) {
-    pRows.innerHTML = '';
-    HOURS_DATA.forEach((h, i) => {
-      const [oh, om] = h.open.split(':').map(Number), [ch, cm] = h.close.split(':').map(Number);
-      const row = document.createElement('div');
-      row.className = 'hours-row' + (i === ti ? ' today' : '');
-      row.innerHTML = '<span class="hours-day' + (i === ti ? ' today' : '') + '">' + h.day + '</span>'
-        + '<span class="hours-time">' + fmtTime(oh, om) + ' &ndash; ' + fmtTime(ch, cm) + '</span>';
-      pRows.appendChild(row);
-    });
+  // Panel badge
+  const pb = document.getElementById('panel-hours-status');
+  if (pb) {
+    pb.className = 'hours-status ' + (open ? 'open-now' : 'closed-now');
+    pb.innerHTML = '<span class="status-dot"></span>' + txt;
   }
 }
-buildHoursStatus();
+
+function buildHoursRows(containerId, rowClass, dayClass, timeClass, todayClass) {
+  const cont = document.getElementById(containerId);
+  if (!cont) return;
+  cont.innerHTML = '';
+  const ti = getTodayIndex();
+  HOURS.forEach((h, i) => {
+    const [oh, om] = h.open.split(':').map(Number), [ch, cm] = h.close.split(':').map(Number);
+    const row = document.createElement('div');
+    row.className = rowClass + (i === ti ? ' ' + (todayClass || 'today') : '');
+    row.innerHTML = '<span class="' + dayClass + (i === ti ? ' today' : '') + '">' + h.day + '</span>'
+                  + '<span class="' + timeClass + '">' + fmt(oh, om) + ' – ' + fmt(ch, cm) + '</span>';
+    cont.appendChild(row);
+  });
+}
+
+buildStatus();
+buildHoursRows('hours-rows', 'h-row', 'h-day', 'h-time');
+buildHoursRows('panel-hours-rows', 'hours-row', 'hours-day', 'hours-time');
 
 // ═══════════════════════════════════════════
 //  CURSOR
@@ -958,34 +979,15 @@ bgR(); window.addEventListener('resize', bgR);
 
 class SmokeP {
   constructor() { this.reset(true); }
-  reset(r = false) {
-    this.x = Math.random() * BW; this.y = r ? Math.random() * BH : BH + 20;
-    this.vx = (Math.random() - .5) * .3; this.vy = -(Math.random() * .55 + .12);
-    this.ra = 25 + Math.random() * 90; this.life = 0; this.maxLife = 260 + Math.random() * 380;
-    this.hue = 20 + Math.random() * 20;
-  }
+  reset(r = false) { this.x = Math.random() * BW; this.y = r ? Math.random() * BH : BH + 20; this.vx = (Math.random() - .5) * .3; this.vy = -(Math.random() * .55 + .12); this.ra = 25 + Math.random() * 90; this.life = 0; this.maxLife = 260 + Math.random() * 380; this.hue = 20 + Math.random() * 20; }
   step() { this.x += this.vx; this.y += this.vy; this.vx += Math.sin(this.life * .022) * .012; this.life++; if (this.life > this.maxLife || this.y < -150) this.reset(); }
-  draw() {
-    const a = Math.max(0, (1 - this.life / this.maxLife) * .13);
-    const g = sX.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.ra);
-    g.addColorStop(0, 'hsla(' + this.hue + ',40%,28%,' + a + ')');
-    g.addColorStop(1, 'hsla(' + this.hue + ',20%,10%,0)');
-    sX.fillStyle = g; sX.beginPath(); sX.arc(this.x, this.y, this.ra, 0, Math.PI * 2); sX.fill();
-  }
+  draw() { const a = Math.max(0, (1 - this.life / this.maxLife) * .13); const g = sX.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.ra); g.addColorStop(0, 'hsla(' + this.hue + ',40%,28%,' + a + ')'); g.addColorStop(1, 'hsla(' + this.hue + ',20%,10%,0)'); sX.fillStyle = g; sX.beginPath(); sX.arc(this.x, this.y, this.ra, 0, Math.PI * 2); sX.fill(); }
 }
 class EmberP {
   constructor() { this.reset(); }
-  reset() {
-    this.x = BW / 2 + (Math.random() - .5) * 140; this.y = BH * .7 + Math.random() * BH * .3;
-    this.vx = (Math.random() - .5) * .8; this.vy = -(Math.random() * 1.2 + .4);
-    this.r = .8 + Math.random() * 1.6; this.life = 0; this.maxLife = 60 + Math.random() * 120;
-  }
+  reset() { this.x = BW / 2 + (Math.random() - .5) * 140; this.y = BH * .7 + Math.random() * BH * .3; this.vx = (Math.random() - .5) * .8; this.vy = -(Math.random() * 1.2 + .4); this.r = .8 + Math.random() * 1.6; this.life = 0; this.maxLife = 60 + Math.random() * 120; }
   step() { this.x += this.vx + Math.sin(this.life * .1) * .2; this.y += this.vy; this.vy *= .98; this.life++; if (this.life > this.maxLife) this.reset(); }
-  draw() {
-    const a = Math.max(0, (1 - this.life / this.maxLife) * .7);
-    sX.beginPath(); sX.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-    sX.fillStyle = 'rgba(232,140,40,' + a + ')'; sX.fill();
-  }
+  draw() { const a = Math.max(0, (1 - this.life / this.maxLife) * .7); sX.beginPath(); sX.arc(this.x, this.y, this.r, 0, Math.PI * 2); sX.fillStyle = 'rgba(232,140,40,' + a + ')'; sX.fill(); }
 }
 
 const sPs = [], ePs = [];
@@ -1005,25 +1007,9 @@ aR(); window.addEventListener('resize', aR);
 
 class AshF {
   constructor() { this.reset(true); }
-  reset(r = false) {
-    this.x = Math.random() * window.innerWidth; this.y = r ? Math.random() * window.innerHeight : -6;
-    this.ra = .4 + Math.random() * 1.4; this.vx = (Math.random() - .5) * .4; this.vy = .15 + Math.random() * .55;
-    this.wb = Math.random() * Math.PI * 2; this.ws = .008 + Math.random() * .018; this.al = .08 + Math.random() * .35;
-    this.ts = .015 + Math.random() * .03; this.tp = Math.random() * Math.PI * 2;
-    this.isStar = Math.random() < .12; if (this.isStar) this.ra = .8 + Math.random() * 2.2;
-  }
+  reset(r = false) { this.x = Math.random() * window.innerWidth; this.y = r ? Math.random() * window.innerHeight : -6; this.ra = .4 + Math.random() * 1.4; this.vx = (Math.random() - .5) * .4; this.vy = .15 + Math.random() * .55; this.wb = Math.random() * Math.PI * 2; this.ws = .008 + Math.random() * .018; this.al = .08 + Math.random() * .35; this.ts = .015 + Math.random() * .03; this.tp = Math.random() * Math.PI * 2; this.isStar = Math.random() < .12; if (this.isStar) this.ra = .8 + Math.random() * 2.2; }
   step() { this.wb += this.ws; this.tp += this.ts; this.x += this.vx + Math.sin(this.wb) * .3; this.y += this.vy; if (this.y > window.innerHeight + 10) this.reset(); }
-  draw() {
-    const tw = .6 + .4 * Math.sin(this.tp), a = this.al * tw;
-    if (this.isStar) {
-      aX.save(); aX.translate(this.x, this.y); aX.fillStyle = 'rgba(212,197,160,' + a + ')';
-      for (let i = 0; i < 4; i++) { const ag = i * Math.PI / 2, ln = this.ra * 2.2; aX.beginPath(); aX.ellipse(0, 0, this.ra * .35, ln, ag, 0, Math.PI * 2); aX.fill(); }
-      aX.restore();
-    } else {
-      aX.beginPath(); aX.arc(this.x, this.y, this.ra, 0, Math.PI * 2);
-      aX.fillStyle = 'rgba(180,160,120,' + a + ')'; aX.fill();
-    }
-  }
+  draw() { const tw = .6 + .4 * Math.sin(this.tp), a = this.al * tw; if (this.isStar) { aX.save(); aX.translate(this.x, this.y); aX.fillStyle = 'rgba(212,197,160,' + a + ')'; for (let i = 0; i < 4; i++) { const ag = i * Math.PI / 2, ln = this.ra * 2.2; aX.beginPath(); aX.ellipse(0, 0, this.ra * .35, ln, ag, 0, Math.PI * 2); aX.fill(); } aX.restore(); } else { aX.beginPath(); aX.arc(this.x, this.y, this.ra, 0, Math.PI * 2); aX.fillStyle = 'rgba(180,160,120,' + a + ')'; aX.fill(); } }
 }
 const aFs = [];
 for (let i = 0; i < 220; i++) aFs.push(new AshF());
@@ -1053,11 +1039,7 @@ class FlameP {
   }
   step() { this.x += this.vx; this.y += this.vy; this.vy += .18; this.vx *= .95; this.life++; }
   isDead() { return this.life >= this.maxLife; }
-  draw() {
-    const t = this.life / this.maxLife, a = Math.max(0, (1 - t) * (1 - t) * .9), r = this.r * (1 - t * .5);
-    fX.beginPath(); fX.arc(this.x, this.y, r, 0, Math.PI * 2);
-    fX.fillStyle = 'hsla(' + this.hue + ',90%,' + (55 + t * 20) + '%,' + a + ')'; fX.fill();
-  }
+  draw() { const t = this.life / this.maxLife, a = Math.max(0, (1 - t) * (1 - t) * .9), r = this.r * (1 - t * .5); fX.beginPath(); fX.arc(this.x, this.y, r, 0, Math.PI * 2); fX.fillStyle = 'hsla(' + this.hue + ',90%,' + (55 + t * 20) + '%,' + a + ')'; fX.fill(); }
 }
 
 function triggerBurst(sx, sy) {
@@ -1101,7 +1083,6 @@ function polar(deg, r) {
 let angle = 0, targetAngle = 0, velocity = 0;
 let isDragging = false, dragStartA = 0, dragStartW = 0, lastDA = 0, lastDT = 0;
 let rafId = null, searchActive = false, searchQuery = '';
-let currentSpecialsCat = null;
 
 function setHub(m, s) {
   const hm = document.getElementById('hub-main');
@@ -1115,8 +1096,7 @@ function buildItemRing(cat) {
   const mob = window.innerWidth <= 640;
   const items = cat.items, n = items.length;
   const oR = mob ? 200 : 226;
-  const baseNR = mob ? (n <= 4 ? 68 : n <= 6 ? 60 : 52) : (n <= 4 ? 58 : n <= 6 ? 50 : 42);
-  const nR = baseNR;
+  const nR = mob ? (n <= 4 ? 68 : n <= 6 ? 60 : 52) : (n <= 4 ? 58 : n <= 6 ? 50 : 42);
 
   wg.appendChild(el('circle', {r: oR, class: 'orbit-ring'}));
   wg.appendChild(el('circle', {r: oR + nR + 16, class: 'orbit-ring-outer'}));
@@ -1133,23 +1113,21 @@ function buildItemRing(cat) {
     const g = el('g', {class: 'node-g', 'data-name': item.name, 'data-cat': cat.label, transform: 'translate(' + ccx + ',' + ccy + ')'});
     g.appendChild(el('line', {x1: 0, y1: 0, x2: -ccx * .88, y2: -ccy * .88, class: 'connector'}));
     g.appendChild(el('circle', {r: nR, cx: 0, cy: 0, class: 'node-circle-bg', fill: 'url(#nodeGrad)'}));
-    g.appendChild(el('circle', {r: nR, cx: 0, cy: 0, class: 'node-circle-rim', stroke: cat.rimColor || 'rgba(232,83,42,.55)'}));
-    g.appendChild(el('circle', {r: nR - 7, cx: 0, cy: 0, class: 'node-circle-inner', stroke: cat.color || '#C43C10'}));
-    g.appendChild(el('circle', {r: nR, cx: 0, cy: 0, fill: cat.color || '#C43C10', opacity: '.1'}));
+    g.appendChild(el('circle', {r: nR, cx: 0, cy: 0, class: 'node-circle-rim', stroke: cat.rimColor}));
+    g.appendChild(el('circle', {r: nR - 7, cx: 0, cy: 0, class: 'node-circle-inner', stroke: cat.color}));
+    g.appendChild(el('circle', {r: nR, cx: 0, cy: 0, fill: cat.color, opacity: '.1'}));
 
     const words = item.name.split(' ');
     let lines = [], cur = '';
     const mC = mob ? (nR < 56 ? 10 : nR < 64 ? 12 : 14) : (nR < 46 ? 9 : nR < 52 ? 11 : 13);
-    words.forEach(w => {
-      const t = cur ? cur + ' ' + w : w;
-      if (t.length > mC && cur) { lines.push(cur); cur = w; } else cur = t;
-    });
+    words.forEach(w => { const t = cur ? cur + ' ' + w : w; if (t.length > mC && cur) { lines.push(cur); cur = w; } else cur = t; });
     if (cur) lines.push(cur);
     lines = lines.slice(0, 3);
 
     const fs = mob ? (nR < 56 ? 12 : nR < 64 ? 13 : 14) : (nR < 46 ? 9 : nR < 52 ? 10 : 11);
     const pfs = mob ? (nR < 56 ? 11 : 13) : (nR < 46 ? 9 : 11);
     const lh = fs + 3, tH = lines.length * lh, sY = -(tH / 2) - (item.price ? 7 : 0);
+
     lines.forEach((ln, li) => {
       const t = el('text', {x: 0, y: sY + li * lh, class: 'item-name-text', 'font-size': fs, 'text-anchor': 'middle', 'dominant-baseline': 'central'});
       t.textContent = ln; g.appendChild(t);
@@ -1170,6 +1148,28 @@ function buildItemRing(cat) {
   applySearch();
 }
 
+function transWheel(buildFn, onBefore) {
+  cancelAnimationFrame(rafId);
+  wg.style.transition = 'opacity .28s ease,transform .28s ease';
+  wg.style.opacity = '0'; wg.style.transform = 'rotate(' + angle + 'deg) scale(.65)';
+  setTimeout(() => {
+    if (onBefore) onBefore();
+    buildFn();
+    angle = 0; targetAngle = 0; velocity = 0;
+    wg.setAttribute('transform', 'rotate(0)');
+    void wg.offsetWidth;
+    wg.style.transition = 'opacity .38s ease,transform .38s cubic-bezier(.2,.9,.3,1)';
+    wg.style.opacity = '1'; wg.style.transform = 'rotate(0) scale(1)';
+  }, 290);
+}
+
+document.getElementById('back-btn').addEventListener('click', () => {
+  // On homepage there's no category ring; just re-init specials
+  initSpecialsWheel(window._SPECIALS || INLINE_SPECIALS);
+  document.getElementById('back-btn').classList.remove('show');
+  document.getElementById('drag-hint').style.opacity = '.65';
+});
+
 // ═══════════════════════════════════════════
 //  POPUP
 // ═══════════════════════════════════════════
@@ -1181,36 +1181,36 @@ function openPopup(item, cat) {
   const pw = document.getElementById('p-price-wrap');
   pw.innerHTML = '';
   if (item.price === 'Market') {
-    const b = document.createElement('div'); b.className = 'popup-market';
-    b.textContent = "Ask your server for today's price"; pw.appendChild(b);
+    const b = document.createElement('div'); b.className = 'popup-market'; b.textContent = "Ask your server for today's price"; pw.appendChild(b);
   } else {
-    const pp = document.createElement('div'); pp.className = 'popup-price';
-    pp.textContent = item.price; pw.appendChild(pp);
+    const pp = document.createElement('div'); pp.className = 'popup-price'; pp.textContent = item.price; pw.appendChild(pp);
   }
   const ex = document.getElementById('p-extra');
-  if (cat.extra) { ex.textContent = cat.extra; ex.style.display = 'block'; }
-  else ex.style.display = 'none';
+  if (cat.extra) { ex.textContent = cat.extra; ex.style.display = 'block'; } else ex.style.display = 'none';
   document.getElementById('popup-overlay').classList.add('open');
 }
-
-function closePopup() { document.getElementById('popup-overlay').classList.remove('open'); }
+function closePopup() {
+  document.getElementById('popup-overlay').classList.remove('open');
+}
 document.getElementById('popup-close').addEventListener('click', closePopup);
 document.getElementById('popup-overlay').addEventListener('click', e => { if (e.target === document.getElementById('popup-overlay')) closePopup(); });
 
 // ═══════════════════════════════════════════
 //  INFO PANEL
 // ═══════════════════════════════════════════
-function openInfoPanel() {
+function openPanel() {
   document.getElementById('info-panel').classList.add('open');
   document.getElementById('panel-backdrop').classList.add('open');
+  buildStatus(); // refresh status when opening
+  buildHoursRows('panel-hours-rows', 'hours-row', 'hours-day', 'hours-time');
 }
-function closeInfoPanel() {
+function closePanel() {
   document.getElementById('info-panel').classList.remove('open');
   document.getElementById('panel-backdrop').classList.remove('open');
 }
-document.getElementById('info-btn').addEventListener('click', openInfoPanel);
-document.getElementById('panel-close').addEventListener('click', closeInfoPanel);
-document.getElementById('panel-backdrop').addEventListener('click', closeInfoPanel);
+document.getElementById('info-btn').addEventListener('click', openPanel);
+document.getElementById('panel-close').addEventListener('click', closePanel);
+document.getElementById('panel-backdrop').addEventListener('click', closePanel);
 
 // ═══════════════════════════════════════════
 //  LIST PANEL
@@ -1218,25 +1218,30 @@ document.getElementById('panel-backdrop').addEventListener('click', closeInfoPan
 function buildList(q = '') {
   const cont = document.getElementById('list-content');
   cont.innerHTML = '';
-  if (!currentSpecialsCat || !currentSpecialsCat.items.length) {
-    const nr = document.createElement('div'); nr.className = 'list-no-results';
-    nr.textContent = 'No specials posted for today.'; cont.appendChild(nr); return;
-  }
   const sq = q.toLowerCase().trim();
-  const cat = currentSpecialsCat;
-  const its = cat.items.filter(it => !sq || it.name.toLowerCase().includes(sq) || it.desc.toLowerCase().includes(sq));
-  if (its.length) {
-    const h = document.createElement('div'); h.className = 'list-cat-hdr';
-    h.innerHTML = '&#11088; ' + cat.label; cont.appendChild(h);
+  let total = 0;
+  const menuData = window._MENU || INLINE_MENU;
+  menuData.forEach(cat => {
+    const its = cat.items.filter(it => !sq || it.name.toLowerCase().includes(sq) || it.desc.toLowerCase().includes(sq) || cat.label.toLowerCase().includes(sq));
+    if (!its.length) return;
+    total += its.length;
+    const h = document.createElement('div');
+    h.className = 'list-cat-hdr';
+    h.innerHTML = '<span>' + cat.icon + '</span>' + cat.label;
+    cont.appendChild(h);
     its.forEach(item => {
-      const r = document.createElement('div'); r.className = 'list-item-row';
+      const r = document.createElement('div');
+      r.className = 'list-item-row';
       r.innerHTML = '<span class="list-item-name">' + item.name + '</span><span class="list-item-price">' + (item.price === 'Market' ? 'Mkt Price' : item.price) + '</span>';
       r.addEventListener('click', () => openPopup(item, cat));
       cont.appendChild(r);
     });
-  } else {
-    const nr = document.createElement('div'); nr.className = 'list-no-results';
-    nr.textContent = 'No items match your search.'; cont.appendChild(nr);
+  });
+  if (sq && !total) {
+    const nr = document.createElement('div');
+    nr.className = 'list-no-results';
+    nr.textContent = 'No items match your search.';
+    cont.appendChild(nr);
   }
 }
 
@@ -1251,8 +1256,7 @@ function closeList() {
   document.getElementById('list-backdrop').classList.remove('open');
   document.getElementById('list-btn').classList.remove('active');
 }
-document.getElementById('list-btn').addEventListener('click', () =>
-  document.getElementById('list-panel').classList.contains('open') ? closeList() : openList());
+document.getElementById('list-btn').addEventListener('click', () => document.getElementById('list-panel').classList.contains('open') ? closeList() : openList());
 document.getElementById('list-close').addEventListener('click', closeList);
 document.getElementById('list-backdrop').addEventListener('click', closeList);
 document.getElementById('list-filter').addEventListener('input', e => buildList(e.target.value));
@@ -1265,20 +1269,10 @@ const sCl = document.getElementById('search-clear');
 const sWr = document.getElementById('search-wrap');
 const sBt = document.getElementById('search-btn');
 
-function openSearch() {
-  searchActive = true; sBt.classList.add('active'); sWr.classList.add('visible');
-  document.body.classList.add('cur-search'); setTimeout(() => sIn.focus(), 80);
-}
-function closeSearch() {
-  searchActive = false; sBt.classList.remove('active'); sWr.classList.remove('visible');
-  document.body.classList.remove('cur-search'); sIn.value = ''; searchQuery = ''; applySearch();
-}
+function openSearch() { searchActive = true; sBt.classList.add('active'); sWr.classList.add('visible'); document.body.classList.add('cur-search'); setTimeout(() => sIn.focus(), 80); }
+function closeSearch() { searchActive = false; sBt.classList.remove('active'); sWr.classList.remove('visible'); document.body.classList.remove('cur-search'); sIn.value = ''; searchQuery = ''; applySearch(); }
 sBt.addEventListener('click', () => searchActive ? closeSearch() : openSearch());
-sIn.addEventListener('input', () => {
-  searchQuery = sIn.value.trim().toLowerCase();
-  sCl.classList.toggle('show', searchQuery.length > 0);
-  applySearch();
-});
+sIn.addEventListener('input', () => { searchQuery = sIn.value.trim().toLowerCase(); sCl.classList.toggle('show', searchQuery.length > 0); applySearch(); });
 sCl.addEventListener('click', () => { sIn.value = ''; searchQuery = ''; applySearch(); sCl.classList.remove('show'); sIn.focus(); });
 sIn.addEventListener('mousedown', e => e.stopPropagation());
 
@@ -1286,8 +1280,7 @@ function applySearch() {
   const q = searchQuery, nodes = wg.querySelectorAll('.node-g');
   if (!q) { nodes.forEach(n => { n.classList.remove('dimmed', 'highlighted'); }); return; }
   nodes.forEach(n => {
-    const name = (n.getAttribute('data-name') || '').toLowerCase();
-    const cat2 = (n.getAttribute('data-cat') || '').toLowerCase();
+    const name = (n.getAttribute('data-name') || '').toLowerCase(), cat2 = (n.getAttribute('data-cat') || '').toLowerCase();
     const m = name.includes(q) || cat2.includes(q);
     n.classList.toggle('dimmed', !m);
     n.classList.toggle('highlighted', m);
@@ -1298,20 +1291,16 @@ function applySearch() {
 //  DRAG TO SPIN
 // ═══════════════════════════════════════════
 const svg2 = document.getElementById('wheel-svg');
+const circOverlay = document.getElementById('circMenuOverlay');
 
-function getSVGC() {
-  const r = svg2.getBoundingClientRect();
-  return [r.left + r.width / 2, r.top + r.height / 2];
-}
-function getA(ex, ey) {
-  const [cx2, cy2] = getSVGC();
-  return Math.atan2(ey - cy2, ex - cx2) * 180 / Math.PI;
-}
+function getSVGC() { const r = svg2.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+function getA(ex, ey) { const [cx2, cy2] = getSVGC(); return Math.atan2(ey - cy2, ex - cx2) * 180 / Math.PI; }
+
 function startDrag(ex, ey) {
   if (document.getElementById('popup-overlay').classList.contains('open')) return;
   if (document.getElementById('info-panel').classList.contains('open')) return;
   if (document.getElementById('list-panel').classList.contains('open')) return;
-  if (document.getElementById('circMenuOverlay').classList.contains('open')) return;
+  if (circOverlay.classList.contains('open')) return;
   if (searchActive && document.activeElement === sIn) return;
   cancelAnimationFrame(rafId);
   isDragging = true; velocity = 0;
@@ -1325,12 +1314,14 @@ function moveDrag(ex, ey) {
   while (d > 180) d -= 360; while (d < -180) d += 360;
   const now = Date.now(), dt = now - lastDT;
   if (dt > 0) velocity = (a - lastDA) / dt * 16;
-  lastDA = a; lastDT = now; angle = dragStartW + d;
+  lastDA = a; lastDT = now;
+  angle = dragStartW + d;
   wg.setAttribute('transform', 'rotate(' + angle + ')');
 }
 function endDrag() {
   if (!isDragging) return;
-  isDragging = false; document.body.classList.remove('cur-drag');
+  isDragging = false;
+  document.body.classList.remove('cur-drag');
   targetAngle = angle + velocity * 22;
   spinCoast();
 }
@@ -1341,10 +1332,7 @@ function spinCoast() {
   if (Math.abs(d) > .04) rafId = requestAnimationFrame(spinCoast);
 }
 
-svg2.addEventListener('mousedown', e => {
-  if (e.target.closest('#hub,#back-btn')) return;
-  e.preventDefault(); startDrag(e.clientX, e.clientY);
-});
+svg2.addEventListener('mousedown', e => { if (e.target.closest('#hub,#back-btn')) return; e.preventDefault(); startDrag(e.clientX, e.clientY); });
 window.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
 window.addEventListener('mouseup', endDrag);
 svg2.addEventListener('touchstart', e => {
@@ -1353,9 +1341,7 @@ svg2.addEventListener('touchstart', e => {
   document.body.style.overflow = 'hidden';
   document.documentElement.style.overflow = 'hidden';
 }, {passive: true});
-window.addEventListener('touchmove', e => {
-  const t = e.touches[0]; moveDrag(t.clientX, t.clientY);
-}, {passive: true});
+window.addEventListener('touchmove', e => { const t = e.touches[0]; moveDrag(t.clientX, t.clientY); }, {passive: true});
 window.addEventListener('touchend', () => {
   endDrag();
   document.body.style.overflow = '';
@@ -1368,7 +1354,7 @@ window.addEventListener('touchcancel', () => {
 
 // Global ESC
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closePopup(); closeInfoPanel(); closeList(); closeSearch(); }
+  if (e.key === 'Escape') { closePopup(); closePanel(); closeList(); closeSearch(); }
 });
 
 // ═══════════════════════════════════════════
@@ -1394,7 +1380,6 @@ zoomSlider.addEventListener('input', () => applyZoom(parseFloat(zoomSlider.value
 zoomOutBtn.addEventListener('click', () => applyZoom(zoomLevel - 0.25));
 zoomInBtn.addEventListener('click', () => applyZoom(zoomLevel + 0.25));
 
-// Pinch to zoom
 let pinchDist0 = 0, pinchZoom0 = 1;
 document.getElementById('stage').addEventListener('touchstart', e => {
   if (e.touches.length === 2) {
@@ -1410,96 +1395,73 @@ document.getElementById('stage').addEventListener('touchmove', e => {
 }, {passive: true});
 
 // ═══════════════════════════════════════════
-//  SPECIALS INIT
+//  SPECIALS WHEEL INIT
 // ═══════════════════════════════════════════
-function initSpecials(SPECIALS) {
+function initSpecialsWheel(SPECIALS) {
+  window._SPECIALS = SPECIALS;
   const todayItems = SPECIALS.filter(s => s.date === todayStr());
-  currentSpecialsCat = {
-    id: 'specials', label: "TODAY'S SPECIALS",
-    color: '#C43C10', rimColor: 'rgba(232,83,42,.55)',
-    note: "Chef's rotating specials · Call (225) 245-5046 to confirm availability",
-    extra: null, items: todayItems
-  };
-  const wheelWrap = document.getElementById('specials-wheel-wrap');
+  const wheelWrap    = document.getElementById('specials-wheel-wrap');
   const lockedNotice = document.getElementById('specials-locked');
+
   if (todayItems.length === 0) {
-    if (wheelWrap) wheelWrap.style.display = 'none';
+    if (wheelWrap)    wheelWrap.style.display = 'none';
     if (lockedNotice) lockedNotice.style.display = 'block';
   } else {
-    buildItemRing(currentSpecialsCat);
+    if (wheelWrap)    wheelWrap.style.display = '';
+    if (lockedNotice) lockedNotice.style.display = 'none';
+    const cat = {
+      id: 'specials', label: "TODAY'S SPECIALS", color: '#C43C10',
+      rimColor: 'rgba(232,83,42,.55)',
+      note: "Chef's rotating specials · Call (225) 245-5046 to confirm availability",
+      extra: null, items: todayItems
+    };
+    buildItemRing(cat);
     setHub('SPECIALS', 'TAP TO VIEW');
+    document.getElementById('drag-hint').style.opacity = '.65';
   }
+  setTimeout(() => { if (wg.classList) wg.classList.remove('hint-spin'); }, 4000);
 }
-
-// Try to load from site-data.js, fallback to inline
-fetch('site-data.js')
-  .then(r => { if (!r.ok) throw new Error('fetch failed'); return r.text(); })
-  .then(src => {
-    try {
-      const fn = new Function(src + '; return typeof SPECIALS !== "undefined" ? SPECIALS : null;');
-      const result = fn();
-      initSpecials(result || INLINE_SPECIALS);
-    } catch (e) {
-      console.warn('Could not parse site-data.js:', e);
-      initSpecials(INLINE_SPECIALS);
-    }
-  })
-  .catch(() => initSpecials(INLINE_SPECIALS));
-
-// Remove hint spin after delay
-setTimeout(() => { if (wg.classList) wg.classList.remove('hint-spin'); }, 4000);
 
 // ═══════════════════════════════════════════
 //  CIRCULAR NAV
 // ═══════════════════════════════════════════
-const circOverlay = document.getElementById('circMenuOverlay');
+(function() {
+  const circLeft   = document.getElementById('circNavLeft');
+  const circBottom = document.getElementById('circNavBottom');
+  const overlay    = document.getElementById('circMenuOverlay');
+  const closeBtn   = document.getElementById('circClose');
+  const homeBtn    = document.getElementById('circHomeBtn');
 
-function openCircNav() { circOverlay.classList.add('open'); }
-function closeCircNav() { circOverlay.classList.remove('open'); }
+  function openCirc() { overlay.classList.add('open'); circLeft.classList.add('nav-disabled'); circBottom.classList.add('nav-disabled'); }
+  function closeCirc() { overlay.classList.remove('open'); circLeft.classList.remove('nav-disabled'); circBottom.classList.remove('nav-disabled'); }
 
-document.getElementById('circNavLeft').addEventListener('click', openCircNav);
-document.getElementById('circNavBottom').addEventListener('click', openCircNav);
-document.getElementById('circClose').addEventListener('click', closeCircNav);
-document.getElementById('circHomeBtn').addEventListener('click', e => {
-  e.stopPropagation(); closeCircNav();
-  window.scrollTo({top: 0, behavior: 'smooth'});
-});
-circOverlay.addEventListener('click', e => { if (e.target === circOverlay) closeCircNav(); });
+  circLeft.addEventListener('click', openCirc);
+  circBottom.addEventListener('click', openCirc);
+  closeBtn.addEventListener('click', closeCirc);
+  homeBtn.addEventListener('click', e => { e.stopPropagation(); closeCirc(); window.scrollTo({top: 0, behavior: 'smooth'}); });
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeCirc(); });
 
-document.querySelectorAll('.circ-menu-item').forEach(item => {
-  item.addEventListener('click', () => {
-    const href = item.getAttribute('data-href');
-    closeCircNav();
-    if (href) window.location.href = href;
+  document.querySelectorAll('.circ-menu-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const href = item.getAttribute('data-href');
+      closeCirc();
+      if (href) window.location.href = href;
+    });
   });
-});
-
-// ═══════════════════════════════════════════
-//  MOBILE NAV DRAWER
-// ═══════════════════════════════════════════
-const navDrawer = document.getElementById('site-nav-drawer');
-const navToggle = document.getElementById('site-nav-toggle');
-const drawerClose = document.getElementById('site-drawer-close');
-
-navToggle.addEventListener('click', () => {
-  navDrawer.classList.toggle('open');
-  navToggle.setAttribute('aria-expanded', navDrawer.classList.contains('open'));
-});
-drawerClose.addEventListener('click', () => {
-  navDrawer.classList.remove('open');
-  navToggle.setAttribute('aria-expanded', 'false');
-});
+})();
 
 // ═══════════════════════════════════════════
 //  LOGO NAV OVERLAY
 // ═══════════════════════════════════════════
-(function () {
-  const trigger = document.getElementById('logoNavTrigger');
-  const overlay = document.getElementById('logoNavOverlay');
+(function() {
+  const trigger  = document.getElementById('logoNavTrigger');
+  const overlay  = document.getElementById('logoNavOverlay');
   const closeBtn = document.getElementById('lnoClose');
-  const center = document.getElementById('lnoCenter');
+  const center   = document.getElementById('lnoCenter');
   const navLabel = document.getElementById('logoNavLabel');
   if (!trigger || !overlay || !center) return;
+
+
 
   const NAV_ITEMS = [
     {label: 'Menu',     icon: 'fa-utensils',    href: 'menu.html'},
@@ -1508,7 +1470,7 @@ drawerClose.addEventListener('click', () => {
     {label: 'Gallery',  icon: 'fa-images',      href: 'gallery.html'},
     {label: 'Contact',  icon: 'fa-envelope',    href: 'contact.html'},
     {label: 'Catering', icon: 'fa-fire-burner', href: 'catering.html'},
-    {label: 'Visit',    icon: 'fa-location-dot', href: '#info-section'},
+    {label: 'Visit',    icon: 'fa-location-dot',href: '#info-section'},
     {label: 'Call',     icon: 'fa-phone',       href: 'tel:+12252455046'},
     {label: 'Specials', icon: 'fa-star',        href: '#specials-section'}
   ];
@@ -1519,13 +1481,13 @@ drawerClose.addEventListener('click', () => {
     NAV_ITEMS.forEach((item, i) => {
       const angle = (i / NAV_ITEMS.length) * Math.PI * 2 - Math.PI / 2;
       const tx = Math.cos(angle) * r, ty = Math.sin(angle) * r;
-      const e2 = document.createElement('div');
-      e2.className = 'lno-item';
-      e2.style.setProperty('--tx', tx + 'px');
-      e2.style.setProperty('--ty', ty + 'px');
-      e2.innerHTML = '<span class="lno-icon"><i class="fas ' + item.icon + '"></i></span><span class="lno-label">' + item.label + '</span>';
-      e2.addEventListener('click', () => { closeNav(); window.location.href = item.href; });
-      center.appendChild(e2);
+      const e = document.createElement('div');
+      e.className = 'lno-item';
+      e.style.setProperty('--tx', tx + 'px');
+      e.style.setProperty('--ty', ty + 'px');
+      e.innerHTML = '<span class="lno-icon"><i class="fas ' + item.icon + '"></i></span><span class="lno-label">' + item.label + '</span>';
+      e.addEventListener('click', () => { closeNav(); window.location.href = item.href; });
+      center.appendChild(e);
     });
   }
 
@@ -1533,17 +1495,13 @@ drawerClose.addEventListener('click', () => {
     buildItems();
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
-    setTimeout(() => {
-      center.querySelectorAll('.lno-item').forEach((e2, i) => {
-        setTimeout(() => e2.classList.add('placed'), i * 45);
-      });
-    }, 60);
+    setTimeout(() => { center.querySelectorAll('.lno-item').forEach((e, i) => { setTimeout(() => e.classList.add('placed'), i * 45); }); }, 60);
     if (navLabel) navLabel.style.opacity = '0';
-    try { localStorage.setItem('lno-seen', '1'); } catch (e) {}
+    try { localStorage.setItem('lno-seen', '1'); } catch(e) {}
   }
 
   function closeNav() {
-    center.querySelectorAll('.lno-item').forEach(e2 => e2.classList.remove('placed'));
+    center.querySelectorAll('.lno-item').forEach(e => e.classList.remove('placed'));
     setTimeout(() => overlay.classList.remove('open'), 320);
     document.body.style.overflow = '';
   }
@@ -1554,27 +1512,66 @@ drawerClose.addEventListener('click', () => {
   overlay.addEventListener('click', e => { if (e.target === overlay) closeNav(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeNav(); });
 
-  // First-visit preview
-  let seen = false;
-  try { seen = !!localStorage.getItem('lno-seen'); } catch (e) {}
-  if (!seen) {
+  // ── AUTO-OPEN EVERY SESSION ──
+  // Opens the nav overlay 1s after load, holds for 2s, then closes.
+  // If the user taps anything before the 2s is up, it closes immediately
+  // and stays open (normal interactive mode) or navigates.
+  let autoCloseTimer = null;
+  let autoNavActive = false;
+
+  function startAutoOpen() {
     setTimeout(() => {
+      // Don't auto-open if user has already interacted with the page
+      if (document.getElementById('popup-overlay').classList.contains('open')) return;
+      autoNavActive = true;
       buildItems();
       overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      // Stagger items in
       setTimeout(() => {
-        center.querySelectorAll('.lno-item').forEach((e2, i) => {
-          setTimeout(() => e2.classList.add('placed'), i * 40);
+        center.querySelectorAll('.lno-item').forEach((e, i) => {
+          setTimeout(() => e.classList.add('placed'), i * 40);
         });
       }, 60);
-      setTimeout(() => {
-        center.querySelectorAll('.lno-item').forEach(e2 => e2.classList.remove('placed'));
-        setTimeout(() => overlay.classList.remove('open'), 340);
-      }, 2000);
-    }, 1400);
+      // Auto-close after 2s
+      autoCloseTimer = setTimeout(() => {
+        if (autoNavActive) {
+          autoNavActive = false;
+          center.querySelectorAll('.lno-item').forEach(e => e.classList.remove('placed'));
+          setTimeout(() => {
+            overlay.classList.remove('open');
+            document.body.style.overflow = '';
+          }, 340);
+        }
+      }, 2200);
+    }, 1000);
   }
+
+  // If user taps the trigger during auto-open, cancel auto-close and keep nav open
+  trigger.addEventListener('click', () => {
+    if (autoNavActive) {
+      autoNavActive = false;
+      clearTimeout(autoCloseTimer);
+      // Nav stays open — openNav() below will handle normal flow
+    }
+  });
+
+  startAutoOpen();
 
   window.addEventListener('resize', () => { if (overlay.classList.contains('open')) buildItems(); });
 })();
-</script>
-</body>
-</html>
+
+// ═══════════════════════════════════════════
+//  LOAD DATA & INIT
+// ═══════════════════════════════════════════
+fetch('site-data.js')
+  .then(r => { if (!r.ok) throw new Error('fetch failed'); return r.text(); })
+  .then(src => {
+    try {
+      // Extract MENU
+      const menuFn = new Function(src + '; return typeof MENU !== "undefined" ? MENU : null;');
+      const menuData = menuFn();
+      if (menuData) window._MENU = menuData;
+
+      // Extract SPECIALS
+      con
