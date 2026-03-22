@@ -225,95 +225,227 @@ a,button{cursor:none}
 }
 
 /* ═══════════════════════════════════════
-   MOBILE — Radial Spark Menu
+   MOBILE — Branding Iron Slide-In Sidebar
 ═══════════════════════════════════════ */
-.mob-trigger{
+
+/* Small ember trigger tab on the left edge */
+.mob-tab{
   display:none;
   position:fixed;
-  bottom:28px;right:28px;
+  left:0;top:50%;transform:translateY(-50%);
   z-index:9500;
-  width:58px;height:58px;
-  border-radius:50%;
+  width:22px;
+  padding:18px 0;
+  background:rgba(8,6,3,.94);
+  border:1px solid rgba(240,230,208,.08);
+  border-left:none;
+  border-radius:0 6px 6px 0;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  box-shadow:4px 0 24px rgba(0,0,0,.5);
+  cursor:none;
+  transition:background .22s,box-shadow .22s;
+}
+.mob-tab:hover,.mob-tab.open{
+  background:rgba(200,84,30,.18);
+  box-shadow:4px 0 32px rgba(200,84,30,.3);
+}
+/* Three ember dots on the tab */
+.mob-tab-dot{
+  width:5px;height:5px;border-radius:50%;
   background:#c8541e;
-  border:none;
-  align-items:center;justify-content:center;
-  box-shadow:0 6px 28px rgba(200,84,30,.55);
-  transition:transform .22s,box-shadow .22s,background .22s;
+  box-shadow:0 0 6px rgba(200,84,30,.7);
+  transition:transform .22s,background .22s;
 }
-.mob-trigger:hover,.mob-trigger.open{background:#e8703a;transform:scale(1.08);box-shadow:0 10px 38px rgba(200,84,30,.7);}
-.mob-trigger svg{width:26px;height:26px;transition:transform .32s cubic-bezier(.34,1.56,.64,1);}
-.mob-trigger.open svg{transform:rotate(45deg);}
+.mob-tab:hover .mob-tab-dot,
+.mob-tab.open .mob-tab-dot{background:#ffb35a;box-shadow:0 0 10px rgba(255,179,90,.8);}
+.mob-tab.open .mob-tab-dot:nth-child(1){transform:translateY(3px) rotate(45deg) scaleX(1.5);}
+.mob-tab.open .mob-tab-dot:nth-child(2){opacity:0;transform:scale(0);}
+.mob-tab.open .mob-tab-dot:nth-child(3){transform:translateY(-3px) rotate(-45deg) scaleX(1.5);}
 
-/* Radial items */
-.mob-radial{
+/* The sliding sidebar panel */
+.mob-sidebar{
+  display:none;
   position:fixed;
-  bottom:57px;right:57px;
+  left:0;top:0;bottom:0;
+  width:72px;
   z-index:9400;
-  width:0;height:0;
-  pointer-events:none;
+  background:rgba(8,6,3,.97);
+  border-right:1px solid rgba(240,230,208,.07);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  flex-direction:column;
+  align-items:center;
+  transform:translateX(-100%);
+  transition:transform .42s cubic-bezier(.77,0,.175,1),width .42s cubic-bezier(.77,0,.175,1);
+  overflow:hidden;
+  box-shadow:6px 0 40px rgba(0,0,0,.6);
 }
-.mob-spoke{
-  position:absolute;
-  width:56px;height:56px;
-  border-radius:50%;
-  background:rgba(16,13,9,.96);
-  border:1px solid rgba(240,230,208,.14);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+.mob-sidebar.open{
+  transform:translateX(0);
+}
+.mob-sidebar.expanded{
+  width:220px;
+}
+
+/* Logo inside mobile sidebar */
+.mob-sidebar .bn-logo{
+  position:relative;
+  top:auto;left:auto;right:auto;
+  width:100%;
+  height:68px;
+  display:flex;align-items:center;justify-content:flex-start;
+  border-bottom:1px solid rgba(240,230,208,.06);
   text-decoration:none;
-  color:#f0e6d0;
+  padding-left:0;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.mob-sidebar .bn-logo-icon{
+  font-family:'Cormorant SC',serif;
+  font-size:17px;font-weight:700;color:#d4a03c;
+  letter-spacing:.1em;
+  flex-shrink:0;width:72px;text-align:center;
+}
+.mob-sidebar .bn-logo-full{
+  font-family:'Cormorant SC',serif;
+  font-size:13px;font-weight:700;color:#d4a03c;
+  letter-spacing:.12em;white-space:nowrap;
+  opacity:0;transform:translateX(-8px);
+  transition:opacity .28s .15s,transform .28s .15s;
+  margin-left:0;
+}
+.mob-sidebar.expanded .bn-logo-full{opacity:1;transform:none;}
+
+/* Nav items inside mobile sidebar — same as desktop */
+.mob-sidebar .bn-items{
+  display:flex;flex-direction:column;
+  width:100%;flex:1;
+  padding:0;
+  overflow:hidden;
+}
+.mob-sidebar .bn-item{
+  position:relative;
+  display:flex;align-items:center;
+  text-decoration:none;
+  height:68px;overflow:hidden;flex-shrink:0;
+}
+.mob-sidebar .bn-label-vert{
+  position:absolute;left:0;width:72px;
+  display:flex;align-items:center;justify-content:center;height:68px;flex-shrink:0;
+}
+.mob-sidebar .bn-label-vert span{
   font-family:'DM Mono',monospace;
-  font-size:8px;letter-spacing:.14em;text-transform:uppercase;
-  line-height:1.3;text-align:center;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%) scale(0);
-  opacity:0;
-  transition:transform .38s cubic-bezier(.34,1.56,.64,1),opacity .28s,background .22s,box-shadow .22s;
-  pointer-events:none;
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(240,230,208,.38);
+  writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);
+  transition:color .24s,text-shadow .24s;white-space:nowrap;
 }
-.mob-spoke .sp-ico{font-size:18px;margin-bottom:2px;line-height:1;}
-.mob-spoke.deployed{
-  transform:translate(var(--tx),var(--ty)) scale(1);
-  opacity:1;pointer-events:auto;
+.mob-sidebar .bn-item:active .bn-label-vert span,
+.mob-sidebar .bn-item.tapped .bn-label-vert span{
+  color:#d4a03c;
+  text-shadow:0 0 12px rgba(212,160,60,.7),0 0 24px rgba(212,160,60,.4);
 }
-.mob-spoke:hover{background:rgba(200,84,30,.2);box-shadow:0 0 20px rgba(200,84,30,.4),0 4px 20px rgba(0,0,0,.5);}
+.mob-sidebar .bn-sear{
+  position:absolute;left:0;width:72px;height:68px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;opacity:0;transform:scale(.7);
+  transition:opacity .28s,transform .28s;
+  filter:drop-shadow(0 0 0 rgba(232,112,58,0));
+}
+.mob-sidebar .bn-item:active .bn-sear,
+.mob-sidebar .bn-item.tapped .bn-sear{
+  opacity:1;transform:scale(1);
+  filter:drop-shadow(0 0 10px rgba(232,112,58,.85));
+}
+.mob-sidebar .bn-item:active .bn-label-vert,
+.mob-sidebar .bn-item.tapped .bn-label-vert{opacity:0;}
 
-/* Radial label tags */
-.mob-radial .tag{
-  position:absolute;
-  font-family:'Cormorant Garamond',serif;
-  font-size:13px;font-weight:600;
-  color:rgba(240,230,208,.0);
-  white-space:nowrap;
-  pointer-events:none;
-  transition:color .28s .18s;
+/* Expanded name inside mobile sidebar */
+.mob-sidebar .bn-expand{
+  margin-left:72px;display:flex;flex-direction:column;
+  opacity:0;transform:translateX(-10px);
+  transition:opacity .3s,transform .3s;
+  pointer-events:none;white-space:nowrap;padding-right:16px;
 }
-.mob-radial.open .tag{color:rgba(240,230,208,.72);}
+.mob-sidebar.expanded .bn-expand{opacity:1;transform:none;pointer-events:auto;}
+.mob-sidebar .bn-item:nth-child(1) .bn-expand{transition-delay:.06s;}
+.mob-sidebar .bn-item:nth-child(2) .bn-expand{transition-delay:.12s;}
+.mob-sidebar .bn-item:nth-child(3) .bn-expand{transition-delay:.18s;}
+.mob-sidebar .bn-item:nth-child(4) .bn-expand{transition-delay:.24s;}
+.mob-sidebar .bn-expand-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:rgba(240,230,208,.86);line-height:1.1;}
+.mob-sidebar .bn-item:active .bn-expand-name,
+.mob-sidebar .bn-item.tapped .bn-expand-name{color:#f0e6d0;}
+.mob-sidebar .bn-expand-hint{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(240,230,208,.28);margin-top:2px;}
 
-/* Glow ring when open */
-.mob-trigger::before{
-  content:'';position:absolute;inset:-8px;border-radius:50%;
-  border:1px solid rgba(200,84,30,0);
-  transition:border-color .3s,box-shadow .3s;
+/* Ember bar on right edge — same as desktop */
+.mob-sidebar .bn-item::after{
+  content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:2px;height:0;
+  background:linear-gradient(180deg,transparent,#c8541e,transparent);
+  transition:height .3s,box-shadow .3s;
 }
-.mob-trigger.open::before{
-  border-color:rgba(200,84,30,.3);
-  box-shadow:0 0 28px rgba(200,84,30,.25);
+.mob-sidebar .bn-item:active::after,
+.mob-sidebar .bn-item.tapped::after{
+  height:50%;
+  box-shadow:0 0 12px rgba(200,84,30,.7),-2px 0 18px rgba(200,84,30,.4);
 }
+.mob-sidebar .bn-item::before{
+  content:'';position:absolute;bottom:0;left:12px;right:12px;
+  height:1px;background:rgba(240,230,208,.05);
+}
+
+/* Call button at bottom of mobile sidebar */
+.mob-sidebar .bn-call{
+  position:relative;bottom:auto;left:auto;right:auto;
+  width:100%;height:68px;
+  display:flex;align-items:center;justify-content:flex-start;
+  border-top:1px solid rgba(240,230,208,.06);
+  background:rgba(200,84,30,.1);
+  text-decoration:none;
+  overflow:hidden;flex-shrink:0;
+  transition:background .24s;
+}
+.mob-sidebar .bn-call:active{background:rgba(200,84,30,.28);}
+.mob-sidebar .bn-call-icon{font-size:20px;flex-shrink:0;width:72px;text-align:center;line-height:1;filter:drop-shadow(0 0 6px rgba(200,84,30,.5));}
+.mob-sidebar .bn-call-txt{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#c8541e;
+  white-space:nowrap;opacity:0;transform:translateX(-8px);
+  transition:opacity .28s .2s,transform .28s .2s;
+}
+.mob-sidebar.expanded .bn-call-txt{opacity:1;transform:none;}
+
+/* Expand toggle button at very bottom of sidebar */
+.mob-expand-toggle{
+  position:relative;
+  width:100%;height:40px;
+  background:none;border:none;border-top:1px solid rgba(240,230,208,.05);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(240,230,208,.28);font-size:14px;
+  cursor:none;flex-shrink:0;
+  transition:color .22s,background .22s;
+}
+.mob-expand-toggle:active{background:rgba(240,230,208,.04);color:#d4a03c;}
+.mob-expand-toggle .tog-arrow{
+  display:inline-block;
+  transition:transform .38s cubic-bezier(.34,1.56,.64,1);
+}
+.mob-sidebar.expanded .mob-expand-toggle .tog-arrow{transform:rotate(180deg);}
 
 /* Backdrop */
 .mob-backdrop{
   display:none;
   position:fixed;inset:0;z-index:9300;
-  background:rgba(8,6,3,.7);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  opacity:0;transition:opacity .28s;
+  background:rgba(8,6,3,.62);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  opacity:0;transition:opacity .32s;
 }
 .mob-backdrop.show{display:block;opacity:1;}
 
 @media(max-width:860px){
   .brand-nav{display:none;}
-  .mob-trigger{display:flex;}
+  .mob-tab{display:flex;}
+  .mob-sidebar{display:flex;}
   .page-wrap{margin-left:0!important;}
 }
 
@@ -506,19 +638,53 @@ footer{background:#050402;border-top:1px solid rgba(240,230,208,.07);padding:cla
 </nav>
 
 <!-- ═══════════════════════════════════════════
-     MOBILE RADIAL SPARK MENU
+     MOBILE BRANDING IRON SIDEBAR
 ═══════════════════════════════════════════ -->
 <div class="mob-backdrop" id="mobBack"></div>
-<div class="mob-radial" id="mobRadial">
-  <!-- Spokes positioned by JS -->
-</div>
-<button class="mob-trigger" id="mobTrigger" aria-label="Open navigation">
-  <svg viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
-    <line x1="3" y1="7" x2="23" y2="7"/>
-    <line x1="3" y1="13" x2="23" y2="13"/>
-    <line x1="3" y1="19" x2="23" y2="19"/>
-  </svg>
+
+<!-- Ember tab trigger on left edge -->
+<button class="mob-tab" id="mobTab" aria-label="Open navigation">
+  <div class="mob-tab-dot"></div>
+  <div class="mob-tab-dot"></div>
+  <div class="mob-tab-dot"></div>
 </button>
+
+<!-- Slide-in sidebar — same structure as desktop brand-nav -->
+<nav class="mob-sidebar" id="mobSidebar" aria-label="Mobile navigation">
+  <a href="index.html" class="bn-logo">
+    <span class="bn-logo-icon">S</span>
+    <span class="bn-logo-full">Smokehouse</span>
+  </a>
+  <div class="bn-items">
+    <a href="menu.html" class="bn-item">
+      <div class="bn-label-vert"><span>Menu</span></div>
+      <div class="bn-sear">🍳</div>
+      <div class="bn-expand"><span class="bn-expand-name">Menu</span><span class="bn-expand-hint">Today's specials</span></div>
+    </a>
+    <a href="about.html" class="bn-item">
+      <div class="bn-label-vert"><span>Our Story</span></div>
+      <div class="bn-sear">🔥</div>
+      <div class="bn-expand"><span class="bn-expand-name">Our Story</span><span class="bn-expand-hint">Who we are</span></div>
+    </a>
+    <a href="delivery.html" class="bn-item">
+      <div class="bn-label-vert"><span>Delivery</span></div>
+      <div class="bn-sear">🚗</div>
+      <div class="bn-expand"><span class="bn-expand-name">Delivery</span><span class="bn-expand-hint">10+ orders · 10mi</span></div>
+    </a>
+    <a href="catering.html" class="bn-item">
+      <div class="bn-label-vert"><span>Catering</span></div>
+      <div class="bn-sear">🍽️</div>
+      <div class="bn-expand"><span class="bn-expand-name">Catering</span><span class="bn-expand-hint">Feed the crowd</span></div>
+    </a>
+  </div>
+  <a href="tel:3372211035" class="bn-call">
+    <span class="bn-call-icon">📞</span>
+    <span class="bn-call-txt">Call to Order</span>
+  </a>
+  <button class="mob-expand-toggle" id="mobExpandToggle" aria-label="Expand sidebar">
+    <span class="tog-arrow">›</span>
+  </button>
+</nav>
 
 <!-- ═══════════════════════════════════════════
      PAGE CONTENT
@@ -681,56 +847,50 @@ class FP{
 for(let i=0;i<130;i++){const p=new FP();p.y=H*Math.random();p.life=Math.random();pts.push(p);}
 (function anim(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.upd();p.drw();});requestAnimationFrame(anim);})();
 
-/* MOBILE RADIAL MENU */
-const trigger=document.getElementById('mobTrigger');
-const radial=document.getElementById('mobRadial');
-const backdrop=document.getElementById('mobBack');
-let mobOpen=false;
+/* MOBILE BRANDING IRON SIDEBAR */
+const mobTab=document.getElementById('mobTab');
+const mobSidebar=document.getElementById('mobSidebar');
+const mobBack=document.getElementById('mobBack');
+const mobExpandToggle=document.getElementById('mobExpandToggle');
+let mobOpen=false,mobExpanded=false;
 
-const spokes=[
-  {href:'menu.html',    ico:'🍳', lbl:'Menu'},
-  {href:'about.html',   ico:'🔥', lbl:'Story'},
-  {href:'delivery.html',ico:'🚗', lbl:'Delivery'},
-  {href:'catering.html',ico:'🍽️', lbl:'Catering'},
-  {href:'tel:3372211035',ico:'📞',lbl:'Call Us'},
-];
+function openSidebar(){
+  mobOpen=true;
+  mobTab.classList.add('open');
+  mobSidebar.classList.add('open');
+  mobBack.classList.add('show');
+}
+function closeSidebar(){
+  mobOpen=false;mobExpanded=false;
+  mobTab.classList.remove('open');
+  mobSidebar.classList.remove('open','expanded');
+  mobBack.classList.remove('show');
+}
+function expandSidebar(){
+  mobExpanded=true;
+  mobSidebar.classList.add('expanded');
+}
+function collapseSidebar(){
+  mobExpanded=false;
+  mobSidebar.classList.remove('expanded');
+}
 
-// Angles spread in an arc going top-left from the button
-const baseAngles=[-110,-150,-185,-220,-255];
-
-spokes.forEach((sp,i)=>{
-  const el=document.createElement('a');
-  el.href=sp.href;
-  el.className='mob-spoke';
-  el.innerHTML=`<span class="sp-ico">${sp.ico}</span>${sp.lbl}`;
-  const ang=baseAngles[i]*(Math.PI/180);
-  const r=90+i*8;
-  const tx=Math.cos(ang)*r;
-  const ty=Math.sin(ang)*r;
-  el.style.setProperty('--tx',tx+'px');
-  el.style.setProperty('--ty',ty+'px');
-  el.style.transitionDelay=(i*0.055)+'s';
-  radial.appendChild(el);
+mobTab.addEventListener('click',()=>mobOpen?closeSidebar():openSidebar());
+mobBack.addEventListener('click',closeSidebar);
+mobExpandToggle.addEventListener('click',e=>{
+  e.stopPropagation();
+  mobExpanded?collapseSidebar():expandSidebar();
 });
 
-function openMob(){
-  mobOpen=true;
-  trigger.classList.add('open');
-  backdrop.classList.add('show');
-  radial.querySelectorAll('.mob-spoke').forEach(s=>s.classList.add('deployed'));
-}
-function closeMob(){
-  mobOpen=false;
-  trigger.classList.remove('open');
-  backdrop.classList.remove('show');
-  radial.querySelectorAll('.mob-spoke').forEach((s,i)=>{
-    s.style.transitionDelay=((spokes.length-1-i)*0.04)+'s';
-    s.classList.remove('deployed');
-  });
-}
-trigger.addEventListener('click',()=>mobOpen?closeMob():openMob());
-backdrop.addEventListener('click',closeMob);
-radial.querySelectorAll('.mob-spoke').forEach(s=>s.addEventListener('click',closeMob));
+/* Tap-state glow effect on mobile sidebar items */
+mobSidebar.querySelectorAll('.bn-item').forEach(item=>{
+  item.addEventListener('touchstart',()=>{
+    item.classList.add('tapped');
+  },{passive:true});
+  item.addEventListener('touchend',()=>{
+    setTimeout(()=>item.classList.remove('tapped'),400);
+  },{passive:true});
+});
 
 /* SCROLL REVEAL */
 const obs=new IntersectionObserver(entries=>{
