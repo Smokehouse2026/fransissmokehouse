@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Smokehouse — Branding Iron Nav</title>
+<title>The Francis Smokehouse — St. Francisville, Louisiana</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600;1,700&family=Cormorant+SC:wght@600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -13,432 +13,376 @@ html,body{height:100%;overflow-x:hidden;cursor:none}
 body{background:#080603;color:#f0e6d0;font-family:'Cormorant Garamond',Georgia,serif;}
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.036;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23g)'/%3E%3C/svg%3E");}
 
-/* CURSOR */
+/* ── CURSOR ── */
 #cr{position:fixed;width:10px;height:10px;border-radius:50%;background:#c8541e;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;}
 #crr{position:fixed;width:34px;height:34px;border-radius:50%;border:1px solid rgba(212,160,60,.5);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .22s,height .22s,opacity .22s;}
 body.ch #cr{width:48px;height:48px;background:rgba(200,84,30,.14);}
 body.ch #crr{width:12px;height:12px;opacity:0;}
 a,button{cursor:none}
 
-/* ═══════════════════════════════════════
-   BRANDING IRON NAV — Desktop
-═══════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   DESKTOP — Branding Iron Vertical Sidebar
+══════════════════════════════════════════ */
 .brand-nav{
-  position:fixed;
-  left:0;top:0;bottom:0;
-  width:64px;
-  z-index:8000;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:0;
-  background:rgba(8,6,3,.92);
+  position:fixed;left:0;top:0;bottom:0;
+  width:64px;z-index:8000;
+  display:flex;flex-direction:column;align-items:center;
+  background:rgba(8,6,3,.94);
   border-right:1px solid rgba(240,230,208,.07);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  transition:width .38s cubic-bezier(.77,0,.175,1);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  transition:width .4s cubic-bezier(.77,0,.175,1);
   overflow:hidden;
 }
-.brand-nav:hover{width:210px;}
+.brand-nav:hover{width:220px;}
 
-/* Logo at top */
+/* Logo */
 .bn-logo{
-  position:absolute;
-  top:0;left:0;right:0;
-  height:64px;
-  display:flex;align-items:center;justify-content:center;
+  position:absolute;top:0;left:0;right:0;height:64px;
+  display:flex;align-items:center;
   border-bottom:1px solid rgba(240,230,208,.06);
-  text-decoration:none;
-  overflow:hidden;
+  text-decoration:none;overflow:hidden;flex-shrink:0;
 }
 .bn-logo-icon{
-  font-family:'Cormorant SC',serif;
-  font-size:18px;font-weight:700;
-  color:#d4a03c;
-  letter-spacing:.1em;
-  flex-shrink:0;
-  width:64px;
-  text-align:center;
-  transition:color .24s;
+  font-family:'Cormorant SC',serif;font-size:18px;font-weight:700;
+  color:#d4a03c;letter-spacing:.1em;
+  flex-shrink:0;width:64px;text-align:center;
 }
 .bn-logo-full{
-  font-family:'Cormorant SC',serif;
-  font-size:13px;font-weight:700;
-  color:#d4a03c;
-  letter-spacing:.12em;
-  white-space:nowrap;
-  opacity:0;
-  transform:translateX(-8px);
-  transition:opacity .28s .1s,transform .28s .1s;
-  margin-left:4px;
+  font-family:'Cormorant SC',serif;font-size:13px;font-weight:700;
+  color:#d4a03c;letter-spacing:.12em;white-space:nowrap;
+  opacity:0;transform:translateX(-10px);
+  transition:opacity .3s .08s,transform .3s .08s;
 }
 .brand-nav:hover .bn-logo-full{opacity:1;transform:none;}
 
-/* Call button at bottom */
+/* Call CTA at bottom */
 .bn-call{
-  position:absolute;
-  bottom:0;left:0;right:0;
-  height:64px;
-  display:flex;align-items:center;justify-content:center;
+  position:absolute;bottom:0;left:0;right:0;height:64px;
+  display:flex;align-items:center;
   border-top:1px solid rgba(240,230,208,.06);
-  background:rgba(200,84,30,.12);
-  text-decoration:none;
-  overflow:hidden;
+  background:rgba(200,84,30,.1);
+  text-decoration:none;overflow:hidden;flex-shrink:0;
   transition:background .24s;
 }
-.bn-call:hover{background:rgba(200,84,30,.3);}
+.bn-call:hover{background:rgba(200,84,30,.28);}
 .bn-call-icon{
-  font-size:20px;
-  flex-shrink:0;
-  width:64px;
-  text-align:center;
-  line-height:1;
-  filter:drop-shadow(0 0 6px rgba(200,84,30,.6));
+  flex-shrink:0;width:64px;
+  display:flex;align-items:center;justify-content:center;
 }
+.bn-call-icon svg{width:18px;height:18px;stroke:#c8541e;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 5px rgba(200,84,30,.5));}
 .bn-call-txt{
-  font-family:'DM Mono',monospace;
-  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
-  color:#c8541e;
-  white-space:nowrap;
-  opacity:0;
-  transform:translateX(-8px);
-  transition:opacity .28s .1s,transform .28s .1s;
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:#c8541e;white-space:nowrap;
+  opacity:0;transform:translateX(-10px);
+  transition:opacity .3s .1s,transform .3s .1s;
 }
 .brand-nav:hover .bn-call-txt{opacity:1;transform:none;}
 
 /* Nav items */
-.bn-items{
-  display:flex;flex-direction:column;
-  width:100%;
-  padding:80px 0;
-}
+.bn-items{display:flex;flex-direction:column;width:100%;padding:72px 0 72px;}
 .bn-item{
-  position:relative;
-  display:flex;
-  align-items:center;
-  text-decoration:none;
-  height:64px;
-  overflow:hidden;
-  flex-shrink:0;
+  position:relative;display:flex;align-items:center;
+  text-decoration:none;height:68px;overflow:hidden;flex-shrink:0;
 }
 
-/* The branding iron effect: vertical rotated label */
+/* Rotated vertical label */
 .bn-label-vert{
-  position:absolute;
-  left:0;
-  width:64px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:64px;
-  flex-shrink:0;
+  position:absolute;left:0;width:64px;height:68px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:opacity .24s;
 }
 .bn-label-vert span{
-  font-family:'DM Mono',monospace;
-  font-size:9px;letter-spacing:.22em;text-transform:uppercase;
-  color:rgba(240,230,208,.42);
-  writing-mode:vertical-rl;
-  text-orientation:mixed;
-  transform:rotate(180deg);
-  transition:color .24s,text-shadow .24s;
-  white-space:nowrap;
-}
-.bn-item:hover .bn-label-vert span{
-  color:#d4a03c;
-  text-shadow:0 0 12px rgba(212,160,60,.7),0 0 24px rgba(212,160,60,.4);
-}
-
-/* Sear mark — the "brand" glyph */
-.bn-sear{
-  position:absolute;
-  left:0;width:64px;height:64px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;
-  opacity:0;
-  transform:scale(.7);
-  transition:opacity .28s,transform .28s;
-  filter:drop-shadow(0 0 0px rgba(232,112,58,0));
-}
-.bn-item:hover .bn-sear{
-  opacity:1;transform:scale(1);
-  filter:drop-shadow(0 0 10px rgba(232,112,58,.8));
-}
-/* Hide vert label when sear is showing */
-.bn-item:hover .bn-label-vert{opacity:0;}
-
-/* Expanded text */
-.bn-expand{
-  margin-left:64px;
-  display:flex;flex-direction:column;
-  opacity:0;
-  transform:translateX(-12px);
-  transition:opacity .3s,transform .3s;
-  pointer-events:none;
-  white-space:nowrap;
-  padding-right:18px;
-}
-.brand-nav:hover .bn-expand{
-  opacity:1;transform:none;pointer-events:auto;
-}
-/* Individual item delays */
-.bn-item:nth-child(1) .bn-expand{transition-delay:.05s;}
-.bn-item:nth-child(2) .bn-expand{transition-delay:.1s;}
-.bn-item:nth-child(3) .bn-expand{transition-delay:.15s;}
-.bn-item:nth-child(4) .bn-expand{transition-delay:.2s;}
-.bn-expand-name{
-  font-family:'Cormorant Garamond',serif;
-  font-size:17px;font-weight:600;
-  color:rgba(240,230,208,.85);
-  line-height:1.1;
-  transition:color .22s;
-}
-.bn-item:hover .bn-expand-name{color:#f0e6d0;}
-.bn-expand-hint{
-  font-family:'DM Mono',monospace;
-  font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
-  color:rgba(240,230,208,.3);
-  margin-top:2px;
-}
-
-/* Hot bar — the ember glow that tracks hover */
-.bn-item::after{
-  content:'';
-  position:absolute;
-  right:0;top:50%;transform:translateY(-50%);
-  width:2px;height:0;
-  background:linear-gradient(180deg,transparent,#c8541e,transparent);
-  transition:height .32s ease,box-shadow .32s ease;
-}
-.bn-item:hover::after{
-  height:50%;
-  box-shadow:0 0 12px rgba(200,84,30,.7),-2px 0 18px rgba(200,84,30,.4);
-}
-
-/* Divider between items */
-.bn-item::before{
-  content:'';
-  position:absolute;
-  bottom:0;left:12px;right:12px;
-  height:1px;
-  background:rgba(240,230,208,.05);
-}
-
-/* ═══════════════════════════════════════
-   MOBILE — Branding Iron Slide-In Sidebar
-═══════════════════════════════════════ */
-
-/* Small ember trigger tab on the left edge */
-.mob-tab{
-  display:none;
-  position:fixed;
-  left:0;top:50%;transform:translateY(-50%);
-  z-index:9500;
-  width:22px;
-  padding:18px 0;
-  background:rgba(8,6,3,.94);
-  border:1px solid rgba(240,230,208,.08);
-  border-left:none;
-  border-radius:0 6px 6px 0;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
-  box-shadow:4px 0 24px rgba(0,0,0,.5);
-  cursor:none;
-  transition:background .22s,box-shadow .22s;
-}
-.mob-tab:hover,.mob-tab.open{
-  background:rgba(200,84,30,.18);
-  box-shadow:4px 0 32px rgba(200,84,30,.3);
-}
-/* Three ember dots on the tab */
-.mob-tab-dot{
-  width:5px;height:5px;border-radius:50%;
-  background:#c8541e;
-  box-shadow:0 0 6px rgba(200,84,30,.7);
-  transition:transform .22s,background .22s;
-}
-.mob-tab:hover .mob-tab-dot,
-.mob-tab.open .mob-tab-dot{background:#ffb35a;box-shadow:0 0 10px rgba(255,179,90,.8);}
-.mob-tab.open .mob-tab-dot:nth-child(1){transform:translateY(3px) rotate(45deg) scaleX(1.5);}
-.mob-tab.open .mob-tab-dot:nth-child(2){opacity:0;transform:scale(0);}
-.mob-tab.open .mob-tab-dot:nth-child(3){transform:translateY(-3px) rotate(-45deg) scaleX(1.5);}
-
-/* The sliding sidebar panel */
-.mob-sidebar{
-  display:none;
-  position:fixed;
-  left:0;top:0;bottom:0;
-  width:72px;
-  z-index:9400;
-  background:rgba(8,6,3,.97);
-  border-right:1px solid rgba(240,230,208,.07);
-  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
-  flex-direction:column;
-  align-items:center;
-  transform:translateX(-100%);
-  transition:transform .42s cubic-bezier(.77,0,.175,1),width .42s cubic-bezier(.77,0,.175,1);
-  overflow:hidden;
-  box-shadow:6px 0 40px rgba(0,0,0,.6);
-}
-.mob-sidebar.open{
-  transform:translateX(0);
-}
-.mob-sidebar.expanded{
-  width:220px;
-}
-
-/* Logo inside mobile sidebar */
-.mob-sidebar .bn-logo{
-  position:relative;
-  top:auto;left:auto;right:auto;
-  width:100%;
-  height:68px;
-  display:flex;align-items:center;justify-content:flex-start;
-  border-bottom:1px solid rgba(240,230,208,.06);
-  text-decoration:none;
-  padding-left:0;
-  overflow:hidden;
-  flex-shrink:0;
-}
-.mob-sidebar .bn-logo-icon{
-  font-family:'Cormorant SC',serif;
-  font-size:17px;font-weight:700;color:#d4a03c;
-  letter-spacing:.1em;
-  flex-shrink:0;width:72px;text-align:center;
-}
-.mob-sidebar .bn-logo-full{
-  font-family:'Cormorant SC',serif;
-  font-size:13px;font-weight:700;color:#d4a03c;
-  letter-spacing:.12em;white-space:nowrap;
-  opacity:0;transform:translateX(-8px);
-  transition:opacity .28s .15s,transform .28s .15s;
-  margin-left:0;
-}
-.mob-sidebar.expanded .bn-logo-full{opacity:1;transform:none;}
-
-/* Nav items inside mobile sidebar — same as desktop */
-.mob-sidebar .bn-items{
-  display:flex;flex-direction:column;
-  width:100%;flex:1;
-  padding:0;
-  overflow:hidden;
-}
-.mob-sidebar .bn-item{
-  position:relative;
-  display:flex;align-items:center;
-  text-decoration:none;
-  height:68px;overflow:hidden;flex-shrink:0;
-}
-.mob-sidebar .bn-label-vert{
-  position:absolute;left:0;width:72px;
-  display:flex;align-items:center;justify-content:center;height:68px;flex-shrink:0;
-}
-.mob-sidebar .bn-label-vert span{
-  font-family:'DM Mono',monospace;
-  font-size:9px;letter-spacing:.22em;text-transform:uppercase;
-  color:rgba(240,230,208,.38);
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(240,230,208,.4);
   writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);
   transition:color .24s,text-shadow .24s;white-space:nowrap;
 }
-.mob-sidebar .bn-item:active .bn-label-vert span,
-.mob-sidebar .bn-item.tapped .bn-label-vert span{
+.bn-item:hover .bn-label-vert span{
   color:#d4a03c;
-  text-shadow:0 0 12px rgba(212,160,60,.7),0 0 24px rgba(212,160,60,.4);
+  text-shadow:0 0 12px rgba(212,160,60,.7),0 0 26px rgba(212,160,60,.35);
 }
-.mob-sidebar .bn-sear{
-  position:absolute;left:0;width:72px;height:68px;
+
+/* Sear icon — SVG, appears on hover */
+.bn-sear{
+  position:absolute;left:0;width:64px;height:68px;
   display:flex;align-items:center;justify-content:center;
-  font-size:22px;opacity:0;transform:scale(.7);
-  transition:opacity .28s,transform .28s;
-  filter:drop-shadow(0 0 0 rgba(232,112,58,0));
+  opacity:0;transform:scale(.65);
+  transition:opacity .28s,transform .3s cubic-bezier(.34,1.4,.64,1);
 }
-.mob-sidebar .bn-item:active .bn-sear,
-.mob-sidebar .bn-item.tapped .bn-sear{
+.bn-sear svg{width:20px;height:20px;stroke:#d4a03c;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.bn-item:hover .bn-sear{
   opacity:1;transform:scale(1);
-  filter:drop-shadow(0 0 10px rgba(232,112,58,.85));
+  filter:drop-shadow(0 0 8px rgba(212,160,60,.7));
 }
-.mob-sidebar .bn-item:active .bn-label-vert,
-.mob-sidebar .bn-item.tapped .bn-label-vert{opacity:0;}
+.bn-item:hover .bn-label-vert{opacity:0;}
 
-/* Expanded name inside mobile sidebar */
-.mob-sidebar .bn-expand{
-  margin-left:72px;display:flex;flex-direction:column;
-  opacity:0;transform:translateX(-10px);
+/* Expanded label */
+.bn-expand{
+  margin-left:64px;display:flex;flex-direction:column;
+  opacity:0;transform:translateX(-12px);
   transition:opacity .3s,transform .3s;
-  pointer-events:none;white-space:nowrap;padding-right:16px;
+  pointer-events:none;white-space:nowrap;padding-right:20px;
 }
-.mob-sidebar.expanded .bn-expand{opacity:1;transform:none;pointer-events:auto;}
-.mob-sidebar .bn-item:nth-child(1) .bn-expand{transition-delay:.06s;}
-.mob-sidebar .bn-item:nth-child(2) .bn-expand{transition-delay:.12s;}
-.mob-sidebar .bn-item:nth-child(3) .bn-expand{transition-delay:.18s;}
-.mob-sidebar .bn-item:nth-child(4) .bn-expand{transition-delay:.24s;}
-.mob-sidebar .bn-expand-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:rgba(240,230,208,.86);line-height:1.1;}
-.mob-sidebar .bn-item:active .bn-expand-name,
-.mob-sidebar .bn-item.tapped .bn-expand-name{color:#f0e6d0;}
-.mob-sidebar .bn-expand-hint{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(240,230,208,.28);margin-top:2px;}
+.brand-nav:hover .bn-expand{opacity:1;transform:none;pointer-events:auto;}
+.bn-item:nth-child(1) .bn-expand{transition-delay:.04s;}
+.bn-item:nth-child(2) .bn-expand{transition-delay:.09s;}
+.bn-item:nth-child(3) .bn-expand{transition-delay:.14s;}
+.bn-item:nth-child(4) .bn-expand{transition-delay:.19s;}
+.bn-expand-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:rgba(240,230,208,.82);line-height:1.1;transition:color .22s;}
+.bn-item:hover .bn-expand-name{color:#f0e6d0;}
+.bn-expand-hint{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(240,230,208,.28);margin-top:3px;}
 
-/* Ember bar on right edge — same as desktop */
-.mob-sidebar .bn-item::after{
+/* Ember bar right edge */
+.bn-item::after{
   content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
   width:2px;height:0;
   background:linear-gradient(180deg,transparent,#c8541e,transparent);
-  transition:height .3s,box-shadow .3s;
+  transition:height .32s,box-shadow .32s;
 }
-.mob-sidebar .bn-item:active::after,
-.mob-sidebar .bn-item.tapped::after{
-  height:50%;
-  box-shadow:0 0 12px rgba(200,84,30,.7),-2px 0 18px rgba(200,84,30,.4);
+.bn-item:hover::after{height:52%;box-shadow:0 0 12px rgba(200,84,30,.7),-2px 0 18px rgba(200,84,30,.35);}
+
+/* Divider */
+.bn-item::before{content:'';position:absolute;bottom:0;left:14px;right:14px;height:1px;background:rgba(240,230,208,.05);}
+
+/* ══════════════════════════════════════════
+   MOBILE — Full-Width Branding Iron Sidebar
+   Close is ATTACHED to the sidebar right edge,
+   never floating over the page.
+══════════════════════════════════════════ */
+
+/* Bottom bar nav trigger */
+.mob-tab{
+  display:none;
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:9500;
+  height:52px;
+  background:rgba(8,6,3,.97);
+  border:none;
+  border-top:1px solid rgba(200,84,30,.35);
+  flex-direction:row;align-items:center;justify-content:center;
+  gap:14px;
+  box-shadow:0 -4px 32px rgba(0,0,0,.55),0 -1px 0 rgba(200,84,30,.15);
+  cursor:none;
+  transition:background .22s,border-color .22s;
+  padding:0 24px;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
 }
-.mob-sidebar .bn-item::before{
-  content:'';position:absolute;bottom:0;left:12px;right:12px;
-  height:1px;background:rgba(240,230,208,.05);
+.mob-tab.open{
+  border-top-color:rgba(200,84,30,.6);
+  background:rgba(20,14,8,.98);
+}
+.mob-tab:active{background:rgba(200,84,30,.14);}
+/* Left ember line accent */
+.mob-tab::before{
+  content:'';
+  position:absolute;left:0;top:0;bottom:0;
+  width:3px;
+  background:linear-gradient(180deg,transparent,#c8541e,transparent);
+  box-shadow:0 0 10px rgba(200,84,30,.5);
+}
+/* Right ember line accent */
+.mob-tab::after{
+  content:'';
+  position:absolute;right:0;top:0;bottom:0;
+  width:3px;
+  background:linear-gradient(180deg,transparent,#c8541e,transparent);
+  box-shadow:0 0 10px rgba(200,84,30,.5);
+}
+.mob-tab-menu-icon{
+  display:flex;flex-direction:column;gap:4px;flex-shrink:0;
+}
+.mob-tab-menu-icon span{
+  display:block;height:1.5px;background:#c8541e;
+  box-shadow:0 0 5px rgba(200,84,30,.6);
+  transition:width .24s,background .22s,transform .24s;
+}
+.mob-tab-menu-icon span:nth-child(1){width:22px;}
+.mob-tab-menu-icon span:nth-child(2){width:16px;}
+.mob-tab-menu-icon span:nth-child(3){width:22px;}
+.mob-tab.open .mob-tab-menu-icon span:nth-child(1){transform:translateY(5.5px) rotate(45deg);}
+.mob-tab.open .mob-tab-menu-icon span:nth-child(2){width:0;opacity:0;}
+.mob-tab.open .mob-tab-menu-icon span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg);}
+.mob-tab-label{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(240,230,208,.55);
+  transition:color .22s;
+  flex:1;text-align:left;
+}
+.mob-tab.open .mob-tab-label{color:rgba(240,230,208,.38);}
+.mob-tab-name{
+  font-family:'Cormorant SC',serif;
+  font-size:16px;font-weight:700;letter-spacing:.14em;
+  color:#d4a03c;
+  transition:color .22s;
+}
+.mob-tab.open .mob-tab-name{color:rgba(212,160,60,.6);}
+.mob-tab-close{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(200,84,30,.7);
+  opacity:0;transition:opacity .22s;
+  flex-shrink:0;
+}
+.mob-tab.open .mob-tab-close{opacity:1;}
+
+/* The sidebar: slides from left, 85vw wide when open */
+.mob-sidebar{
+  display:none;
+  position:fixed;left:0;top:0;bottom:52px;
+  width:85vw;max-width:380px;
+  z-index:9400;
+  background:#0a0806;
+  flex-direction:row; /* sidebar content LEFT, close strip RIGHT */
+  transform:translateX(-100%);
+  transition:transform .44s cubic-bezier(.77,0,.175,1);
+  box-shadow:8px 0 60px rgba(0,0,0,.7);
+  overflow:hidden;
+}
+.mob-sidebar.open{transform:translateX(0);}
+
+/* Left column — the actual nav content */
+.mob-nav-content{
+  flex:1;
+  display:flex;flex-direction:column;
+  border-right:1px solid rgba(240,230,208,.07);
+  overflow:hidden;
 }
 
-/* Call button at bottom of mobile sidebar */
-.mob-sidebar .bn-call{
-  position:relative;bottom:auto;left:auto;right:auto;
-  width:100%;height:68px;
-  display:flex;align-items:center;justify-content:flex-start;
+/* Logo row */
+.mob-logo-row{
+  height:72px;flex-shrink:0;
+  display:flex;align-items:center;
+  border-bottom:1px solid rgba(240,230,208,.06);
+  padding:0 28px;
+  text-decoration:none;
+}
+.mob-logo-mark{
+  font-family:'Cormorant SC',serif;font-size:22px;font-weight:700;
+  color:#d4a03c;letter-spacing:.12em;
+}
+.mob-logo-sub{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(240,230,208,.35);margin-left:12px;margin-top:2px;
+}
+
+/* Nav links — large, vertical, with same branding iron DNA */
+.mob-links{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.mob-link{
+  position:relative;
+  display:flex;align-items:center;
+  text-decoration:none;
+  height:calc((100vh - 72px - 72px) / 4);
+  min-height:72px;
+  padding:0 28px;
+  border-bottom:1px solid rgba(240,230,208,.05);
+  overflow:hidden;
+  transition:background .26s;
+}
+.mob-link::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:#c8541e;
+  transform:scaleY(0);transform-origin:bottom;
+  transition:transform .3s ease;
+}
+.mob-link:active::before,.mob-link.tapped::before{transform:scaleY(1);}
+.mob-link:active,.mob-link.tapped{background:rgba(200,84,30,.07);}
+
+/* Number tag */
+.mob-link-num{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;
+  color:rgba(240,230,208,.2);
+  margin-right:20px;flex-shrink:0;min-width:20px;
+}
+/* Icon */
+.mob-link-icon{
+  flex-shrink:0;margin-right:18px;
+  opacity:.45;transition:opacity .24s;
+}
+.mob-link-icon svg{width:18px;height:18px;stroke:#d4a03c;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.mob-link:active .mob-link-icon,.mob-link.tapped .mob-link-icon{opacity:1;}
+
+/* Text */
+.mob-link-body{flex:1;}
+.mob-link-name{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(22px,5vw,28px);font-weight:600;
+  color:rgba(240,230,208,.84);line-height:1.05;
+  transition:color .22s;
+}
+.mob-link:active .mob-link-name,.mob-link.tapped .mob-link-name{color:#d4a03c;}
+.mob-link-hint{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(240,230,208,.28);margin-top:3px;
+}
+
+/* Ember bar right side of link */
+.mob-link::after{
+  content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:2px;height:0;
+  background:linear-gradient(180deg,transparent,#c8541e,transparent);
+  transition:height .28s,box-shadow .28s;
+}
+.mob-link:active::after,.mob-link.tapped::after{
+  height:46%;
+  box-shadow:0 0 10px rgba(200,84,30,.65),-2px 0 16px rgba(200,84,30,.3);
+}
+
+/* Call CTA at bottom */
+.mob-call{
+  height:72px;flex-shrink:0;
+  display:flex;align-items:center;
+  padding:0 28px;
   border-top:1px solid rgba(240,230,208,.06);
   background:rgba(200,84,30,.1);
   text-decoration:none;
-  overflow:hidden;flex-shrink:0;
-  transition:background .24s;
+  transition:background .22s;
 }
-.mob-sidebar .bn-call:active{background:rgba(200,84,30,.28);}
-.mob-sidebar .bn-call-icon{font-size:20px;flex-shrink:0;width:72px;text-align:center;line-height:1;filter:drop-shadow(0 0 6px rgba(200,84,30,.5));}
-.mob-sidebar .bn-call-txt{
-  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#c8541e;
-  white-space:nowrap;opacity:0;transform:translateX(-8px);
-  transition:opacity .28s .2s,transform .28s .2s;
+.mob-call:active{background:rgba(200,84,30,.26);}
+.mob-call-icon{
+  flex-shrink:0;margin-right:16px;
 }
-.mob-sidebar.expanded .bn-call-txt{opacity:1;transform:none;}
+.mob-call-icon svg{width:18px;height:18px;stroke:#c8541e;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.mob-call-txt{
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:#c8541e;
+}
 
-/* Expand toggle button at very bottom of sidebar */
-.mob-expand-toggle{
-  position:relative;
-  width:100%;height:40px;
-  background:none;border:none;border-top:1px solid rgba(240,230,208,.05);
+/* Right column — close strip, part of the sidebar itself */
+.mob-close-strip{
+  width:52px;flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(8,6,3,.6);
+  border-left:1px solid rgba(240,230,208,.05);
+  cursor:none;
+  gap:8px;
+  padding:20px 0;
+}
+/* Close button within the strip */
+.mob-close-btn{
+  width:38px;height:38px;
+  background:none;border:1px solid rgba(240,230,208,.12);
   display:flex;align-items:center;justify-content:center;
-  color:rgba(240,230,208,.28);font-size:14px;
-  cursor:none;flex-shrink:0;
-  transition:color .22s,background .22s;
+  cursor:none;
+  transition:border-color .22s,background .22s;
 }
-.mob-expand-toggle:active{background:rgba(240,230,208,.04);color:#d4a03c;}
-.mob-expand-toggle .tog-arrow{
-  display:inline-block;
-  transition:transform .38s cubic-bezier(.34,1.56,.64,1);
+.mob-close-btn:active{background:rgba(200,84,30,.18);border-color:rgba(200,84,30,.4);}
+.mob-close-btn svg{width:14px;height:14px;stroke:rgba(240,230,208,.5);stroke-width:1.5;fill:none;stroke-linecap:round;}
+.mob-close-btn:active svg{stroke:#d4a03c;}
+/* Close label rotated */
+.mob-close-label{
+  font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(240,230,208,.22);
+  writing-mode:vertical-rl;text-orientation:mixed;
+  margin-top:6px;
 }
-.mob-sidebar.expanded .mob-expand-toggle .tog-arrow{transform:rotate(180deg);}
 
-/* Backdrop */
+/* Backdrop — only dims the right portion of screen */
 .mob-backdrop{
-  display:none;
-  position:fixed;inset:0;z-index:9300;
-  background:rgba(8,6,3,.62);
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  opacity:0;transition:opacity .32s;
+  display:none;position:fixed;top:0;left:0;right:0;bottom:52px;z-index:9300;
+  background:rgba(8,6,3,.55);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  opacity:0;transition:opacity .36s;
 }
 .mob-backdrop.show{display:block;opacity:1;}
 
@@ -448,33 +392,30 @@ a,button{cursor:none}
   .mob-sidebar{display:flex;}
   .page-wrap{margin-left:0!important;}
 }
-
-/* PAGE */
-.page-wrap{
-  margin-left:64px;
-  transition:margin-left .38s cubic-bezier(.77,0,.175,1);
+/* hide mob trigger on desktop */
+@media(min-width:861px){
+  .mob-tab{display:none!important;}
+  .mob-sidebar{display:none!important;}
+  .mob-backdrop{display:none!important;}
 }
-@media(max-width:860px){.page-wrap{margin-left:0;}}
 
-/* HERO */
-.hero{
-  position:relative;min-height:100vh;
-  display:flex;flex-direction:column;justify-content:flex-end;
-  overflow:hidden;
-}
+/* ── PAGE ── */
+.page-wrap{margin-left:64px;transition:margin-left .4s cubic-bezier(.77,0,.175,1);}
+@media(max-width:860px){.page-wrap{margin-left:0;padding-bottom:52px;}}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;}
 #fc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.62;}
 .hero-atm{position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:
-    radial-gradient(ellipse 55% 65% at 62% 28%,rgba(200,84,30,.26),transparent 60%),
+  background:radial-gradient(ellipse 55% 65% at 62% 28%,rgba(200,84,30,.26),transparent 60%),
     radial-gradient(ellipse 80% 40% at 50% 100%,rgba(8,6,3,.96),transparent 55%),
-    linear-gradient(180deg,rgba(8,6,3,.5) 0%,transparent 28%,rgba(8,6,3,.72) 72%,#080603 100%);
-}
+    linear-gradient(180deg,rgba(8,6,3,.5) 0%,transparent 28%,rgba(8,6,3,.72) 72%,#080603 100%);}
 .hero-inner{position:relative;z-index:2;padding:clamp(100px,14vh,170px) clamp(28px,6vw,90px) clamp(60px,8vh,96px);}
 .h-sup{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#c8541e;margin-bottom:20px;display:flex;align-items:center;gap:14px;animation:ru 1s cubic-bezier(.16,1,.3,1) .3s both;}
 .h-sup::before{content:'';width:32px;height:1px;background:#c8541e;box-shadow:0 0 8px rgba(200,84,30,.8);}
 .h-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(58px,10vw,138px);font-weight:300;line-height:.89;letter-spacing:-.03em;margin-bottom:clamp(16px,2.5vh,28px);animation:ru 1s cubic-bezier(.16,1,.3,1) .46s both;}
 .h-h1 .l2{font-weight:700;font-style:italic;color:#d4a03c;display:block;padding-left:clamp(26px,4vw,64px);}
-.h-h1 .l3{font-weight:300;display:block;color:rgba(240,230,208,.58);font-size:.48em;letter-spacing:.08em;padding-top:8px;border-top:1px solid rgba(240,230,208,.1);margin-top:8px;}
+.h-h1 .l3{font-weight:300;display:block;color:rgba(240,230,208,.55);font-size:.48em;letter-spacing:.08em;padding-top:8px;border-top:1px solid rgba(240,230,208,.1);margin-top:8px;}
 .h-body{max-width:400px;font-size:clamp(15px,1.7vw,18px);font-weight:300;line-height:1.85;color:rgba(240,230,208,.62);margin-bottom:clamp(28px,4vh,46px);animation:ru 1s cubic-bezier(.16,1,.3,1) .68s both;}
 .h-body strong{color:#f0e6d0;font-weight:600;}
 .h-btns{display:flex;gap:14px;flex-wrap:wrap;animation:ru 1s cubic-bezier(.16,1,.3,1) .86s both;}
@@ -483,8 +424,6 @@ a,button{cursor:none}
 .hb-f:hover{background:#e8703a;transform:translateY(-2px);box-shadow:0 12px 40px rgba(200,84,30,.6);}
 .hb-o{border:1px solid rgba(240,230,208,.24);color:rgba(240,230,208,.74);}
 .hb-o:hover{border-color:#d4a03c;color:#d4a03c;transform:translateY(-2px);}
-
-/* Floating stat pillars */
 .stats{position:absolute;right:clamp(20px,5vw,88px);bottom:clamp(72px,10vh,120px);z-index:2;display:flex;flex-direction:column;gap:2px;animation:ru 1s cubic-bezier(.16,1,.3,1) 1.1s both;}
 @media(max-width:640px){.stats{display:none;}}
 .stat{display:flex;align-items:center;gap:12px;background:rgba(8,6,3,.64);border:1px solid rgba(240,230,208,.08);border-left:2px solid #c8541e;padding:10px 17px;backdrop-filter:blur(10px);transition:background .24s;}
@@ -492,14 +431,14 @@ a,button{cursor:none}
 .stat-n{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:700;color:#d4a03c;line-height:1;}
 .stat-l{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:rgba(240,230,208,.44);line-height:1.4;}
 
-/* Ticker */
+/* ── TICKER ── */
 .ticker{height:44px;overflow:hidden;background:linear-gradient(90deg,#c8541e,#a83e12);display:flex;align-items:center;}
 .ticker-inner{display:flex;white-space:nowrap;animation:tk 34s linear infinite;}
 .ti{font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.8);padding:0 26px;}
 .ts{color:rgba(255,255,255,.26);font-size:17px;vertical-align:middle;}
 @keyframes tk{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-/* Signature */
+/* ── SIGNATURE ── */
 .sig{padding:clamp(72px,9vw,128px) clamp(28px,6vw,90px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(38px,5.5vw,88px);align-items:center;background:#080603;position:relative;overflow:hidden;}
 @media(max-width:740px){.sig{grid-template-columns:1fr;}}
 .eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#c8541e;margin-bottom:14px;display:block;}
@@ -516,7 +455,7 @@ a,button{cursor:none}
 .ib-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:rgba(240,230,208,.32);margin-bottom:6px;display:block;}
 .ib-val{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.8vw,20px);font-weight:600;color:#f0e6d0;line-height:1.3;}
 
-/* Menu rows */
+/* ── MENU ROWS ── */
 .menu-sec{padding:clamp(64px,8.5vw,112px) clamp(28px,6vw,90px);background:#0c0906;position:relative;overflow:hidden;}
 .menu-sec::after{content:'MENU';position:absolute;right:-.04em;top:50%;transform:translateY(-50%);font-family:'Cormorant SC',serif;font-size:clamp(100px,16vw,200px);font-weight:700;color:rgba(240,230,208,.02);pointer-events:none;line-height:1;user-select:none;}
 .s-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,62px);font-weight:700;line-height:.95;margin-bottom:clamp(34px,4vw,58px);}
@@ -532,7 +471,7 @@ a,button{cursor:none}
 .mrarr{font-size:15px;color:rgba(240,230,208,.16);transition:color .22s,transform .22s;}
 .mrow:hover .mrarr{color:#d4a03c;transform:translateX(5px);}
 
-/* Hours */
+/* ── HOURS ── */
 .hours{padding:clamp(64px,8.5vw,112px) clamp(28px,6vw,90px);background:#080603;}
 .hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(188px,1fr));gap:2px;margin-top:clamp(32px,3.8vw,50px);}
 .hcard{padding:clamp(20px,2.6vw,32px) clamp(17px,2.2vw,26px);background:#100d09;border:1px solid rgba(240,230,208,.06);position:relative;transition:background .26s;}
@@ -542,7 +481,7 @@ a,button{cursor:none}
 .hsub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(240,230,208,.34);line-height:1.85;}
 .hbadge{position:absolute;top:12px;right:12px;font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;padding:3px 8px;background:rgba(200,84,30,.13);border:1px solid rgba(200,84,30,.26);color:#c8541e;}
 
-/* Location */
+/* ── LOCATION ── */
 .loc{position:relative;overflow:hidden;padding:clamp(52px,7vw,88px) clamp(28px,6vw,90px);background:#c8541e;display:grid;grid-template-columns:1fr auto;gap:clamp(26px,5vw,72px);align-items:center;}
 @media(max-width:620px){.loc{grid-template-columns:1fr;}}
 .loc::before,.loc::after{content:'';position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.07);pointer-events:none;}
@@ -558,7 +497,7 @@ a,button{cursor:none}
 .lbtn-g{border:1px solid rgba(255,255,255,.36);color:#fff;}
 .lbtn-g:hover{background:rgba(255,255,255,.1);transform:translateY(-2px);}
 
-/* Footer */
+/* ── FOOTER ── */
 footer{background:#050402;border-top:1px solid rgba(240,230,208,.07);padding:clamp(36px,4.5vw,56px) clamp(28px,6vw,90px);}
 .ftop{display:flex;flex-wrap:wrap;gap:clamp(24px,3.8vw,54px);justify-content:space-between;padding-bottom:clamp(24px,2.8vw,36px);border-bottom:1px solid rgba(240,230,208,.07);margin-bottom:clamp(17px,2.3vw,26px);}
 .fbrand{font-family:'Cormorant SC',serif;font-size:24px;font-weight:700;letter-spacing:.14em;color:#d4a03c;margin-bottom:8px;}
@@ -572,11 +511,10 @@ footer{background:#050402;border-top:1px solid rgba(240,230,208,.07);padding:cla
 .fphone{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:#c8541e;text-decoration:none;transition:color .2s;}
 .fphone:hover{color:#d4a03c;}
 
-/* Reveal */
+/* ── REVEAL ── */
 .rz{opacity:0;transform:translateY(24px);transition:opacity .76s ease,transform .76s ease;}
 .rz.on{opacity:1;transform:none;}
 .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.42s;}
-
 @keyframes ru{from{opacity:0;transform:translateY(26px) skewY(1.5deg)}to{opacity:1;transform:none}}
 </style>
 </head>
@@ -584,45 +522,55 @@ footer{background:#050402;border-top:1px solid rgba(240,230,208,.07);padding:cla
 <div id="cr"></div>
 <div id="crr"></div>
 
-<!-- ═══════════════════════════════════════════
-     BRANDING IRON NAV (Desktop Vertical Sidebar)
-═══════════════════════════════════════════ -->
-<nav class="brand-nav" id="brandNav">
-  <!-- Logo -->
+<!-- ══════════════════════════════════
+     DESKTOP — Branding Iron Sidebar
+══════════════════════════════════ -->
+<nav class="brand-nav">
   <a href="index.html" class="bn-logo">
-    <span class="bn-logo-icon">S</span>
-    <span class="bn-logo-full">Smokehouse</span>
+    <span class="bn-logo-icon">F</span>
+    <span class="bn-logo-full">The Francis</span>
   </a>
 
-  <!-- Nav Items -->
   <div class="bn-items">
-    <a href="menu.html" class="bn-item" data-sear="🍳">
+    <!-- Menu -->
+    <a href="menu.html" class="bn-item">
       <div class="bn-label-vert"><span>Menu</span></div>
-      <div class="bn-sear">🍳</div>
+      <div class="bn-sear">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h12"/><circle cx="19" cy="18" r="2"/></svg>
+      </div>
       <div class="bn-expand">
         <span class="bn-expand-name">Menu</span>
         <span class="bn-expand-hint">Today's specials</span>
       </div>
     </a>
-    <a href="about.html" class="bn-item" data-sear="🔥">
+    <!-- Our Story -->
+    <a href="about.html" class="bn-item">
       <div class="bn-label-vert"><span>Our Story</span></div>
-      <div class="bn-sear">🔥</div>
+      <div class="bn-sear">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 6 5 10c0 5 7 12 7 12s7-7 7-12c0-4-3-8-7-8z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      </div>
       <div class="bn-expand">
         <span class="bn-expand-name">Our Story</span>
         <span class="bn-expand-hint">Who we are</span>
       </div>
     </a>
-    <a href="delivery.html" class="bn-item" data-sear="🚗">
+    <!-- Delivery -->
+    <a href="delivery.html" class="bn-item">
       <div class="bn-label-vert"><span>Delivery</span></div>
-      <div class="bn-sear">🚗</div>
+      <div class="bn-sear">
+        <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      </div>
       <div class="bn-expand">
         <span class="bn-expand-name">Delivery</span>
         <span class="bn-expand-hint">10+ orders · 10mi</span>
       </div>
     </a>
-    <a href="catering.html" class="bn-item" data-sear="🍽️">
+    <!-- Catering -->
+    <a href="catering.html" class="bn-item">
       <div class="bn-label-vert"><span>Catering</span></div>
-      <div class="bn-sear">🍽️</div>
+      <div class="bn-sear">
+        <svg viewBox="0 0 24 24"><path d="M3 16s1-3 9-3 9 3 9 3"/><path d="M12 13V7"/><circle cx="12" cy="5" r="2"/><path d="M2 20h20"/></svg>
+      </div>
       <div class="bn-expand">
         <span class="bn-expand-name">Catering</span>
         <span class="bn-expand-hint">Feed the crowd</span>
@@ -630,176 +578,207 @@ footer{background:#050402;border-top:1px solid rgba(240,230,208,.07);padding:cla
     </a>
   </div>
 
-  <!-- Call CTA -->
-  <a href="tel:3372211035" class="bn-call">
-    <span class="bn-call-icon">📞</span>
+  <a href="tel:2252455046" class="bn-call">
+    <span class="bn-call-icon">
+      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.26h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.18 6.18l1.02-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/></svg>
+    </span>
     <span class="bn-call-txt">Call to Order</span>
   </a>
 </nav>
 
-<!-- ═══════════════════════════════════════════
-     MOBILE BRANDING IRON SIDEBAR
-═══════════════════════════════════════════ -->
+<!-- ══════════════════════════════════
+     MOBILE — Branding Iron Slide Sidebar
+══════════════════════════════════ -->
 <div class="mob-backdrop" id="mobBack"></div>
 
-<!-- Ember tab trigger on left edge -->
+<!-- Slim left-edge trigger tab -->
 <button class="mob-tab" id="mobTab" aria-label="Open navigation">
-  <div class="mob-tab-dot"></div>
-  <div class="mob-tab-dot"></div>
-  <div class="mob-tab-dot"></div>
+  <div class="mob-tab-menu-icon">
+    <span></span><span></span><span></span>
+  </div>
+  <span class="mob-tab-label">Navigate</span>
+  <span class="mob-tab-name">The Francis Smokehouse</span>
+  <span class="mob-tab-close">Close</span>
 </button>
 
-<!-- Slide-in sidebar — same structure as desktop brand-nav -->
-<nav class="mob-sidebar" id="mobSidebar" aria-label="Mobile navigation">
-  <a href="index.html" class="bn-logo">
-    <span class="bn-logo-icon">S</span>
-    <span class="bn-logo-full">Smokehouse</span>
-  </a>
-  <div class="bn-items">
-    <a href="menu.html" class="bn-item">
-      <div class="bn-label-vert"><span>Menu</span></div>
-      <div class="bn-sear">🍳</div>
-      <div class="bn-expand"><span class="bn-expand-name">Menu</span><span class="bn-expand-hint">Today's specials</span></div>
+<!-- Sidebar: nav content + close strip side by side -->
+<nav class="mob-sidebar" id="mobSidebar" aria-label="Site navigation">
+
+  <!-- Left: nav content -->
+  <div class="mob-nav-content">
+    <a href="index.html" class="mob-logo-row">
+      <span class="mob-logo-mark">The Francis</span>
+      <span class="mob-logo-sub">Smokehouse</span>
     </a>
-    <a href="about.html" class="bn-item">
-      <div class="bn-label-vert"><span>Our Story</span></div>
-      <div class="bn-sear">🔥</div>
-      <div class="bn-expand"><span class="bn-expand-name">Our Story</span><span class="bn-expand-hint">Who we are</span></div>
-    </a>
-    <a href="delivery.html" class="bn-item">
-      <div class="bn-label-vert"><span>Delivery</span></div>
-      <div class="bn-sear">🚗</div>
-      <div class="bn-expand"><span class="bn-expand-name">Delivery</span><span class="bn-expand-hint">10+ orders · 10mi</span></div>
-    </a>
-    <a href="catering.html" class="bn-item">
-      <div class="bn-label-vert"><span>Catering</span></div>
-      <div class="bn-sear">🍽️</div>
-      <div class="bn-expand"><span class="bn-expand-name">Catering</span><span class="bn-expand-hint">Feed the crowd</span></div>
+
+    <div class="mob-links">
+      <a href="menu.html" class="mob-link">
+        <span class="mob-link-num">01</span>
+        <span class="mob-link-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h12"/><circle cx="19" cy="18" r="2"/></svg>
+        </span>
+        <div class="mob-link-body">
+          <div class="mob-link-name">Menu</div>
+          <div class="mob-link-hint">Today's specials</div>
+        </div>
+      </a>
+      <a href="about.html" class="mob-link">
+        <span class="mob-link-num">02</span>
+        <span class="mob-link-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 6 5 10c0 5 7 12 7 12s7-7 7-12c0-4-3-8-7-8z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        </span>
+        <div class="mob-link-body">
+          <div class="mob-link-name">Our Story</div>
+          <div class="mob-link-hint">Who we are</div>
+        </div>
+      </a>
+      <a href="delivery.html" class="mob-link">
+        <span class="mob-link-num">03</span>
+        <span class="mob-link-icon">
+          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </span>
+        <div class="mob-link-body">
+          <div class="mob-link-name">Delivery</div>
+          <div class="mob-link-hint">10+ orders · 10mi radius</div>
+        </div>
+      </a>
+      <a href="catering.html" class="mob-link">
+        <span class="mob-link-num">04</span>
+        <span class="mob-link-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 16s1-3 9-3 9 3 9 3"/><path d="M12 13V7"/><circle cx="12" cy="5" r="2"/><path d="M2 20h20"/></svg>
+        </span>
+        <div class="mob-link-body">
+          <div class="mob-link-name">Catering</div>
+          <div class="mob-link-hint">Feed the crowd</div>
+        </div>
+      </a>
+    </div>
+
+    <a href="tel:2252455046" class="mob-call">
+      <span class="mob-call-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.26h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.18 6.18l1.02-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/></svg>
+      </span>
+      <span class="mob-call-txt">Call to Order</span>
     </a>
   </div>
-  <a href="tel:3372211035" class="bn-call">
-    <span class="bn-call-icon">📞</span>
-    <span class="bn-call-txt">Call to Order</span>
-  </a>
-  <button class="mob-expand-toggle" id="mobExpandToggle" aria-label="Expand sidebar">
-    <span class="tog-arrow">›</span>
-  </button>
+
+  <!-- Right: close strip — part of the sidebar, not floating -->
+  <div class="mob-close-strip" id="mobCloseStrip">
+    <button class="mob-close-btn" id="mobCloseBtn" aria-label="Close navigation">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <span class="mob-close-label">Close</span>
+  </div>
+
 </nav>
 
-<!-- ═══════════════════════════════════════════
+<!-- ══════════════════════════════════
      PAGE CONTENT
-═══════════════════════════════════════════ -->
+══════════════════════════════════ -->
 <div class="page-wrap">
-  <!-- HERO -->
   <section class="hero">
     <canvas id="fc"></canvas>
     <div class="hero-atm"></div>
     <div class="hero-inner">
-      <span class="h-sup">Wood-Fired Southern Kitchen</span>
+      <span class="h-sup">St. Francisville, Louisiana</span>
       <h1 class="h-h1">
-        The<br/>
-        <span class="l2">Smoke &amp; Soul</span>
-        <span class="l3">DeRidder, Louisiana — Open Every Morning</span>
+        Wood<br/>
+        <span class="l2">Fire &amp; Soul.</span>
+        <span class="l3">St. Francisville, Louisiana — Open Daily</span>
       </h1>
-      <p class="h-body"><strong>Real fire. Real flavor.</strong> From the first biscuit at sunrise to the last smoked plate before close — we cook like your grandmother is watching.</p>
+      <p class="h-body"><strong>Real smoke. Real flavor.</strong> From slow-smoked brisket to boudin balls and homemade bread pudding — this is Louisiana BBQ done the way it was meant to be.</p>
       <div class="h-btns">
         <a href="menu.html" class="hb hb-f">Today's Menu</a>
         <a href="about.html" class="hb hb-o">Our Story</a>
       </div>
     </div>
     <div class="stats">
-      <div class="stat"><div class="stat-n">5:30</div><div class="stat-l">Opens<br/>Every Morning</div></div>
-      <div class="stat"><div class="stat-n">7</div><div class="stat-l">Days a<br/>Week</div></div>
-      <div class="stat"><div class="stat-n">10mi</div><div class="stat-l">Delivery<br/>Radius</div></div>
+      <div class="stat"><div class="stat-n">10AM</div><div class="stat-l">Open<br/>Every Day</div></div>
+      <div class="stat"><div class="stat-n">4.5</div><div class="stat-l">Stars on<br/>Tripadvisor</div></div>
+      <div class="stat"><div class="stat-n">143</div><div class="stat-l">Five&#8209;Star<br/>Reviews</div></div>
     </div>
   </section>
 
-  <!-- TICKER -->
   <div class="ticker"><div class="ticker-inner">
-    <span class="ti">Smoked Brisket</span><span class="ts">✦</span>
-    <span class="ti">Fried Chicken Tenders</span><span class="ts">✦</span>
-    <span class="ti">Crawfish Thu–Sun</span><span class="ts">✦</span>
-    <span class="ti">Breakfast from 5:30 AM</span><span class="ts">✦</span>
-    <span class="ti">Salad Bar Daily</span><span class="ts">✦</span>
-    <span class="ti">Homestyle Lunch Plates</span><span class="ts">✦</span>
-    <span class="ti">Delivery Available</span><span class="ts">✦</span>
-    <span class="ti">Smoked Brisket</span><span class="ts">✦</span>
-    <span class="ti">Fried Chicken Tenders</span><span class="ts">✦</span>
-    <span class="ti">Crawfish Thu–Sun</span><span class="ts">✦</span>
-    <span class="ti">Breakfast from 5:30 AM</span><span class="ts">✦</span>
-    <span class="ti">Salad Bar Daily</span><span class="ts">✦</span>
-    <span class="ti">Homestyle Lunch Plates</span><span class="ts">✦</span>
-    <span class="ti">Delivery Available</span><span class="ts">✦</span>
+    <span class="ti">Slow-Smoked Brisket</span><span class="ts">✦</span>
+    <span class="ti">Boudin Balls</span><span class="ts">✦</span>
+    <span class="ti">Full Rack of Ribs</span><span class="ts">✦</span>
+    <span class="ti">Pulled Pork Plates</span><span class="ts">✦</span>
+    <span class="ti">Crawfish Po-Boys</span><span class="ts">✦</span>
+    <span class="ti">Homemade Bread Pudding</span><span class="ts">✦</span>
+    <span class="ti">Corn Pudding</span><span class="ts">✦</span>
+    <span class="ti">Slow-Smoked Brisket</span><span class="ts">✦</span>
+    <span class="ti">Boudin Balls</span><span class="ts">✦</span>
+    <span class="ti">Full Rack of Ribs</span><span class="ts">✦</span>
+    <span class="ti">Pulled Pork Plates</span><span class="ts">✦</span>
+    <span class="ti">Crawfish Po-Boys</span><span class="ts">✦</span>
+    <span class="ti">Homemade Bread Pudding</span><span class="ts">✦</span>
+    <span class="ti">Corn Pudding</span><span class="ts">✦</span>
   </div></div>
 
-  <!-- SIGNATURE -->
   <section class="sig">
     <div>
       <span class="eyebrow rz">The Philosophy</span>
-      <p class="bq rz d1">"We cook like <em>your grandmother</em> is still watching."</p>
-      <p class="btext rz d2">Every plate that leaves our kitchen started with real fire, real seasoning, and real intention. No shortcuts. No freezer bags. Just Southern cooking the way it was meant to be done.</p>
-      <a href="about.html" class="tlink rz d3">Read our story →</a>
+      <p class="bq rz d1">"Brisket that <em>practically melted</em> in my mouth."</p>
+      <p class="btext rz d2">A Travellers' Choice on Tripadvisor with over 143 reviews and a 4.5-star rating — The Francis Smokehouse has been feeding locals and travelers alike since 2015. Real wood smoke, real Louisiana flavor, right on US Highway 61.</p>
+      <a href="about.html" class="tlink rz d3">Our story →</a>
     </div>
     <div class="info-stack">
-      <div class="ib rz"><span class="ib-lbl">Breakfast</span><div class="ib-val">Eggs. Biscuits. Grits.<br/>From $9.99 a plate.</div></div>
-      <div class="ib rz d1"><span class="ib-lbl">Lunch</span><div class="ib-val">Daily changing menu.<br/>1 Meat + 2 Sides from $12.99.</div></div>
-      <div class="ib rz d2"><span class="ib-lbl">Crawfish Season</span><div class="ib-val">Thu – Sun from 4 PM.<br/>$5.99/lb — call to confirm.</div></div>
-      <div class="ib rz d3"><span class="ib-lbl">Delivery</span><div class="ib-val">10+ orders within 10 miles.<br/>Call (337) 221-1035.</div></div>
+      <div class="ib rz"><span class="ib-lbl">BBQ Plates</span><div class="ib-val">Pulled pork, brisket, ribs &amp; chicken.<br/>From $9.99.</div></div>
+      <div class="ib rz d1"><span class="ib-lbl">Po-Boys &amp; Burgers</span><div class="ib-val">Ribeye, crawfish, catfish, shrimp.<br/>From $6.99.</div></div>
+      <div class="ib rz d2"><span class="ib-lbl">Boudin &amp; Specialty</span><div class="ib-val">Boudin balls, egg rolls, meat pies.<br/>Deli-style, made fresh.</div></div>
+      <div class="ib rz d3"><span class="ib-lbl">Desserts</span><div class="ib-val">Bread pudding, Creole cream cheesecake,<br/>chocolate &amp; carrot cake.</div></div>
     </div>
   </section>
 
-  <!-- MENU ROWS -->
   <section class="menu-sec">
     <span class="eyebrow rz">On The Menu</span>
     <h2 class="s-h2 rz d1">A taste of <em>what's waiting.</em></h2>
     <div>
-      <a href="menu.html" class="mrow rz"><span class="mrn">01</span><div><div class="mrname">Breakfast Plates</div><div class="mrdesc">Bacon, sausage, hot links, pancakes, French toast, grits — the full spread from $9.99</div></div><span class="mrarr">→</span></a>
-      <a href="menu.html" class="mrow rz d1"><span class="mrn">02</span><div><div class="mrname">Smoked Brisket</div><div class="mrdesc">Slow-cooked with rich, deep smoky flavor — Friday's crown jewel</div></div><span class="mrarr">→</span></a>
-      <a href="menu.html" class="mrow rz d2"><span class="mrn">03</span><div><div class="mrname">Fried Chicken Tenders</div><div class="mrdesc">Golden and crispy, made fresh — a daily staple that never misses</div></div><span class="mrarr">→</span></a>
-      <a href="menu.html" class="mrow rz d3"><span class="mrn">04</span><div><div class="mrname">Louisiana Crawfish</div><div class="mrdesc">Seasoned the Louisiana way, Thu–Sun starting at 4 PM</div></div><span class="mrarr">→</span></a>
-      <a href="menu.html" class="mrow rz d4"><span class="mrn">05</span><div><div class="mrname">Salad Bar</div><div class="mrdesc">Built fresh daily — romaine, iceberg, 12 toppings, 5 house dressings</div></div><span class="mrarr">→</span></a>
+      <a href="menu.html" class="mrow rz"><span class="mrn">01</span><div><div class="mrname">Slow-Smoked Brisket</div><div class="mrdesc">Wood-smoked low and slow — tender, rich, and worth every bite. Plate from $10.99</div></div><span class="mrarr">→</span></a>
+      <a href="menu.html" class="mrow rz d1"><span class="mrn">02</span><div><div class="mrname">Full Rack of Ribs</div><div class="mrdesc">Tender, smoky, and fall-off-the-bone. Served with two sides — $19.99</div></div><span class="mrarr">→</span></a>
+      <a href="menu.html" class="mrow rz d2"><span class="mrn">03</span><div><div class="mrname">Boudin Balls</div><div class="mrdesc">A house favorite — golden, crispy, and absolutely delicious in every review</div></div><span class="mrarr">→</span></a>
+      <a href="menu.html" class="mrow rz d3"><span class="mrn">04</span><div><div class="mrname">Crawfish Po-Boy</div><div class="mrdesc">Dressed with lettuce and tomato on fresh bread — a Louisiana classic at $10.99</div></div><span class="mrarr">→</span></a>
+      <a href="menu.html" class="mrow rz d4"><span class="mrn">05</span><div><div class="mrname">Bread Pudding</div><div class="mrdesc">Homemade and legendary — reviewers drive back just for this</div></div><span class="mrarr">→</span></a>
     </div>
     <div style="margin-top:clamp(28px,3.8vw,46px);" class="rz"><a href="menu.html" class="hb hb-f">See Full Menu</a></div>
   </section>
 
-  <!-- HOURS -->
   <section class="hours">
     <span class="eyebrow rz">Hours</span>
     <h2 class="s-h2 rz d1">Come find us <em>early.</em></h2>
     <div class="hgrid">
-      <div class="hcard rz"><span class="hbadge">Weekdays</span><div class="hday">Mon – Fri</div><div class="htime">5:30 AM – 2:00 PM</div><div class="hsub">Breakfast until 10:30 AM<br/>Lunch 11 AM – 2 PM</div></div>
-      <div class="hcard rz d1"><span class="hbadge">Saturday</span><div class="hday">Saturday</div><div class="htime">6:00 AM – 2:00 PM</div><div class="hsub">Breakfast until 10:30 AM<br/>Lunch 11 AM – 2 PM</div></div>
-      <div class="hcard rz d2"><span class="hbadge">Sunday</span><div class="hday">Sunday</div><div class="htime">7:00 AM – 3:00 PM</div><div class="hsub">Breakfast until 10:30 AM<br/>Lunch 11 AM – 3 PM</div></div>
-      <div class="hcard rz d3"><span class="hbadge">Thu–Sun Only</span><div class="hday">Crawfish</div><div class="htime">4:00 PM – 8:00 PM</div><div class="hsub">$5.99 per lb<br/>Call to confirm availability</div></div>
+      <div class="hcard rz"><span class="hbadge">Mon – Sat</span><div class="hday">Mon – Sat</div><div class="htime">10:00 AM – 6:00 PM</div><div class="hsub">Full menu all day<br/>Dine in &amp; takeout available</div></div>
+      <div class="hcard rz d1"><span class="hbadge">Sunday</span><div class="hday">Sunday</div><div class="htime">10:00 AM – 3:00 PM</div><div class="hsub">Full menu all day<br/>Closes early — arrive by 2:30</div></div>
+      <div class="hcard rz d2"><span class="hbadge">Parking</span><div class="hday">On-Site</div><div class="htime">Free Parking</div><div class="hsub">Wheelchair accessible<br/>Outdoor seating available</div></div>
+      <div class="hcard rz d3"><span class="hbadge">Tripadvisor</span><div class="hday">Travellers' Choice</div><div class="htime">4.5 Stars</div><div class="hsub">143 reviews &amp; counting<br/>Top 10% of restaurants</div></div>
     </div>
   </section>
 
-  <!-- LOCATION -->
   <section class="loc rz">
     <div>
       <span class="loc-lbl">Find Us</span>
-      <div class="loc-addr">2741<br/>US-190</div>
-      <div class="loc-city">DeRidder, Louisiana 70634</div>
+      <div class="loc-addr">6779<br/>US Hwy 61</div>
+      <div class="loc-city">St. Francisville, Louisiana 70775</div>
     </div>
     <div class="loc-btns">
-      <a href="https://maps.google.com/?q=2741+US-190,+DeRidder,+LA+70634" target="_blank" class="lbtn lbtn-w">Get Directions</a>
-      <a href="tel:3372211035" class="lbtn lbtn-g">(337) 221-1035</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+Saint+Francisville%2C+LA+70775" target="_blank" class="lbtn lbtn-w">Get Directions</a>
+      <a href="tel:2252455046" class="lbtn lbtn-g">(225) 245-5046</a>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="ftop">
-      <div><div class="fbrand">Smokehouse</div><div class="ftagline">Wood-fired Southern cooking in DeRidder, Louisiana.</div></div>
+      <div><div class="fbrand">The Francis</div><div class="ftagline">Smokehouse &amp; Specialty Meats<br/>St. Francisville, Louisiana.</div></div>
       <div><span class="fcollbl">Navigate</span><ul class="flinks"><li><a href="menu.html">Menu</a></li><li><a href="about.html">Our Story</a></li><li><a href="delivery.html">Delivery</a></li><li><a href="catering.html">Catering</a></li></ul></div>
-      <div><span class="fcollbl">Visit</span><ul class="flinks"><li><a href="https://maps.google.com/?q=2741+US-190,+DeRidder,+LA+70634">2741 US-190, DeRidder, LA</a></li><li><a href="tel:3372211035">(337) 221-1035</a></li></ul></div>
+      <div><span class="fcollbl">Visit</span><ul class="flinks"><li><a href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+Saint+Francisville%2C+LA+70775">6779 US Hwy 61, St. Francisville, LA</a></li><li><a href="tel:2252455046">(225) 245-5046</a></li></ul></div>
     </div>
     <div class="fbot">
-      <span class="fcopy">© 2025 The Smokehouse · DeRidder, Louisiana</span>
-      <a href="tel:3372211035" class="fphone">(337) 221-1035</a>
+      <span class="fcopy">© 2025 The Francis Smokehouse · St. Francisville, Louisiana</span>
+      <a href="tel:2252455046" class="fphone">(225) 245-5046</a>
     </div>
   </footer>
-</div><!-- /page-wrap -->
+</div>
 
 <script>
 /* CURSOR */
@@ -847,49 +826,36 @@ class FP{
 for(let i=0;i<130;i++){const p=new FP();p.y=H*Math.random();p.life=Math.random();pts.push(p);}
 (function anim(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.upd();p.drw();});requestAnimationFrame(anim);})();
 
-/* MOBILE BRANDING IRON SIDEBAR */
+/* MOBILE SIDEBAR */
 const mobTab=document.getElementById('mobTab');
 const mobSidebar=document.getElementById('mobSidebar');
 const mobBack=document.getElementById('mobBack');
-const mobExpandToggle=document.getElementById('mobExpandToggle');
-let mobOpen=false,mobExpanded=false;
+const mobCloseBtn=document.getElementById('mobCloseBtn');
+let mobOpen=false;
 
 function openSidebar(){
   mobOpen=true;
   mobTab.classList.add('open');
   mobSidebar.classList.add('open');
   mobBack.classList.add('show');
+  document.body.style.overflow='hidden';
 }
 function closeSidebar(){
-  mobOpen=false;mobExpanded=false;
+  mobOpen=false;
   mobTab.classList.remove('open');
-  mobSidebar.classList.remove('open','expanded');
+  mobSidebar.classList.remove('open');
   mobBack.classList.remove('show');
-}
-function expandSidebar(){
-  mobExpanded=true;
-  mobSidebar.classList.add('expanded');
-}
-function collapseSidebar(){
-  mobExpanded=false;
-  mobSidebar.classList.remove('expanded');
+  document.body.style.overflow='';
 }
 
 mobTab.addEventListener('click',()=>mobOpen?closeSidebar():openSidebar());
+mobCloseBtn.addEventListener('click',closeSidebar);
 mobBack.addEventListener('click',closeSidebar);
-mobExpandToggle.addEventListener('click',e=>{
-  e.stopPropagation();
-  mobExpanded?collapseSidebar():expandSidebar();
-});
 
-/* Tap-state glow effect on mobile sidebar items */
-mobSidebar.querySelectorAll('.bn-item').forEach(item=>{
-  item.addEventListener('touchstart',()=>{
-    item.classList.add('tapped');
-  },{passive:true});
-  item.addEventListener('touchend',()=>{
-    setTimeout(()=>item.classList.remove('tapped'),400);
-  },{passive:true});
+/* Touch tap glow on links */
+mobSidebar.querySelectorAll('.mob-link').forEach(item=>{
+  item.addEventListener('touchstart',()=>item.classList.add('tapped'),{passive:true});
+  item.addEventListener('touchend',()=>setTimeout(()=>item.classList.remove('tapped'),420),{passive:true});
 });
 
 /* SCROLL REVEAL */
