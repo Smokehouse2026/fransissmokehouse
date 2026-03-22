@@ -1511,28 +1511,26 @@ function initSpecialsWheel(SPECIALS){
 // Init
 initSpecialsWheel(INLINE_SPECIALS);
 
-// Try to load site-data.js for live specials/menu updates
-fetch('site-data.js')
-  .then(r=>{if(!r.ok)throw new Error('no site-data');return r.text();})
-  .then(src=>{
-    try{
-      const menuFn=new Function(src+'; return typeof MENU!=="undefined"?MENU:null;');
-      const menuData=menuFn();if(menuData)window._MENU=menuData;
-      const specFn=new Function(src+'; return typeof SPECIALS!=="undefined"?SPECIALS:null;');
-      const specData=specFn();if(specData)initSpecialsWheel(specData);
-    }catch(e){console.warn('site-data parse error',e);}
-  })
-  .catch(()=>{});
-  .then(r=>{if(!r.ok)throw new Error('no site-data');return r.text();})
-  .then(src=>{
-    try{
-      const menuFn=new Function(src+'; return typeof MENU!=="undefined"?MENU:null;');
-      const menuData=menuFn();if(menuData)window._MENU=menuData;
-      const specFn=new Function(src+'; return typeof SPECIALS!=="undefined"?SPECIALS:null;');
-      const specData=specFn();if(specData)initSpecialsWheel(specData);
-    }catch(e){console.warn('site-data parse error',e);}
-  })
-  .catch(()=>{});
+// Load site-data.js for live specials/menu updates
+function loadSiteData(){
+  fetch('site-data.js')
+    .then(function(r){
+      if(!r.ok) throw new Error('no site-data');
+      return r.text();
+    })
+    .then(function(src){
+      try{
+        var menuFn = new Function(src + '; return typeof MENU!=="undefined"?MENU:null;');
+        var menuData = menuFn();
+        if(menuData) window._MENU = menuData;
+        var specFn = new Function(src + '; return typeof SPECIALS!=="undefined"?SPECIALS:null;');
+        var specData = specFn();
+        if(specData) initSpecialsWheel(specData);
+      } catch(e){ console.warn('site-data parse error', e); }
+    })
+    .catch(function(){ /* site-data.js not present — using inline data */ });
+}
+loadSiteData();
 
 </script>
 </body>
