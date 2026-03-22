@@ -2,869 +2,762 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>The Menu — The Francis Smokehouse</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,300;1,400;1,700&family=Barlow+Condensed:wght@300;400;500;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ember:#c04800;--fire:#e06010;--flame:#f08820;--glow:#f5a830;--pop:#ff6b35;
+  --cream:#f5e8cc;--parch:#e8d4a8;--sand:#c4a070;
+  --serif:'Playfair Display',Georgia,serif;
+  --cond:'Barlow Condensed',sans-serif;
+  --body:'Barlow',sans-serif;
+}
+html,body{width:100%;min-height:100%;background:#07050302;color:var(--cream);
+  font-family:var(--body);overflow-x:hidden;cursor:none;-webkit-tap-highlight-color:transparent;}
+@media(hover:none){html,body{cursor:auto}}
 
-:root {
-  --void:    #080604;
-  --deep:    #100c06;
-  --coal:    #1a1108;
-  --ash:     #2c1f0e;
-  --bark:    #4a3218;
-  --leather: #7a5830;
-  --sand:    #c4a070;
-  --parch:   #e8d4a8;
-  --cream:   #f5e8cc;
-  --ember:   #c04800;
-  --fire:    #e06010;
-  --flame:   #f08820;
-  --glow:    #f5a830;
-  --pop:     #ff6b35;
-  --serif:   'Playfair Display', Georgia, serif;
-  --cond:    'Barlow Condensed', sans-serif;
-  --body:    'Barlow', sans-serif;
-}
+#grain{position:fixed;inset:0;z-index:9998;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");}
 
-html, body {
-  min-height: 100%; width: 100%;
-  background: var(--void);
-  color: var(--cream);
-  cursor: none;
-  font-family: var(--body);
-  overflow-x: hidden;
-  -webkit-tap-highlight-color: transparent;
-}
-@media (hover:none) { html, body { cursor: auto; } }
+#fire-cv{position:fixed;bottom:0;left:0;width:100%;height:42vh;z-index:1;
+  pointer-events:none;image-rendering:pixelated;image-rendering:crisp-edges;
+  mask-image:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.5) 50%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.5) 50%,transparent 100%);}
+#smoke-cv,#ember-cv{position:fixed;inset:0;pointer-events:none;}
+#smoke-cv{z-index:2;}#ember-cv{z-index:3;}
+#transition-cv{position:fixed;inset:0;z-index:800;pointer-events:none;opacity:0;}
+#vignette{position:fixed;inset:0;z-index:4;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 35%,transparent 25%,rgba(7,5,3,.72) 100%);}
 
-/* ── GRAIN ── */
-body::before {
-  content: ''; position: fixed; inset: 0; z-index: 999; pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
-}
+#cursor{position:fixed;z-index:9999;pointer-events:none;top:0;left:0;will-change:transform;}
+#c-dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--flame);
+  transform:translate(-50%,-50%);box-shadow:0 0 12px var(--flame),0 0 24px rgba(240,136,32,.35);
+  transition:width .3s,height .3s;}
+#c-ring{position:absolute;width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(240,136,32,.28);transform:translate(-50%,-50%);
+  transition:width .5s cubic-bezier(.16,1,.3,1),height .5s,border-color .3s;}
+@media(hover:none){#cursor{display:none}}
 
-/* ── EMBER CANVAS ── */
-#ecv { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+/* HEADER */
+#hdr{position:sticky;top:0;z-index:500;
+  background:linear-gradient(to bottom,rgba(7,5,3,.97) 70%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(196,160,112,.09);}
+#hdr-top{display:flex;align-items:center;justify-content:space-between;
+  padding:clamp(10px,1.8vh,16px) clamp(16px,4vw,48px);
+  border-bottom:1px solid rgba(196,160,112,.06);}
+#back-btn{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(196,160,112,.4);background:none;
+  border:1px solid rgba(196,160,112,.12);padding:7px 16px;border-radius:2px;
+  cursor:none;-webkit-tap-highlight-color:transparent;transition:all .3s;
+  text-decoration:none;display:inline-block;}
+#back-btn:hover,#back-btn:active{border-color:rgba(240,136,32,.4);color:var(--flame);}
+.hdr-c{text-align:center;}
+.hdr-n{font-family:var(--serif);font-weight:700;font-size:clamp(16px,2.5vw,26px);
+  letter-spacing:.01em;color:var(--cream);text-shadow:0 0 40px rgba(240,136,32,.2);line-height:1;}
+.hdr-n em{font-style:italic;font-weight:400;color:var(--flame);}
+.hdr-s{font-family:var(--cond);font-size:8px;letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(196,160,112,.28);margin-top:2px;}
+.hdr-r{text-align:right;}
+.hdr-live{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--flame);display:flex;align-items:center;gap:6px;justify-content:flex-end;}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--glow);
+  box-shadow:0 0 7px var(--glow);animation:dp 1.8s ease-in-out infinite;}
+@keyframes dp{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+.hdr-clk{font-family:var(--cond);font-size:9px;letter-spacing:.14em;color:rgba(196,160,112,.28);margin-top:2px;}
 
-/* ── FIRE GLOW ── */
-#fglow {
-  position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%);
-  width: 120vw; height: 55vh;
-  background: radial-gradient(ellipse at 50% 100%, rgba(192,72,0,.13) 0%, rgba(120,38,0,.06) 40%, transparent 70%);
-  pointer-events: none; z-index: 1;
-  animation: breathe 4.5s ease-in-out infinite;
-}
-@keyframes breathe { 0%,100%{opacity:.7} 50%{opacity:1} }
+#tabs{display:flex;gap:clamp(3px,1vw,8px);padding:clamp(7px,1.2vh,12px) clamp(16px,4vw,48px);
+  overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+#tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;font-family:var(--cond);font-weight:600;
+  font-size:clamp(10px,1.3vw,12px);letter-spacing:.16em;text-transform:uppercase;
+  padding:clamp(7px,1vh,10px) clamp(12px,2vw,20px);border-radius:2px;
+  border:1px solid rgba(196,160,112,.1);color:rgba(196,160,112,.38);
+  background:none;cursor:none;-webkit-tap-highlight-color:transparent;
+  transition:color .3s,border-color .3s,box-shadow .3s;position:relative;overflow:hidden;white-space:nowrap;}
+.tab::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,var(--ember),var(--fire));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .45s cubic-bezier(.77,0,.18,1);z-index:0;}
+.tab span{position:relative;z-index:1;}
+.tab.active{color:var(--cream);border-color:var(--fire);box-shadow:0 0 20px rgba(192,72,0,.22);}
+.tab.active::before{transform:scaleX(1);}
+.tab:hover:not(.active){border-color:rgba(240,136,32,.28);color:rgba(240,136,32,.7);}
 
-/* ── CURSOR ── */
-#cur { position: fixed; z-index: 9999; pointer-events: none; top:0; left:0; }
-#cur-d { width:8px; height:8px; border-radius:50%; background:var(--flame); transform:translate(-50%,-50%); box-shadow:0 0 10px var(--flame); transition:width .3s,height .3s; }
-#cur-r { position:absolute; top:0; left:0; width:34px; height:34px; border:1px solid rgba(240,136,32,.35); border-radius:50%; transform:translate(-50%,-50%); transition:width .45s cubic-bezier(.16,1,.3,1),height .45s,border-color .3s; }
-@media (hover:none) { #cur { display:none; } }
+/* LAYOUT */
+#layout{position:relative;z-index:10;display:grid;grid-template-columns:1fr;
+  min-height:calc(100vh - 130px);
+  padding:clamp(16px,3vh,32px) clamp(16px,4vw,48px);gap:clamp(20px,4vh,36px);}
+@media(min-width:960px){#layout{grid-template-columns:1fr 320px;align-items:start;gap:44px;}}
 
-/* ════════════════════════════════════════════
-   HEADER
-════════════════════════════════════════════ */
-#hdr {
-  position: sticky; top: 0; z-index: 200;
-  background: linear-gradient(to bottom, rgba(8,6,4,.98) 80%, transparent);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(196,160,112,.1);
-  padding: 0 clamp(16px,4vw,48px);
-}
+.sec{display:none;}.sec.active{display:block;}
+.sh{margin-bottom:clamp(14px,2.5vh,22px);padding-bottom:14px;
+  border-bottom:1px solid rgba(196,160,112,.1);position:relative;}
+.sh::after{content:'';position:absolute;bottom:-1px;left:0;width:0;height:1px;
+  background:linear-gradient(90deg,var(--ember),var(--flame));
+  transition:width .8s cubic-bezier(.16,1,.3,1);}
+.sec.active .sh::after{width:80px;}
+.st{font-family:var(--serif);font-weight:900;font-size:clamp(26px,5vw,52px);
+  letter-spacing:-.02em;line-height:1;color:var(--cream);}
+.si{font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(12px,1.4vw,17px);color:rgba(196,160,112,.4);}
+.sn{font-family:var(--cond);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(196,160,112,.26);margin-bottom:clamp(10px,2vh,18px);}
 
-#hdr-top {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: clamp(12px,2vh,18px) 0 clamp(8px,1.2vh,12px);
-  border-bottom: 1px solid rgba(196,160,112,.07);
-}
+/* ITEMS */
+.items{display:grid;grid-template-columns:1fr;gap:0;}
+@media(min-width:580px) and (max-width:959px){.items{grid-template-columns:1fr 1fr;column-gap:24px;}}
 
-#back-btn {
-  font-family: var(--cond); font-weight: 600;
-  font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
-  color: rgba(196,160,112,.4); background: none;
-  border: 1px solid rgba(196,160,112,.12); padding: 7px 16px; border-radius: 2px;
-  cursor: none; -webkit-tap-highlight-color: transparent;
-  transition: all .25s; text-decoration: none; display: inline-block;
-}
-#back-btn:hover, #back-btn:active { border-color:rgba(240,136,32,.4); color:var(--flame); }
+.mi{position:relative;display:flex;align-items:flex-start;justify-content:space-between;
+  padding:clamp(13px,2vh,18px) clamp(12px,2vw,18px);
+  border-bottom:1px solid rgba(196,160,112,.07);border-radius:4px;
+  transform-style:preserve-3d;transition:border-color .35s,box-shadow .4s;
+  cursor:default;will-change:transform;overflow:hidden;}
+.mi:hover{border-color:rgba(240,136,32,.15);box-shadow:0 8px 40px rgba(192,72,0,.12);}
+.mi-spec{position:absolute;inset:0;border-radius:4px;pointer-events:none;z-index:1;}
+.mi::before{content:'';position:absolute;inset:0;border-radius:4px;
+  background:linear-gradient(100deg,rgba(192,72,0,.09) 0%,rgba(240,136,32,.05) 45%,transparent 80%);
+  transform:translateX(-108%);transition:transform .65s cubic-bezier(.77,0,.18,1);z-index:0;}
+.mi:hover::before{transform:translateX(0);}
+.mi::after{content:'';position:absolute;left:0;top:16%;bottom:16%;width:2px;border-radius:2px;
+  background:linear-gradient(to bottom,transparent,var(--fire),transparent);
+  transform:scaleY(0);transform-origin:center;
+  transition:transform .4s cubic-bezier(.16,1,.3,1);box-shadow:0 0 8px var(--fire);}
+.mi:hover::after{transform:scaleY(1);}
 
-.hdr-brand {
-  text-align: center; display: flex; flex-direction: column; align-items: center; gap: 2px;
-}
-.hdr-name {
-  font-family: var(--serif); font-weight: 700;
-  font-size: clamp(16px,2.5vw,24px); letter-spacing:.01em;
-  color: var(--cream); line-height: 1;
-  text-shadow: 0 0 30px rgba(240,136,32,.18);
-}
-.hdr-name em { font-style:italic; font-weight:400; color:var(--flame); }
-.hdr-sub {
-  font-family: var(--cond); font-weight: 400;
-  font-size: 9px; letter-spacing: .28em; text-transform: uppercase;
-  color: rgba(196,160,112,.3);
-}
+.mi-l{flex:1;padding-right:14px;position:relative;z-index:2;}
+.mi-n{font-family:var(--serif);font-weight:700;font-size:clamp(15px,1.9vw,21px);
+  color:rgba(232,212,176,.88);line-height:1.15;transition:color .3s;}
+.mi:hover .mi-n{color:var(--cream);}
+.mi-d{font-family:var(--body);font-weight:300;font-size:clamp(10px,1vw,13px);
+  line-height:1.5;color:rgba(196,160,112,.36);margin-top:3px;transition:color .3s;}
+.mi:hover .mi-d{color:rgba(196,160,112,.56);}
+.mi-b{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;}
+.badge{font-family:var(--cond);font-weight:600;font-size:7px;letter-spacing:.15em;
+  text-transform:uppercase;padding:2px 7px;border-radius:2px;}
+.b-p{background:rgba(255,107,53,.15);color:var(--pop);border:1px solid rgba(255,107,53,.22);}
+.b-s{background:rgba(240,136,32,.12);color:var(--flame);border:1px solid rgba(240,136,32,.22);}
+.b-n{background:rgba(100,200,80,.1);color:#90e060;border:1px solid rgba(100,200,80,.2);}
 
-.hdr-status {
-  display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
-}
-.hdr-live {
-  font-family: var(--cond); font-weight: 600; font-size: 10px;
-  letter-spacing: .12em; text-transform: uppercase;
-  color: var(--flame); display: flex; align-items: center; gap: 5px;
-}
-.live-dot { width:5px; height:5px; border-radius:50%; background:var(--glow); box-shadow:0 0 7px var(--glow); animation:dp 1.8s ease-in-out infinite; }
-@keyframes dp { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
-.hdr-time { font-family:var(--cond); font-size:9px; letter-spacing:.15em; color:rgba(196,160,112,.3); }
+.mi-r{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;position:relative;z-index:2;}
+.mi-p{font-family:var(--cond);font-weight:700;font-size:clamp(15px,1.9vw,20px);
+  letter-spacing:.02em;color:var(--glow);
+  text-shadow:0 0 18px rgba(245,168,48,.28);transition:text-shadow .3s;}
+.mi:hover .mi-p{text-shadow:0 0 30px rgba(245,168,48,.6);}
+.mi-nt{font-family:var(--cond);font-size:9px;letter-spacing:.1em;
+  color:rgba(196,160,112,.28);text-transform:uppercase;text-align:right;}
 
-/* ── CATEGORY TABS ── */
-#tabs-wrap {
-  padding: clamp(8px,1.2vh,14px) 0;
-  display: flex; gap: clamp(4px,1vw,10px);
-  overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
-}
-#tabs-wrap::-webkit-scrollbar { display: none; }
+.mi.hero{flex-direction:column;gap:10px;padding:clamp(16px,2.5vh,22px) clamp(14px,2vw,20px);
+  margin-bottom:4px;background:rgba(192,72,0,.07);
+  border:1px solid rgba(192,72,0,.2);border-radius:6px;}
+.mi.hero::before,.mi.hero::after{display:none;}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;width:100%;}
+.h-badge{font-family:var(--cond);font-weight:700;font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  padding:3px 10px;border-radius:2px;background:rgba(192,72,0,.25);color:var(--flame);
+  border:1px solid rgba(192,72,0,.38);margin-bottom:7px;display:inline-block;}
+.mi.hero .mi-n{font-size:clamp(19px,2.7vw,27px);color:var(--cream);}
+.mi.hero .mi-p{font-size:clamp(19px,2.4vw,25px);}
 
-.tab {
-  flex-shrink: 0;
-  font-family: var(--cond); font-weight: 600;
-  font-size: clamp(10px,1.4vw,13px); letter-spacing: .18em; text-transform: uppercase;
-  padding: clamp(7px,1vh,10px) clamp(12px,2vw,22px);
-  border-radius: 2px;
-  border: 1px solid rgba(196,160,112,.1);
-  color: rgba(196,160,112,.38);
-  background: none; cursor: none; -webkit-tap-highlight-color: transparent;
-  transition: all .35s;
-  position: relative; overflow: hidden;
-  white-space: nowrap;
-}
-/* ember fill on active */
-.tab::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, var(--ember), var(--fire));
-  transform: scaleX(0); transform-origin: left;
-  transition: transform .4s cubic-bezier(.77,0,.18,1); z-index: 0;
-}
-.tab.active { color: var(--cream); border-color: var(--fire); }
-.tab.active::before { transform: scaleX(1); }
-.tab span { position: relative; z-index: 1; }
-.tab:hover:not(.active) { border-color: rgba(240,136,32,.3); color: rgba(240,136,32,.7); }
+.dr{display:flex;align-items:center;gap:12px;padding:clamp(14px,2vh,20px) 0 clamp(10px,1.5vh,14px);}
+.dl{font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.28em;
+  text-transform:uppercase;color:rgba(196,160,112,.3);white-space:nowrap;}
+.dline{flex:1;height:1px;background:linear-gradient(90deg,rgba(196,160,112,.14),transparent);}
+.df{font-size:11px;animation:flkr 2.2s ease-in-out infinite;
+  filter:drop-shadow(0 0 3px rgba(240,136,32,.5));}
+@keyframes flkr{0%,100%{opacity:.6;transform:scaleY(1)}40%{opacity:1;transform:scaleY(1.1) translateY(-1px)}}
 
-/* ════════════════════════════════════════════
-   MAIN LAYOUT — split on desktop
-════════════════════════════════════════════ */
-#layout {
-  position: relative; z-index: 10;
-  display: grid;
-  grid-template-columns: 1fr;
-  min-height: calc(100vh - 120px);
-  padding: clamp(16px,3vh,32px) clamp(16px,4vw,48px);
-  gap: clamp(24px,4vh,40px);
-}
-@media (min-width: 900px) {
-  #layout {
-    grid-template-columns: 1fr 340px;
-    align-items: start;
-    gap: 48px;
-  }
-}
+/* SPECIALS */
+.sp-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:clamp(9px,1.5vw,14px);}
+.sp-c{background:rgba(22,14,6,.65);border:1px solid rgba(196,160,112,.1);border-radius:8px;
+  padding:clamp(14px,2vh,20px);position:relative;overflow:hidden;
+  cursor:default;will-change:transform;transform-style:preserve-3d;
+  transition:border-color .4s,box-shadow .4s;}
+.sp-c:hover{border-color:rgba(240,136,32,.24);box-shadow:0 12px 48px rgba(192,72,0,.18);}
+.sp-sp{position:absolute;inset:0;border-radius:8px;pointer-events:none;z-index:0;}
+.sp-i{position:relative;z-index:1;}
+.sp-t{font-family:var(--cond);font-weight:600;font-size:8px;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(196,160,112,.28);margin-bottom:7px;}
+.sp-n{font-family:var(--serif);font-weight:700;font-size:clamp(16px,2vw,20px);
+  color:var(--cream);line-height:1.15;margin-bottom:6px;}
+.sp-d{font-family:var(--body);font-weight:300;font-size:clamp(11px,1.1vw,13px);
+  color:rgba(196,160,112,.4);line-height:1.55;margin-bottom:11px;}
+.sp-p{font-family:var(--cond);font-weight:700;font-size:clamp(18px,2.2vw,22px);
+  color:var(--glow);letter-spacing:.02em;text-shadow:0 0 18px rgba(245,168,48,.3);}
 
-/* ════════════════════════════════════════════
-   SECTION HEADING
-════════════════════════════════════════════ */
-.section-header {
-  display: flex; align-items: baseline; gap: 14px;
-  margin-bottom: clamp(14px,2.5vh,24px);
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(196,160,112,.1);
-  position: relative;
-}
-.section-header::after {
-  content: ''; position: absolute; bottom: -1px; left: 0; width: 60px; height: 1px;
-  background: linear-gradient(90deg, var(--ember), var(--flame));
-}
-.section-title {
-  font-family: var(--serif); font-weight: 900;
-  font-size: clamp(28px,5vw,52px);
-  letter-spacing: -.02em; line-height: 1;
-  color: var(--cream);
-}
-.section-italic {
-  font-family: var(--serif); font-style: italic; font-weight: 300;
-  font-size: clamp(13px,1.5vw,18px);
-  color: rgba(196,160,112,.45);
-}
-.section-note {
-  font-family: var(--cond); font-size: 10px; letter-spacing: .18em;
-  text-transform: uppercase; color: rgba(196,160,112,.28);
-  margin-bottom: clamp(10px,2vh,18px);
-  font-weight: 400;
-}
+/* DESSERTS */
+.ds-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(170px,100%),1fr));gap:clamp(7px,1.4vw,12px);}
+.ds-i{padding:clamp(12px,1.8vh,18px);border:1px solid rgba(196,160,112,.08);border-radius:6px;
+  text-align:center;cursor:default;transition:border-color .35s,background .35s,transform .4s cubic-bezier(.16,1,.3,1);will-change:transform;}
+.ds-i:hover{border-color:rgba(240,136,32,.22);background:rgba(192,72,0,.06);transform:translateY(-4px);}
+.ds-ic{font-size:clamp(24px,3.5vw,34px);margin-bottom:8px;filter:drop-shadow(0 0 7px rgba(240,136,32,.32));}
+.ds-n{font-family:var(--serif);font-weight:700;font-size:clamp(13px,1.5vw,16px);
+  color:rgba(232,212,176,.85);margin-bottom:4px;line-height:1.2;}
+.ds-p{font-family:var(--cond);font-weight:600;font-size:12px;color:rgba(245,168,48,.6);letter-spacing:.05em;}
 
-/* ════════════════════════════════════════════
-   MENU ITEMS
-════════════════════════════════════════════ */
-.items-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
-}
-@media (min-width: 600px) and (max-width: 899px) {
-  .items-grid { grid-template-columns: 1fr 1fr; gap: 0 24px; }
-}
+/* RIGHT COL */
+#rc{display:flex;flex-direction:column;gap:clamp(14px,2.2vh,20px);}
+@media(max-width:959px){#rc{order:-1;}}
+.ic{background:rgba(22,14,6,.7);border:1px solid rgba(196,160,112,.1);
+  border-radius:6px;padding:clamp(14px,2vh,20px);position:relative;overflow:hidden;}
+.ic::before{content:'';position:absolute;bottom:0;left:0;right:0;height:50%;
+  background:radial-gradient(ellipse at 50% 100%,rgba(192,72,0,.09),transparent 70%);pointer-events:none;}
+.ic-l{font-family:var(--cond);font-weight:600;font-size:8px;letter-spacing:.3em;
+  text-transform:uppercase;color:rgba(196,160,112,.28);margin-bottom:8px;}
+.ic-t{font-family:var(--serif);font-weight:700;font-size:clamp(15px,1.8vw,20px);
+  color:var(--cream);line-height:1.2;margin-bottom:6px;}
+.ic-t em{font-style:italic;font-weight:400;color:var(--flame);}
+.ic-b{font-family:var(--body);font-weight:300;font-size:clamp(11px,1.1vw,13px);line-height:1.7;color:rgba(196,160,112,.44);}
+.ic-b strong{color:rgba(232,212,176,.7);font-weight:400;}
+.rats{display:flex;gap:14px;margin-top:10px;}
+.rb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.r-s{font-size:11px;color:var(--glow);letter-spacing:.04em;}
+.r-n{font-family:var(--cond);font-weight:700;font-size:17px;color:var(--cream);}
+.r-src{font-family:var(--cond);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,160,112,.28);}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:10px;}
+.sgr{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(196,160,112,.06);}
+.sgn{font-family:var(--cond);font-size:10px;letter-spacing:.06em;color:rgba(196,160,112,.5);}
+.sgp{font-family:var(--cond);font-weight:700;font-size:10px;color:rgba(245,168,48,.58);}
+.ctac{background:linear-gradient(135deg,rgba(192,72,0,.22),rgba(224,96,16,.08));
+  border:1px solid rgba(192,72,0,.28);border-radius:6px;padding:clamp(14px,2vh,20px);text-align:center;}
+.ctat{font-family:var(--serif);font-weight:900;font-size:clamp(18px,2.2vw,23px);letter-spacing:-.01em;color:var(--cream);margin-bottom:6px;}
+.ctas{font-family:var(--body);font-weight:300;font-size:12px;color:rgba(196,160,112,.42);margin-bottom:14px;line-height:1.5;}
+.ctab{display:inline-flex;align-items:center;gap:8px;font-family:var(--cond);font-weight:700;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream);text-decoration:none;
+  background:linear-gradient(90deg,var(--ember),var(--fire));
+  padding:12px 22px;border-radius:2px;border:none;cursor:none;-webkit-tap-highlight-color:transparent;
+  box-shadow:0 6px 24px rgba(192,72,0,.32);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,letter-spacing .3s;}
+.ctab:hover,.ctab:active{transform:scale(1.04);box-shadow:0 10px 36px rgba(192,72,0,.48);letter-spacing:.26em;}
 
-.menu-item {
-  position: relative;
-  display: flex; align-items: flex-start; justify-content: space-between;
-  padding: clamp(13px,2vh,18px) 0;
-  border-bottom: 1px solid rgba(196,160,112,.07);
-  overflow: hidden;
-  transition: border-color .35s;
-  cursor: default;
-}
-.menu-item:hover { border-bottom-color: rgba(240,136,32,.15); }
+#ftr{position:relative;z-index:10;border-top:1px solid rgba(196,160,112,.07);
+  background:linear-gradient(to top,rgba(7,5,3,.95),transparent);
+  padding:clamp(12px,2vh,18px) clamp(16px,4vw,48px);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.ft{font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.18);}
+.ffs{display:flex;gap:4px;align-items:flex-end;}
+.ff{font-size:clamp(10px,1.5vw,14px);animation:flkr 2s ease-in-out infinite;filter:drop-shadow(0 0 4px rgba(240,136,32,.4));}
+.ff:nth-child(2){animation-delay:.3s;font-size:.8em;}
+.ff:nth-child(3){animation-delay:.65s;}
 
-/* glow sweep */
-.menu-item::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(192,72,0,.07) 0%, rgba(240,136,32,.04) 50%, transparent 100%);
-  transform: translateX(-105%);
-  transition: transform .6s cubic-bezier(.77,0,.18,1);
-}
-.menu-item:hover::before { transform: translateX(0); }
-
-/* ember left accent */
-.menu-item::after {
-  content: ''; position: absolute; left: 0; top: 18%; bottom: 18%; width: 2px;
-  background: linear-gradient(to bottom, transparent, var(--fire), transparent);
-  transform: scaleY(0); transform-origin: center;
-  transition: transform .4s cubic-bezier(.16,1,.3,1);
-}
-.menu-item:hover::after { transform: scaleY(1); }
-
-.item-left { flex: 1; padding-left: 0; padding-right: 16px; position: relative; z-index: 1; }
-.item-name {
-  font-family: var(--serif); font-weight: 700;
-  font-size: clamp(16px,2vw,21px);
-  color: rgba(232,212,176,.88); line-height: 1.15;
-  transition: color .3s;
-}
-.menu-item:hover .item-name { color: var(--cream); }
-
-.item-desc {
-  font-family: var(--body); font-weight: 300;
-  font-size: clamp(11px,1.1vw,13px); line-height: 1.5;
-  color: rgba(196,160,112,.38); margin-top: 3px;
-  transition: color .3s;
-}
-.menu-item:hover .item-desc { color: rgba(196,160,112,.58); }
-
-.item-badges { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
-.badge {
-  font-family: var(--cond); font-weight: 600;
-  font-size: 7px; letter-spacing: .15em; text-transform: uppercase;
-  padding: 2px 7px; border-radius: 2px;
-}
-.badge-pop     { background: rgba(255,107,53,.15); color: var(--pop); border: 1px solid rgba(255,107,53,.2); }
-.badge-special { background: rgba(240,136,32,.12); color: var(--flame); border: 1px solid rgba(240,136,32,.2); }
-.badge-new     { background: rgba(100,200,80,.1);  color: #90e060; border: 1px solid rgba(100,200,80,.2); }
-
-.item-right {
-  display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
-  flex-shrink: 0; position: relative; z-index: 1;
-}
-.item-price {
-  font-family: var(--cond); font-weight: 700;
-  font-size: clamp(16px,2vw,20px); letter-spacing: .02em;
-  color: var(--glow);
-  text-shadow: 0 0 20px rgba(245,168,48,.3);
-  transition: text-shadow .3s;
-}
-.menu-item:hover .item-price { text-shadow: 0 0 30px rgba(245,168,48,.55); }
-.item-size-note {
-  font-family: var(--cond); font-size: 9px; letter-spacing: .12em;
-  color: rgba(196,160,112,.3); text-transform: uppercase; text-align: right;
-}
-
-/* FEATURED / HERO ITEM */
-.menu-item.hero {
-  flex-direction: column; gap: 10px;
-  padding: clamp(16px,2.5vh,22px);
-  margin-bottom: 4px;
-  background: rgba(192,72,0,.06);
-  border: 1px solid rgba(192,72,0,.18);
-  border-radius: 4px;
-}
-.menu-item.hero::before { display: none; }
-.menu-item.hero::after  { display: none; }
-.hero-top { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; }
-.hero-badge {
-  font-family: var(--cond); font-weight: 700;
-  font-size: 8px; letter-spacing: .2em; text-transform: uppercase;
-  padding: 3px 10px; border-radius: 2px;
-  background: rgba(192,72,0,.25); color: var(--flame);
-  border: 1px solid rgba(192,72,0,.35);
-  margin-bottom: 6px; display: inline-block;
-}
-.menu-item.hero .item-name {
-  font-size: clamp(20px,2.8vw,28px);
-  color: var(--cream);
-}
-.menu-item.hero .item-desc {
-  color: rgba(196,160,112,.55); font-size: clamp(12px,1.2vw,14px);
-}
-.menu-item.hero .item-price {
-  font-size: clamp(20px,2.5vw,26px);
-}
-
-/* DIVIDER between sections inside same category */
-.item-divider {
-  display: flex; align-items: center; gap: 12px;
-  padding: clamp(14px,2.2vh,20px) 0 clamp(10px,1.5vh,14px);
-}
-.divider-label {
-  font-family: var(--cond); font-weight: 700;
-  font-size: 9px; letter-spacing: .28em; text-transform: uppercase;
-  color: rgba(196,160,112,.3); white-space: nowrap;
-}
-.divider-line {
-  flex: 1; height: 1px;
-  background: linear-gradient(90deg, rgba(196,160,112,.15), transparent);
-}
-.divider-flame { font-size: 11px; animation:flkr 2.2s ease-in-out infinite; filter:drop-shadow(0 0 3px rgba(240,136,32,.5)); }
-@keyframes flkr { 0%,100%{opacity:.6;transform:scaleY(1)} 40%{opacity:1;transform:scaleY(1.1) translateY(-1px)} }
-
-/* ════════════════════════════════════════════
-   RIGHT COLUMN — PIT INFO
-════════════════════════════════════════════ */
-#right-col { display: flex; flex-direction: column; gap: clamp(16px,2.5vh,24px); }
-@media (max-width: 899px) { #right-col { order: -1; } }
-
-.info-card {
-  background: rgba(26,17,8,.7);
-  border: 1px solid rgba(196,160,112,.1);
-  border-radius: 4px; padding: clamp(14px,2vh,20px);
-  position: relative; overflow: hidden;
-}
-.info-card::before {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 50%;
-  background: radial-gradient(ellipse at 50% 100%, rgba(192,72,0,.08), transparent 70%);
-  pointer-events: none;
-}
-.ic-label {
-  font-family: var(--cond); font-weight: 600;
-  font-size: 8px; letter-spacing: .3em; text-transform: uppercase;
-  color: rgba(196,160,112,.3); margin-bottom: 8px;
-}
-.ic-title {
-  font-family: var(--serif); font-weight: 700;
-  font-size: clamp(15px,1.8vw,20px);
-  color: var(--cream); line-height: 1.2; margin-bottom: 6px;
-}
-.ic-title em { font-style:italic; font-weight:400; color:var(--flame); }
-.ic-body {
-  font-family: var(--body); font-weight: 300;
-  font-size: clamp(11px,1.1vw,13px); line-height: 1.7;
-  color: rgba(196,160,112,.45);
-}
-.ic-body strong { color: rgba(232,212,176,.7); font-weight: 400; }
-
-/* sides grid in info card */
-.sides-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
-.side-item {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 5px 0;
-  border-bottom: 1px solid rgba(196,160,112,.07);
-  font-family: var(--cond);
-}
-.side-name { font-size: 11px; letter-spacing: .06em; color: rgba(196,160,112,.55); font-weight: 400; }
-.side-price { font-size: 10px; color: rgba(245,168,48,.6); font-weight: 600; letter-spacing: .06em; }
-
-/* call-to-action card */
-.cta-card {
-  background: linear-gradient(135deg, rgba(192,72,0,.2), rgba(224,96,16,.08));
-  border: 1px solid rgba(192,72,0,.25);
-  border-radius: 4px; padding: clamp(14px,2vh,20px);
-  text-align: center;
-}
-.cta-card-title {
-  font-family: var(--serif); font-weight: 900;
-  font-size: clamp(18px,2.2vw,24px); letter-spacing: -.01em;
-  color: var(--cream); margin-bottom: 6px;
-}
-.cta-card-sub {
-  font-family: var(--body); font-weight: 300; font-size: 13px;
-  color: rgba(196,160,112,.45); margin-bottom: 14px; line-height: 1.5;
-}
-.cta-pill {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--cond); font-weight: 700;
-  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--cream);
-  background: linear-gradient(90deg, var(--ember), var(--fire));
-  padding: 11px 24px; border-radius: 2px; border: none; cursor: none;
-  -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 6px 24px rgba(192,72,0,.3);
-  transition: transform .2s, box-shadow .2s, letter-spacing .3s;
-  text-decoration: none;
-}
-.cta-pill:hover, .cta-pill:active { transform:scale(1.03); box-shadow:0 8px 32px rgba(192,72,0,.45); letter-spacing:.28em; }
-
-/* ratings */
-.ratings-row { display: flex; gap: 14px; margin-top: 10px; }
-.rating-bit { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
-.rating-stars { font-size: 12px; color: var(--glow); letter-spacing: .05em; }
-.rating-num { font-family: var(--cond); font-weight: 700; font-size: 16px; color: var(--cream); }
-.rating-source { font-family: var(--cond); font-size: 8px; letter-spacing: .15em; text-transform: uppercase; color: rgba(196,160,112,.3); }
-
-/* ════════════════════════════════════════════
-   SPECIALS — card grid layout
-════════════════════════════════════════════ */
-.specials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(280px,100%), 1fr));
-  gap: clamp(10px,1.8vw,16px);
-}
-.special-card {
-  background: rgba(26,17,8,.65);
-  border: 1px solid rgba(196,160,112,.1);
-  border-radius: 6px;
-  padding: clamp(14px,2vh,20px);
-  position: relative; overflow: hidden;
-  transition: border-color .35s, transform .3s cubic-bezier(.16,1,.3,1);
-  cursor: default;
-}
-.special-card:hover { border-color: rgba(240,136,32,.22); transform: translateY(-3px); }
-.special-card::before {
-  content: ''; position: absolute; inset: 0; border-radius: 6px;
-  background: linear-gradient(135deg, rgba(192,72,0,.08), transparent 60%);
-  opacity: 0; transition: opacity .4s;
-}
-.special-card:hover::before { opacity: 1; }
-.sc-type { font-family: var(--cond); font-weight: 600; font-size: 8px; letter-spacing: .24em; text-transform: uppercase; color: rgba(196,160,112,.3); margin-bottom: 7px; }
-.sc-name { font-family: var(--serif); font-weight: 700; font-size: clamp(16px,2vw,20px); color: var(--cream); line-height: 1.15; margin-bottom: 6px; }
-.sc-desc { font-family: var(--body); font-weight: 300; font-size: clamp(11px,1.1vw,13px); color: rgba(196,160,112,.42); line-height: 1.55; margin-bottom: 10px; }
-.sc-price { font-family: var(--cond); font-weight: 700; font-size: clamp(18px,2.2vw,22px); color: var(--glow); letter-spacing: .02em; text-shadow: 0 0 18px rgba(245,168,48,.28); }
-
-/* ════════════════════════════════════════════
-   DESSERTS — decorative layout
-════════════════════════════════════════════ */
-.desserts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(200px,100%), 1fr));
-  gap: clamp(8px,1.5vw,14px);
-}
-.dessert-item {
-  padding: clamp(12px,1.8vh,16px);
-  border: 1px solid rgba(196,160,112,.08);
-  border-radius: 4px; text-align: center;
-  transition: border-color .35s, background .35s;
-  cursor: default;
-}
-.dessert-item:hover { border-color: rgba(240,136,32,.2); background: rgba(192,72,0,.05); }
-.di-icon { font-size: clamp(22px,3vw,30px); margin-bottom: 7px; filter: drop-shadow(0 0 6px rgba(240,136,32,.3)); }
-.di-name { font-family: var(--serif); font-weight: 700; font-size: clamp(14px,1.6vw,17px); color: rgba(232,212,176,.85); margin-bottom: 3px; line-height: 1.2; }
-.di-price { font-family: var(--cond); font-weight: 600; font-size: 13px; color: rgba(245,168,48,.65); letter-spacing: .05em; }
-
-/* ════════════════════════════════════════════
-   FOOTER BAR
-════════════════════════════════════════════ */
-#ftr {
-  position: relative; z-index: 10;
-  border-top: 1px solid rgba(196,160,112,.08);
-  background: linear-gradient(to top, rgba(8,6,4,.95), transparent);
-  padding: clamp(12px,2vh,18px) clamp(16px,4vw,48px);
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
-}
-.ftr-txt { font-family: var(--cond); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: rgba(196,160,112,.2); }
-.ftr-flames { display: flex; gap: 4px; align-items: flex-end; }
-.ff { font-size: clamp(10px,1.5vw,14px); animation: flkr 2s ease-in-out infinite; filter: drop-shadow(0 0 4px rgba(240,136,32,.4)); }
-.ff:nth-child(2){ animation-delay:.3s; font-size:.8em; }
-.ff:nth-child(3){ animation-delay:.7s; }
-
-/* HIDDEN sections */
-.menu-section { display: none; }
-.menu-section.active { display: block; }
-
-/* scroll reveal */
-.menu-section.active .menu-item,
-.menu-section.active .special-card,
-.menu-section.active .dessert-item {
-  animation: itemIn .4s ease both;
-}
-.menu-section.active .menu-item:nth-child(1)  { animation-delay: .04s }
-.menu-section.active .menu-item:nth-child(2)  { animation-delay: .08s }
-.menu-section.active .menu-item:nth-child(3)  { animation-delay: .12s }
-.menu-section.active .menu-item:nth-child(4)  { animation-delay: .16s }
-.menu-section.active .menu-item:nth-child(5)  { animation-delay: .20s }
-.menu-section.active .menu-item:nth-child(6)  { animation-delay: .24s }
-.menu-section.active .menu-item:nth-child(7)  { animation-delay: .28s }
-.menu-section.active .menu-item:nth-child(8)  { animation-delay: .32s }
-.menu-section.active .menu-item:nth-child(9)  { animation-delay: .36s }
-.menu-section.active .menu-item:nth-child(10) { animation-delay: .40s }
-.menu-section.active .special-card:nth-child(1){ animation-delay:.04s }
-.menu-section.active .special-card:nth-child(2){ animation-delay:.10s }
-.menu-section.active .special-card:nth-child(3){ animation-delay:.16s }
-.menu-section.active .special-card:nth-child(4){ animation-delay:.22s }
-.menu-section.active .special-card:nth-child(5){ animation-delay:.28s }
-.menu-section.active .special-card:nth-child(6){ animation-delay:.34s }
-.menu-section.active .dessert-item:nth-child(1){ animation-delay:.04s }
-.menu-section.active .dessert-item:nth-child(2){ animation-delay:.10s }
-.menu-section.active .dessert-item:nth-child(3){ animation-delay:.16s }
-.menu-section.active .dessert-item:nth-child(4){ animation-delay:.22s }
-@keyframes itemIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-
-/* page fade in */
-body { opacity: 0; transition: opacity .7s ease; }
-body.on { opacity: 1; }
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .6s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
 </style>
 </head>
 <body>
+<div id="grain"></div>
+<canvas id="fire-cv"></canvas>
+<canvas id="smoke-cv"></canvas>
+<canvas id="ember-cv"></canvas>
+<canvas id="transition-cv"></canvas>
+<div id="vignette"></div>
+<div id="cursor"><div id="c-dot"></div><div id="c-ring"></div></div>
 
-<div id="cur"><div id="cur-d"></div><div id="cur-r"></div></div>
-<canvas id="ecv"></canvas>
-<div id="fglow"></div>
-
-<!-- ══════════ HEADER ══════════ -->
 <div id="hdr">
   <div id="hdr-top">
     <a id="back-btn" href="francis-final.html">← Back</a>
-    <div class="hdr-brand">
-      <div class="hdr-name">The Francis <em>Smokehouse</em></div>
-      <div class="hdr-sub">The Pit Board — St. Francisville, LA</div>
+    <div class="hdr-c">
+      <div class="hdr-n">The Francis <em>Smokehouse</em></div>
+      <div class="hdr-s">The Pit Board · St. Francisville, LA</div>
     </div>
-    <div class="hdr-status">
-      <div class="hdr-live"><span class="live-dot"></span>Fire's Burning</div>
-      <div class="hdr-time" id="clock">10am – 6pm Today</div>
+    <div class="hdr-r">
+      <div class="hdr-live"><span class="ldot"></span>Fire's Burning</div>
+      <div class="hdr-clk" id="clk">Open · 10am–6pm</div>
     </div>
   </div>
-
-  <!-- TABS -->
-  <div id="tabs-wrap">
-    <button class="tab active" onclick="switchTab('bbq',this)"><span>🔥 BBQ Plates</span></button>
-    <button class="tab" onclick="switchTab('sandwiches',this)"><span>🥖 Po-boys & Sandwiches</span></button>
-    <button class="tab" onclick="switchTab('boudin',this)"><span>🌶 Boudin & Cajun</span></button>
-    <button class="tab" onclick="switchTab('specials',this)"><span>✦ Daily Specials</span></button>
-    <button class="tab" onclick="switchTab('sides',this)"><span>🍟 Sides</span></button>
-    <button class="tab" onclick="switchTab('desserts',this)"><span>🍮 Desserts</span></button>
+  <div id="tabs">
+    <button class="tab active" onclick="sw('bbq',this)"><span>🔥 BBQ Plates</span></button>
+    <button class="tab" onclick="sw('sb',this)"><span>🥖 Po-boys</span></button>
+    <button class="tab" onclick="sw('bd',this)"><span>🌶 Boudin</span></button>
+    <button class="tab" onclick="sw('sp',this)"><span>✦ Specials</span></button>
+    <button class="tab" onclick="sw('si',this)"><span>🍟 Sides</span></button>
+    <button class="tab" onclick="sw('ds',this)"><span>🍮 Desserts</span></button>
   </div>
 </div>
 
-<!-- ══════════ MAIN LAYOUT ══════════ -->
 <div id="layout">
+<div id="left-col">
 
-  <!-- LEFT — MENU CONTENT -->
-  <div id="left-col">
-
-    <!-- BBQ PLATES -->
-    <div class="menu-section active" id="sec-bbq">
-      <div class="section-header">
-        <div class="section-title">BBQ Plates</div>
-        <div class="section-italic">Served with two sides</div>
-      </div>
-      <div class="section-note">All meats smoked 12+ hours over post oak & hickory · Plates include two sides of your choice</div>
-      <div class="items-grid">
-
-        <div class="menu-item hero">
-          <div class="hero-top">
-            <div class="item-left">
-              <div class="hero-badge">✦ Pit Master's Cut</div>
-              <div class="item-name">Brisket Plate</div>
-              <div class="item-desc">Slow-smoked beef brisket, sliced to order. Bark-crusted, smoke-ringed, impossibly tender.</div>
-              <div class="item-badges"><span class="badge badge-pop">Most Ordered</span><span class="badge badge-special">12 Hrs Smoke</span></div>
-            </div>
-            <div class="item-right"><div class="item-price">$10.99</div><div class="item-size-note">+ 2 sides</div></div>
-          </div>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-left">
-            <div class="item-name">Full Rack of Ribs</div>
-            <div class="item-desc">Pork spare ribs, rubbed and smoked low and slow until fall-off-the-bone.</div>
-            <div class="item-badges"><span class="badge badge-pop">Fan Favorite</span></div>
-          </div>
-          <div class="item-right"><div class="item-price">$19.99</div><div class="item-size-note">+ 2 sides</div></div>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-left">
-            <div class="item-name">½ Rack of Ribs</div>
-            <div class="item-desc">Half rack of our signature smoked pork spare ribs.</div>
-          </div>
-          <div class="item-right"><div class="item-price">$11.99</div><div class="item-size-note">+ 2 sides</div></div>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-left">
-            <div class="item-name">Pulled Pork Plate</div>
-            <div class="item-desc">Pork shoulder smoked until it pulls apart like silk. Topped with house sauce.</div>
-          </div>
-          <div class="item-right"><div class="item-price">$9.99</div><div class="item-size-note">+ 2 sides</div></div>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-left">
-            <div class="item-name">½ Smoked Chicken</div>
-            <div class="item-desc">Half chicken, brined and smoked whole, juicy through to the bone.</div>
-          </div>
-          <div class="item-right"><div class="item-price">$9.99</div><div class="item-size-note">+ 2 sides</div></div>
-        </div>
-
-        <div class="menu-item">
-          <div class="item-left">
-            <div class="item-name">Smoked Wings</div>
-            <div class="item-desc">Whole wings, smoked low then finished hot. Crispy skin, smoky through.</div>
-            <div class="item-badges"><span class="badge badge-new">Try It</span></div>
-          </div>
-          <div class="item-right"><div class="item-price">$7.99</div></div>
-        </div>
-
-      </div>
-    </div><!-- /bbq -->
-
-    <!-- PO-BOYS & SANDWICHES -->
-    <div class="menu-section" id="sec-sandwiches">
-      <div class="section-header">
-        <div class="section-title">Po-boys & Sandwiches</div>
-        <div class="section-italic">Served with one side · Dressed with lettuce & tomato</div>
-      </div>
-
-      <div class="item-divider">
-        <div class="divider-label">Smoked Meats</div>
-        <div class="divider-line"></div>
-        <div class="divider-flame">🔥</div>
-      </div>
-      <div class="items-grid">
-        <div class="menu-item">
-          <div class="item-left"><div class="item-name">Pulled Pork Sandwich</div><div class="item-desc">House-smoked pulled pork on a toasted bun. House sauce on the side.</div></div>
-          <div class="item-right"><div class="item-price">$7.99</div><div class="item-size-note">+ 1 side</div></div>
-        </div>
-        <div class="menu-item">
-          <div class="item-left"><div class="item-name">Brisket Sandwich</div><div class="item-desc">Sliced smoked brisket piled on a bun. Simple. Perfect.</div><div class="item-badges"><span class="badge badge-pop">Best Seller</span></div></div>
-          <div class="item-right"><div class="item-price">$8.99</div><div class="item-size-note">+ 1 side</div></div>
-        </div>
-        <div class="menu-item">
-          <div class="item-left"><div class="item-name">Chicken Sandwich</div><div class="item-desc">Smoked chicken breast on a brioche bun with house slaw.</div></div>
-          <div class="item-right"><div class="item-price">$7.99</div><div class="item-size-note">+ 1 side</div></div>
-        </div>
-      </div>
-
-      <div class="item-divider">
-        <div class="divider-label">Burgers</div>
-        <div class="divider-line"></div>
-        <div class="divider-flame">🔥</div>
-      </div>
-      <div class="items-grid">
-        <div class="menu-item"><div class="item-left"><div class="item-name">Hamburger</div><div class="item-desc">Hand-formed beef patty on a toasted bun. Dressed.</div></div><div class="item-right"><div class="item-price">$6.99</div><div class="item-size-note">+ 1 side</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Cheeseburger</div><div class="item-desc">Add American cheese. The classic.</div></div><div class="item-right"><div class="item-price">$7.99</div><div class="item-size-note">+ 1 side</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Bacon Cheeseburger</div><div class="item-desc">Smoked bacon, American cheese, dressed.</div><div class="item-badges"><span class="badge badge-pop">Top Pick</span></div></div><div class="item-right"><div class="item-price">$8.99</div><div class="item-size-note">+ 1 side</div></div></div>
-      </div>
-
-      <div class="item-divider">
-        <div class="divider-label">Louisiana Po-boys</div>
-        <div class="divider-line"></div>
-        <div class="divider-flame">🔥</div>
-      </div>
-      <div class="items-grid">
-        <div class="menu-item"><div class="item-left"><div class="item-name">Ribeye Po-boy</div><div class="item-desc">Shaved ribeye on French bread, dressed. A house signature.</div><div class="item-badges"><span class="badge badge-special">Signature</span></div></div><div class="item-right"><div class="item-price">$10.99</div><div class="item-size-note">+ 1 side</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Shrimp Po-boy</div><div class="item-desc">Gulf shrimp, fried golden, dressed on French bread.</div></div><div class="item-right"><div class="item-price">$8.99</div><div class="item-size-note">+ 1 side</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Crawfish Po-boy</div><div class="item-desc">Louisiana crawfish tails, seasoned and fried, dressed.</div><div class="item-badges"><span class="badge badge-new">Louisiana Proud</span></div></div><div class="item-right"><div class="item-price">$10.99</div><div class="item-size-note">+ 1 side</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Catfish Po-boy</div><div class="item-desc">Cornmeal-crusted catfish, fried to order, dressed.</div></div><div class="item-right"><div class="item-price">$8.99</div><div class="item-size-note">+ 1 side</div></div></div>
-      </div>
-    </div><!-- /sandwiches -->
-
-    <!-- BOUDIN & CAJUN -->
-    <div class="menu-section" id="sec-boudin">
-      <div class="section-header">
-        <div class="section-title">Boudin & Cajun</div>
-        <div class="section-italic">Made in-house — true Louisiana tradition</div>
-      </div>
-      <div class="section-note">Our boudin is made from scratch in the deli. Specialty meats change with the season.</div>
-      <div class="items-grid">
-        <div class="menu-item hero">
-          <div class="hero-top">
-            <div class="item-left">
-              <div class="hero-badge">✦ Louisiana Icon</div>
-              <div class="item-name">Steamed Boudin Links</div>
-              <div class="item-desc">House-made pork and rice boudin, steamed in the casing. The real thing — Cajun comfort in every bite.</div>
-              <div class="item-badges"><span class="badge badge-pop">Made In-House</span></div>
-            </div>
-            <div class="item-right"><div class="item-price">Deli</div></div>
-          </div>
-        </div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Classic Boudin Balls</div><div class="item-desc">Boudin rolled and fried golden. Crispy outside, seasoned and juicy inside.</div><div class="item-badges"><span class="badge badge-pop">AMAZING — Guest Review</span></div></div><div class="item-right"><div class="item-price">Deli</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Pepper Jack Boudin Balls</div><div class="item-desc">Same boudin balls, loaded with melted pepper jack cheese. A step up in heat.</div><div class="item-badges"><span class="badge badge-special">Fan Favorite</span></div></div><div class="item-right"><div class="item-price">Deli</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Boudin Egg Rolls</div><div class="item-desc">Boudin filling wrapped in a crispy egg roll shell. Perfectly dippable.</div></div><div class="item-right"><div class="item-price">Deli</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Meat Pies</div><div class="item-desc">Old-school Louisiana meat pies, flaky pastry filled with seasoned ground meat.</div></div><div class="item-right"><div class="item-price">Deli</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Crawfish Pies</div><div class="item-desc">Seasoned Louisiana crawfish in a buttery, flaky pastry shell.</div><div class="item-badges"><span class="badge badge-new">Louisiana Made</span></div></div><div class="item-right"><div class="item-price">Deli</div></div></div>
-      </div>
-    </div><!-- /boudin -->
-
-    <!-- DAILY SPECIALS -->
-    <div class="menu-section" id="sec-specials">
-      <div class="section-header">
-        <div class="section-title">Daily Specials</div>
-        <div class="section-italic">Board changes every morning at 6am</div>
-      </div>
-      <div class="section-note">Call (225) 245-5046 or check Facebook for today's board · Prices & items rotate daily</div>
-      <div class="specials-grid">
-        <div class="special-card"><div class="sc-type">Appetizer</div><div class="sc-name">Sweet Thai Chili Wings</div><div class="sc-desc">Smoked wings tossed in house-made sweet Thai chili glaze. Sticky, smoky, addictive.</div><div class="sc-price">$16</div></div>
-        <div class="special-card"><div class="sc-type">Entrée</div><div class="sc-name">Eggplant Pirogue</div><div class="sc-desc">Hollowed eggplant filled with a rich Cajun seafood stuffing. A Louisiana classic.</div><div class="sc-price">$26</div></div>
-        <div class="special-card"><div class="sc-type">Entrée</div><div class="sc-name">Blackened Lemon Fish</div><div class="sc-desc">Blackened fresh fish with cream spinach and grilled Louisiana crawfish tails.</div><div class="sc-price">$28</div></div>
-        <div class="special-card"><div class="sc-type">Entrée</div><div class="sc-name">Jack Daniel's BBQ Shrimp</div><div class="sc-desc">Gulf shrimp in JD BBQ glaze with a 14oz bone-in pork chop, mac & cheese and green beans.</div><div class="sc-price">$26</div></div>
-        <div class="special-card"><div class="sc-type">Entrée</div><div class="sc-name">Grilled Salmon</div><div class="sc-desc">Grilled salmon fillet with Louisiana crabmeat, avocado cream sauce and house sides.</div><div class="sc-price">$28</div></div>
-        <div class="special-card"><div class="sc-type">Dessert Special</div><div class="sc-name">Miss Mud Pie</div><div class="sc-desc">The house dessert special. Rich, indulgent, and worth every bite.</div><div class="sc-price">$7</div></div>
-      </div>
-    </div><!-- /specials -->
-
-    <!-- SIDES -->
-    <div class="menu-section" id="sec-sides">
-      <div class="section-header">
-        <div class="section-title">Sides</div>
-        <div class="section-italic">Made from scratch, every morning</div>
-      </div>
-      <div class="section-note">Small sides come with sandwiches & burgers · BBQ plates include two sides of your choice</div>
-      <div class="items-grid">
-        <div class="menu-item"><div class="item-left"><div class="item-name">Corn Pudding</div><div class="item-desc">Creamy, sweet Southern corn pudding. A guest obsession.</div><div class="item-badges"><span class="badge badge-pop">Most Loved Side</span></div></div><div class="item-right"><div class="item-price">$2.75</div><div class="item-size-note">Sm · $6.99 Lg</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Baked Beans</div><div class="item-desc">Slow-cooked with smoked meat drippings and brown sugar.</div></div><div class="item-right"><div class="item-price">$2.75</div><div class="item-size-note">Sm · $6.99 Lg</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Potato Salad</div><div class="item-desc">Classic Southern-style creamy potato salad.</div></div><div class="item-right"><div class="item-price">$2.75</div><div class="item-size-note">Sm · $6.99 Lg</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Cole Slaw</div><div class="item-desc">House-made slaw with a tangy, slightly sweet dressing.</div></div><div class="item-right"><div class="item-price">$2.75</div><div class="item-size-note">Sm · $6.99 Lg</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">French Fries</div><div class="item-desc">Golden, crispy, seasoned fries.</div></div><div class="item-right"><div class="item-price">$2.75</div><div class="item-size-note">Sm · $6.99 Lg</div></div></div>
-        <div class="menu-item"><div class="item-left"><div class="item-name">Sweet Potato Waffle Fries</div><div class="item-desc">Sweet potato waffle-cut fries, lightly seasoned. A house specialty.</div><div class="item-badges"><span class="badge badge-special">House Pick</span></div></div><div class="item-right"><div class="item-price">$2.75</div><div class="item-size-note">Sm · $6.99 Lg</div></div></div>
-      </div>
-    </div><!-- /sides -->
-
-    <!-- DESSERTS -->
-    <div class="menu-section" id="sec-desserts">
-      <div class="section-header">
-        <div class="section-title">Desserts</div>
-        <div class="section-italic">The Sweet — made in-house daily</div>
-      </div>
-      <div class="section-note">Dessert availability varies by day — ask your server what's fresh</div>
-      <div class="desserts-grid">
-        <div class="dessert-item"><div class="di-icon">🍞</div><div class="di-name">Homemade Bread Pudding</div><div class="di-price">Ask for price</div></div>
-        <div class="dessert-item"><div class="di-icon">🍰</div><div class="di-name">Creole Cream Cheesecake</div><div class="di-price">Ask for price</div></div>
-        <div class="dessert-item"><div class="di-icon">🎂</div><div class="di-name">Chocolate Cake</div><div class="di-price">Ask for price</div></div>
-        <div class="dessert-item"><div class="di-icon">🥕</div><div class="di-name">Carrot Cake</div><div class="di-price">Ask for price</div></div>
-        <div class="dessert-item"><div class="di-icon">🍓</div><div class="di-name">Strawberry Shortcake</div><div class="di-price">Ask for price</div></div>
-        <div class="dessert-item"><div class="di-icon">🥧</div><div class="di-name">Miss Mud Pie</div><div class="di-price">$7 (Special)</div></div>
-      </div>
-    </div><!-- /desserts -->
-
-  </div><!-- /left-col -->
-
-  <!-- RIGHT COL — PIT INFO -->
-  <div id="right-col">
-
-    <div class="info-card">
-      <div class="ic-label">The Pit</div>
-      <div class="ic-title">Post Oak & <em>Hickory</em></div>
-      <div class="ic-body">225°F. 12+ hours minimum. <strong>No gas. No shortcuts.</strong> Fire starts at 4am. The first plate doesn't leave until the meat is ready — not because a clock says so.</div>
-    </div>
-
-    <div class="info-card">
-      <div class="ic-label">What People Say</div>
-      <div class="ratings-row">
-        <div class="rating-bit"><div class="rating-stars">★★★★½</div><div class="rating-num">4.5</div><div class="rating-source">TripAdvisor</div></div>
-        <div class="rating-bit"><div class="rating-stars">★★★★★</div><div class="rating-num">4.7</div><div class="rating-source">Google</div></div>
-      </div>
-      <div class="ic-body" style="margin-top:10px;font-style:italic;">"Brisket practically melted in my mouth." — TripAdvisor<br><br>"Boudin balls were AMAZING!" — Google</div>
-    </div>
-
-    <div class="info-card">
-      <div class="ic-label">Sides Pricing</div>
-      <div class="sides-grid">
-        <div class="side-item"><span class="side-name">Small side</span><span class="side-price">$2.75</span></div>
-        <div class="side-item"><span class="side-name">Large side</span><span class="side-price">$6.99</span></div>
-        <div class="side-item"><span class="side-name">With sandwich</span><span class="side-price">1 side</span></div>
-        <div class="side-item"><span class="side-name">With BBQ plate</span><span class="side-price">2 sides</span></div>
-      </div>
-    </div>
-
-    <div class="cta-card">
-      <div class="cta-card-title">Large Order?</div>
-      <div class="cta-card-sub">We cater events, parties & corporate lunches. Call or email to discuss your needs.</div>
-      <a class="cta-pill" href="tel:2252455046">🔥 Call (225) 245-5046</a>
-    </div>
-
-    <div class="info-card">
-      <div class="ic-label">Hours & Location</div>
-      <div class="ic-body"><strong>Mon – Sat:</strong> 10am – 6pm<br><strong>Sunday:</strong> 10am – 3pm<br><br><strong>6779 US Hwy 61</strong><br>St. Francisville, LA 70775<br><br>Free parking · Wheelchair accessible<br>Outdoor deck available</div>
-    </div>
-
+<!-- BBQ -->
+<div class="sec active" id="s-bbq">
+  <div class="sh reveal"><div class="st">BBQ Plates</div><div class="si">Served with two sides of your choice</div></div>
+  <div class="sn reveal">Smoked 12+ hours over post oak & hickory · All plates include two sides</div>
+  <div class="items">
+    <div class="mi hero reveal"><div class="hero-top"><div class="mi-l"><div class="h-badge">✦ Pit Master's Cut</div><div class="mi-n">Brisket Plate</div><div class="mi-d">Slow-smoked beef brisket, sliced to order. Bark-crusted, smoke-ringed, impossibly tender.</div><div class="mi-b"><span class="badge b-p">Most Ordered</span><span class="badge b-s">12 Hr Smoke</span></div></div><div class="mi-r"><div class="mi-p">$10.99</div><div class="mi-nt">+ 2 sides</div></div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Full Rack of Ribs</div><div class="mi-d">Pork spare ribs, rubbed and smoked until fall-off-the-bone tender.</div><div class="mi-b"><span class="badge b-p">Fan Favorite</span></div></div><div class="mi-r"><div class="mi-p">$19.99</div><div class="mi-nt">+ 2 sides</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">½ Rack of Ribs</div><div class="mi-d">Half rack of our signature smoked pork spare ribs.</div></div><div class="mi-r"><div class="mi-p">$11.99</div><div class="mi-nt">+ 2 sides</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Pulled Pork Plate</div><div class="mi-d">Pork shoulder smoked until it pulls apart like silk. House sauce on the side.</div></div><div class="mi-r"><div class="mi-p">$9.99</div><div class="mi-nt">+ 2 sides</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">½ Smoked Chicken</div><div class="mi-d">Half chicken, brined and smoked whole, juicy straight through to the bone.</div></div><div class="mi-r"><div class="mi-p">$9.99</div><div class="mi-nt">+ 2 sides</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Smoked Wings</div><div class="mi-d">Whole wings smoked low, finished hot. Crispy skin. Smoke all the way through.</div><div class="mi-b"><span class="badge b-n">Try It</span></div></div><div class="mi-r"><div class="mi-p">$7.99</div></div></div>
   </div>
+</div>
 
+<!-- SANDWICHES -->
+<div class="sec" id="s-sb">
+  <div class="sh reveal"><div class="st">Po-boys & Sandwiches</div><div class="si">Served with one side · Dressed with lettuce & tomato</div></div>
+  <div class="dr reveal"><div class="dl">Smoked Meats</div><div class="dline"></div><div class="df">🔥</div></div>
+  <div class="items">
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Pulled Pork Sandwich</div><div class="mi-d">House-smoked pulled pork on a toasted bun.</div></div><div class="mi-r"><div class="mi-p">$7.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Brisket Sandwich</div><div class="mi-d">Sliced smoked brisket piled high. Simple. Perfect.</div><div class="mi-b"><span class="badge b-p">Best Seller</span></div></div><div class="mi-r"><div class="mi-p">$8.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Chicken Sandwich</div><div class="mi-d">Smoked chicken breast on a brioche bun with house slaw.</div></div><div class="mi-r"><div class="mi-p">$7.99</div><div class="mi-nt">+ 1 side</div></div></div>
+  </div>
+  <div class="dr reveal"><div class="dl">Burgers</div><div class="dline"></div><div class="df">🔥</div></div>
+  <div class="items">
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Hamburger</div><div class="mi-d">Hand-formed beef patty. Toasted bun. Dressed.</div></div><div class="mi-r"><div class="mi-p">$6.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Cheeseburger</div><div class="mi-d">American cheese. The classic.</div></div><div class="mi-r"><div class="mi-p">$7.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Bacon Cheeseburger</div><div class="mi-d">Smoked bacon, American cheese, dressed.</div><div class="mi-b"><span class="badge b-p">Top Pick</span></div></div><div class="mi-r"><div class="mi-p">$8.99</div><div class="mi-nt">+ 1 side</div></div></div>
+  </div>
+  <div class="dr reveal"><div class="dl">Louisiana Po-boys</div><div class="dline"></div><div class="df">🔥</div></div>
+  <div class="items">
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Ribeye Po-boy</div><div class="mi-d">Shaved ribeye on French bread, dressed. A house signature.</div><div class="mi-b"><span class="badge b-s">Signature</span></div></div><div class="mi-r"><div class="mi-p">$10.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Shrimp Po-boy</div><div class="mi-d">Gulf shrimp, fried golden, dressed on French bread.</div></div><div class="mi-r"><div class="mi-p">$8.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Crawfish Po-boy</div><div class="mi-d">Louisiana crawfish tails, seasoned and fried, dressed.</div><div class="mi-b"><span class="badge b-n">Louisiana Proud</span></div></div><div class="mi-r"><div class="mi-p">$10.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Catfish Po-boy</div><div class="mi-d">Cornmeal-crusted catfish, fried to order, dressed.</div></div><div class="mi-r"><div class="mi-p">$8.99</div><div class="mi-nt">+ 1 side</div></div></div>
+  </div>
+</div>
+
+<!-- BOUDIN -->
+<div class="sec" id="s-bd">
+  <div class="sh reveal"><div class="st">Boudin & Cajun</div><div class="si">Made in-house — true Louisiana tradition</div></div>
+  <div class="sn reveal">Ask staff for current deli availability</div>
+  <div class="items">
+    <div class="mi hero reveal"><div class="hero-top"><div class="mi-l"><div class="h-badge">✦ Louisiana Icon</div><div class="mi-n">Steamed Boudin Links</div><div class="mi-d">House-made pork and rice boudin, steamed in the casing. The real thing.</div><div class="mi-b"><span class="badge b-s">Made In-House</span></div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Classic Boudin Balls</div><div class="mi-d">Boudin rolled and fried golden. Crispy outside, seasoned inside.</div><div class="mi-b"><span class="badge b-p">"AMAZING" — Guest</span></div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Pepper Jack Boudin Balls</div><div class="mi-d">Same boudin balls, loaded with melted pepper jack. Heat included.</div><div class="mi-b"><span class="badge b-s">Fan Favorite</span></div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Boudin Egg Rolls</div><div class="mi-d">Boudin filling wrapped in a crispy egg roll shell. Perfectly dippable.</div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Meat Pies</div><div class="mi-d">Old-school Louisiana meat pies, flaky pastry, seasoned ground meat.</div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Crawfish Pies</div><div class="mi-d">Seasoned Louisiana crawfish in a buttery, flaky pastry shell.</div><div class="mi-b"><span class="badge b-n">Louisiana Made</span></div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div>
+  </div>
+</div>
+
+<!-- SPECIALS -->
+<div class="sec" id="s-sp">
+  <div class="sh reveal"><div class="st">Daily Specials</div><div class="si">Board changes every morning at 6am</div></div>
+  <div class="sn reveal">Call (225) 245-5046 or check Facebook for today's board</div>
+  <div class="sp-g">
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Appetizer</div><div class="sp-n">Sweet Thai Chili Wings</div><div class="sp-d">Smoked wings in house-made sweet Thai chili glaze. Sticky, smoky, addictive.</div><div class="sp-p">$16</div></div></div>
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Entrée</div><div class="sp-n">Eggplant Pirogue</div><div class="sp-d">Hollowed eggplant filled with rich Cajun seafood stuffing.</div><div class="sp-p">$26</div></div></div>
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Entrée</div><div class="sp-n">Blackened Lemon Fish</div><div class="sp-d">Blackened fresh fish with cream spinach and grilled Louisiana crawfish tails.</div><div class="sp-p">$28</div></div></div>
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Entrée</div><div class="sp-n">Jack Daniel's BBQ Shrimp</div><div class="sp-d">Gulf shrimp in JD BBQ glaze with 14oz bone-in pork chop, mac & cheese and green beans.</div><div class="sp-p">$26</div></div></div>
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Entrée</div><div class="sp-n">Grilled Salmon</div><div class="sp-d">Grilled salmon with Louisiana crabmeat, avocado cream sauce and house sides.</div><div class="sp-p">$28</div></div></div>
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Dessert Special</div><div class="sp-n">Miss Mud Pie</div><div class="sp-d">The house dessert special. Rich, indulgent, worth every bite.</div><div class="sp-p">$7</div></div></div>
+  </div>
+</div>
+
+<!-- SIDES -->
+<div class="sec" id="s-si">
+  <div class="sh reveal"><div class="st">Sides</div><div class="si">Made from scratch, every morning</div></div>
+  <div class="sn reveal">Small comes with sandwiches · BBQ plates include two sides of your choice</div>
+  <div class="items">
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Corn Pudding</div><div class="mi-d">Creamy, sweet Southern corn pudding. Our most-loved side — guests order extras.</div><div class="mi-b"><span class="badge b-p">Most Loved</span></div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Baked Beans</div><div class="mi-d">Slow-cooked with smoked meat drippings and brown sugar.</div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Potato Salad</div><div class="mi-d">Classic Southern-style creamy potato salad.</div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Cole Slaw</div><div class="mi-d">House-made with a tangy, slightly sweet dressing.</div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">French Fries</div><div class="mi-d">Golden, crispy, seasoned fries.</div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Sweet Potato Waffle Fries</div><div class="mi-d">Sweet potato waffle-cut fries, lightly seasoned. A house specialty.</div><div class="mi-b"><span class="badge b-s">House Pick</span></div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+  </div>
+</div>
+
+<!-- DESSERTS -->
+<div class="sec" id="s-ds">
+  <div class="sh reveal"><div class="st">Desserts</div><div class="si">The Sweet — made in-house daily</div></div>
+  <div class="sn reveal">Availability varies by day · Ask your server what came out fresh</div>
+  <div class="ds-g">
+    <div class="ds-i reveal"><div class="ds-ic">🍞</div><div class="ds-n">Homemade Bread Pudding</div><div class="ds-p">Ask for price</div></div>
+    <div class="ds-i reveal"><div class="ds-ic">🍰</div><div class="ds-n">Creole Cream Cheesecake</div><div class="ds-p">Ask for price</div></div>
+    <div class="ds-i reveal"><div class="ds-ic">🎂</div><div class="ds-n">Chocolate Cake</div><div class="ds-p">Ask for price</div></div>
+    <div class="ds-i reveal"><div class="ds-ic">🥕</div><div class="ds-n">Carrot Cake</div><div class="ds-p">Ask for price</div></div>
+    <div class="ds-i reveal"><div class="ds-ic">🍓</div><div class="ds-n">Strawberry Shortcake</div><div class="ds-p">Ask for price</div></div>
+    <div class="ds-i reveal"><div class="ds-ic">🥧</div><div class="ds-n">Miss Mud Pie</div><div class="ds-p">$7 (Special)</div></div>
+  </div>
+</div>
+
+</div><!-- /left-col -->
+
+<div id="rc">
+  <div class="ic reveal"><div class="ic-l">The Pit</div><div class="ic-t">Post Oak & <em>Hickory</em></div><div class="ic-b">225°F. 12+ hours minimum. <strong>No gas. No shortcuts.</strong> Fire starts at 4am. The first plate doesn't leave until the meat decides — not the clock.</div></div>
+  <div class="ic reveal"><div class="ic-l">What People Say</div><div class="rats"><div class="rb"><div class="r-s">★★★★½</div><div class="r-n">4.5</div><div class="r-src">TripAdvisor</div></div><div class="rb"><div class="r-s">★★★★★</div><div class="r-n">4.7</div><div class="r-src">Google</div></div></div><div class="ic-b" style="margin-top:10px;font-style:italic">"Brisket practically melted in my mouth."<br><br>"Boudin balls were AMAZING!"</div></div>
+  <div class="ic reveal"><div class="ic-l">Sides Pricing</div><div class="sg"><div class="sgr"><span class="sgn">Small side</span><span class="sgp">$2.75</span></div><div class="sgr"><span class="sgn">Large side</span><span class="sgp">$6.99</span></div><div class="sgr"><span class="sgn">With sandwich</span><span class="sgp">1 side</span></div><div class="sgr"><span class="sgn">With BBQ plate</span><span class="sgp">2 sides</span></div></div></div>
+  <div class="ctac reveal"><div class="ctat">Large Order?</div><div class="ctas">We cater events, parties & corporate lunches. Call or email to discuss.</div><a class="ctab" href="tel:2252455046">🔥 Call (225) 245-5046</a></div>
+  <div class="ic reveal"><div class="ic-l">Hours & Location</div><div class="ic-b"><strong>Mon – Sat:</strong> 10am – 6pm<br><strong>Sunday:</strong> 10am – 3pm<br><br><strong>6779 US Hwy 61</strong><br>St. Francisville, LA 70775<br><br>Free parking · Wheelchair accessible<br>Outdoor deck around the old tree</div></div>
+</div>
 </div><!-- /layout -->
 
 <div id="ftr">
-  <span class="ftr-txt">The Francis Smokehouse & Specialty Meats</span>
-  <div class="ftr-flames"><span class="ff">🔥</span><span class="ff">🔥</span><span class="ff">🔥</span></div>
-  <span class="ftr-txt">St. Francisville, LA · (225) 245-5046</span>
+  <span class="ft">The Francis Smokehouse & Specialty Meats</span>
+  <div class="ffs"><span class="ff">🔥</span><span class="ff">🔥</span><span class="ff">🔥</span></div>
+  <span class="ft">St. Francisville, LA · (225) 245-5046</span>
 </div>
 
 <script>
-/* ── EMBER CANVAS ── */
-const cv=document.getElementById('ecv'), cx=cv.getContext('2d');
-function rsz(){ cv.width=window.innerWidth; cv.height=window.innerHeight; }
-rsz(); window.addEventListener('resize',rsz);
-function mkE(){ return{x:.1+Math.random()*.8,y:1.02+Math.random()*.04,vx:(Math.random()-.5)*.003,vy:-.004-Math.random()*.008,r:.6+Math.random()*1.7,life:1,decay:.003+Math.random()*.006,h:10+Math.random()*22}; }
-const EM=Array.from({length:20},mkE);
-let bgP=0;
-(function loop(){
-  bgP+=.003;
-  cx.clearRect(0,0,cv.width,cv.height);
-  /* bg */
-  const g=cx.createRadialGradient(cv.width*.5,cv.height*.9,0,cv.width*.5,cv.height*.9,cv.width*.8);
-  g.addColorStop(0,'rgba(22,12,4,.9)'); g.addColorStop(.4,'rgba(14,9,3,1)'); g.addColorStop(1,'rgba(8,6,4,1)');
-  cx.fillStyle=g; cx.fillRect(0,0,cv.width,cv.height);
-  const g2=cx.createRadialGradient(cv.width*.5,cv.height,0,cv.width*.5,cv.height,cv.width*.55);
-  g2.addColorStop(0,`rgba(140,44,0,${.05+.03*Math.sin(bgP)})`); g2.addColorStop(1,'transparent');
-  cx.fillStyle=g2; cx.fillRect(0,0,cv.width,cv.height);
-  /* embers */
-  for(let i=0;i<EM.length;i++){
-    const e=EM[i]; e.x+=e.vx+(Math.random()-.5)*.001; e.y+=e.vy; e.life-=e.decay;
-    if(e.life<=0||e.y<-.02){EM[i]=mkE();continue;}
-    cx.beginPath(); cx.arc(e.x*cv.width,e.y*cv.height,e.r,0,Math.PI*2);
-    cx.fillStyle=`hsla(${e.h},100%,${52+e.life*34}%,${e.life*.8})`;
-    cx.shadowBlur=7; cx.shadowColor=`hsla(${e.h},100%,58%,${e.life*.5})`;
-    cx.fill(); cx.shadowBlur=0;
-  }
-  requestAnimationFrame(loop);
-})();
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 1: DOOM FIRE SIMULATION
+   Classic cellular automata. 144×80 pixel grid,
+   each frame heat rises & cools randomly upward.
+   Rendered via direct ImageData pixel buffer (fast).
+═══════════════════════════════════════════════════════ */
+const FCV=document.getElementById('fire-cv');
+const FCX=FCV.getContext('2d');
+const FW=144,FH=80;
+FCV.width=FW;FCV.height=FH;
 
-/* ── CURSOR ── */
-const curEl=document.getElementById('cur');
-document.addEventListener('mousemove',e=>{ curEl.style.left=e.clientX+'px'; curEl.style.top=e.clientY+'px'; });
-document.querySelectorAll('.tab,.cta-pill,.back-btn,#back-btn').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{ document.getElementById('cur-r').style.width='50px'; document.getElementById('cur-r').style.height='50px'; });
-  el.addEventListener('mouseleave',()=>{ document.getElementById('cur-r').style.width='34px'; document.getElementById('cur-r').style.height='34px'; });
+/* 256-color fire palette — black→deep red→orange→yellow→white */
+const PAL=new Uint32Array(256);
+for(let i=0;i<256;i++){
+  let r,g,b;
+  if(i<64){r=Math.min(255,i*3);g=0;b=0;}
+  else if(i<128){r=255;g=(i-64)*2;b=0;}
+  else if(i<200){r=255;g=128+(i-128);b=0;}
+  else{r=255;g=255;b=(i-200)*3;}
+  PAL[i]=(255<<24)|(b<<16)|(g<<8)|r; /* ABGR — ImageData buffer layout */
+}
+
+const FIRE=new Uint8Array(FW*FH);
+const IMG=FCX.createImageData(FW,FH);
+const BUF=new Uint32Array(IMG.data.buffer);
+
+function seedFire(){for(let x=0;x<FW;x++)FIRE[(FH-1)*FW+x]=255;}
+seedFire();
+
+function stepFire(){
+  for(let y=0;y<FH-1;y++){
+    for(let x=0;x<FW;x++){
+      const src=FIRE[(y+1)*FW+x];
+      const decay=Math.random()<.4?1:0;
+      const dst=y*FW+((x-decay+FW)%FW);
+      FIRE[dst]=Math.max(0,src-(Math.random()<.25?1:0));
+    }
+  }
+}
+
+function renderFire(){
+  for(let i=0;i<FW*FH;i++)BUF[i]=FIRE[i]===0?0:PAL[FIRE[i]];
+  FCX.putImageData(IMG,0,0);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 2: SMOKE PARTICLES
+═══════════════════════════════════════════════════════ */
+const SCV=document.getElementById('smoke-cv');
+const SCX=SCV.getContext('2d');
+let SW=0,SH=0;
+function rszS(){SW=SCV.width=window.innerWidth;SH=SCV.height=window.innerHeight;}
+rszS();window.addEventListener('resize',rszS);
+
+function mkS(){return{x:.15+Math.random()*.7,y:1.04+Math.random()*.04,
+  vx:(Math.random()-.5)*.0003,vy:-.0006-Math.random()*.0005,
+  r:38+Math.random()*58,a:0,ta:.02+Math.random()*.02,
+  gr:.07+Math.random()*.04,wb:Math.random()*Math.PI*2,ws:.004+Math.random()*.007};}
+const SM=Array.from({length:16},mkS);
+
+function stepSmoke(){
+  SCX.clearRect(0,0,SW,SH);
+  for(const s of SM){
+    s.wb+=s.ws;s.x+=s.vx+Math.sin(s.wb)*.00022;s.y+=s.vy;s.r+=s.gr;
+    s.a=s.a<s.ta?s.a+.002:Math.max(0,s.a-.0014);
+    if(s.y<-.3||s.a<=0){Object.assign(s,mkS());continue;}
+    const g=SCX.createRadialGradient(s.x*SW,s.y*SH,0,s.x*SW,s.y*SH,s.r);
+    g.addColorStop(0,`rgba(85,60,36,${s.a})`);
+    g.addColorStop(.55,`rgba(56,38,22,${s.a*.4})`);
+    g.addColorStop(1,'transparent');
+    SCX.fillStyle=g;SCX.beginPath();SCX.arc(s.x*SW,s.y*SH,s.r,0,Math.PI*2);SCX.fill();
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 3: EMBER PARTICLES + CURSOR TRAIL RING BUFFER
+   Trail stores 30 past cursor positions.
+   Each position fades and shrinks with age.
+═══════════════════════════════════════════════════════ */
+const ECV=document.getElementById('ember-cv');
+const ECX=ECV.getContext('2d');
+let EW=0,EH=0;
+function rszE(){EW=ECV.width=window.innerWidth;EH=ECV.height=window.innerHeight;}
+rszE();window.addEventListener('resize',rszE);
+
+function mkE(){return{x:.1+Math.random()*.8,y:1.02+Math.random()*.03,
+  vx:(Math.random()-.5)*.003,vy:-.004-Math.random()*.009,
+  r:.6+Math.random()*1.8,life:1,decay:.003+Math.random()*.007,h:8+Math.random()*24};}
+const EM=Array.from({length:24},mkE);
+
+const TL=30; /* trail length */
+const TX=new Float32Array(TL);const TY=new Float32Array(TL);
+let TH_=0;
+
+function stepEmbers(){
+  ECX.clearRect(0,0,EW,EH);
+  /* cursor trail */
+  for(let i=1;i<TL;i++){
+    const idx=(TH_-i+TL)%TL;
+    const age=i/TL;
+    const r=4*(1-age);
+    if(r<.25)continue;
+    ECX.beginPath();ECX.arc(TX[idx],TY[idx],r,0,Math.PI*2);
+    ECX.fillStyle=`hsla(${22+age*12},100%,${62-age*28}%,${(1-age)*.6})`;
+    if(age<.25){ECX.shadowBlur=10;ECX.shadowColor='rgba(240,130,30,.5)';}
+    ECX.fill();ECX.shadowBlur=0;
+  }
+  /* floating embers */
+  for(let i=0;i<EM.length;i++){
+    const e=EM[i];e.x+=e.vx+(Math.random()-.5)*.001;e.y+=e.vy;e.life-=e.decay;
+    if(e.life<=0||e.y<-.02){EM[i]=mkE();continue;}
+    ECX.beginPath();ECX.arc(e.x*EW,e.y*EH,e.r,0,Math.PI*2);
+    ECX.fillStyle=`hsla(${e.h},100%,${52+e.life*34}%,${e.life*.82})`;
+    ECX.shadowBlur=8;ECX.shadowColor=`hsla(${e.h},100%,58%,${e.life*.5})`;
+    ECX.fill();ECX.shadowBlur=0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 4: SPRING-PHYSICS CURSOR
+   Critically-damped spring: cursor lags behind mouse
+   with natural deceleration. Feels physically real.
+═══════════════════════════════════════════════════════ */
+let mx=window.innerWidth/2,my=window.innerHeight/2;
+let cx_=mx,cy_=my,cvx=0,cvy=0;
+const SPRING=0.14,DAMPING=0.78;
+
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  TX[TH_]=mx;TY[TH_]=my;
+  TH_=(TH_+1)%TL;
 });
 
-/* ── TAB SWITCHING ── */
-function switchTab(id, btn) {
-  document.querySelectorAll('.menu-section').forEach(s=>s.classList.remove('active'));
+function stepCursor(){
+  cvx+=(mx-cx_)*SPRING;cvy+=(my-cy_)*SPRING;
+  cvx*=DAMPING;cvy*=DAMPING;
+  cx_+=cvx;cy_+=cvy;
+  document.getElementById('cursor').style.transform=`translate(${cx_}px,${cy_}px)`;
+}
+
+/* Cursor scale on interactives */
+function setBig(v){
+  document.getElementById('c-dot').style.width=v?'5px':'10px';
+  document.getElementById('c-dot').style.height=v?'5px':'10px';
+  document.getElementById('c-ring').style.width=v?'58px':'40px';
+  document.getElementById('c-ring').style.height=v?'58px':'40px';
+  document.getElementById('c-ring').style.borderColor=v?'rgba(240,136,32,.65)':'rgba(240,136,32,.28)';
+}
+function bindCursor(){
+  document.querySelectorAll('.tab,.mi,.sp-c,.ds-i,.ctab,.ic,#back-btn').forEach(el=>{
+    el.addEventListener('mouseenter',()=>setBig(true));
+    el.addEventListener('mouseleave',()=>setBig(false));
+  });
+}
+bindCursor();
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 5: 3D PERSPECTIVE TILT + SPECULAR HIGHLIGHT
+   Tracks mouse position relative to each card center.
+   Applies rotateX/rotateY transforms for real depth.
+   Specular highlight is a radial gradient that follows
+   the mouse — simulates a light source on the card.
+═══════════════════════════════════════════════════════ */
+function bindTilt(el,deg,tz){
+  const spec=el.querySelector('.mi-spec,.sp-sp');
+  el.addEventListener('mousemove',e=>{
+    const r=el.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    el.style.transform=`perspective(700px) rotateX(${-y*deg}deg) rotateY(${x*deg}deg) translateZ(${tz}px)`;
+    el.style.transition='transform .05s linear';
+    if(spec)spec.style.background=`radial-gradient(circle at ${(x+.5)*100}% ${(y+.5)*100}%,rgba(255,190,80,.11),transparent 65%)`;
+  });
+  el.addEventListener('mouseleave',()=>{
+    el.style.transform='perspective(700px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+    el.style.transition='transform .65s cubic-bezier(.16,1,.3,1)';
+    if(spec)spec.style.background='';
+  });
+}
+
+function bindAllTilts(){
+  document.querySelectorAll('.mi:not(.hero)').forEach(el=>bindTilt(el,9,6));
+  document.querySelectorAll('.sp-c').forEach(el=>bindTilt(el,11,8));
+  document.querySelectorAll('.ds-i').forEach(el=>bindTilt(el,10,5));
+  bindCursor();
+}
+bindAllTilts();
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 6: FIRE CURTAIN TAB TRANSITION
+   Radial expand of fire-colored circle covers screen,
+   content swaps at peak, circle contracts out.
+   Uses eased timing so expansion feels organic.
+═══════════════════════════════════════════════════════ */
+const TCV=document.getElementById('transition-cv');
+const TCX=TCV.getContext('2d');
+let TVW=0,TVH=0;
+function rszT(){TVW=TCV.width=window.innerWidth;TVH=TCV.height=window.innerHeight;}
+rszT();window.addEventListener('resize',rszT);
+
+let tAnim=null,transitioning=false;
+
+function fireCurtain(cb){
+  if(transitioning)return;
+  transitioning=true;
+  TCV.style.opacity='1';
+  let t=0;
+  const ocx=TVW/2,ocy=TVH/2;
+  const maxR=Math.sqrt(ocx*ocx+ocy*ocy)*1.12;
+  if(tAnim)cancelAnimationFrame(tAnim);
+
+  (function expand(){
+    t+=.065;
+    const ease=t<1?1-Math.pow(1-t,3):1; /* cubic ease out */
+    const r=maxR*ease;
+    TCX.clearRect(0,0,TVW,TVH);
+    /* dark fill */
+    const g=TCX.createRadialGradient(ocx,ocy,0,ocx,ocy,r);
+    g.addColorStop(0,'rgba(24,12,4,1)');
+    g.addColorStop(.75,'rgba(16,9,3,.97)');
+    g.addColorStop(1,'transparent');
+    TCX.fillStyle=g;TCX.beginPath();TCX.arc(ocx,ocy,r,0,Math.PI*2);TCX.fill();
+    /* fire ring */
+    if(r>30&&r<maxR*.88){
+      const fR=r;
+      const fg=TCX.createRadialGradient(ocx,ocy,fR*.82,ocx,ocy,fR);
+      fg.addColorStop(0,'transparent');
+      fg.addColorStop(.5,'rgba(192,72,0,.38)');
+      fg.addColorStop(1,'rgba(240,136,32,.55)');
+      TCX.fillStyle=fg;TCX.beginPath();TCX.arc(ocx,ocy,fR,0,Math.PI*2);TCX.fill();
+    }
+    /* swap content at 55% */
+    if(t>=.55&&cb){cb();cb=null;}
+    if(t<1){tAnim=requestAnimationFrame(expand);}
+    else{
+      /* contract */
+      let t2=0;
+      (function contract(){
+        t2+=.07;
+        const ease2=Math.pow(t2,2); /* quad ease in */
+        const r2=maxR*(1-Math.min(ease2,1));
+        TCX.clearRect(0,0,TVW,TVH);
+        if(r2>5){
+          const g2=TCX.createRadialGradient(ocx,ocy,0,ocx,ocy,r2);
+          g2.addColorStop(0,'rgba(18,10,4,.95)');g2.addColorStop(1,'transparent');
+          TCX.fillStyle=g2;TCX.beginPath();TCX.arc(ocx,ocy,r2,0,Math.PI*2);TCX.fill();
+        }
+        if(t2<1){tAnim=requestAnimationFrame(contract);}
+        else{TCV.style.opacity='0';TCX.clearRect(0,0,TVW,TVH);transitioning=false;}
+      })();
+    }
+  })();
+}
+
+const ORDER=['bbq','sb','bd','sp','si','ds'];
+let current='bbq';
+
+function sw(id,btn){
+  if(id===current||transitioning)return;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('sec-'+id).classList.add('active');
   btn.classList.add('active');
-  window.scrollTo({top:0, behavior:'smooth'});
+  fireCurtain(()=>{
+    document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+    document.getElementById('s-'+id).classList.add('active');
+    current=id;
+    bindAllTilts();
+    triggerReveals();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
 }
 
-/* ── CLOCK ── */
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 7: INTERSECTION OBSERVER SCROLL REVEALS
+   Staggered with delay based on sibling index.
+═══════════════════════════════════════════════════════ */
+const IO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const sibs=Array.from(e.target.parentElement.querySelectorAll('.reveal'));
+    const idx=sibs.indexOf(e.target);
+    e.target.style.transitionDelay=(idx*.055)+'s';
+    e.target.classList.add('in');
+    IO.unobserve(e.target);
+  });
+},{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+
+function triggerReveals(){
+  document.querySelectorAll('.reveal').forEach(el=>{
+    el.classList.remove('in');el.style.transitionDelay='';
+    IO.observe(el);
+  });
+}
+triggerReveals();
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 8: PROXIMITY GLOW
+   Items within 300px of cursor emit a warm glow.
+   Intensity falls off with distance squared.
+   Runs at 20fps (every 50ms) — no need for 60fps.
+═══════════════════════════════════════════════════════ */
+let PROX=[];
+function rebuildProx(){
+  PROX=Array.from(document.querySelectorAll('.mi:not(.hero),.sp-c,.ds-i'));
+}
+rebuildProx();
+
+setInterval(()=>{
+  PROX.forEach(el=>{
+    const r=el.getBoundingClientRect();
+    if(r.bottom<-100||r.top>window.innerHeight+100){el.style.boxShadow='';return;}
+    const ex=r.left+r.width/2,ey=r.top+r.height/2;
+    const dist=Math.sqrt((cx_-ex)**2+(cy_-ey)**2);
+    const RAD=300;
+    if(dist<RAD){
+      const s=Math.pow(1-dist/RAD,1.5);
+      el.style.boxShadow=`0 0 ${s*32}px rgba(192,72,0,${s*.16}),0 ${s*10}px ${s*24}px rgba(192,72,0,${s*.1})`;
+    } else {
+      el.style.boxShadow='';
+    }
+  });
+},50);
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 9: MASTER RAF LOOP — 60fps
+   Fire at ~24fps (every 42ms), smoke/embers/cursor at 60.
+═══════════════════════════════════════════════════════ */
+let lastFire=0;
+function loop(ts){
+  if(ts-lastFire>42){stepFire();renderFire();lastFire=ts;}
+  stepSmoke();
+  stepEmbers();
+  stepCursor();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 10: LIVE CLOCK
+═══════════════════════════════════════════════════════ */
 function tick(){
-  const d=new Date();
-  const dow=d.getDay();
-  const h=d.getHours();
-  let status='';
-  if(dow===0){ status=h>=10&&h<15?'Open · Sun 10am–3pm':'Closed Today · Sun closes 3pm'; }
-  else { status=h>=10&&h<18?'Open · 10am–6pm':'Closed Today · Opens 10am'; }
-  document.getElementById('clock').textContent=status;
+  const d=new Date(),dow=d.getDay(),h=d.getHours();
+  const s=dow===0?(h>=10&&h<15?'Open · Sun 10am–3pm':'Closed · Sun closes 3pm')
+                 :(h>=10&&h<18?'Open · 10am–6pm':'Closed · Opens 10am');
+  document.getElementById('clk').textContent=s;
 }
-tick(); setInterval(tick,60000);
+tick();setInterval(tick,60000);
 
-/* ── BOOT ── */
-window.addEventListener('load',()=>{ requestAnimationFrame(()=>requestAnimationFrame(()=>{ document.body.classList.add('on'); })); });
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 11: MOBILE SWIPE BETWEEN TABS
+   Horizontal swipe gesture with 60px threshold.
+═══════════════════════════════════════════════════════ */
+let tsX=0;
+document.addEventListener('touchstart',e=>{tsX=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tsX;
+  if(Math.abs(dx)<60)return;
+  const idx=ORDER.indexOf(current);
+  let next=idx+(dx<0?1:-1);
+  next=Math.max(0,Math.min(ORDER.length-1,next));
+  if(next!==idx)sw(ORDER[next],document.querySelectorAll('.tab')[next]);
+},{passive:true});
+
+/* BOOT */
+window.addEventListener('load',()=>{
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('on')));
+});
 </script>
 </body>
 </html>
