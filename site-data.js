@@ -55,7 +55,7 @@ const SPECIALS = [
     "desc":  "Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious, and worth every cent."
   },
   {
-    "date":  "2026-03-19",
+    "date":  "2026-03-22",
     "name":  "Miss Mud Pie",
     "price": "$7",
     "desc":  "The house dessert special. Chocolate, cream, crunch. We will let it speak for itself."
