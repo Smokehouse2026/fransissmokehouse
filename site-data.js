@@ -61,7 +61,7 @@ const SITE_SPECIALS = [
   {
     hidden: false,
     type:   "Dessert Special",
-    name:   "Miss Mud Pie",
+    name:   "Miss Mud Pi",
     desc:   "The house dessert special. Rich, indulgent, worth every bite.",
     price:  "$7"
   }
