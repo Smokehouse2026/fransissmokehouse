@@ -955,17 +955,17 @@ function openPanel(id){
   const descEl   = document.getElementById('panel-desc');
   const chipsEl  = document.getElementById('panel-chips');
 
-  if(id === 'specials'){
-    descEl.innerHTML = '';
-    chipsEl.innerHTML = '';
-    specList.style.display = 'flex';
-    specList.innerHTML = buildSpecialsHTML();
-    startSpecialsCountdown('panel');
+  specList.style.display = 'none';
+  stopSpecialsCountdown();
+
+  if(id === 'menu'){
+    // Show menu description + today's special inline
+    var specialHTML = getTodaysSpecialHTML();
+    descEl.innerHTML = p.desc + specialHTML;
+    chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
   } else {
-    specList.style.display = 'none';
     descEl.innerHTML = p.desc;
     chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
-    stopSpecialsCountdown();
   }
 
   document.getElementById('panel').classList.add('open');
@@ -991,17 +991,16 @@ function openMobPanel(id){
   const descEl   = document.getElementById('mob-sheet-desc');
   const chipsEl  = document.getElementById('mob-sheet-chips');
 
-  if(id === 'specials'){
-    descEl.innerHTML = '';
-    chipsEl.innerHTML = '';
-    specList.style.display = 'flex';
-    specList.innerHTML = buildSpecialsHTML();
-    startSpecialsCountdown('mob');
+  specList.style.display = 'none';
+  stopSpecialsCountdown();
+
+  if(id === 'menu'){
+    var specialHTML = getTodaysSpecialHTML();
+    descEl.innerHTML = p.desc + specialHTML;
+    chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
   } else {
-    specList.style.display = 'none';
     descEl.innerHTML = p.desc;
     chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
-    stopSpecialsCountdown();
   }
 
   document.getElementById('mob-panel').classList.add('open');
@@ -1090,67 +1089,45 @@ function _fmt(ms){
   return h+':'+String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0');
 }
 
-function buildSpecialsHTML(){
-  var open=_isOpen();
-  var hoursUntil=(_nextOpen()-new Date())/3600000;
-  var dotColor  = open?'#90e060':hoursUntil<=4?'#f08820':'rgba(196,168,130,.3)';
-  var dotShadow = open?'0 0 7px #90e060':hoursUntil<=4?'0 0 7px #f08820':'none';
-  var statusTxt, cdHTML='';
-  var hr=_hrs();
-
-  if(open){
-    statusTxt='<span style="color:#90e060">Open Now &middot; Closes '+(hr.close>12?hr.close-12:hr.close)+'pm</span>';
-    cdHTML='<span style="font-family:var(--cond);font-size:10px;letter-spacing:.1em;color:rgba(196,168,130,.5);display:flex;align-items:center;gap:6px;">Closing in <span id="sp-cd-num" style="font-weight:700;font-size:13px;color:var(--glow);font-variant-numeric:tabular-nums;">'+_fmt(_closeTime()-new Date())+'</span></span>';
-  } else if(hoursUntil<=4){
-    var oh=_nextOpen().getHours();
-    statusTxt='<span style="color:#f08820">Opens at '+(oh>12?oh-12:oh)+'am</span>';
-    cdHTML='<span style="font-family:var(--cond);font-size:10px;letter-spacing:.1em;color:rgba(196,168,130,.5);display:flex;align-items:center;gap:6px;">Opening in <span id="sp-cd-num" style="font-weight:700;font-size:13px;color:var(--glow);font-variant-numeric:tabular-nums;">'+_fmt(_nextOpen()-new Date())+'</span></span>';
-  } else {
-    var oh2=_nextOpen().getHours();
-    statusTxt='<span style="color:rgba(196,168,130,.45)">Closed &middot; Opens '+(oh2>12?oh2-12:oh2)+'am Tomorrow</span>';
+/* Returns the active special item from either SITE_SPECIAL (new) or SITE_SPECIALS (old array) */
+function _getSpecialItem(){
+  var today = _todayStr();
+  if(typeof SITE_SPECIAL !== 'undefined' && SITE_SPECIAL && !SITE_SPECIAL.hidden){
+    if(!SITE_SPECIAL.date || SITE_SPECIAL.date === today) return SITE_SPECIAL;
   }
-
-  var html='<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;'
-    +'padding:8px 12px;border-radius:4px;margin-bottom:10px;'
-    +'background:rgba(9,7,4,.5);border:1px solid rgba(196,168,130,.1);">'
-    +'<div style="display:flex;align-items:center;">'
-    +'<span style="width:7px;height:7px;border-radius:50%;background:'+dotColor+';box-shadow:'+dotShadow
-    +';display:inline-block;margin-right:8px;flex-shrink:0;"></span>'
-    +'<span style="font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;">'+statusTxt+'</span>'
-    +'</div>'+cdHTML+'</div>';
-
-  if(!open){
-    html+='<div class="sp-list-empty">Come back during business hours to see today\'s specials.</div>';
-    return html;
+  if(typeof SITE_SPECIALS !== 'undefined' && Array.isArray(SITE_SPECIALS)){
+    var vis = SITE_SPECIALS.filter(function(i){
+      if(!i||i.hidden)return false;
+      if(i.date&&i.date!==today)return false;
+      return true;
+    });
+    if(vis.length) return vis[0];
   }
+  return null;
+}
 
-  if(typeof SITE_SPECIALS==='undefined'||!Array.isArray(SITE_SPECIALS)){
-    html+='<div class="sp-list-empty">No specials posted yet &mdash; call (225) 245-5046 to confirm.</div>';
-    return html;
-  }
+/* Returns HTML to inject into the Menu panel description showing today's special */
+function getTodaysSpecialHTML(){
+  if(!_isOpen()) return '';
+  var item = _getSpecialItem();
+  if(!item || !item.name) return '';
 
-  var today=_todayStr();
-  var visible=SITE_SPECIALS.filter(function(i){
-    if(!i||i.hidden)return false;
-    if(i.date&&i.date!==today)return false;
-    return true;
-  });
-
-  if(!visible.length){
-    html+='<div class="sp-list-empty">No specials posted yet &mdash; call (225) 245-5046 to confirm.</div>';
-    return html;
-  }
-
-  visible.forEach(function(item){
-    html+='<div class="sp-list-item">'
-      +'<div class="sp-list-left">'
-      +(item.type?'<div class="sp-list-type">'+item.type+'</div>':'')
-      +'<div class="sp-list-name">'+(item.name||'')+'</div>'
-      +(item.desc?'<div class="sp-list-desc">'+item.desc+'</div>':'')
-      +'</div>'
-      +(item.price?'<div class="sp-list-price">'+item.price+'</div>':'')
-      +'</div>';
-  });
+  var html = '<div style="'
+    +'margin-top:14px;padding:12px 14px;border-radius:6px;'
+    +'background:rgba(192,72,0,.12);border:1px solid rgba(192,72,0,.3);'
+    +'border-left:3px solid var(--fire,#e06010);">'
+    +'<div style="font-family:var(--cond,\'Barlow Condensed\',sans-serif);font-weight:700;font-size:8px;'
+    +'letter-spacing:.28em;text-transform:uppercase;color:var(--flame,#f08820);margin-bottom:6px;">'
+    +'🔥 '+(item.type||'Today\'s Special')+'</div>'
+    +'<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;">'
+    +'<strong style="font-family:var(--serif,\'Playfair Display\',serif);font-size:clamp(14px,1.4vw,17px);'
+    +'color:var(--cream,#f5edda);font-weight:700;">'+item.name+'</strong>'
+    +(item.price ? '<span style="font-family:var(--cond,\'Barlow Condensed\',sans-serif);font-weight:800;'
+    +'font-size:clamp(14px,1.4vw,16px);color:var(--glow,#f5a830);white-space:nowrap;">'+item.price+'</span>' : '')
+    +'</div>'
+    +(item.desc ? '<div style="font-size:clamp(10px,1vw,12px);color:rgba(196,168,130,.55);margin-top:4px;line-height:1.5;">'+item.desc+'</div>' : '')
+    +(item.sides ? '<div style="font-size:10px;color:rgba(196,168,130,.4);margin-top:5px;letter-spacing:.04em;">With: '+item.sides+'</div>' : '')
+    +'</div>';
   return html;
 }
 
@@ -1164,6 +1141,9 @@ function startSpecialsCountdown(){
   },1000);
 }
 function stopSpecialsCountdown(){if(_cdInt){clearInterval(_cdInt);_cdInt=null;}}
+
+/* Keep buildSpecialsHTML for any legacy callers */
+function buildSpecialsHTML(){ return ''; }
 </script>
 
 <script src="site-data.js"></script>
