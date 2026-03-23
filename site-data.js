@@ -14,7 +14,7 @@ var SITE_SPECIALS = [
   {
     hidden: false,
     type:  "Appetizer",
-    name:  "Sweet Thai Chili Wings",
+    name:  "Sweet Thai Chili Wingssss",
     desc:  "Smoked wings tossed in house-made sweet Thai chili glaze. Sticky, smoky, addictive.",
     price: "$16"
   },
@@ -22,7 +22,7 @@ var SITE_SPECIALS = [
   {
     hidden: false,
     type:  "Entree",
-    name:  "Eggplant Pirogue",
+    name:  "Eggplant Piroguess",
     desc:  "Hollowed eggplant filled with rich Cajun seafood stuffing. A Louisiana classic.",
     price: "$26"
   },
