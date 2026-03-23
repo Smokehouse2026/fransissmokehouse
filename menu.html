@@ -686,7 +686,7 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
   </div>
 </div>
 
-<!-- SPECIALS — loaded from site-data.js -->
+<!-- SPECIALS — data defined at top of script block below -->
 <div class="sec" id="s-sp">
   <div class="sh reveal"><div class="st">Daily Specials</div><div class="si">Board changes every morning at 6am</div></div>
   <div class="sn reveal">Call (225) 245-5046 or check Facebook for today's board</div>
@@ -754,6 +754,7 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
   <span class="ft">St. Francisville, LA · (225) 245-5046</span>
 </div>
 
+<script src="site-data.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════════
    SYSTEM 1: DOOM FIRE SIMULATION
@@ -1120,44 +1121,27 @@ document.addEventListener('touchend',e=>{
 },{passive:true});
 
 /* ═══════════════════════════════════════════════════════
-   SPECIALS — reads from site-data.js loaded in <head>
-   Just edit site-data.js to update the board daily.
+   SPECIALS — reads SITE_SPECIALS defined at top of this
+   script. Edit the array above to update the board daily.
 ═══════════════════════════════════════════════════════ */
 function loadSpecials() {
   const container = document.getElementById('specials-container');
+  if (!container) return;
   container.innerHTML = '';
 
-  /* No data file found or empty array */
+  /* Safety check — SITE_SPECIALS must exist and be an array */
   if (typeof SITE_SPECIALS === 'undefined' || !Array.isArray(SITE_SPECIALS)) {
-    container.innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;padding:56px 20px;">
-        <div style="font-family:var(--serif);font-style:italic;font-size:clamp(16px,2vw,20px);color:rgba(196,160,112,.6);margin-bottom:12px;">
-          No daily specials posted yet today.
-        </div>
-        <div style="font-family:var(--cond);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,160,112,.3);">
-          Call (225) 245-5046 · Check Facebook for today's board
-        </div>
-      </div>`;
+    showNoSpecials(container);
     return;
   }
 
-  /* Filter visible items */
-  const visible = SITE_SPECIALS.filter(item => !item.hidden);
+  const visible = SITE_SPECIALS.filter(item => item && !item.hidden);
 
-  if (visible.length === 0) {
-    container.innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;padding:56px 20px;">
-        <div style="font-family:var(--serif);font-style:italic;font-size:clamp(16px,2vw,20px);color:rgba(196,160,112,.6);margin-bottom:12px;">
-          No daily specials posted yet today.
-        </div>
-        <div style="font-family:var(--cond);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,160,112,.3);">
-          Call (225) 245-5046 · Check Facebook for today's board
-        </div>
-      </div>`;
+  if (!visible.length) {
+    showNoSpecials(container);
     return;
   }
 
-  /* Build cards */
   visible.forEach(item => {
     const card = document.createElement('div');
     card.className = 'sp-c reveal';
@@ -1165,7 +1149,7 @@ function loadSpecials() {
       <div class="sp-sp"></div>
       <div class="sp-i">
         ${item.type  ? `<div class="sp-t">${item.type}</div>`  : ''}
-        <div class="sp-n">${item.name}</div>
+        <div class="sp-n">${item.name || ''}</div>
         ${item.desc  ? `<div class="sp-d">${item.desc}</div>`  : ''}
         ${item.price ? `<div class="sp-p">${item.price}</div>` : ''}
       </div>`;
@@ -1175,6 +1159,20 @@ function loadSpecials() {
   bindAllTilts();
   triggerReveals();
   rebuildProx();
+}
+
+function showNoSpecials(container) {
+  container.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;padding:56px 20px;">
+      <div style="font-family:var(--serif);font-style:italic;
+        font-size:clamp(16px,2vw,22px);color:rgba(196,160,112,.7);margin-bottom:14px;">
+        No daily specials posted yet today.
+      </div>
+      <div style="font-family:var(--cond);font-size:10px;letter-spacing:.22em;
+        text-transform:uppercase;color:rgba(196,160,112,.35);">
+        Call (225) 245-5046 · Check Facebook for today's board
+      </div>
+    </div>`;
 }
 
 /* BOOT */
