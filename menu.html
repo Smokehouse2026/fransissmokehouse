@@ -514,7 +514,64 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
 @keyframes flkr{0%,100%{opacity:.6;transform:scaleY(1)}40%{opacity:1;transform:scaleY(1.1) translateY(-1px)}}
 
 /* SPECIALS */
-.sp-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:clamp(9px,1.5vw,14px);}
+/* SINGLE SPECIAL CARD */
+.sp-single{
+  background:rgba(22,12,4,.9);
+  border:1px solid rgba(192,72,0,.4);
+  border-radius:10px;
+  padding:clamp(22px,3.5vh,36px) clamp(20px,3vw,32px);
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 40px rgba(192,72,0,.18),inset 0 1px 0 rgba(240,136,32,.1);
+}
+.sp-single::before{
+  content:'';position:absolute;bottom:-20%;left:-10%;width:70%;height:70%;
+  background:radial-gradient(ellipse,rgba(192,72,0,.15),transparent 65%);
+  pointer-events:none;
+}
+.sp-single-inner{position:relative;z-index:1;display:flex;flex-direction:column;gap:clamp(12px,2vh,18px);}
+.sp-s-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+.sp-s-left{flex:1;}
+.sp-s-type{font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--flame);opacity:.8;
+  display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.sp-s-type::before{content:'';width:18px;height:1px;background:currentColor;}
+.sp-s-name{font-family:var(--serif);font-weight:900;
+  font-size:clamp(26px,4.5vw,48px);letter-spacing:-.02em;line-height:1;
+  color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.5);}
+.sp-s-badge{
+  font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  padding:5px 14px;border-radius:2px;white-space:nowrap;align-self:flex-start;margin-top:4px;
+  background:rgba(192,72,0,.3);color:var(--glow);border:1px solid rgba(192,72,0,.5);
+  box-shadow:0 0 12px rgba(192,72,0,.2);
+}
+.sp-s-price{
+  font-family:var(--cond);font-weight:800;
+  font-size:clamp(32px,5vw,52px);letter-spacing:-.02em;
+  color:var(--glow);text-shadow:0 0 28px rgba(245,168,48,.5);
+  white-space:nowrap;
+}
+.sp-s-desc{font-family:var(--body);font-weight:300;
+  font-size:clamp(14px,1.5vw,17px);line-height:1.75;color:var(--text-md);}
+.sp-s-footer{
+  display:flex;flex-wrap:wrap;align-items:center;gap:clamp(10px,2vw,20px);
+  padding-top:clamp(12px,2vh,18px);
+  border-top:1px solid rgba(196,160,112,.12);
+}
+.sp-s-sides{display:flex;align-items:center;gap:8px;font-family:var(--body);font-weight:300;
+  font-size:clamp(12px,1.2vw,14px);color:rgba(196,160,112,.55);}
+.sp-s-sides::before{content:'🍟';font-size:14px;filter:drop-shadow(0 0 4px rgba(240,136,32,.3));}
+.sp-s-note{font-family:var(--cond);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(196,160,112,.35);}
+
+/* empty state */
+.sp-empty{text-align:center;padding:clamp(40px,7vh,72px) 20px;}
+.sp-empty-icon{font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 10px rgba(240,136,32,.35));
+  animation:pulse-s 3s ease-in-out infinite;}
+@keyframes pulse-s{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.sp-empty-t{font-family:var(--serif);font-style:italic;font-size:clamp(16px,2vw,22px);
+  color:rgba(196,160,112,.65);margin-bottom:8px;}
+.sp-empty-s{font-family:var(--cond);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(196,160,112,.32);}
 .sp-c{background:var(--surface);border:1px solid rgba(196,160,112,.14);border-radius:8px;
   padding:clamp(16px,2.2vh,22px);position:relative;overflow:hidden;
   cursor:default;will-change:transform;transform-style:preserve-3d;
@@ -687,35 +744,31 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
 
 <!-- SPECIALS — data defined at top of script block below -->
 <div class="sec" id="s-sp">
-  <div class="sh reveal"><div class="st">Daily Specials</div><div class="si">Board changes every morning at 6am</div></div>
+  <div class="sh reveal"><div class="st">Daily Special</div><div class="si">One plate — changes every morning at 6am</div></div>
   <div class="sn reveal">Call (225) 245-5046 or check Facebook for today's board</div>
 
-  <!-- STATUS BAR — open/closed + countdowns -->
+  <!-- STATUS BAR -->
   <div id="sp-status-bar" style="
     display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
     background:rgba(18,10,4,.85);border:1px solid rgba(196,160,112,.15);
     border-radius:6px;padding:12px 18px;margin-bottom:18px;">
-    <div id="sp-open-badge" style="display:flex;align-items:center;gap:8px;">
+    <div style="display:flex;align-items:center;gap:8px;">
       <span id="sp-status-dot" style="width:8px;height:8px;border-radius:50%;background:#90e060;
         box-shadow:0 0 8px #90e060;flex-shrink:0;display:inline-block;"></span>
       <span id="sp-status-text" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;
         font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#d4b882;"></span>
     </div>
-    <div id="sp-countdown-wrap" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;
       letter-spacing:.14em;text-transform:uppercase;color:rgba(196,160,112,.55);
       display:flex;align-items:center;gap:8px;">
       <span id="sp-countdown-label"></span>
       <span id="sp-countdown-timer" style="font-weight:700;font-size:15px;
-        color:#f5a830;letter-spacing:.05em;font-variant-numeric:tabular-nums;"></span>
+        color:#f5a830;font-variant-numeric:tabular-nums;"></span>
     </div>
   </div>
 
-  <div class="sp-g" id="specials-container">
-    <div style="grid-column:1/-1;text-align:center;padding:40px 0;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:.25em;
-        text-transform:uppercase;color:rgba(196,160,112,.35);">Loading today's specials...</div>
-    </div>
-  </div>
+  <!-- SINGLE SPECIAL CARD -->
+  <div id="specials-container"></div>
 </div>
 
 <!-- SIDES -->
@@ -772,7 +825,6 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
   <span class="ft">St. Francisville, LA · (225) 245-5046</span>
 </div>
 
-<script src="site-data.js" onload="if(typeof loadSpecials==='function')loadSpecials()"></script>
 <script>
 /* ═══════════════════════════════════════════════════════
    SYSTEM 1: DOOM FIRE SIMULATION
@@ -1135,73 +1187,38 @@ window.addEventListener('load',()=>{
 });
 </script>
 
+
 <script>
 /* ══════════════════════════════════════════════════════
-   SPECIALS ENGINE
-   - Reads SITE_SPECIALS from site-data.js
-   - Filters by today's date and hidden flag
-   - Shows open/closed status with live countdowns
-   - Countdown to close while open
-   - Countdown to open starting 4 hours before opening
+   SPECIALS ENGINE — single daily special
+   Reads SITE_SPECIAL (object) from site-data.js
 ══════════════════════════════════════════════════════ */
-
-/* Hours config */
 var HOURS = {
-  /* Mon=1 Tue=2 Wed=3 Thu=4 Fri=5 Sat=6 */
   weekday: { open: 10, close: 18 },
-  /* Sun=0 */
   sunday:  { open: 10, close: 15 }
 };
 
-function getTodayString() {
+function _todayStr() {
   var d = new Date();
-  var y = d.getFullYear();
-  var m = String(d.getMonth()+1).padStart(2,'0');
-  var day = String(d.getDate()).padStart(2,'0');
-  return y+'-'+m+'-'+day;
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
-
-function getHoursToday() {
-  return new Date().getDay() === 0 ? HOURS.sunday : HOURS.weekday;
+function _hrs() { return new Date().getDay()===0 ? HOURS.sunday : HOURS.weekday; }
+function _isOpen() {
+  var h = new Date().getHours() + new Date().getMinutes()/60, r = _hrs();
+  return h >= r.open && h < r.close;
 }
-
-function isOpenNow() {
-  var h = new Date().getHours() + new Date().getMinutes()/60;
-  var hrs = getHoursToday();
-  return h >= hrs.open && h < hrs.close;
+function _nextOpen() {
+  var n = new Date(), d = new Date(n), r = _hrs();
+  if (n.getHours() < r.open) { d.setHours(r.open,0,0,0); return d; }
+  d.setDate(d.getDate()+1);
+  var nr = d.getDay()===0 ? HOURS.sunday : HOURS.weekday;
+  d.setHours(nr.open,0,0,0); return d;
 }
-
-function getNextOpenTime() {
-  /* Returns a Date object for the next opening time */
-  var now = new Date();
-  var d = new Date(now);
-  var hrs = getHoursToday();
-  /* If we haven't opened yet today */
-  if (now.getHours() < hrs.open) {
-    d.setHours(hrs.open, 0, 0, 0);
-    return d;
-  }
-  /* Otherwise next day */
-  d.setDate(d.getDate() + 1);
-  var nextHrs = d.getDay() === 0 ? HOURS.sunday : HOURS.weekday;
-  d.setHours(nextHrs.open, 0, 0, 0);
-  return d;
-}
-
-function getCloseTime() {
-  var d = new Date();
-  var hrs = getHoursToday();
-  d.setHours(hrs.close, 0, 0, 0);
-  return d;
-}
-
-function fmtCountdown(ms) {
-  if (ms <= 0) return '0:00:00';
-  var totalSec = Math.floor(ms / 1000);
-  var h = Math.floor(totalSec / 3600);
-  var m = Math.floor((totalSec % 3600) / 60);
-  var s = totalSec % 60;
-  return h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+function _closeTime() { var d=new Date(),r=_hrs(); d.setHours(r.close,0,0,0); return d; }
+function _fmt(ms) {
+  if (ms<=0) return '0:00:00';
+  var s=Math.floor(ms/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sc=s%60;
+  return h+':'+String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0');
 }
 
 function updateStatusBar() {
@@ -1209,112 +1226,100 @@ function updateStatusBar() {
   var txt   = document.getElementById('sp-status-text');
   var label = document.getElementById('sp-countdown-label');
   var timer = document.getElementById('sp-countdown-timer');
-  if (!dot || !txt) return;
-
-  var now   = new Date();
-  var open  = isOpenNow();
-  var hrs   = getHoursToday();
-  var hoursUntilOpen = (getNextOpenTime() - now) / 3600000;
-
+  if (!dot) return;
+  var now = new Date(), open = _isOpen(), hrs = _hrs();
+  var hoursUntil = (_nextOpen() - now) / 3600000;
   if (open) {
-    /* OPEN — show countdown to close */
-    dot.style.background = '#90e060';
-    dot.style.boxShadow  = '0 0 8px #90e060';
-    txt.style.color      = '#90e060';
-    txt.textContent      = 'Open Now · Closes ' + (hrs.close > 12 ? hrs.close-12 : hrs.close) + 'pm';
-    label.textContent    = 'Closing in';
-    timer.textContent    = fmtCountdown(getCloseTime() - now);
-
-  } else if (hoursUntilOpen <= 4) {
-    /* WITHIN 4 HOURS OF OPENING — countdown to open */
-    dot.style.background = '#f08820';
-    dot.style.boxShadow  = '0 0 8px #f08820';
-    txt.style.color      = '#f08820';
-    var openHr = getNextOpenTime().getHours();
-    txt.textContent      = 'Opens at ' + (openHr > 12 ? openHr-12 : openHr) + 'am';
-    label.textContent    = 'Opening in';
-    timer.textContent    = fmtCountdown(getNextOpenTime() - now);
-
+    dot.style.background='#90e060'; dot.style.boxShadow='0 0 8px #90e060';
+    txt.style.color='#90e060';
+    txt.textContent='Open Now · Closes '+(hrs.close>12?hrs.close-12:hrs.close)+'pm';
+    label.textContent='Closing in'; timer.textContent=_fmt(_closeTime()-now);
+  } else if (hoursUntil <= 4) {
+    dot.style.background='#f08820'; dot.style.boxShadow='0 0 8px #f08820';
+    txt.style.color='#f08820';
+    var oh = _nextOpen().getHours();
+    txt.textContent='Opens at '+(oh>12?oh-12:oh)+'am';
+    label.textContent='Opening in'; timer.textContent=_fmt(_nextOpen()-now);
   } else {
-    /* CLOSED — no countdown */
-    dot.style.background = 'rgba(196,160,112,.3)';
-    dot.style.boxShadow  = 'none';
-    txt.style.color      = 'rgba(196,160,112,.5)';
-    var openHr2 = getNextOpenTime().getHours();
-    txt.textContent      = 'Closed · Opens ' + (openHr2 > 12 ? openHr2-12 : openHr2) + 'am Tomorrow';
-    label.textContent    = '';
-    timer.textContent    = '';
+    dot.style.background='rgba(196,160,112,.3)'; dot.style.boxShadow='none';
+    txt.style.color='rgba(196,160,112,.5)';
+    var oh2 = _nextOpen().getHours();
+    txt.textContent='Closed · Opens '+(oh2>12?oh2-12:oh2)+'am Tomorrow';
+    label.textContent=''; timer.textContent='';
   }
 }
 
-function showNoSpecials(msg) {
-  var container = document.getElementById('specials-container');
-  if (!container) return;
-  container.innerHTML =
-    '<div style="grid-column:1/-1;text-align:center;padding:56px 20px;">'
-    +'<div style="font-family:\'Playfair Display\',serif;font-style:italic;'
-    +'font-size:clamp(16px,2vw,22px);color:rgba(196,160,112,.7);margin-bottom:12px;">'
-    +(msg||'No daily specials posted yet today.')+'</div>'
-    +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:10px;'
-    +'letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.35);">'
-    +'Call (225) 245-5046 &middot; Check Facebook for today\'s board</div>'
+function showEmpty(msg) {
+  var c = document.getElementById('specials-container');
+  if (!c) return;
+  c.innerHTML =
+    '<div class="sp-empty">'
+    +'<div class="sp-empty-icon">🔥</div>'
+    +'<div class="sp-empty-t">'+(msg||'No special posted yet today.')+'</div>'
+    +'<div class="sp-empty-s">Call (225) 245-5046 &middot; Check Facebook at 6am</div>'
     +'</div>';
 }
 
 function loadSpecials() {
-  var container = document.getElementById('specials-container');
-  if (!container) return;
-  container.innerHTML = '';
-
+  var c = document.getElementById('specials-container');
+  if (!c) return;
+  c.innerHTML = '';
   updateStatusBar();
 
-  /* If closed — show come back message */
-  if (!isOpenNow()) {
-    showNoSpecials('Come back tomorrow to see the daily specials.');
+  if (!_isOpen()) {
+    showEmpty('Come back during business hours to see today\'s special.');
     return;
   }
 
-  /* No data */
-  if (typeof SITE_SPECIALS === 'undefined' || !Array.isArray(SITE_SPECIALS)) {
-    showNoSpecials('No daily specials posted yet today.');
+  /* Support both old SITE_SPECIALS array and new SITE_SPECIAL object */
+  var item = null;
+  if (typeof SITE_SPECIAL !== 'undefined' && SITE_SPECIAL && !SITE_SPECIAL.hidden) {
+    var today = _todayStr();
+    if (!SITE_SPECIAL.date || SITE_SPECIAL.date === today) item = SITE_SPECIAL;
+  } else if (typeof SITE_SPECIALS !== 'undefined' && Array.isArray(SITE_SPECIALS)) {
+    /* fallback: use first visible item from old array format */
+    var today2 = _todayStr();
+    var vis = SITE_SPECIALS.filter(function(i) {
+      if (!i || i.hidden) return false;
+      if (i.date && i.date !== today2) return false;
+      return true;
+    });
+    if (vis.length) item = vis[0];
+  }
+
+  if (!item || !item.name) {
+    showEmpty('No special posted yet today — call (225) 245-5046 to confirm.');
     return;
   }
 
-  var today = getTodayString();
+  /* Build the single card */
+  var html = '<div class="sp-single reveal">'
+    +'<div class="sp-single-inner">'
+    +'<div class="sp-s-top">'
+    +'<div class="sp-s-left">'
+    +(item.type ? '<div class="sp-s-type">'+item.type+'</div>' : '')
+    +'<div class="sp-s-name">'+(item.name)+'</div>'
+    +'</div>'
+    +(item.price ? '<div class="sp-s-price">'+item.price+'</div>' : '')
+    +'</div>'
+    +(item.badge ? '<div style="margin-top:-4px;"><span class="sp-s-badge">'+item.badge+'</span></div>' : '')
+    +(item.desc  ? '<div class="sp-s-desc">'+item.desc+'</div>' : '')
+    +(item.sides || item.note
+      ? '<div class="sp-s-footer">'
+        +(item.sides ? '<div class="sp-s-sides">Served with '+item.sides+'</div>' : '')
+        +(item.note  ? '<div class="sp-s-note">'+item.note+'</div>' : '')
+        +'</div>'
+      : '')
+    +'</div>'
+    +'</div>';
 
-  /* Filter: not hidden + date matches today OR no date set */
-  var visible = SITE_SPECIALS.filter(function(item) {
-    if (!item || item.hidden) return false;
-    if (item.date && item.date !== today) return false;
-    return true;
-  });
-
-  if (!visible.length) {
-    showNoSpecials('No daily specials posted yet today.');
-    return;
-  }
-
-  visible.forEach(function(item) {
-    var d = document.createElement('div');
-    d.className = 'sp-c reveal';
-    d.innerHTML = '<div class="sp-sp"></div><div class="sp-i">'
-      +(item.type ? '<div class="sp-t">'+item.type+'</div>' : '')
-      +'<div class="sp-n">'+(item.name||'')+'</div>'
-      +(item.desc  ? '<div class="sp-d">'+item.desc+'</div>'  : '')
-      +(item.price ? '<div class="sp-p">'+item.price+'</div>' : '')
-      +'</div>';
-    container.appendChild(d);
-  });
-
-  if (typeof bindAllTilts   === 'function') bindAllTilts();
+  c.innerHTML = html;
   if (typeof triggerReveals === 'function') triggerReveals();
-  if (typeof rebuildProx    === 'function') rebuildProx();
 }
 
-/* Tick the countdown every second */
 setInterval(updateStatusBar, 1000);
 </script>
 
-<script src="site-data.js" onload="loadSpecials()" onerror="showNoSpecials('No daily specials posted yet today.')"></script>
+<script src="site-data.js" onload="loadSpecials()" onerror="showEmpty('No special posted yet today.')"></script>
 </body>
 </html>
