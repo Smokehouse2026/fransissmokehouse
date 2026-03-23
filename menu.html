@@ -610,7 +610,7 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
 
 <div id="hdr">
   <div id="hdr-top">
-    <a id="back-btn" href="index.html">← Back</a>
+    <a id="back-btn" href="LandingPage.html">← Back</a>
     <div class="hdr-c">
       <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse & Specialty Meats logo — St. Francisville, Louisiana BBQ restaurant" id="hdr-logo" itemprop="image" width="48" height="48" style="height:clamp(36px,5vh,52px);width:auto;object-fit:contain;filter:drop-shadow(0 0 8px rgba(240,136,32,.3));vertical-align:middle;margin-right:10px;">
       <div class="hdr-n" itemprop="name">The Francis <em>Smokehouse</em></div>
@@ -754,7 +754,7 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
   <span class="ft">St. Francisville, LA · (225) 245-5046</span>
 </div>
 
-<script src="site-data.js"></script>
+<script src="site-data.js" onload="if(typeof loadSpecials==='function')loadSpecials()"></script>
 <script>
 /* ═══════════════════════════════════════════════════════
    SYSTEM 1: DOOM FIRE SIMULATION
@@ -1120,68 +1120,49 @@ document.addEventListener('touchend',e=>{
   if(next!==idx)sw(ORDER[next],document.querySelectorAll('.tab')[next]);
 },{passive:true});
 
-/* ═══════════════════════════════════════════════════════
-   SPECIALS — reads SITE_SPECIALS defined at top of this
-   script. Edit the array above to update the board daily.
-═══════════════════════════════════════════════════════ */
-function loadSpecials() {
-  const container = document.getElementById('specials-container');
-  if (!container) return;
-  container.innerHTML = '';
-
-  /* Safety check — SITE_SPECIALS must exist and be an array */
-  if (typeof SITE_SPECIALS === 'undefined' || !Array.isArray(SITE_SPECIALS)) {
-    showNoSpecials(container);
-    return;
-  }
-
-  const visible = SITE_SPECIALS.filter(item => item && !item.hidden);
-
-  if (!visible.length) {
-    showNoSpecials(container);
-    return;
-  }
-
-  visible.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'sp-c reveal';
-    card.innerHTML = `
-      <div class="sp-sp"></div>
-      <div class="sp-i">
-        ${item.type  ? `<div class="sp-t">${item.type}</div>`  : ''}
-        <div class="sp-n">${item.name || ''}</div>
-        ${item.desc  ? `<div class="sp-d">${item.desc}</div>`  : ''}
-        ${item.price ? `<div class="sp-p">${item.price}</div>` : ''}
-      </div>`;
-    container.appendChild(card);
-  });
-
-  bindAllTilts();
-  triggerReveals();
-  rebuildProx();
-}
-
-function showNoSpecials(container) {
-  container.innerHTML = `
-    <div style="grid-column:1/-1;text-align:center;padding:56px 20px;">
-      <div style="font-family:var(--serif);font-style:italic;
-        font-size:clamp(16px,2vw,22px);color:rgba(196,160,112,.7);margin-bottom:14px;">
-        No daily specials posted yet today.
-      </div>
-      <div style="font-family:var(--cond);font-size:10px;letter-spacing:.22em;
-        text-transform:uppercase;color:rgba(196,160,112,.35);">
-        Call (225) 245-5046 · Check Facebook for today's board
-      </div>
-    </div>`;
-}
 
 /* BOOT */
 window.addEventListener('load',()=>{
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     document.body.classList.add('on');
-    loadSpecials();
   }));
 });
 </script>
+
+<script>
+/* ── loadSpecials: defined here, called by site-data.js onload ── */
+function showNoSpecials(){
+  document.getElementById('specials-container').innerHTML=
+    '<div style="grid-column:1/-1;text-align:center;padding:56px 20px">'
+    +'<div style="font-family:\'Playfair Display\',serif;font-style:italic;font-size:20px;color:rgba(196,160,112,.7);margin-bottom:12px">No daily specials posted yet today.</div>'
+    +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.35)">Call (225) 245-5046 &middot; Check Facebook for today\'s board</div>'
+    +'</div>';
+}
+
+function loadSpecials(){
+  var c=document.getElementById('specials-container');
+  if(!c)return;
+  c.innerHTML='';
+  if(typeof SITE_SPECIALS==='undefined'||!Array.isArray(SITE_SPECIALS)){showNoSpecials();return;}
+  var v=SITE_SPECIALS.filter(function(i){return i&&!i.hidden;});
+  if(!v.length){showNoSpecials();return;}
+  v.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='sp-c reveal';
+    d.innerHTML='<div class="sp-sp"></div><div class="sp-i">'
+      +(item.type?'<div class="sp-t">'+item.type+'</div>':'')
+      +'<div class="sp-n">'+(item.name||'')+'</div>'
+      +(item.desc?'<div class="sp-d">'+item.desc+'</div>':'')
+      +(item.price?'<div class="sp-p">'+item.price+'</div>':'')
+      +'</div>';
+    c.appendChild(d);
+  });
+  if(typeof bindAllTilts==='function')bindAllTilts();
+  if(typeof triggerReveals==='function')triggerReveals();
+  if(typeof rebuildProx==='function')rebuildProx();
+}
+</script>
+
+<script src="site-data.js" onload="loadSpecials()" onerror="showNoSpecials()"></script>
 </body>
 </html>
