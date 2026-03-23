@@ -1,1537 +1,978 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>The Francis Smokehouse | BBQ &amp; Cajun &middot; St. Francisville, Louisiana</title>
-  <meta name="description" content="Award-winning pit-smoked BBQ, boudin, po-boys and Southern sides on Highway 61 in St. Francisville, LA. Open Mon&ndash;Sat 10am&ndash;6pm, Sun 10am&ndash;3pm. Call (225) 245-5046."/>
-  <link rel="canonical" href="https://www.thefrancissmokehouse.com/"/>
-  <meta property="og:type" content="restaurant"/>
-  <meta property="og:title" content="The Francis Smokehouse | St. Francisville, Louisiana"/>
-  <meta property="og:description" content="Pit-smoked BBQ, boudin, po-boys and Southern sides. Tripadvisor Travellers Choice award winner."/>
-  <meta property="og:image" content="https://www.thefrancissmokehouse.com/Images/Smokehouselogo.png"/>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Restaurant","name":"The Francis Smokehouse","telephone":"(225) 245-5046","address":{"@type":"PostalAddress","streetAddress":"6779 US Highway 61","addressLocality":"St. Francisville","addressRegion":"LA","postalCode":"70775"},"servesCuisine":["BBQ","Cajun","Southern"],"openingHours":["Mo-Sa 10:00-18:00","Su 10:00-15:00"]}
-  </script>
-  <link rel="icon" type="image/png" href="Images/Smokehouselogo.png"/>
-  <link rel="apple-touch-icon" href="Images/Smokehouselogo.png"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Barlow+Condensed:wght@200;300;400;500;600&family=Cormorant+SC:wght@600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>The Francis Smokehouse — St. Francisville, LA</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,300;1,400;1,700&family=Barlow+Condensed:wght@300;400;500;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --fire:#E8532A;--ember:#C43C10;--gold:#C9881A;--gold-light:#E5A830;
-  --cream:#F0E6D0;--smoke:#080604;--char:#141009;--char2:#1C1510;
-  --ash:#6B5C42;--bone:#D4C5A0;--dim:#3A2E1E;
-  --ease:cubic-bezier(.22,1,.36,1);
+:root {
+  --void:    #090704;
+  --deep:    #120d07;
+  --coal:    #1e1509;
+  --bark:    #4a3520;
+  --leather: #7a5c38;
+  --sand:    #c4a882;
+  --parch:   #e8d9bc;
+  --cream:   #f5edda;
+  --ember:   #c04a00;
+  --fire:    #e06510;
+  --flame:   #f08c28;
+  --glow:    #f5b040;
+  --serif:   'Playfair Display', Georgia, serif;
+  --cond:    'Barlow Condensed', sans-serif;
+  --body:    'Barlow', sans-serif;
 }
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}.spark{display:none!important}}
-html,body{width:100%;min-height:100%;overflow-x:hidden;background:var(--smoke)}
-body{font-family:'Barlow Condensed',sans-serif;color:var(--cream);display:block;cursor:auto}
-body.no-touch{cursor:none;overflow-x:hidden}
 
-/* ── CURSOR ── */
-#cur-wrap{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;will-change:transform;display:none}
-body.no-touch #cur-wrap{display:block}
-#cur-svg{position:absolute;transform:translate(-50%,-50%);overflow:visible;transition:width .3s cubic-bezier(.2,.8,.3,1),height .3s cubic-bezier(.2,.8,.3,1);width:28px;height:28px}
-body.cur-hover #cur-svg{width:64px;height:64px}
-body.cur-drag #cur-svg{width:44px;height:44px}
-body.cur-click #cur-svg{width:20px;height:20px}
-body.cur-search #cur-svg{width:36px;height:36px}
-#cur-outer{fill:none;stroke:var(--fire);stroke-width:1;opacity:.7;transform-origin:center;transition:stroke .3s,opacity .3s,stroke-dasharray .4s}
-body.cur-hover #cur-outer{stroke:var(--gold);opacity:0;stroke-dasharray:80 40}
-body.cur-drag #cur-outer{stroke:var(--ember);opacity:.9;stroke-dasharray:120 0}
-body.cur-click #cur-outer{stroke:var(--fire);opacity:1;stroke-dasharray:10 200}
-body.cur-search #cur-outer{stroke:var(--gold-light);opacity:.8;stroke-dasharray:40 20}
-#cur-inner{fill:var(--fire);opacity:.85;transform-origin:center;transition:fill .3s,opacity .3s}
-body.cur-hover #cur-inner{fill:var(--gold);opacity:1}
-body.cur-drag #cur-inner{fill:var(--ember);opacity:.7}
-body.cur-click #cur-inner{fill:var(--cream);opacity:1}
-body.cur-search #cur-inner{fill:var(--gold-light);opacity:.9}
-#cur-cross{stroke:var(--fire);stroke-width:.8;opacity:0;transition:opacity .3s}
-body.cur-hover #cur-cross{opacity:.5}
-body.cur-search #cur-cross{opacity:.35}
-#cur-mag{opacity:0;transition:opacity .3s}
-body.cur-search #cur-mag{opacity:.6}
-.spark{position:fixed;width:4px;height:4px;border-radius:50%;background:var(--fire);pointer-events:none;z-index:9998;animation:sparkFade .5s ease forwards;transform:translate(-50%,-50%)}
-@keyframes sparkFade{0%{opacity:.9;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(calc(-50% + var(--dx,0px)),calc(-50% + var(--dy,-20px))) scale(0)}}
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--void);
+  color: var(--cream);
+  cursor: none;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (hover:none) { html, body { cursor: auto; } }
+
+/* ── GRAIN ── */
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 3; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.042'/%3E%3C/svg%3E");
+}
 
 /* ── CANVASES ── */
-#bg-smoke{position:fixed;inset:0;z-index:0;pointer-events:none}
-#bg-ash{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.7}
-#flame-canvas{position:fixed;inset:0;z-index:5;pointer-events:none}
-#ambient{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(196,60,16,.05) 0%,transparent 70%)}
+#cv-bg    { position: fixed; inset: 0; z-index: 0; }
+#cv-smoke { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+#cv-ember { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
 
-/* ── FIRE LINE ── */
-.fire-line{height:3px;background:linear-gradient(90deg,transparent,var(--ember) 20%,var(--gold) 50%,var(--ember) 80%,transparent)}
+/* ══════════════════════════════════════════════════════
+   CURSOR — desktop only
+══════════════════════════════════════════════════════ */
+#cursor { position: fixed; z-index: 9999; pointer-events: none; top:0; left:0; }
+#cursor-dot  { width:8px; height:8px; border-radius:50%; background:var(--flame); transform:translate(-50%,-50%); box-shadow:0 0 10px var(--flame),0 0 20px rgba(240,140,40,.3); transition:width .35s,height .35s,background .3s; }
+#cursor-ring { position:absolute; top:0; left:0; width:36px; height:36px; border:1px solid rgba(240,140,40,.35); border-radius:50%; transform:translate(-50%,-50%); transition:width .45s cubic-bezier(.16,1,.3,1),height .45s,border-color .3s; }
+body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:rgba(240,140,40,.6); }
+@media (hover:none) { #cursor { display:none; } }
 
-/* ── HERO ── */
-.hero-section{position:relative;min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px clamp(20px,5vw,80px) 120px;overflow:hidden}
-.hero-bg-div{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 70% 50% at 50% 60%,rgba(232,83,42,.1),transparent 60%),radial-gradient(ellipse 40% 40% at 20% 30%,rgba(201,136,26,.07),transparent 55%),var(--char)}
-.hero-bg-div::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 75%);opacity:.4}
-.hero-inner-div{position:relative;z-index:1;max-width:760px}
-.hero-logo-img{width:clamp(140px,24vw,200px);height:auto;display:block;margin:0 auto;filter:drop-shadow(0 0 18px rgba(232,83,42,.55)) drop-shadow(0 0 40px rgba(232,83,42,.25));transition:transform .4s,filter .4s}
-#logoNavTrigger:hover .hero-logo-img{transform:scale(1.07);filter:drop-shadow(0 0 28px rgba(232,83,42,.9)) drop-shadow(0 0 55px rgba(232,83,42,.4))}
-.hero-kicker{font-size:.62rem;letter-spacing:.5em;text-transform:uppercase;color:var(--fire);margin-bottom:16px;display:block}
-.hero-title-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.2rem,8vw,6.5rem);letter-spacing:.06em;line-height:.88;color:var(--cream)}
-.hero-title-sub{display:block;font-size:clamp(1rem,2.5vw,1.8rem);letter-spacing:.35em;color:rgba(212,197,160,.5);margin-top:8px}
-.hero-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,1.8vw,1.2rem);color:rgba(212,197,160,.65);margin:20px auto 32px;max-width:42ch;line-height:1.7}
-.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn-fire{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:.18em;color:var(--char);background:linear-gradient(135deg,var(--fire),var(--ember));padding:.85rem 2rem;border-radius:999px;border:none;cursor:pointer;box-shadow:0 0 24px rgba(232,83,42,.3);transition:box-shadow .2s,transform .2s;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
-.btn-fire:hover{box-shadow:0 0 40px rgba(232,83,42,.55);transform:translateY(-2px)}
-.btn-ghost{font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:.18em;color:var(--cream);background:transparent;padding:.82rem 1.8rem;border-radius:999px;border:1px solid rgba(232,83,42,.4);cursor:pointer;transition:border-color .2s,background .2s;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
-.btn-ghost:hover{border-color:var(--fire);background:rgba(232,83,42,.08)}
-.hero-status-wrap{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:1}
-.status-badge{display:inline-flex;align-items:center;gap:8px;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;padding:7px 16px;border-radius:999px;border:1px solid;white-space:nowrap}
-.status-badge.open{color:#7EC87E;border-color:rgba(126,200,126,.3);background:rgba(126,200,126,.07)}
-.status-badge.closed{color:var(--fire);border-color:rgba(232,83,42,.3);background:rgba(232,83,42,.07)}
-.s-dot{width:7px;height:7px;border-radius:50%;animation:blink 2s ease-in-out infinite;flex-shrink:0}
-.open .s-dot{background:#7EC87E}.closed .s-dot{background:var(--fire)}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.page-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(232,83,42,.2) 30%,rgba(232,83,42,.2) 70%,transparent)}
+/* ══════════════════════════════════════════════════════
+   SHELL
+══════════════════════════════════════════════════════ */
+#shell {
+  position: fixed; inset: 0; z-index: 10;
+  display: flex; flex-direction: column;
+  opacity: 0; transition: opacity .9s ease;
+}
+#shell.on { opacity: 1; }
 
-/* ── SPECIALS SECTION ── */
-#specials-section{position:relative;background:var(--char2);padding:40px 0 60px;overflow:hidden}
-.specials-header{text-align:center;padding:0 20px 20px}
-.specials-eyebrow{font-size:.58rem;letter-spacing:.52em;text-transform:uppercase;color:var(--fire);margin-bottom:12px;display:flex;align-items:center;gap:10px;justify-content:center}
-.specials-eyebrow::before,.specials-eyebrow::after{content:"";display:block;width:22px;height:1px;background:var(--fire)}
-.specials-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4.5vw,3.8rem);letter-spacing:.06em;color:var(--cream);line-height:.9;margin-bottom:8px}
-.specials-title em{color:var(--fire);font-style:normal}
-.locked-notice{max-width:560px;margin:40px auto;text-align:center;padding:32px;border:1px solid rgba(107,92,66,.2);background:rgba(18,13,8,.5)}
-.locked-notice-icon{font-size:2rem;margin-bottom:12px;opacity:.5}
-.locked-notice-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.1em;color:var(--ash);margin-bottom:8px}
-.locked-notice-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(107,92,66,.7);line-height:1.7}
-.wheel-wrapper{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:20px 0 8px}
+/* ══════════════════════════════════════════════════════
+   ████  DESKTOP LAYOUT  (min-width: 768px)
+══════════════════════════════════════════════════════ */
 
-/* ── STAGE ── */
-#stage{position:relative;z-index:3;width:min(92vw,92vh);height:min(92vw,92vh);max-width:720px;max-height:720px;margin:0 auto}
-#wordmark{position:absolute;top:-2%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;white-space:nowrap;z-index:10}
-.wm-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.2rem,3.5vw,2.4rem);letter-spacing:.12em;color:var(--cream);line-height:1}
-.wm-name em{-webkit-text-stroke:.5px var(--fire);color:transparent;font-style:normal}
-.wm-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.55rem,1.2vw,.82rem);color:var(--ash);letter-spacing:.14em;margin-top:3px}
-#wheel-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.hub-ring-1{fill:none;stroke:rgba(232,83,42,.18);stroke-width:1}
-.hub-ring-2{fill:none;stroke:rgba(232,83,42,.08);stroke-width:1}
-.hub-ring-3{fill:none;stroke:rgba(201,136,26,.06);stroke-width:.5;stroke-dasharray:3 6}
-.orbit-ring{fill:none;stroke:rgba(232,83,42,.1);stroke-width:1}
-.orbit-ring-outer{fill:none;stroke:rgba(232,83,42,.04);stroke-width:1}
-.tick-line{stroke:rgba(232,83,42,.2);stroke-width:.8}
-.node-g{cursor:pointer;transition:opacity .35s}
-.node-g.dimmed{opacity:.18}
-.node-g.highlighted .node-circle-bg{fill:#281C0C}
-.node-g.highlighted .node-circle-rim{stroke-width:2}
-.node-g.highlighted .node-circle-inner{opacity:1}
-.node-circle-bg{fill:var(--char2);transition:fill .28s}
-.node-circle-rim{fill:none;stroke-width:1;transition:stroke .28s,stroke-width .28s}
-.node-circle-inner{fill:none;stroke-width:.5;opacity:.4;transition:opacity .28s}
-.node-g:hover .node-circle-bg{fill:#281C0C}
-.node-g:hover .node-circle-rim{stroke-width:1.8}
-.node-g:hover .node-circle-inner{opacity:1}
-.cat-icon-text{font-size:20px;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-.cat-label-text{font-family:'Bebas Neue',sans-serif;fill:var(--cream);letter-spacing:.1em;text-anchor:middle;dominant-baseline:central;pointer-events:none;font-size:10px}
-.cat-count-text{font-family:'Barlow Condensed',sans-serif;fill:var(--ash);font-size:8px;letter-spacing:.2em;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-.item-name-text{font-family:'Cormorant Garamond',serif;fill:var(--cream);font-weight:600;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-.item-price-text{font-family:'Bebas Neue',sans-serif;fill:var(--gold);letter-spacing:.08em;text-anchor:middle;dominant-baseline:central;pointer-events:none;transition:fill .25s}
-.node-g:hover .item-price-text{fill:var(--fire)}
-.connector{fill:none;stroke:rgba(232,83,42,.1);stroke-width:.8;stroke-dasharray:2 5}
-.hub-main-text{font-family:'Bebas Neue',sans-serif;fill:var(--cream);font-size:17px;letter-spacing:.14em;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-.hub-sub-text{font-family:'Barlow Condensed',sans-serif;fill:var(--ash);font-size:8.5px;letter-spacing:.3em;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-#back-btn{cursor:pointer;pointer-events:none;opacity:0;transition:opacity .4s}
-#back-btn.show{pointer-events:all;opacity:1}
-#back-btn .back-circle{fill:rgba(232,83,42,.07);stroke:rgba(232,83,42,.22);stroke-width:1;transition:fill .2s}
-#back-btn:hover .back-circle{fill:rgba(232,83,42,.18)}
-#back-btn .back-arrow{font-family:'Bebas Neue',sans-serif;fill:var(--bone);font-size:24px;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-#back-btn .back-label{font-family:'Barlow Condensed',sans-serif;fill:var(--ash);font-size:8px;letter-spacing:.3em;text-anchor:middle;pointer-events:none}
-#drag-hint{position:absolute;bottom:2%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:clamp(.5rem,1.1vw,.72rem);letter-spacing:.35em;color:var(--ash);text-transform:uppercase;opacity:.65;pointer-events:none;z-index:10;transition:opacity .7s;white-space:nowrap}
-#addr-strip{position:absolute;bottom:-6%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:clamp(.4rem,.82vw,.58rem);letter-spacing:.22em;color:rgba(107,92,66,.38);text-transform:uppercase;white-space:nowrap;pointer-events:none;z-index:10;text-align:center;width:100%;padding:0 8px}
-@keyframes rotateHint{0%{transform:rotate(0deg)}30%{transform:rotate(18deg)}70%{transform:rotate(-6deg)}100%{transform:rotate(0deg)}}
-.hint-spin{animation:rotateHint 2s ease 1.8s both}
-#zoom-wrap{display:flex;flex-direction:row;align-items:center;gap:10px;background:rgba(14,10,5,.88);border:1px solid rgba(232,83,42,.28);padding:10px 16px;border-radius:999px;backdrop-filter:blur(10px);transition:border-color .3s;margin-top:16px}
-#zoom-wrap:hover{border-color:rgba(232,83,42,.55)}
-#zoom-label{font-family:'Barlow Condensed',sans-serif;font-size:.52rem;letter-spacing:.28em;color:var(--ash);text-transform:uppercase;white-space:nowrap}
-#zoom-out,#zoom-in{width:26px;height:26px;border-radius:50%;background:rgba(232,83,42,.08);border:1px solid rgba(232,83,42,.3);color:var(--cream);font-size:.95rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;flex-shrink:0}
-#zoom-out:hover,#zoom-in:hover{background:rgba(232,83,42,.22);border-color:var(--fire)}
-#zoom-slider{-webkit-appearance:none;appearance:none;width:100px;height:3px;background:rgba(107,92,66,.3);border-radius:2px;outline:none;cursor:pointer}
-#zoom-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--fire);border:2px solid var(--gold);cursor:pointer}
-#zoom-pct{font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:.06em;color:var(--gold);min-width:36px;text-align:center}
-.bottom-btn{position:fixed;bottom:80px;z-index:20;width:42px;height:42px;border-radius:50%;background:rgba(20,16,9,.9);border:1px solid rgba(232,83,42,.3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .25s,background .25s}
-.bottom-btn:hover{background:rgba(232,83,42,.12);border-color:rgba(232,83,42,.7)}
-.bottom-btn.active{background:rgba(232,83,42,.15);border-color:var(--fire)}
-.bottom-label{position:fixed;bottom:128px;z-index:20;font-family:'Barlow Condensed',sans-serif;font-size:.58rem;letter-spacing:.3em;color:rgba(107,92,66,.5);text-transform:uppercase;pointer-events:none;text-align:center;width:42px}
-#search-btn{left:28px}
-#search-btn-label{left:28px}
-#list-btn{left:82px}
-#list-btn-label{left:82px}
-#info-btn{right:28px}
-#info-btn-label{right:28px}
-.side-panel{position:fixed;top:0;bottom:0;z-index:150;background:rgba(10,7,4,.97);display:flex;flex-direction:column;backdrop-filter:blur(12px);overflow:hidden}
-#info-panel{right:0;width:min(420px,92vw);border-left:1px solid rgba(232,83,42,.2);transform:translateX(100%);transition:transform .5s cubic-bezier(.16,.9,.3,1)}
-#info-panel.open{transform:translateX(0)}
-#list-panel{left:0;width:min(500px,100vw);border-right:1px solid rgba(232,83,42,.2);transform:translateX(-100%);transition:transform .5s cubic-bezier(.16,.9,.3,1)}
-#list-panel.open{transform:translateX(0)}
-.panel-fire-top{height:2px;flex-shrink:0;background:linear-gradient(90deg,transparent,var(--ember),var(--gold),var(--ember),transparent)}
-.panel-scroll,.list-scroll{flex:1;overflow-y:auto;padding:32px 32px 48px;scrollbar-width:thin;scrollbar-color:rgba(232,83,42,.25) transparent}
-.panel-scroll::-webkit-scrollbar,.list-scroll::-webkit-scrollbar{width:3px}
-.panel-scroll::-webkit-scrollbar-thumb,.list-scroll::-webkit-scrollbar-thumb{background:rgba(232,83,42,.25);border-radius:2px}
-.panel-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:.58rem;letter-spacing:.45em;color:var(--fire);text-transform:uppercase;font-weight:600;margin-bottom:10px}
-.panel-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3rem);letter-spacing:.1em;color:var(--cream);line-height:.95;margin-bottom:4px}
-.panel-title em{color:var(--fire);font-style:normal}
-.panel-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--ash);margin-bottom:20px;letter-spacing:.06em}
-.hours-status{display:inline-flex;align-items:center;gap:7px;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;padding:5px 13px;border:1px solid;margin-bottom:18px}
-.hours-status.open-now{color:#7EC87E;border-color:rgba(126,200,126,.3);background:rgba(126,200,126,.07)}
-.hours-status.closed-now{color:var(--fire);border-color:rgba(232,83,42,.3);background:rgba(232,83,42,.07)}
-.status-dot{width:6px;height:6px;border-radius:50%;animation:pulse 2s ease-in-out infinite}
-.open-now .status-dot{background:#7EC87E}
-.closed-now .status-dot{background:var(--fire)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.hours-block{margin-bottom:20px}
-.hours-row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid rgba(107,92,66,.15);gap:12px}
-.hours-row.today{background:rgba(232,83,42,.06);margin:0 -6px;padding-left:6px;padding-right:6px}
-.hours-day{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;letter-spacing:.12em;color:var(--bone);text-transform:uppercase}
-.hours-day.today{color:var(--gold)}
-.hours-time{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--gold);letter-spacing:.08em;white-space:nowrap}
-.hours-note{font-size:.6rem;letter-spacing:.18em;color:var(--ash);text-transform:uppercase;margin-top:10px;padding:8px 10px;background:rgba(232,83,42,.04);border-left:2px solid rgba(232,83,42,.22);font-family:'Barlow Condensed',sans-serif;line-height:1.7}
-.panel-rule{height:1px;background:rgba(232,83,42,.15);margin:20px 0}
-.contact-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
-.contact-icon{width:28px;height:28px;flex-shrink:0;border:1px solid rgba(232,83,42,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--fire)}
-.contact-label{font-family:'Barlow Condensed',sans-serif;font-size:.62rem;letter-spacing:.3em;color:var(--ash);text-transform:uppercase;margin-bottom:2px}
-.contact-value{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--cream)}
-.contact-value a{color:var(--cream);text-decoration:none}
-.contact-value a:hover{color:var(--fire)}
-.features-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-.feat-tag{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);border:1px solid rgba(107,92,66,.3);padding:5px 12px;transition:border-color .2s,color .2s}
-.feat-tag:hover{border-color:rgba(232,83,42,.4);color:var(--bone)}
-.drinks-block{margin-top:20px;padding:14px 16px;background:rgba(232,83,42,.05);border:1px solid rgba(232,83,42,.15)}
-.drinks-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.1em;color:var(--gold);margin-bottom:4px}
-.drinks-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ash);line-height:1.6}
-.panel-close-btn{position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(107,92,66,.6);padding:6px 8px;transition:color .2s}
-.panel-close-btn:hover{color:var(--fire)}
-.backdrop{position:fixed;inset:0;z-index:140;background:rgba(8,6,4,.4);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .4s}
-.backdrop.open{opacity:1;pointer-events:all}
-.list-filter{width:100%;background:rgba(232,83,42,.05);border:1px solid rgba(232,83,42,.2);color:var(--cream);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;letter-spacing:.1em;padding:8px 14px;outline:none;transition:border-color .2s;margin-bottom:18px}
-.list-filter::placeholder{color:var(--ash)}
-.list-filter:focus{border-color:rgba(232,83,42,.5)}
-.list-cat-hdr{display:flex;align-items:center;gap:10px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.12em;color:var(--fire);margin:20px 0 8px;padding-bottom:8px;border-bottom:1px solid rgba(232,83,42,.15)}
-.list-item-row{display:flex;align-items:baseline;justify-content:space-between;padding:9px 8px;border-bottom:1px solid rgba(107,92,66,.1);cursor:pointer;transition:background .15s;gap:12px;margin:0 -8px}
-.list-item-row:hover{background:rgba(232,83,42,.07)}
-.list-item-name{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-weight:600;color:var(--cream)}
-.list-item-price{font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--gold);white-space:nowrap;flex-shrink:0}
-.list-no-results{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--ash);font-size:1rem;padding:20px 0}
-#popup-overlay{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;background:rgba(8,6,4,.78);backdrop-filter:blur(10px) saturate(.7);opacity:0;pointer-events:none;transition:opacity .4s}
-#popup-overlay.open{opacity:1;pointer-events:all}
-#popup-card{position:relative;background:var(--char);max-width:480px;width:92%;overflow:hidden;transform:scale(.84) translateY(32px);transition:transform .42s cubic-bezier(.16,.9,.3,1.05);border:1px solid rgba(232,83,42,.25)}
-#popup-overlay.open #popup-card{transform:scale(1) translateY(0)}
-.popup-fire{height:3px;background:linear-gradient(90deg,var(--ember),var(--gold-light),var(--gold),var(--ember));width:100%}
-.popup-inner{padding:28px 36px 32px 38px}
-.popup-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.45em;color:var(--fire);text-transform:uppercase;font-weight:600;margin-bottom:8px}
-.popup-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,4vw,2.1rem);font-weight:600;color:var(--cream);line-height:1.05;margin-bottom:4px}
-.popup-price{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,2.8rem);color:var(--fire);letter-spacing:.1em;margin-bottom:18px}
-.popup-market{display:inline-block;margin-bottom:18px;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,136,26,.4);padding:5px 14px;background:rgba(201,136,26,.07)}
-.popup-rule{height:1px;background:rgba(232,83,42,.15);margin-bottom:18px}
-.popup-desc{font-family:'Cormorant Garamond',serif;font-size:clamp(.95rem,2vw,1.1rem);font-style:italic;font-weight:300;color:var(--bone);line-height:1.75}
-.popup-note{margin-top:14px;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:.22em;color:var(--ash);text-transform:uppercase;line-height:1.6}
-.popup-extra-note{margin-top:10px;padding-top:10px;border-top:1px solid rgba(232,83,42,.1);font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.18em;color:rgba(107,92,66,.6);text-transform:uppercase;line-height:1.7}
-#popup-close{position:absolute;top:12px;right:14px;background:none;border:none;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(107,92,66,.7);cursor:pointer;padding:6px 8px;transition:color .2s}
-#popup-close:hover{color:var(--fire)}
-#menu-link-section{text-align:center;padding:70px clamp(20px,5vw,80px);background:var(--char)}
-.menu-link-body{max-width:560px;margin:0 auto}
-.section-label{font-size:.58rem;letter-spacing:.52em;text-transform:uppercase;color:var(--fire);margin-bottom:12px;display:flex;align-items:center;gap:10px;justify-content:center}
-.section-label::before,.section-label::after{content:"";display:block;width:22px;height:1px;background:var(--fire)}
-.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4.5vw,3.8rem);letter-spacing:.06em;color:var(--cream);line-height:.9}
-.section-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--ash);margin:14px 0 28px;line-height:1.7}
-#info-section{background:var(--char2);padding:80px clamp(20px,5vw,80px)}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:40px auto 0}
-.info-card{padding:30px 28px;border:1px solid rgba(232,83,42,.12);background:var(--char)}
-.info-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.12em;color:var(--cream);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(107,92,66,.2)}
-.h-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid rgba(107,92,66,.1);gap:12px}
-.h-row:last-child{border-bottom:none}
-.h-day{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bone)}
-.h-day.today{color:var(--gold)}
-.h-time{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.05em;color:var(--gold);white-space:nowrap}
-.c-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
-.c-row:last-child{margin-bottom:0}
-.c-icon{width:30px;height:30px;flex-shrink:0;border-radius:50%;border:1px solid rgba(232,83,42,.22);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--fire)}
-.c-label{font-size:.56rem;letter-spacing:.32em;text-transform:uppercase;color:var(--ash);margin-bottom:2px}
-.c-value{font-family:'Cormorant Garamond',serif;font-size:.98rem;color:var(--cream)}
-.c-value a{color:var(--cream);transition:color .2s;text-decoration:none}
-.c-value a:hover{color:var(--fire)}
-.amenities{margin-top:18px;display:flex;flex-wrap:wrap;gap:7px}
-.amenity{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);border:1px solid rgba(107,92,66,.25);padding:4px 9px}
-footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px clamp(20px,5vw,80px) 80px}
-.footer-inner{max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
-.footer-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
-.footer-logo{width:52px;height:52px;border-radius:50%;object-fit:contain;background:radial-gradient(circle at 40% 35%,#2A1A0A,#1A0E06);border:1px solid rgba(232,83,42,.4);box-shadow:0 0 16px rgba(232,83,42,.2)}
-.footer-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.12em;color:var(--cream)}
-.footer-name small{display:block;font-family:'Barlow Condensed',sans-serif;font-size:.5rem;letter-spacing:.4em;color:var(--ash);margin-top:2px}
-.footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
-.footer-link{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,197,160,.5);padding:.45rem .8rem;border-radius:999px;transition:color .2s,background .2s;text-decoration:none}
-.footer-link:hover{color:var(--cream);background:rgba(232,83,42,.08)}
-.footer-copy{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(107,92,66,.4)}
-#search-wrap{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-8px);z-index:20;width:min(340px,80vw);opacity:0;pointer-events:none;transition:opacity .4s,transform .4s}
-#search-wrap.visible{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0)}
-#search-input{width:100%;background:rgba(12,9,5,.9);border:1px solid rgba(232,83,42,.3);border-bottom:1px solid rgba(232,83,42,.5);color:var(--cream);font-family:'Barlow Condensed',sans-serif;font-size:1rem;letter-spacing:.18em;padding:10px 40px 10px 16px;outline:none;transition:border-color .25s,background .25s}
-#search-input::placeholder{color:var(--ash);letter-spacing:.2em}
-#search-input:focus{background:rgba(20,14,7,.95);border-color:rgba(232,83,42,.7)}
-#search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--ash);font-size:.75rem;padding:4px;transition:color .2s;opacity:0;pointer-events:none}
-#search-clear.show{opacity:1;pointer-events:all}
-#search-clear:hover{color:var(--fire)}
-#logoNavOverlay{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(6,4,2,.9);backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .4s ease}
-#logoNavOverlay.open{opacity:1;pointer-events:all}
-.lno-center{position:relative;display:flex;align-items:center;justify-content:center}
-.lno-logo{width:clamp(90px,16vw,130px);height:auto;display:block;filter:drop-shadow(0 0 22px rgba(232,83,42,.7));position:relative;z-index:2}
-.lno-ring-1{position:absolute;width:clamp(160px,26vw,210px);height:clamp(160px,26vw,210px);border-radius:50%;border:1px solid rgba(232,83,42,.18);pointer-events:none;z-index:1}
-.lno-ring-2{position:absolute;width:clamp(280px,46vw,380px);height:clamp(280px,46vw,380px);border-radius:50%;border:1px dashed rgba(232,83,42,.08);pointer-events:none;z-index:1}
-.lno-item{position:absolute;top:50%;left:50%;width:70px;height:70px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(16,11,6,.95);border:1px solid rgba(232,83,42,.38);color:var(--cream);font-family:'Bebas Neue',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;text-align:center;cursor:pointer;backdrop-filter:blur(10px);box-shadow:0 0 20px rgba(0,0,0,.7);transform:translate(-50%,-50%);opacity:0;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .4s ease,background .2s,border-color .2s,box-shadow .2s}
-.lno-item.placed{opacity:1;transform:translate(calc(-50% + var(--tx,0px)),calc(-50% + var(--ty,0px)))}
-.lno-item:hover{background:rgba(232,83,42,.88);border-color:var(--gold);box-shadow:0 0 32px rgba(232,83,42,.55)}
-.lno-item.placed:hover{transform:translate(calc(-50% + var(--tx,0px)),calc(-50% + var(--ty,0px))) scale(1.1)}
-.lno-icon{font-size:1.05rem;line-height:1;display:block}
-.lno-label{font-size:.56rem;letter-spacing:.08em}
-.lno-close{position:absolute;top:22px;right:26px;background:none;border:1px solid rgba(232,83,42,.28);color:var(--ash);font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:color .2s,border-color .2s;z-index:3}
-.lno-close:hover{color:var(--fire);border-color:rgba(232,83,42,.6)}
-@keyframes logoOrbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes logoPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.14);opacity:.15}}
-@media(max-width:860px){.info-grid{grid-template-columns:1fr}}
-@media(max-width:640px){
-  #stage{width:min(88vw,82vh);height:min(88vw,82vh)}
-  .bottom-btn{width:48px;height:48px}
-  .bottom-label{font-size:.55rem;bottom:132px}
-  #search-btn{left:16px}#search-btn-label{left:16px;width:48px}
-  #list-btn{left:74px}#list-btn-label{left:74px;width:48px}
-  #info-btn{right:16px}#info-btn-label{right:16px;width:48px}
-  .popup-inner{padding:22px 24px 28px}
-  .panel-scroll,.list-scroll{padding:24px 20px 48px}
+/* TOP BAR */
+#topbar {
+  flex-shrink: 0;
+  display: flex; align-items: stretch;
+  height: clamp(52px,7vh,68px);
+  border-bottom: 1px solid rgba(196,168,130,.1);
+  background: linear-gradient(to bottom,rgba(9,7,4,.95),rgba(9,7,4,.5));
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
+.tb-cell {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 0 clamp(12px,2vw,28px);
+  border-right: 1px solid rgba(196,168,130,.07);
+}
+.tb-cell:last-child { border-right: none; }
+.tb-cell.grow { flex:1; align-items:center; }
+.tb-eyebrow { font-family:var(--cond); font-weight:500; font-size:8px; letter-spacing:.3em; text-transform:uppercase; color:rgba(196,168,130,.35); margin-bottom:2px; }
+.tb-val     { font-family:var(--cond); font-weight:400; font-size:clamp(10px,1.2vw,13px); letter-spacing:.06em; color:rgba(232,217,188,.6); }
+#brand-name { font-family:var(--serif); font-weight:700; font-size:clamp(14px,2vw,22px); letter-spacing:.01em; color:var(--cream); text-align:center; line-height:1; text-shadow:0 0 40px rgba(240,140,40,.2); }
+#brand-name em { font-style:italic; font-weight:400; color:var(--flame); }
+#brand-tagline { font-family:var(--cond); font-weight:400; font-size:9px; letter-spacing:.26em; text-transform:uppercase; color:rgba(196,168,130,.28); margin-top:3px; text-align:center; }
+.tb-status { display:flex; align-items:center; gap:7px; font-family:var(--cond); font-weight:500; font-size:clamp(10px,1.2vw,12px); letter-spacing:.12em; text-transform:uppercase; color:var(--flame); }
+.status-flame { animation:flkr 2s ease-in-out infinite; filter:drop-shadow(0 0 4px rgba(240,140,40,.6)); }
+@keyframes flkr { 0%,100%{opacity:.7;transform:scaleY(1)} 35%{opacity:1;transform:scaleY(1.1) translateY(-1px)} 70%{opacity:.85;transform:scaleY(.95)} }
 
-/* ── BRANDING IRON NAV ── */
+/* MAIN 3-COL */
+#main { flex:1; overflow:hidden; display:grid; grid-template-columns:clamp(155px,17vw,220px) 1fr clamp(155px,17vw,220px); }
+#main > * + * { border-left: 1px solid rgba(196,168,130,.08); }
 
-/* ══════════════════════════════════════════
-   DESKTOP — Branding Iron Vertical Sidebar
-══════════════════════════════════════════ */
-.brand-nav{
-  position:fixed;left:0;top:0;bottom:0;
-  width:64px;z-index:8000;
-  display:flex;flex-direction:column;align-items:center;
-  background:rgba(8,6,3,.94);
-  border-right:1px solid rgba(240,230,208,.07);
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  transition:width .4s cubic-bezier(.77,0,.175,1);
-  overflow:hidden;
+/* SIDEBARS */
+#sidebar-l, #sidebar-r {
+  display: flex; flex-direction:column; justify-content:space-between;
+  padding: clamp(14px,2.2vh,24px) clamp(12px,1.6vw,22px);
 }
-.brand-nav:hover{width:220px;}
+#sidebar-l { animation:fadeSlideR .8s .5s ease both; }
+#sidebar-r { animation:fadeSlideL .8s .5s ease both; }
+.sb-group { display:flex; flex-direction:column; gap:clamp(12px,1.8vh,20px); }
+.sb-block { display:flex; flex-direction:column; gap:4px; }
+.sb-label { font-family:var(--cond); font-weight:600; font-size:8px; letter-spacing:.3em; text-transform:uppercase; color:rgba(196,168,130,.33); }
+.sb-text  { font-family:var(--serif); font-style:italic; font-weight:400; font-size:clamp(10px,1vw,13px); color:rgba(232,217,188,.55); line-height:1.5; }
+.sb-hot   { font-family:var(--cond); font-weight:600; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--flame); display:flex; align-items:center; gap:5px; }
+.sb-hot::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--glow); box-shadow:0 0 7px var(--glow); animation:dp 1.8s ease-in-out infinite; flex-shrink:0; }
+@keyframes dp { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
+.sb-stars       { color:var(--glow); letter-spacing:.04em; font-size:11px; }
+.sb-rating-line { font-family:var(--cond); font-size:9px; letter-spacing:.06em; color:rgba(196,168,130,.38); line-height:1.55; }
+.sb-links { display:flex; flex-direction:column; gap:6px; }
+.sb-link  { font-family:var(--cond); font-weight:500; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:rgba(196,168,130,.33); text-decoration:none; transition:color .25s; cursor:none; display:flex; align-items:center; gap:6px; }
+.sb-link::before { content:'—'; color:rgba(240,140,40,.28); font-size:8px; }
+.sb-link:hover { color:var(--flame); }
 
-/* Logo */
-.bn-logo{
-  position:absolute;top:0;left:0;right:0;height:64px;
-  display:flex;align-items:center;
-  border-bottom:1px solid rgba(240,230,208,.06);
-  text-decoration:none;overflow:hidden;flex-shrink:0;
-}
-.bn-logo-icon{
-  font-family:'Cormorant SC',serif;font-size:18px;font-weight:700;
-  color:#d4a03c;letter-spacing:.1em;
-  flex-shrink:0;width:64px;text-align:center;
-}
-.bn-logo-full{
-  font-family:'Cormorant SC',serif;font-size:13px;font-weight:700;
-  color:#d4a03c;letter-spacing:.12em;white-space:nowrap;
-  opacity:0;transform:translateX(-10px);
-  transition:opacity .3s .08s,transform .3s .08s;
-}
-.brand-nav:hover .bn-logo-full{opacity:1;transform:none;}
-
-/* Call CTA at bottom */
-.bn-call{
-  position:absolute;bottom:0;left:0;right:0;height:64px;
-  display:flex;align-items:center;
-  border-top:1px solid rgba(240,230,208,.06);
-  background:rgba(200,84,30,.1);
-  text-decoration:none;overflow:hidden;flex-shrink:0;
-  transition:background .24s;
-}
-.bn-call:hover{background:rgba(200,84,30,.28);}
-.bn-call-icon{
-  flex-shrink:0;width:64px;
-  display:flex;align-items:center;justify-content:center;
-}
-.bn-call-icon svg{width:18px;height:18px;stroke:#c8541e;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 5px rgba(200,84,30,.5));}
-.bn-call-txt{
-  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
-  color:#c8541e;white-space:nowrap;
-  opacity:0;transform:translateX(-10px);
-  transition:opacity .3s .1s,transform .3s .1s;
-}
-.brand-nav:hover .bn-call-txt{opacity:1;transform:none;}
-
-/* Nav items */
-.bn-items{display:flex;flex-direction:column;width:100%;padding:72px 0 72px;}
-.bn-item{
-  position:relative;display:flex;align-items:center;
-  text-decoration:none;height:68px;overflow:hidden;flex-shrink:0;
-}
-
-/* Rotated vertical label */
-.bn-label-vert{
-  position:absolute;left:0;width:64px;height:68px;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  transition:opacity .24s;
-}
-.bn-label-vert span{
-  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;
-  color:rgba(240,230,208,.4);
-  writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);
-  transition:color .24s,text-shadow .24s;white-space:nowrap;
-}
-.bn-item:hover .bn-label-vert span{
-  color:#d4a03c;
-  text-shadow:0 0 12px rgba(212,160,60,.7),0 0 26px rgba(212,160,60,.35);
-}
-
-/* Sear icon — SVG, appears on hover */
-.bn-sear{
-  position:absolute;left:0;width:64px;height:68px;
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;transform:scale(.65);
-  transition:opacity .28s,transform .3s cubic-bezier(.34,1.4,.64,1);
-}
-.bn-sear svg{width:20px;height:20px;stroke:#d4a03c;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
-.bn-item:hover .bn-sear{
-  opacity:1;transform:scale(1);
-  filter:drop-shadow(0 0 8px rgba(212,160,60,.7));
-}
-.bn-item:hover .bn-label-vert{opacity:0;}
-
-/* Expanded label */
-.bn-expand{
-  margin-left:64px;display:flex;flex-direction:column;
-  opacity:0;transform:translateX(-12px);
-  transition:opacity .3s,transform .3s;
-  pointer-events:none;white-space:nowrap;padding-right:20px;
-}
-.brand-nav:hover .bn-expand{opacity:1;transform:none;pointer-events:auto;}
-.bn-item:nth-child(1) .bn-expand{transition-delay:.04s;}
-.bn-item:nth-child(2) .bn-expand{transition-delay:.09s;}
-.bn-item:nth-child(3) .bn-expand{transition-delay:.14s;}
-.bn-item:nth-child(4) .bn-expand{transition-delay:.19s;}
-.bn-expand-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:rgba(240,230,208,.82);line-height:1.1;transition:color .22s;}
-.bn-item:hover .bn-expand-name{color:#f0e6d0;}
-.bn-expand-hint{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(240,230,208,.28);margin-top:3px;}
-
-/* Ember bar right edge */
-.bn-item::after{
-  content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
-  width:2px;height:0;
-  background:linear-gradient(180deg,transparent,#c8541e,transparent);
-  transition:height .32s,box-shadow .32s;
-}
-.bn-item:hover::after{height:52%;box-shadow:0 0 12px rgba(200,84,30,.7),-2px 0 18px rgba(200,84,30,.35);}
-
-/* Divider */
-.bn-item::before{content:'';position:absolute;bottom:0;left:14px;right:14px;height:1px;background:rgba(240,230,208,.05);}
-
-/* ══════════════════════════════════════════
-   MOBILE — Full-Width Branding Iron Sidebar
-   Close is ATTACHED to the sidebar right edge,
-   never floating over the page.
-══════════════════════════════════════════ */
-
-/* Bottom bar nav trigger */
-.mob-tab{
-  display:none;
-  position:fixed;
-  bottom:0;left:0;right:0;
-  z-index:9500;
-  height:52px;
-  background:rgba(8,6,3,.97);
-  border:none;
-  border-top:1px solid rgba(200,84,30,.35);
-  flex-direction:row;align-items:center;justify-content:center;
-  gap:14px;
-  box-shadow:0 -4px 32px rgba(0,0,0,.55),0 -1px 0 rgba(200,84,30,.15);
-  cursor:pointer;
-  transition:background .22s,border-color .22s;
-  padding:0 24px;
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-}
-.mob-tab.open{
-  border-top-color:rgba(200,84,30,.6);
-  background:rgba(20,14,8,.98);
-}
-.mob-tab:active{background:rgba(200,84,30,.14);}
-/* Left ember line accent */
-.mob-tab::before{
-  content:'';
-  position:absolute;left:0;top:0;bottom:0;
-  width:3px;
-  background:linear-gradient(180deg,transparent,#c8541e,transparent);
-  box-shadow:0 0 10px rgba(200,84,30,.5);
-}
-/* Right ember line accent */
-.mob-tab::after{
-  content:'';
-  position:absolute;right:0;top:0;bottom:0;
-  width:3px;
-  background:linear-gradient(180deg,transparent,#c8541e,transparent);
-  box-shadow:0 0 10px rgba(200,84,30,.5);
-}
-.mob-tab-menu-icon{
-  display:flex;flex-direction:column;gap:4px;flex-shrink:0;
-}
-.mob-tab-menu-icon span{
-  display:block;height:1.5px;background:#c8541e;
-  box-shadow:0 0 5px rgba(200,84,30,.6);
-  transition:width .24s,background .22s,transform .24s;
-}
-.mob-tab-menu-icon span:nth-child(1){width:22px;}
-.mob-tab-menu-icon span:nth-child(2){width:16px;}
-.mob-tab-menu-icon span:nth-child(3){width:22px;}
-.mob-tab.open .mob-tab-menu-icon span:nth-child(1){transform:translateY(5.5px) rotate(45deg);}
-.mob-tab.open .mob-tab-menu-icon span:nth-child(2){width:0;opacity:0;}
-.mob-tab.open .mob-tab-menu-icon span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg);}
-.mob-tab-label{
-  font-family:'DM Mono',monospace;
-  font-size:10px;letter-spacing:.28em;text-transform:uppercase;
-  color:rgba(240,230,208,.55);
-  transition:color .22s;
-  flex:1;text-align:left;
-}
-.mob-tab.open .mob-tab-label{color:rgba(240,230,208,.38);}
-.mob-tab-name{
-  font-family:'Cormorant SC',serif;
-  font-size:16px;font-weight:700;letter-spacing:.14em;
-  color:#d4a03c;
-  transition:color .22s;
-}
-.mob-tab.open .mob-tab-name{color:rgba(212,160,60,.6);}
-.mob-tab-close{
-  font-family:'DM Mono',monospace;
-  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
-  color:rgba(200,84,30,.7);
-  opacity:0;transition:opacity .22s;
-  flex-shrink:0;
-}
-.mob-tab.open .mob-tab-close{opacity:1;}
-
-/* The sidebar: slides from left, 85vw wide when open */
-.mob-sidebar{
-  display:none;
-  position:fixed;left:0;top:0;bottom:52px;
-  width:85vw;max-width:380px;
-  z-index:9400;
-  background:#0a0806;
-  flex-direction:row; /* sidebar content LEFT, close strip RIGHT */
-  transform:translateX(-100%);
-  transition:transform .44s cubic-bezier(.77,0,.175,1);
-  box-shadow:8px 0 60px rgba(0,0,0,.7);
-  overflow:hidden;
-}
-.mob-sidebar.open{transform:translateX(0);}
-
-/* Left column — the actual nav content */
-.mob-nav-content{
-  flex:1;
-  display:flex;flex-direction:column;
-  border-right:1px solid rgba(240,230,208,.07);
-  overflow:hidden;
-}
-
-/* Logo row */
-.mob-logo-row{
-  height:72px;flex-shrink:0;
-  display:flex;align-items:center;
-  border-bottom:1px solid rgba(240,230,208,.06);
-  padding:0 28px;
-  text-decoration:none;
-}
-.mob-logo-mark{
-  font-family:'Cormorant SC',serif;font-size:22px;font-weight:700;
-  color:#d4a03c;letter-spacing:.12em;
-}
-.mob-logo-sub{
-  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(240,230,208,.35);margin-left:12px;margin-top:2px;
-}
-
-/* Nav links — large, vertical, with same branding iron DNA */
-.mob-links{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.mob-link{
+/* NAV CENTER */
+#nav-center {
+  display:flex; flex-direction:column; justify-content:center;
+  padding: clamp(8px,1.5vh,14px) clamp(18px,2.8vw,44px);
   position:relative;
-  display:flex;align-items:center;
-  text-decoration:none;
-  height:calc((100vh - 72px - 72px) / 4);
-  min-height:72px;
-  padding:0 28px;
-  border-bottom:1px solid rgba(240,230,208,.05);
-  overflow:hidden;
-  transition:background .26s;
 }
-.mob-link::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;
-  width:3px;background:#c8541e;
-  transform:scaleY(0);transform-origin:bottom;
-  transition:transform .3s ease;
+#nav-center::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse at 50% 85%,rgba(192,74,0,.07),transparent 65%);
 }
-.mob-link:active::before,.mob-link.tapped::before{transform:scaleY(1);}
-.mob-link:active,.mob-link.tapped{background:rgba(200,84,30,.07);}
+.nav-item {
+  position:relative; display:flex; align-items:center;
+  padding:clamp(9px,1.5vh,16px) 0;
+  border-bottom:1px solid rgba(196,168,130,.07);
+  cursor:none; overflow:hidden; transition:border-color .4s;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-item:first-child { border-top:1px solid rgba(196,168,130,.07); }
+.nav-item:hover { border-bottom-color:rgba(240,140,40,.15); }
+.nav-item:first-child:hover { border-top-color:rgba(240,140,40,.15); }
+/* amber glow sweep */
+.nav-item::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(90deg,rgba(192,74,0,.0) 0%,rgba(192,74,0,.08) 25%,rgba(224,101,16,.12) 50%,rgba(240,140,40,.06) 75%,transparent 100%);
+  transform:translateX(-105%); transition:transform .7s cubic-bezier(.77,0,.18,1);
+}
+.nav-item:hover::before { transform:translateX(0); }
+/* ember left bar */
+.nav-item::after {
+  content:''; position:absolute; left:0; top:20%; bottom:20%; width:2px;
+  background:linear-gradient(to bottom,transparent,var(--fire),var(--flame),transparent);
+  border-radius:2px; transform:scaleY(0); transform-origin:center;
+  transition:transform .45s .05s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 0 8px var(--fire);
+}
+.nav-item:hover::after { transform:scaleY(1); }
 
-/* Number tag */
-.mob-link-num{
-  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;
-  color:rgba(240,230,208,.2);
-  margin-right:20px;flex-shrink:0;min-width:20px;
-}
-/* Icon */
-.mob-link-icon{
-  flex-shrink:0;margin-right:18px;
-  opacity:.45;transition:opacity .24s;
-}
-.mob-link-icon svg{width:18px;height:18px;stroke:#d4a03c;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
-.mob-link:active .mob-link-icon,.mob-link.tapped .mob-link-icon{opacity:1;}
+.ni-num   { position:relative; z-index:1; font-family:var(--cond); font-weight:400; font-size:9px; letter-spacing:.2em; color:rgba(196,168,130,.22); min-width:clamp(34px,3.5vw,50px); padding-left:12px; transition:color .4s; }
+.nav-item:hover .ni-num { color:rgba(240,140,40,.5); }
+.ni-name  { position:relative; z-index:1; font-family:var(--serif); font-weight:700; font-size:clamp(22px,3.5vw,50px); letter-spacing:-.01em; line-height:1; flex:1; color:rgba(232,217,188,.72); transition:color .35s,letter-spacing .55s cubic-bezier(.16,1,.3,1),text-shadow .4s; }
+.nav-item:hover .ni-name { color:var(--cream); letter-spacing:.01em; text-shadow:0 0 60px rgba(240,140,40,.25); }
+.ni-sub   { position:relative; z-index:1; font-family:var(--serif); font-style:italic; font-weight:400; font-size:clamp(10px,.95vw,13px); color:rgba(196,168,130,.2); padding:0 clamp(8px,1.4vw,18px); transition:color .35s; display:none; }
+@media (min-width:900px) { .ni-sub { display:block; } }
+.nav-item:hover .ni-sub { color:rgba(240,140,40,.48); }
+.ni-arrow { position:relative; z-index:1; width:clamp(26px,2.8vw,38px); height:clamp(26px,2.8vw,38px); border:1px solid rgba(196,168,130,.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:rgba(196,168,130,.22); font-size:12px; transition:transform .45s cubic-bezier(.34,1.56,.64,1),border-color .35s,color .35s,background .35s,box-shadow .35s; }
+.nav-item:hover .ni-arrow { transform:rotate(-45deg) scale(1.1); border-color:rgba(240,140,40,.5); color:var(--flame); background:rgba(240,140,40,.08); box-shadow:0 0 16px rgba(240,140,40,.15); }
 
-/* Text */
-.mob-link-body{flex:1;}
-.mob-link-name{
-  font-family:'Cormorant Garamond',serif;font-size:clamp(22px,5vw,28px);font-weight:600;
-  color:rgba(240,230,208,.84);line-height:1.05;
-  transition:color .22s;
-}
-.mob-link:active .mob-link-name,.mob-link.tapped .mob-link-name{color:#d4a03c;}
-.mob-link-hint{
-  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(240,230,208,.28);margin-top:3px;
-}
+.nav-item:nth-child(1){animation:fadeSlideU .6s .4s ease both}
+.nav-item:nth-child(2){animation:fadeSlideU .6s .5s ease both}
+.nav-item:nth-child(3){animation:fadeSlideU .6s .6s ease both}
+.nav-item:nth-child(4){animation:fadeSlideU .6s .7s ease both}
+.nav-item:nth-child(5){animation:fadeSlideU .6s .8s ease both}
+.nav-item:nth-child(6){animation:fadeSlideU .6s .9s ease both}
 
-/* Ember bar right side of link */
-.mob-link::after{
-  content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
-  width:2px;height:0;
-  background:linear-gradient(180deg,transparent,#c8541e,transparent);
-  transition:height .28s,box-shadow .28s;
-}
-.mob-link:active::after,.mob-link.tapped::after{
-  height:46%;
-  box-shadow:0 0 10px rgba(200,84,30,.65),-2px 0 16px rgba(200,84,30,.3);
-}
+/* RIGHT SIDEBAR PREVIEW */
+.pv-label { font-family:var(--cond); font-weight:600; font-size:8px; letter-spacing:.3em; text-transform:uppercase; color:rgba(196,168,130,.25); margin-bottom:7px; }
+#pv-title { font-family:var(--serif); font-weight:700; font-size:clamp(12px,1.3vw,16px); line-height:1.25; color:rgba(232,217,188,.68); transition:all .4s; min-height:38px; }
+#pv-desc  { margin-top:7px; font-family:var(--serif); font-style:italic; font-size:clamp(9px,.95vw,12px); line-height:1.6; color:rgba(196,168,130,.32); transition:all .4s; min-height:46px; }
+#pv-chips { display:flex; flex-wrap:wrap; gap:5px; margin-top:9px; min-height:26px; }
+.pv-chip  { font-family:var(--cond); font-weight:500; font-size:7px; letter-spacing:.1em; text-transform:uppercase; padding:3px 8px; border-radius:2px; border:1px solid rgba(196,168,130,.1); color:rgba(196,168,130,.28); transition:all .35s; }
+.pv-chip.on { border-color:rgba(240,140,40,.3); color:var(--flame); background:rgba(240,140,40,.06); }
+#pv-num   { font-family:var(--cond); font-weight:800; font-size:clamp(58px,10vw,110px); line-height:1; letter-spacing:-.03em; color:rgba(192,74,0,.06); text-align:right; margin-top:auto; transition:color .5s; }
+#pv-num.lit { color:rgba(240,140,40,.17); }
 
-/* Call CTA at bottom */
-.mob-call{
-  height:72px;flex-shrink:0;
-  display:flex;align-items:center;
-  padding:0 28px;
-  border-top:1px solid rgba(240,230,208,.06);
-  background:rgba(200,84,30,.1);
-  text-decoration:none;
-  transition:background .22s;
-}
-.mob-call:active{background:rgba(200,84,30,.26);}
-.mob-call-icon{
-  flex-shrink:0;margin-right:16px;
-}
-.mob-call-icon svg{width:18px;height:18px;stroke:#c8541e;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;}
-.mob-call-txt{
-  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  color:#c8541e;
-}
+/* BOTTOM TICKER */
+#botbar { flex-shrink:0; height:36px; display:flex; align-items:center; justify-content:space-between; padding:0 clamp(14px,2.5vw,28px); border-top:1px solid rgba(196,168,130,.07); background:linear-gradient(to top,rgba(9,7,4,.9),transparent); overflow:hidden; }
+#ticker-track { display:flex; white-space:nowrap; animation:tkr 32s linear infinite; flex:1; overflow:hidden; }
+.t-item { font-family:var(--cond); font-weight:400; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(196,168,130,.2); padding:0 26px; display:inline-flex; align-items:center; gap:26px; flex-shrink:0; }
+.t-item::after { content:'✦'; font-size:6px; color:rgba(240,140,40,.28); }
+@keyframes tkr { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+#botbar-right { flex-shrink:0; padding-left:20px; font-family:var(--cond); font-weight:400; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:rgba(196,168,130,.18); }
 
-/* Right column — close strip, part of the sidebar itself */
-.mob-close-strip{
-  width:52px;flex-shrink:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:rgba(8,6,3,.6);
-  border-left:1px solid rgba(240,230,208,.05);
-  cursor:pointer;
-  gap:8px;
-  padding:20px 0;
+
+/* ══════════════════════════════════════════════════════
+   ████  MOBILE LAYOUT  (max-width: 767px)
+   Completely different structure — hidden on desktop
+══════════════════════════════════════════════════════ */
+#mobile-shell {
+  display: none;
+  position: fixed; inset: 0; z-index: 10;
+  flex-direction: column;
+  background: var(--void);
+  opacity: 0; transition: opacity .9s ease;
 }
-/* Close button within the strip */
-.mob-close-btn{
-  width:38px;height:38px;
-  background:none;border:1px solid rgba(240,230,208,.12);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-  transition:border-color .22s,background .22s;
-}
-.mob-close-btn:active{background:rgba(200,84,30,.18);border-color:rgba(200,84,30,.4);}
-.mob-close-btn svg{width:14px;height:14px;stroke:rgba(240,230,208,.5);stroke-width:1.5;fill:none;stroke-linecap:round;}
-.mob-close-btn:active svg{stroke:#d4a03c;}
-/* Close label rotated */
-.mob-close-label{
-  font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.22em;text-transform:uppercase;
-  color:rgba(240,230,208,.22);
-  writing-mode:vertical-rl;text-orientation:mixed;
-  margin-top:6px;
+#mobile-shell.on { opacity: 1; }
+
+@media (max-width: 767px) {
+  #shell        { display: none !important; }
+  #mobile-shell { display: flex; }
 }
 
-/* Backdrop — only dims the right portion of screen */
-.mob-backdrop{
-  display:none;position:fixed;top:0;left:0;right:0;bottom:52px;z-index:9300;
-  background:rgba(8,6,3,.55);
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-  opacity:0;transition:opacity .36s;
-}
-.mob-backdrop.show{display:block;opacity:1;}
-
-@media(max-width:860px){
-  .brand-nav{display:none;}
-  .mob-tab{display:flex;}
-  .mob-sidebar{display:flex;}
-  .page-wrap{margin-left:0!important;}
-}
-/* hide mob trigger on desktop */
-@media(min-width:861px){
-  .mob-tab{display:none!important;}
-  .mob-sidebar{display:none!important;}
-  .mob-backdrop{display:none!important;}
+/* ── MOBILE HEADER ── */
+#mob-header {
+  flex-shrink: 0;
+  position: relative; overflow: hidden;
+  padding: env(safe-area-inset-top, 16px) 0 0;
+  background: linear-gradient(to bottom, rgba(9,7,4,.98), rgba(9,7,4,.7));
+  border-bottom: 1px solid rgba(196,168,130,.1);
 }
 
-/* sidebar offset on desktop */
-@media(min-width:861px){
-  .fire-line,header,section,footer{margin-left:64px;}
+#mob-header-inner {
+  padding: 20px 20px 0;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
 }
-@media(max-width:860px){
-  body{padding-bottom:52px;}
+
+.mob-eyebrow {
+  font-family: var(--cond); font-weight: 600;
+  font-size: 9px; letter-spacing: .35em; text-transform: uppercase;
+  color: rgba(196,168,130,.32);
+  display: flex; align-items: center; gap: 10px;
 }
-  </style>
+.mob-eyebrow::before, .mob-eyebrow::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(196,168,130,.2), transparent);
+}
+
+#mob-brand {
+  font-family: var(--serif); font-weight: 900;
+  font-size: clamp(28px, 8vw, 40px);
+  letter-spacing: -.01em; color: var(--cream); text-align: center;
+  line-height: 1; text-shadow: 0 0 40px rgba(240,140,40,.2);
+}
+#mob-brand em { font-style: italic; font-weight: 400; color: var(--flame); }
+
+.mob-tagline {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: 13px; color: rgba(196,168,130,.4); text-align: center;
+  letter-spacing: .03em;
+}
+
+/* info strip */
+#mob-info-strip {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 20px 14px;
+  margin-top: 10px;
+  border-top: 1px solid rgba(196,168,130,.07);
+}
+.mob-info-bit {
+  display: flex; flex-direction: column; gap: 2px; align-items: center;
+}
+.mob-info-lbl { font-family: var(--cond); font-weight: 600; font-size: 7px; letter-spacing: .25em; text-transform: uppercase; color: rgba(196,168,130,.28); }
+.mob-info-val { font-family: var(--cond); font-weight: 500; font-size: 11px; letter-spacing: .04em; color: rgba(232,217,188,.6); }
+.mob-status   { color: var(--flame); display: flex; align-items: center; gap: 5px; font-size: 11px; }
+.mob-status-dot { width:5px; height:5px; border-radius:50%; background:var(--glow); box-shadow:0 0 7px var(--glow); animation:dp 1.8s ease-in-out infinite; }
+
+/* ── MOBILE NAV ITEMS ── */
+#mob-nav {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: 8px 0 calc(env(safe-area-inset-bottom, 16px) + 16px);
+  -webkit-overflow-scrolling: touch;
+}
+#mob-nav::-webkit-scrollbar { display: none; }
+
+.mob-nav-item {
+  position: relative;
+  display: flex; align-items: center;
+  padding: 0 20px;
+  height: clamp(68px, 11vh, 88px);
+  border-bottom: 1px solid rgba(196,168,130,.07);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  transition: background .3s;
+  /* active state for touch */
+}
+.mob-nav-item:first-child { border-top: 1px solid rgba(196,168,130,.07); }
+.mob-nav-item:active { background: rgba(240,140,40,.05); }
+
+/* left accent bar */
+.mob-nav-item::before {
+  content: ''; position: absolute; left: 0; top: 15%; bottom: 15%; width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--fire), transparent);
+  border-radius: 2px;
+  transform: scaleY(0); transform-origin: center;
+  transition: transform .4s cubic-bezier(.16,1,.3,1);
+  box-shadow: 0 0 8px var(--fire);
+}
+.mob-nav-item:active::before,
+.mob-nav-item.touched::before { transform: scaleY(1); }
+
+/* warm glow on press */
+.mob-nav-item::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(192,74,0,.1), rgba(240,140,40,.04), transparent);
+  opacity: 0; transition: opacity .3s;
+}
+.mob-nav-item:active::after,
+.mob-nav-item.touched::after { opacity: 1; }
+
+.mni-num {
+  font-family: var(--cond); font-weight: 400;
+  font-size: 9px; letter-spacing: .2em;
+  color: rgba(196,168,130,.22);
+  width: 36px; flex-shrink: 0; padding-left: 10px;
+}
+.mni-body { flex: 1; display: flex; flex-direction: column; gap: 3px; padding: 0 12px 0 8px; }
+.mni-name {
+  font-family: var(--serif); font-weight: 700;
+  font-size: clamp(20px, 5vw, 26px);
+  letter-spacing: -.01em; line-height: 1;
+  color: rgba(232,217,188,.78);
+  transition: color .3s;
+}
+.mob-nav-item:active .mni-name,
+.mob-nav-item.touched .mni-name { color: var(--cream); }
+.mni-sub {
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: 11px; color: rgba(196,168,130,.3);
+  transition: color .3s;
+  line-height: 1;
+}
+.mob-nav-item:active .mni-sub,
+.mob-nav-item.touched .mni-sub { color: rgba(240,140,40,.5); }
+
+.mni-arrow {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid rgba(196,168,130,.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: rgba(196,168,130,.22);
+  flex-shrink: 0;
+  transition: all .35s;
+}
+.mob-nav-item:active .mni-arrow,
+.mob-nav-item.touched .mni-arrow { border-color:rgba(240,140,40,.4); color:var(--flame); background:rgba(240,140,40,.08); }
+
+/* stagger */
+.mob-nav-item:nth-child(1){animation:fadeSlideU .5s .35s ease both}
+.mob-nav-item:nth-child(2){animation:fadeSlideU .5s .43s ease both}
+.mob-nav-item:nth-child(3){animation:fadeSlideU .5s .51s ease both}
+.mob-nav-item:nth-child(4){animation:fadeSlideU .5s .59s ease both}
+.mob-nav-item:nth-child(5){animation:fadeSlideU .5s .67s ease both}
+.mob-nav-item:nth-child(6){animation:fadeSlideU .5s .75s ease both}
+
+/* ── MOBILE BOTTOM BAR ── */
+#mob-botbar {
+  flex-shrink: 0; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border-top: 1px solid rgba(196,168,130,.07);
+  background: linear-gradient(to top, rgba(9,7,4,.95), transparent);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  overflow: hidden;
+}
+#mob-ticker-track {
+  display: flex; white-space: nowrap;
+  animation: tkr 28s linear infinite;
+}
+.mt-item {
+  font-family: var(--cond); font-weight: 400;
+  font-size: 8px; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(196,168,130,.18); padding: 0 22px;
+  display: inline-flex; align-items: center; gap: 22px; flex-shrink: 0;
+}
+.mt-item::after { content: '✦'; font-size: 5px; color: rgba(240,140,40,.25); }
+
+
+/* ══════════════════════════════════════════════════════
+   DESKTOP INFO PANEL — split screen
+══════════════════════════════════════════════════════ */
+#panel {
+  position: fixed; inset: 0; z-index: 500;
+  display: grid; grid-template-columns: 45% 55%;
+  opacity: 0; pointer-events: none;
+  transition: opacity .5s;
+}
+#panel.open { opacity:1; pointer-events:all; }
+
+#panel-mood {
+  position: relative; overflow: hidden; background: var(--deep);
+  transform: translateX(-100%);
+  transition: transform .65s cubic-bezier(.77,0,.18,1);
+}
+#panel.open #panel-mood { transform: translateX(0); }
+#panel-mood-bg { position:absolute; inset:0; transition:background 1s ease; }
+#panel-mood-bg::after { content:''; position:absolute; inset:0; background:linear-gradient(to right,transparent 60%,var(--deep)); }
+#panel-smoke-cv { position:absolute; inset:0; pointer-events:none; z-index:1; }
+.pm-inner { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; justify-content:flex-end; padding:clamp(24px,3.8vw,48px); }
+.pm-back  { position:absolute; top:clamp(16px,2.5vh,26px); left:clamp(16px,2.5vw,26px); font-family:var(--cond); font-weight:600; font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:rgba(232,217,188,.3); background:none; border:none; cursor:none; transition:color .25s; padding:0; display:flex; align-items:center; gap:8px; }
+.pm-back::before { content:'←'; font-size:14px; }
+.pm-back:hover { color:var(--flame); }
+#panel-big-num  { font-family:var(--cond); font-weight:800; font-size:clamp(90px,16vw,190px); line-height:1; letter-spacing:-.04em; color:rgba(232,217,188,.04); margin-bottom:-10px; }
+.pm-eyebrow     { font-family:var(--cond); font-weight:600; font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:var(--flame); opacity:.8; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
+.pm-eyebrow::before { content:''; width:22px; height:1px; background:currentColor; }
+#panel-title    { font-family:var(--serif); font-weight:900; font-size:clamp(34px,5.5vw,68px); letter-spacing:-.02em; line-height:.95; color:var(--cream); transform:translateY(20px); opacity:0; transition:transform .65s .15s cubic-bezier(.16,1,.3,1),opacity .5s .15s; text-shadow:0 2px 20px rgba(0,0,0,.5); }
+#panel.open #panel-title { transform:translateY(0); opacity:1; }
+#panel-italic   { font-family:var(--serif); font-style:italic; font-weight:300; font-size:clamp(12px,1.4vw,17px); color:rgba(196,168,130,.5); margin-top:8px; transform:translateY(14px); opacity:0; transition:transform .65s .25s cubic-bezier(.16,1,.3,1),opacity .5s .25s; }
+#panel.open #panel-italic { transform:translateY(0); opacity:1; }
+
+#panel-info {
+  background:var(--deep); display:flex; flex-direction:column; justify-content:space-between;
+  padding:clamp(24px,3.8vw,48px); transform:translateX(100%);
+  transition:transform .65s cubic-bezier(.77,0,.18,1);
+  border-left:1px solid rgba(196,168,130,.07); overflow-y:auto;
+}
+#panel.open #panel-info { transform:translateX(0); }
+.pi-top   { display:flex; justify-content:flex-end; margin-bottom:8px; }
+.pi-hint  { font-family:var(--cond); font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:rgba(196,168,130,.2); }
+.pi-body-wrap { flex:1; display:flex; flex-direction:column; gap:clamp(12px,2vh,20px); transform:translateY(18px); opacity:0; transition:transform .6s .3s cubic-bezier(.16,1,.3,1),opacity .5s .3s; }
+#panel.open .pi-body-wrap { transform:translateY(0); opacity:1; }
+.pi-meta  { font-family:var(--cond); font-weight:500; font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(196,168,130,.3); display:flex; align-items:center; gap:8px; }
+.pi-meta::before { content:''; width:18px; height:1px; background:rgba(240,140,40,.3); }
+#panel-desc   { font-family:var(--body); font-weight:300; font-size:clamp(12px,1.25vw,15px); line-height:1.85; letter-spacing:.01em; color:rgba(196,168,130,.52); }
+#panel-desc strong { color:var(--parch); font-weight:400; }
+#panel-chips  { display:flex; flex-wrap:wrap; gap:6px; }
+.panel-chip   { font-family:var(--cond); font-weight:500; font-size:8px; letter-spacing:.13em; text-transform:uppercase; padding:4px 11px; border-radius:2px; border:1px solid rgba(196,168,130,.1); color:rgba(196,168,130,.28); transition:all .3s; }
+.panel-chip.lit { border-color:rgba(240,140,40,.35); color:var(--flame); background:rgba(240,140,40,.07); }
+.pi-cta-wrap  { display:flex; flex-direction:column; gap:8px; }
+.pi-dbl-note  { font-family:var(--serif); font-style:italic; font-size:11px; color:rgba(196,168,130,.28); }
+#panel-cta    { align-self:flex-start; position:relative; overflow:hidden; font-family:var(--cond); font-weight:700; font-size:clamp(11px,1.2vw,13px); letter-spacing:.18em; text-transform:uppercase; color:var(--cream); border:none; cursor:none; padding:clamp(12px,1.7vh,16px) clamp(22px,2.8vw,34px); background:transparent; border:1px solid rgba(240,140,40,.28); transition:border-color .3s,letter-spacing .35s; display:flex; align-items:center; gap:10px; }
+#panel-cta::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,var(--ember) 0%,var(--fire) 50%,var(--flame) 100%); transform:scaleX(0); transform-origin:left; transition:transform .5s cubic-bezier(.77,0,.18,1); z-index:0; }
+#panel-cta:hover::before { transform:scaleX(1); }
+#panel-cta:hover { border-color:var(--fire); letter-spacing:.26em; }
+#panel-cta span { position:relative; z-index:1; }
+#panel-cta .cta-arrow { position:relative; z-index:1; transition:transform .4s cubic-bezier(.34,1.56,.64,1); }
+#panel-cta:hover .cta-arrow { transform:translateX(5px); }
+.pi-bottom  { display:flex; justify-content:space-between; align-items:flex-end; margin-top:8px; padding-top:14px; border-top:1px solid rgba(196,168,130,.07); }
+.pi-foot-rule { font-family:var(--serif); font-style:italic; font-size:11px; color:rgba(196,168,130,.22); }
+.pi-foot-idx  { font-family:var(--cond); font-weight:800; font-size:50px; line-height:1; color:rgba(196,168,130,.05); }
+
+
+/* ══════════════════════════════════════════════════════
+   MOBILE BOTTOM SHEET PANEL
+══════════════════════════════════════════════════════ */
+#mob-panel {
+  position: fixed; inset: 0; z-index: 500;
+  pointer-events: none; opacity: 0;
+  transition: opacity .4s;
+}
+#mob-panel.open { opacity: 1; pointer-events: all; }
+
+/* dimmed backdrop */
+#mob-panel-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(9,7,4,.85);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+}
+
+/* the sheet */
+#mob-sheet {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  max-height: 88vh;
+  background: var(--coal);
+  border-top: 1px solid rgba(196,168,130,.12);
+  border-radius: 20px 20px 0 0;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transform: translateY(100%);
+  transition: transform .55s cubic-bezier(.16,1,.3,1);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+#mob-panel.open #mob-sheet { transform: translateY(0); }
+
+/* drag handle */
+#mob-sheet-handle {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px 0 6px;
+}
+.handle-bar {
+  width: 40px; height: 4px; border-radius: 2px;
+  background: rgba(196,168,130,.2);
+}
+
+/* sheet header */
+#mob-sheet-hdr {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 20px 14px;
+  border-bottom: 1px solid rgba(196,168,130,.08);
+}
+.msh-eyebrow {
+  font-family: var(--cond); font-weight: 600;
+  font-size: 9px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--flame); opacity: .8;
+  display: flex; align-items: center; gap: 8px;
+}
+.msh-eyebrow::before { content: ''; width: 18px; height: 1px; background: currentColor; }
+#mob-sheet-close {
+  font-family: var(--cond); font-weight: 600; font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(196,168,130,.3); background: none;
+  border: 1px solid rgba(196,168,130,.1); padding: 5px 14px; border-radius: 2px;
+  -webkit-tap-highlight-color: transparent;
+  transition: all .25s;
+}
+#mob-sheet-close:active { border-color: rgba(240,140,40,.4); color: var(--flame); }
+
+/* sheet content — scrollable */
+#mob-sheet-body {
+  flex: 1; overflow-y: auto; padding: 16px 20px 20px;
+  -webkit-overflow-scrolling: touch;
+  display: flex; flex-direction: column; gap: 16px;
+}
+#mob-sheet-body::-webkit-scrollbar { display: none; }
+
+#mob-sheet-title {
+  font-family: var(--serif); font-weight: 900;
+  font-size: clamp(28px, 7vw, 40px);
+  letter-spacing: -.02em; line-height: .95;
+  color: var(--cream);
+}
+#mob-sheet-italic {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: 14px; color: rgba(196,168,130,.45); margin-top: 4px;
+}
+.msh-meta {
+  font-family: var(--cond); font-weight: 500;
+  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: rgba(196,168,130,.28);
+  display: flex; align-items: center; gap: 8px;
+}
+.msh-meta::before { content: ''; width: 16px; height: 1px; background: rgba(240,140,40,.3); }
+#mob-sheet-desc {
+  font-family: var(--body); font-weight: 300;
+  font-size: 14px; line-height: 1.8; color: rgba(196,168,130,.5);
+}
+#mob-sheet-desc strong { color: var(--parch); font-weight: 400; }
+#mob-sheet-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.msc { font-family: var(--cond); font-weight: 500; font-size: 8px; letter-spacing: .12em; text-transform: uppercase; padding: 5px 11px; border-radius: 2px; border: 1px solid rgba(196,168,130,.1); color: rgba(196,168,130,.28); }
+.msc.lit { border-color: rgba(240,140,40,.35); color: var(--flame); background: rgba(240,140,40,.07); }
+
+/* CTA */
+#mob-sheet-cta {
+  width: 100%; padding: 16px;
+  font-family: var(--cond); font-weight: 700;
+  font-size: 13px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--cream); border: none;
+  background: linear-gradient(90deg, var(--ember), var(--fire), var(--flame));
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 8px 30px rgba(192,74,0,.35);
+  transition: transform .2s, box-shadow .2s;
+}
+#mob-sheet-cta:active { transform: scale(.98); box-shadow: 0 4px 15px rgba(192,74,0,.25); }
+.msc-arrow { transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+#mob-sheet-cta:active .msc-arrow { transform: translateX(4px); }
+
+.msh-foot-rule {
+  font-family: var(--serif); font-style: italic;
+  font-size: 11px; color: rgba(196,168,130,.2); text-align: center;
+}
+
+/* ══════════════════════════════════════════════════════
+   LOADER — shared
+══════════════════════════════════════════════════════ */
+#loader {
+  position: fixed; inset: 0; z-index: 700;
+  background: var(--void);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+  opacity: 0; pointer-events: none; transition: opacity .4s;
+}
+#loader.show { opacity: 1; pointer-events: all; }
+.ld-name  { font-family:var(--serif); font-weight:700; font-size:clamp(22px,5vw,42px); letter-spacing:.02em; color:var(--cream); text-shadow:0 0 60px rgba(240,140,40,.2); text-align:center; }
+.ld-name em { font-style:italic; font-weight:400; color:var(--flame); }
+.ld-going { font-family:var(--serif); font-style:italic; font-size:clamp(12px,1.5vw,16px); color:rgba(196,168,130,.32); letter-spacing:.04em; text-align:center; }
+.ld-fire  { display:flex; align-items:flex-end; gap:4px; height:30px; }
+.lff { width:4px; border-radius:2px; background:linear-gradient(to top,var(--ember),var(--glow)); animation:lffA .5s ease-in-out infinite alternate; }
+.lff:nth-child(1){height:9px;  animation-delay:0s}
+.lff:nth-child(2){height:20px; animation-delay:.07s}
+.lff:nth-child(3){height:27px; animation-delay:.14s}
+.lff:nth-child(4){height:15px; animation-delay:.21s}
+.lff:nth-child(5){height:23px; animation-delay:.28s}
+.lff:nth-child(6){height:12px; animation-delay:.35s}
+.lff:nth-child(7){height:21px; animation-delay:.42s}
+@keyframes lffA { from{transform:scaleY(1);opacity:.65} to{transform:scaleY(1.3);opacity:1} }
+.ld-track { width:clamp(140px,22vw,240px); height:1px; background:rgba(196,168,130,.08); position:relative; }
+.ld-fill  { position:absolute; top:0; left:0; bottom:0; background:linear-gradient(90deg,var(--ember),var(--flame),var(--glow)); transform:scaleX(0); transform-origin:left; border-radius:1px; }
+#loader.show .ld-fill { animation:ldFill 1.8s .1s cubic-bezier(.77,0,.18,1) forwards; }
+@keyframes ldFill { to { transform:scaleX(1); } }
+.ld-msg   { font-family:var(--cond); font-weight:500; font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:rgba(196,168,130,.2); animation:msgBlink 1.3s ease-in-out infinite; }
+@keyframes msgBlink { 0%,100%{opacity:.2} 50%{opacity:.55} }
+
+/* touch ripple */
+.ripple { position:fixed; border-radius:50%; pointer-events:none; z-index:50; border:1px solid rgba(240,140,40,.3); animation:rip .6s ease-out forwards; }
+@keyframes rip { from{width:0;height:0;opacity:.7;transform:translate(-50%,-50%)} to{width:80px;height:80px;opacity:0;transform:translate(-50%,-50%)} }
+
+@keyframes fadeSlideR  { from{opacity:0;transform:translateX(-14px)} to{opacity:1;transform:translateX(0)} }
+@keyframes fadeSlideL  { from{opacity:0;transform:translateX(14px)}  to{opacity:1;transform:translateX(0)} }
+@keyframes fadeSlideU  { from{opacity:0;transform:translateY(14px)}  to{opacity:1;transform:translateY(0)} }
+</style>
 </head>
 <body>
 
-<!-- Custom cursor -->
-<div id="cur-wrap">
-  <svg id="cur-svg" viewBox="-32 -32 64 64" xmlns="http://www.w3.org/2000/svg">
-    <circle id="cur-outer" r="26" cx="0" cy="0" stroke-dasharray="60 20"/>
-    <g id="cur-cross">
-      <line x1="-20" y1="0" x2="-8" y2="0" stroke="var(--fire)" stroke-width=".8"/>
-      <line x1="8" y1="0" x2="20" y2="0" stroke="var(--fire)" stroke-width=".8"/>
-      <line x1="0" y1="-20" x2="0" y2="-8" stroke="var(--fire)" stroke-width=".8"/>
-      <line x1="0" y1="8" x2="0" y2="20" stroke="var(--fire)" stroke-width=".8"/>
-    </g>
-    <circle id="cur-mag" r="18" cx="4" cy="4" fill="none" stroke="var(--gold-light)" stroke-width=".8"/>
-    <circle id="cur-inner" r="3" cx="0" cy="0"/>
-  </svg>
-</div>
+<div id="cursor"><div id="cursor-dot"></div><div id="cursor-ring"></div></div>
+<canvas id="cv-bg"></canvas>
+<canvas id="cv-smoke"></canvas>
+<canvas id="cv-ember"></canvas>
 
-<canvas id="bg-smoke"></canvas>
-<canvas id="bg-ash"></canvas>
-<canvas id="flame-canvas"></canvas>
-<div id="ambient"></div>
-<div class="fire-line" role="presentation"></div>
-
-<!-- ══════════════════════════════════
-     DESKTOP — Branding Iron Sidebar
-══════════════════════════════════ -->
-<nav class="brand-nav">
-  <a href="index.html" class="bn-logo">
-    <span class="bn-logo-icon">F</span>
-    <span class="bn-logo-full">The Francis</span>
-  </a>
-
-  <div class="bn-items">
-    <!-- Menu -->
-    <a href="menu.html" class="bn-item">
-      <div class="bn-label-vert"><span>Menu</span></div>
-      <div class="bn-sear">
-        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h12"/><circle cx="19" cy="18" r="2"/></svg>
-      </div>
-      <div class="bn-expand">
-        <span class="bn-expand-name">Menu</span>
-        <span class="bn-expand-hint">Today's specials</span>
-      </div>
-    </a>
-    <!-- Our Story -->
-    <a href="about.html" class="bn-item">
-      <div class="bn-label-vert"><span>Our Story</span></div>
-      <div class="bn-sear">
-        <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 6 5 10c0 5 7 12 7 12s7-7 7-12c0-4-3-8-7-8z"/><circle cx="12" cy="10" r="2.5"/></svg>
-      </div>
-      <div class="bn-expand">
-        <span class="bn-expand-name">Our Story</span>
-        <span class="bn-expand-hint">Who we are</span>
-      </div>
-    </a>
-    <!-- Delivery -->
-    <a href="delivery.html" class="bn-item">
-      <div class="bn-label-vert"><span>Delivery</span></div>
-      <div class="bn-sear">
-        <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-      </div>
-      <div class="bn-expand">
-        <span class="bn-expand-name">Delivery</span>
-        <span class="bn-expand-hint">10+ orders · 10mi</span>
-      </div>
-    </a>
-    <!-- Catering -->
-    <a href="catering.html" class="bn-item">
-      <div class="bn-label-vert"><span>Catering</span></div>
-      <div class="bn-sear">
-        <svg viewBox="0 0 24 24"><path d="M3 16s1-3 9-3 9 3 9 3"/><path d="M12 13V7"/><circle cx="12" cy="5" r="2"/><path d="M2 20h20"/></svg>
-      </div>
-      <div class="bn-expand">
-        <span class="bn-expand-name">Catering</span>
-        <span class="bn-expand-hint">Feed the crowd</span>
-      </div>
-    </a>
+<!-- ══════════ DESKTOP SHELL ══════════ -->
+<div id="shell">
+  <div id="topbar">
+    <div class="tb-cell"><div class="tb-eyebrow">Location</div><div class="tb-val">St. Francisville, LA</div></div>
+    <div class="tb-cell"><div class="tb-eyebrow">Phone</div><div class="tb-val">(225) 245-5046</div></div>
+    <div class="tb-cell grow">
+      <div id="brand-name">The Francis <em>Smokehouse</em></div>
+      <div id="brand-tagline">& Specialty Meats — Est. 2015 — US Hwy 61</div>
+    </div>
+    <div class="tb-cell"><div class="tb-eyebrow">Hours</div><div class="tb-val" id="hours-today">Mon–Sat 10am–6pm</div></div>
+    <div class="tb-cell"><div class="tb-status"><span class="status-flame">🔥</span><span>Fire's Burning</span></div></div>
   </div>
 
-  <a href="tel:2252455046" class="bn-call">
-    <span class="bn-call-icon">
-      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.26h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.18 6.18l1.02-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/></svg>
-    </span>
-    <span class="bn-call-txt">Call to Order</span>
-  </a>
-</nav>
-
-<!-- ══════════════════════════════════
-     MOBILE — Branding Iron Slide Sidebar
-══════════════════════════════════ -->
-<div class="mob-backdrop" id="mobBack"></div>
-
-<!-- Slim left-edge trigger tab -->
-<button class="mob-tab" id="mobTab" aria-label="Open navigation">
-  <div class="mob-tab-menu-icon">
-    <span></span><span></span><span></span>
-  </div>
-  <span class="mob-tab-label">Navigate</span>
-  <span class="mob-tab-name">The Francis Smokehouse</span>
-  <span class="mob-tab-close">Close</span>
-</button>
-
-<!-- Sidebar: nav content + close strip side by side -->
-<nav class="mob-sidebar" id="mobSidebar" aria-label="Site navigation">
-
-  <!-- Left: nav content -->
-  <div class="mob-nav-content">
-    <a href="index.html" class="mob-logo-row">
-      <span class="mob-logo-mark">The Francis</span>
-      <span class="mob-logo-sub">Smokehouse</span>
-    </a>
-
-    <div class="mob-links">
-      <a href="menu.html" class="mob-link">
-        <span class="mob-link-num">01</span>
-        <span class="mob-link-icon">
-          <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h12"/><circle cx="19" cy="18" r="2"/></svg>
-        </span>
-        <div class="mob-link-body">
-          <div class="mob-link-name">Menu</div>
-          <div class="mob-link-hint">Today's specials</div>
+  <div id="main">
+    <!-- LEFT -->
+    <div id="sidebar-l">
+      <div class="sb-group">
+        <div class="sb-block"><span class="sb-label">The Pit</span><span class="sb-text">Post oak & hickory. 225°F. Low and slow. No gas. No shortcuts.</span></div>
+        <div class="sb-block"><span class="sb-label">Specialty</span><span class="sb-text">Brisket, ribs, boudin, pulled pork, house sausages & Cajun sides</span></div>
+        <div class="sb-block"><span class="sb-label">Rating</span><div class="sb-stars">★★★★½</div><div class="sb-rating-line">4.5 · TripAdvisor Travellers' Choice<br>4.7 · Google (505 reviews)</div></div>
+        <div class="sb-block"><span class="sb-label">Tonight</span><span class="sb-hot">Pit is loaded & running</span></div>
+      </div>
+      <div>
+        <div class="sb-label" style="margin-bottom:8px">Connect</div>
+        <div class="sb-links">
+          <a class="sb-link" href="https://www.facebook.com/1547733028788117/" target="_blank">Facebook</a>
+          <a class="sb-link" href="mailto:francissmokehouse@att.net">Email Us</a>
+          <a class="sb-link" href="https://www.tripadvisor.ca/Restaurant_Review-g40411-d7851018-Reviews-The_Francis_Smokehouse-Saint_Francisville_Louisiana.html" target="_blank">TripAdvisor</a>
+          <a class="sb-link" href="https://www.google.com/maps/search/?api=1&query=The+Francis+Smokehouse%2C+St+Francisville%2C+LA" target="_blank">Google Maps</a>
+          <a class="sb-link" href="mailto:francissmokehouse@att.net">Catering Enquiry</a>
         </div>
-      </a>
-      <a href="about.html" class="mob-link">
-        <span class="mob-link-num">02</span>
-        <span class="mob-link-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 6 5 10c0 5 7 12 7 12s7-7 7-12c0-4-3-8-7-8z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        </span>
-        <div class="mob-link-body">
-          <div class="mob-link-name">Our Story</div>
-          <div class="mob-link-hint">Who we are</div>
-        </div>
-      </a>
-      <a href="delivery.html" class="mob-link">
-        <span class="mob-link-num">03</span>
-        <span class="mob-link-icon">
-          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        </span>
-        <div class="mob-link-body">
-          <div class="mob-link-name">Delivery</div>
-          <div class="mob-link-hint">10+ orders · 10mi radius</div>
-        </div>
-      </a>
-      <a href="catering.html" class="mob-link">
-        <span class="mob-link-num">04</span>
-        <span class="mob-link-icon">
-          <svg viewBox="0 0 24 24"><path d="M3 16s1-3 9-3 9 3 9 3"/><path d="M12 13V7"/><circle cx="12" cy="5" r="2"/><path d="M2 20h20"/></svg>
-        </span>
-        <div class="mob-link-body">
-          <div class="mob-link-name">Catering</div>
-          <div class="mob-link-hint">Feed the crowd</div>
-        </div>
-      </a>
-    </div>
-
-    <a href="tel:2252455046" class="mob-call">
-      <span class="mob-call-icon">
-        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.26h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.18 6.18l1.02-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/></svg>
-      </span>
-      <span class="mob-call-txt">Call to Order</span>
-    </a>
-  </div>
-
-  <!-- Right: close strip — part of the sidebar, not floating -->
-  <div class="mob-close-strip" id="mobCloseStrip">
-    <button class="mob-close-btn" id="mobCloseBtn" aria-label="Close navigation">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-    <span class="mob-close-label">Close</span>
-  </div>
-
-</nav>
-
-<!-- ══════════════════════════════════
-     PAGE CONTENT
-══════════════════════════════════ -->
-
-<!-- HERO -->
-<header class="hero-section" role="banner">
-  <div class="hero-bg-div" aria-hidden="true"></div>
-  <div class="hero-inner-div">
-    <div id="logoNavTrigger" style="position:relative;display:inline-block;cursor:pointer;margin:0 auto 28px;">
-      <div id="logoOrbitRing" style="position:absolute;inset:-16px;border-radius:50%;border:1px dashed rgba(232,83,42,.4);animation:logoOrbit 10s linear infinite;pointer-events:none;"></div>
-      <div id="logoPulseRing" style="position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(232,83,42,.22);animation:logoPulse 2.6s ease-in-out infinite;pointer-events:none;"></div>
-      <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="hero-logo-img" style="position:relative;z-index:2;" onerror="this.style.display='none'"/>
-      <div id="logoNavLabel" style="position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:.54rem;letter-spacing:.38em;text-transform:uppercase;color:rgba(232,83,42,.65);white-space:nowrap;pointer-events:none;display:flex;align-items:center;gap:5px;transition:opacity .4s;"><i class="fas fa-compass" style="animation:logoOrbit 4s linear infinite;font-size:.54rem;"></i> NAVIGATE</div>
-    </div>
-    <p class="hero-kicker">St. Francisville, Louisiana &nbsp;&middot;&nbsp; Highway 61</p>
-    <h1 class="hero-title-h1">
-      The Francis Smokehouse
-      <span class="hero-title-sub">Low &amp; Slow Since 2015</span>
-    </h1>
-    <p class="hero-tagline">Louisiana smokehouse tradition &mdash; pit-fired brisket, boudin, po-boys, and Southern sides that taste like the bayou on a good day.</p>
-    <div class="hero-btns">
-      <a class="btn-fire" href="menu.html">Explore the Menu</a>
-      <a class="btn-ghost" href="#info-section">Find Us</a>
-    </div>
-  </div>
-  <div class="hero-status-wrap" aria-live="polite">
-    <div class="status-badge" id="hero-status">
-      <span class="s-dot"></span>
-      <span id="hero-status-text">Checking hours&hellip;</span>
-    </div>
-  </div>
-</header>
-
-<div class="page-divider"></div>
-
-<!-- DAILY SPECIALS WHEEL -->
-<section id="specials-section" aria-labelledby="specials-heading">
-  <div class="specials-header">
-    <div class="specials-eyebrow">Fresh From the Kitchen</div>
-    <h2 class="specials-title" id="specials-heading">Today&rsquo;s <em>Specials</em></h2>
-  </div>
-  <div class="wheel-wrapper" id="specials-wheel-wrap">
-    <div id="stage">
-      <div id="wordmark">
-        <div class="wm-name">THE FRANCIS <em>SMOKEHOUSE</em></div>
-        <div class="wm-sub">St. Francisville, Louisiana &nbsp;&middot;&nbsp; Tap to explore</div>
       </div>
-      <svg id="wheel-svg" viewBox="-360 -360 720 720">
-        <defs>
-          <radialGradient id="hubGrad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#221508"/><stop offset="100%" stop-color="#080604"/></radialGradient>
-          <radialGradient id="nodeGrad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1E1208"/><stop offset="100%" stop-color="#0E0A05"/></radialGradient>
-          <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        <circle r="348" fill="none" stroke="rgba(232,83,42,.04)" stroke-width="1"/>
-        <circle r="335" fill="none" stroke="rgba(232,83,42,.03)" stroke-width="1"/>
-        <g id="wheel-group" class="hint-spin"></g>
-        <polygon points="0,-322 -6,-307 6,-307" fill="var(--fire)" opacity=".75"/>
-        <line x1="0" y1="-297" x2="0" y2="-262" stroke="rgba(232,83,42,.18)" stroke-width=".8" stroke-dasharray="2 4"/>
-        <g id="hub">
-          <circle r="90" fill="url(#hubGrad)"/>
-          <circle r="90" class="hub-ring-1"/>
-          <circle r="84" class="hub-ring-2"/>
-          <circle r="78" class="hub-ring-3"/>
-          <polygon points="0,-18 -10,8 10,8" fill="var(--ember)" opacity=".15" filter="url(#glow)"/>
-          <text id="hub-main" class="hub-main-text" y="-6">SPECIALS</text>
-          <text id="hub-sub" class="hub-sub-text" y="14">TAP TO VIEW</text>
-        </g>
-        <g id="back-btn">
-          <circle class="back-circle" r="90" cx="0" cy="0"/>
-          <text class="back-arrow" x="0" y="-8">&#8592;</text>
-          <text class="back-label" x="0" y="16">BACK</text>
-        </g>
-      </svg>
-      <div id="drag-hint">&#8635; drag to spin &nbsp;&middot;&nbsp; tap to select</div>
-      <div id="addr-strip">6779 US-61 &middot; St. Francisville, LA &middot; (225) 245-5046</div>
     </div>
-    <div id="zoom-wrap">
-      <span id="zoom-label">SIZE</span>
-      <button id="zoom-out" aria-label="Zoom out">&#8722;</button>
-      <input id="zoom-slider" type="range" min="1" max="3" step="0.05" value="1" aria-label="Zoom level"/>
-      <button id="zoom-in" aria-label="Zoom in">&#43;</button>
-      <span id="zoom-pct">100%</span>
+
+    <!-- CENTER NAV -->
+    <div id="nav-center">
+      <nav>
+        <div class="nav-item" onclick="openPanel('menu')"     onmouseenter="setPreview('menu')"     onmouseleave="clearPreview()"><span class="ni-num">01</span><span class="ni-name">The Menu</span><span class="ni-sub">BBQ plates, po-boys & sandwiches</span><span class="ni-arrow">↗</span></div>
+        <div class="nav-item" onclick="openPanel('boudin')"   onmouseenter="setPreview('boudin')"   onmouseleave="clearPreview()"><span class="ni-num">02</span><span class="ni-name">Boudin & Sides</span><span class="ni-sub">Louisiana staples done right</span><span class="ni-arrow">↗</span></div>
+        <div class="nav-item" onclick="openPanel('specials')" onmouseenter="setPreview('specials')" onmouseleave="clearPreview()"><span class="ni-num">03</span><span class="ni-name">Daily Specials</span><span class="ni-sub">Board changes every morning at 6am</span><span class="ni-arrow">↗</span></div>
+        <div class="nav-item" onclick="openPanel('story')"    onmouseenter="setPreview('story')"    onmouseleave="clearPreview()"><span class="ni-num">04</span><span class="ni-name">Our Story</span><span class="ni-sub">St. Francisville proud since 2015</span><span class="ni-arrow">↗</span></div>
+        <div class="nav-item" onclick="openPanel('catering')" onmouseenter="setPreview('catering')" onmouseleave="clearPreview()"><span class="ni-num">05</span><span class="ni-name">Catering</span><span class="ni-sub">Large orders, events & gatherings</span><span class="ni-arrow">↗</span></div>
+        <div class="nav-item" onclick="openPanel('find')"     onmouseenter="setPreview('find')"     onmouseleave="clearPreview()"><span class="ni-num">06</span><span class="ni-name">Find Us</span><span class="ni-sub">6779 US Hwy 61 · Follow the smoke</span><span class="ni-arrow">↗</span></div>
+      </nav>
+    </div>
+
+    <!-- RIGHT -->
+    <div id="sidebar-r">
+      <div><div class="pv-label">Section Preview</div><div id="pv-title">Hover any item to explore</div><div id="pv-desc">Each destination has its own story. Take your time.</div><div id="pv-chips"></div></div>
+      <div id="pv-num">—</div>
     </div>
   </div>
-  <div class="locked-notice" id="specials-locked" style="display:none">
-    <div class="locked-notice-icon">&#x1F512;</div>
-    <div class="locked-notice-title">No Specials Posted Yet</div>
-    <div class="locked-notice-body">Check back soon &mdash; the kitchen posts daily specials each morning.<br/>Call <a href="tel:+12252455046" style="color:var(--fire)">(225) 245-5046</a> to ask what&rsquo;s on today.</div>
-  </div>
-</section>
 
-<div class="page-divider"></div>
-
-<!-- MENU LINK -->
-<section id="menu-link-section" aria-label="Full menu">
-  <div class="menu-link-body">
-    <div class="section-label">The Full Menu</div>
-    <h2 class="section-title">BBQ &middot; Burgers &middot; Po-Boys<br/>Cajun &middot; Sides &middot; Desserts</h2>
-    <p class="section-body">Explore all 40+ items across 7 categories on our interactive spinning menu.</p>
-    <a class="btn-fire" href="menu.html">Open Full Menu</a>
-  </div>
-</section>
-
-<div class="page-divider"></div>
-
-<!-- HOURS & INFO -->
-<section id="info-section" aria-labelledby="info-heading">
-  <div style="max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,80px)">
-    <div class="section-label">Find Us</div>
-    <h2 class="section-title" id="info-heading">Hours &amp; Location</h2>
-  </div>
-  <div class="info-grid" style="padding:0 clamp(20px,5vw,80px)">
-    <div class="info-card">
-      <h3>Hours</h3>
-      <div id="hours-status-badge" style="margin-bottom:16px"></div>
-      <div id="hours-rows"></div>
-      <p class="hours-note">Hours may vary on holidays &mdash; call ahead to confirm</p>
-    </div>
-    <div class="info-card">
-      <h3>Location &amp; Contact</h3>
-      <div class="c-row"><div class="c-icon"><i class="fas fa-location-dot"></i></div><div><div class="c-label">Address</div><div class="c-value"><a href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775" target="_blank" rel="noopener">6779 US Highway 61<br/>St. Francisville, LA 70775</a></div></div></div>
-      <div class="c-row"><div class="c-icon"><i class="fas fa-phone"></i></div><div><div class="c-label">Phone</div><div class="c-value"><a href="tel:+12252455046">(225) 245-5046</a></div></div></div>
-      <div class="c-row"><div class="c-icon"><i class="fas fa-envelope"></i></div><div><div class="c-label">Email</div><div class="c-value"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div></div></div>
-      <div class="c-row"><div class="c-icon"><i class="fas fa-star"></i></div><div><div class="c-label">Rating</div><div class="c-value">4.5&nbsp;/ 5 &nbsp;&middot;&nbsp; Tripadvisor Travellers&rsquo; Choice</div></div></div>
-      <div class="amenities"><span class="amenity">Dine In</span><span class="amenity">Takeout</span><span class="amenity">Catering</span><span class="amenity">Parking</span><span class="amenity">Wheelchair Access</span><span class="amenity">Outdoor Seating</span><span class="amenity">Dog Friendly</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- SEARCH BAR -->
-<div id="search-wrap">
-  <input id="search-input" type="text" placeholder="SEARCH MENU..." autocomplete="off" spellcheck="false"/>
-  <button id="search-clear" aria-label="Clear">&#10005;</button>
-</div>
-
-<!-- BOTTOM ICON BUTTONS -->
-<button id="search-btn" class="bottom-btn" aria-label="Search">
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--fire)" stroke-width="1.4"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.2" y1="10.2" x2="14" y2="14"/></svg>
-</button>
-<div id="search-btn-label" class="bottom-label">SEARCH</div>
-<button id="list-btn" class="bottom-btn" aria-label="Full menu list">
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--fire)" stroke-width="1.4"><line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/></svg>
-</button>
-<div id="list-btn-label" class="bottom-label">LIST</div>
-<button id="info-btn" class="bottom-btn" aria-label="Hours and info">
-  <svg viewBox="0 0 16 16" fill="none" stroke="var(--fire)" stroke-width="1.4" width="16" height="16"><circle cx="8" cy="8" r="6.5"/><line x1="8" y1="7" x2="8" y2="11.5"/><circle cx="8" cy="4.8" r=".8" fill="var(--fire)" stroke="none"/></svg>
-</button>
-<div id="info-btn-label" class="bottom-label">INFO</div>
-
-<!-- LIST PANEL -->
-<div id="list-backdrop" class="backdrop"></div>
-<div id="list-panel" class="side-panel" role="dialog" aria-label="Full menu">
-  <div class="panel-fire-top"></div>
-  <div class="list-scroll">
-    <div class="panel-eyebrow">The Francis Smokehouse</div>
-    <div class="panel-title">FULL MENU</div>
-    <input class="list-filter" id="list-filter" type="text" placeholder="Filter items..." autocomplete="off"/>
-    <div id="list-content"></div>
-  </div>
-  <button class="panel-close-btn" id="list-close">&#10005; Close</button>
-</div>
-
-<!-- INFO PANEL -->
-<div id="panel-backdrop" class="backdrop"></div>
-<div id="info-panel" class="side-panel" role="dialog" aria-label="Hours and info">
-  <div class="panel-fire-top"></div>
-  <div class="panel-scroll">
-    <div class="panel-eyebrow">The Francis Smokehouse</div>
-    <div class="panel-title">HOURS <em>&amp;</em><br/>INFO</div>
-    <div class="panel-sub">St. Francisville, Louisiana</div>
-    <div id="panel-hours-status"></div>
-    <div class="hours-block" id="panel-hours-rows"></div>
-    <div class="hours-note">Hours may vary on holidays. Call ahead to confirm availability.</div>
-    <div class="panel-rule"></div>
-    <div class="contact-item"><div class="contact-icon">&#x1F4CD;</div><div><div class="contact-label">Address</div><div class="contact-value">6779 US Highway 61<br/>St. Francisville, LA 70775</div></div></div>
-    <div class="contact-item"><div class="contact-icon">&#x1F4DE;</div><div><div class="contact-label">Phone</div><div class="contact-value"><a href="tel:2252455046">(225) 245-5046</a></div></div></div>
-    <div class="contact-item"><div class="contact-icon">&#x2709;</div><div><div class="contact-label">Email</div><div class="contact-value"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div></div></div>
-    <div class="contact-item"><div class="contact-icon">&#x2B50;</div><div><div class="contact-label">Rating</div><div class="contact-value">4.5 / 5 &nbsp;&middot;&nbsp; Tripadvisor Travellers' Choice</div></div></div>
-    <div class="panel-rule"></div>
-    <div class="panel-eyebrow" style="margin-bottom:14px">What we offer</div>
-    <div class="features-list">
-      <span class="feat-tag">Dine In</span><span class="feat-tag">Takeout</span><span class="feat-tag">Catering</span>
-      <span class="feat-tag">Parking</span><span class="feat-tag">Wheelchair Accessible</span>
-      <span class="feat-tag">Outdoor Seating</span><span class="feat-tag">Dog Friendly</span>
-    </div>
-    <div class="drinks-block">
-      <div class="drinks-title">Drinks</div>
-      <div class="drinks-body">Soft drinks, sweet tea, lemonade &amp; seasonal specials. Ask your server about today's drink offerings.</div>
-    </div>
-  </div>
-  <button class="panel-close-btn" id="panel-close">&#10005; Close</button>
-</div>
-
-<!-- ITEM POPUP -->
-<div id="popup-overlay" role="dialog" aria-modal="true">
-  <div id="popup-card">
-    <div class="popup-fire"></div>
-    <div class="popup-inner">
-      <div class="popup-eyebrow" id="p-cat"></div>
-      <div class="popup-title" id="p-name"></div>
-      <div id="p-price-wrap"></div>
-      <div class="popup-rule"></div>
-      <div class="popup-desc" id="p-desc"></div>
-      <div class="popup-note" id="p-note"></div>
-      <div class="popup-extra-note" id="p-extra" style="display:none"></div>
-    </div>
-    <button id="popup-close" aria-label="Close">&#10005; Close</button>
+  <div id="botbar">
+    <div id="ticker-track"></div>
+    <div id="botbar-right">© 2025 The Francis Smokehouse</div>
   </div>
 </div>
 
-<!-- LOGO NAV OVERLAY -->
-<div id="logoNavOverlay" role="dialog" aria-modal="true" aria-label="Navigation">
-  <button class="lno-close" id="lnoClose">&#10005; close</button>
-  <div class="lno-center" id="lnoCenter">
-    <div class="lno-ring-1"></div>
-    <div class="lno-ring-2"></div>
-    <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="lno-logo" onerror="this.style.display='none'"/>
+<!-- ══════════ MOBILE SHELL ══════════ -->
+<div id="mobile-shell">
+  <div id="mob-header">
+    <div id="mob-header-inner">
+      <div class="mob-eyebrow">St. Francisville, Louisiana</div>
+      <div id="mob-brand">The Francis <em>Smokehouse</em></div>
+      <div class="mob-tagline">& Specialty Meats — US Hwy 61</div>
+    </div>
+    <div id="mob-info-strip">
+      <div class="mob-info-bit"><span class="mob-info-lbl">Phone</span><span class="mob-info-val">(225) 245-5046</span></div>
+      <div class="mob-info-bit"><span class="mob-info-lbl">Status</span><span class="mob-info-val mob-status"><span class="mob-status-dot"></span>Fire's Burning</span></div>
+      <div class="mob-info-bit"><span class="mob-info-lbl">Hours</span><span class="mob-info-val" id="mob-hours">10am – 6pm</span></div>
+    </div>
+  </div>
+
+  <div id="mob-nav">
+    <div class="mob-nav-item" onclick="openMobPanel('menu')"><span class="mni-num">01</span><div class="mni-body"><div class="mni-name">The Menu</div><div class="mni-sub">BBQ plates, po-boys & sandwiches</div></div><span class="mni-arrow">↗</span></div>
+    <div class="mob-nav-item" onclick="openMobPanel('boudin')"><span class="mni-num">02</span><div class="mni-body"><div class="mni-name">Boudin & Sides</div><div class="mni-sub">Louisiana staples done right</div></div><span class="mni-arrow">↗</span></div>
+    <div class="mob-nav-item" onclick="openMobPanel('specials')"><span class="mni-num">03</span><div class="mni-body"><div class="mni-name">Daily Specials</div><div class="mni-sub">Board changes every morning</div></div><span class="mni-arrow">↗</span></div>
+    <div class="mob-nav-item" onclick="openMobPanel('story')"><span class="mni-num">04</span><div class="mni-body"><div class="mni-name">Our Story</div><div class="mni-sub">St. Francisville proud since 2015</div></div><span class="mni-arrow">↗</span></div>
+    <div class="mob-nav-item" onclick="openMobPanel('catering')"><span class="mni-num">05</span><div class="mni-body"><div class="mni-name">Catering</div><div class="mni-sub">Large orders & events</div></div><span class="mni-arrow">↗</span></div>
+    <div class="mob-nav-item" onclick="openMobPanel('find')"><span class="mni-num">06</span><div class="mni-body"><div class="mni-name">Find Us</div><div class="mni-sub">6779 US Hwy 61 · Follow the smoke</div></div><span class="mni-arrow">↗</span></div>
+  </div>
+
+  <div id="mob-botbar">
+    <div id="mob-ticker-track"></div>
   </div>
 </div>
 
-<!-- FOOTER -->
-<footer role="contentinfo">
-  <div class="footer-inner">
-    <div class="footer-logo-wrap">
-      <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" class="footer-logo" onerror="this.style.display='none'"/>
-      <div class="footer-name">The Francis Smokehouse<small>St. Francisville, Louisiana</small></div>
+<!-- ══════════ DESKTOP PANEL ══════════ -->
+<div id="panel">
+  <div id="panel-mood">
+    <div id="panel-mood-bg"></div>
+    <canvas id="panel-smoke-cv"></canvas>
+    <div class="pm-inner">
+      <button class="pm-back" onclick="closePanel()">Back</button>
+      <div id="panel-big-num">01</div>
+      <div class="pm-eyebrow" id="panel-eyebrow">Section</div>
+      <div id="panel-title"></div>
+      <div id="panel-italic"></div>
     </div>
-    <nav class="footer-links" aria-label="Footer navigation">
-      <a class="footer-link" href="story.html">Our Story</a>
-      <a class="footer-link" href="menu.html">Full Menu</a>
-      <a class="footer-link" href="#specials-section">Specials</a>
-      <a class="footer-link" href="#info-section">Hours</a>
-      <a class="footer-link" href="tel:+12252455046">(225) 245-5046</a>
-    </nav>
-    <p class="footer-copy">&copy; 2025 The Francis Smokehouse &amp; Specialty Meats &nbsp;&middot;&nbsp; 6779 US Hwy 61, St. Francisville, LA</p>
   </div>
-</footer>
+  <div id="panel-info">
+    <div class="pi-top"><span class="pi-hint">Double-click or confirm to enter · ESC to close</span></div>
+    <div class="pi-body-wrap">
+      <div class="pi-meta" id="panel-meta"></div>
+      <p id="panel-desc"></p>
+      <div id="panel-chips"></div>
+      <div class="pi-cta-wrap">
+        <div class="pi-dbl-note">Double-click anywhere to enter, or use the button</div>
+        <button id="panel-cta" onclick="goTo()"><span id="cta-label">Enter</span><span class="cta-arrow">→</span></button>
+      </div>
+    </div>
+    <div class="pi-bottom"><span class="pi-foot-rule" id="panel-rule"></span><span class="pi-foot-idx" id="panel-idx"></span></div>
+  </div>
+</div>
+
+<!-- ══════════ MOBILE BOTTOM SHEET ══════════ -->
+<div id="mob-panel">
+  <div id="mob-panel-backdrop" onclick="closeMobPanel()"></div>
+  <div id="mob-sheet">
+    <div id="mob-sheet-handle"><div class="handle-bar"></div></div>
+    <div id="mob-sheet-hdr">
+      <div class="msh-eyebrow" id="mob-sheet-eyebrow">Section</div>
+      <button id="mob-sheet-close" onclick="closeMobPanel()">✕ Close</button>
+    </div>
+    <div id="mob-sheet-body">
+      <div>
+        <div id="mob-sheet-title"></div>
+        <div id="mob-sheet-italic"></div>
+      </div>
+      <div class="msh-meta" id="mob-sheet-meta"></div>
+      <p id="mob-sheet-desc"></p>
+      <div id="mob-sheet-chips"></div>
+      <button id="mob-sheet-cta" onclick="goTo()"><span id="mob-cta-label">Enter</span><span class="msc-arrow">→</span></button>
+      <div class="msh-foot-rule" id="mob-sheet-rule"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ LOADER ══════════ -->
+<div id="loader">
+  <div class="ld-name">The Francis <em>Smokehouse</em></div>
+  <div class="ld-going" id="ld-going">Loading...</div>
+  <div class="ld-fire"><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div></div>
+  <div class="ld-track"><div class="ld-fill" id="ld-fill"></div></div>
+  <div class="ld-msg">Stoking the fire...</div>
+</div>
 
 <script>
-'use strict';
+/* ════════════════════════════
+   CANVAS ATMOSPHERE
+════════════════════════════ */
+const cvBg=document.getElementById('cv-bg'),bx=cvBg.getContext('2d');
+const cvSm=document.getElementById('cv-smoke'),sx=cvSm.getContext('2d');
+const cvEm=document.getElementById('cv-ember'),ex=cvEm.getContext('2d');
+let W,H;
+function rsz(){ W=cvBg.width=cvSm.width=cvEm.width=window.innerWidth; H=cvBg.height=cvSm.height=cvEm.height=window.innerHeight; }
+rsz(); window.addEventListener('resize',rsz);
 
-const HOURS = [
-  {day:'Monday',    open:'10:00', close:'18:00'},
-  {day:'Tuesday',   open:'10:00', close:'18:00'},
-  {day:'Wednesday', open:'10:00', close:'18:00'},
-  {day:'Thursday',  open:'10:00', close:'18:00'},
-  {day:'Friday',    open:'10:00', close:'18:00'},
-  {day:'Saturday',  open:'10:00', close:'18:00'},
-  {day:'Sunday',    open:'10:00', close:'15:00'}
-];
-
-const INLINE_MENU = [
-  {id:'bbq',label:'BBQ PLATES',icon:'&#x1F525;',color:'#C43C10',rimColor:'rgba(232,83,42,.55)',note:'Every plate served with your choice of two sides',
-   items:[
-    {name:'Full Rack of Ribs',price:'$19.99',desc:'Our crown jewel. Smoked low-and-slow over hardwood for hours until the meat falls clean off the bone.'},
-    {name:'Half Rack of Ribs',price:'$11.99',desc:'Same pit. Same patience. Same fall-off-the-bone tenderness. Half the rack, all the glory.'},
-    {name:'Pulled Pork Plate',price:'$9.99',desc:'Pork shoulder smoked low and slow then pulled by hand. Rich, tender, and kissed with our house seasoning.'},
-    {name:'Brisket Plate',price:'$10.99',desc:'The one regulars drive miles for. Slow-smoked until it practically melts — fork-tender with a deep, beautiful smoke ring.'},
-    {name:'Half Chicken Plate',price:'$9.99',desc:'A half bird with smoke-crisp skin and impossibly juicy meat inside. The pit does all the work.'},
-    {name:'Smoked Wings',price:'$7.99',desc:'Pit-seasoned wings, smoked low then finished hot for crispy skin. Tender, smoky, and dangerously snackable.'}
-  ]},
-  {id:'burgers',label:'BURGERS',icon:'&#x1F354;',color:'#8C4A12',rimColor:'rgba(180,100,30,.55)',note:'Includes one side · dressed with lettuce & tomato',
-   items:[
-    {name:'Hamburger',price:'$6.99',desc:'A straight-up half-pound patty on a toasted bun. Simple, dressed right, no fuss needed.'},
-    {name:'Cheeseburger',price:'$7.99',desc:'American or cheddar melted perfectly on our classic half-pound patty. A true Smokehouse staple.'},
-    {name:'Bacon Cheeseburger',price:'$8.99',desc:'Thick-cut bacon, melted cheese, and our half-pound patty stacked together. The full picture.'},
-    {name:'Chicken Sandwich',price:'$7.99',desc:'Crispy Southern-fried chicken on a toasted bun, dressed clean with lettuce and tomato.'}
-  ]},
-  {id:'poboys',label:"PO-BOYS",icon:'&#x1F956;',color:'#7A5010',rimColor:'rgba(180,130,40,.5)',note:"Includes one side · Louisiana-style dressed",
-   items:[
-    {name:'Ribeye Po-Boy',price:'$10.99',desc:'Shaved ribeye piled high on toasted French bread, dressed Louisiana-style. Messy in the best possible way.'},
-    {name:'Pulled Pork Sub',price:'$7.99',desc:'House-pulled pork on a toasted roll — the same pit-smoked pork from our plates, sandwiched up beautifully.'},
-    {name:'Brisket Sandwich',price:'$8.99',desc:'Sliced pit brisket on toasted bread. Smoke-forward, tender, worth every single bite.'},
-    {name:'Shrimp Po-Boy',price:'$8.99',desc:'Gulf shrimp battered and golden-fried, loaded onto French bread and dressed right. Classic Louisiana.'},
-    {name:'Crawfish Po-Boy',price:'$10.99',desc:'Louisiana crawfish tails, seasoned and fried crisp. This one tastes like the bayou on a good day.'},
-    {name:'Catfish Po-Boy',price:'$8.99',desc:'Southern-fried catfish on French bread — dressed, crispy, and unmistakably Louisiana.'}
-  ]},
-  {id:'sides',label:'SIDES',icon:'&#x1FAD9;',color:'#5A3C14',rimColor:'rgba(150,100,40,.5)',note:'Small $2.75 · Large $6.99 · Made in-house daily',
-   items:[
-    {name:'Baked Beans',price:'$2.75–$6.99',desc:'Slow-cooked beans in a smoky-sweet sauce. The kind you want a second scoop of without admitting it.'},
-    {name:'Corn Pudding',price:'$2.75–$6.99',desc:'A Smokehouse signature that customers rave about. Creamy, sweet, and savory all at once — order the large.'},
-    {name:'Potato Salad',price:'$2.75–$6.99',desc:'House-made Southern potato salad. Creamy, simple, and exactly what a great BBQ plate needs alongside it.'},
-    {name:'Cole Slaw',price:'$2.75–$6.99',desc:'Crisp and creamy slaw. The right cool contrast to a plate of hot smoked meat.'},
-    {name:'French Fries',price:'$2.75–$6.99',desc:'Hot, golden, and seasoned just right. The reliable choice that never disappoints.'},
-    {name:'Sweet Potato Waffle Fries',price:'$2.75–$6.99',desc:'Sweet potato waffled and fried — a little sweet, a little crispy, and a lot of fun.'}
-  ]},
-  {id:'cajun',label:'CAJUN',icon:'&#x1F336;',color:'#7A1A0A',rimColor:'rgba(200,60,20,.55)',note:"Deli-style specialty items · ask about daily availability",extra:"Cajun specialties are priced at market rate. Ask your server for today's prices.",
-   items:[
-    {name:'Steamed Boudin Links',price:'Market',desc:'Classic Louisiana boudin — seasoned rice and pork stuffed in a natural casing and steamed. Ask what is fresh today.'},
-    {name:'Boudin Balls',price:'Market',desc:'The item every first-timer orders and every regular comes back for. Deep-fried, crispy outside, creamy boudin inside.'},
-    {name:'Pepper Jack Boudin Balls',price:'Market',desc:'Our famous boudin balls with molten pepper jack inside. Spicy, creamy, deeply addictive.'},
-    {name:'Boudin Egg Rolls',price:'Market',desc:'Louisiana boudin wrapped in an egg roll skin and fried golden. Cajun-fusion done exactly right.'},
-    {name:'Meat Pies',price:'Market',desc:'Old Creole comfort — seasoned meat in a golden pastry shell. A slice of Louisiana culinary history.'},
-    {name:'Crawfish Pies',price:'Market',desc:'Gulf Coast crawfish tails in a buttery pastry shell. The flavors of South Louisiana in every bite.'}
-  ]},
-  {id:'specials',label:'SPECIALS',icon:'&#x2B50;',color:'#2A1A6B',rimColor:'rgba(100,80,200,.45)',note:"Chef's rotating specials",extra:'These are dinner specials reflecting seasonal ingredients and chef creativity. Availability varies — call ahead or ask your server.',
-   items:[
-    {name:'Thai Chili Wings',price:'$16',desc:'Smoked wings tossed in sweet Thai chili sauce. A bold East-meets-South mashup that works surprisingly, undeniably well.'},
-    {name:'Eggplant Pirogue',price:'$26',desc:'Eggplant hollowed into a pirogue and filled with a rich Cajun seafood stuffing. A true Louisiana original.'},
-    {name:'Blackened Lemon Fish',price:'$28',desc:'Blackened fillet with cream spinach and grilled crawfish tails. Elegant Southern seafood at its absolute peak.'},
-    {name:'BBQ Shrimp & Pork Chop',price:'$26',desc:"Jack Daniel's BBQ shrimp alongside a 14oz bone-in pork chop with mac and cheese and green beans."},
-    {name:'Grilled Salmon',price:'$28',desc:'Grilled salmon topped with lump crabmeat and avocado cream sauce. Rich, luxurious, and worth every cent.'},
-    {name:'Miss Mud Pie',price:'$7',desc:'The house dessert special. Chocolate, cream, crunch. We will let it speak for itself.'}
-  ]},
-  {id:'desserts',label:'DESSERTS',icon:'&#x1F370;',color:'#3A1A08',rimColor:'rgba(180,80,20,.4)',note:'House-made fresh daily',
-   items:[
-    {name:'Bread Pudding',price:'House-made',desc:'Old-school Louisiana bread pudding baked fresh in-house. Rich, custardy, and deeply comforting.'},
-    {name:'Creole Cream Cheesecake',price:'House-made',desc:'A Southern take on cheesecake using Creole cream cheese. Tangy, rich, and unlike any you have tried before.'},
-    {name:'Chocolate & Carrot Cake',price:'House-made',desc:'Two classics done right. Moist chocolate or classic carrot — both are worthy finishes to a great meal.'},
-    {name:'Strawberry Shortcake',price:'House-made',desc:'Light biscuit, fresh strawberries, and whipped cream. Simple, beautiful, and perfect when done this well.'}
-  ]}
-];
-
-const INLINE_SPECIALS = [];
-
-const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
-if (!isTouch) document.body.classList.add('no-touch');
-
-function fmt(h,m){const ap=h>=12?'PM':'AM',h12=h%12||12;return h12+(m?':'+String(m).padStart(2,'0'):'')+' '+ap;}
-function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-function getTodayIndex(){const di=new Date().getDay();return di===0?6:di-1;}
-function isOpenNow(){const now=new Date(),ti=getTodayIndex();const hm=now.getHours()*60+now.getMinutes(),th=HOURS[ti];const[oh,om]=th.open.split(':').map(Number),[ch,cm]=th.close.split(':').map(Number);return hm>=oh*60+om&&hm<ch*60+cm;}
-
-function buildStatus(){
-  const open=isOpenNow(),cls=open?'open':'closed',txt=open?'Open Now':'Currently Closed';
-  const badge=document.getElementById('hero-status'),textEl=document.getElementById('hero-status-text');
-  if(badge)badge.className='status-badge '+cls;
-  if(textEl)textEl.textContent=txt;
-  const ib=document.getElementById('hours-status-badge');
-  if(ib){ib.className='status-badge '+cls;ib.innerHTML='<span class="s-dot"></span>'+txt;}
-  const pb=document.getElementById('panel-hours-status');
-  if(pb){pb.className='hours-status '+(open?'open-now':'closed-now');pb.innerHTML='<span class="status-dot"></span>'+txt;}
+let bgP=0;
+function drawBg(){
+  bgP+=.003; const pulse=.5+.5*Math.sin(bgP);
+  const g=bx.createRadialGradient(W*.5,H*.85,0,W*.5,H*.85,W*.9);
+  g.addColorStop(0,`rgba(28,16,4,${.8+pulse*.08})`); g.addColorStop(.35,'rgba(18,12,5,1)'); g.addColorStop(1,'rgba(9,7,4,1)');
+  bx.fillStyle=g; bx.fillRect(0,0,W,H);
+  const g2=bx.createRadialGradient(W*.5,H,0,W*.5,H,W*.6);
+  g2.addColorStop(0,`rgba(160,50,0,${.06+pulse*.04})`); g2.addColorStop(.5,'rgba(100,30,0,.03)'); g2.addColorStop(1,'transparent');
+  bx.fillStyle=g2; bx.fillRect(0,0,W,H);
 }
-function buildHoursRows(containerId,rowClass,dayClass,timeClass){
-  const cont=document.getElementById(containerId);if(!cont)return;cont.innerHTML='';
-  const ti=getTodayIndex();
-  HOURS.forEach((h,i)=>{
-    const[oh,om]=h.open.split(':').map(Number),[ch,cm]=h.close.split(':').map(Number);
-    const row=document.createElement('div');
-    row.className=rowClass+(i===ti?' today':'');
-    row.innerHTML='<span class="'+dayClass+(i===ti?' today':'')+'">'+h.day+'</span><span class="'+timeClass+'">'+fmt(oh,om)+' – '+fmt(ch,cm)+'</span>';
-    cont.appendChild(row);
-  });
-}
-buildStatus();
-buildHoursRows('hours-rows','h-row','h-day','h-time');
-buildHoursRows('panel-hours-rows','hours-row','hours-day','hours-time');
-
-// ── CURSOR TRACKING ──
-const curWrap = document.getElementById('cur-wrap');
-let CX = window.innerWidth/2, CY = window.innerHeight/2;
-document.addEventListener('mousemove', e => {
-  CX = e.clientX; CY = e.clientY;
-  curWrap.style.transform = 'translate(' + CX + 'px,' + CY + 'px)';
-}, {passive:true});
-document.addEventListener('mousedown', () => {
-  document.body.classList.add('cur-click');
-  setTimeout(() => document.body.classList.remove('cur-click'), 200);
-});
-document.addEventListener('mouseover', e => {
-  if (e.target.closest('button,a,.node-g,#back-btn'))
-    document.body.classList.add('cur-hover');
-});
-document.addEventListener('mouseout', e => {
-  if (e.target.closest('button,a,.node-g,#back-btn'))
-    document.body.classList.remove('cur-hover');
-});
-
-
-// ── BRANDING IRON NAV JS ──
-/* Nav hover — sync both cursor systems */
-document.querySelectorAll('.brand-nav a,.brand-nav,.mob-sidebar a,.mob-tab,.mob-close-btn').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('cur-hover'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('cur-hover'));
-});
-
-/* FIRE CANVAS — page uses its own flame canvas system above */
-
-/* MOBILE SIDEBAR */
-const mobTab=document.getElementById('mobTab');
-const mobSidebar=document.getElementById('mobSidebar');
-const mobBack=document.getElementById('mobBack');
-const mobCloseBtn=document.getElementById('mobCloseBtn');
-let mobOpen=false;
-
-function openSidebar(){
-  mobOpen=true;
-  mobTab.classList.add('open');
-  mobSidebar.classList.add('open');
-  mobBack.classList.add('show');
-  document.body.style.overflow='hidden';
-}
-function closeSidebar(){
-  mobOpen=false;
-  mobTab.classList.remove('open');
-  mobSidebar.classList.remove('open');
-  mobBack.classList.remove('show');
-  document.body.style.overflow='';
-}
-
-mobTab.addEventListener('click',()=>mobOpen?closeSidebar():openSidebar());
-mobCloseBtn.addEventListener('click',closeSidebar);
-mobBack.addEventListener('click',closeSidebar);
-
-/* Touch tap glow on links */
-mobSidebar.querySelectorAll('.mob-link').forEach(item=>{
-  item.addEventListener('touchstart',()=>item.classList.add('tapped'),{passive:true});
-  item.addEventListener('touchend',()=>setTimeout(()=>item.classList.remove('tapped'),420),{passive:true});
-});
-
-/* SCROLL REVEAL */
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target);}});
-},{threshold:.1});
-document.querySelectorAll('.rz').forEach(el=>obs.observe(el));
-
-// ── SMOKE BACKGROUND ──
-const sC=document.getElementById('bg-smoke'),sX=sC.getContext('2d');
-let BW,BH;
-function bgR(){BW=sC.width=window.innerWidth;BH=sC.height=window.innerHeight;}
-bgR();window.addEventListener('resize',bgR);
-class SmokeP{
-  constructor(){this.reset(true);}
-  reset(r=false){this.x=Math.random()*BW;this.y=r?Math.random()*BH:BH+20;this.vx=(Math.random()-.5)*.3;this.vy=-(Math.random()*.55+.12);this.ra=25+Math.random()*90;this.life=0;this.maxLife=260+Math.random()*380;this.hue=20+Math.random()*20;}
-  step(){this.x+=this.vx;this.y+=this.vy;this.vx+=Math.sin(this.life*.022)*.012;this.life++;if(this.life>this.maxLife||this.y<-150)this.reset();}
-  draw(){const a=Math.max(0,(1-this.life/this.maxLife)*.13);const g=sX.createRadialGradient(this.x,this.y,0,this.x,this.y,this.ra);g.addColorStop(0,'hsla('+this.hue+',40%,28%,'+a+')');g.addColorStop(1,'hsla('+this.hue+',20%,10%,0)');sX.fillStyle=g;sX.beginPath();sX.arc(this.x,this.y,this.ra,0,Math.PI*2);sX.fill();}
-}
-class EmberP{
-  constructor(){this.reset();}
-  reset(){this.x=BW/2+(Math.random()-.5)*140;this.y=BH*.7+Math.random()*BH*.3;this.vx=(Math.random()-.5)*.8;this.vy=-(Math.random()*1.2+.4);this.r=.8+Math.random()*1.6;this.life=0;this.maxLife=60+Math.random()*120;}
-  step(){this.x+=this.vx+Math.sin(this.life*.1)*.2;this.y+=this.vy;this.vy*=.98;this.life++;if(this.life>this.maxLife)this.reset();}
-  draw(){const a=Math.max(0,(1-this.life/this.maxLife)*.7);sX.beginPath();sX.arc(this.x,this.y,this.r,0,Math.PI*2);sX.fillStyle='rgba(232,140,40,'+a+')';sX.fill();}
-}
-const sPs=[],ePs=[];
-for(let i=0;i<55;i++)sPs.push(new SmokeP());
-for(let i=0;i<32;i++){const ep=new EmberP();ep.life=Math.random()*ep.maxLife;ePs.push(ep);}
-(function smL(){if(window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;sX.clearRect(0,0,BW,BH);sPs.forEach(p=>{p.step();p.draw();});ePs.forEach(p=>{p.step();p.draw();});requestAnimationFrame(smL);})();
-
-const aC=document.getElementById('bg-ash'),aX=aC.getContext('2d');
-function aR(){aC.width=window.innerWidth;aC.height=window.innerHeight;}
-aR();window.addEventListener('resize',aR);
-class AshF{
-  constructor(){this.reset(true);}
-  reset(r=false){this.x=Math.random()*window.innerWidth;this.y=r?Math.random()*window.innerHeight:-6;this.ra=.4+Math.random()*1.4;this.vx=(Math.random()-.5)*.4;this.vy=.15+Math.random()*.55;this.wb=Math.random()*Math.PI*2;this.ws=.008+Math.random()*.018;this.al=.08+Math.random()*.35;this.ts=.015+Math.random()*.03;this.tp=Math.random()*Math.PI*2;this.isStar=Math.random()<.12;if(this.isStar)this.ra=.8+Math.random()*2.2;}
-  step(){this.wb+=this.ws;this.tp+=this.ts;this.x+=this.vx+Math.sin(this.wb)*.3;this.y+=this.vy;if(this.y>window.innerHeight+10)this.reset();}
-  draw(){const tw=.6+.4*Math.sin(this.tp),a=this.al*tw;if(this.isStar){aX.save();aX.translate(this.x,this.y);aX.fillStyle='rgba(212,197,160,'+a+')';for(let i=0;i<4;i++){const ag=i*Math.PI/2,ln=this.ra*2.2;aX.beginPath();aX.ellipse(0,0,this.ra*.35,ln,ag,0,Math.PI*2);aX.fill();}aX.restore();}else{aX.beginPath();aX.arc(this.x,this.y,this.ra,0,Math.PI*2);aX.fillStyle='rgba(180,160,120,'+a+')';aX.fill();}}
-}
-const aFs=[];
-for(let i=0;i<220;i++)aFs.push(new AshF());
-(function aL(){if(window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;aX.clearRect(0,0,aC.width,aC.height);aFs.forEach(f=>{f.step();f.draw();});requestAnimationFrame(aL);})();
-
-const fC=document.getElementById('flame-canvas'),fX=fC.getContext('2d');
-function fR(){fC.width=window.innerWidth;fC.height=window.innerHeight;}
-fR();window.addEventListener('resize',fR);
-let fPs=[],fA=false;
-class FlameP{
-  constructor(x,y,burst=false){this.x=x;this.y=y;const a=Math.random()*Math.PI*2,sp=burst?(4+Math.random()*18):(1+Math.random()*6);this.vx=Math.cos(a)*sp;this.vy=Math.sin(a)*sp-(burst?6:2);this.life=0;this.maxLife=burst?(30+Math.random()*40):(20+Math.random()*25);this.r=burst?(2+Math.random()*5):(1+Math.random()*3);this.hue=Math.random()<.5?15:38;}
-  step(){this.x+=this.vx;this.y+=this.vy;this.vy+=.18;this.vx*=.95;this.life++;}
-  isDead(){return this.life>=this.maxLife;}
-  draw(){const t=this.life/this.maxLife,a=Math.max(0,(1-t)*(1-t)*.9),r=this.r*(1-t*.5);fX.beginPath();fX.arc(this.x,this.y,r,0,Math.PI*2);fX.fillStyle='hsla('+this.hue+',90%,'+(55+t*20)+'%,'+a+')';fX.fill();}
-}
-function triggerBurst(sx,sy){if(window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;for(let i=0;i<120;i++)fPs.push(new FlameP(sx,sy,true));for(let i=0;i<60;i++){const fp=new FlameP(sx+(Math.random()-.5)*80,sy+(Math.random()-.5)*80,false);fp.maxLife=15+Math.random()*20;fPs.push(fp);}if(!fA){fA=true;runFL();}}
-function runFL(){fX.clearRect(0,0,fC.width,fC.height);fPs=fPs.filter(p=>{p.step();p.draw();return!p.isDead();});if(fPs.length>0)requestAnimationFrame(runFL);else{fA=false;fX.clearRect(0,0,fC.width,fC.height);}}
-
-// ── SVG WHEEL ──
-const NS='http://www.w3.org/2000/svg';
-const wg=document.getElementById('wheel-group');
-function el(tag,attrs){const e=document.createElementNS(NS,tag);if(attrs)for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);return e;}
-function polar(deg,r){const rad=(deg-90)*Math.PI/180;return[r*Math.cos(rad),r*Math.sin(rad)];}
-let angle=0,targetAngle=0,velocity=0;
-let isDragging=false,dragStartA=0,dragStartW=0,lastDA=0,lastDT=0;
-let rafId=null,searchActive=false,searchQuery='';
-function setHub(m,s){const hm=document.getElementById('hub-main'),hs=document.getElementById('hub-sub');if(hm)hm.textContent=m;if(hs)hs.textContent=s;}
-
-function buildItemRing(cat){
-  wg.innerHTML='';
-  const mob=window.innerWidth<=640;
-  const items=cat.items,n=items.length;
-  const oR=mob?200:226;
-  const nR=mob?(n<=4?68:n<=6?60:52):(n<=4?58:n<=6?50:42);
-  wg.appendChild(el('circle',{r:oR,class:'orbit-ring'}));
-  wg.appendChild(el('circle',{r:oR+nR+16,class:'orbit-ring-outer'}));
-  for(let i=0;i<n*4;i++){const[x1,y1]=polar(i*(360/(n*4)),oR+nR+5);const[x2,y2]=polar(i*(360/(n*4)),oR+nR+13);const t=el('line',{x1,y1,x2,y2,class:'tick-line'});if(i%4!==0)t.setAttribute('opacity','.35');wg.appendChild(t);}
-  items.forEach((item,i)=>{
-    const deg=(i/n)*360,[ccx,ccy]=polar(deg,oR);
-    const g=el('g',{class:'node-g','data-name':item.name,'data-cat':cat.label,transform:'translate('+ccx+','+ccy+')'});
-    g.appendChild(el('line',{x1:0,y1:0,x2:-ccx*.88,y2:-ccy*.88,class:'connector'}));
-    g.appendChild(el('circle',{r:nR,cx:0,cy:0,class:'node-circle-bg',fill:'url(#nodeGrad)'}));
-    g.appendChild(el('circle',{r:nR,cx:0,cy:0,class:'node-circle-rim',stroke:cat.rimColor}));
-    g.appendChild(el('circle',{r:nR-7,cx:0,cy:0,class:'node-circle-inner',stroke:cat.color}));
-    g.appendChild(el('circle',{r:nR,cx:0,cy:0,fill:cat.color,opacity:'.1'}));
-    const words=item.name.split(' ');let lines=[],cur='';
-    const mC=mob?(nR<56?10:nR<64?12:14):(nR<46?9:nR<52?11:13);
-    words.forEach(w=>{const t=cur?cur+' '+w:w;if(t.length>mC&&cur){lines.push(cur);cur=w;}else cur=t;});
-    if(cur)lines.push(cur);lines=lines.slice(0,3);
-    const fs=mob?(nR<56?12:nR<64?13:14):(nR<46?9:nR<52?10:11);
-    const pfs=mob?(nR<56?11:13):(nR<46?9:11);
-    const lh=fs+3,tH=lines.length*lh,sY=-(tH/2)-(item.price?7:0);
-    lines.forEach((ln,li)=>{const t=el('text',{x:0,y:sY+li*lh,class:'item-name-text','font-size':fs,'text-anchor':'middle','dominant-baseline':'central'});t.textContent=ln;g.appendChild(t);});
-    if(item.price){const pt=el('text',{x:0,y:sY+lines.length*lh+5,class:'item-price-text','font-size':pfs,'text-anchor':'middle','dominant-baseline':'central'});pt.textContent=item.price==='Market'?'Ask Staff':item.price;g.appendChild(pt);}
-    let tm=false;
-    g.addEventListener('touchstart',()=>{tm=false;},{passive:true});
-    g.addEventListener('touchmove',()=>{tm=true;},{passive:true});
-    g.addEventListener('touchend',()=>{if(!tm)openPopup(item,cat);});
-    g.addEventListener('click',()=>openPopup(item,cat));
-    wg.appendChild(g);
-  });
-  applySearch();
-}
-
-function transWheel(buildFn,onBefore){
-  cancelAnimationFrame(rafId);
-  wg.style.transition='opacity .28s ease,transform .28s ease';
-  wg.style.opacity='0';wg.style.transform='rotate('+angle+'deg) scale(.65)';
-  setTimeout(()=>{if(onBefore)onBefore();buildFn();angle=0;targetAngle=0;velocity=0;wg.setAttribute('transform','rotate(0)');void wg.offsetWidth;wg.style.transition='opacity .38s ease,transform .38s cubic-bezier(.2,.9,.3,1)';wg.style.opacity='1';wg.style.transform='rotate(0) scale(1)';},290);
-}
-
-document.getElementById('back-btn').addEventListener('click',()=>{initSpecialsWheel(window._SPECIALS||INLINE_SPECIALS);document.getElementById('back-btn').classList.remove('show');document.getElementById('drag-hint').style.opacity='.65';});
-
-function openPopup(item,cat){
-  document.getElementById('p-cat').textContent=cat.label;
-  document.getElementById('p-name').textContent=item.name;
-  document.getElementById('p-desc').textContent=item.desc;
-  document.getElementById('p-note').textContent=cat.note||'';
-  const pw=document.getElementById('p-price-wrap');pw.innerHTML='';
-  if(item.price==='Market'){const b=document.createElement('div');b.className='popup-market';b.textContent="Ask your server for today's price";pw.appendChild(b);}
-  else{const pp=document.createElement('div');pp.className='popup-price';pp.textContent=item.price;pw.appendChild(pp);}
-  const ex=document.getElementById('p-extra');
-  if(cat.extra){ex.textContent=cat.extra;ex.style.display='block';}else ex.style.display='none';
-  document.getElementById('popup-overlay').classList.add('open');
-}
-function closePopup(){document.getElementById('popup-overlay').classList.remove('open');}
-document.getElementById('popup-close').addEventListener('click',closePopup);
-document.getElementById('popup-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('popup-overlay'))closePopup();});
-
-function openPanel(){document.getElementById('info-panel').classList.add('open');document.getElementById('panel-backdrop').classList.add('open');buildStatus();buildHoursRows('panel-hours-rows','hours-row','hours-day','hours-time');}
-function closePanel(){document.getElementById('info-panel').classList.remove('open');document.getElementById('panel-backdrop').classList.remove('open');}
-document.getElementById('info-btn').addEventListener('click',openPanel);
-document.getElementById('panel-close').addEventListener('click',closePanel);
-document.getElementById('panel-backdrop').addEventListener('click',closePanel);
-
-function buildList(q=''){
-  const cont=document.getElementById('list-content');cont.innerHTML='';
-  const sq=q.toLowerCase().trim();let total=0;
-  const menuData=window._MENU||INLINE_MENU;
-  menuData.forEach(cat=>{
-    const its=cat.items.filter(it=>!sq||it.name.toLowerCase().includes(sq)||it.desc.toLowerCase().includes(sq)||cat.label.toLowerCase().includes(sq));
-    if(!its.length)return;total+=its.length;
-    const h=document.createElement('div');h.className='list-cat-hdr';h.innerHTML='<span>'+cat.icon+'</span>'+cat.label;cont.appendChild(h);
-    its.forEach(item=>{const r=document.createElement('div');r.className='list-item-row';r.innerHTML='<span class="list-item-name">'+item.name+'</span><span class="list-item-price">'+(item.price==='Market'?'Mkt Price':item.price)+'</span>';r.addEventListener('click',()=>openPopup(item,cat));cont.appendChild(r);});
-  });
-  if(sq&&!total){const nr=document.createElement('div');nr.className='list-no-results';nr.textContent='No items match your search.';cont.appendChild(nr);}
-}
-function openList(){document.getElementById('list-panel').classList.add('open');document.getElementById('list-backdrop').classList.add('open');document.getElementById('list-btn').classList.add('active');buildList();}
-function closeList(){document.getElementById('list-panel').classList.remove('open');document.getElementById('list-backdrop').classList.remove('open');document.getElementById('list-btn').classList.remove('active');}
-document.getElementById('list-btn').addEventListener('click',()=>document.getElementById('list-panel').classList.contains('open')?closeList():openList());
-document.getElementById('list-close').addEventListener('click',closeList);
-document.getElementById('list-backdrop').addEventListener('click',closeList);
-document.getElementById('list-filter').addEventListener('input',e=>buildList(e.target.value));
-
-const sIn=document.getElementById('search-input'),sCl=document.getElementById('search-clear'),sWr=document.getElementById('search-wrap'),sBt=document.getElementById('search-btn');
-function openSearch(){searchActive=true;sBt.classList.add('active');sWr.classList.add('visible');document.body.classList.add('cur-search');setTimeout(()=>sIn.focus(),80);}
-function closeSearch(){searchActive=false;sBt.classList.remove('active');sWr.classList.remove('visible');document.body.classList.remove('cur-search');sIn.value='';searchQuery='';applySearch();}
-sBt.addEventListener('click',()=>searchActive?closeSearch():openSearch());
-sIn.addEventListener('input',()=>{searchQuery=sIn.value.trim().toLowerCase();sCl.classList.toggle('show',searchQuery.length>0);applySearch();});
-sCl.addEventListener('click',()=>{sIn.value='';searchQuery='';applySearch();sCl.classList.remove('show');sIn.focus();});
-sIn.addEventListener('mousedown',e=>e.stopPropagation());
-function applySearch(){const q=searchQuery,nodes=wg.querySelectorAll('.node-g');if(!q){nodes.forEach(n=>{n.classList.remove('dimmed','highlighted');});return;}nodes.forEach(n=>{const name=(n.getAttribute('data-name')||'').toLowerCase(),cat2=(n.getAttribute('data-cat')||'').toLowerCase();const m=name.includes(q)||cat2.includes(q);n.classList.toggle('dimmed',!m);n.classList.toggle('highlighted',m);});}
-
-const svg2=document.getElementById('wheel-svg');
-function getSVGC(){const r=svg2.getBoundingClientRect();return[r.left+r.width/2,r.top+r.height/2];}
-function getA(ex,ey){const[cx2,cy2]=getSVGC();return Math.atan2(ey-cy2,ex-cx2)*180/Math.PI;}
-function startDrag(ex,ey){
-  if(document.getElementById('popup-overlay').classList.contains('open'))return;
-  if(document.getElementById('info-panel').classList.contains('open'))return;
-  if(document.getElementById('list-panel').classList.contains('open'))return;
-  if(searchActive&&document.activeElement===sIn)return;
-  cancelAnimationFrame(rafId);isDragging=true;velocity=0;
-  dragStartA=getA(ex,ey);dragStartW=angle;lastDA=dragStartA;lastDT=Date.now();
-  document.body.classList.add('cur-drag');
-}
-function moveDrag(ex,ey){if(!isDragging)return;const a=getA(ex,ey);let d=a-dragStartA;while(d>180)d-=360;while(d<-180)d+=360;const now=Date.now(),dt=now-lastDT;if(dt>0)velocity=(a-lastDA)/dt*16;lastDA=a;lastDT=now;angle=dragStartW+d;wg.setAttribute('transform','rotate('+angle+')');}
-function endDrag(){if(!isDragging)return;isDragging=false;document.body.classList.remove('cur-drag');targetAngle=angle+velocity*22;spinCoast();}
-function spinCoast(){const d=targetAngle-angle;angle+=d*.075;velocity*=.96;wg.setAttribute('transform','rotate('+angle+')');if(Math.abs(d)>.04)rafId=requestAnimationFrame(spinCoast);}
-svg2.addEventListener('mousedown',e=>{if(e.target.closest('#hub,#back-btn'))return;e.preventDefault();startDrag(e.clientX,e.clientY);});
-window.addEventListener('mousemove',e=>moveDrag(e.clientX,e.clientY));
-window.addEventListener('mouseup',endDrag);
-svg2.addEventListener('touchstart',e=>{if(e.target.closest('#hub,#back-btn'))return;const t=e.touches[0];startDrag(t.clientX,t.clientY);document.body.style.overflow='hidden';document.documentElement.style.overflow='hidden';},{passive:true});
-window.addEventListener('touchmove',e=>{const t=e.touches[0];moveDrag(t.clientX,t.clientY);},{passive:true});
-window.addEventListener('touchend',()=>{endDrag();document.body.style.overflow='';document.documentElement.style.overflow='';});
-window.addEventListener('touchcancel',()=>{document.body.style.overflow='';document.documentElement.style.overflow='';});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePopup();closePanel();closeList();closeSearch();}});
-
-const wheelSvg=document.getElementById('wheel-svg'),zoomSlider=document.getElementById('zoom-slider'),zoomOutBtn=document.getElementById('zoom-out'),zoomInBtn=document.getElementById('zoom-in'),zoomPct=document.getElementById('zoom-pct');
-let zoomLevel=1;const BASE_VB=720;
-function applyZoom(z){zoomLevel=Math.max(1,Math.min(3,z));const half=(BASE_VB/2)/zoomLevel;wheelSvg.setAttribute('viewBox',-half+' '+-half+' '+(half*2)+' '+(half*2));zoomSlider.value=zoomLevel;zoomPct.textContent=Math.round(zoomLevel*100)+'%';}
-zoomSlider.addEventListener('input',()=>applyZoom(parseFloat(zoomSlider.value)));
-zoomOutBtn.addEventListener('click',()=>applyZoom(zoomLevel-0.25));
-zoomInBtn.addEventListener('click',()=>applyZoom(zoomLevel+0.25));
-let pinchDist0=0,pinchZoom0=1;
-document.getElementById('stage').addEventListener('touchstart',e=>{if(e.touches.length===2){pinchDist0=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);pinchZoom0=zoomLevel;}},{passive:true});
-document.getElementById('stage').addEventListener('touchmove',e=>{if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);applyZoom(pinchZoom0*(d/pinchDist0));}},{passive:true});
-
-function initSpecialsWheel(SPECIALS){
-  window._SPECIALS=SPECIALS;
-  const todayItems=SPECIALS.filter(s=>s.date===todayStr());
-  const wheelWrap=document.getElementById('specials-wheel-wrap'),lockedNotice=document.getElementById('specials-locked');
-  if(todayItems.length===0){if(wheelWrap)wheelWrap.style.display='none';if(lockedNotice)lockedNotice.style.display='block';}
-  else{if(wheelWrap)wheelWrap.style.display='';if(lockedNotice)lockedNotice.style.display='none';const cat={id:'specials',label:"TODAY'S SPECIALS",color:'#C43C10',rimColor:'rgba(232,83,42,.55)',note:"Chef's rotating specials · Call (225) 245-5046 to confirm availability",extra:null,items:todayItems};buildItemRing(cat);setHub('SPECIALS','TAP TO VIEW');document.getElementById('drag-hint').style.opacity='.65';}
-  setTimeout(()=>{if(wg.classList)wg.classList.remove('hint-spin');},4000);
-}
-
-// Logo Nav Overlay
-(function(){
-  const trigger=document.getElementById('logoNavTrigger'),overlay=document.getElementById('logoNavOverlay'),closeBtn=document.getElementById('lnoClose'),center=document.getElementById('lnoCenter'),navLabel=document.getElementById('logoNavLabel');
-  if(!trigger||!overlay||!center)return;
-  const NAV_ITEMS=[
-    {label:'Menu',icon:'fa-utensils',href:'menu.html'},
-    {label:'About',icon:'fa-circle-info',href:'about.html'},
-    {label:'Story',icon:'fa-book-open',href:'story.html'},
-    {label:'Gallery',icon:'fa-images',href:'gallery.html'},
-    {label:'Contact',icon:'fa-envelope',href:'contact.html'},
-    {label:'Catering',icon:'fa-fire-burner',href:'catering.html'},
-    {label:'Visit',icon:'fa-location-dot',href:'#info-section'},
-    {label:'Call',icon:'fa-phone',href:'tel:+12252455046'},
-    {label:'Specials',icon:'fa-star',href:'#specials-section'}
-  ];
-  function buildItems(){
-    center.querySelectorAll('.lno-item').forEach(e=>e.remove());
-    const r=Math.min(window.innerWidth*.30,window.innerHeight*.30,190);
-    NAV_ITEMS.forEach((item,i)=>{const angle=(i/NAV_ITEMS.length)*Math.PI*2-Math.PI/2;const tx=Math.cos(angle)*r,ty=Math.sin(angle)*r;const e=document.createElement('div');e.className='lno-item';e.style.setProperty('--tx',tx+'px');e.style.setProperty('--ty',ty+'px');e.innerHTML='<span class="lno-icon"><i class="fas '+item.icon+'"></i></span><span class="lno-label">'+item.label+'</span>';e.addEventListener('click',()=>{closeNav();window.location.href=item.href;});center.appendChild(e);});
+function mkS(){ return{x:.15+Math.random()*.7,y:1.05+Math.random()*.05,vx:(Math.random()-.5)*.0003,vy:-.0006-Math.random()*.0005,r:35+Math.random()*55,a:0,ta:.018+Math.random()*.02,gr:.06+Math.random()*.04,wb:Math.random()*Math.PI*2,ws:.004+Math.random()*.007}; }
+const SM=Array.from({length:18},mkS);
+function drawSmoke(){
+  sx.clearRect(0,0,W,H);
+  for(const s of SM){
+    s.wb+=s.ws; s.x+=s.vx+Math.sin(s.wb)*.00025; s.y+=s.vy; s.r+=s.gr;
+    s.a=s.a<s.ta?s.a+.0018:Math.max(0,s.a-.0012);
+    if(s.y<-.25||s.a<=0){Object.assign(s,mkS());continue;}
+    const g=sx.createRadialGradient(s.x*W,s.y*H,0,s.x*W,s.y*H,s.r);
+    g.addColorStop(0,`rgba(90,65,40,${s.a})`); g.addColorStop(.5,`rgba(60,42,25,${s.a*.45})`); g.addColorStop(1,'transparent');
+    sx.fillStyle=g; sx.beginPath(); sx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2); sx.fill();
   }
-  function openNav(){buildItems();overlay.classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>{center.querySelectorAll('.lno-item').forEach((e,i)=>{setTimeout(()=>e.classList.add('placed'),i*45);});},60);if(navLabel)navLabel.style.opacity='0';}
-  function closeNav(){center.querySelectorAll('.lno-item').forEach(e=>e.classList.remove('placed'));setTimeout(()=>overlay.classList.remove('open'),320);document.body.style.overflow='';}
-  trigger.addEventListener('click',e=>{e.stopPropagation();openNav();});
-  closeBtn.addEventListener('click',closeNav);
-  overlay.addEventListener('click',e=>{if(e.target===overlay)closeNav();});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))closeNav();});
-  window.addEventListener('resize',()=>{if(overlay.classList.contains('open'))buildItems();});
+}
+function mkE(){ return{x:.12+Math.random()*.76,y:1.02+Math.random()*.04,vx:(Math.random()-.5)*.0028,vy:-.004-Math.random()*.008,r:.6+Math.random()*1.6,life:1,decay:.003+Math.random()*.006,h:10+Math.random()*22,tw:(Math.random()-.5)*.001}; }
+const EM=Array.from({length:26},mkE);
+function drawEmbers(){
+  ex.clearRect(0,0,W,H);
+  for(let i=0;i<EM.length;i++){
+    const e=EM[i]; e.x+=e.vx+e.tw; e.y+=e.vy; e.life-=e.decay;
+    if(e.life<=0||e.y<-.02){EM[i]=mkE();continue;}
+    ex.beginPath(); ex.arc(e.x*W,e.y*H,e.r,0,Math.PI*2);
+    ex.fillStyle=`hsla(${e.h},100%,${52+e.life*34}%,${e.life*.82})`;
+    ex.shadowBlur=8; ex.shadowColor=`hsla(${e.h},100%,58%,${e.life*.5})`;
+    ex.fill(); ex.shadowBlur=0;
+  }
+}
+(function loop(){ drawBg(); drawSmoke(); drawEmbers(); requestAnimationFrame(loop); })();
+
+/* Panel smoke */
+const psCV=document.getElementById('panel-smoke-cv'),psx=psCV.getContext('2d');
+function rszPS(){psCV.width=window.innerWidth;psCV.height=window.innerHeight;}
+rszPS(); window.addEventListener('resize',rszPS);
+const PS=Array.from({length:10},mkS);
+(function psL(){
+  psx.clearRect(0,0,psCV.width,psCV.height);
+  for(const s of PS){
+    s.wb+=s.ws; s.x+=s.vx+Math.sin(s.wb)*.0002; s.y+=s.vy; s.r+=s.gr*.7;
+    s.a=s.a<s.ta?s.a+.0015:Math.max(0,s.a-.001);
+    if(s.y<-.2||s.a<=0){Object.assign(s,mkS());continue;}
+    const g=psx.createRadialGradient(s.x*psCV.width,s.y*psCV.height,0,s.x*psCV.width,s.y*psCV.height,s.r);
+    g.addColorStop(0,`rgba(70,50,30,${s.a*.7})`); g.addColorStop(1,'transparent');
+    psx.fillStyle=g; psx.beginPath(); psx.arc(s.x*psCV.width,s.y*psCV.height,s.r,0,Math.PI*2); psx.fill();
+  }
+  requestAnimationFrame(psL);
 })();
 
-// Init
-initSpecialsWheel(INLINE_SPECIALS);
+/* ════════════════════════════
+   CURSOR
+════════════════════════════ */
+const curEl=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{ curEl.style.left=e.clientX+'px'; curEl.style.top=e.clientY+'px'; });
 
-// Load site-data.js for live specials/menu updates
-function loadSiteData(){
-  fetch('site-data.js')
-    .then(function(r){
-      if(!r.ok) throw new Error('no site-data');
-      return r.text();
-    })
-    .then(function(src){
-      try{
-        var menuFn = new Function(src + '; return typeof MENU!=="undefined"?MENU:null;');
-        var menuData = menuFn();
-        if(menuData) window._MENU = menuData;
-        var specFn = new Function(src + '; return typeof SPECIALS!=="undefined"?SPECIALS:null;');
-        var specData = specFn();
-        if(specData) initSpecialsWheel(specData);
-      } catch(e){ console.warn('site-data parse error', e); }
-    })
-    .catch(function(){ /* site-data.js not present — using inline data */ });
+/* ════════════════════════════
+   TICKERS
+════════════════════════════ */
+const tkItems=['Brisket Plate — $10.99','Full Rack Ribs — $19.99','Pulled Pork — $9.99','Smoked Wings — $7.99','Ribeye Po-boy — $10.99','Crawfish Po-boy — $10.99','Boudin Balls','Pepper Jack Boudin','Corn Pudding','Bread Pudding','Creole Cream Cheesecake','½ Chicken — $9.99','Catfish Po-boy — $8.99','Cheeseburger — $7.99','Boudin Egg Rolls'];
+const d4=[...tkItems,...tkItems,...tkItems,...tkItems];
+const html=d4.map(t=>`<span class="t-item">${t}</span>`).join('');
+document.getElementById('ticker-track').innerHTML=html;
+document.getElementById('mob-ticker-track').innerHTML=d4.map(t=>`<span class="mt-item">${t}</span>`).join('');
+
+/* ════════════════════════════
+   HOURS
+════════════════════════════ */
+const dow=new Date().getDay();
+const hoursStr=dow===0?'Sun: 10am – 3pm':'Mon–Sat 10am–6pm';
+const mobHoursStr=dow===0?'10am – 3pm':'10am – 6pm';
+document.getElementById('hours-today').textContent=hoursStr;
+document.getElementById('mob-hours').textContent=mobHoursStr;
+
+/* ════════════════════════════
+   PAGE DATA
+════════════════════════════ */
+const PAGES={
+  menu:{num:'01',eyebrow:'The Menu',cta:'See Full Menu',title:'Pit to\nPlate.',italic:'BBQ plates · Po-boys · Burgers · Sandwiches',meta:'Smoked daily — 12+ hours minimum',mood:'radial-gradient(ellipse at 30% 80%,#3a1800 0%,#1a0c04 50%,#09070a 100%)',desc:`Everything on this menu spent <strong>a minimum of twelve hours over post oak and hickory.</strong> Brisket plate $10.99. Full rack ribs $19.99. Pulled pork $9.99. Half chicken $9.99. Smoked wings $7.99. All BBQ plates come with two sides. Ribeye po-boys, shrimp po-boys, crawfish po-boys and catfish po-boys also on the board. Burgers from $6.99.`,chips:['Brisket $10.99','Ribs $19.99','Pulled Pork $9.99','Wings $7.99','Ribeye Po-boy $10.99','2 Sides Included'],rule:'Low & slow, always.',dest:'menu.html'},
+  boudin:{num:'02',eyebrow:'Boudin & Sides',cta:'Explore the Deli Case',title:'Louisiana\nStaples.',italic:'Boudin · Specialty meats · House sides · Desserts',meta:'Made in-house — true Louisiana tradition',mood:'radial-gradient(ellipse at 30% 80%,#2a1200 0%,#180a02 50%,#09070a 100%)',desc:`The deli case is loaded. <strong>Steamed boudin links, classic boudin balls, pepper jack boudin balls, boudin egg rolls, meat pies and crawfish pies.</strong> Sides run small ($2.75) or large ($6.99): corn pudding, baked beans, potato salad, coleslaw, fries and sweet potato waffle fries. Desserts: homemade bread pudding, Creole cream cheesecake, chocolate & carrot cake.`,chips:['Boudin Links','Boudin Balls','Pepper Jack Boudin','Crawfish Pies','Corn Pudding','Bread Pudding'],rule:'Made from scratch.',dest:'boudin.html'},
+  specials:{num:'03',eyebrow:'Daily Specials',cta:"Check Today's Board",title:'Daily\nBoard.',italic:'Changes every morning — call to confirm',meta:'Board posted at 6am · (225) 245-5046',mood:'radial-gradient(ellipse at 30% 80%,#321800 0%,#1c0e02 50%,#09070a 100%)',desc:`The specials board rotates every single day. Recent features: <strong>Eggplant pirogue with Cajun seafood stuffing ($26). Blackened lemon fish with cream spinach & grilled crawfish tails ($28). Jack Daniel's BBQ shrimp with 14oz bone-in pork chop ($26). Grilled salmon with crabmeat & avocado cream sauce ($28).</strong> Sweet Thai chili wings app $16. Miss Mud Pie $7.`,chips:['Eggplant Pirogue $26','Blackened Fish $28','BBQ Shrimp $26','Salmon $28','Wings App $16','Mud Pie $7'],rule:'Fresh board, every day.',dest:'specials.html'},
+  story:{num:'04',eyebrow:'Our Story',cta:'Read Our Story',title:'St. Francisville\nProud.',italic:"Travellers' Choice · 4.5★ TripAdvisor · 4.7★ Google",meta:'143 TripAdvisor reviews · 505 Google reviews',mood:'radial-gradient(ellipse at 30% 80%,#281400 0%,#160a02 50%,#09070a 100%)',desc:`The Francis Smokehouse has been a fixture on <strong>US Highway 61 in St. Francisville</strong> since 2015. Rated Travellers' Choice on Tripadvisor — top 10% of restaurants worldwide. 4.7 across 505 Google reviews. <em>"Brisket practically melted in my mouth."</em> <em>"Boudin balls were AMAZING."</em> Locals fill the inside. The outdoor deck built around the old tree keeps everyone coming back.`,chips:['Est. 2015',"Travellers' Choice",'4.7★ Google','4.5★ TripAdvisor','Outdoor Deck',"Locals' Favorite"],rule:'Real food. Real people.',dest:'story.html'},
+  catering:{num:'05',eyebrow:'Catering',cta:'Contact Us Now',title:'Feed\nThe Crowd.',italic:'Large orders · Events · Private gatherings',meta:'(225) 245-5046 · francissmokehouse@att.net',mood:'radial-gradient(ellipse at 30% 80%,#301600 0%,#180b02 50%,#09070a 100%)',desc:`The team handles <strong>large catering orders</strong> for parties, corporate lunches, weddings and events. Brisket, wings and sides in bulk. Call <strong>(225) 245-5046</strong> or email <strong>francissmokehouse@att.net</strong>. On-site parking, fully wheelchair accessible.`,chips:['Brisket Catering','Wings & Sides','Takeout Available','Groups Welcome','Wheelchair Access','Free Parking'],rule:'Enough for the whole crew.',dest:'catering.html'},
+  find:{num:'06',eyebrow:'Find Us',cta:'Open in Google Maps',title:'Follow\nThe Smoke.',italic:'6779 US Highway 61 · St. Francisville, LA 70775',meta:'Mon–Sat 10am–6pm · Sun 10am–3pm',mood:'radial-gradient(ellipse at 30% 80%,#1e1000 0%,#120800 50%,#09070a 100%)',desc:`We're at <strong>6779 US Highway 61, St. Francisville, LA 70775</strong>. Mon–Sat 10am–6pm, Sunday 10am–3pm. On-site parking, fully wheelchair accessible. <strong>When the smoker is running you'll smell us before you see us.</strong> Travelers on the Great River Road call it a mandatory stop.`,chips:['6779 US Hwy 61','(225) 245-5046','Mon–Sat 10–6','Sun 10–3','Free Parking','Wheelchair OK'],rule:"You'll smell us first.",dest:'https://www.google.com/maps/search/?api=1&query=The+Francis+Smokehouse%2C+St+Francisville%2C+LA'},
+};
+
+/* ════════════════════════════
+   DESKTOP PREVIEW
+════════════════════════════ */
+const pvNums={menu:'01',boudin:'02',specials:'03',story:'04',catering:'05',find:'06'};
+function setPreview(id){
+  const p=PAGES[id];
+  document.getElementById('pv-title').textContent=p.title.replace('\n',' ');
+  document.getElementById('pv-desc').textContent=p.italic;
+  document.getElementById('pv-num').textContent=pvNums[id];
+  document.getElementById('pv-num').classList.add('lit');
+  document.getElementById('pv-chips').innerHTML=p.chips.slice(0,4).map((c,i)=>`<span class="pv-chip${i<2?' on':''}">${c}</span>`).join('');
 }
-loadSiteData();
+function clearPreview(){
+  document.getElementById('pv-title').textContent='Hover any item to explore';
+  document.getElementById('pv-desc').textContent='Each destination has its own story. Take your time.';
+  document.getElementById('pv-num').classList.remove('lit');
+  document.getElementById('pv-num').textContent='—';
+  document.getElementById('pv-chips').innerHTML='';
+}
 
+/* ════════════════════════════
+   DESKTOP PANEL
+════════════════════════════ */
+let currentPage=null, navigating=false;
+function openPanel(id){
+  const p=PAGES[id]; currentPage=p;
+  document.getElementById('panel-mood-bg').style.background=p.mood;
+  document.getElementById('panel-big-num').textContent=p.num;
+  document.getElementById('panel-eyebrow').textContent=p.eyebrow;
+  document.getElementById('panel-title').innerHTML=p.title.replace('\n','<br>');
+  document.getElementById('panel-italic').textContent=p.italic;
+  document.getElementById('panel-meta').textContent=p.meta;
+  document.getElementById('panel-desc').innerHTML=p.desc;
+  document.getElementById('panel-rule').textContent=p.rule;
+  document.getElementById('panel-idx').textContent=p.num;
+  document.getElementById('cta-label').textContent=p.cta;
+  document.getElementById('panel-chips').innerHTML=p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('shell').style.pointerEvents='none';
+  navigating=false;
+}
+function closePanel(){ document.getElementById('panel').classList.remove('open'); document.getElementById('shell').style.pointerEvents=''; currentPage=null; }
+document.getElementById('panel-info').addEventListener('dblclick',goTo);
+
+/* ════════════════════════════
+   MOBILE BOTTOM SHEET
+════════════════════════════ */
+function openMobPanel(id){
+  const p=PAGES[id]; currentPage=p;
+  document.getElementById('mob-sheet-eyebrow').textContent=p.eyebrow;
+  document.getElementById('mob-sheet-title').innerHTML=p.title.replace('\n','<br>');
+  document.getElementById('mob-sheet-italic').textContent=p.italic;
+  document.getElementById('mob-sheet-meta').textContent=p.meta;
+  document.getElementById('mob-sheet-desc').innerHTML=p.desc;
+  document.getElementById('mob-sheet-rule').textContent=p.rule;
+  document.getElementById('mob-cta-label').textContent=p.cta;
+  document.getElementById('mob-sheet-chips').innerHTML=p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
+  document.getElementById('mob-panel').classList.add('open');
+  navigating=false;
+  // scroll sheet to top
+  document.getElementById('mob-sheet-body').scrollTop=0;
+}
+function closeMobPanel(){ document.getElementById('mob-panel').classList.remove('open'); currentPage=null; }
+
+/* ════════════════════════════
+   LOADER + NAVIGATE
+════════════════════════════ */
+function goTo(){
+  if(!currentPage||navigating) return;
+  navigating=true;
+  const ld=document.getElementById('loader');
+  document.getElementById('ld-going').textContent='Heading to '+currentPage.eyebrow.toLowerCase()+'...';
+  const fill=document.getElementById('ld-fill');
+  fill.style.animation='none'; void fill.offsetHeight;
+  ld.classList.add('show');
+  setTimeout(()=>{
+    if(currentPage.dest.startsWith('http')){ window.open(currentPage.dest,'_blank'); ld.classList.remove('show'); navigating=false; }
+    else { window.location.href=currentPage.dest; }
+  },1900);
+}
+
+/* Touch ripple */
+document.addEventListener('touchstart',e=>{
+  const t=e.touches[0];
+  const r=document.createElement('div'); r.className='ripple';
+  r.style.left=t.clientX+'px'; r.style.top=t.clientY+'px';
+  document.body.appendChild(r); setTimeout(()=>r.remove(),700);
+},{passive:true});
+
+/* ESC */
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closePanel(); closeMobPanel(); } });
+
+/* Sheet swipe down to close */
+let sheetStartY=0;
+document.getElementById('mob-sheet').addEventListener('touchstart',e=>{ sheetStartY=e.touches[0].clientY; },{passive:true});
+document.getElementById('mob-sheet').addEventListener('touchend',e=>{
+  const dy=e.changedTouches[0].clientY-sheetStartY;
+  if(dy>80) closeMobPanel();
+},{passive:true});
+
+/* ════════════════════════════
+   BOOT
+════════════════════════════ */
+document.body.style.opacity='0';
+document.body.style.transition='opacity .6s';
+window.addEventListener('load',()=>{
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.body.style.opacity='1';
+    const isMobile=window.innerWidth<768;
+    setTimeout(()=>{
+      if(isMobile) document.getElementById('mobile-shell').classList.add('on');
+      else document.getElementById('shell').classList.add('on');
+    },200);
+  }));
+});
 </script>
 </body>
 </html>
