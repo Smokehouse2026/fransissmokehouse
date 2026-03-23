@@ -13,7 +13,7 @@ var SITE_SPECIALS = [
 
   {
     hidden: false,
-    date:  "2026-03-22",
+    date:  "2026-03-23",
     type:  "Appetizer",
     name:  "Sweet Thai Chili Wings",
     desc:  "Smoked wings tossed in house-made sweet Thai chili glaze. Sticky, smoky, addictive.",
