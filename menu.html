@@ -1183,6 +1183,11 @@ document.addEventListener('touchend',e=>{
 window.addEventListener('load',()=>{
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     document.body.classList.add('on');
+    // Auto-open specials tab if linked directly
+    if(window.location.hash === '#specials'){
+      var spTab = document.querySelectorAll('.tab')[3]; // index 3 = Specials
+      if(spTab) sw('sp', spTab);
+    }
   }));
 });
 </script>
