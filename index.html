@@ -698,6 +698,7 @@ body::after {
     <div id="nav-center">
       <nav>
         <div class="nav-item" onclick="openPanel('menu')"     onmouseenter="setPreview('menu')"     onmouseleave="clearPreview()"><span class="ni-num">01</span><span class="ni-name">The Menu</span><span class="ni-sub">BBQ plates, po-boys & sandwiches</span><span class="ni-arrow">↗</span></div>
+        <div class="nav-item" onclick="openPanel('special')"   onmouseenter="setPreview('special')"  onmouseleave="clearPreview()" style="padding-left:clamp(18px,2.8vw,44px);opacity:.85;"><span class="ni-num" style="font-size:8px;opacity:.6;">✦</span><span class="ni-name" style="font-size:clamp(14px,2.2vw,32px);color:rgba(240,140,40,.7);">Daily Special</span><span class="ni-sub">Today's plate · Changes at 6am</span><span class="ni-arrow" style="width:clamp(20px,2vw,28px);height:clamp(20px,2vw,28px);">↗</span></div>
         <div class="nav-item" onclick="openPanel('about')"   onmouseenter="setPreview('about')"   onmouseleave="clearPreview()"><span class="ni-num">02</span><span class="ni-name">About Us</span><span class="ni-sub">St. Francisville proud since 2015</span><span class="ni-arrow">↗</span></div>
         <div class="nav-item" onclick="openPanel('giftcards')" onmouseenter="setPreview('giftcards')" onmouseleave="clearPreview()"><span class="ni-num">03</span><span class="ni-name">Gift Cards</span><span class="ni-sub">Load any amount · Available in-store</span><span class="ni-arrow">↗</span></div>
         <div class="nav-item" onclick="openPanel('story')"    onmouseenter="setPreview('story')"    onmouseleave="clearPreview()"><span class="ni-num">04</span><span class="ni-name">Our Story</span><span class="ni-sub">St. Francisville proud since 2015</span><span class="ni-arrow">↗</span></div>
@@ -736,6 +737,7 @@ body::after {
 
   <div id="mob-nav">
     <div class="mob-nav-item" onclick="openMobPanel('menu')"><span class="mni-num">01</span><div class="mni-body"><div class="mni-name">The Menu</div><div class="mni-sub">BBQ plates, po-boys & sandwiches</div></div><span class="mni-arrow">↗</span></div>
+    <div class="mob-nav-item" onclick="openMobPanel('special')" style="padding-left:36px;"><span class="mni-num" style="font-size:8px;opacity:.5;">✦</span><div class="mni-body"><div class="mni-name" style="font-size:clamp(17px,4.2vw,22px);color:rgba(240,140,40,.75);">Daily Special</div><div class="mni-sub">Today's plate · Changes at 6am</div></div><span class="mni-arrow">↗</span></div>
     <div class="mob-nav-item" onclick="openMobPanel('about')"><span class="mni-num">02</span><div class="mni-body"><div class="mni-name">About Us</div><div class="mni-sub">St. Francisville proud since 2015</div></div><span class="mni-arrow">↗</span></div>
     <div class="mob-nav-item" onclick="openMobPanel('giftcards')"><span class="mni-num">03</span><div class="mni-body"><div class="mni-name">Gift Cards</div><div class="mni-sub">Load any amount · Available in-store</div></div><span class="mni-arrow">↗</span></div>
     <div class="mob-nav-item" onclick="openMobPanel('story')"><span class="mni-num">04</span><div class="mni-body"><div class="mni-name">Our Story</div><div class="mni-sub">St. Francisville proud since 2015</div></div><span class="mni-arrow">↗</span></div>
@@ -908,6 +910,7 @@ document.getElementById('mob-hours').textContent=mobHoursStr;
 ================================ */
 const PAGES={
   menu:{num:'01',eyebrow:'The Menu',cta:'See Full Menu',title:'Pit to\nPlate.',italic:'BBQ plates · Po-boys · Burgers · Sandwiches',meta:'Smoked daily — 12+ hours minimum',mood:'radial-gradient(ellipse at 30% 80%,#3a1800 0%,#1a0c04 50%,#09070a 100%)',desc:`Everything on this menu spent <strong>a minimum of twelve hours over post oak and hickory.</strong> Brisket plate $10.99. Full rack ribs $19.99. Pulled pork $9.99. Half chicken $9.99. Smoked wings $7.99. All BBQ plates come with two sides. Ribeye po-boys, shrimp po-boys, crawfish po-boys and catfish po-boys also on the board. Burgers from $6.99.`,chips:['Brisket $10.99','Ribs $19.99','Pulled Pork $9.99','Wings $7.99','Ribeye Po-boy $10.99','2 Sides Included'],rule:'Low & slow, always.',dest:'menu.html'},
+  special:{num:'✦',eyebrow:'Daily Special',cta:"See Today's Special",title:'Daily\nSpecial.',italic:'One plate — changes every morning at 6am',meta:'Posted at 6am · Call (225) 245-5046 to confirm',mood:'radial-gradient(ellipse at 30% 80%,#3a1800 0%,#1a0c04 50%,#09070a 100%)',desc:`The daily special changes every morning at 6am. One plate, made fresh. <strong>Check back daily or follow us on Facebook</strong> to see what's on the board before you drive out.`,chips:['Changes Daily','Posted at 6am','Check Facebook','(225) 245-5046'],rule:'Fresh every morning.',dest:'menu.html#specials'},
   about:{num:'02',eyebrow:'About Us',cta:'Read Our Story',title:'Who\nWe Are.',italic:'Family owned · St. Francisville · Since 2015',meta:'4.7★ Google · 4.5★ TripAdvisor · 505 reviews',mood:'radial-gradient(ellipse at 30% 80%,#2a1200 0%,#180a02 50%,#09070a 100%)',desc:`The Francis Smokehouse has been a fixture on <strong>US Highway 61 in St. Francisville</strong> since 2015. We smoke everything over post oak and hickory — no gas, no shortcuts. Rated <strong>Travellers' Choice</strong> on TripAdvisor and 4.7★ across 505 Google reviews. <em>"Brisket practically melted in my mouth."</em> The outdoor deck built around the old tree keeps everyone coming back.`,chips:['Est. 2015',"Travellers' Choice",'4.7★ Google','4.5★ TripAdvisor','Outdoor Deck','Family Owned'],rule:'Real food. Real people.',dest:'about.html'},
   giftcards:{num:'03',eyebrow:'Gift Cards',cta:'Get a Gift Card',title:'Give the\nGift.',italic:'Load any amount · Available in-store',meta:'Available at 6779 US Hwy 61 · No minimum',mood:'radial-gradient(ellipse at 30% 80%,#321800 0%,#1c0e02 50%,#09070a 100%)',desc:`Give the gift of slow-smoked BBQ. <strong>Load any amount</strong> onto a Francis Smokehouse gift card — available right at the counter. No minimum, no expiry. Perfect for birthdays, holidays, thank-yous, or any BBQ lover in your life. Stop in during business hours and we'll take care of you.`,chips:['Any Amount','No Minimum','No Expiry','Available In-Store','Mon–Sat 10–6','Sun 10–3'],rule:'The best gift for a BBQ lover.',dest:'giftcards.html'},
   story:{num:'04',eyebrow:'Our Story',cta:'Read Our Story',title:'St. Francisville\nProud.',italic:"Travellers' Choice · 4.5★ TripAdvisor · 4.7★ Google",meta:'143 TripAdvisor reviews · 505 Google reviews',mood:'radial-gradient(ellipse at 30% 80%,#281400 0%,#160a02 50%,#09070a 100%)',desc:`The Francis Smokehouse has been a fixture on <strong>US Highway 61 in St. Francisville</strong> since 2015. Rated Travellers' Choice on Tripadvisor — top 10% of restaurants worldwide. 4.7 across 505 Google reviews. <em>"Brisket practically melted in my mouth."</em> <em>"Boudin balls were AMAZING."</em> Locals fill the inside. The outdoor deck built around the old tree keeps everyone coming back.`,chips:['Est. 2015',"Travellers' Choice",'4.7★ Google','4.5★ TripAdvisor','Outdoor Deck',"Locals' Favorite"],rule:'Real food. Real people.',dest:'story.html'},
@@ -918,7 +921,7 @@ const PAGES={
 /* ================================
    DESKTOP PREVIEW
 ================================ */
-const pvNums={menu:'01',about:'02',giftcards:'03',story:'04',catering:'05',find:'06'};
+const pvNums={menu:'01',special:'✦',about:'02',giftcards:'03',story:'04',catering:'05',find:'06'};
 function setPreview(id){
   const p=PAGES[id];
   document.getElementById('pv-title').textContent=p.title.replace('\n',' ');
@@ -958,8 +961,7 @@ function openPanel(id){
   specList.style.display = 'none';
   stopSpecialsCountdown();
 
-  if(id === 'menu'){
-    // Show menu description + today's special inline
+  if(id === 'menu' || id === 'special'){
     var specialHTML = getTodaysSpecialHTML();
     descEl.innerHTML = p.desc + specialHTML;
     chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
@@ -994,7 +996,7 @@ function openMobPanel(id){
   specList.style.display = 'none';
   stopSpecialsCountdown();
 
-  if(id === 'menu'){
+  if(id === 'menu' || id === 'special'){
     var specialHTML = getTodaysSpecialHTML();
     descEl.innerHTML = p.desc + specialHTML;
     chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
