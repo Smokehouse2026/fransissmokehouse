@@ -47,18 +47,18 @@ body::after {
 #cv-smoke { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
 #cv-ember { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
 
-/* ══════════════════════════════════════════════════════
+/* ========================================================══
    CURSOR — desktop only
-══════════════════════════════════════════════════════ */
+========================================================══ */
 #cursor { position: fixed; z-index: 9999; pointer-events: none; top:0; left:0; }
 #cursor-dot  { width:8px; height:8px; border-radius:50%; background:var(--flame); transform:translate(-50%,-50%); box-shadow:0 0 10px var(--flame),0 0 20px rgba(240,140,40,.3); transition:width .35s,height .35s,background .3s; }
 #cursor-ring { position:absolute; top:0; left:0; width:36px; height:36px; border:1px solid rgba(240,140,40,.35); border-radius:50%; transform:translate(-50%,-50%); transition:width .45s cubic-bezier(.16,1,.3,1),height .45s,border-color .3s; }
 body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:rgba(240,140,40,.6); }
 @media (hover:none) { #cursor { display:none; } }
 
-/* ══════════════════════════════════════════════════════
+/* ========================================================══
    SHELL
-══════════════════════════════════════════════════════ */
+========================================================══ */
 #shell {
   position: fixed; inset: 0; z-index: 10;
   display: flex; flex-direction: column;
@@ -66,9 +66,9 @@ body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:r
 }
 #shell.on { opacity: 1; }
 
-/* ══════════════════════════════════════════════════════
+/* ========================================================══
    ████  DESKTOP LAYOUT  (min-width: 768px)
-══════════════════════════════════════════════════════ */
+========================================================══ */
 
 /* TOP BAR */
 #topbar {
@@ -193,10 +193,10 @@ body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:r
 #botbar-right { flex-shrink:0; padding-left:20px; font-family:var(--cond); font-weight:400; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:rgba(196,168,130,.18); }
 
 
-/* ══════════════════════════════════════════════════════
+/* ========================================================══
    ████  MOBILE LAYOUT  (max-width: 767px)
    Completely different structure — hidden on desktop
-══════════════════════════════════════════════════════ */
+========================================================══ */
 #mobile-shell {
   display: none;
   position: fixed; inset: 0; z-index: 10;
@@ -375,9 +375,9 @@ body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:r
 .mt-item::after { content: '✦'; font-size: 5px; color: rgba(240,140,40,.25); }
 
 
-/* ══════════════════════════════════════════════════════
+/* ========================================================══
    DESKTOP INFO PANEL — split screen
-══════════════════════════════════════════════════════ */
+========================================================══ */
 #panel {
   position: fixed; inset: 0; z-index: 500;
   display: grid; grid-template-columns: 45% 55%;
@@ -420,7 +420,35 @@ body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:r
 #panel.open .pi-body-wrap { transform:translateY(0); opacity:1; }
 .pi-meta  { font-family:var(--cond); font-weight:500; font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(196,168,130,.3); display:flex; align-items:center; gap:8px; }
 .pi-meta::before { content:''; width:18px; height:1px; background:rgba(240,140,40,.3); }
-#panel-desc   { font-family:var(--body); font-weight:300; font-size:clamp(12px,1.25vw,15px); line-height:1.85; letter-spacing:.01em; color:rgba(196,168,130,.52); }
+/* ── SPECIALS LIST inside panel ── */
+#panel-specials-status, #mob-specials-status {
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  padding:8px 12px; border-radius:4px; margin-bottom:8px;
+  background:rgba(9,7,4,.5); border:1px solid rgba(196,168,130,.1);
+}
+.sp-status-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; display:inline-block; margin-right:6px; }
+.sp-status-txt { font-family:var(--cond); font-weight:600; font-size:10px; letter-spacing:.14em; text-transform:uppercase; }
+.sp-countdown  { font-family:var(--cond); font-size:10px; letter-spacing:.1em; color:rgba(196,168,130,.5); display:flex; align-items:center; gap:6px; }
+.sp-countdown-num { font-weight:700; font-size:13px; color:var(--glow); font-variant-numeric:tabular-nums; }
+
+.sp-list-item {
+  display:flex; align-items:baseline; justify-content:space-between;
+  padding:10px 0; border-bottom:1px solid rgba(196,168,130,.08);
+  gap:12px;
+}
+.sp-list-item:last-child { border-bottom:none; }
+.sp-list-left  { display:flex; flex-direction:column; gap:3px; flex:1; }
+.sp-list-type  { font-family:var(--cond); font-weight:600; font-size:7px; letter-spacing:.22em; text-transform:uppercase; color:rgba(196,168,130,.35); }
+.sp-list-name  { font-family:var(--serif); font-weight:700; font-size:clamp(14px,1.4vw,17px); color:var(--cream); line-height:1.2; }
+.sp-list-desc  { font-family:var(--body); font-weight:300; font-size:clamp(10px,1vw,12px); color:rgba(196,168,130,.48); line-height:1.45; margin-top:2px; }
+.sp-list-price { font-family:var(--cond); font-weight:800; font-size:clamp(14px,1.4vw,17px); color:var(--glow); letter-spacing:.02em; white-space:nowrap; flex-shrink:0; text-shadow:0 0 14px rgba(245,176,64,.35); }
+.sp-list-empty { font-family:var(--serif); font-style:italic; font-size:clamp(12px,1.2vw,14px); color:rgba(196,168,130,.4); padding:14px 0; text-align:center; }
+
+/* Mobile sheet specials — slightly larger */
+#mob-sheet-specials-list .sp-list-name  { font-size:16px; }
+#mob-sheet-specials-list .sp-list-desc  { font-size:12px; }
+#mob-sheet-specials-list .sp-list-price { font-size:16px; }
+#mob-sheet-specials-list .sp-list-item  { padding:12px 0; }
 #panel-desc strong { color:var(--parch); font-weight:400; }
 #panel-chips  { display:flex; flex-wrap:wrap; gap:6px; }
 .panel-chip   { font-family:var(--cond); font-weight:500; font-size:8px; letter-spacing:.13em; text-transform:uppercase; padding:4px 11px; border-radius:2px; border:1px solid rgba(196,168,130,.1); color:rgba(196,168,130,.28); transition:all .3s; }
@@ -439,9 +467,9 @@ body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:r
 .pi-foot-idx  { font-family:var(--cond); font-weight:800; font-size:50px; line-height:1; color:rgba(196,168,130,.05); }
 
 
-/* ══════════════════════════════════════════════════════
+/* ========================================================══
    MOBILE BOTTOM SHEET PANEL
-══════════════════════════════════════════════════════ */
+========================================================══ */
 #mob-panel {
   position: fixed; inset: 0; z-index: 500;
   pointer-events: none; opacity: 0;
@@ -561,9 +589,9 @@ body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:r
   font-size: 11px; color: rgba(196,168,130,.2); text-align: center;
 }
 
-/* ══════════════════════════════════════════════════════
+/* ========================================================══
    LOADER — shared
-══════════════════════════════════════════════════════ */
+========================================================══ */
 #loader {
   position: fixed; inset: 0; z-index: 700;
   background: var(--void);
@@ -633,10 +661,10 @@ body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:r
         <div class="sb-label" style="margin-bottom:8px">Connect</div>
         <div class="sb-links">
           <a class="sb-link" href="https://www.facebook.com/1547733028788117/" target="_blank">Facebook</a>
-          <a class="sb-link" href="mailto:francissmokehouse@att.net">Email Us</a>
+          <a class="sb-link" href="/cdn-cgi/l/email-protection#ccaabeada2afa5bfbfa1a3a7a9a4a3b9bfa98cadb8b8e2a2a9b8">Email Us</a>
           <a class="sb-link" href="https://www.tripadvisor.ca/Restaurant_Review-g40411-d7851018-Reviews-The_Francis_Smokehouse-Saint_Francisville_Louisiana.html" target="_blank">TripAdvisor</a>
           <a class="sb-link" href="https://www.google.com/maps/search/?api=1&query=The+Francis+Smokehouse%2C+St+Francisville%2C+LA" target="_blank">Google Maps</a>
-          <a class="sb-link" href="mailto:francissmokehouse@att.net">Catering Enquiry</a>
+          <a class="sb-link" href="/cdn-cgi/l/email-protection#610713000f020812120c0e0a04090e141204210015154f0f0415">Catering Enquiry</a>
         </div>
       </div>
     </div>
@@ -714,6 +742,8 @@ body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:r
       <div class="pi-meta" id="panel-meta"></div>
       <p id="panel-desc"></p>
       <div id="panel-chips"></div>
+      <!-- SPECIALS LIST — only shown for specials panel -->
+      <div id="panel-specials-list" style="display:none;flex-direction:column;gap:0;margin-top:4px;"></div>
       <div class="pi-cta-wrap">
         <div class="pi-dbl-note">Double-click anywhere to enter, or use the button</div>
         <button id="panel-cta" onclick="goTo()"><span id="cta-label">Enter</span><span class="cta-arrow">→</span></button>
@@ -740,6 +770,8 @@ body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:r
       <div class="msh-meta" id="mob-sheet-meta"></div>
       <p id="mob-sheet-desc"></p>
       <div id="mob-sheet-chips"></div>
+      <!-- SPECIALS LIST — only shown for specials panel -->
+      <div id="mob-sheet-specials-list" style="display:none;flex-direction:column;gap:0;"></div>
       <button id="mob-sheet-cta" onclick="goTo()"><span id="mob-cta-label">Enter</span><span class="msc-arrow">→</span></button>
       <div class="msh-foot-rule" id="mob-sheet-rule"></div>
     </div>
@@ -755,10 +787,10 @@ body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:r
   <div class="ld-msg">Stoking the fire...</div>
 </div>
 
-<script>
-/* ════════════════════════════
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ================================
    CANVAS ATMOSPHERE
-════════════════════════════ */
+================================ */
 const cvBg=document.getElementById('cv-bg'),bx=cvBg.getContext('2d');
 const cvSm=document.getElementById('cv-smoke'),sx=cvSm.getContext('2d');
 const cvEm=document.getElementById('cv-ember'),ex=cvEm.getContext('2d');
@@ -822,33 +854,33 @@ const PS=Array.from({length:10},mkS);
   requestAnimationFrame(psL);
 })();
 
-/* ════════════════════════════
+/* ================================
    CURSOR
-════════════════════════════ */
+================================ */
 const curEl=document.getElementById('cursor');
 document.addEventListener('mousemove',e=>{ curEl.style.left=e.clientX+'px'; curEl.style.top=e.clientY+'px'; });
 
-/* ════════════════════════════
+/* ================================
    TICKERS
-════════════════════════════ */
+================================ */
 const tkItems=['Brisket Plate — $10.99','Full Rack Ribs — $19.99','Pulled Pork — $9.99','Smoked Wings — $7.99','Ribeye Po-boy — $10.99','Crawfish Po-boy — $10.99','Boudin Balls','Pepper Jack Boudin','Corn Pudding','Bread Pudding','Creole Cream Cheesecake','½ Chicken — $9.99','Catfish Po-boy — $8.99','Cheeseburger — $7.99','Boudin Egg Rolls'];
 const d4=[...tkItems,...tkItems,...tkItems,...tkItems];
 const html=d4.map(t=>`<span class="t-item">${t}</span>`).join('');
 document.getElementById('ticker-track').innerHTML=html;
 document.getElementById('mob-ticker-track').innerHTML=d4.map(t=>`<span class="mt-item">${t}</span>`).join('');
 
-/* ════════════════════════════
+/* ================================
    HOURS
-════════════════════════════ */
+================================ */
 const dow=new Date().getDay();
 const hoursStr=dow===0?'Sun: 10am – 3pm':'Mon–Sat 10am–6pm';
 const mobHoursStr=dow===0?'10am – 3pm':'10am – 6pm';
 document.getElementById('hours-today').textContent=hoursStr;
 document.getElementById('mob-hours').textContent=mobHoursStr;
 
-/* ════════════════════════════
+/* ================================
    PAGE DATA
-════════════════════════════ */
+================================ */
 const PAGES={
   menu:{num:'01',eyebrow:'The Menu',cta:'See Full Menu',title:'Pit to\nPlate.',italic:'BBQ plates · Po-boys · Burgers · Sandwiches',meta:'Smoked daily — 12+ hours minimum',mood:'radial-gradient(ellipse at 30% 80%,#3a1800 0%,#1a0c04 50%,#09070a 100%)',desc:`Everything on this menu spent <strong>a minimum of twelve hours over post oak and hickory.</strong> Brisket plate $10.99. Full rack ribs $19.99. Pulled pork $9.99. Half chicken $9.99. Smoked wings $7.99. All BBQ plates come with two sides. Ribeye po-boys, shrimp po-boys, crawfish po-boys and catfish po-boys also on the board. Burgers from $6.99.`,chips:['Brisket $10.99','Ribs $19.99','Pulled Pork $9.99','Wings $7.99','Ribeye Po-boy $10.99','2 Sides Included'],rule:'Low & slow, always.',dest:'menu.html'},
   boudin:{num:'02',eyebrow:'Boudin & Sides',cta:'Explore the Deli Case',title:'Louisiana\nStaples.',italic:'Boudin · Specialty meats · House sides · Desserts',meta:'Made in-house — true Louisiana tradition',mood:'radial-gradient(ellipse at 30% 80%,#2a1200 0%,#180a02 50%,#09070a 100%)',desc:`The deli case is loaded. <strong>Steamed boudin links, classic boudin balls, pepper jack boudin balls, boudin egg rolls, meat pies and crawfish pies.</strong> Sides run small ($2.75) or large ($6.99): corn pudding, baked beans, potato salad, coleslaw, fries and sweet potato waffle fries. Desserts: homemade bread pudding, Creole cream cheesecake, chocolate & carrot cake.`,chips:['Boudin Links','Boudin Balls','Pepper Jack Boudin','Crawfish Pies','Corn Pudding','Bread Pudding'],rule:'Made from scratch.',dest:'boudin.html'},
@@ -858,9 +890,9 @@ const PAGES={
   find:{num:'06',eyebrow:'Find Us',cta:'Open in Google Maps',title:'Follow\nThe Smoke.',italic:'6779 US Highway 61 · St. Francisville, LA 70775',meta:'Mon–Sat 10am–6pm · Sun 10am–3pm',mood:'radial-gradient(ellipse at 30% 80%,#1e1000 0%,#120800 50%,#09070a 100%)',desc:`We're at <strong>6779 US Highway 61, St. Francisville, LA 70775</strong>. Mon–Sat 10am–6pm, Sunday 10am–3pm. On-site parking, fully wheelchair accessible. <strong>When the smoker is running you'll smell us before you see us.</strong> Travelers on the Great River Road call it a mandatory stop.`,chips:['6779 US Hwy 61','(225) 245-5046','Mon–Sat 10–6','Sun 10–3','Free Parking','Wheelchair OK'],rule:"You'll smell us first.",dest:'https://www.google.com/maps/search/?api=1&query=The+Francis+Smokehouse%2C+St+Francisville%2C+LA'},
 };
 
-/* ════════════════════════════
+/* ================================
    DESKTOP PREVIEW
-════════════════════════════ */
+================================ */
 const pvNums={menu:'01',boudin:'02',specials:'03',story:'04',catering:'05',find:'06'};
 function setPreview(id){
   const p=PAGES[id];
@@ -878,9 +910,9 @@ function clearPreview(){
   document.getElementById('pv-chips').innerHTML='';
 }
 
-/* ════════════════════════════
+/* ================================
    DESKTOP PANEL
-════════════════════════════ */
+================================ */
 let currentPage=null, navigating=false;
 function openPanel(id){
   const p=PAGES[id]; currentPage=p;
@@ -890,11 +922,27 @@ function openPanel(id){
   document.getElementById('panel-title').innerHTML=p.title.replace('\n','<br>');
   document.getElementById('panel-italic').textContent=p.italic;
   document.getElementById('panel-meta').textContent=p.meta;
-  document.getElementById('panel-desc').innerHTML=p.desc;
   document.getElementById('panel-rule').textContent=p.rule;
   document.getElementById('panel-idx').textContent=p.num;
   document.getElementById('cta-label').textContent=p.cta;
-  document.getElementById('panel-chips').innerHTML=p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
+
+  const specList = document.getElementById('panel-specials-list');
+  const descEl   = document.getElementById('panel-desc');
+  const chipsEl  = document.getElementById('panel-chips');
+
+  if(id === 'specials'){
+    descEl.innerHTML = '';
+    chipsEl.innerHTML = '';
+    specList.style.display = 'flex';
+    specList.innerHTML = buildSpecialsHTML();
+    startSpecialsCountdown('panel');
+  } else {
+    specList.style.display = 'none';
+    descEl.innerHTML = p.desc;
+    chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
+    stopSpecialsCountdown();
+  }
+
   document.getElementById('panel').classList.add('open');
   document.getElementById('shell').style.pointerEvents='none';
   navigating=false;
@@ -902,29 +950,44 @@ function openPanel(id){
 function closePanel(){ document.getElementById('panel').classList.remove('open'); document.getElementById('shell').style.pointerEvents=''; currentPage=null; }
 document.getElementById('panel-info').addEventListener('dblclick',goTo);
 
-/* ════════════════════════════
+/* ================================
    MOBILE BOTTOM SHEET
-════════════════════════════ */
+================================ */
 function openMobPanel(id){
   const p=PAGES[id]; currentPage=p;
   document.getElementById('mob-sheet-eyebrow').textContent=p.eyebrow;
   document.getElementById('mob-sheet-title').innerHTML=p.title.replace('\n','<br>');
   document.getElementById('mob-sheet-italic').textContent=p.italic;
   document.getElementById('mob-sheet-meta').textContent=p.meta;
-  document.getElementById('mob-sheet-desc').innerHTML=p.desc;
   document.getElementById('mob-sheet-rule').textContent=p.rule;
   document.getElementById('mob-cta-label').textContent=p.cta;
-  document.getElementById('mob-sheet-chips').innerHTML=p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
+
+  const specList = document.getElementById('mob-sheet-specials-list');
+  const descEl   = document.getElementById('mob-sheet-desc');
+  const chipsEl  = document.getElementById('mob-sheet-chips');
+
+  if(id === 'specials'){
+    descEl.innerHTML = '';
+    chipsEl.innerHTML = '';
+    specList.style.display = 'flex';
+    specList.innerHTML = buildSpecialsHTML();
+    startSpecialsCountdown('mob');
+  } else {
+    specList.style.display = 'none';
+    descEl.innerHTML = p.desc;
+    chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
+    stopSpecialsCountdown();
+  }
+
   document.getElementById('mob-panel').classList.add('open');
   navigating=false;
-  // scroll sheet to top
   document.getElementById('mob-sheet-body').scrollTop=0;
 }
 function closeMobPanel(){ document.getElementById('mob-panel').classList.remove('open'); currentPage=null; }
 
-/* ════════════════════════════
+/* ================================
    LOADER + NAVIGATE
-════════════════════════════ */
+================================ */
 function goTo(){
   if(!currentPage||navigating) return;
   navigating=true;
@@ -958,9 +1021,9 @@ document.getElementById('mob-sheet').addEventListener('touchend',e=>{
   if(dy>80) closeMobPanel();
 },{passive:true});
 
-/* ════════════════════════════
+/* ================================
    BOOT
-════════════════════════════ */
+================================ */
 document.body.style.opacity='0';
 document.body.style.transition='opacity .6s';
 window.addEventListener('load',()=>{
@@ -974,5 +1037,110 @@ window.addEventListener('load',()=>{
   }));
 });
 </script>
+
+<!-- ══════════ SPECIALS ENGINE ══════════ -->
+<script>
+var HOURS_CFG = { weekday:{open:10,close:18}, sunday:{open:10,close:15} };
+
+function _todayStr(){
+  var d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function _hrs(){ return new Date().getDay()===0?HOURS_CFG.sunday:HOURS_CFG.weekday; }
+function _isOpen(){
+  var n=new Date(),h=n.getHours()+n.getMinutes()/60,r=_hrs();
+  return h>=r.open&&h<r.close;
+}
+function _nextOpen(){
+  var n=new Date(),d=new Date(n),r=_hrs();
+  if(n.getHours()<r.open){d.setHours(r.open,0,0,0);return d;}
+  d.setDate(d.getDate()+1);
+  var nr=d.getDay()===0?HOURS_CFG.sunday:HOURS_CFG.weekday;
+  d.setHours(nr.open,0,0,0);return d;
+}
+function _closeTime(){var d=new Date(),r=_hrs();d.setHours(r.close,0,0,0);return d;}
+function _fmt(ms){
+  if(ms<=0)return'0:00:00';
+  var s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=s%60;
+  return h+':'+String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0');
+}
+
+function buildSpecialsHTML(){
+  var open=_isOpen();
+  var hoursUntil=(_nextOpen()-new Date())/3600000;
+  var dotColor  = open?'#90e060':hoursUntil<=4?'#f08820':'rgba(196,168,130,.3)';
+  var dotShadow = open?'0 0 7px #90e060':hoursUntil<=4?'0 0 7px #f08820':'none';
+  var statusTxt, cdHTML='';
+  var hr=_hrs();
+
+  if(open){
+    statusTxt='<span style="color:#90e060">Open Now &middot; Closes '+(hr.close>12?hr.close-12:hr.close)+'pm</span>';
+    cdHTML='<span style="font-family:var(--cond);font-size:10px;letter-spacing:.1em;color:rgba(196,168,130,.5);display:flex;align-items:center;gap:6px;">Closing in <span id="sp-cd-num" style="font-weight:700;font-size:13px;color:var(--glow);font-variant-numeric:tabular-nums;">'+_fmt(_closeTime()-new Date())+'</span></span>';
+  } else if(hoursUntil<=4){
+    var oh=_nextOpen().getHours();
+    statusTxt='<span style="color:#f08820">Opens at '+(oh>12?oh-12:oh)+'am</span>';
+    cdHTML='<span style="font-family:var(--cond);font-size:10px;letter-spacing:.1em;color:rgba(196,168,130,.5);display:flex;align-items:center;gap:6px;">Opening in <span id="sp-cd-num" style="font-weight:700;font-size:13px;color:var(--glow);font-variant-numeric:tabular-nums;">'+_fmt(_nextOpen()-new Date())+'</span></span>';
+  } else {
+    var oh2=_nextOpen().getHours();
+    statusTxt='<span style="color:rgba(196,168,130,.45)">Closed &middot; Opens '+(oh2>12?oh2-12:oh2)+'am Tomorrow</span>';
+  }
+
+  var html='<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;'
+    +'padding:8px 12px;border-radius:4px;margin-bottom:10px;'
+    +'background:rgba(9,7,4,.5);border:1px solid rgba(196,168,130,.1);">'
+    +'<div style="display:flex;align-items:center;">'
+    +'<span style="width:7px;height:7px;border-radius:50%;background:'+dotColor+';box-shadow:'+dotShadow
+    +';display:inline-block;margin-right:8px;flex-shrink:0;"></span>'
+    +'<span style="font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;">'+statusTxt+'</span>'
+    +'</div>'+cdHTML+'</div>';
+
+  if(!open){
+    html+='<div class="sp-list-empty">Come back during business hours to see today\'s specials.</div>';
+    return html;
+  }
+
+  if(typeof SITE_SPECIALS==='undefined'||!Array.isArray(SITE_SPECIALS)){
+    html+='<div class="sp-list-empty">No specials posted yet &mdash; call (225) 245-5046 to confirm.</div>';
+    return html;
+  }
+
+  var today=_todayStr();
+  var visible=SITE_SPECIALS.filter(function(i){
+    if(!i||i.hidden)return false;
+    if(i.date&&i.date!==today)return false;
+    return true;
+  });
+
+  if(!visible.length){
+    html+='<div class="sp-list-empty">No specials posted yet &mdash; call (225) 245-5046 to confirm.</div>';
+    return html;
+  }
+
+  visible.forEach(function(item){
+    html+='<div class="sp-list-item">'
+      +'<div class="sp-list-left">'
+      +(item.type?'<div class="sp-list-type">'+item.type+'</div>':'')
+      +'<div class="sp-list-name">'+(item.name||'')+'</div>'
+      +(item.desc?'<div class="sp-list-desc">'+item.desc+'</div>':'')
+      +'</div>'
+      +(item.price?'<div class="sp-list-price">'+item.price+'</div>':'')
+      +'</div>';
+  });
+  return html;
+}
+
+var _cdInt=null;
+function startSpecialsCountdown(){
+  stopSpecialsCountdown();
+  _cdInt=setInterval(function(){
+    var el=document.getElementById('sp-cd-num');
+    if(!el){stopSpecialsCountdown();return;}
+    el.textContent=_isOpen()?_fmt(_closeTime()-new Date()):_fmt(_nextOpen()-new Date());
+  },1000);
+}
+function stopSpecialsCountdown(){if(_cdInt){clearInterval(_cdInt);_cdInt=null;}}
+</script>
+
+<script src="site-data.js"></script>
 </body>
 </html>
