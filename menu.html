@@ -321,14 +321,13 @@
 :root{
   --ember:#c04800;--fire:#e06010;--flame:#f08820;--glow:#f5a830;--pop:#ff6b35;
   --cream:#f5e8cc;--parch:#e8d4a8;--sand:#c4a070;
-  /* Rich semi-transparent card surfaces — dark enough to read, thin enough to let fire glow through */
   --surface:  rgba(18,10,4,.82);
   --surface2: rgba(26,15,5,.9);
   --border:   rgba(196,160,112,.18);
   --border2:  rgba(240,136,32,.35);
-  --text-hi:  #f5e8cc;   /* headings */
-  --text-md:  #d4b882;   /* body text — was washed out */
-  --text-lo:  #8a6840;   /* labels — was near invisible */
+  --text-hi:  #f5e8cc;
+  --text-md:  #d4b882;
+  --text-lo:  #8a6840;
   --serif:'Playfair Display',Georgia,serif;
   --cond:'Barlow Condensed',sans-serif;
   --body:'Barlow',sans-serif;
@@ -358,7 +357,6 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
 @keyframes cursor-breathe{0%,100%{box-shadow:0 0 6px var(--flame),0 0 12px rgba(240,136,32,.2)}50%{box-shadow:0 0 12px var(--flame),0 0 24px rgba(240,136,32,.4)}}
 @media(hover:none){#cursor{display:none}}
 
-/* HEADER — semi-transparent frosted so fire glows through */
 #hdr{position:sticky;top:0;z-index:500;
   background:rgba(8,5,2,.88);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
@@ -405,7 +403,6 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
 .tab.active::before{transform:scaleX(1);}
 .tab:hover:not(.active){border-color:rgba(240,136,32,.45);color:var(--flame);background:rgba(240,136,32,.07);}
 
-/* LAYOUT */
 #layout{position:relative;z-index:10;display:grid;grid-template-columns:1fr;
   min-height:calc(100vh - 130px);
   padding:clamp(16px,3vh,32px) clamp(16px,4vw,48px);gap:clamp(20px,4vh,36px);}
@@ -421,7 +418,6 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
 .st{font-family:var(--serif);font-weight:900;font-size:clamp(26px,5vw,52px);
   letter-spacing:-.02em;line-height:1;color:#fff;
   text-shadow:0 2px 20px rgba(0,0,0,.6);}
-/* italic subtitle — pill */
 .si{display:inline-block;margin-top:10px;
   font-family:var(--serif);font-style:italic;font-weight:400;
   font-size:clamp(12px,1.3vw,15px);
@@ -431,7 +427,6 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
   border-radius:100px;
   padding:5px 16px;
   box-shadow:0 2px 10px rgba(0,0,0,.5);}
-/* note line — pill */
 .sn{display:inline-block;margin-bottom:clamp(12px,2vh,20px);
   font-family:var(--cond);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
   color:rgba(212,184,130,.85);
@@ -441,7 +436,6 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
   padding:4px 14px;
   box-shadow:0 2px 8px rgba(0,0,0,.5);}
 
-/* ITEMS — proper opaque surfaces */
 .items{display:grid;grid-template-columns:1fr;gap:2px;}
 @media(min-width:580px) and (max-width:959px){.items{grid-template-columns:1fr 1fr;column-gap:2px;}}
 
@@ -487,7 +481,6 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
 .mi-nt{font-family:var(--cond);font-size:9px;letter-spacing:.1em;
   color:var(--text-lo);text-transform:uppercase;text-align:right;}
 
-/* HERO ITEM */
 .mi.hero{flex-direction:column;gap:12px;padding:clamp(18px,2.8vh,26px) clamp(16px,2.2vw,22px);
   margin-bottom:6px;
   background:rgba(22,12,4,.9);
@@ -504,7 +497,6 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
 .mi.hero .mi-d{color:var(--text-md);}
 .mi.hero .mi-p{font-size:clamp(20px,2.5vw,28px);}
 
-/* DIVIDERS */
 .dr{display:flex;align-items:center;gap:12px;padding:clamp(14px,2vh,20px) 0 clamp(10px,1.5vh,14px);}
 .dl{font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.28em;
   text-transform:uppercase;color:var(--text-lo);white-space:nowrap;}
@@ -513,8 +505,6 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
   filter:drop-shadow(0 0 4px rgba(240,136,32,.6));}
 @keyframes flkr{0%,100%{opacity:.6;transform:scaleY(1)}40%{opacity:1;transform:scaleY(1.1) translateY(-1px)}}
 
-/* SPECIALS */
-/* SINGLE SPECIAL CARD */
 .sp-single{
   background:rgba(22,12,4,.9);
   border:1px solid rgba(192,72,0,.4);
@@ -563,7 +553,6 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
 .sp-s-note{font-family:var(--cond);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
   color:rgba(196,160,112,.35);}
 
-/* empty state */
 .sp-empty{text-align:center;padding:clamp(40px,7vh,72px) 20px;}
 .sp-empty-icon{font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 10px rgba(240,136,32,.35));
   animation:pulse-s 3s ease-in-out infinite;}
@@ -589,7 +578,6 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
 .sp-p{font-family:var(--cond);font-weight:800;font-size:clamp(19px,2.3vw,24px);
   color:var(--glow);letter-spacing:.02em;text-shadow:0 0 20px rgba(245,168,48,.4);}
 
-/* DESSERTS */
 .ds-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(170px,100%),1fr));gap:clamp(7px,1.4vw,12px);}
 .ds-i{padding:clamp(14px,2vh,20px);
   background:var(--surface);
@@ -603,7 +591,6 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
   color:var(--text-hi);margin-bottom:5px;line-height:1.2;}
 .ds-p{font-family:var(--cond);font-weight:700;font-size:12px;color:var(--glow);letter-spacing:.08em;}
 
-/* RIGHT COL */
 #rc{display:flex;flex-direction:column;gap:clamp(14px,2.2vh,20px);}
 @media(max-width:959px){#rc{order:2;}}
 .ic{background:var(--surface);border:1px solid rgba(196,160,112,.14);
@@ -742,12 +729,11 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
   </div>
 </div>
 
-<!-- SPECIALS — data defined at top of script block below -->
+<!-- SPECIALS -->
 <div class="sec" id="s-sp">
   <div class="sh reveal"><div class="st">Daily Special</div><div class="si">One plate — changes every morning at 6am</div></div>
   <div class="sn reveal">Call (225) 245-5046 or check Facebook for today's board</div>
 
-  <!-- STATUS BAR -->
   <div id="sp-status-bar" style="
     display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
     background:rgba(18,10,4,.85);border:1px solid rgba(196,160,112,.15);
@@ -767,7 +753,6 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
     </div>
   </div>
 
-  <!-- SINGLE SPECIAL CARD -->
   <div id="specials-container"></div>
 </div>
 
@@ -828,16 +813,12 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
 <script>
 /* ═══════════════════════════════════════════════════════
    SYSTEM 1: DOOM FIRE SIMULATION
-   Classic cellular automata. 144×80 pixel grid,
-   each frame heat rises & cools randomly upward.
-   Rendered via direct ImageData pixel buffer (fast).
 ═══════════════════════════════════════════════════════ */
 const FCV=document.getElementById('fire-cv');
 const FCX=FCV.getContext('2d');
 const FW=144,FH=80;
 FCV.width=FW;FCV.height=FH;
 
-/* 256-color fire palette — black→deep red→orange→yellow→white */
 const PAL=new Uint32Array(256);
 for(let i=0;i<256;i++){
   let r,g,b;
@@ -845,7 +826,7 @@ for(let i=0;i<256;i++){
   else if(i<128){r=255;g=(i-64)*2;b=0;}
   else if(i<200){r=255;g=128+(i-128);b=0;}
   else{r=255;g=255;b=(i-200)*3;}
-  PAL[i]=(255<<24)|(b<<16)|(g<<8)|r; /* ABGR — ImageData buffer layout */
+  PAL[i]=(255<<24)|(b<<16)|(g<<8)|r;
 }
 
 const FIRE=new Uint8Array(FW*FH);
@@ -901,9 +882,7 @@ function stepSmoke(){
 }
 
 /* ═══════════════════════════════════════════════════════
-   SYSTEM 3: EMBER PARTICLES + CURSOR TRAIL RING BUFFER
-   Trail stores 30 past cursor positions.
-   Each position fades and shrinks with age.
+   SYSTEM 3: EMBER PARTICLES + CURSOR TRAIL
 ═══════════════════════════════════════════════════════ */
 const ECV=document.getElementById('ember-cv');
 const ECX=ECV.getContext('2d');
@@ -916,13 +895,12 @@ function mkE(){return{x:.1+Math.random()*.8,y:1.02+Math.random()*.03,
   r:.6+Math.random()*1.8,life:1,decay:.003+Math.random()*.007,h:8+Math.random()*24};}
 const EM=Array.from({length:24},mkE);
 
-const TL=30; /* trail length */
+const TL=30;
 const TX=new Float32Array(TL);const TY=new Float32Array(TL);
 let TH_=0;
 
 function stepEmbers(){
   ECX.clearRect(0,0,EW,EH);
-  /* cursor trail */
   for(let i=1;i<TL;i++){
     const idx=(TH_-i+TL)%TL;
     const age=i/TL;
@@ -933,7 +911,6 @@ function stepEmbers(){
     if(age<.25){ECX.shadowBlur=10;ECX.shadowColor='rgba(240,130,30,.5)';}
     ECX.fill();ECX.shadowBlur=0;
   }
-  /* floating embers */
   for(let i=0;i<EM.length;i++){
     const e=EM[i];e.x+=e.vx+(Math.random()-.5)*.001;e.y+=e.vy;e.life-=e.decay;
     if(e.life<=0||e.y<-.02){EM[i]=mkE();continue;}
@@ -946,12 +923,10 @@ function stepEmbers(){
 
 /* ═══════════════════════════════════════════════════════
    SYSTEM 4: SPRING-PHYSICS CURSOR
-   Critically-damped spring: cursor lags behind mouse
-   with natural deceleration. Feels physically real.
 ═══════════════════════════════════════════════════════ */
 let mx=window.innerWidth/2,my=window.innerHeight/2;
-let cx_=mx,cy_=my,cvx=0,cvy=0;
-const SPRING=0.14,DAMPING=0.78;
+let cx_=mx,cy_=my;
+const LERP=0.35;
 
 document.addEventListener('mousemove',e=>{
   mx=e.clientX;my=e.clientY;
@@ -960,22 +935,16 @@ document.addEventListener('mousemove',e=>{
 });
 
 function stepCursor(){
-  cvx+=(mx-cx_)*SPRING;cvy+=(my-cy_)*SPRING;
-  cvx*=DAMPING;cvy*=DAMPING;
-  cx_+=cvx;cy_+=cvy;
+  cx_+=(mx-cx_)*LERP;
+  cy_+=(my-cy_)*LERP;
   document.getElementById('cursor').style.transform=`translate(${cx_}px,${cy_}px)`;
 }
 
-/* Cursor bound — no ring to resize */
 function bindCursor(){}
 bindCursor();
 
 /* ═══════════════════════════════════════════════════════
    SYSTEM 5: 3D PERSPECTIVE TILT + SPECULAR HIGHLIGHT
-   Tracks mouse position relative to each card center.
-   Applies rotateX/rotateY transforms for real depth.
-   Specular highlight is a radial gradient that follows
-   the mouse — simulates a light source on the card.
 ═══════════════════════════════════════════════════════ */
 function bindTilt(el,deg,tz){
   const spec=el.querySelector('.mi-spec,.sp-sp');
@@ -1004,9 +973,8 @@ bindAllTilts();
 
 /* ═══════════════════════════════════════════════════════
    SYSTEM 6: FIRE CURTAIN TAB TRANSITION
-   Radial expand of fire-colored circle covers screen,
-   content swaps at peak, circle contracts out.
-   Uses eased timing so expansion feels organic.
+   FIX: Slowed expand (0.032) and contract (0.038) steps
+        for a more cinematic ~1.2s total duration.
 ═══════════════════════════════════════════════════════ */
 const TCV=document.getElementById('transition-cv');
 const TCX=TCV.getContext('2d');
@@ -1026,17 +994,15 @@ function fireCurtain(cb){
   if(tAnim)cancelAnimationFrame(tAnim);
 
   (function expand(){
-    t+=.065;
-    const ease=t<1?1-Math.pow(1-t,3):1; /* cubic ease out */
+    t+=.032; /* SLOWED from .065 */
+    const ease=t<1?1-Math.pow(1-t,3):1;
     const r=maxR*ease;
     TCX.clearRect(0,0,TVW,TVH);
-    /* dark fill */
     const g=TCX.createRadialGradient(ocx,ocy,0,ocx,ocy,r);
     g.addColorStop(0,'rgba(24,12,4,1)');
     g.addColorStop(.75,'rgba(16,9,3,.97)');
     g.addColorStop(1,'transparent');
     TCX.fillStyle=g;TCX.beginPath();TCX.arc(ocx,ocy,r,0,Math.PI*2);TCX.fill();
-    /* fire ring */
     if(r>30&&r<maxR*.88){
       const fR=r;
       const fg=TCX.createRadialGradient(ocx,ocy,fR*.82,ocx,ocy,fR);
@@ -1045,15 +1011,13 @@ function fireCurtain(cb){
       fg.addColorStop(1,'rgba(240,136,32,.55)');
       TCX.fillStyle=fg;TCX.beginPath();TCX.arc(ocx,ocy,fR,0,Math.PI*2);TCX.fill();
     }
-    /* swap content at 55% */
     if(t>=.55&&cb){cb();cb=null;}
     if(t<1){tAnim=requestAnimationFrame(expand);}
     else{
-      /* contract */
       let t2=0;
       (function contract(){
-        t2+=.07;
-        const ease2=Math.pow(t2,2); /* quad ease in */
+        t2+=.038; /* SLOWED from .07 */
+        const ease2=Math.pow(t2,2);
         const r2=maxR*(1-Math.min(ease2,1));
         TCX.clearRect(0,0,TVW,TVH);
         if(r2>5){
@@ -1079,7 +1043,6 @@ function sw(id,btn){
     document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
     document.getElementById('s-'+id).classList.add('active');
     current=id;
-    /* fresh load every time specials tab is opened */
     if(id==='sp') loadSpecials();
     bindAllTilts();
     triggerReveals();
@@ -1089,7 +1052,6 @@ function sw(id,btn){
 
 /* ═══════════════════════════════════════════════════════
    SYSTEM 7: INTERSECTION OBSERVER SCROLL REVEALS
-   Staggered with delay based on sibling index.
 ═══════════════════════════════════════════════════════ */
 const IO=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
@@ -1112,9 +1074,6 @@ triggerReveals();
 
 /* ═══════════════════════════════════════════════════════
    SYSTEM 8: PROXIMITY GLOW
-   Items within 300px of cursor emit a warm glow.
-   Intensity falls off with distance squared.
-   Runs at 20fps (every 50ms) — no need for 60fps.
 ═══════════════════════════════════════════════════════ */
 let PROX=[];
 function rebuildProx(){
@@ -1140,7 +1099,6 @@ setInterval(()=>{
 
 /* ═══════════════════════════════════════════════════════
    SYSTEM 9: MASTER RAF LOOP — 60fps
-   Fire at ~24fps (every 42ms), smoke/embers/cursor at 60.
 ═══════════════════════════════════════════════════════ */
 let lastFire=0;
 function loop(ts){
@@ -1165,12 +1123,20 @@ tick();setInterval(tick,60000);
 
 /* ═══════════════════════════════════════════════════════
    SYSTEM 11: MOBILE SWIPE BETWEEN TABS
-   Horizontal swipe gesture with 60px threshold.
+   FIX: Track Y on touchstart; bail if vertical movement
+        exceeds horizontal — prevents scroll triggering
+        a tab swap.
 ═══════════════════════════════════════════════════════ */
-let tsX=0;
-document.addEventListener('touchstart',e=>{tsX=e.touches[0].clientX;},{passive:true});
+let tsX=0,tsY=0;
+document.addEventListener('touchstart',e=>{
+  tsX=e.touches[0].clientX;
+  tsY=e.touches[0].clientY;
+},{passive:true});
 document.addEventListener('touchend',e=>{
   const dx=e.changedTouches[0].clientX-tsX;
+  const dy=e.changedTouches[0].clientY-tsY;
+  /* If vertical movement dominates, user is scrolling — do nothing */
+  if(Math.abs(dy)>Math.abs(dx))return;
   if(Math.abs(dx)<60)return;
   const idx=ORDER.indexOf(current);
   let next=idx+(dx<0?1:-1);
@@ -1178,20 +1144,17 @@ document.addEventListener('touchend',e=>{
   if(next!==idx)sw(ORDER[next],document.querySelectorAll('.tab')[next]);
 },{passive:true});
 
-
 /* BOOT */
 window.addEventListener('load',()=>{
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     document.body.classList.add('on');
-    // Auto-open specials tab if linked directly
     if(window.location.hash === '#specials'){
-      var spTab = document.querySelectorAll('.tab')[3]; // index 3 = Specials
+      var spTab = document.querySelectorAll('.tab')[3];
       if(spTab) sw('sp', spTab);
     }
   }));
 });
 </script>
-
 
 <script>
 /* ══════════════════════════════════════════════════════
@@ -1276,13 +1239,11 @@ function loadSpecials() {
     return;
   }
 
-  /* Support both old SITE_SPECIALS array and new SITE_SPECIAL object */
   var item = null;
   if (typeof SITE_SPECIAL !== 'undefined' && SITE_SPECIAL && !SITE_SPECIAL.hidden) {
     var today = _todayStr();
     if (!SITE_SPECIAL.date || SITE_SPECIAL.date === today) item = SITE_SPECIAL;
   } else if (typeof SITE_SPECIALS !== 'undefined' && Array.isArray(SITE_SPECIALS)) {
-    /* fallback: use first visible item from old array format */
     var today2 = _todayStr();
     var vis = SITE_SPECIALS.filter(function(i) {
       if (!i || i.hidden) return false;
@@ -1297,7 +1258,6 @@ function loadSpecials() {
     return;
   }
 
-  /* Build the single card */
   var html = '<div class="sp-single reveal">'
     +'<div class="sp-single-inner">'
     +'<div class="sp-s-top">'
