@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Gift Cards — The Francis Smokehouse | St. Francisville, LA</title>
+<meta name="description" content="Give the gift of slow-smoked BBQ. The Francis Smokehouse gift cards are available in-store at 6779 US Highway 61, St. Francisville, LA. Load any amount." />
+<link rel="icon" type="image/png" href="Images/Smokehouselogo.png" />
+<link rel="apple-touch-icon" href="Images/Smokehouselogo.png" />
+<meta name="theme-color" content="#090704" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,300;1,400;1,700&family=Barlow+Condensed:wght@300;400;500;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --void:#090704;--deep:#120d07;--coal:#1a1108;
+  --ember:#c04800;--fire:#e06010;--flame:#f08820;--glow:#f5a830;
+  --cream:#f5e8cc;--parch:#e8d4a8;--sand:#c4a070;
+  --serif:'Playfair Display',Georgia,serif;
+  --cond:'Barlow Condensed',sans-serif;
+  --body:'Barlow',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--cream);font-family:var(--body);overflow-x:hidden;cursor:none;-webkit-tap-highlight-color:transparent;}
+@media(hover:none){body{cursor:auto;}}
+body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.042'/%3E%3C/svg%3E");}
+#cv-bg,#cv-smoke,#cv-ember{position:fixed;inset:0;pointer-events:none;}
+#cv-bg{z-index:0;}#cv-smoke{z-index:1;}#cv-ember{z-index:2;}
+#vignette{position:fixed;inset:0;z-index:3;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 20%,transparent 30%,rgba(9,7,4,.65) 100%);}
+#cursor{position:fixed;z-index:9999;pointer-events:none;top:0;left:0;}
+#c-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--flame);
+  transform:translate(-50%,-50%);box-shadow:0 0 8px var(--flame),0 0 16px rgba(240,136,32,.25);
+  animation:cursor-breathe 2.5s ease-in-out infinite;}
+@keyframes cursor-breathe{0%,100%{box-shadow:0 0 6px var(--flame),0 0 12px rgba(240,136,32,.2)}50%{box-shadow:0 0 12px var(--flame),0 0 24px rgba(240,136,32,.4)}}
+@media(hover:none){#cursor{display:none;}}
+
+/* HEADER */
+#hdr{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;
+  padding:clamp(12px,1.8vh,18px) clamp(20px,5vw,60px);
+  background:rgba(9,7,4,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(196,160,112,.09);}
+#hdr-brand{font-family:var(--serif);font-weight:700;font-size:clamp(14px,2vw,22px);
+  letter-spacing:.01em;color:var(--cream);text-decoration:none;text-shadow:0 0 30px rgba(240,136,32,.15);}
+#hdr-brand em{font-style:italic;font-weight:400;color:var(--flame);}
+.hdr-sub{font-family:var(--cond);font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(196,160,112,.28);margin-top:2px;}
+#back-btn{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(196,160,112,.45);border:1px solid rgba(196,160,112,.18);
+  padding:7px 16px;border-radius:2px;background:none;cursor:none;-webkit-tap-highlight-color:transparent;
+  transition:all .3s;text-decoration:none;}
+#back-btn:hover{border-color:rgba(240,136,32,.45);color:var(--flame);}
+
+/* ══ HERO ══ */
+#hero{
+  position:relative;z-index:10;
+  min-height:80vh;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+  padding:clamp(60px,10vh,100px) clamp(24px,8vw,120px);
+  overflow:hidden;
+}
+#hero-ghost{
+  position:absolute;right:-4%;bottom:-10px;
+  font-family:var(--cond);font-weight:800;
+  font-size:clamp(90px,16vw,210px);
+  letter-spacing:-.06em;line-height:1;
+  color:rgba(192,72,0,.04);pointer-events:none;user-select:none;white-space:nowrap;
+}
+.h-eyebrow{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.4em;
+  text-transform:uppercase;color:var(--flame);opacity:.75;margin-bottom:clamp(14px,2.5vh,24px);
+  display:flex;align-items:center;gap:12px;
+  opacity:0;animation:fadeU .7s .3s ease forwards;}
+.h-eyebrow::before{content:'';width:28px;height:1px;background:currentColor;}
+#hero-title{font-family:var(--serif);font-weight:900;
+  font-size:clamp(48px,10vw,128px);letter-spacing:-.03em;line-height:.92;
+  color:var(--cream);text-shadow:0 4px 80px rgba(0,0,0,.9);
+  opacity:0;animation:fadeU .8s .5s ease forwards;}
+#hero-title em{font-style:italic;font-weight:300;color:var(--flame);display:block;font-size:.65em;}
+#hero-rule{width:clamp(50px,8vw,100px);height:2px;
+  background:linear-gradient(90deg,var(--ember),var(--flame),transparent);
+  margin:clamp(20px,3.5vh,36px) 0;
+  opacity:0;animation:fadeU .7s .7s ease forwards;}
+#hero-lead{font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(15px,1.8vw,22px);line-height:1.65;
+  color:rgba(196,160,112,.55);max-width:540px;
+  opacity:0;animation:fadeU .7s .9s ease forwards;}
+
+/* ══ CARD VISUAL ══ */
+#card-section{
+  position:relative;z-index:10;
+  padding:clamp(40px,7vh,80px) clamp(24px,8vw,120px);
+  display:grid;grid-template-columns:1fr;gap:clamp(40px,6vh,64px);
+}
+@media(min-width:768px){#card-section{grid-template-columns:1fr 1fr;align-items:center;}}
+
+/* the gift card mockup */
+#card-mockup{
+  position:relative;
+  aspect-ratio:1.586/1;
+  border-radius:16px;
+  background:linear-gradient(135deg,#1a0c04 0%,#2c1408 40%,#1e0f06 70%,#0f0702 100%);
+  border:1px solid rgba(192,72,0,.35);
+  box-shadow:0 24px 80px rgba(192,72,0,.25),0 4px 20px rgba(0,0,0,.6),inset 0 1px 0 rgba(240,136,32,.1);
+  overflow:hidden;
+  opacity:0;animation:fadeU .9s .6s ease forwards;
+}
+/* ember glow spots */
+#card-mockup::before{content:'';position:absolute;bottom:-20%;left:-10%;width:70%;height:70%;
+  background:radial-gradient(ellipse,rgba(192,72,0,.2),transparent 65%);pointer-events:none;}
+#card-mockup::after{content:'';position:absolute;top:-20%;right:-10%;width:50%;height:50%;
+  background:radial-gradient(ellipse,rgba(240,136,32,.08),transparent 65%);pointer-events:none;}
+.cm-inner{position:absolute;inset:0;padding:clamp(18px,4%,32px);display:flex;flex-direction:column;justify-content:space-between;}
+.cm-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.cm-logo-text{font-family:var(--serif);font-weight:700;font-size:clamp(12px,2.2%,18px);
+  color:rgba(232,212,176,.8);letter-spacing:.01em;line-height:1;}
+.cm-logo-text em{font-style:italic;font-weight:400;color:var(--flame);}
+.cm-logo-sub{font-family:var(--cond);font-size:clamp(7px,1.2%,10px);letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(196,160,112,.4);margin-top:3px;}
+.cm-chip{width:clamp(24px,5%,36px);height:clamp(18px,3.8%,28px);border-radius:3px;
+  background:linear-gradient(135deg,rgba(245,168,48,.6),rgba(192,72,0,.4));
+  border:1px solid rgba(245,168,48,.25);}
+.cm-mid{display:flex;flex-direction:column;gap:4px;}
+.cm-gift-label{font-family:var(--cond);font-weight:700;font-size:clamp(8px,1.4%,11px);
+  letter-spacing:.35em;text-transform:uppercase;color:rgba(196,160,112,.35);}
+.cm-gift-title{font-family:var(--serif);font-weight:900;font-size:clamp(18px,4%,32px);
+  letter-spacing:-.02em;color:var(--cream);line-height:1;}
+.cm-gift-title em{font-style:italic;font-weight:300;color:var(--glow);}
+.cm-bot{display:flex;justify-content:space-between;align-items:flex-end;}
+.cm-detail{display:flex;flex-direction:column;gap:2px;}
+.cm-detail-label{font-family:var(--cond);font-size:clamp(6px,1%,8px);letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(196,160,112,.28);}
+.cm-detail-val{font-family:var(--cond);font-weight:600;font-size:clamp(8px,1.5%,12px);
+  letter-spacing:.06em;color:rgba(196,160,112,.55);}
+.cm-flames{display:flex;gap:2px;font-size:clamp(12px,2.5%,20px);
+  filter:drop-shadow(0 0 6px rgba(240,136,32,.5));}
+
+/* card info panel */
+#card-info{display:flex;flex-direction:column;gap:clamp(20px,3.5vh,32px);}
+.ci-eyebrow{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--flame);opacity:.75;
+  display:flex;align-items:center;gap:10px;}
+.ci-eyebrow::before{content:'';width:20px;height:1px;background:currentColor;}
+.ci-title{font-family:var(--serif);font-weight:900;
+  font-size:clamp(26px,4vw,48px);letter-spacing:-.02em;line-height:1;color:var(--cream);}
+.ci-title em{font-style:italic;font-weight:300;color:var(--flame);}
+.ci-body{font-family:var(--body);font-weight:300;
+  font-size:clamp(14px,1.4vw,17px);line-height:1.85;color:rgba(196,160,112,.58);}
+.ci-body strong{color:var(--parch);font-weight:400;}
+
+/* ══ HOW IT WORKS ══ */
+#how-section{
+  position:relative;z-index:10;
+  padding:clamp(40px,7vh,80px) clamp(24px,8vw,120px);
+  border-top:1px solid rgba(196,160,112,.07);
+}
+#how-section::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 100%,rgba(192,72,0,.06),transparent 65%);}
+.sec-eyebrow{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--flame);opacity:.75;margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;}
+.sec-eyebrow::before{content:'';width:20px;height:1px;background:currentColor;}
+.sec-title{font-family:var(--serif);font-weight:900;
+  font-size:clamp(26px,4.5vw,52px);letter-spacing:-.02em;line-height:1;
+  color:var(--cream);margin-bottom:clamp(24px,4vh,40px);}
+.sec-title em{font-style:italic;font-weight:300;color:var(--flame);}
+
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr));
+  gap:clamp(10px,1.5vw,16px);}
+.step{background:rgba(22,14,6,.75);border:1px solid rgba(196,160,112,.1);
+  border-radius:8px;padding:clamp(18px,2.8vh,28px);
+  display:flex;flex-direction:column;gap:10px;
+  transition:border-color .3s,transform .35s cubic-bezier(.16,1,.3,1);}
+.step:hover{border-color:rgba(240,136,32,.2);transform:translateY(-3px);}
+.step-num{font-family:var(--cond);font-weight:800;
+  font-size:clamp(40px,6vw,60px);letter-spacing:-.04em;line-height:1;
+  color:rgba(192,72,0,.15);transition:color .4s;}
+.step:hover .step-num{color:rgba(240,136,32,.22);}
+.step-title{font-family:var(--serif);font-weight:700;font-size:clamp(16px,1.7vw,20px);color:var(--cream);}
+.step-desc{font-family:var(--body);font-weight:300;font-size:clamp(12px,1.1vw,14px);
+  line-height:1.65;color:rgba(196,160,112,.48);}
+
+/* ══ PERFECT FOR ══ */
+#for-section{
+  position:relative;z-index:10;
+  padding:clamp(40px,7vh,80px) clamp(24px,8vw,120px);
+  border-top:1px solid rgba(196,160,112,.07);
+}
+.occasions{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));
+  gap:clamp(8px,1.2vw,14px);}
+.occ{display:flex;align-items:center;gap:12px;
+  padding:clamp(14px,2vh,20px);
+  background:rgba(18,10,4,.7);border:1px solid rgba(196,160,112,.09);border-radius:6px;
+  transition:border-color .3s,background .3s;}
+.occ:hover{border-color:rgba(240,136,32,.18);background:rgba(26,14,6,.8);}
+.occ-icon{font-size:clamp(20px,2.8vw,28px);filter:drop-shadow(0 0 6px rgba(240,136,32,.3));flex-shrink:0;}
+.occ-text{font-family:var(--serif);font-weight:700;font-size:clamp(14px,1.5vw,17px);color:rgba(232,212,176,.85);}
+
+/* ══ CTA ══ */
+#cta-section{
+  position:relative;z-index:10;text-align:center;
+  padding:clamp(60px,10vh,100px) clamp(24px,8vw,120px);
+  border-top:1px solid rgba(196,160,112,.07);
+}
+#cta-section::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%,rgba(192,72,0,.09),transparent 65%);}
+.cta-title{font-family:var(--serif);font-weight:900;
+  font-size:clamp(36px,7vw,80px);letter-spacing:-.03em;line-height:.92;
+  color:var(--cream);margin-bottom:clamp(12px,2vh,18px);position:relative;z-index:1;}
+.cta-title em{font-style:italic;font-weight:300;color:var(--flame);}
+.cta-sub{font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(14px,1.6vw,20px);color:rgba(196,160,112,.42);
+  margin-bottom:clamp(28px,4.5vh,44px);position:relative;z-index:1;}
+.cta-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;position:relative;z-index:1;}
+
+/* info cards row */
+.info-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
+  margin-bottom:clamp(28px,4vh,40px);position:relative;z-index:1;}
+.info-card{display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:rgba(22,14,6,.75);border:1px solid rgba(196,160,112,.1);
+  border-radius:8px;padding:clamp(14px,2.2vh,22px) clamp(16px,2.5vw,28px);
+  min-width:clamp(130px,16vw,180px);transition:border-color .3s;}
+.info-card:hover{border-color:rgba(240,136,32,.22);}
+.ic-icon{font-size:clamp(22px,3vw,30px);filter:drop-shadow(0 0 7px rgba(240,136,32,.3));}
+.ic-label{font-family:var(--cond);font-weight:600;font-size:8px;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(196,160,112,.32);}
+.ic-val{font-family:var(--cond);font-weight:700;font-size:clamp(12px,1.4vw,15px);
+  letter-spacing:.04em;color:rgba(232,212,176,.75);text-align:center;}
+
+.btn-fire{display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:#fff;text-decoration:none;
+  background:linear-gradient(90deg,var(--ember),var(--fire),var(--flame));
+  padding:14px 30px;border-radius:2px;box-shadow:0 6px 28px rgba(192,72,0,.4);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,letter-spacing .3s;
+  cursor:none;-webkit-tap-highlight-color:transparent;}
+.btn-fire:hover{transform:scale(1.05);box-shadow:0 10px 40px rgba(192,72,0,.55);letter-spacing:.26em;}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(196,160,112,.55);text-decoration:none;
+  border:1px solid rgba(196,160,112,.2);padding:13px 28px;border-radius:2px;
+  transition:all .3s;cursor:none;-webkit-tap-highlight-color:transparent;}
+.btn-ghost:hover{border-color:rgba(240,136,32,.4);color:var(--flame);}
+
+/* FOOTER */
+#ftr{position:relative;z-index:10;border-top:1px solid rgba(196,160,112,.08);
+  background:rgba(9,7,4,.9);padding:clamp(16px,2.5vh,24px) clamp(20px,5vw,60px);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.ftr-t{font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.22);}
+.ftr-flames{display:flex;gap:4px;align-items:flex-end;}
+.ff{font-size:13px;animation:flkr 2s ease-in-out infinite;filter:drop-shadow(0 0 4px rgba(240,136,32,.4));}
+.ff:nth-child(2){animation-delay:.3s;font-size:.8em;}
+.ff:nth-child(3){animation-delay:.65s;}
+@keyframes flkr{0%,100%{opacity:.6;transform:scaleY(1)}40%{opacity:1;transform:scaleY(1.1) translateY(-1px)}}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s,transform .85s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+@keyframes fadeU{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
+</style>
+</head>
+<body>
+<div id="cursor"><div id="c-dot"></div></div>
+<canvas id="cv-bg"></canvas><canvas id="cv-smoke"></canvas><canvas id="cv-ember"></canvas>
+<div id="vignette"></div>
+
+<!-- HEADER -->
+<header id="hdr">
+  <a href="index.html" id="back-btn">← Back</a>
+  <div style="text-align:center;">
+    <a href="index.html" id="hdr-brand">The Francis <em>Smokehouse</em></a>
+    <div class="hdr-sub">& Specialty Meats · St. Francisville, LA</div>
+  </div>
+  <a href="menu.html" class="btn-ghost" style="font-size:10px;padding:7px 14px;">See Menu →</a>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div id="hero-ghost">GIFT</div>
+  <div class="h-eyebrow">Gift Cards</div>
+  <h1 id="hero-title">Give the Gift<br>of <em>Real BBQ.</em></h1>
+  <div id="hero-rule"></div>
+  <p id="hero-lead">Load any amount. Available in-store at 6779 US Highway 61. The best gift you can give someone who loves good food.</p>
+</section>
+
+<!-- CARD MOCKUP + INFO -->
+<section id="card-section">
+  <!-- Gift Card Visual -->
+  <div id="card-mockup">
+    <div class="cm-inner">
+      <div class="cm-top">
+        <div>
+          <div class="cm-logo-text">The Francis <em>Smokehouse</em></div>
+          <div class="cm-logo-sub">& Specialty Meats · St. Francisville, LA</div>
+        </div>
+        <div class="cm-chip"></div>
+      </div>
+      <div class="cm-mid">
+        <div class="cm-gift-label">Gift Card</div>
+        <div class="cm-gift-title">Any <em>Amount.</em></div>
+      </div>
+      <div class="cm-bot">
+        <div class="cm-detail">
+          <div class="cm-detail-label">Valid at</div>
+          <div class="cm-detail-val">6779 US Hwy 61</div>
+        </div>
+        <div class="cm-detail" style="text-align:center;">
+          <div class="cm-detail-label">Phone</div>
+          <div class="cm-detail-val">(225) 245-5046</div>
+        </div>
+        <div class="cm-flames">🔥🔥🔥</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info -->
+  <div id="card-info">
+    <div class="ci-eyebrow reveal">Available In-Store</div>
+    <h2 class="ci-title reveal">Load Any <em>Amount.</em></h2>
+    <p class="ci-body reveal">Francis Smokehouse gift cards are available right at the counter. <strong>Load them with any dollar amount you choose</strong> — there's no minimum and you can top them up whenever you like. Perfect for birthdays, holidays, thank-yous, or just because you know someone who deserves a great meal.</p>
+    <p class="ci-body reveal">Stop in during business hours and we'll take care of you. <strong>Mon–Sat 10am–6pm, Sunday 10am–3pm.</strong></p>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-section">
+  <div class="sec-eyebrow reveal">Simple as It Gets</div>
+  <h2 class="sec-title reveal">How It <em>Works.</em></h2>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <div class="step-title">Come In</div>
+      <div class="step-desc">Stop by during business hours. Mon–Sat 10am–6pm, Sunday 10am–3pm. Ask at the counter for a gift card.</div>
+    </div>
+    <div class="step reveal" style="transition-delay:.08s">
+      <div class="step-num">02</div>
+      <div class="step-title">Load Any Amount</div>
+      <div class="step-desc">Tell us how much you want on the card. Any amount works — load it with exactly what you need.</div>
+    </div>
+    <div class="step reveal" style="transition-delay:.16s">
+      <div class="step-num">03</div>
+      <div class="step-title">Give the Gift</div>
+      <div class="step-desc">Hand it over. The recipient can use it anytime on anything — BBQ plates, po-boys, boudin, desserts, the works.</div>
+    </div>
+    <div class="step reveal" style="transition-delay:.24s">
+      <div class="step-num">04</div>
+      <div class="step-title">Top It Up Anytime</div>
+      <div class="step-desc">Running low? Come back in and add more to the card. No expiry, no fees, no nonsense.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PERFECT FOR -->
+<section id="for-section">
+  <div class="sec-eyebrow reveal">Perfect For</div>
+  <h2 class="sec-title reveal">Every <em>Occasion.</em></h2>
+  <div class="occasions">
+    <div class="occ reveal"><div class="occ-icon">🎂</div><div class="occ-text">Birthdays</div></div>
+    <div class="occ reveal" style="transition-delay:.05s"><div class="occ-icon">🎄</div><div class="occ-text">Holidays</div></div>
+    <div class="occ reveal" style="transition-delay:.10s"><div class="occ-icon">💍</div><div class="occ-text">Weddings & Showers</div></div>
+    <div class="occ reveal" style="transition-delay:.15s"><div class="occ-icon">🎓</div><div class="occ-text">Graduation</div></div>
+    <div class="occ reveal" style="transition-delay:.20s"><div class="occ-icon">🙏</div><div class="occ-text">Thank You</div></div>
+    <div class="occ reveal" style="transition-delay:.25s"><div class="occ-icon">🏆</div><div class="occ-text">Employee Recognition</div></div>
+    <div class="occ reveal" style="transition-delay:.30s"><div class="occ-icon">❤️</div><div class="occ-text">Just Because</div></div>
+    <div class="occ reveal" style="transition-delay:.35s"><div class="occ-icon">🔥</div><div class="occ-text">Any BBQ Lover</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta-section">
+  <h2 class="cta-title reveal">Come <em>Get One.</em></h2>
+  <p class="cta-sub reveal">We're open daily. Stop in and we'll get you sorted.</p>
+  <div class="info-row reveal">
+    <div class="info-card">
+      <div class="ic-icon">📍</div>
+      <div class="ic-label">Address</div>
+      <div class="ic-val">6779 US Hwy 61<br>St. Francisville, LA</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-icon">🕙</div>
+      <div class="ic-label">Hours</div>
+      <div class="ic-val">Mon–Sat 10am–6pm<br>Sun 10am–3pm</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-icon">📞</div>
+      <div class="ic-label">Phone</div>
+      <div class="ic-val">(225) 245-5046</div>
+    </div>
+  </div>
+  <div class="cta-btns reveal">
+    <a href="https://www.google.com/maps/dir/?api=1&destination=The+Francis+Smokehouse%2C+6779+US-61%2C+St.+Francisville%2C+LA+70775" target="_blank" class="btn-fire">🧭 Get Directions</a>
+    <a href="tel:2252455046" class="btn-ghost">📞 Call Us</a>
+    <a href="menu.html" class="btn-ghost">See The Menu →</a>
+  </div>
+</section>
+
+<footer id="ftr">
+  <span class="ftr-t">© 2025 The Francis Smokehouse & Specialty Meats</span>
+  <div class="ftr-flames"><span class="ff">🔥</span><span class="ff">🔥</span><span class="ff">🔥</span></div>
+  <span class="ftr-t">St. Francisville, LA · (225) 245-5046</span>
+</footer>
+
+<script>
+/* CANVAS */
+const cvBg=document.getElementById('cv-bg'),bx=cvBg.getContext('2d');
+const cvSm=document.getElementById('cv-smoke'),sx=cvSm.getContext('2d');
+const cvEm=document.getElementById('cv-ember'),ex=cvEm.getContext('2d');
+let W=0,H=0;
+function rsz(){W=cvBg.width=cvSm.width=cvEm.width=window.innerWidth;H=cvBg.height=cvSm.height=cvEm.height=window.innerHeight;}
+rsz();window.addEventListener('resize',rsz);
+let bgP=0;
+function drawBg(){
+  bgP+=.003;const p=.5+.5*Math.sin(bgP);
+  const g=bx.createRadialGradient(W*.5,H*.85,0,W*.5,H*.85,W*.9);
+  g.addColorStop(0,`rgba(28,16,4,${.8+p*.08})`);g.addColorStop(.35,'rgba(18,12,5,1)');g.addColorStop(1,'rgba(9,7,4,1)');
+  bx.fillStyle=g;bx.fillRect(0,0,W,H);
+  const g2=bx.createRadialGradient(W*.5,H,0,W*.5,H,W*.55);
+  g2.addColorStop(0,`rgba(160,50,0,${.06+p*.04})`);g2.addColorStop(1,'transparent');
+  bx.fillStyle=g2;bx.fillRect(0,0,W,H);
+}
+function mkS(){return{x:.15+Math.random()*.7,y:1.05+Math.random()*.05,vx:(Math.random()-.5)*.0003,vy:-.0006-Math.random()*.0005,r:35+Math.random()*55,a:0,ta:.018+Math.random()*.02,gr:.06+Math.random()*.04,wb:Math.random()*Math.PI*2,ws:.004+Math.random()*.007};}
+const SM=Array.from({length:14},mkS);
+function drawSmoke(){
+  sx.clearRect(0,0,W,H);
+  for(const s of SM){
+    s.wb+=s.ws;s.x+=s.vx+Math.sin(s.wb)*.00025;s.y+=s.vy;s.r+=s.gr;
+    s.a=s.a<s.ta?s.a+.0018:Math.max(0,s.a-.0012);
+    if(s.y<-.25||s.a<=0){Object.assign(s,mkS());continue;}
+    const g=sx.createRadialGradient(s.x*W,s.y*H,0,s.x*W,s.y*H,s.r);
+    g.addColorStop(0,`rgba(90,65,40,${s.a})`);g.addColorStop(.5,`rgba(60,42,25,${s.a*.45})`);g.addColorStop(1,'transparent');
+    sx.fillStyle=g;sx.beginPath();sx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);sx.fill();
+  }
+}
+function mkE(){return{x:.1+Math.random()*.8,y:1.02+Math.random()*.04,vx:(Math.random()-.5)*.003,vy:-.004-Math.random()*.008,r:.5+Math.random()*1.6,life:1,decay:.003+Math.random()*.007,h:8+Math.random()*24};}
+const EM=Array.from({length:18},mkE);
+function drawEmbers(){
+  ex.clearRect(0,0,W,H);
+  for(let i=0;i<EM.length;i++){
+    const e=EM[i];e.x+=e.vx+(Math.random()-.5)*.001;e.y+=e.vy;e.life-=e.decay;
+    if(e.life<=0||e.y<-.02){EM[i]=mkE();continue;}
+    ex.beginPath();ex.arc(e.x*W,e.y*H,e.r,0,Math.PI*2);
+    ex.fillStyle=`hsla(${e.h},100%,${52+e.life*34}%,${e.life*.82})`;
+    ex.shadowBlur=8;ex.shadowColor=`hsla(${e.h},100%,58%,${e.life*.5})`;
+    ex.fill();ex.shadowBlur=0;
+  }
+}
+(function loop(){drawBg();drawSmoke();drawEmbers();requestAnimationFrame(loop);})();
+
+/* CURSOR */
+const cur=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+
+/* SCROLL REVEAL */
+const IO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');IO.unobserve(e.target);}});
+},{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>IO.observe(el));
+
+/* BOOT */
+window.addEventListener('load',()=>{
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('on')));
+});
+</script>
+</body>
+</html>
