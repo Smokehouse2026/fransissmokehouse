@@ -305,10 +305,6 @@ footer{background:#080604;border-top:1px solid rgba(232,83,42,.15);padding:44px 
 }
 
 /* ── BRANDING IRON NAV ── */
-#cr{position:fixed;width:10px;height:10px;border-radius:50%;background:#c8541e;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;}
-#crr{position:fixed;width:34px;height:34px;border-radius:50%;border:1px solid rgba(212,160,60,.5);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .22s,height .22s,opacity .22s;}
-body.ch #cr{width:48px;height:48px;background:rgba(200,84,30,.14);}
-body.ch #crr{width:12px;height:12px;opacity:0;}
 
 /* ══════════════════════════════════════════
    DESKTOP — Branding Iron Vertical Sidebar
@@ -453,7 +449,7 @@ body.ch #crr{width:12px;height:12px;opacity:0;}
   flex-direction:row;align-items:center;justify-content:center;
   gap:14px;
   box-shadow:0 -4px 32px rgba(0,0,0,.55),0 -1px 0 rgba(200,84,30,.15);
-  cursor:none;
+  cursor:pointer;
   transition:background .22s,border-color .22s;
   padding:0 24px;
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
@@ -644,7 +640,7 @@ body.ch #crr{width:12px;height:12px;opacity:0;}
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   background:rgba(8,6,3,.6);
   border-left:1px solid rgba(240,230,208,.05);
-  cursor:none;
+  cursor:pointer;
   gap:8px;
   padding:20px 0;
 }
@@ -653,7 +649,7 @@ body.ch #crr{width:12px;height:12px;opacity:0;}
   width:38px;height:38px;
   background:none;border:1px solid rgba(240,230,208,.12);
   display:flex;align-items:center;justify-content:center;
-  cursor:none;
+  cursor:pointer;
   transition:border-color .22s,background .22s;
 }
 .mob-close-btn:active{background:rgba(200,84,30,.18);border-color:rgba(200,84,30,.4);}
@@ -689,17 +685,9 @@ body.ch #crr{width:12px;height:12px;opacity:0;}
   .mob-backdrop{display:none!important;}
 }
 
-/* sidebar offset — all scrollable page sections shift right on desktop */
+/* sidebar offset on desktop */
 @media(min-width:861px){
-  .fire-line,.hero-section,#specials-section,.page-divider,
-  #menu-link-section,#info-section,#search-wrap,footer{
-    margin-left:64px;
-  }
-  .brand-nav:hover ~ .fire-line,
-  .brand-nav:hover ~ .hero-section{
-    margin-left:220px;
-    transition:margin-left .4s cubic-bezier(.77,0,.175,1);
-  }
+  .fire-line,header,section,footer{margin-left:64px;}
 }
 @media(max-width:860px){
   body{padding-bottom:52px;}
@@ -709,8 +697,6 @@ body.ch #crr{width:12px;height:12px;opacity:0;}
 <body>
 
 <!-- Custom cursor -->
-<div id="cr" style="display:none"></div>
-<div id="crr" style="display:none"></div>
 <div id="cur-wrap">
   <svg id="cur-svg" viewBox="-32 -32 64 64" xmlns="http://www.w3.org/2000/svg">
     <circle id="cur-outer" r="26" cx="0" cy="0" stroke-dasharray="60 20"/>
@@ -1003,7 +989,7 @@ body.ch #crr{width:12px;height:12px;opacity:0;}
       <h3>Location &amp; Contact</h3>
       <div class="c-row"><div class="c-icon"><i class="fas fa-location-dot"></i></div><div><div class="c-label">Address</div><div class="c-value"><a href="https://www.google.com/maps/search/?api=1&query=6779+US+Highway+61%2C+St.+Francisville%2C+LA+70775" target="_blank" rel="noopener">6779 US Highway 61<br/>St. Francisville, LA 70775</a></div></div></div>
       <div class="c-row"><div class="c-icon"><i class="fas fa-phone"></i></div><div><div class="c-label">Phone</div><div class="c-value"><a href="tel:+12252455046">(225) 245-5046</a></div></div></div>
-      <div class="c-row"><div class="c-icon"><i class="fas fa-envelope"></i></div><div><div class="c-label">Email</div><div class="c-value"><a href="/cdn-cgi/l/email-protection#ec8a9e8d828f859f9f818387898483999f89ac8d9898c2828998"><span class="__cf_email__" data-cfemail="5d3b2f3c333e342e2e303236383532282e381d3c292973333829">[email&#160;protected]</span></a></div></div></div>
+      <div class="c-row"><div class="c-icon"><i class="fas fa-envelope"></i></div><div><div class="c-label">Email</div><div class="c-value"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div></div></div>
       <div class="c-row"><div class="c-icon"><i class="fas fa-star"></i></div><div><div class="c-label">Rating</div><div class="c-value">4.5&nbsp;/ 5 &nbsp;&middot;&nbsp; Tripadvisor Travellers&rsquo; Choice</div></div></div>
       <div class="amenities"><span class="amenity">Dine In</span><span class="amenity">Takeout</span><span class="amenity">Catering</span><span class="amenity">Parking</span><span class="amenity">Wheelchair Access</span><span class="amenity">Outdoor Seating</span><span class="amenity">Dog Friendly</span></div>
     </div>
@@ -1057,7 +1043,7 @@ body.ch #crr{width:12px;height:12px;opacity:0;}
     <div class="panel-rule"></div>
     <div class="contact-item"><div class="contact-icon">&#x1F4CD;</div><div><div class="contact-label">Address</div><div class="contact-value">6779 US Highway 61<br/>St. Francisville, LA 70775</div></div></div>
     <div class="contact-item"><div class="contact-icon">&#x1F4DE;</div><div><div class="contact-label">Phone</div><div class="contact-value"><a href="tel:2252455046">(225) 245-5046</a></div></div></div>
-    <div class="contact-item"><div class="contact-icon">&#x2709;</div><div><div class="contact-label">Email</div><div class="contact-value"><a href="/cdn-cgi/l/email-protection#d9bfabb8b7bab0aaaab4b6b2bcb1b6acaabc99b8adadf7b7bcad"><span class="__cf_email__" data-cfemail="a7c1d5c6c9c4ced4d4cac8ccc2cfc8d2d4c2e7c6d3d389c9c2d3">[email&#160;protected]</span></a></div></div></div>
+    <div class="contact-item"><div class="contact-icon">&#x2709;</div><div><div class="contact-label">Email</div><div class="contact-value"><a href="mailto:francissmokehouse@att.net">francissmokehouse@att.net</a></div></div></div>
     <div class="contact-item"><div class="contact-icon">&#x2B50;</div><div><div class="contact-label">Rating</div><div class="contact-value">4.5 / 5 &nbsp;&middot;&nbsp; Tripadvisor Travellers' Choice</div></div></div>
     <div class="panel-rule"></div>
     <div class="panel-eyebrow" style="margin-bottom:14px">What we offer</div>
@@ -1119,7 +1105,7 @@ body.ch #crr{width:12px;height:12px;opacity:0;}
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 'use strict';
 
 const HOURS = [
@@ -1229,11 +1215,32 @@ buildStatus();
 buildHoursRows('hours-rows','h-row','h-day','h-time');
 buildHoursRows('panel-hours-rows','hours-row','hours-day','hours-time');
 
+// ── CURSOR TRACKING ──
+const curWrap = document.getElementById('cur-wrap');
+let CX = window.innerWidth/2, CY = window.innerHeight/2;
+document.addEventListener('mousemove', e => {
+  CX = e.clientX; CY = e.clientY;
+  curWrap.style.transform = 'translate(' + CX + 'px,' + CY + 'px)';
+}, {passive:true});
+document.addEventListener('mousedown', () => {
+  document.body.classList.add('cur-click');
+  setTimeout(() => document.body.classList.remove('cur-click'), 200);
+});
+document.addEventListener('mouseover', e => {
+  if (e.target.closest('button,a,.node-g,#back-btn'))
+    document.body.classList.add('cur-hover');
+});
+document.addEventListener('mouseout', e => {
+  if (e.target.closest('button,a,.node-g,#back-btn'))
+    document.body.classList.remove('cur-hover');
+});
+
+
 // ── BRANDING IRON NAV JS ──
-/* Mobile sidebar cursor hover state */
-document.querySelectorAll('.brand-nav a,.mob-sidebar a,.mob-tab,.mob-close-btn').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{document.body.classList.add('ch');document.body.classList.add('cur-hover');});
-  el.addEventListener('mouseleave',()=>{document.body.classList.remove('ch');document.body.classList.remove('cur-hover');});
+/* Nav hover — sync both cursor systems */
+document.querySelectorAll('.brand-nav a,.brand-nav,.mob-sidebar a,.mob-tab,.mob-close-btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cur-hover'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cur-hover'));
 });
 
 /* FIRE CANVAS — page uses its own flame canvas system above */
@@ -1504,9 +1511,27 @@ function initSpecialsWheel(SPECIALS){
 // Init
 initSpecialsWheel(INLINE_SPECIALS);
 
-// Try to load site-data.js for live specials/menu updates
-fetch('site-data.js')
-  .then(r=>{if(!r.ok)throw new Error('no site-data');return r.text();})
-  .then(src=>{
-    try{
-      const menuFn=n
+// Load site-data.js for live specials/menu updates
+function loadSiteData(){
+  fetch('site-data.js')
+    .then(function(r){
+      if(!r.ok) throw new Error('no site-data');
+      return r.text();
+    })
+    .then(function(src){
+      try{
+        var menuFn = new Function(src + '; return typeof MENU!=="undefined"?MENU:null;');
+        var menuData = menuFn();
+        if(menuData) window._MENU = menuData;
+        var specFn = new Function(src + '; return typeof SPECIALS!=="undefined"?SPECIALS:null;');
+        var specData = specFn();
+        if(specData) initSpecialsWheel(specData);
+      } catch(e){ console.warn('site-data parse error', e); }
+    })
+    .catch(function(){ /* site-data.js not present — using inline data */ });
+}
+loadSiteData();
+
+</script>
+</body>
+</html>
