@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>The Francis Smokehouse — St. Francisville, LA</title>
 <meta name="description" content="The Francis Smokehouse & Specialty Meats. Slow-smoked BBQ, Louisiana boudin, po-boys and daily specials in St. Francisville, Louisiana. 4.7★ Google · Travellers' Choice TripAdvisor. Open Mon–Sat 10am–6pm, Sun 10am–3pm.">
-
-<!-- Open Graph — controls how the link looks when shared on Facebook, iMessage, etc. -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="The Francis Smokehouse & Specialty Meats" />
 <meta property="og:title" content="The Francis Smokehouse — St. Francisville, LA" />
@@ -18,15 +16,11 @@
 <meta property="og:image:height" content="630" />
 <meta property="og:url" content="https://www.thefrancismokehouse.com" />
 <meta property="og:locale" content="en_US" />
-
-<!-- Twitter / X card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="The Francis Smokehouse — St. Francisville, LA" />
 <meta name="twitter:description" content="Slow-smoked BBQ over post oak & hickory. Louisiana boudin, po-boys, daily specials. 4.7★ Google · Open daily on US Hwy 61." />
 <meta name="twitter:image" content="https://www.thefrancismokehouse.com/Images/Smokehouselink.png" />
 <meta name="twitter:image:alt" content="The Francis Smokehouse & Specialty Meats" />
-
-<!-- Favicon -->
 <link rel="icon" type="image/png" href="Images/Smokehouselogo.png">
 <link rel="apple-touch-icon" href="Images/Smokehouselogo.png">
 <meta name="theme-color" content="#090704">
@@ -62,28 +56,20 @@ html, body {
 }
 @media (hover:none) { html, body { cursor: auto; } }
 
-/* ── GRAIN ── */
 body::after {
   content: ''; position: fixed; inset: 0; z-index: 3; pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.042'/%3E%3C/svg%3E");
 }
 
-/* ── CANVASES ── */
 #cv-bg    { position: fixed; inset: 0; z-index: 0; }
 #cv-smoke { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
 #cv-ember { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
 
-/* ========================================================══
-   CURSOR — desktop only
-========================================================══ */
 #cursor { position: fixed; z-index: 9999; pointer-events: none; top:0; left:0; }
 #cursor-dot { width:7px; height:7px; border-radius:50%; background:var(--flame); transform:translate(-50%,-50%); box-shadow:0 0 8px var(--flame),0 0 16px rgba(240,140,40,.25); animation:cursor-breathe 2.5s ease-in-out infinite; }
 @keyframes cursor-breathe { 0%,100%{box-shadow:0 0 6px var(--flame),0 0 12px rgba(240,140,40,.2)} 50%{box-shadow:0 0 12px var(--flame),0 0 24px rgba(240,140,40,.4)} }
 @media (hover:none) { #cursor { display:none; } }
 
-/* ========================================================══
-   SHELL
-========================================================══ */
 #shell {
   position: fixed; inset: 0; z-index: 10;
   display: flex; flex-direction: column;
@@ -91,11 +77,6 @@ body::after {
 }
 #shell.on { opacity: 1; }
 
-/* ========================================================══
-   ████  DESKTOP LAYOUT  (min-width: 768px)
-========================================================══ */
-
-/* TOP BAR */
 #topbar {
   flex-shrink: 0;
   display: flex; align-items: stretch;
@@ -120,11 +101,9 @@ body::after {
 .status-flame { animation:flkr 2s ease-in-out infinite; filter:drop-shadow(0 0 4px rgba(240,140,40,.6)); }
 @keyframes flkr { 0%,100%{opacity:.7;transform:scaleY(1)} 35%{opacity:1;transform:scaleY(1.1) translateY(-1px)} 70%{opacity:.85;transform:scaleY(.95)} }
 
-/* MAIN 3-COL */
 #main { flex:1; overflow:hidden; display:grid; grid-template-columns:clamp(155px,17vw,220px) 1fr clamp(155px,17vw,220px); }
 #main > * + * { border-left: 1px solid rgba(196,168,130,.08); }
 
-/* SIDEBARS */
 #sidebar-l, #sidebar-r {
   display: flex; flex-direction:column; justify-content:space-between;
   padding: clamp(14px,2.2vh,24px) clamp(12px,1.6vw,22px);
@@ -145,7 +124,6 @@ body::after {
 .sb-link::before { content:'—'; color:rgba(240,140,40,.28); font-size:8px; }
 .sb-link:hover { color:var(--flame); }
 
-/* NAV CENTER */
 #nav-center {
   display:flex; flex-direction:column; justify-content:center;
   padding: clamp(8px,1.5vh,14px) clamp(18px,2.8vw,44px);
@@ -165,14 +143,12 @@ body::after {
 .nav-item:first-child { border-top:1px solid rgba(196,168,130,.07); }
 .nav-item:hover { border-bottom-color:rgba(240,140,40,.15); }
 .nav-item:first-child:hover { border-top-color:rgba(240,140,40,.15); }
-/* amber glow sweep */
 .nav-item::before {
   content:''; position:absolute; inset:0;
   background:linear-gradient(90deg,rgba(192,74,0,.0) 0%,rgba(192,74,0,.08) 25%,rgba(224,101,16,.12) 50%,rgba(240,140,40,.06) 75%,transparent 100%);
   transform:translateX(-105%); transition:transform .7s cubic-bezier(.77,0,.18,1);
 }
 .nav-item:hover::before { transform:translateX(0); }
-/* ember left bar */
 .nav-item::after {
   content:''; position:absolute; left:0; top:20%; bottom:20%; width:2px;
   background:linear-gradient(to bottom,transparent,var(--fire),var(--flame),transparent);
@@ -199,7 +175,6 @@ body::after {
 .nav-item:nth-child(5){animation:fadeSlideU .6s .8s ease both}
 .nav-item:nth-child(6){animation:fadeSlideU .6s .9s ease both}
 
-/* RIGHT SIDEBAR PREVIEW */
 .pv-label { font-family:var(--cond); font-weight:600; font-size:8px; letter-spacing:.3em; text-transform:uppercase; color:rgba(196,168,130,.25); margin-bottom:7px; }
 #pv-title { font-family:var(--serif); font-weight:700; font-size:clamp(12px,1.3vw,16px); line-height:1.25; color:rgba(232,217,188,.68); transition:all .4s; min-height:38px; }
 #pv-desc  { margin-top:7px; font-family:var(--serif); font-style:italic; font-size:clamp(9px,.95vw,12px); line-height:1.6; color:rgba(196,168,130,.32); transition:all .4s; min-height:46px; }
@@ -209,7 +184,6 @@ body::after {
 #pv-num   { font-family:var(--cond); font-weight:800; font-size:clamp(58px,10vw,110px); line-height:1; letter-spacing:-.03em; color:rgba(192,74,0,.06); text-align:right; margin-top:auto; transition:color .5s; }
 #pv-num.lit { color:rgba(240,140,40,.17); }
 
-/* BOTTOM TICKER */
 #botbar { flex-shrink:0; height:36px; display:flex; align-items:center; justify-content:space-between; padding:0 clamp(14px,2.5vw,28px); border-top:1px solid rgba(196,168,130,.07); background:linear-gradient(to top,rgba(9,7,4,.9),transparent); overflow:hidden; }
 #ticker-track { display:flex; white-space:nowrap; animation:tkr 32s linear infinite; flex:1; overflow:hidden; }
 .t-item { font-family:var(--cond); font-weight:400; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(196,168,130,.2); padding:0 26px; display:inline-flex; align-items:center; gap:26px; flex-shrink:0; }
@@ -217,11 +191,7 @@ body::after {
 @keyframes tkr { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 #botbar-right { flex-shrink:0; padding-left:20px; font-family:var(--cond); font-weight:400; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:rgba(196,168,130,.18); }
 
-
-/* ========================================================══
-   ████  MOBILE LAYOUT  (max-width: 767px)
-   Completely different structure — hidden on desktop
-========================================================══ */
+/* ── MOBILE ── */
 #mobile-shell {
   display: none;
   position: fixed; inset: 0; z-index: 10;
@@ -230,147 +200,48 @@ body::after {
   opacity: 0; transition: opacity .9s ease;
 }
 #mobile-shell.on { opacity: 1; }
-
 @media (max-width: 767px) {
   #shell        { display: none !important; }
   #mobile-shell { display: flex; }
 }
 
-/* ── MOBILE HEADER ── */
 #mob-header {
-  flex-shrink: 0;
-  position: relative; overflow: hidden;
+  flex-shrink: 0; position: relative; overflow: hidden;
   padding: env(safe-area-inset-top, 16px) 0 0;
   background: linear-gradient(to bottom, rgba(9,7,4,.98), rgba(9,7,4,.7));
   border-bottom: 1px solid rgba(196,168,130,.1);
 }
-
-#mob-header-inner {
-  padding: 20px 20px 0;
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-}
-
-.mob-eyebrow {
-  font-family: var(--cond); font-weight: 600;
-  font-size: 9px; letter-spacing: .35em; text-transform: uppercase;
-  color: rgba(196,168,130,.32);
-  display: flex; align-items: center; gap: 10px;
-}
-.mob-eyebrow::before, .mob-eyebrow::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(196,168,130,.2), transparent);
-}
-
-#mob-brand {
-  font-family: var(--serif); font-weight: 900;
-  font-size: clamp(28px, 8vw, 40px);
-  letter-spacing: -.01em; color: var(--cream); text-align: center;
-  line-height: 1; text-shadow: 0 0 40px rgba(240,140,40,.2);
-}
+#mob-header-inner { padding: 20px 20px 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.mob-eyebrow { font-family: var(--cond); font-weight: 600; font-size: 9px; letter-spacing: .35em; text-transform: uppercase; color: rgba(196,168,130,.32); display: flex; align-items: center; gap: 10px; }
+.mob-eyebrow::before, .mob-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(196,168,130,.2), transparent); }
+#mob-brand { font-family: var(--serif); font-weight: 900; font-size: clamp(28px, 8vw, 40px); letter-spacing: -.01em; color: var(--cream); text-align: center; line-height: 1; text-shadow: 0 0 40px rgba(240,140,40,.2); }
 #mob-brand em { font-style: italic; font-weight: 400; color: var(--flame); }
-
-.mob-tagline {
-  font-family: var(--serif); font-style: italic; font-weight: 300;
-  font-size: 13px; color: rgba(196,168,130,.4); text-align: center;
-  letter-spacing: .03em;
-}
-
-/* info strip */
-#mob-info-strip {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 20px 14px;
-  margin-top: 10px;
-  border-top: 1px solid rgba(196,168,130,.07);
-}
-.mob-info-bit {
-  display: flex; flex-direction: column; gap: 2px; align-items: center;
-}
+.mob-tagline { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 13px; color: rgba(196,168,130,.4); text-align: center; letter-spacing: .03em; }
+#mob-info-strip { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px 14px; margin-top: 10px; border-top: 1px solid rgba(196,168,130,.07); }
+.mob-info-bit { display: flex; flex-direction: column; gap: 2px; align-items: center; }
 .mob-info-lbl { font-family: var(--cond); font-weight: 600; font-size: 7px; letter-spacing: .25em; text-transform: uppercase; color: rgba(196,168,130,.28); }
 .mob-info-val { font-family: var(--cond); font-weight: 500; font-size: 11px; letter-spacing: .04em; color: rgba(232,217,188,.6); }
 .mob-status   { color: var(--flame); display: flex; align-items: center; gap: 5px; font-size: 11px; }
 .mob-status-dot { width:5px; height:5px; border-radius:50%; background:var(--glow); box-shadow:0 0 7px var(--glow); animation:dp 1.8s ease-in-out infinite; }
 
-/* ── MOBILE NAV ITEMS ── */
-#mob-nav {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
-  padding: 8px 0 calc(env(safe-area-inset-bottom, 16px) + 16px);
-  -webkit-overflow-scrolling: touch;
-}
+#mob-nav { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 8px 0 calc(env(safe-area-inset-bottom, 16px) + 16px); -webkit-overflow-scrolling: touch; }
 #mob-nav::-webkit-scrollbar { display: none; }
-
-.mob-nav-item {
-  position: relative;
-  display: flex; align-items: center;
-  padding: 0 20px;
-  height: clamp(68px, 11vh, 88px);
-  border-bottom: 1px solid rgba(196,168,130,.07);
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-  cursor: pointer;
-  transition: background .3s;
-  /* active state for touch */
-}
+.mob-nav-item { position: relative; display: flex; align-items: center; padding: 0 20px; height: clamp(68px, 11vh, 88px); border-bottom: 1px solid rgba(196,168,130,.07); overflow: hidden; -webkit-tap-highlight-color: transparent; cursor: pointer; transition: background .3s; }
 .mob-nav-item:first-child { border-top: 1px solid rgba(196,168,130,.07); }
 .mob-nav-item:active { background: rgba(240,140,40,.05); }
-
-/* left accent bar */
-.mob-nav-item::before {
-  content: ''; position: absolute; left: 0; top: 15%; bottom: 15%; width: 2px;
-  background: linear-gradient(to bottom, transparent, var(--fire), transparent);
-  border-radius: 2px;
-  transform: scaleY(0); transform-origin: center;
-  transition: transform .4s cubic-bezier(.16,1,.3,1);
-  box-shadow: 0 0 8px var(--fire);
-}
-.mob-nav-item:active::before,
-.mob-nav-item.touched::before { transform: scaleY(1); }
-
-/* warm glow on press */
-.mob-nav-item::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(192,74,0,.1), rgba(240,140,40,.04), transparent);
-  opacity: 0; transition: opacity .3s;
-}
-.mob-nav-item:active::after,
-.mob-nav-item.touched::after { opacity: 1; }
-
-.mni-num {
-  font-family: var(--cond); font-weight: 400;
-  font-size: 9px; letter-spacing: .2em;
-  color: rgba(196,168,130,.22);
-  width: 36px; flex-shrink: 0; padding-left: 10px;
-}
+.mob-nav-item::before { content: ''; position: absolute; left: 0; top: 15%; bottom: 15%; width: 2px; background: linear-gradient(to bottom, transparent, var(--fire), transparent); border-radius: 2px; transform: scaleY(0); transform-origin: center; transition: transform .4s cubic-bezier(.16,1,.3,1); box-shadow: 0 0 8px var(--fire); }
+.mob-nav-item:active::before, .mob-nav-item.touched::before { transform: scaleY(1); }
+.mob-nav-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(192,74,0,.1), rgba(240,140,40,.04), transparent); opacity: 0; transition: opacity .3s; }
+.mob-nav-item:active::after, .mob-nav-item.touched::after { opacity: 1; }
+.mni-num { font-family: var(--cond); font-weight: 400; font-size: 9px; letter-spacing: .2em; color: rgba(196,168,130,.22); width: 36px; flex-shrink: 0; padding-left: 10px; }
 .mni-body { flex: 1; display: flex; flex-direction: column; gap: 3px; padding: 0 12px 0 8px; }
-.mni-name {
-  font-family: var(--serif); font-weight: 700;
-  font-size: clamp(20px, 5vw, 26px);
-  letter-spacing: -.01em; line-height: 1;
-  color: rgba(232,217,188,.78);
-  transition: color .3s;
-}
-.mob-nav-item:active .mni-name,
-.mob-nav-item.touched .mni-name { color: var(--cream); }
-.mni-sub {
-  font-family: var(--serif); font-style: italic; font-weight: 400;
-  font-size: 11px; color: rgba(196,168,130,.3);
-  transition: color .3s;
-  line-height: 1;
-}
-.mob-nav-item:active .mni-sub,
-.mob-nav-item.touched .mni-sub { color: rgba(240,140,40,.5); }
+.mni-name { font-family: var(--serif); font-weight: 700; font-size: clamp(20px, 5vw, 26px); letter-spacing: -.01em; line-height: 1; color: rgba(232,217,188,.78); transition: color .3s; }
+.mob-nav-item:active .mni-name, .mob-nav-item.touched .mni-name { color: var(--cream); }
+.mni-sub { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 11px; color: rgba(196,168,130,.3); transition: color .3s; line-height: 1; }
+.mob-nav-item:active .mni-sub, .mob-nav-item.touched .mni-sub { color: rgba(240,140,40,.5); }
+.mni-arrow { width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(196,168,130,.1); display: flex; align-items: center; justify-content: center; font-size: 13px; color: rgba(196,168,130,.22); flex-shrink: 0; transition: all .35s; }
+.mob-nav-item:active .mni-arrow, .mob-nav-item.touched .mni-arrow { border-color:rgba(240,140,40,.4); color:var(--flame); background:rgba(240,140,40,.08); }
 
-.mni-arrow {
-  width: 32px; height: 32px; border-radius: 50%;
-  border: 1px solid rgba(196,168,130,.1);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; color: rgba(196,168,130,.22);
-  flex-shrink: 0;
-  transition: all .35s;
-}
-.mob-nav-item:active .mni-arrow,
-.mob-nav-item.touched .mni-arrow { border-color:rgba(240,140,40,.4); color:var(--flame); background:rgba(240,140,40,.08); }
-
-/* stagger */
 .mob-nav-item:nth-child(1){animation:fadeSlideU .5s .35s ease both}
 .mob-nav-item:nth-child(2){animation:fadeSlideU .5s .43s ease both}
 .mob-nav-item:nth-child(3){animation:fadeSlideU .5s .51s ease both}
@@ -378,31 +249,12 @@ body::after {
 .mob-nav-item:nth-child(5){animation:fadeSlideU .5s .67s ease both}
 .mob-nav-item:nth-child(6){animation:fadeSlideU .5s .75s ease both}
 
-/* ── MOBILE BOTTOM BAR ── */
-#mob-botbar {
-  flex-shrink: 0; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  border-top: 1px solid rgba(196,168,130,.07);
-  background: linear-gradient(to top, rgba(9,7,4,.95), transparent);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  overflow: hidden;
-}
-#mob-ticker-track {
-  display: flex; white-space: nowrap;
-  animation: tkr 28s linear infinite;
-}
-.mt-item {
-  font-family: var(--cond); font-weight: 400;
-  font-size: 8px; letter-spacing: .18em; text-transform: uppercase;
-  color: rgba(196,168,130,.18); padding: 0 22px;
-  display: inline-flex; align-items: center; gap: 22px; flex-shrink: 0;
-}
+#mob-botbar { flex-shrink: 0; height: 36px; display: flex; align-items: center; justify-content: center; border-top: 1px solid rgba(196,168,130,.07); background: linear-gradient(to top, rgba(9,7,4,.95), transparent); padding-bottom: env(safe-area-inset-bottom, 0px); overflow: hidden; }
+#mob-ticker-track { display: flex; white-space: nowrap; animation: tkr 28s linear infinite; }
+.mt-item { font-family: var(--cond); font-weight: 400; font-size: 8px; letter-spacing: .18em; text-transform: uppercase; color: rgba(196,168,130,.18); padding: 0 22px; display: inline-flex; align-items: center; gap: 22px; flex-shrink: 0; }
 .mt-item::after { content: '✦'; font-size: 5px; color: rgba(240,140,40,.25); }
 
-
-/* ========================================================══
-   DESKTOP INFO PANEL — split screen
-========================================================══ */
+/* ── DESKTOP PANEL ── */
 #panel {
   position: fixed; inset: 0; z-index: 500;
   display: grid; grid-template-columns: 45% 55%;
@@ -445,22 +297,91 @@ body::after {
 #panel.open .pi-body-wrap { transform:translateY(0); opacity:1; }
 .pi-meta  { font-family:var(--cond); font-weight:500; font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(196,168,130,.3); display:flex; align-items:center; gap:8px; }
 .pi-meta::before { content:''; width:18px; height:1px; background:rgba(240,140,40,.3); }
-/* ── SPECIALS LIST inside panel ── */
-#panel-specials-status, #mob-specials-status {
-  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;
-  padding:8px 12px; border-radius:4px; margin-bottom:8px;
-  background:rgba(9,7,4,.5); border:1px solid rgba(196,168,130,.1);
-}
+#panel-desc { font-family:var(--body); font-weight:300; font-size:clamp(12px,1.25vw,15px); line-height:1.85; color:rgba(196,168,130,.52); }
+#panel-desc strong { color:var(--parch); font-weight:400; }
+#panel-chips  { display:flex; flex-wrap:wrap; gap:6px; }
+.panel-chip   { font-family:var(--cond); font-weight:500; font-size:8px; letter-spacing:.13em; text-transform:uppercase; padding:4px 11px; border-radius:2px; border:1px solid rgba(196,168,130,.1); color:rgba(196,168,130,.28); transition:all .3s; }
+.panel-chip.lit { border-color:rgba(240,140,40,.35); color:var(--flame); background:rgba(240,140,40,.07); }
+
+/* ── AUTO-REDIRECT COUNTDOWN ── */
+.pi-cta-wrap  { display:flex; flex-direction:column; gap:12px; }
+.pi-dbl-note  { display:none; }
+
+.pi-countdown-row { display:flex; align-items:center; gap:12px; margin-bottom:4px; }
+.pi-countdown-ring { position:relative; width:38px; height:38px; flex-shrink:0; }
+.pi-countdown-ring svg { position:absolute; inset:0; transform:rotate(-90deg); }
+.pi-countdown-ring .ring-bg   { fill:none; stroke:rgba(240,140,40,.12); stroke-width:3; }
+.pi-countdown-ring .ring-fill { fill:none; stroke:var(--flame); stroke-width:3; stroke-linecap:round; stroke-dasharray:100; stroke-dashoffset:0; transition:stroke-dashoffset 1s linear; }
+.pi-countdown-ring .ring-num  { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--cond); font-weight:800; font-size:13px; color:var(--flame); }
+.pi-countdown-text { font-family:var(--cond); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:rgba(196,168,130,.4); line-height:1.4; }
+
+/* ── CTA BUTTON with light chaser ── */
+.cta-wrap { position:relative; align-self:flex-start; display:inline-block; }
+.cta-border-svg { position:absolute; top:-1px; left:-1px; width:calc(100% + 2px); height:calc(100% + 2px); pointer-events:none; overflow:visible; z-index:5; }
+.cta-border-track  { fill:none; stroke:rgba(240,140,40,.18); stroke-width:1.5; }
+.cta-border-chaser { fill:none; stroke:var(--flame); stroke-width:2; stroke-linecap:round;
+  filter:drop-shadow(0 0 5px var(--flame)) drop-shadow(0 0 10px rgba(240,140,40,.7));
+  stroke-dasharray:50 9999; stroke-dashoffset:0; animation:chaserMove 1.8s linear infinite; }
+@keyframes chaserMove { from{stroke-dashoffset:0} to{stroke-dashoffset:-9999} }
+
+#panel-cta { position:relative; overflow:hidden; font-family:var(--cond); font-weight:700; font-size:clamp(11px,1.2vw,13px); letter-spacing:.18em; text-transform:uppercase; color:var(--cream); border:1px solid rgba(240,140,40,.28); cursor:none; padding:clamp(12px,1.7vh,16px) clamp(22px,2.8vw,34px); background:rgba(240,140,40,.07); transition:letter-spacing .35s; display:flex; align-items:center; gap:10px; }
+#panel-cta::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,var(--ember) 0%,var(--fire) 50%,var(--flame) 100%); transform:scaleX(0); transform-origin:left; transition:transform .5s cubic-bezier(.77,0,.18,1); z-index:0; }
+#panel-cta:hover::before { transform:scaleX(1); }
+#panel-cta:hover { letter-spacing:.26em; }
+#panel-cta span { position:relative; z-index:1; }
+#panel-cta .cta-arrow { position:relative; z-index:1; transition:transform .4s cubic-bezier(.34,1.56,.64,1); }
+#panel-cta:hover .cta-arrow { transform:translateX(5px); }
+
+/* Mobile countdown */
+.mob-countdown-row { display:flex; align-items:center; gap:10px; justify-content:center; }
+.mob-countdown-ring { position:relative; width:34px; height:34px; flex-shrink:0; }
+.mob-countdown-ring svg { position:absolute; inset:0; transform:rotate(-90deg); }
+.mob-countdown-ring .ring-bg   { fill:none; stroke:rgba(240,140,40,.12); stroke-width:3; }
+.mob-countdown-ring .ring-fill { fill:none; stroke:var(--flame); stroke-width:3; stroke-linecap:round; stroke-dasharray:88; stroke-dashoffset:0; transition:stroke-dashoffset 1s linear; }
+.mob-countdown-ring .ring-num  { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--cond); font-weight:800; font-size:12px; color:var(--flame); }
+.mob-countdown-text { font-family:var(--cond); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:rgba(196,168,130,.4); }
+
+.pi-bottom  { display:flex; justify-content:space-between; align-items:flex-end; margin-top:8px; padding-top:14px; border-top:1px solid rgba(196,168,130,.07); }
+.pi-foot-rule { font-family:var(--serif); font-style:italic; font-size:11px; color:rgba(196,168,130,.22); }
+.pi-foot-idx  { font-family:var(--cond); font-weight:800; font-size:50px; line-height:1; color:rgba(196,168,130,.05); }
+
+/* ── MOBILE BOTTOM SHEET ── */
+#mob-panel { position:fixed; inset:0; z-index:500; pointer-events:none; opacity:0; transition:opacity .4s; }
+#mob-panel.open { opacity:1; pointer-events:all; }
+#mob-panel-backdrop { position:absolute; inset:0; background:rgba(9,7,4,.85); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+#mob-sheet { position:absolute; left:0; right:0; bottom:0; max-height:88vh; background:var(--coal); border-top:1px solid rgba(196,168,130,.12); border-radius:20px 20px 0 0; display:flex; flex-direction:column; overflow:hidden; transform:translateY(100%); transition:transform .55s cubic-bezier(.16,1,.3,1); padding-bottom:env(safe-area-inset-bottom,0px); }
+#mob-panel.open #mob-sheet { transform:translateY(0); }
+#mob-sheet-handle { flex-shrink:0; display:flex; align-items:center; justify-content:center; padding:12px 0 6px; }
+.handle-bar { width:40px; height:4px; border-radius:2px; background:rgba(196,168,130,.2); }
+#mob-sheet-hdr { flex-shrink:0; display:flex; align-items:center; justify-content:space-between; padding:6px 20px 14px; border-bottom:1px solid rgba(196,168,130,.08); }
+.msh-eyebrow { font-family:var(--cond); font-weight:600; font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:var(--flame); opacity:.8; display:flex; align-items:center; gap:8px; }
+.msh-eyebrow::before { content:''; width:18px; height:1px; background:currentColor; }
+#mob-sheet-close { font-family:var(--cond); font-weight:600; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(196,168,130,.3); background:none; border:1px solid rgba(196,168,130,.1); padding:5px 14px; border-radius:2px; -webkit-tap-highlight-color:transparent; transition:all .25s; }
+#mob-sheet-close:active { border-color:rgba(240,140,40,.4); color:var(--flame); }
+#mob-sheet-body { flex:1; overflow-y:auto; padding:16px 20px 20px; -webkit-overflow-scrolling:touch; display:flex; flex-direction:column; gap:16px; }
+#mob-sheet-body::-webkit-scrollbar { display:none; }
+#mob-sheet-title { font-family:var(--serif); font-weight:900; font-size:clamp(28px,7vw,40px); letter-spacing:-.02em; line-height:.95; color:var(--cream); }
+#mob-sheet-italic { font-family:var(--serif); font-style:italic; font-weight:300; font-size:14px; color:rgba(196,168,130,.45); margin-top:4px; }
+.msh-meta { font-family:var(--cond); font-weight:500; font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:rgba(196,168,130,.28); display:flex; align-items:center; gap:8px; }
+.msh-meta::before { content:''; width:16px; height:1px; background:rgba(240,140,40,.3); }
+#mob-sheet-desc { font-family:var(--body); font-weight:300; font-size:14px; line-height:1.8; color:rgba(196,168,130,.5); }
+#mob-sheet-desc strong { color:var(--parch); font-weight:400; }
+#mob-sheet-chips { display:flex; flex-wrap:wrap; gap:6px; }
+.msc { font-family:var(--cond); font-weight:500; font-size:8px; letter-spacing:.12em; text-transform:uppercase; padding:5px 11px; border-radius:2px; border:1px solid rgba(196,168,130,.1); color:rgba(196,168,130,.28); }
+.msc.lit { border-color:rgba(240,140,40,.35); color:var(--flame); background:rgba(240,140,40,.07); }
+#mob-sheet-cta { width:100%; padding:16px; font-family:var(--cond); font-weight:700; font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--cream); border:none; background:linear-gradient(90deg,var(--ember),var(--fire),var(--flame)); border-radius:4px; display:flex; align-items:center; justify-content:center; gap:10px; -webkit-tap-highlight-color:transparent; box-shadow:0 8px 30px rgba(192,74,0,.35); transition:transform .2s,box-shadow .2s; }
+#mob-sheet-cta:active { transform:scale(.98); box-shadow:0 4px 15px rgba(192,74,0,.25); }
+.msc-arrow { transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+#mob-sheet-cta:active .msc-arrow { transform:translateX(4px); }
+.msh-foot-rule { font-family:var(--serif); font-style:italic; font-size:11px; color:rgba(196,168,130,.2); text-align:center; }
+
+/* ── SPECIALS inside panel ── */
+#panel-specials-status, #mob-specials-status { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding:8px 12px; border-radius:4px; margin-bottom:8px; background:rgba(9,7,4,.5); border:1px solid rgba(196,168,130,.1); }
 .sp-status-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; display:inline-block; margin-right:6px; }
 .sp-status-txt { font-family:var(--cond); font-weight:600; font-size:10px; letter-spacing:.14em; text-transform:uppercase; }
 .sp-countdown  { font-family:var(--cond); font-size:10px; letter-spacing:.1em; color:rgba(196,168,130,.5); display:flex; align-items:center; gap:6px; }
 .sp-countdown-num { font-weight:700; font-size:13px; color:var(--glow); font-variant-numeric:tabular-nums; }
-
-.sp-list-item {
-  display:flex; align-items:baseline; justify-content:space-between;
-  padding:10px 0; border-bottom:1px solid rgba(196,168,130,.08);
-  gap:12px;
-}
+.sp-list-item  { display:flex; align-items:baseline; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(196,168,130,.08); gap:12px; }
 .sp-list-item:last-child { border-bottom:none; }
 .sp-list-left  { display:flex; flex-direction:column; gap:3px; flex:1; }
 .sp-list-type  { font-family:var(--cond); font-weight:600; font-size:7px; letter-spacing:.22em; text-transform:uppercase; color:rgba(196,168,130,.35); }
@@ -468,183 +389,28 @@ body::after {
 .sp-list-desc  { font-family:var(--body); font-weight:300; font-size:clamp(10px,1vw,12px); color:rgba(196,168,130,.48); line-height:1.45; margin-top:2px; }
 .sp-list-price { font-family:var(--cond); font-weight:800; font-size:clamp(14px,1.4vw,17px); color:var(--glow); letter-spacing:.02em; white-space:nowrap; flex-shrink:0; text-shadow:0 0 14px rgba(245,176,64,.35); }
 .sp-list-empty { font-family:var(--serif); font-style:italic; font-size:clamp(12px,1.2vw,14px); color:rgba(196,168,130,.4); padding:14px 0; text-align:center; }
-
-/* Mobile sheet specials — slightly larger */
 #mob-sheet-specials-list .sp-list-name  { font-size:16px; }
 #mob-sheet-specials-list .sp-list-desc  { font-size:12px; }
 #mob-sheet-specials-list .sp-list-price { font-size:16px; }
 #mob-sheet-specials-list .sp-list-item  { padding:12px 0; }
-#panel-desc strong { color:var(--parch); font-weight:400; }
-#panel-chips  { display:flex; flex-wrap:wrap; gap:6px; }
-.panel-chip   { font-family:var(--cond); font-weight:500; font-size:8px; letter-spacing:.13em; text-transform:uppercase; padding:4px 11px; border-radius:2px; border:1px solid rgba(196,168,130,.1); color:rgba(196,168,130,.28); transition:all .3s; }
-.panel-chip.lit { border-color:rgba(240,140,40,.35); color:var(--flame); background:rgba(240,140,40,.07); }
-.pi-cta-wrap  { display:flex; flex-direction:column; gap:8px; }
-.pi-dbl-note  { font-family:var(--serif); font-style:italic; font-size:11px; color:rgba(196,168,130,.28); }
-#panel-cta    { align-self:flex-start; position:relative; overflow:hidden; font-family:var(--cond); font-weight:700; font-size:clamp(11px,1.2vw,13px); letter-spacing:.18em; text-transform:uppercase; color:var(--cream); border:none; cursor:none; padding:clamp(12px,1.7vh,16px) clamp(22px,2.8vw,34px); background:transparent; border:1px solid rgba(240,140,40,.28); transition:border-color .3s,letter-spacing .35s; display:flex; align-items:center; gap:10px; }
-#panel-cta::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,var(--ember) 0%,var(--fire) 50%,var(--flame) 100%); transform:scaleX(0); transform-origin:left; transition:transform .5s cubic-bezier(.77,0,.18,1); z-index:0; }
-#panel-cta:hover::before { transform:scaleX(1); }
-#panel-cta:hover { border-color:var(--fire); letter-spacing:.26em; }
-#panel-cta span { position:relative; z-index:1; }
-#panel-cta .cta-arrow { position:relative; z-index:1; transition:transform .4s cubic-bezier(.34,1.56,.64,1); }
-#panel-cta:hover .cta-arrow { transform:translateX(5px); }
-.pi-bottom  { display:flex; justify-content:space-between; align-items:flex-end; margin-top:8px; padding-top:14px; border-top:1px solid rgba(196,168,130,.07); }
-.pi-foot-rule { font-family:var(--serif); font-style:italic; font-size:11px; color:rgba(196,168,130,.22); }
-.pi-foot-idx  { font-family:var(--cond); font-weight:800; font-size:50px; line-height:1; color:rgba(196,168,130,.05); }
 
-
-/* ========================================================══
-   MOBILE BOTTOM SHEET PANEL
-========================================================══ */
-#mob-panel {
-  position: fixed; inset: 0; z-index: 500;
-  pointer-events: none; opacity: 0;
-  transition: opacity .4s;
-}
-#mob-panel.open { opacity: 1; pointer-events: all; }
-
-/* dimmed backdrop */
-#mob-panel-backdrop {
-  position: absolute; inset: 0;
-  background: rgba(9,7,4,.85);
-  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-}
-
-/* the sheet */
-#mob-sheet {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  max-height: 88vh;
-  background: var(--coal);
-  border-top: 1px solid rgba(196,168,130,.12);
-  border-radius: 20px 20px 0 0;
-  display: flex; flex-direction: column;
-  overflow: hidden;
-  transform: translateY(100%);
-  transition: transform .55s cubic-bezier(.16,1,.3,1);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-#mob-panel.open #mob-sheet { transform: translateY(0); }
-
-/* drag handle */
-#mob-sheet-handle {
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  padding: 12px 0 6px;
-}
-.handle-bar {
-  width: 40px; height: 4px; border-radius: 2px;
-  background: rgba(196,168,130,.2);
-}
-
-/* sheet header */
-#mob-sheet-hdr {
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 6px 20px 14px;
-  border-bottom: 1px solid rgba(196,168,130,.08);
-}
-.msh-eyebrow {
-  font-family: var(--cond); font-weight: 600;
-  font-size: 9px; letter-spacing: .28em; text-transform: uppercase;
-  color: var(--flame); opacity: .8;
-  display: flex; align-items: center; gap: 8px;
-}
-.msh-eyebrow::before { content: ''; width: 18px; height: 1px; background: currentColor; }
-#mob-sheet-close {
-  font-family: var(--cond); font-weight: 600; font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
-  color: rgba(196,168,130,.3); background: none;
-  border: 1px solid rgba(196,168,130,.1); padding: 5px 14px; border-radius: 2px;
-  -webkit-tap-highlight-color: transparent;
-  transition: all .25s;
-}
-#mob-sheet-close:active { border-color: rgba(240,140,40,.4); color: var(--flame); }
-
-/* sheet content — scrollable */
-#mob-sheet-body {
-  flex: 1; overflow-y: auto; padding: 16px 20px 20px;
-  -webkit-overflow-scrolling: touch;
-  display: flex; flex-direction: column; gap: 16px;
-}
-#mob-sheet-body::-webkit-scrollbar { display: none; }
-
-#mob-sheet-title {
-  font-family: var(--serif); font-weight: 900;
-  font-size: clamp(28px, 7vw, 40px);
-  letter-spacing: -.02em; line-height: .95;
-  color: var(--cream);
-}
-#mob-sheet-italic {
-  font-family: var(--serif); font-style: italic; font-weight: 300;
-  font-size: 14px; color: rgba(196,168,130,.45); margin-top: 4px;
-}
-.msh-meta {
-  font-family: var(--cond); font-weight: 500;
-  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
-  color: rgba(196,168,130,.28);
-  display: flex; align-items: center; gap: 8px;
-}
-.msh-meta::before { content: ''; width: 16px; height: 1px; background: rgba(240,140,40,.3); }
-#mob-sheet-desc {
-  font-family: var(--body); font-weight: 300;
-  font-size: 14px; line-height: 1.8; color: rgba(196,168,130,.5);
-}
-#mob-sheet-desc strong { color: var(--parch); font-weight: 400; }
-#mob-sheet-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.msc { font-family: var(--cond); font-weight: 500; font-size: 8px; letter-spacing: .12em; text-transform: uppercase; padding: 5px 11px; border-radius: 2px; border: 1px solid rgba(196,168,130,.1); color: rgba(196,168,130,.28); }
-.msc.lit { border-color: rgba(240,140,40,.35); color: var(--flame); background: rgba(240,140,40,.07); }
-
-/* CTA */
-#mob-sheet-cta {
-  width: 100%; padding: 16px;
-  font-family: var(--cond); font-weight: 700;
-  font-size: 13px; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--cream); border: none;
-  background: linear-gradient(90deg, var(--ember), var(--fire), var(--flame));
-  border-radius: 4px;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 8px 30px rgba(192,74,0,.35);
-  transition: transform .2s, box-shadow .2s;
-}
-#mob-sheet-cta:active { transform: scale(.98); box-shadow: 0 4px 15px rgba(192,74,0,.25); }
-.msc-arrow { transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
-#mob-sheet-cta:active .msc-arrow { transform: translateX(4px); }
-
-.msh-foot-rule {
-  font-family: var(--serif); font-style: italic;
-  font-size: 11px; color: rgba(196,168,130,.2); text-align: center;
-}
-
-/* ========================================================══
-   LOADER — shared
-========================================================══ */
-#loader {
-  position: fixed; inset: 0; z-index: 700;
-  background: var(--void);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
-  opacity: 0; pointer-events: none; transition: opacity .4s;
-}
-#loader.show { opacity: 1; pointer-events: all; }
+/* ── LOADER ── */
+#loader { position:fixed; inset:0; z-index:700; background:var(--void); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; opacity:0; pointer-events:none; transition:opacity .4s; }
+#loader.show { opacity:1; pointer-events:all; }
 .ld-name  { font-family:var(--serif); font-weight:700; font-size:clamp(22px,5vw,42px); letter-spacing:.02em; color:var(--cream); text-shadow:0 0 60px rgba(240,140,40,.2); text-align:center; }
 .ld-name em { font-style:italic; font-weight:400; color:var(--flame); }
 .ld-going { font-family:var(--serif); font-style:italic; font-size:clamp(12px,1.5vw,16px); color:rgba(196,168,130,.32); letter-spacing:.04em; text-align:center; }
 .ld-fire  { display:flex; align-items:flex-end; gap:4px; height:30px; }
 .lff { width:4px; border-radius:2px; background:linear-gradient(to top,var(--ember),var(--glow)); animation:lffA .5s ease-in-out infinite alternate; }
-.lff:nth-child(1){height:9px;  animation-delay:0s}
-.lff:nth-child(2){height:20px; animation-delay:.07s}
-.lff:nth-child(3){height:27px; animation-delay:.14s}
-.lff:nth-child(4){height:15px; animation-delay:.21s}
-.lff:nth-child(5){height:23px; animation-delay:.28s}
-.lff:nth-child(6){height:12px; animation-delay:.35s}
-.lff:nth-child(7){height:21px; animation-delay:.42s}
+.lff:nth-child(1){height:9px;animation-delay:0s}.lff:nth-child(2){height:20px;animation-delay:.07s}.lff:nth-child(3){height:27px;animation-delay:.14s}.lff:nth-child(4){height:15px;animation-delay:.21s}.lff:nth-child(5){height:23px;animation-delay:.28s}.lff:nth-child(6){height:12px;animation-delay:.35s}.lff:nth-child(7){height:21px;animation-delay:.42s}
 @keyframes lffA { from{transform:scaleY(1);opacity:.65} to{transform:scaleY(1.3);opacity:1} }
 .ld-track { width:clamp(140px,22vw,240px); height:1px; background:rgba(196,168,130,.08); position:relative; }
 .ld-fill  { position:absolute; top:0; left:0; bottom:0; background:linear-gradient(90deg,var(--ember),var(--flame),var(--glow)); transform:scaleX(0); transform-origin:left; border-radius:1px; }
 #loader.show .ld-fill { animation:ldFill 1.8s .1s cubic-bezier(.77,0,.18,1) forwards; }
-@keyframes ldFill { to { transform:scaleX(1); } }
+@keyframes ldFill { to{transform:scaleX(1);} }
 .ld-msg   { font-family:var(--cond); font-weight:500; font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:rgba(196,168,130,.2); animation:msgBlink 1.3s ease-in-out infinite; }
 @keyframes msgBlink { 0%,100%{opacity:.2} 50%{opacity:.55} }
 
-/* touch ripple */
 .ripple { position:fixed; border-radius:50%; pointer-events:none; z-index:50; border:1px solid rgba(240,140,40,.3); animation:rip .6s ease-out forwards; }
 @keyframes rip { from{width:0;height:0;opacity:.7;transform:translate(-50%,-50%)} to{width:80px;height:80px;opacity:0;transform:translate(-50%,-50%)} }
 
@@ -660,7 +426,7 @@ body::after {
 <canvas id="cv-smoke"></canvas>
 <canvas id="cv-ember"></canvas>
 
-<!-- ══════════ DESKTOP SHELL ══════════ -->
+<!-- DESKTOP SHELL -->
 <div id="shell">
   <div id="topbar">
     <div class="tb-cell"><div class="tb-eyebrow">Location</div><div class="tb-val">St. Francisville, LA</div></div>
@@ -674,7 +440,6 @@ body::after {
   </div>
 
   <div id="main">
-    <!-- LEFT -->
     <div id="sidebar-l">
       <div class="sb-group">
         <div class="sb-block"><span class="sb-label">The Pit</span><span class="sb-text">Post oak & hickory. 225°F. Low and slow. No gas. No shortcuts.</span></div>
@@ -686,15 +451,14 @@ body::after {
         <div class="sb-label" style="margin-bottom:8px">Connect</div>
         <div class="sb-links">
           <a class="sb-link" href="https://www.facebook.com/1547733028788117/" target="_blank">Facebook</a>
-          <a class="sb-link" href="/cdn-cgi/l/email-protection#ccaabeada2afa5bfbfa1a3a7a9a4a3b9bfa98cadb8b8e2a2a9b8">Email Us</a>
+          <a class="sb-link" href="mailto:francissmokehouse@att.net">Email Us</a>
           <a class="sb-link" href="https://www.tripadvisor.ca/Restaurant_Review-g40411-d7851018-Reviews-The_Francis_Smokehouse-Saint_Francisville_Louisiana.html" target="_blank">TripAdvisor</a>
           <a class="sb-link" href="https://www.google.com/maps/search/?api=1&query=The+Francis+Smokehouse%2C+St+Francisville%2C+LA" target="_blank">Google Maps</a>
-          <a class="sb-link" href="/cdn-cgi/l/email-protection#610713000f020812120c0e0a04090e141204210015154f0f0415">Catering Enquiry</a>
+          <a class="sb-link" href="mailto:francissmokehouse@att.net">Catering Enquiry</a>
         </div>
       </div>
     </div>
 
-    <!-- CENTER NAV -->
     <div id="nav-center">
       <nav>
         <div class="nav-item" onclick="openPanel('menu')"     onmouseenter="setPreview('menu')"     onmouseleave="clearPreview()"><span class="ni-num">01</span><span class="ni-name">The Menu</span><span class="ni-sub">BBQ plates, po-boys & sandwiches</span><span class="ni-arrow">↗</span></div>
@@ -707,7 +471,6 @@ body::after {
       </nav>
     </div>
 
-    <!-- RIGHT -->
     <div id="sidebar-r">
       <div><div class="pv-label">Section Preview</div><div id="pv-title">Hover any item to explore</div><div id="pv-desc">Each destination has its own story. Take your time.</div><div id="pv-chips"></div></div>
       <div id="pv-num">—</div>
@@ -720,7 +483,7 @@ body::after {
   </div>
 </div>
 
-<!-- ══════════ MOBILE SHELL ══════════ -->
+<!-- MOBILE SHELL -->
 <div id="mobile-shell">
   <div id="mob-header">
     <div id="mob-header-inner">
@@ -734,7 +497,6 @@ body::after {
       <div class="mob-info-bit"><span class="mob-info-lbl">Hours</span><span class="mob-info-val" id="mob-hours">10am – 6pm</span></div>
     </div>
   </div>
-
   <div id="mob-nav">
     <div class="mob-nav-item" onclick="openMobPanel('menu')"><span class="mni-num">01</span><div class="mni-body"><div class="mni-name">The Menu</div><div class="mni-sub">BBQ plates, po-boys & sandwiches</div></div><span class="mni-arrow">↗</span></div>
     <div class="mob-nav-item" onclick="openMobPanel('special')" style="padding-left:36px;"><span class="mni-num" style="font-size:8px;opacity:.5;">✦</span><div class="mni-body"><div class="mni-name" style="font-size:clamp(17px,4.2vw,22px);color:rgba(240,140,40,.75);">Daily Special</div><div class="mni-sub">Today's plate · Changes at 6am</div></div><span class="mni-arrow">↗</span></div>
@@ -744,13 +506,10 @@ body::after {
     <div class="mob-nav-item" onclick="openMobPanel('catering')"><span class="mni-num">05</span><div class="mni-body"><div class="mni-name">Catering</div><div class="mni-sub">Large orders & events</div></div><span class="mni-arrow">↗</span></div>
     <div class="mob-nav-item" onclick="openMobPanel('find')"><span class="mni-num">06</span><div class="mni-body"><div class="mni-name">Find Us</div><div class="mni-sub">6779 US Hwy 61 · Follow the smoke</div></div><span class="mni-arrow">↗</span></div>
   </div>
-
-  <div id="mob-botbar">
-    <div id="mob-ticker-track"></div>
-  </div>
+  <div id="mob-botbar"><div id="mob-ticker-track"></div></div>
 </div>
 
-<!-- ══════════ DESKTOP PANEL ══════════ -->
+<!-- DESKTOP PANEL -->
 <div id="panel">
   <div id="panel-mood">
     <div id="panel-mood-bg"></div>
@@ -764,23 +523,31 @@ body::after {
     </div>
   </div>
   <div id="panel-info">
-    <div class="pi-top"><span class="pi-hint">Double-click or confirm to enter · ESC to close</span></div>
+    <div class="pi-top"><span class="pi-hint">Auto-redirecting · ESC to cancel</span></div>
     <div class="pi-body-wrap">
       <div class="pi-meta" id="panel-meta"></div>
       <p id="panel-desc"></p>
       <div id="panel-chips"></div>
-      <!-- SPECIALS LIST — only shown for specials panel -->
       <div id="panel-specials-list" style="display:none;flex-direction:column;gap:0;margin-top:4px;"></div>
       <div class="pi-cta-wrap">
-        <div class="pi-dbl-note">Double-click anywhere to enter, or use the button</div>
-        <button id="panel-cta" onclick="goTo()"><span id="cta-label">Enter</span><span class="cta-arrow">→</span></button>
+        <div class="pi-countdown-row" id="panel-countdown-row" style="display:none;">
+          <div class="pi-countdown-ring">
+            <svg viewBox="0 0 38 38"><circle class="ring-bg" cx="19" cy="19" r="16"/><circle class="ring-fill" id="panel-ring-fill" cx="19" cy="19" r="16"/></svg>
+            <div class="ring-num" id="panel-ring-num">5</div>
+          </div>
+          <div class="pi-countdown-text">Redirecting in <strong id="panel-countdown-sec" style="color:var(--flame);">5</strong> seconds</div>
+        </div>
+        <div class="cta-wrap">
+          <button id="panel-cta" onclick="goTo()"><span id="cta-label">Enter</span><span class="cta-arrow">→</span></button>
+          <svg class="cta-border-svg" id="cta-border-svg"><rect class="cta-border-track" id="cta-track" rx="0"/><rect class="cta-border-chaser" id="cta-chaser" rx="0"/></svg>
+        </div>
       </div>
     </div>
     <div class="pi-bottom"><span class="pi-foot-rule" id="panel-rule"></span><span class="pi-foot-idx" id="panel-idx"></span></div>
   </div>
 </div>
 
-<!-- ══════════ MOBILE BOTTOM SHEET ══════════ -->
+<!-- MOBILE SHEET -->
 <div id="mob-panel">
   <div id="mob-panel-backdrop" onclick="closeMobPanel()"></div>
   <div id="mob-sheet">
@@ -790,22 +557,25 @@ body::after {
       <button id="mob-sheet-close" onclick="closeMobPanel()">✕ Close</button>
     </div>
     <div id="mob-sheet-body">
-      <div>
-        <div id="mob-sheet-title"></div>
-        <div id="mob-sheet-italic"></div>
-      </div>
+      <div><div id="mob-sheet-title"></div><div id="mob-sheet-italic"></div></div>
       <div class="msh-meta" id="mob-sheet-meta"></div>
       <p id="mob-sheet-desc"></p>
       <div id="mob-sheet-chips"></div>
-      <!-- SPECIALS LIST — only shown for specials panel -->
       <div id="mob-sheet-specials-list" style="display:none;flex-direction:column;gap:0;"></div>
+      <div class="mob-countdown-row" id="mob-countdown-row" style="display:none;">
+        <div class="mob-countdown-ring">
+          <svg viewBox="0 0 34 34"><circle class="ring-bg" cx="17" cy="17" r="14"/><circle class="ring-fill" id="mob-ring-fill" cx="17" cy="17" r="14"/></svg>
+          <div class="ring-num" id="mob-ring-num">5</div>
+        </div>
+        <div class="mob-countdown-text">Redirecting in <strong id="mob-countdown-sec" style="color:var(--flame);">5</strong>s</div>
+      </div>
       <button id="mob-sheet-cta" onclick="goTo()"><span id="mob-cta-label">Enter</span><span class="msc-arrow">→</span></button>
       <div class="msh-foot-rule" id="mob-sheet-rule"></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════ LOADER ══════════ -->
+<!-- LOADER -->
 <div id="loader">
   <div class="ld-name">The Francis <em>Smokehouse</em></div>
   <div class="ld-going" id="ld-going">Loading...</div>
@@ -814,10 +584,8 @@ body::after {
   <div class="ld-msg">Stoking the fire...</div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-/* ================================
-   CANVAS ATMOSPHERE
-================================ */
+<script>
+/* CANVAS ATMOSPHERE */
 const cvBg=document.getElementById('cv-bg'),bx=cvBg.getContext('2d');
 const cvSm=document.getElementById('cv-smoke'),sx=cvSm.getContext('2d');
 const cvEm=document.getElementById('cv-ember'),ex=cvEm.getContext('2d');
@@ -863,7 +631,6 @@ function drawEmbers(){
 }
 (function loop(){ drawBg(); drawSmoke(); drawEmbers(); requestAnimationFrame(loop); })();
 
-/* Panel smoke */
 const psCV=document.getElementById('panel-smoke-cv'),psx=psCV.getContext('2d');
 function rszPS(){psCV.width=window.innerWidth;psCV.height=window.innerHeight;}
 rszPS(); window.addEventListener('resize',rszPS);
@@ -881,46 +648,36 @@ const PS=Array.from({length:10},mkS);
   requestAnimationFrame(psL);
 })();
 
-/* ================================
-   CURSOR
-================================ */
+/* CURSOR — direct follow, no bounce */
 const curEl=document.getElementById('cursor');
 document.addEventListener('mousemove',e=>{ curEl.style.left=e.clientX+'px'; curEl.style.top=e.clientY+'px'; });
 
-/* ================================
-   TICKERS
-================================ */
+/* TICKERS */
 const tkItems=['Brisket Plate — $10.99','Full Rack Ribs — $19.99','Pulled Pork — $9.99','Smoked Wings — $7.99','Ribeye Po-boy — $10.99','Crawfish Po-boy — $10.99','Boudin Balls','Pepper Jack Boudin','Corn Pudding','Bread Pudding','Creole Cream Cheesecake','½ Chicken — $9.99','Catfish Po-boy — $8.99','Cheeseburger — $7.99','Boudin Egg Rolls'];
 const d4=[...tkItems,...tkItems,...tkItems,...tkItems];
 const html=d4.map(t=>`<span class="t-item">${t}</span>`).join('');
 document.getElementById('ticker-track').innerHTML=html;
 document.getElementById('mob-ticker-track').innerHTML=d4.map(t=>`<span class="mt-item">${t}</span>`).join('');
 
-/* ================================
-   HOURS
-================================ */
+/* HOURS */
 const dow=new Date().getDay();
 const hoursStr=dow===0?'Sun: 10am – 3pm':'Mon–Sat 10am–6pm';
 const mobHoursStr=dow===0?'10am – 3pm':'10am – 6pm';
 document.getElementById('hours-today').textContent=hoursStr;
 document.getElementById('mob-hours').textContent=mobHoursStr;
 
-/* ================================
-   PAGE DATA
-================================ */
+/* PAGE DATA */
 const PAGES={
   menu:{num:'01',eyebrow:'The Menu',cta:'See Full Menu',title:'Pit to\nPlate.',italic:'BBQ plates · Po-boys · Burgers · Sandwiches',meta:'Smoked daily — 12+ hours minimum',mood:'radial-gradient(ellipse at 30% 80%,#3a1800 0%,#1a0c04 50%,#09070a 100%)',desc:`Everything on this menu spent <strong>a minimum of twelve hours over post oak and hickory.</strong> Brisket plate $10.99. Full rack ribs $19.99. Pulled pork $9.99. Half chicken $9.99. Smoked wings $7.99. All BBQ plates come with two sides. Ribeye po-boys, shrimp po-boys, crawfish po-boys and catfish po-boys also on the board. Burgers from $6.99.`,chips:['Brisket $10.99','Ribs $19.99','Pulled Pork $9.99','Wings $7.99','Ribeye Po-boy $10.99','2 Sides Included'],rule:'Low & slow, always.',dest:'menu.html'},
   special:{num:'✦',eyebrow:'Daily Special',cta:"See Today's Special",title:'Daily\nSpecial.',italic:'One plate — changes every morning at 6am',meta:'Posted at 6am · Call (225) 245-5046 to confirm',mood:'radial-gradient(ellipse at 30% 80%,#3a1800 0%,#1a0c04 50%,#09070a 100%)',desc:`The daily special changes every morning at 6am. One plate, made fresh. <strong>Check back daily or follow us on Facebook</strong> to see what's on the board before you drive out.`,chips:['Changes Daily','Posted at 6am','Check Facebook','(225) 245-5046'],rule:'Fresh every morning.',dest:'menu.html#specials'},
   about:{num:'02',eyebrow:'About Us',cta:'Read Our Story',title:'Who\nWe Are.',italic:'Family owned · St. Francisville · Since 2015',meta:'4.7★ Google · 4.5★ TripAdvisor · 505 reviews',mood:'radial-gradient(ellipse at 30% 80%,#2a1200 0%,#180a02 50%,#09070a 100%)',desc:`The Francis Smokehouse has been a fixture on <strong>US Highway 61 in St. Francisville</strong> since 2015. We smoke everything over post oak and hickory — no gas, no shortcuts. Rated <strong>Travellers' Choice</strong> on TripAdvisor and 4.7★ across 505 Google reviews. <em>"Brisket practically melted in my mouth."</em> The outdoor deck built around the old tree keeps everyone coming back.`,chips:['Est. 2015',"Travellers' Choice",'4.7★ Google','4.5★ TripAdvisor','Outdoor Deck','Family Owned'],rule:'Real food. Real people.',dest:'about.html'},
-  giftcards:{num:'03',eyebrow:'Gift Cards',cta:'Get a Gift Card',title:'Give the\nGift.',italic:'Load any amount · Available in-store',meta:'Available at 6779 US Hwy 61 · No minimum',mood:'radial-gradient(ellipse at 30% 80%,#321800 0%,#1c0e02 50%,#09070a 100%)',desc:`Give the gift of slow-smoked BBQ. <strong>Load any amount</strong> onto a Francis Smokehouse gift card — available right at the counter. No minimum, no expiry. Perfect for birthdays, holidays, thank-yous, or any BBQ lover in your life. Stop in during business hours and we'll take care of you.`,chips:['Any Amount','No Minimum','No Expiry','Available In-Store','Mon–Sat 10–6','Sun 10–3'],rule:'The best gift for a BBQ lover.',dest:'giftcards.html'},
-  story:{num:'04',eyebrow:'Our Story',cta:'Read Our Story',title:'St. Francisville\nProud.',italic:"Travellers' Choice · 4.5★ TripAdvisor · 4.7★ Google",meta:'143 TripAdvisor reviews · 505 Google reviews',mood:'radial-gradient(ellipse at 30% 80%,#281400 0%,#160a02 50%,#09070a 100%)',desc:`The Francis Smokehouse has been a fixture on <strong>US Highway 61 in St. Francisville</strong> since 2015. Rated Travellers' Choice on Tripadvisor — top 10% of restaurants worldwide. 4.7 across 505 Google reviews. <em>"Brisket practically melted in my mouth."</em> <em>"Boudin balls were AMAZING."</em> Locals fill the inside. The outdoor deck built around the old tree keeps everyone coming back.`,chips:['Est. 2015',"Travellers' Choice",'4.7★ Google','4.5★ TripAdvisor','Outdoor Deck',"Locals' Favorite"],rule:'Real food. Real people.',dest:'story.html'},
-  catering:{num:'05',eyebrow:'Catering',cta:'Contact Us Now',title:'Feed\nThe Crowd.',italic:'Large orders · Events · Private gatherings',meta:'Call (225) 245-5046 · Message on Facebook',mood:'radial-gradient(ellipse at 30% 80%,#301600 0%,#180b02 50%,#09070a 100%)',desc:`The team handles <strong>large catering orders</strong> for parties, corporate lunches, weddings and events. Brisket, wings and sides in bulk. <strong>Call (225) 245-5046</strong> or message us on <strong>Facebook</strong> to discuss your event. On-site parking, fully wheelchair accessible.`,chips:['Brisket Catering','Wings & Sides','Takeout Available','Groups Welcome','Wheelchair Access','Free Parking'],rule:'Enough for the whole crew.',dest:'catering.html'},
-  find:{num:'06',eyebrow:'Find Us',cta:'Open in Google Maps',title:'Follow\nThe Smoke.',italic:'6779 US Highway 61 · St. Francisville, LA 70775',meta:'Mon–Sat 10am–6pm · Sun 10am–3pm',mood:'radial-gradient(ellipse at 30% 80%,#1e1000 0%,#120800 50%,#09070a 100%)',desc:`We're at <strong>6779 US Highway 61, St. Francisville, LA 70775</strong>. Mon–Sat 10am–6pm, Sunday 10am–3pm. On-site parking, fully wheelchair accessible. <strong>When the smoker is running you'll smell us before you see us.</strong> Travelers on the Great River Road call it a mandatory stop.`,chips:['6779 US Hwy 61','(225) 245-5046','Mon–Sat 10–6','Sun 10–3','Free Parking','Wheelchair OK'],rule:"You'll smell us first.",dest:'findus.html'},
+  giftcards:{num:'03',eyebrow:'Gift Cards',cta:'Get a Gift Card',title:'Give the\nGift.',italic:'Load any amount · Available in-store',meta:'Available at 6779 US Hwy 61 · No minimum',mood:'radial-gradient(ellipse at 30% 80%,#321800 0%,#1c0e02 50%,#09070a 100%)',desc:`Give the gift of slow-smoked BBQ. <strong>Load any amount</strong> onto a Francis Smokehouse gift card — available right at the counter. No minimum, no expiry. Perfect for birthdays, holidays, thank-yous, or any BBQ lover in your life.`,chips:['Any Amount','No Minimum','No Expiry','Available In-Store','Mon–Sat 10–6','Sun 10–3'],rule:'The best gift for a BBQ lover.',dest:'giftcards.html'},
+  story:{num:'04',eyebrow:'Our Story',cta:'Read Our Story',title:'St. Francisville\nProud.',italic:"Travellers' Choice · 4.5★ TripAdvisor · 4.7★ Google",meta:'143 TripAdvisor reviews · 505 Google reviews',mood:'radial-gradient(ellipse at 30% 80%,#281400 0%,#160a02 50%,#09070a 100%)',desc:`The Francis Smokehouse has been a fixture on <strong>US Highway 61 in St. Francisville</strong> since 2015. Rated Travellers' Choice on Tripadvisor. 4.7 across 505 Google reviews. <em>"Brisket practically melted in my mouth."</em> <em>"Boudin balls were AMAZING."</em>`,chips:['Est. 2015',"Travellers' Choice",'4.7★ Google','4.5★ TripAdvisor','Outdoor Deck',"Locals' Favorite"],rule:'Real food. Real people.',dest:'story.html'},
+  catering:{num:'05',eyebrow:'Catering',cta:'Contact Us Now',title:'Feed\nThe Crowd.',italic:'Large orders · Events · Private gatherings',meta:'Call (225) 245-5046 · Message on Facebook',mood:'radial-gradient(ellipse at 30% 80%,#301600 0%,#180b02 50%,#09070a 100%)',desc:`The team handles <strong>large catering orders</strong> for parties, corporate lunches, weddings and events. Brisket, wings and sides in bulk. <strong>Call (225) 245-5046</strong> or message us on <strong>Facebook</strong> to discuss your event.`,chips:['Brisket Catering','Wings & Sides','Takeout Available','Groups Welcome','Wheelchair Access','Free Parking'],rule:'Enough for the whole crew.',dest:'catering.html'},
+  find:{num:'06',eyebrow:'Find Us',cta:'Open in Google Maps',title:'Follow\nThe Smoke.',italic:'6779 US Highway 61 · St. Francisville, LA 70775',meta:'Mon–Sat 10am–6pm · Sun 10am–3pm',mood:'radial-gradient(ellipse at 30% 80%,#1e1000 0%,#120800 50%,#09070a 100%)',desc:`We're at <strong>6779 US Highway 61, St. Francisville, LA 70775</strong>. Mon–Sat 10am–6pm, Sunday 10am–3pm. On-site parking, fully wheelchair accessible. <strong>When the smoker is running you'll smell us before you see us.</strong>`,chips:['6779 US Hwy 61','(225) 245-5046','Mon–Sat 10–6','Sun 10–3','Free Parking','Wheelchair OK'],rule:"You'll smell us first.",dest:'findus.html'},
 };
 
-/* ================================
-   DESKTOP PREVIEW
-================================ */
+/* PREVIEW */
 const pvNums={menu:'01',special:'✦',about:'02',giftcards:'03',story:'04',catering:'05',find:'06'};
 function setPreview(id){
   const p=PAGES[id];
@@ -938,10 +695,53 @@ function clearPreview(){
   document.getElementById('pv-chips').innerHTML='';
 }
 
-/* ================================
-   DESKTOP PANEL
-================================ */
 let currentPage=null, navigating=false;
+
+/* ── AUTO-REDIRECT COUNTDOWN ── */
+const CD_SECS=5, RING_D=100, RING_M=88;
+let _cdTimer=null, _cdInterval=null;
+
+function stopCountdown(){
+  if(_cdTimer){clearTimeout(_cdTimer);_cdTimer=null;}
+  if(_cdInterval){clearInterval(_cdInterval);_cdInterval=null;}
+  const dr=document.getElementById('panel-countdown-row');
+  const mr=document.getElementById('mob-countdown-row');
+  if(dr)dr.style.display='none';
+  if(mr)mr.style.display='none';
+}
+
+function startCountdown(){
+  stopCountdown();
+  let secs=CD_SECS;
+  document.getElementById('panel-countdown-row').style.display='flex';
+  document.getElementById('mob-countdown-row').style.display='flex';
+  function tick(){
+    const ds=document.getElementById('panel-countdown-sec'), dn=document.getElementById('panel-ring-num'), df=document.getElementById('panel-ring-fill');
+    if(ds) ds.textContent=secs; if(dn) dn.textContent=secs;
+    if(df) df.style.strokeDashoffset=String(RING_D*(1-secs/CD_SECS));
+    const ms=document.getElementById('mob-countdown-sec'), mn=document.getElementById('mob-ring-num'), mf=document.getElementById('mob-ring-fill');
+    if(ms) ms.textContent=secs; if(mn) mn.textContent=secs;
+    if(mf) mf.style.strokeDashoffset=String(RING_M*(1-secs/CD_SECS));
+  }
+  tick();
+  _cdInterval=setInterval(()=>{ secs--; if(secs>=0) tick(); }, 1000);
+  _cdTimer=setTimeout(()=>{ stopCountdown(); goTo(); }, CD_SECS*1000);
+}
+
+/* ── CTA BORDER CHASER sizing ── */
+function sizeChaserBorder(){
+  const btn=document.getElementById('panel-cta');
+  const track=document.getElementById('cta-track');
+  const chaser=document.getElementById('cta-chaser');
+  if(!btn||!track||!chaser) return;
+  const w=btn.offsetWidth, h=btn.offsetHeight;
+  const perimeter=2*(w+h);
+  [track,chaser].forEach(el=>{ el.setAttribute('x','0'); el.setAttribute('y','0'); el.setAttribute('width',w); el.setAttribute('height',h); });
+  chaser.style.strokeDasharray='50 '+perimeter;
+  chaser.style.animationDuration=(perimeter/150)+'s';
+}
+
+/* PANEL OPEN/CLOSE */
 function openPanel(id){
   const p=PAGES[id]; currentPage=p;
   document.getElementById('panel-mood-bg').style.background=p.mood;
@@ -954,32 +754,35 @@ function openPanel(id){
   document.getElementById('panel-idx').textContent=p.num;
   document.getElementById('cta-label').textContent=p.cta;
 
-  const specList = document.getElementById('panel-specials-list');
-  const descEl   = document.getElementById('panel-desc');
-  const chipsEl  = document.getElementById('panel-chips');
+  const specList=document.getElementById('panel-specials-list');
+  const descEl=document.getElementById('panel-desc');
+  const chipsEl=document.getElementById('panel-chips');
+  specList.style.display='none';
 
-  specList.style.display = 'none';
-  stopSpecialsCountdown();
-
-  if(id === 'menu' || id === 'special'){
-    var specialHTML = getTodaysSpecialHTML();
-    descEl.innerHTML = p.desc + specialHTML;
-    chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
+  if(id==='menu'||id==='special'){
+    var specialHTML=getTodaysSpecialHTML();
+    descEl.innerHTML=p.desc+specialHTML;
+    chipsEl.innerHTML=p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
   } else {
-    descEl.innerHTML = p.desc;
-    chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
+    descEl.innerHTML=p.desc;
+    chipsEl.innerHTML=p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
   }
 
   document.getElementById('panel').classList.add('open');
   document.getElementById('shell').style.pointerEvents='none';
   navigating=false;
+  requestAnimationFrame(()=>{ sizeChaserBorder(); startCountdown(); });
 }
-function closePanel(){ document.getElementById('panel').classList.remove('open'); document.getElementById('shell').style.pointerEvents=''; currentPage=null; }
+
+function closePanel(){
+  stopCountdown();
+  document.getElementById('panel').classList.remove('open');
+  document.getElementById('shell').style.pointerEvents='';
+  currentPage=null;
+}
 document.getElementById('panel-info').addEventListener('dblclick',goTo);
 
-/* ================================
-   MOBILE BOTTOM SHEET
-================================ */
+/* MOBILE SHEET */
 function openMobPanel(id){
   const p=PAGES[id]; currentPage=p;
   document.getElementById('mob-sheet-eyebrow').textContent=p.eyebrow;
@@ -989,31 +792,28 @@ function openMobPanel(id){
   document.getElementById('mob-sheet-rule').textContent=p.rule;
   document.getElementById('mob-cta-label').textContent=p.cta;
 
-  const specList = document.getElementById('mob-sheet-specials-list');
-  const descEl   = document.getElementById('mob-sheet-desc');
-  const chipsEl  = document.getElementById('mob-sheet-chips');
+  const specList=document.getElementById('mob-sheet-specials-list');
+  const descEl=document.getElementById('mob-sheet-desc');
+  const chipsEl=document.getElementById('mob-sheet-chips');
+  specList.style.display='none';
 
-  specList.style.display = 'none';
-  stopSpecialsCountdown();
-
-  if(id === 'menu' || id === 'special'){
-    var specialHTML = getTodaysSpecialHTML();
-    descEl.innerHTML = p.desc + specialHTML;
-    chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
+  if(id==='menu'||id==='special'){
+    var specialHTML=getTodaysSpecialHTML();
+    descEl.innerHTML=p.desc+specialHTML;
+    chipsEl.innerHTML=p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
   } else {
-    descEl.innerHTML = p.desc;
-    chipsEl.innerHTML = p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
+    descEl.innerHTML=p.desc;
+    chipsEl.innerHTML=p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
   }
 
   document.getElementById('mob-panel').classList.add('open');
   navigating=false;
   document.getElementById('mob-sheet-body').scrollTop=0;
+  startCountdown();
 }
-function closeMobPanel(){ document.getElementById('mob-panel').classList.remove('open'); currentPage=null; }
+function closeMobPanel(){ stopCountdown(); document.getElementById('mob-panel').classList.remove('open'); currentPage=null; }
 
-/* ================================
-   LOADER + NAVIGATE
-================================ */
+/* NAVIGATE */
 function goTo(){
   if(!currentPage||navigating) return;
   navigating=true;
@@ -1022,13 +822,21 @@ function goTo(){
   const fill=document.getElementById('ld-fill');
   fill.style.animation='none'; void fill.offsetHeight;
   ld.classList.add('show');
+  const dest=currentPage.dest;
+  const isExternal=dest.startsWith('http')||dest.startsWith('tel');
+  const extWin=isExternal?window.open('','_blank'):null;
   setTimeout(()=>{
-    if(currentPage.dest.startsWith('http')){ window.open(currentPage.dest,'_blank'); ld.classList.remove('show'); navigating=false; }
-    else { window.location.href=currentPage.dest; }
+    if(isExternal){
+      if(extWin&&!extWin.closed){ extWin.location.href=dest; }
+      else{ window.location.href=dest; }
+      ld.classList.remove('show'); navigating=false;
+    } else {
+      window.location.href=dest;
+    }
   },1900);
 }
 
-/* Touch ripple */
+/* TOUCH RIPPLE */
 document.addEventListener('touchstart',e=>{
   const t=e.touches[0];
   const r=document.createElement('div'); r.className='ripple';
@@ -1039,7 +847,7 @@ document.addEventListener('touchstart',e=>{
 /* ESC */
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closePanel(); closeMobPanel(); } });
 
-/* Sheet swipe down to close */
+/* SHEET SWIPE DOWN */
 let sheetStartY=0;
 document.getElementById('mob-sheet').addEventListener('touchstart',e=>{ sheetStartY=e.touches[0].clientY; },{passive:true});
 document.getElementById('mob-sheet').addEventListener('touchend',e=>{
@@ -1047,9 +855,7 @@ document.getElementById('mob-sheet').addEventListener('touchend',e=>{
   if(dy>80) closeMobPanel();
 },{passive:true});
 
-/* ================================
-   BOOT
-================================ */
+/* BOOT */
 document.body.style.opacity='0';
 document.body.style.transition='opacity .6s';
 window.addEventListener('load',()=>{
@@ -1064,90 +870,39 @@ window.addEventListener('load',()=>{
 });
 </script>
 
-<!-- ══════════ SPECIALS ENGINE ══════════ -->
+<!-- SPECIALS ENGINE -->
 <script>
 var HOURS_CFG = { weekday:{open:10,close:18}, sunday:{open:10,close:15} };
-
-function _todayStr(){
-  var d=new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-}
+function _todayStr(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function _hrs(){ return new Date().getDay()===0?HOURS_CFG.sunday:HOURS_CFG.weekday; }
-function _isOpen(){
-  var n=new Date(),h=n.getHours()+n.getMinutes()/60,r=_hrs();
-  return h>=r.open&&h<r.close;
-}
-function _nextOpen(){
-  var n=new Date(),d=new Date(n),r=_hrs();
-  if(n.getHours()<r.open){d.setHours(r.open,0,0,0);return d;}
-  d.setDate(d.getDate()+1);
-  var nr=d.getDay()===0?HOURS_CFG.sunday:HOURS_CFG.weekday;
-  d.setHours(nr.open,0,0,0);return d;
-}
-function _closeTime(){var d=new Date(),r=_hrs();d.setHours(r.close,0,0,0);return d;}
-function _fmt(ms){
-  if(ms<=0)return'0:00:00';
-  var s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=s%60;
-  return h+':'+String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0');
-}
-
-/* Returns the active special item from either SITE_SPECIAL (new) or SITE_SPECIALS (old array) */
+function _isOpen(){ var n=new Date(),h=n.getHours()+n.getMinutes()/60,r=_hrs(); return h>=r.open&&h<r.close; }
+function _nextOpen(){ var n=new Date(),d=new Date(n),r=_hrs(); if(n.getHours()<r.open){d.setHours(r.open,0,0,0);return d;} d.setDate(d.getDate()+1); var nr=d.getDay()===0?HOURS_CFG.sunday:HOURS_CFG.weekday; d.setHours(nr.open,0,0,0);return d; }
+function _closeTime(){ var d=new Date(),r=_hrs(); d.setHours(r.close,0,0,0); return d; }
 function _getSpecialItem(){
-  var today = _todayStr();
-  if(typeof SITE_SPECIAL !== 'undefined' && SITE_SPECIAL && !SITE_SPECIAL.hidden){
-    if(!SITE_SPECIAL.date || SITE_SPECIAL.date === today) return SITE_SPECIAL;
-  }
-  if(typeof SITE_SPECIALS !== 'undefined' && Array.isArray(SITE_SPECIALS)){
-    var vis = SITE_SPECIALS.filter(function(i){
-      if(!i||i.hidden)return false;
-      if(i.date&&i.date!==today)return false;
-      return true;
-    });
-    if(vis.length) return vis[0];
-  }
+  var today=_todayStr();
+  if(typeof SITE_SPECIAL!=='undefined'&&SITE_SPECIAL&&!SITE_SPECIAL.hidden){ if(!SITE_SPECIAL.date||SITE_SPECIAL.date===today) return SITE_SPECIAL; }
+  if(typeof SITE_SPECIALS!=='undefined'&&Array.isArray(SITE_SPECIALS)){ var vis=SITE_SPECIALS.filter(function(i){ if(!i||i.hidden)return false; if(i.date&&i.date!==today)return false; return true; }); if(vis.length) return vis[0]; }
   return null;
 }
-
-/* Returns HTML to inject into the Menu panel description showing today's special */
 function getTodaysSpecialHTML(){
   if(!_isOpen()) return '';
-  var item = _getSpecialItem();
-  if(!item || !item.name) return '';
-
-  var html = '<div style="'
-    +'margin-top:14px;padding:12px 14px;border-radius:6px;'
-    +'background:rgba(192,72,0,.12);border:1px solid rgba(192,72,0,.3);'
-    +'border-left:3px solid var(--fire,#e06010);">'
-    +'<div style="font-family:var(--cond,\'Barlow Condensed\',sans-serif);font-weight:700;font-size:8px;'
-    +'letter-spacing:.28em;text-transform:uppercase;color:var(--flame,#f08820);margin-bottom:6px;">'
-    +'🔥 '+(item.type||'Today\'s Special')+'</div>'
+  var item=_getSpecialItem();
+  if(!item||!item.name) return '';
+  return '<div style="margin-top:14px;padding:12px 14px;border-radius:6px;background:rgba(192,72,0,.12);border:1px solid rgba(192,72,0,.3);border-left:3px solid var(--fire,#e06010);">'
+    +'<div style="font-family:var(--cond,\'Barlow Condensed\',sans-serif);font-weight:700;font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--flame,#f08820);margin-bottom:6px;">🔥 '+(item.type||"Today's Special")+'</div>'
     +'<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;">'
-    +'<strong style="font-family:var(--serif,\'Playfair Display\',serif);font-size:clamp(14px,1.4vw,17px);'
-    +'color:var(--cream,#f5edda);font-weight:700;">'+item.name+'</strong>'
-    +(item.price ? '<span style="font-family:var(--cond,\'Barlow Condensed\',sans-serif);font-weight:800;'
-    +'font-size:clamp(14px,1.4vw,16px);color:var(--glow,#f5a830);white-space:nowrap;">'+item.price+'</span>' : '')
+    +'<strong style="font-family:var(--serif,\'Playfair Display\',serif);font-size:clamp(14px,1.4vw,17px);color:var(--cream,#f5edda);font-weight:700;">'+item.name+'</strong>'
+    +(item.price?'<span style="font-family:var(--cond,\'Barlow Condensed\',sans-serif);font-weight:800;font-size:clamp(14px,1.4vw,16px);color:var(--glow,#f5a830);white-space:nowrap;">'+item.price+'</span>':'')
     +'</div>'
-    +(item.desc ? '<div style="font-size:clamp(10px,1vw,12px);color:rgba(196,168,130,.55);margin-top:4px;line-height:1.5;">'+item.desc+'</div>' : '')
-    +(item.sides ? '<div style="font-size:10px;color:rgba(196,168,130,.4);margin-top:5px;letter-spacing:.04em;">With: '+item.sides+'</div>' : '')
+    +(item.desc?'<div style="font-size:clamp(10px,1vw,12px);color:rgba(196,168,130,.55);margin-top:4px;line-height:1.5;">'+item.desc+'</div>':'')
+    +(item.sides?'<div style="font-size:10px;color:rgba(196,168,130,.4);margin-top:5px;">With: '+item.sides+'</div>':'')
     +'</div>';
-  return html;
 }
-
-var _cdInt=null;
-function startSpecialsCountdown(){
-  stopSpecialsCountdown();
-  _cdInt=setInterval(function(){
-    var el=document.getElementById('sp-cd-num');
-    if(!el){stopSpecialsCountdown();return;}
-    el.textContent=_isOpen()?_fmt(_closeTime()-new Date()):_fmt(_nextOpen()-new Date());
-  },1000);
-}
-function stopSpecialsCountdown(){if(_cdInt){clearInterval(_cdInt);_cdInt=null;}}
-
-/* Keep buildSpecialsHTML for any legacy callers */
 function buildSpecialsHTML(){ return ''; }
+var _spCdInt=null;
+function startSpecialsCountdown(){ if(_spCdInt){clearInterval(_spCdInt);_spCdInt=null;} }
+function stopSpecialsCountdown(){ if(_spCdInt){clearInterval(_spCdInt);_spCdInt=null;} }
 </script>
-
 <script src="site-data.js"></script>
 </body>
 </html>
