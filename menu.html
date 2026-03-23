@@ -1020,7 +1020,7 @@ function sw(id,btn){
     document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
     document.getElementById('s-'+id).classList.add('active');
     current=id;
-    /* fresh fetch every time specials tab is opened */
+    /* fresh load every time specials tab is opened */
     if(id==='sp') loadSpecials();
     bindAllTilts();
     triggerReveals();
@@ -1120,67 +1120,78 @@ document.addEventListener('touchend',e=>{
 },{passive:true});
 
 /* ═══════════════════════════════════════════════════════
-   FETCH SPECIALS FROM site-data.html
-   Parses .special blocks, respects data-hidden="true",
-   renders cards into #specials-container.
-   Falls back to a friendly message if fetch fails.
+   FETCH SPECIALS FROM site-data.js
+   Loads the JS file as a script tag, reads SITE_SPECIALS
+   array, renders cards. Re-runs every time specials tab
+   is opened so updates show without a page reload.
 ═══════════════════════════════════════════════════════ */
-async function loadSpecials() {
+function renderSpecials() {
   const container = document.getElementById('specials-container');
-  try {
-    const res  = await fetch('site-data.html?nocache=' + Date.now());
-    if (!res.ok) throw new Error('not found');
-    const html = await res.text();
-    const doc  = new DOMParser().parseFromString(html, 'text/html');
-    const items = doc.querySelectorAll('#specials-data .special');
 
-    container.innerHTML = ''; /* clear loading state */
-    let count = 0;
-
-    items.forEach(item => {
-      /* respect data-hidden="true" */
-      if (item.dataset.hidden === 'true') return;
-
-      const type  = item.querySelector('.sp-type')?.textContent.trim()  || '';
-      const name  = item.querySelector('.sp-name')?.textContent.trim()  || '';
-      const desc  = item.querySelector('.sp-desc')?.textContent.trim()  || '';
-      const price = item.querySelector('.sp-price')?.textContent.trim() || '';
-
-      if (!name) return;
-      count++;
-
-      const card = document.createElement('div');
-      card.className = 'sp-c reveal';
-      card.innerHTML = `
-        <div class="sp-sp"></div>
-        <div class="sp-i">
-          ${type  ? `<div class="sp-t">${type}</div>`  : ''}
-          <div class="sp-n">${name}</div>
-          ${desc  ? `<div class="sp-d">${desc}</div>`  : ''}
-          ${price ? `<div class="sp-p">${price}</div>` : ''}
-        </div>`;
-      container.appendChild(card);
-    });
-
-    /* nothing visible */
-    if (count === 0) {
-      container.innerHTML = `
-        <div style="grid-column:1/-1;text-align:center;padding:48px 0;">
-          <div style="font-family:var(--serif);font-style:italic;font-size:18px;color:rgba(196,160,112,.5);">
-            Check back soon — specials update every morning.
-          </div>
-          <div style="font-family:var(--cond);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.3);margin-top:10px;">
-            Call (225) 245-5046 for today's board
-          </div>
-        </div>`;
-    }
-
-    /* bind tilt and reveal to new cards */
-    bindAllTilts();
-    triggerReveals();
-
-  } catch(e) {
+  /* SITE_SPECIALS injected by site-data.js */
+  if (typeof SITE_SPECIALS === 'undefined' || !SITE_SPECIALS.length) {
     container.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:48px 0;">
+        <div style="font-family:var(--serif);font-style:italic;font-size:18px;color:rgba(196,160,112,.5);">
+          Check back soon — specials update every morning.
+        </div>
+        <div style="font-family:var(--cond);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.3);margin-top:10px;">
+          Call (225) 245-5046 for today's board
+        </div>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = '';
+  let count = 0;
+
+  SITE_SPECIALS.forEach(item => {
+    if (item.hidden) return;
+    count++;
+    const card = document.createElement('div');
+    card.className = 'sp-c reveal';
+    card.innerHTML = `
+      <div class="sp-sp"></div>
+      <div class="sp-i">
+        ${item.type  ? `<div class="sp-t">${item.type}</div>`  : ''}
+        <div class="sp-n">${item.name}</div>
+        ${item.desc  ? `<div class="sp-d">${item.desc}</div>`  : ''}
+        ${item.price ? `<div class="sp-p">${item.price}</div>` : ''}
+      </div>`;
+    container.appendChild(card);
+  });
+
+  if (count === 0) {
+    container.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:48px 0;">
+        <div style="font-family:var(--serif);font-style:italic;font-size:18px;color:rgba(196,160,112,.5);">
+          No specials posted yet today — check back soon.
+        </div>
+        <div style="font-family:var(--cond);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.3);margin-top:10px;">
+          Call (225) 245-5046 for today's board
+        </div>
+      </div>`;
+    return;
+  }
+
+  bindAllTilts();
+  triggerReveals();
+  rebuildProx();
+}
+
+function loadSpecials() {
+  /* Remove any previously injected script so we get a fresh load */
+  const old = document.getElementById('site-data-script');
+  if (old) old.remove();
+  /* Also clear the global so we can detect load failure */
+  window.SITE_SPECIALS = undefined;
+
+  const script = document.createElement('script');
+  script.id  = 'site-data-script';
+  script.src = 'site-data.js?v=' + Date.now(); /* cache bust */
+  script.onload = () => renderSpecials();
+  script.onerror = () => {
+    document.getElementById('specials-container').innerHTML = `
       <div style="grid-column:1/-1;text-align:center;padding:48px 0;">
         <div style="font-family:var(--serif);font-style:italic;font-size:18px;color:rgba(196,160,112,.5);">
           Today's specials are being prepared.
@@ -1189,10 +1200,10 @@ async function loadSpecials() {
           Call (225) 245-5046 for today's board
         </div>
       </div>`;
-  }
+  };
+  document.head.appendChild(script);
 }
 
-/* Load specials on page ready + reload when specials tab is opened */
 loadSpecials();
 
 /* BOOT */
