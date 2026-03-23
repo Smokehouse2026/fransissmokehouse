@@ -2,976 +2,803 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>The Francis Smokehouse — St. Francisville, LA</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>The Menu — The Francis Smokehouse</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,300;1,400;1,700&family=Barlow+Condensed:wght@300;400;500;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ember:#c04800;--fire:#e06010;--flame:#f08820;--glow:#f5a830;--pop:#ff6b35;
+  --cream:#f5e8cc;--parch:#e8d4a8;--sand:#c4a070;
+  /* Rich semi-transparent card surfaces — dark enough to read, thin enough to let fire glow through */
+  --surface:  rgba(18,10,4,.82);
+  --surface2: rgba(26,15,5,.9);
+  --border:   rgba(196,160,112,.18);
+  --border2:  rgba(240,136,32,.35);
+  --text-hi:  #f5e8cc;   /* headings */
+  --text-md:  #d4b882;   /* body text — was washed out */
+  --text-lo:  #8a6840;   /* labels — was near invisible */
+  --serif:'Playfair Display',Georgia,serif;
+  --cond:'Barlow Condensed',sans-serif;
+  --body:'Barlow',sans-serif;
+}
+html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
+  font-family:var(--body);overflow-x:hidden;cursor:none;-webkit-tap-highlight-color:transparent;}
+@media(hover:none){html,body{cursor:auto}}
 
-:root {
-  --void:    #090704;
-  --deep:    #120d07;
-  --coal:    #1e1509;
-  --bark:    #4a3520;
-  --leather: #7a5c38;
-  --sand:    #c4a882;
-  --parch:   #e8d9bc;
-  --cream:   #f5edda;
-  --ember:   #c04a00;
-  --fire:    #e06510;
-  --flame:   #f08c28;
-  --glow:    #f5b040;
-  --serif:   'Playfair Display', Georgia, serif;
-  --cond:    'Barlow Condensed', sans-serif;
-  --body:    'Barlow', sans-serif;
-}
+#grain{position:fixed;inset:0;z-index:9998;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.055'/%3E%3C/svg%3E");}
 
-html, body {
-  width: 100%; height: 100%;
-  overflow: hidden;
-  background: var(--void);
-  color: var(--cream);
-  cursor: none;
-  -webkit-tap-highlight-color: transparent;
-}
-@media (hover:none) { html, body { cursor: auto; } }
+#fire-cv{position:fixed;bottom:0;left:0;width:100%;height:42vh;z-index:1;
+  pointer-events:none;image-rendering:pixelated;image-rendering:crisp-edges;
+  mask-image:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(0,0,0,.6) 55%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(0,0,0,.6) 55%,transparent 100%);}
+#smoke-cv,#ember-cv{position:fixed;inset:0;pointer-events:none;}
+#smoke-cv{z-index:2;}#ember-cv{z-index:3;}
+#transition-cv{position:fixed;inset:0;z-index:800;pointer-events:none;opacity:0;}
+#vignette{position:fixed;inset:0;z-index:4;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 30%,transparent 20%,rgba(10,7,3,.65) 100%);}
 
-/* ── GRAIN ── */
-body::after {
-  content: ''; position: fixed; inset: 0; z-index: 3; pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.042'/%3E%3C/svg%3E");
-}
+#cursor{position:fixed;z-index:9999;pointer-events:none;top:0;left:0;will-change:transform;}
+#c-dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--flame);
+  transform:translate(-50%,-50%);box-shadow:0 0 12px var(--flame),0 0 28px rgba(240,136,32,.45);
+  transition:width .3s,height .3s;}
+#c-ring{position:absolute;width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(240,136,32,.4);transform:translate(-50%,-50%);
+  transition:width .5s cubic-bezier(.16,1,.3,1),height .5s,border-color .3s;}
+@media(hover:none){#cursor{display:none}}
 
-/* ── CANVASES ── */
-#cv-bg    { position: fixed; inset: 0; z-index: 0; }
-#cv-smoke { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
-#cv-ember { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+/* HEADER — semi-transparent frosted so fire glows through */
+#hdr{position:sticky;top:0;z-index:500;
+  background:rgba(8,5,2,.88);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);}
+#hdr-top{display:flex;align-items:center;justify-content:space-between;
+  padding:clamp(10px,1.8vh,16px) clamp(16px,4vw,48px);
+  border-bottom:1px solid rgba(196,160,112,.1);}
+#back-btn{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--text-lo);background:rgba(255,255,255,.03);
+  border:1px solid rgba(196,160,112,.22);padding:7px 16px;border-radius:2px;
+  cursor:none;-webkit-tap-highlight-color:transparent;transition:all .3s;
+  text-decoration:none;display:inline-block;}
+#back-btn:hover,#back-btn:active{border-color:rgba(240,136,32,.55);color:var(--flame);background:rgba(240,136,32,.07);}
+.hdr-c{text-align:center;}
+.hdr-n{font-family:var(--serif);font-weight:700;font-size:clamp(16px,2.5vw,26px);
+  letter-spacing:.01em;color:var(--text-hi);text-shadow:0 0 40px rgba(240,136,32,.25);line-height:1;}
+.hdr-n em{font-style:italic;font-weight:400;color:var(--flame);}
+.hdr-s{font-family:var(--cond);font-size:8px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--text-lo);margin-top:3px;}
+.hdr-r{text-align:right;}
+.hdr-live{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--flame);display:flex;align-items:center;gap:6px;justify-content:flex-end;}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--glow);
+  box-shadow:0 0 8px var(--glow);animation:dp 1.8s ease-in-out infinite;}
+@keyframes dp{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+.hdr-clk{font-family:var(--cond);font-size:9px;letter-spacing:.14em;color:var(--text-lo);margin-top:2px;}
 
-/* ══════════════════════════════════════════════════════
-   CURSOR — desktop only
-══════════════════════════════════════════════════════ */
-#cursor { position: fixed; z-index: 9999; pointer-events: none; top:0; left:0; }
-#cursor-dot  { width:8px; height:8px; border-radius:50%; background:var(--flame); transform:translate(-50%,-50%); box-shadow:0 0 10px var(--flame),0 0 20px rgba(240,140,40,.3); transition:width .35s,height .35s,background .3s; }
-#cursor-ring { position:absolute; top:0; left:0; width:36px; height:36px; border:1px solid rgba(240,140,40,.35); border-radius:50%; transform:translate(-50%,-50%); transition:width .45s cubic-bezier(.16,1,.3,1),height .45s,border-color .3s; }
-body:has(.nav-item:hover) #cursor-ring { width:52px; height:52px; border-color:rgba(240,140,40,.6); }
-@media (hover:none) { #cursor { display:none; } }
+#tabs{display:flex;gap:clamp(3px,1vw,8px);padding:clamp(7px,1.2vh,12px) clamp(16px,4vw,48px);
+  overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  background:rgba(6,4,1,.5);}
+#tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;font-family:var(--cond);font-weight:600;
+  font-size:clamp(10px,1.3vw,12px);letter-spacing:.16em;text-transform:uppercase;
+  padding:clamp(7px,1vh,10px) clamp(12px,2vw,20px);border-radius:2px;
+  border:1px solid rgba(196,160,112,.22);color:rgba(212,184,130,.75);
+  background:rgba(255,255,255,.04);cursor:none;-webkit-tap-highlight-color:transparent;
+  transition:color .3s,border-color .3s,box-shadow .3s;position:relative;overflow:hidden;white-space:nowrap;}
+.tab::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,var(--ember),var(--fire));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .45s cubic-bezier(.77,0,.18,1);z-index:0;}
+.tab span{position:relative;z-index:1;}
+.tab.active{color:#fff;border-color:var(--fire);box-shadow:0 0 20px rgba(192,72,0,.28);}
+.tab.active::before{transform:scaleX(1);}
+.tab:hover:not(.active){border-color:rgba(240,136,32,.45);color:var(--flame);background:rgba(240,136,32,.07);}
 
-/* ══════════════════════════════════════════════════════
-   SHELL
-══════════════════════════════════════════════════════ */
-#shell {
-  position: fixed; inset: 0; z-index: 10;
-  display: flex; flex-direction: column;
-  opacity: 0; transition: opacity .9s ease;
-}
-#shell.on { opacity: 1; }
+/* LAYOUT */
+#layout{position:relative;z-index:10;display:grid;grid-template-columns:1fr;
+  min-height:calc(100vh - 130px);
+  padding:clamp(16px,3vh,32px) clamp(16px,4vw,48px);gap:clamp(20px,4vh,36px);}
+@media(min-width:960px){#layout{grid-template-columns:1fr 320px;align-items:start;gap:44px;}}
 
-/* ══════════════════════════════════════════════════════
-   ████  DESKTOP LAYOUT  (min-width: 768px)
-══════════════════════════════════════════════════════ */
+.sec{display:none;}.sec.active{display:block;}
+.sh{margin-bottom:clamp(14px,2.5vh,22px);padding-bottom:14px;
+  border-bottom:1px solid rgba(196,160,112,.18);position:relative;}
+.sh::after{content:'';position:absolute;bottom:-1px;left:0;width:0;height:1px;
+  background:linear-gradient(90deg,var(--ember),var(--flame));
+  transition:width .8s cubic-bezier(.16,1,.3,1);}
+.sec.active .sh::after{width:80px;}
+.st{font-family:var(--serif);font-weight:900;font-size:clamp(26px,5vw,52px);
+  letter-spacing:-.02em;line-height:1;color:#fff;
+  text-shadow:0 2px 20px rgba(0,0,0,.6);}
+/* italic subtitle — pill */
+.si{display:inline-block;margin-top:10px;
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:clamp(12px,1.3vw,15px);
+  color:var(--parch);
+  background:rgba(22,12,4,.88);
+  border:1px solid rgba(196,160,112,.25);
+  border-radius:100px;
+  padding:5px 16px;
+  box-shadow:0 2px 10px rgba(0,0,0,.5);}
+/* note line — pill */
+.sn{display:inline-block;margin-bottom:clamp(12px,2vh,20px);
+  font-family:var(--cond);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(212,184,130,.85);
+  background:rgba(22,12,4,.88);
+  border:1px solid rgba(196,160,112,.18);
+  border-radius:100px;
+  padding:4px 14px;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);}
 
-/* TOP BAR */
-#topbar {
-  flex-shrink: 0;
-  display: flex; align-items: stretch;
-  height: clamp(52px,7vh,68px);
-  border-bottom: 1px solid rgba(196,168,130,.1);
-  background: linear-gradient(to bottom,rgba(9,7,4,.95),rgba(9,7,4,.5));
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-}
-.tb-cell {
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 0 clamp(12px,2vw,28px);
-  border-right: 1px solid rgba(196,168,130,.07);
-}
-.tb-cell:last-child { border-right: none; }
-.tb-cell.grow { flex:1; align-items:center; }
-.tb-eyebrow { font-family:var(--cond); font-weight:500; font-size:8px; letter-spacing:.3em; text-transform:uppercase; color:rgba(196,168,130,.35); margin-bottom:2px; }
-.tb-val     { font-family:var(--cond); font-weight:400; font-size:clamp(10px,1.2vw,13px); letter-spacing:.06em; color:rgba(232,217,188,.6); }
-#brand-name { font-family:var(--serif); font-weight:700; font-size:clamp(14px,2vw,22px); letter-spacing:.01em; color:var(--cream); text-align:center; line-height:1; text-shadow:0 0 40px rgba(240,140,40,.2); }
-#brand-name em { font-style:italic; font-weight:400; color:var(--flame); }
-#brand-tagline { font-family:var(--cond); font-weight:400; font-size:9px; letter-spacing:.26em; text-transform:uppercase; color:rgba(196,168,130,.28); margin-top:3px; text-align:center; }
-.tb-status { display:flex; align-items:center; gap:7px; font-family:var(--cond); font-weight:500; font-size:clamp(10px,1.2vw,12px); letter-spacing:.12em; text-transform:uppercase; color:var(--flame); }
-.status-flame { animation:flkr 2s ease-in-out infinite; filter:drop-shadow(0 0 4px rgba(240,140,40,.6)); }
-@keyframes flkr { 0%,100%{opacity:.7;transform:scaleY(1)} 35%{opacity:1;transform:scaleY(1.1) translateY(-1px)} 70%{opacity:.85;transform:scaleY(.95)} }
+/* ITEMS — proper opaque surfaces */
+.items{display:grid;grid-template-columns:1fr;gap:2px;}
+@media(min-width:580px) and (max-width:959px){.items{grid-template-columns:1fr 1fr;column-gap:2px;}}
 
-/* MAIN 3-COL */
-#main { flex:1; overflow:hidden; display:grid; grid-template-columns:clamp(155px,17vw,220px) 1fr clamp(155px,17vw,220px); }
-#main > * + * { border-left: 1px solid rgba(196,168,130,.08); }
+.mi{position:relative;display:flex;align-items:flex-start;justify-content:space-between;
+  padding:clamp(14px,2.2vh,20px) clamp(14px,2vw,20px);
+  background:var(--surface);
+  border:1px solid rgba(196,160,112,.1);
+  border-radius:4px;
+  transform-style:preserve-3d;transition:border-color .35s,box-shadow .4s,background .35s;
+  cursor:default;will-change:transform;overflow:hidden;}
+.mi:hover{border-color:var(--border2);background:var(--surface2);
+  box-shadow:0 8px 40px rgba(192,72,0,.18),inset 0 1px 0 rgba(240,136,32,.06);}
+.mi-spec{position:absolute;inset:0;border-radius:4px;pointer-events:none;z-index:1;}
+.mi::before{content:'';position:absolute;inset:0;border-radius:4px;
+  background:linear-gradient(100deg,rgba(192,72,0,.14) 0%,rgba(240,136,32,.07) 45%,transparent 80%);
+  transform:translateX(-108%);transition:transform .65s cubic-bezier(.77,0,.18,1);z-index:0;}
+.mi:hover::before{transform:translateX(0);}
+.mi::after{content:'';position:absolute;left:0;top:14%;bottom:14%;width:3px;border-radius:2px;
+  background:linear-gradient(to bottom,transparent,var(--fire),var(--glow),transparent);
+  transform:scaleY(0);transform-origin:center;
+  transition:transform .4s cubic-bezier(.16,1,.3,1);box-shadow:0 0 12px var(--fire);}
+.mi:hover::after{transform:scaleY(1);}
 
-/* SIDEBARS */
-#sidebar-l, #sidebar-r {
-  display: flex; flex-direction:column; justify-content:space-between;
-  padding: clamp(14px,2.2vh,24px) clamp(12px,1.6vw,22px);
-}
-#sidebar-l { animation:fadeSlideR .8s .5s ease both; }
-#sidebar-r { animation:fadeSlideL .8s .5s ease both; }
-.sb-group { display:flex; flex-direction:column; gap:clamp(12px,1.8vh,20px); }
-.sb-block { display:flex; flex-direction:column; gap:4px; }
-.sb-label { font-family:var(--cond); font-weight:600; font-size:8px; letter-spacing:.3em; text-transform:uppercase; color:rgba(196,168,130,.33); }
-.sb-text  { font-family:var(--serif); font-style:italic; font-weight:400; font-size:clamp(10px,1vw,13px); color:rgba(232,217,188,.55); line-height:1.5; }
-.sb-hot   { font-family:var(--cond); font-weight:600; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--flame); display:flex; align-items:center; gap:5px; }
-.sb-hot::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--glow); box-shadow:0 0 7px var(--glow); animation:dp 1.8s ease-in-out infinite; flex-shrink:0; }
-@keyframes dp { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
-.sb-stars       { color:var(--glow); letter-spacing:.04em; font-size:11px; }
-.sb-rating-line { font-family:var(--cond); font-size:9px; letter-spacing:.06em; color:rgba(196,168,130,.38); line-height:1.55; }
-.sb-links { display:flex; flex-direction:column; gap:6px; }
-.sb-link  { font-family:var(--cond); font-weight:500; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:rgba(196,168,130,.33); text-decoration:none; transition:color .25s; cursor:none; display:flex; align-items:center; gap:6px; }
-.sb-link::before { content:'—'; color:rgba(240,140,40,.28); font-size:8px; }
-.sb-link:hover { color:var(--flame); }
+.mi-l{flex:1;padding-right:14px;position:relative;z-index:2;}
+.mi-n{font-family:var(--serif);font-weight:700;font-size:clamp(16px,2vw,22px);
+  color:var(--text-hi);line-height:1.15;transition:color .3s;}
+.mi:hover .mi-n{color:#fff;text-shadow:0 0 30px rgba(240,136,32,.15);}
+.mi-d{font-family:var(--body);font-weight:300;font-size:clamp(11px,1.1vw,13px);
+  line-height:1.55;color:var(--text-md);margin-top:4px;transition:color .3s;}
+.mi:hover .mi-d{color:var(--parch);}
+.mi-b{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;}
+.badge{font-family:var(--cond);font-weight:700;font-size:7px;letter-spacing:.15em;
+  text-transform:uppercase;padding:3px 8px;border-radius:2px;}
+.b-p{background:rgba(255,107,53,.2);color:#ff8c5a;border:1px solid rgba(255,107,53,.35);}
+.b-s{background:rgba(240,136,32,.18);color:var(--flame);border:1px solid rgba(240,136,32,.35);}
+.b-n{background:rgba(100,200,80,.15);color:#a0f060;border:1px solid rgba(100,200,80,.3);}
 
-/* NAV CENTER */
-#nav-center {
-  display:flex; flex-direction:column; justify-content:center;
-  padding: clamp(8px,1.5vh,14px) clamp(18px,2.8vw,44px);
-  position:relative;
-}
-#nav-center::before {
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background:radial-gradient(ellipse at 50% 85%,rgba(192,74,0,.07),transparent 65%);
-}
-.nav-item {
-  position:relative; display:flex; align-items:center;
-  padding:clamp(9px,1.5vh,16px) 0;
-  border-bottom:1px solid rgba(196,168,130,.07);
-  cursor:none; overflow:hidden; transition:border-color .4s;
-  -webkit-tap-highlight-color:transparent;
-}
-.nav-item:first-child { border-top:1px solid rgba(196,168,130,.07); }
-.nav-item:hover { border-bottom-color:rgba(240,140,40,.15); }
-.nav-item:first-child:hover { border-top-color:rgba(240,140,40,.15); }
-/* amber glow sweep */
-.nav-item::before {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(90deg,rgba(192,74,0,.0) 0%,rgba(192,74,0,.08) 25%,rgba(224,101,16,.12) 50%,rgba(240,140,40,.06) 75%,transparent 100%);
-  transform:translateX(-105%); transition:transform .7s cubic-bezier(.77,0,.18,1);
-}
-.nav-item:hover::before { transform:translateX(0); }
-/* ember left bar */
-.nav-item::after {
-  content:''; position:absolute; left:0; top:20%; bottom:20%; width:2px;
-  background:linear-gradient(to bottom,transparent,var(--fire),var(--flame),transparent);
-  border-radius:2px; transform:scaleY(0); transform-origin:center;
-  transition:transform .45s .05s cubic-bezier(.16,1,.3,1);
-  box-shadow:0 0 8px var(--fire);
-}
-.nav-item:hover::after { transform:scaleY(1); }
+.mi-r{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;position:relative;z-index:2;}
+.mi-p{font-family:var(--cond);font-weight:800;font-size:clamp(16px,2vw,22px);
+  letter-spacing:.02em;color:var(--glow);
+  text-shadow:0 0 20px rgba(245,168,48,.45);transition:text-shadow .3s;}
+.mi:hover .mi-p{text-shadow:0 0 32px rgba(245,168,48,.75);}
+.mi-nt{font-family:var(--cond);font-size:9px;letter-spacing:.1em;
+  color:var(--text-lo);text-transform:uppercase;text-align:right;}
 
-.ni-num   { position:relative; z-index:1; font-family:var(--cond); font-weight:400; font-size:9px; letter-spacing:.2em; color:rgba(196,168,130,.22); min-width:clamp(34px,3.5vw,50px); padding-left:12px; transition:color .4s; }
-.nav-item:hover .ni-num { color:rgba(240,140,40,.5); }
-.ni-name  { position:relative; z-index:1; font-family:var(--serif); font-weight:700; font-size:clamp(22px,3.5vw,50px); letter-spacing:-.01em; line-height:1; flex:1; color:rgba(232,217,188,.72); transition:color .35s,letter-spacing .55s cubic-bezier(.16,1,.3,1),text-shadow .4s; }
-.nav-item:hover .ni-name { color:var(--cream); letter-spacing:.01em; text-shadow:0 0 60px rgba(240,140,40,.25); }
-.ni-sub   { position:relative; z-index:1; font-family:var(--serif); font-style:italic; font-weight:400; font-size:clamp(10px,.95vw,13px); color:rgba(196,168,130,.2); padding:0 clamp(8px,1.4vw,18px); transition:color .35s; display:none; }
-@media (min-width:900px) { .ni-sub { display:block; } }
-.nav-item:hover .ni-sub { color:rgba(240,140,40,.48); }
-.ni-arrow { position:relative; z-index:1; width:clamp(26px,2.8vw,38px); height:clamp(26px,2.8vw,38px); border:1px solid rgba(196,168,130,.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:rgba(196,168,130,.22); font-size:12px; transition:transform .45s cubic-bezier(.34,1.56,.64,1),border-color .35s,color .35s,background .35s,box-shadow .35s; }
-.nav-item:hover .ni-arrow { transform:rotate(-45deg) scale(1.1); border-color:rgba(240,140,40,.5); color:var(--flame); background:rgba(240,140,40,.08); box-shadow:0 0 16px rgba(240,140,40,.15); }
+/* HERO ITEM */
+.mi.hero{flex-direction:column;gap:12px;padding:clamp(18px,2.8vh,26px) clamp(16px,2.2vw,22px);
+  margin-bottom:6px;
+  background:rgba(22,12,4,.9);
+  border:1px solid rgba(192,72,0,.5);border-radius:8px;
+  box-shadow:0 4px 32px rgba(192,72,0,.2),inset 0 1px 0 rgba(240,136,32,.12),inset 0 0 40px rgba(140,50,0,.08);}
+.mi.hero::before,.mi.hero::after{display:none;}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;width:100%;}
+.h-badge{font-family:var(--cond);font-weight:700;font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  padding:4px 12px;border-radius:2px;
+  background:rgba(192,72,0,.35);color:var(--glow);
+  border:1px solid rgba(240,136,32,.45);margin-bottom:8px;display:inline-block;
+  box-shadow:0 0 12px rgba(192,72,0,.3);}
+.mi.hero .mi-n{font-size:clamp(20px,2.8vw,30px);color:#fff;}
+.mi.hero .mi-d{color:var(--text-md);}
+.mi.hero .mi-p{font-size:clamp(20px,2.5vw,28px);}
 
-.nav-item:nth-child(1){animation:fadeSlideU .6s .4s ease both}
-.nav-item:nth-child(2){animation:fadeSlideU .6s .5s ease both}
-.nav-item:nth-child(3){animation:fadeSlideU .6s .6s ease both}
-.nav-item:nth-child(4){animation:fadeSlideU .6s .7s ease both}
-.nav-item:nth-child(5){animation:fadeSlideU .6s .8s ease both}
-.nav-item:nth-child(6){animation:fadeSlideU .6s .9s ease both}
+/* DIVIDERS */
+.dr{display:flex;align-items:center;gap:12px;padding:clamp(14px,2vh,20px) 0 clamp(10px,1.5vh,14px);}
+.dl{font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--text-lo);white-space:nowrap;}
+.dline{flex:1;height:1px;background:linear-gradient(90deg,rgba(196,160,112,.25),transparent);}
+.df{font-size:11px;animation:flkr 2.2s ease-in-out infinite;
+  filter:drop-shadow(0 0 4px rgba(240,136,32,.6));}
+@keyframes flkr{0%,100%{opacity:.6;transform:scaleY(1)}40%{opacity:1;transform:scaleY(1.1) translateY(-1px)}}
 
-/* RIGHT SIDEBAR PREVIEW */
-.pv-label { font-family:var(--cond); font-weight:600; font-size:8px; letter-spacing:.3em; text-transform:uppercase; color:rgba(196,168,130,.25); margin-bottom:7px; }
-#pv-title { font-family:var(--serif); font-weight:700; font-size:clamp(12px,1.3vw,16px); line-height:1.25; color:rgba(232,217,188,.68); transition:all .4s; min-height:38px; }
-#pv-desc  { margin-top:7px; font-family:var(--serif); font-style:italic; font-size:clamp(9px,.95vw,12px); line-height:1.6; color:rgba(196,168,130,.32); transition:all .4s; min-height:46px; }
-#pv-chips { display:flex; flex-wrap:wrap; gap:5px; margin-top:9px; min-height:26px; }
-.pv-chip  { font-family:var(--cond); font-weight:500; font-size:7px; letter-spacing:.1em; text-transform:uppercase; padding:3px 8px; border-radius:2px; border:1px solid rgba(196,168,130,.1); color:rgba(196,168,130,.28); transition:all .35s; }
-.pv-chip.on { border-color:rgba(240,140,40,.3); color:var(--flame); background:rgba(240,140,40,.06); }
-#pv-num   { font-family:var(--cond); font-weight:800; font-size:clamp(58px,10vw,110px); line-height:1; letter-spacing:-.03em; color:rgba(192,74,0,.06); text-align:right; margin-top:auto; transition:color .5s; }
-#pv-num.lit { color:rgba(240,140,40,.17); }
+/* SPECIALS */
+.sp-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:clamp(9px,1.5vw,14px);}
+.sp-c{background:var(--surface);border:1px solid rgba(196,160,112,.14);border-radius:8px;
+  padding:clamp(16px,2.2vh,22px);position:relative;overflow:hidden;
+  cursor:default;will-change:transform;transform-style:preserve-3d;
+  transition:border-color .4s,box-shadow .4s,background .35s;}
+.sp-c:hover{border-color:var(--border2);background:var(--surface2);
+  box-shadow:0 14px 52px rgba(192,72,0,.22);}
+.sp-sp{position:absolute;inset:0;border-radius:8px;pointer-events:none;z-index:0;}
+.sp-i{position:relative;z-index:1;}
+.sp-t{font-family:var(--cond);font-weight:700;font-size:8px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--text-lo);margin-bottom:7px;}
+.sp-n{font-family:var(--serif);font-weight:700;font-size:clamp(16px,2vw,21px);
+  color:var(--text-hi);line-height:1.15;margin-bottom:7px;}
+.sp-d{font-family:var(--body);font-weight:300;font-size:clamp(11px,1.1vw,13px);
+  color:var(--text-md);line-height:1.6;margin-bottom:12px;}
+.sp-p{font-family:var(--cond);font-weight:800;font-size:clamp(19px,2.3vw,24px);
+  color:var(--glow);letter-spacing:.02em;text-shadow:0 0 20px rgba(245,168,48,.4);}
 
-/* BOTTOM TICKER */
-#botbar { flex-shrink:0; height:36px; display:flex; align-items:center; justify-content:space-between; padding:0 clamp(14px,2.5vw,28px); border-top:1px solid rgba(196,168,130,.07); background:linear-gradient(to top,rgba(9,7,4,.9),transparent); overflow:hidden; }
-#ticker-track { display:flex; white-space:nowrap; animation:tkr 32s linear infinite; flex:1; overflow:hidden; }
-.t-item { font-family:var(--cond); font-weight:400; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(196,168,130,.2); padding:0 26px; display:inline-flex; align-items:center; gap:26px; flex-shrink:0; }
-.t-item::after { content:'✦'; font-size:6px; color:rgba(240,140,40,.28); }
-@keyframes tkr { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-#botbar-right { flex-shrink:0; padding-left:20px; font-family:var(--cond); font-weight:400; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:rgba(196,168,130,.18); }
+/* DESSERTS */
+.ds-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(170px,100%),1fr));gap:clamp(7px,1.4vw,12px);}
+.ds-i{padding:clamp(14px,2vh,20px);
+  background:var(--surface);
+  border:1px solid rgba(196,160,112,.12);border-radius:8px;
+  text-align:center;cursor:default;
+  transition:border-color .35s,background .35s,transform .4s cubic-bezier(.16,1,.3,1);will-change:transform;}
+.ds-i:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-5px);
+  box-shadow:0 10px 36px rgba(192,72,0,.18);}
+.ds-ic{font-size:clamp(26px,3.8vw,38px);margin-bottom:10px;filter:drop-shadow(0 0 8px rgba(240,136,32,.4));}
+.ds-n{font-family:var(--serif);font-weight:700;font-size:clamp(13px,1.5vw,17px);
+  color:var(--text-hi);margin-bottom:5px;line-height:1.2;}
+.ds-p{font-family:var(--cond);font-weight:700;font-size:12px;color:var(--glow);letter-spacing:.08em;}
 
+/* RIGHT COL */
+#rc{display:flex;flex-direction:column;gap:clamp(14px,2.2vh,20px);}
+@media(max-width:959px){#rc{order:2;}}
+.ic{background:var(--surface);border:1px solid rgba(196,160,112,.14);
+  border-radius:8px;padding:clamp(16px,2.2vh,22px);position:relative;overflow:hidden;}
+.ic::before{content:'';position:absolute;bottom:0;left:0;right:0;height:50%;
+  background:radial-gradient(ellipse at 50% 100%,rgba(192,72,0,.12),transparent 70%);pointer-events:none;}
+.ic-l{font-family:var(--cond);font-weight:700;font-size:8px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--text-lo);margin-bottom:9px;}
+.ic-t{font-family:var(--serif);font-weight:700;font-size:clamp(16px,1.9vw,22px);
+  color:var(--text-hi);line-height:1.2;margin-bottom:7px;}
+.ic-t em{font-style:italic;font-weight:400;color:var(--flame);}
+.ic-b{font-family:var(--body);font-weight:300;font-size:clamp(12px,1.2vw,14px);line-height:1.75;color:var(--text-md);}
+.ic-b strong{color:var(--parch);font-weight:400;}
+.rats{display:flex;gap:14px;margin-top:12px;}
+.rb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.r-s{font-size:13px;color:var(--glow);letter-spacing:.04em;}
+.r-n{font-family:var(--cond);font-weight:800;font-size:20px;color:var(--text-hi);}
+.r-src{font-family:var(--cond);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-lo);}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:12px;}
+.sgr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(196,160,112,.1);}
+.sgn{font-family:var(--cond);font-size:11px;letter-spacing:.06em;color:var(--text-md);}
+.sgp{font-family:var(--cond);font-weight:700;font-size:11px;color:var(--glow);}
+.ctac{background:linear-gradient(135deg,rgba(192,72,0,.3),rgba(224,96,16,.12));
+  border:1px solid rgba(192,72,0,.4);border-radius:8px;padding:clamp(16px,2.2vh,22px);text-align:center;
+  box-shadow:inset 0 1px 0 rgba(240,136,32,.08);}
+.ctat{font-family:var(--serif);font-weight:900;font-size:clamp(19px,2.3vw,25px);letter-spacing:-.01em;color:var(--text-hi);margin-bottom:7px;}
+.ctas{font-family:var(--body);font-weight:300;font-size:13px;color:var(--text-md);margin-bottom:16px;line-height:1.55;}
+.ctab{display:inline-flex;align-items:center;gap:8px;font-family:var(--cond);font-weight:700;
+  font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#fff;text-decoration:none;
+  background:linear-gradient(90deg,var(--ember),var(--fire),var(--flame));
+  padding:14px 26px;border-radius:2px;border:none;cursor:none;-webkit-tap-highlight-color:transparent;
+  box-shadow:0 6px 28px rgba(192,72,0,.45);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,letter-spacing .3s;}
+.ctab:hover,.ctab:active{transform:scale(1.05);box-shadow:0 12px 40px rgba(192,72,0,.6);letter-spacing:.26em;}
 
-/* ══════════════════════════════════════════════════════
-   ████  MOBILE LAYOUT  (max-width: 767px)
-   Completely different structure — hidden on desktop
-══════════════════════════════════════════════════════ */
-#mobile-shell {
-  display: none;
-  position: fixed; inset: 0; z-index: 10;
-  flex-direction: column;
-  background: var(--void);
-  opacity: 0; transition: opacity .9s ease;
-}
-#mobile-shell.on { opacity: 1; }
+#ftr{position:relative;z-index:10;
+  background:rgba(8,5,2,.88);
+  border-top:1px solid rgba(196,160,112,.1);
+  padding:clamp(12px,2vh,18px) clamp(16px,4vw,48px);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.ft{font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-lo);}
+.ffs{display:flex;gap:4px;align-items:flex-end;}
+.ff{font-size:clamp(10px,1.5vw,14px);animation:flkr 2s ease-in-out infinite;filter:drop-shadow(0 0 5px rgba(240,136,32,.5));}
+.ff:nth-child(2){animation-delay:.3s;font-size:.8em;}
+.ff:nth-child(3){animation-delay:.65s;}
 
-@media (max-width: 767px) {
-  #shell        { display: none !important; }
-  #mobile-shell { display: flex; }
-}
-
-/* ── MOBILE HEADER ── */
-#mob-header {
-  flex-shrink: 0;
-  position: relative; overflow: hidden;
-  padding: env(safe-area-inset-top, 16px) 0 0;
-  background: linear-gradient(to bottom, rgba(9,7,4,.98), rgba(9,7,4,.7));
-  border-bottom: 1px solid rgba(196,168,130,.1);
-}
-
-#mob-header-inner {
-  padding: 20px 20px 0;
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-}
-
-.mob-eyebrow {
-  font-family: var(--cond); font-weight: 600;
-  font-size: 9px; letter-spacing: .35em; text-transform: uppercase;
-  color: rgba(196,168,130,.32);
-  display: flex; align-items: center; gap: 10px;
-}
-.mob-eyebrow::before, .mob-eyebrow::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(196,168,130,.2), transparent);
-}
-
-#mob-brand {
-  font-family: var(--serif); font-weight: 900;
-  font-size: clamp(28px, 8vw, 40px);
-  letter-spacing: -.01em; color: var(--cream); text-align: center;
-  line-height: 1; text-shadow: 0 0 40px rgba(240,140,40,.2);
-}
-#mob-brand em { font-style: italic; font-weight: 400; color: var(--flame); }
-
-.mob-tagline {
-  font-family: var(--serif); font-style: italic; font-weight: 300;
-  font-size: 13px; color: rgba(196,168,130,.4); text-align: center;
-  letter-spacing: .03em;
-}
-
-/* info strip */
-#mob-info-strip {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 20px 14px;
-  margin-top: 10px;
-  border-top: 1px solid rgba(196,168,130,.07);
-}
-.mob-info-bit {
-  display: flex; flex-direction: column; gap: 2px; align-items: center;
-}
-.mob-info-lbl { font-family: var(--cond); font-weight: 600; font-size: 7px; letter-spacing: .25em; text-transform: uppercase; color: rgba(196,168,130,.28); }
-.mob-info-val { font-family: var(--cond); font-weight: 500; font-size: 11px; letter-spacing: .04em; color: rgba(232,217,188,.6); }
-.mob-status   { color: var(--flame); display: flex; align-items: center; gap: 5px; font-size: 11px; }
-.mob-status-dot { width:5px; height:5px; border-radius:50%; background:var(--glow); box-shadow:0 0 7px var(--glow); animation:dp 1.8s ease-in-out infinite; }
-
-/* ── MOBILE NAV ITEMS ── */
-#mob-nav {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
-  padding: 8px 0 calc(env(safe-area-inset-bottom, 16px) + 16px);
-  -webkit-overflow-scrolling: touch;
-}
-#mob-nav::-webkit-scrollbar { display: none; }
-
-.mob-nav-item {
-  position: relative;
-  display: flex; align-items: center;
-  padding: 0 20px;
-  height: clamp(68px, 11vh, 88px);
-  border-bottom: 1px solid rgba(196,168,130,.07);
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-  cursor: pointer;
-  transition: background .3s;
-  /* active state for touch */
-}
-.mob-nav-item:first-child { border-top: 1px solid rgba(196,168,130,.07); }
-.mob-nav-item:active { background: rgba(240,140,40,.05); }
-
-/* left accent bar */
-.mob-nav-item::before {
-  content: ''; position: absolute; left: 0; top: 15%; bottom: 15%; width: 2px;
-  background: linear-gradient(to bottom, transparent, var(--fire), transparent);
-  border-radius: 2px;
-  transform: scaleY(0); transform-origin: center;
-  transition: transform .4s cubic-bezier(.16,1,.3,1);
-  box-shadow: 0 0 8px var(--fire);
-}
-.mob-nav-item:active::before,
-.mob-nav-item.touched::before { transform: scaleY(1); }
-
-/* warm glow on press */
-.mob-nav-item::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(192,74,0,.1), rgba(240,140,40,.04), transparent);
-  opacity: 0; transition: opacity .3s;
-}
-.mob-nav-item:active::after,
-.mob-nav-item.touched::after { opacity: 1; }
-
-.mni-num {
-  font-family: var(--cond); font-weight: 400;
-  font-size: 9px; letter-spacing: .2em;
-  color: rgba(196,168,130,.22);
-  width: 36px; flex-shrink: 0; padding-left: 10px;
-}
-.mni-body { flex: 1; display: flex; flex-direction: column; gap: 3px; padding: 0 12px 0 8px; }
-.mni-name {
-  font-family: var(--serif); font-weight: 700;
-  font-size: clamp(20px, 5vw, 26px);
-  letter-spacing: -.01em; line-height: 1;
-  color: rgba(232,217,188,.78);
-  transition: color .3s;
-}
-.mob-nav-item:active .mni-name,
-.mob-nav-item.touched .mni-name { color: var(--cream); }
-.mni-sub {
-  font-family: var(--serif); font-style: italic; font-weight: 400;
-  font-size: 11px; color: rgba(196,168,130,.3);
-  transition: color .3s;
-  line-height: 1;
-}
-.mob-nav-item:active .mni-sub,
-.mob-nav-item.touched .mni-sub { color: rgba(240,140,40,.5); }
-
-.mni-arrow {
-  width: 32px; height: 32px; border-radius: 50%;
-  border: 1px solid rgba(196,168,130,.1);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; color: rgba(196,168,130,.22);
-  flex-shrink: 0;
-  transition: all .35s;
-}
-.mob-nav-item:active .mni-arrow,
-.mob-nav-item.touched .mni-arrow { border-color:rgba(240,140,40,.4); color:var(--flame); background:rgba(240,140,40,.08); }
-
-/* stagger */
-.mob-nav-item:nth-child(1){animation:fadeSlideU .5s .35s ease both}
-.mob-nav-item:nth-child(2){animation:fadeSlideU .5s .43s ease both}
-.mob-nav-item:nth-child(3){animation:fadeSlideU .5s .51s ease both}
-.mob-nav-item:nth-child(4){animation:fadeSlideU .5s .59s ease both}
-.mob-nav-item:nth-child(5){animation:fadeSlideU .5s .67s ease both}
-.mob-nav-item:nth-child(6){animation:fadeSlideU .5s .75s ease both}
-
-/* ── MOBILE BOTTOM BAR ── */
-#mob-botbar {
-  flex-shrink: 0; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  border-top: 1px solid rgba(196,168,130,.07);
-  background: linear-gradient(to top, rgba(9,7,4,.95), transparent);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  overflow: hidden;
-}
-#mob-ticker-track {
-  display: flex; white-space: nowrap;
-  animation: tkr 28s linear infinite;
-}
-.mt-item {
-  font-family: var(--cond); font-weight: 400;
-  font-size: 8px; letter-spacing: .18em; text-transform: uppercase;
-  color: rgba(196,168,130,.18); padding: 0 22px;
-  display: inline-flex; align-items: center; gap: 22px; flex-shrink: 0;
-}
-.mt-item::after { content: '✦'; font-size: 5px; color: rgba(240,140,40,.25); }
-
-
-/* ══════════════════════════════════════════════════════
-   DESKTOP INFO PANEL — split screen
-══════════════════════════════════════════════════════ */
-#panel {
-  position: fixed; inset: 0; z-index: 500;
-  display: grid; grid-template-columns: 45% 55%;
-  opacity: 0; pointer-events: none;
-  transition: opacity .5s;
-}
-#panel.open { opacity:1; pointer-events:all; }
-
-#panel-mood {
-  position: relative; overflow: hidden; background: var(--deep);
-  transform: translateX(-100%);
-  transition: transform .65s cubic-bezier(.77,0,.18,1);
-}
-#panel.open #panel-mood { transform: translateX(0); }
-#panel-mood-bg { position:absolute; inset:0; transition:background 1s ease; }
-#panel-mood-bg::after { content:''; position:absolute; inset:0; background:linear-gradient(to right,transparent 60%,var(--deep)); }
-#panel-smoke-cv { position:absolute; inset:0; pointer-events:none; z-index:1; }
-.pm-inner { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; justify-content:flex-end; padding:clamp(24px,3.8vw,48px); }
-.pm-back  { position:absolute; top:clamp(16px,2.5vh,26px); left:clamp(16px,2.5vw,26px); font-family:var(--cond); font-weight:600; font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:rgba(232,217,188,.3); background:none; border:none; cursor:none; transition:color .25s; padding:0; display:flex; align-items:center; gap:8px; }
-.pm-back::before { content:'←'; font-size:14px; }
-.pm-back:hover { color:var(--flame); }
-#panel-big-num  { font-family:var(--cond); font-weight:800; font-size:clamp(90px,16vw,190px); line-height:1; letter-spacing:-.04em; color:rgba(232,217,188,.04); margin-bottom:-10px; }
-.pm-eyebrow     { font-family:var(--cond); font-weight:600; font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:var(--flame); opacity:.8; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
-.pm-eyebrow::before { content:''; width:22px; height:1px; background:currentColor; }
-#panel-title    { font-family:var(--serif); font-weight:900; font-size:clamp(34px,5.5vw,68px); letter-spacing:-.02em; line-height:.95; color:var(--cream); transform:translateY(20px); opacity:0; transition:transform .65s .15s cubic-bezier(.16,1,.3,1),opacity .5s .15s; text-shadow:0 2px 20px rgba(0,0,0,.5); }
-#panel.open #panel-title { transform:translateY(0); opacity:1; }
-#panel-italic   { font-family:var(--serif); font-style:italic; font-weight:300; font-size:clamp(12px,1.4vw,17px); color:rgba(196,168,130,.5); margin-top:8px; transform:translateY(14px); opacity:0; transition:transform .65s .25s cubic-bezier(.16,1,.3,1),opacity .5s .25s; }
-#panel.open #panel-italic { transform:translateY(0); opacity:1; }
-
-#panel-info {
-  background:var(--deep); display:flex; flex-direction:column; justify-content:space-between;
-  padding:clamp(24px,3.8vw,48px); transform:translateX(100%);
-  transition:transform .65s cubic-bezier(.77,0,.18,1);
-  border-left:1px solid rgba(196,168,130,.07); overflow-y:auto;
-}
-#panel.open #panel-info { transform:translateX(0); }
-.pi-top   { display:flex; justify-content:flex-end; margin-bottom:8px; }
-.pi-hint  { font-family:var(--cond); font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:rgba(196,168,130,.2); }
-.pi-body-wrap { flex:1; display:flex; flex-direction:column; gap:clamp(12px,2vh,20px); transform:translateY(18px); opacity:0; transition:transform .6s .3s cubic-bezier(.16,1,.3,1),opacity .5s .3s; }
-#panel.open .pi-body-wrap { transform:translateY(0); opacity:1; }
-.pi-meta  { font-family:var(--cond); font-weight:500; font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(196,168,130,.3); display:flex; align-items:center; gap:8px; }
-.pi-meta::before { content:''; width:18px; height:1px; background:rgba(240,140,40,.3); }
-#panel-desc   { font-family:var(--body); font-weight:300; font-size:clamp(12px,1.25vw,15px); line-height:1.85; letter-spacing:.01em; color:rgba(196,168,130,.52); }
-#panel-desc strong { color:var(--parch); font-weight:400; }
-#panel-chips  { display:flex; flex-wrap:wrap; gap:6px; }
-.panel-chip   { font-family:var(--cond); font-weight:500; font-size:8px; letter-spacing:.13em; text-transform:uppercase; padding:4px 11px; border-radius:2px; border:1px solid rgba(196,168,130,.1); color:rgba(196,168,130,.28); transition:all .3s; }
-.panel-chip.lit { border-color:rgba(240,140,40,.35); color:var(--flame); background:rgba(240,140,40,.07); }
-.pi-cta-wrap  { display:flex; flex-direction:column; gap:8px; }
-.pi-dbl-note  { font-family:var(--serif); font-style:italic; font-size:11px; color:rgba(196,168,130,.28); }
-#panel-cta    { align-self:flex-start; position:relative; overflow:hidden; font-family:var(--cond); font-weight:700; font-size:clamp(11px,1.2vw,13px); letter-spacing:.18em; text-transform:uppercase; color:var(--cream); border:none; cursor:none; padding:clamp(12px,1.7vh,16px) clamp(22px,2.8vw,34px); background:transparent; border:1px solid rgba(240,140,40,.28); transition:border-color .3s,letter-spacing .35s; display:flex; align-items:center; gap:10px; }
-#panel-cta::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,var(--ember) 0%,var(--fire) 50%,var(--flame) 100%); transform:scaleX(0); transform-origin:left; transition:transform .5s cubic-bezier(.77,0,.18,1); z-index:0; }
-#panel-cta:hover::before { transform:scaleX(1); }
-#panel-cta:hover { border-color:var(--fire); letter-spacing:.26em; }
-#panel-cta span { position:relative; z-index:1; }
-#panel-cta .cta-arrow { position:relative; z-index:1; transition:transform .4s cubic-bezier(.34,1.56,.64,1); }
-#panel-cta:hover .cta-arrow { transform:translateX(5px); }
-.pi-bottom  { display:flex; justify-content:space-between; align-items:flex-end; margin-top:8px; padding-top:14px; border-top:1px solid rgba(196,168,130,.07); }
-.pi-foot-rule { font-family:var(--serif); font-style:italic; font-size:11px; color:rgba(196,168,130,.22); }
-.pi-foot-idx  { font-family:var(--cond); font-weight:800; font-size:50px; line-height:1; color:rgba(196,168,130,.05); }
-
-
-/* ══════════════════════════════════════════════════════
-   MOBILE BOTTOM SHEET PANEL
-══════════════════════════════════════════════════════ */
-#mob-panel {
-  position: fixed; inset: 0; z-index: 500;
-  pointer-events: none; opacity: 0;
-  transition: opacity .4s;
-}
-#mob-panel.open { opacity: 1; pointer-events: all; }
-
-/* dimmed backdrop */
-#mob-panel-backdrop {
-  position: absolute; inset: 0;
-  background: rgba(9,7,4,.85);
-  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-}
-
-/* the sheet */
-#mob-sheet {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  max-height: 88vh;
-  background: var(--coal);
-  border-top: 1px solid rgba(196,168,130,.12);
-  border-radius: 20px 20px 0 0;
-  display: flex; flex-direction: column;
-  overflow: hidden;
-  transform: translateY(100%);
-  transition: transform .55s cubic-bezier(.16,1,.3,1);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-#mob-panel.open #mob-sheet { transform: translateY(0); }
-
-/* drag handle */
-#mob-sheet-handle {
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  padding: 12px 0 6px;
-}
-.handle-bar {
-  width: 40px; height: 4px; border-radius: 2px;
-  background: rgba(196,168,130,.2);
-}
-
-/* sheet header */
-#mob-sheet-hdr {
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 6px 20px 14px;
-  border-bottom: 1px solid rgba(196,168,130,.08);
-}
-.msh-eyebrow {
-  font-family: var(--cond); font-weight: 600;
-  font-size: 9px; letter-spacing: .28em; text-transform: uppercase;
-  color: var(--flame); opacity: .8;
-  display: flex; align-items: center; gap: 8px;
-}
-.msh-eyebrow::before { content: ''; width: 18px; height: 1px; background: currentColor; }
-#mob-sheet-close {
-  font-family: var(--cond); font-weight: 600; font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
-  color: rgba(196,168,130,.3); background: none;
-  border: 1px solid rgba(196,168,130,.1); padding: 5px 14px; border-radius: 2px;
-  -webkit-tap-highlight-color: transparent;
-  transition: all .25s;
-}
-#mob-sheet-close:active { border-color: rgba(240,140,40,.4); color: var(--flame); }
-
-/* sheet content — scrollable */
-#mob-sheet-body {
-  flex: 1; overflow-y: auto; padding: 16px 20px 20px;
-  -webkit-overflow-scrolling: touch;
-  display: flex; flex-direction: column; gap: 16px;
-}
-#mob-sheet-body::-webkit-scrollbar { display: none; }
-
-#mob-sheet-title {
-  font-family: var(--serif); font-weight: 900;
-  font-size: clamp(28px, 7vw, 40px);
-  letter-spacing: -.02em; line-height: .95;
-  color: var(--cream);
-}
-#mob-sheet-italic {
-  font-family: var(--serif); font-style: italic; font-weight: 300;
-  font-size: 14px; color: rgba(196,168,130,.45); margin-top: 4px;
-}
-.msh-meta {
-  font-family: var(--cond); font-weight: 500;
-  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
-  color: rgba(196,168,130,.28);
-  display: flex; align-items: center; gap: 8px;
-}
-.msh-meta::before { content: ''; width: 16px; height: 1px; background: rgba(240,140,40,.3); }
-#mob-sheet-desc {
-  font-family: var(--body); font-weight: 300;
-  font-size: 14px; line-height: 1.8; color: rgba(196,168,130,.5);
-}
-#mob-sheet-desc strong { color: var(--parch); font-weight: 400; }
-#mob-sheet-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.msc { font-family: var(--cond); font-weight: 500; font-size: 8px; letter-spacing: .12em; text-transform: uppercase; padding: 5px 11px; border-radius: 2px; border: 1px solid rgba(196,168,130,.1); color: rgba(196,168,130,.28); }
-.msc.lit { border-color: rgba(240,140,40,.35); color: var(--flame); background: rgba(240,140,40,.07); }
-
-/* CTA */
-#mob-sheet-cta {
-  width: 100%; padding: 16px;
-  font-family: var(--cond); font-weight: 700;
-  font-size: 13px; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--cream); border: none;
-  background: linear-gradient(90deg, var(--ember), var(--fire), var(--flame));
-  border-radius: 4px;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 8px 30px rgba(192,74,0,.35);
-  transition: transform .2s, box-shadow .2s;
-}
-#mob-sheet-cta:active { transform: scale(.98); box-shadow: 0 4px 15px rgba(192,74,0,.25); }
-.msc-arrow { transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
-#mob-sheet-cta:active .msc-arrow { transform: translateX(4px); }
-
-.msh-foot-rule {
-  font-family: var(--serif); font-style: italic;
-  font-size: 11px; color: rgba(196,168,130,.2); text-align: center;
-}
-
-/* ══════════════════════════════════════════════════════
-   LOADER — shared
-══════════════════════════════════════════════════════ */
-#loader {
-  position: fixed; inset: 0; z-index: 700;
-  background: var(--void);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
-  opacity: 0; pointer-events: none; transition: opacity .4s;
-}
-#loader.show { opacity: 1; pointer-events: all; }
-.ld-name  { font-family:var(--serif); font-weight:700; font-size:clamp(22px,5vw,42px); letter-spacing:.02em; color:var(--cream); text-shadow:0 0 60px rgba(240,140,40,.2); text-align:center; }
-.ld-name em { font-style:italic; font-weight:400; color:var(--flame); }
-.ld-going { font-family:var(--serif); font-style:italic; font-size:clamp(12px,1.5vw,16px); color:rgba(196,168,130,.32); letter-spacing:.04em; text-align:center; }
-.ld-fire  { display:flex; align-items:flex-end; gap:4px; height:30px; }
-.lff { width:4px; border-radius:2px; background:linear-gradient(to top,var(--ember),var(--glow)); animation:lffA .5s ease-in-out infinite alternate; }
-.lff:nth-child(1){height:9px;  animation-delay:0s}
-.lff:nth-child(2){height:20px; animation-delay:.07s}
-.lff:nth-child(3){height:27px; animation-delay:.14s}
-.lff:nth-child(4){height:15px; animation-delay:.21s}
-.lff:nth-child(5){height:23px; animation-delay:.28s}
-.lff:nth-child(6){height:12px; animation-delay:.35s}
-.lff:nth-child(7){height:21px; animation-delay:.42s}
-@keyframes lffA { from{transform:scaleY(1);opacity:.65} to{transform:scaleY(1.3);opacity:1} }
-.ld-track { width:clamp(140px,22vw,240px); height:1px; background:rgba(196,168,130,.08); position:relative; }
-.ld-fill  { position:absolute; top:0; left:0; bottom:0; background:linear-gradient(90deg,var(--ember),var(--flame),var(--glow)); transform:scaleX(0); transform-origin:left; border-radius:1px; }
-#loader.show .ld-fill { animation:ldFill 1.8s .1s cubic-bezier(.77,0,.18,1) forwards; }
-@keyframes ldFill { to { transform:scaleX(1); } }
-.ld-msg   { font-family:var(--cond); font-weight:500; font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:rgba(196,168,130,.2); animation:msgBlink 1.3s ease-in-out infinite; }
-@keyframes msgBlink { 0%,100%{opacity:.2} 50%{opacity:.55} }
-
-/* touch ripple */
-.ripple { position:fixed; border-radius:50%; pointer-events:none; z-index:50; border:1px solid rgba(240,140,40,.3); animation:rip .6s ease-out forwards; }
-@keyframes rip { from{width:0;height:0;opacity:.7;transform:translate(-50%,-50%)} to{width:80px;height:80px;opacity:0;transform:translate(-50%,-50%)} }
-
-@keyframes fadeSlideR  { from{opacity:0;transform:translateX(-14px)} to{opacity:1;transform:translateX(0)} }
-@keyframes fadeSlideL  { from{opacity:0;transform:translateX(14px)}  to{opacity:1;transform:translateX(0)} }
-@keyframes fadeSlideU  { from{opacity:0;transform:translateY(14px)}  to{opacity:1;transform:translateY(0)} }
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .6s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
 </style>
 </head>
 <body>
+<div id="grain"></div>
+<canvas id="fire-cv"></canvas>
+<canvas id="smoke-cv"></canvas>
+<canvas id="ember-cv"></canvas>
+<canvas id="transition-cv"></canvas>
+<div id="vignette"></div>
+<div id="cursor"><div id="c-dot"></div><div id="c-ring"></div></div>
 
-<div id="cursor"><div id="cursor-dot"></div><div id="cursor-ring"></div></div>
-<canvas id="cv-bg"></canvas>
-<canvas id="cv-smoke"></canvas>
-<canvas id="cv-ember"></canvas>
-
-<!-- ══════════ DESKTOP SHELL ══════════ -->
-<div id="shell">
-  <div id="topbar">
-    <div class="tb-cell"><div class="tb-eyebrow">Location</div><div class="tb-val">St. Francisville, LA</div></div>
-    <div class="tb-cell"><div class="tb-eyebrow">Phone</div><div class="tb-val">(225) 245-5046</div></div>
-    <div class="tb-cell grow">
-      <div id="brand-name">The Francis <em>Smokehouse</em></div>
-      <div id="brand-tagline">& Specialty Meats — Est. 2015 — US Hwy 61</div>
+<div id="hdr">
+  <div id="hdr-top">
+    <a id="back-btn" href="LandingPage.html">← Back</a>
+    <div class="hdr-c">
+      <div class="hdr-n">The Francis <em>Smokehouse</em></div>
+      <div class="hdr-s">The Pit Board · St. Francisville, LA</div>
     </div>
-    <div class="tb-cell"><div class="tb-eyebrow">Hours</div><div class="tb-val" id="hours-today">Mon–Sat 10am–6pm</div></div>
-    <div class="tb-cell"><div class="tb-status"><span class="status-flame">🔥</span><span>Fire's Burning</span></div></div>
-  </div>
-
-  <div id="main">
-    <!-- LEFT -->
-    <div id="sidebar-l">
-      <div class="sb-group">
-        <div class="sb-block"><span class="sb-label">The Pit</span><span class="sb-text">Post oak & hickory. 225°F. Low and slow. No gas. No shortcuts.</span></div>
-        <div class="sb-block"><span class="sb-label">Specialty</span><span class="sb-text">Brisket, ribs, boudin, pulled pork, house sausages & Cajun sides</span></div>
-        <div class="sb-block"><span class="sb-label">Rating</span><div class="sb-stars">★★★★½</div><div class="sb-rating-line">4.5 · TripAdvisor Travellers' Choice<br>4.7 · Google (505 reviews)</div></div>
-        <div class="sb-block"><span class="sb-label">Tonight</span><span class="sb-hot">Pit is loaded & running</span></div>
-      </div>
-      <div>
-        <div class="sb-label" style="margin-bottom:8px">Connect</div>
-        <div class="sb-links">
-          <a class="sb-link" href="https://www.facebook.com/1547733028788117/" target="_blank">Facebook</a>
-          <a class="sb-link" href="mailto:francissmokehouse@att.net">Email Us</a>
-          <a class="sb-link" href="https://www.tripadvisor.ca/Restaurant_Review-g40411-d7851018-Reviews-The_Francis_Smokehouse-Saint_Francisville_Louisiana.html" target="_blank">TripAdvisor</a>
-          <a class="sb-link" href="https://www.google.com/maps/search/?api=1&query=The+Francis+Smokehouse%2C+St+Francisville%2C+LA" target="_blank">Google Maps</a>
-          <a class="sb-link" href="mailto:francissmokehouse@att.net">Catering Enquiry</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- CENTER NAV -->
-    <div id="nav-center">
-      <nav>
-        <div class="nav-item" onclick="openPanel('menu')"     onmouseenter="setPreview('menu')"     onmouseleave="clearPreview()"><span class="ni-num">01</span><span class="ni-name">The Menu</span><span class="ni-sub">BBQ plates, po-boys & sandwiches</span><span class="ni-arrow">↗</span></div>
-        <div class="nav-item" onclick="openPanel('boudin')"   onmouseenter="setPreview('boudin')"   onmouseleave="clearPreview()"><span class="ni-num">02</span><span class="ni-name">Boudin & Sides</span><span class="ni-sub">Louisiana staples done right</span><span class="ni-arrow">↗</span></div>
-        <div class="nav-item" onclick="openPanel('specials')" onmouseenter="setPreview('specials')" onmouseleave="clearPreview()"><span class="ni-num">03</span><span class="ni-name">Daily Specials</span><span class="ni-sub">Board changes every morning at 6am</span><span class="ni-arrow">↗</span></div>
-        <div class="nav-item" onclick="openPanel('story')"    onmouseenter="setPreview('story')"    onmouseleave="clearPreview()"><span class="ni-num">04</span><span class="ni-name">Our Story</span><span class="ni-sub">St. Francisville proud since 2015</span><span class="ni-arrow">↗</span></div>
-        <div class="nav-item" onclick="openPanel('catering')" onmouseenter="setPreview('catering')" onmouseleave="clearPreview()"><span class="ni-num">05</span><span class="ni-name">Catering</span><span class="ni-sub">Large orders, events & gatherings</span><span class="ni-arrow">↗</span></div>
-        <div class="nav-item" onclick="openPanel('find')"     onmouseenter="setPreview('find')"     onmouseleave="clearPreview()"><span class="ni-num">06</span><span class="ni-name">Find Us</span><span class="ni-sub">6779 US Hwy 61 · Follow the smoke</span><span class="ni-arrow">↗</span></div>
-      </nav>
-    </div>
-
-    <!-- RIGHT -->
-    <div id="sidebar-r">
-      <div><div class="pv-label">Section Preview</div><div id="pv-title">Hover any item to explore</div><div id="pv-desc">Each destination has its own story. Take your time.</div><div id="pv-chips"></div></div>
-      <div id="pv-num">—</div>
+    <div class="hdr-r">
+      <div class="hdr-live"><span class="ldot"></span>Fire's Burning</div>
+      <div class="hdr-clk" id="clk">Open · 10am–6pm</div>
     </div>
   </div>
-
-  <div id="botbar">
-    <div id="ticker-track"></div>
-    <div id="botbar-right">© 2025 The Francis Smokehouse</div>
+  <div id="tabs">
+    <button class="tab active" onclick="sw('bbq',this)"><span>🔥 BBQ Plates</span></button>
+    <button class="tab" onclick="sw('sb',this)"><span>🥖 Po-boys</span></button>
+    <button class="tab" onclick="sw('bd',this)"><span>🌶 Boudin</span></button>
+    <button class="tab" onclick="sw('sp',this)"><span>✦ Specials</span></button>
+    <button class="tab" onclick="sw('si',this)"><span>🍟 Sides</span></button>
+    <button class="tab" onclick="sw('ds',this)"><span>🍮 Desserts</span></button>
   </div>
 </div>
 
-<!-- ══════════ MOBILE SHELL ══════════ -->
-<div id="mobile-shell">
-  <div id="mob-header">
-    <div id="mob-header-inner">
-      <div class="mob-eyebrow">St. Francisville, Louisiana</div>
-      <div id="mob-brand">The Francis <em>Smokehouse</em></div>
-      <div class="mob-tagline">& Specialty Meats — US Hwy 61</div>
-    </div>
-    <div id="mob-info-strip">
-      <div class="mob-info-bit"><span class="mob-info-lbl">Phone</span><span class="mob-info-val">(225) 245-5046</span></div>
-      <div class="mob-info-bit"><span class="mob-info-lbl">Status</span><span class="mob-info-val mob-status"><span class="mob-status-dot"></span>Fire's Burning</span></div>
-      <div class="mob-info-bit"><span class="mob-info-lbl">Hours</span><span class="mob-info-val" id="mob-hours">10am – 6pm</span></div>
-    </div>
-  </div>
+<div id="layout">
+<div id="left-col">
 
-  <div id="mob-nav">
-    <div class="mob-nav-item" onclick="openMobPanel('menu')"><span class="mni-num">01</span><div class="mni-body"><div class="mni-name">The Menu</div><div class="mni-sub">BBQ plates, po-boys & sandwiches</div></div><span class="mni-arrow">↗</span></div>
-    <div class="mob-nav-item" onclick="openMobPanel('boudin')"><span class="mni-num">02</span><div class="mni-body"><div class="mni-name">Boudin & Sides</div><div class="mni-sub">Louisiana staples done right</div></div><span class="mni-arrow">↗</span></div>
-    <div class="mob-nav-item" onclick="openMobPanel('specials')"><span class="mni-num">03</span><div class="mni-body"><div class="mni-name">Daily Specials</div><div class="mni-sub">Board changes every morning</div></div><span class="mni-arrow">↗</span></div>
-    <div class="mob-nav-item" onclick="openMobPanel('story')"><span class="mni-num">04</span><div class="mni-body"><div class="mni-name">Our Story</div><div class="mni-sub">St. Francisville proud since 2015</div></div><span class="mni-arrow">↗</span></div>
-    <div class="mob-nav-item" onclick="openMobPanel('catering')"><span class="mni-num">05</span><div class="mni-body"><div class="mni-name">Catering</div><div class="mni-sub">Large orders & events</div></div><span class="mni-arrow">↗</span></div>
-    <div class="mob-nav-item" onclick="openMobPanel('find')"><span class="mni-num">06</span><div class="mni-body"><div class="mni-name">Find Us</div><div class="mni-sub">6779 US Hwy 61 · Follow the smoke</div></div><span class="mni-arrow">↗</span></div>
-  </div>
-
-  <div id="mob-botbar">
-    <div id="mob-ticker-track"></div>
+<!-- BBQ -->
+<div class="sec active" id="s-bbq">
+  <div class="sh reveal"><div class="st">BBQ Plates</div><div class="si">Served with two sides of your choice</div></div>
+  <div class="sn reveal">Smoked 12+ hours over post oak & hickory · All plates include two sides</div>
+  <div class="items">
+    <div class="mi hero reveal"><div class="hero-top"><div class="mi-l"><div class="h-badge">✦ Pit Master's Cut</div><div class="mi-n">Brisket Plate</div><div class="mi-d">Slow-smoked beef brisket, sliced to order. Bark-crusted, smoke-ringed, impossibly tender.</div><div class="mi-b"><span class="badge b-p">Most Ordered</span><span class="badge b-s">12 Hr Smoke</span></div></div><div class="mi-r"><div class="mi-p">$10.99</div><div class="mi-nt">+ 2 sides</div></div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Full Rack of Ribs</div><div class="mi-d">Pork spare ribs, rubbed and smoked until fall-off-the-bone tender.</div><div class="mi-b"><span class="badge b-p">Fan Favorite</span></div></div><div class="mi-r"><div class="mi-p">$19.99</div><div class="mi-nt">+ 2 sides</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">½ Rack of Ribs</div><div class="mi-d">Half rack of our signature smoked pork spare ribs.</div></div><div class="mi-r"><div class="mi-p">$11.99</div><div class="mi-nt">+ 2 sides</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Pulled Pork Plate</div><div class="mi-d">Pork shoulder smoked until it pulls apart like silk. House sauce on the side.</div></div><div class="mi-r"><div class="mi-p">$9.99</div><div class="mi-nt">+ 2 sides</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">½ Smoked Chicken</div><div class="mi-d">Half chicken, brined and smoked whole, juicy straight through to the bone.</div></div><div class="mi-r"><div class="mi-p">$9.99</div><div class="mi-nt">+ 2 sides</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Smoked Wings</div><div class="mi-d">Whole wings smoked low, finished hot. Crispy skin. Smoke all the way through.</div><div class="mi-b"><span class="badge b-n">Try It</span></div></div><div class="mi-r"><div class="mi-p">$7.99</div></div></div>
   </div>
 </div>
 
-<!-- ══════════ DESKTOP PANEL ══════════ -->
-<div id="panel">
-  <div id="panel-mood">
-    <div id="panel-mood-bg"></div>
-    <canvas id="panel-smoke-cv"></canvas>
-    <div class="pm-inner">
-      <button class="pm-back" onclick="closePanel()">Back</button>
-      <div id="panel-big-num">01</div>
-      <div class="pm-eyebrow" id="panel-eyebrow">Section</div>
-      <div id="panel-title"></div>
-      <div id="panel-italic"></div>
-    </div>
+<!-- SANDWICHES -->
+<div class="sec" id="s-sb">
+  <div class="sh reveal"><div class="st">Po-boys & Sandwiches</div><div class="si">Served with one side · Dressed with lettuce & tomato</div></div>
+  <div class="dr reveal"><div class="dl">Smoked Meats</div><div class="dline"></div><div class="df">🔥</div></div>
+  <div class="items">
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Pulled Pork Sandwich</div><div class="mi-d">House-smoked pulled pork on a toasted bun.</div></div><div class="mi-r"><div class="mi-p">$7.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Brisket Sandwich</div><div class="mi-d">Sliced smoked brisket piled high. Simple. Perfect.</div><div class="mi-b"><span class="badge b-p">Best Seller</span></div></div><div class="mi-r"><div class="mi-p">$8.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Chicken Sandwich</div><div class="mi-d">Smoked chicken breast on a brioche bun with house slaw.</div></div><div class="mi-r"><div class="mi-p">$7.99</div><div class="mi-nt">+ 1 side</div></div></div>
   </div>
-  <div id="panel-info">
-    <div class="pi-top"><span class="pi-hint">Double-click or confirm to enter · ESC to close</span></div>
-    <div class="pi-body-wrap">
-      <div class="pi-meta" id="panel-meta"></div>
-      <p id="panel-desc"></p>
-      <div id="panel-chips"></div>
-      <div class="pi-cta-wrap">
-        <div class="pi-dbl-note">Double-click anywhere to enter, or use the button</div>
-        <button id="panel-cta" onclick="goTo()"><span id="cta-label">Enter</span><span class="cta-arrow">→</span></button>
-      </div>
-    </div>
-    <div class="pi-bottom"><span class="pi-foot-rule" id="panel-rule"></span><span class="pi-foot-idx" id="panel-idx"></span></div>
+  <div class="dr reveal"><div class="dl">Burgers</div><div class="dline"></div><div class="df">🔥</div></div>
+  <div class="items">
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Hamburger</div><div class="mi-d">Hand-formed beef patty. Toasted bun. Dressed.</div></div><div class="mi-r"><div class="mi-p">$6.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Cheeseburger</div><div class="mi-d">American cheese. The classic.</div></div><div class="mi-r"><div class="mi-p">$7.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Bacon Cheeseburger</div><div class="mi-d">Smoked bacon, American cheese, dressed.</div><div class="mi-b"><span class="badge b-p">Top Pick</span></div></div><div class="mi-r"><div class="mi-p">$8.99</div><div class="mi-nt">+ 1 side</div></div></div>
+  </div>
+  <div class="dr reveal"><div class="dl">Louisiana Po-boys</div><div class="dline"></div><div class="df">🔥</div></div>
+  <div class="items">
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Ribeye Po-boy</div><div class="mi-d">Shaved ribeye on French bread, dressed. A house signature.</div><div class="mi-b"><span class="badge b-s">Signature</span></div></div><div class="mi-r"><div class="mi-p">$10.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Shrimp Po-boy</div><div class="mi-d">Gulf shrimp, fried golden, dressed on French bread.</div></div><div class="mi-r"><div class="mi-p">$8.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Crawfish Po-boy</div><div class="mi-d">Louisiana crawfish tails, seasoned and fried, dressed.</div><div class="mi-b"><span class="badge b-n">Louisiana Proud</span></div></div><div class="mi-r"><div class="mi-p">$10.99</div><div class="mi-nt">+ 1 side</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Catfish Po-boy</div><div class="mi-d">Cornmeal-crusted catfish, fried to order, dressed.</div></div><div class="mi-r"><div class="mi-p">$8.99</div><div class="mi-nt">+ 1 side</div></div></div>
   </div>
 </div>
 
-<!-- ══════════ MOBILE BOTTOM SHEET ══════════ -->
-<div id="mob-panel">
-  <div id="mob-panel-backdrop" onclick="closeMobPanel()"></div>
-  <div id="mob-sheet">
-    <div id="mob-sheet-handle"><div class="handle-bar"></div></div>
-    <div id="mob-sheet-hdr">
-      <div class="msh-eyebrow" id="mob-sheet-eyebrow">Section</div>
-      <button id="mob-sheet-close" onclick="closeMobPanel()">✕ Close</button>
-    </div>
-    <div id="mob-sheet-body">
-      <div>
-        <div id="mob-sheet-title"></div>
-        <div id="mob-sheet-italic"></div>
-      </div>
-      <div class="msh-meta" id="mob-sheet-meta"></div>
-      <p id="mob-sheet-desc"></p>
-      <div id="mob-sheet-chips"></div>
-      <button id="mob-sheet-cta" onclick="goTo()"><span id="mob-cta-label">Enter</span><span class="msc-arrow">→</span></button>
-      <div class="msh-foot-rule" id="mob-sheet-rule"></div>
-    </div>
+<!-- BOUDIN -->
+<div class="sec" id="s-bd">
+  <div class="sh reveal"><div class="st">Boudin & Cajun</div><div class="si">Made in-house — true Louisiana tradition</div></div>
+  <div class="sn reveal">Ask staff for current deli availability</div>
+  <div class="items">
+    <div class="mi hero reveal"><div class="hero-top"><div class="mi-l"><div class="h-badge">✦ Louisiana Icon</div><div class="mi-n">Steamed Boudin Links</div><div class="mi-d">House-made pork and rice boudin, steamed in the casing. The real thing.</div><div class="mi-b"><span class="badge b-s">Made In-House</span></div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Classic Boudin Balls</div><div class="mi-d">Boudin rolled and fried golden. Crispy outside, seasoned inside.</div><div class="mi-b"><span class="badge b-p">"AMAZING" — Guest</span></div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Pepper Jack Boudin Balls</div><div class="mi-d">Same boudin balls, loaded with melted pepper jack. Heat included.</div><div class="mi-b"><span class="badge b-s">Fan Favorite</span></div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Boudin Egg Rolls</div><div class="mi-d">Boudin filling wrapped in a crispy egg roll shell. Perfectly dippable.</div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Meat Pies</div><div class="mi-d">Old-school Louisiana meat pies, flaky pastry, seasoned ground meat.</div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Crawfish Pies</div><div class="mi-d">Seasoned Louisiana crawfish in a buttery, flaky pastry shell.</div><div class="mi-b"><span class="badge b-n">Louisiana Made</span></div></div><div class="mi-r"><div class="mi-p">Deli</div></div></div>
   </div>
 </div>
 
-<!-- ══════════ LOADER ══════════ -->
-<div id="loader">
-  <div class="ld-name">The Francis <em>Smokehouse</em></div>
-  <div class="ld-going" id="ld-going">Loading...</div>
-  <div class="ld-fire"><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div></div>
-  <div class="ld-track"><div class="ld-fill" id="ld-fill"></div></div>
-  <div class="ld-msg">Stoking the fire...</div>
+<!-- SPECIALS -->
+<div class="sec" id="s-sp">
+  <div class="sh reveal"><div class="st">Daily Specials</div><div class="si">Board changes every morning at 6am</div></div>
+  <div class="sn reveal">Call (225) 245-5046 or check Facebook for today's board</div>
+  <div class="sp-g">
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Appetizer</div><div class="sp-n">Sweet Thai Chili Wings</div><div class="sp-d">Smoked wings in house-made sweet Thai chili glaze. Sticky, smoky, addictive.</div><div class="sp-p">$16</div></div></div>
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Entrée</div><div class="sp-n">Eggplant Pirogue</div><div class="sp-d">Hollowed eggplant filled with rich Cajun seafood stuffing.</div><div class="sp-p">$26</div></div></div>
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Entrée</div><div class="sp-n">Blackened Lemon Fish</div><div class="sp-d">Blackened fresh fish with cream spinach and grilled Louisiana crawfish tails.</div><div class="sp-p">$28</div></div></div>
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Entrée</div><div class="sp-n">Jack Daniel's BBQ Shrimp</div><div class="sp-d">Gulf shrimp in JD BBQ glaze with 14oz bone-in pork chop, mac & cheese and green beans.</div><div class="sp-p">$26</div></div></div>
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Entrée</div><div class="sp-n">Grilled Salmon</div><div class="sp-d">Grilled salmon with Louisiana crabmeat, avocado cream sauce and house sides.</div><div class="sp-p">$28</div></div></div>
+    <div class="sp-c reveal"><div class="sp-sp"></div><div class="sp-i"><div class="sp-t">Dessert Special</div><div class="sp-n">Miss Mud Pie</div><div class="sp-d">The house dessert special. Rich, indulgent, worth every bite.</div><div class="sp-p">$7</div></div></div>
+  </div>
+</div>
+
+<!-- SIDES -->
+<div class="sec" id="s-si">
+  <div class="sh reveal"><div class="st">Sides</div><div class="si">Made from scratch, every morning</div></div>
+  <div class="sn reveal">Small comes with sandwiches · BBQ plates include two sides of your choice</div>
+  <div class="items">
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Corn Pudding</div><div class="mi-d">Creamy, sweet Southern corn pudding. Our most-loved side — guests order extras.</div><div class="mi-b"><span class="badge b-p">Most Loved</span></div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Baked Beans</div><div class="mi-d">Slow-cooked with smoked meat drippings and brown sugar.</div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Potato Salad</div><div class="mi-d">Classic Southern-style creamy potato salad.</div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Cole Slaw</div><div class="mi-d">House-made with a tangy, slightly sweet dressing.</div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">French Fries</div><div class="mi-d">Golden, crispy, seasoned fries.</div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+    <div class="mi reveal"><div class="mi-spec"></div><div class="mi-l"><div class="mi-n">Sweet Potato Waffle Fries</div><div class="mi-d">Sweet potato waffle-cut fries, lightly seasoned. A house specialty.</div><div class="mi-b"><span class="badge b-s">House Pick</span></div></div><div class="mi-r"><div class="mi-p">$2.75</div><div class="mi-nt">Sm · $6.99 Lg</div></div></div>
+  </div>
+</div>
+
+<!-- DESSERTS -->
+<div class="sec" id="s-ds">
+  <div class="sh reveal"><div class="st">Desserts</div><div class="si">The Sweet — made in-house daily</div></div>
+  <div class="sn reveal">Availability varies by day · Ask your server what came out fresh</div>
+  <div class="ds-g">
+    <div class="ds-i reveal"><div class="ds-ic">🍞</div><div class="ds-n">Homemade Bread Pudding</div><div class="ds-p">Ask for price</div></div>
+    <div class="ds-i reveal"><div class="ds-ic">🍰</div><div class="ds-n">Creole Cream Cheesecake</div><div class="ds-p">Ask for price</div></div>
+    <div class="ds-i reveal"><div class="ds-ic">🎂</div><div class="ds-n">Chocolate Cake</div><div class="ds-p">Ask for price</div></div>
+    <div class="ds-i reveal"><div class="ds-ic">🥕</div><div class="ds-n">Carrot Cake</div><div class="ds-p">Ask for price</div></div>
+    <div class="ds-i reveal"><div class="ds-ic">🍓</div><div class="ds-n">Strawberry Shortcake</div><div class="ds-p">Ask for price</div></div>
+    <div class="ds-i reveal"><div class="ds-ic">🥧</div><div class="ds-n">Miss Mud Pie</div><div class="ds-p">$7 (Special)</div></div>
+  </div>
+</div>
+
+</div><!-- /left-col -->
+
+<div id="rc">
+  <div class="ic reveal"><div class="ic-l">The Pit</div><div class="ic-t">Post Oak & <em>Hickory</em></div><div class="ic-b">225°F. 12+ hours minimum. <strong>No gas. No shortcuts.</strong> Fire starts at 4am. The first plate doesn't leave until the meat decides — not the clock.</div></div>
+  <div class="ic reveal"><div class="ic-l">What People Say</div><div class="rats"><div class="rb"><div class="r-s">★★★★½</div><div class="r-n">4.5</div><div class="r-src">TripAdvisor</div></div><div class="rb"><div class="r-s">★★★★★</div><div class="r-n">4.7</div><div class="r-src">Google</div></div></div><div class="ic-b" style="margin-top:10px;font-style:italic">"Brisket practically melted in my mouth."<br><br>"Boudin balls were AMAZING!"</div></div>
+  <div class="ic reveal"><div class="ic-l">Sides Pricing</div><div class="sg"><div class="sgr"><span class="sgn">Small side</span><span class="sgp">$2.75</span></div><div class="sgr"><span class="sgn">Large side</span><span class="sgp">$6.99</span></div><div class="sgr"><span class="sgn">With sandwich</span><span class="sgp">1 side</span></div><div class="sgr"><span class="sgn">With BBQ plate</span><span class="sgp">2 sides</span></div></div></div>
+  <div class="ctac reveal"><div class="ctat">Large Order?</div><div class="ctas">We cater events, parties & corporate lunches. Call or email to discuss.</div><a class="ctab" href="tel:2252455046">🔥 Call (225) 245-5046</a></div>
+  <div class="ic reveal"><div class="ic-l">Hours & Location</div><div class="ic-b"><strong>Mon – Sat:</strong> 10am – 6pm<br><strong>Sunday:</strong> 10am – 3pm<br><br><strong>6779 US Hwy 61</strong><br>St. Francisville, LA 70775<br><br>Free parking · Wheelchair accessible<br>Outdoor deck around the old tree</div></div>
+</div>
+</div><!-- /layout -->
+
+<div id="ftr">
+  <span class="ft">The Francis Smokehouse & Specialty Meats</span>
+  <div class="ffs"><span class="ff">🔥</span><span class="ff">🔥</span><span class="ff">🔥</span></div>
+  <span class="ft">St. Francisville, LA · (225) 245-5046</span>
 </div>
 
 <script>
-/* ════════════════════════════
-   CANVAS ATMOSPHERE
-════════════════════════════ */
-const cvBg=document.getElementById('cv-bg'),bx=cvBg.getContext('2d');
-const cvSm=document.getElementById('cv-smoke'),sx=cvSm.getContext('2d');
-const cvEm=document.getElementById('cv-ember'),ex=cvEm.getContext('2d');
-let W,H;
-function rsz(){ W=cvBg.width=cvSm.width=cvEm.width=window.innerWidth; H=cvBg.height=cvSm.height=cvEm.height=window.innerHeight; }
-rsz(); window.addEventListener('resize',rsz);
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 1: DOOM FIRE SIMULATION
+   Classic cellular automata. 144×80 pixel grid,
+   each frame heat rises & cools randomly upward.
+   Rendered via direct ImageData pixel buffer (fast).
+═══════════════════════════════════════════════════════ */
+const FCV=document.getElementById('fire-cv');
+const FCX=FCV.getContext('2d');
+const FW=144,FH=80;
+FCV.width=FW;FCV.height=FH;
 
-let bgP=0;
-function drawBg(){
-  bgP+=.003; const pulse=.5+.5*Math.sin(bgP);
-  const g=bx.createRadialGradient(W*.5,H*.85,0,W*.5,H*.85,W*.9);
-  g.addColorStop(0,`rgba(28,16,4,${.8+pulse*.08})`); g.addColorStop(.35,'rgba(18,12,5,1)'); g.addColorStop(1,'rgba(9,7,4,1)');
-  bx.fillStyle=g; bx.fillRect(0,0,W,H);
-  const g2=bx.createRadialGradient(W*.5,H,0,W*.5,H,W*.6);
-  g2.addColorStop(0,`rgba(160,50,0,${.06+pulse*.04})`); g2.addColorStop(.5,'rgba(100,30,0,.03)'); g2.addColorStop(1,'transparent');
-  bx.fillStyle=g2; bx.fillRect(0,0,W,H);
+/* 256-color fire palette — black→deep red→orange→yellow→white */
+const PAL=new Uint32Array(256);
+for(let i=0;i<256;i++){
+  let r,g,b;
+  if(i<64){r=Math.min(255,i*3);g=0;b=0;}
+  else if(i<128){r=255;g=(i-64)*2;b=0;}
+  else if(i<200){r=255;g=128+(i-128);b=0;}
+  else{r=255;g=255;b=(i-200)*3;}
+  PAL[i]=(255<<24)|(b<<16)|(g<<8)|r; /* ABGR — ImageData buffer layout */
 }
-function mkS(){ return{x:.15+Math.random()*.7,y:1.05+Math.random()*.05,vx:(Math.random()-.5)*.0003,vy:-.0006-Math.random()*.0005,r:35+Math.random()*55,a:0,ta:.018+Math.random()*.02,gr:.06+Math.random()*.04,wb:Math.random()*Math.PI*2,ws:.004+Math.random()*.007}; }
-const SM=Array.from({length:18},mkS);
-function drawSmoke(){
-  sx.clearRect(0,0,W,H);
+
+const FIRE=new Uint8Array(FW*FH);
+const IMG=FCX.createImageData(FW,FH);
+const BUF=new Uint32Array(IMG.data.buffer);
+
+function seedFire(){for(let x=0;x<FW;x++)FIRE[(FH-1)*FW+x]=255;}
+seedFire();
+
+function stepFire(){
+  for(let y=0;y<FH-1;y++){
+    for(let x=0;x<FW;x++){
+      const src=FIRE[(y+1)*FW+x];
+      const decay=Math.random()<.4?1:0;
+      const dst=y*FW+((x-decay+FW)%FW);
+      FIRE[dst]=Math.max(0,src-(Math.random()<.25?1:0));
+    }
+  }
+}
+
+function renderFire(){
+  for(let i=0;i<FW*FH;i++)BUF[i]=FIRE[i]===0?0:PAL[FIRE[i]];
+  FCX.putImageData(IMG,0,0);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 2: SMOKE PARTICLES
+═══════════════════════════════════════════════════════ */
+const SCV=document.getElementById('smoke-cv');
+const SCX=SCV.getContext('2d');
+let SW=0,SH=0;
+function rszS(){SW=SCV.width=window.innerWidth;SH=SCV.height=window.innerHeight;}
+rszS();window.addEventListener('resize',rszS);
+
+function mkS(){return{x:.15+Math.random()*.7,y:1.04+Math.random()*.04,
+  vx:(Math.random()-.5)*.0003,vy:-.0006-Math.random()*.0005,
+  r:38+Math.random()*58,a:0,ta:.02+Math.random()*.02,
+  gr:.07+Math.random()*.04,wb:Math.random()*Math.PI*2,ws:.004+Math.random()*.007};}
+const SM=Array.from({length:16},mkS);
+
+function stepSmoke(){
+  SCX.clearRect(0,0,SW,SH);
   for(const s of SM){
-    s.wb+=s.ws; s.x+=s.vx+Math.sin(s.wb)*.00025; s.y+=s.vy; s.r+=s.gr;
-    s.a=s.a<s.ta?s.a+.0018:Math.max(0,s.a-.0012);
-    if(s.y<-.25||s.a<=0){Object.assign(s,mkS());continue;}
-    const g=sx.createRadialGradient(s.x*W,s.y*H,0,s.x*W,s.y*H,s.r);
-    g.addColorStop(0,`rgba(90,65,40,${s.a})`); g.addColorStop(.5,`rgba(60,42,25,${s.a*.45})`); g.addColorStop(1,'transparent');
-    sx.fillStyle=g; sx.beginPath(); sx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2); sx.fill();
+    s.wb+=s.ws;s.x+=s.vx+Math.sin(s.wb)*.00022;s.y+=s.vy;s.r+=s.gr;
+    s.a=s.a<s.ta?s.a+.002:Math.max(0,s.a-.0014);
+    if(s.y<-.3||s.a<=0){Object.assign(s,mkS());continue;}
+    const g=SCX.createRadialGradient(s.x*SW,s.y*SH,0,s.x*SW,s.y*SH,s.r);
+    g.addColorStop(0,`rgba(85,60,36,${s.a})`);
+    g.addColorStop(.55,`rgba(56,38,22,${s.a*.4})`);
+    g.addColorStop(1,'transparent');
+    SCX.fillStyle=g;SCX.beginPath();SCX.arc(s.x*SW,s.y*SH,s.r,0,Math.PI*2);SCX.fill();
   }
 }
-function mkE(){ return{x:.12+Math.random()*.76,y:1.02+Math.random()*.04,vx:(Math.random()-.5)*.0028,vy:-.004-Math.random()*.008,r:.6+Math.random()*1.6,life:1,decay:.003+Math.random()*.006,h:10+Math.random()*22,tw:(Math.random()-.5)*.001}; }
-const EM=Array.from({length:26},mkE);
-function drawEmbers(){
-  ex.clearRect(0,0,W,H);
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 3: EMBER PARTICLES + CURSOR TRAIL RING BUFFER
+   Trail stores 30 past cursor positions.
+   Each position fades and shrinks with age.
+═══════════════════════════════════════════════════════ */
+const ECV=document.getElementById('ember-cv');
+const ECX=ECV.getContext('2d');
+let EW=0,EH=0;
+function rszE(){EW=ECV.width=window.innerWidth;EH=ECV.height=window.innerHeight;}
+rszE();window.addEventListener('resize',rszE);
+
+function mkE(){return{x:.1+Math.random()*.8,y:1.02+Math.random()*.03,
+  vx:(Math.random()-.5)*.003,vy:-.004-Math.random()*.009,
+  r:.6+Math.random()*1.8,life:1,decay:.003+Math.random()*.007,h:8+Math.random()*24};}
+const EM=Array.from({length:24},mkE);
+
+const TL=30; /* trail length */
+const TX=new Float32Array(TL);const TY=new Float32Array(TL);
+let TH_=0;
+
+function stepEmbers(){
+  ECX.clearRect(0,0,EW,EH);
+  /* cursor trail */
+  for(let i=1;i<TL;i++){
+    const idx=(TH_-i+TL)%TL;
+    const age=i/TL;
+    const r=4*(1-age);
+    if(r<.25)continue;
+    ECX.beginPath();ECX.arc(TX[idx],TY[idx],r,0,Math.PI*2);
+    ECX.fillStyle=`hsla(${22+age*12},100%,${62-age*28}%,${(1-age)*.6})`;
+    if(age<.25){ECX.shadowBlur=10;ECX.shadowColor='rgba(240,130,30,.5)';}
+    ECX.fill();ECX.shadowBlur=0;
+  }
+  /* floating embers */
   for(let i=0;i<EM.length;i++){
-    const e=EM[i]; e.x+=e.vx+e.tw; e.y+=e.vy; e.life-=e.decay;
+    const e=EM[i];e.x+=e.vx+(Math.random()-.5)*.001;e.y+=e.vy;e.life-=e.decay;
     if(e.life<=0||e.y<-.02){EM[i]=mkE();continue;}
-    ex.beginPath(); ex.arc(e.x*W,e.y*H,e.r,0,Math.PI*2);
-    ex.fillStyle=`hsla(${e.h},100%,${52+e.life*34}%,${e.life*.82})`;
-    ex.shadowBlur=8; ex.shadowColor=`hsla(${e.h},100%,58%,${e.life*.5})`;
-    ex.fill(); ex.shadowBlur=0;
+    ECX.beginPath();ECX.arc(e.x*EW,e.y*EH,e.r,0,Math.PI*2);
+    ECX.fillStyle=`hsla(${e.h},100%,${52+e.life*34}%,${e.life*.82})`;
+    ECX.shadowBlur=8;ECX.shadowColor=`hsla(${e.h},100%,58%,${e.life*.5})`;
+    ECX.fill();ECX.shadowBlur=0;
   }
 }
-(function loop(){ drawBg(); drawSmoke(); drawEmbers(); requestAnimationFrame(loop); })();
 
-/* Panel smoke */
-const psCV=document.getElementById('panel-smoke-cv'),psx=psCV.getContext('2d');
-function rszPS(){psCV.width=window.innerWidth;psCV.height=window.innerHeight;}
-rszPS(); window.addEventListener('resize',rszPS);
-const PS=Array.from({length:10},mkS);
-(function psL(){
-  psx.clearRect(0,0,psCV.width,psCV.height);
-  for(const s of PS){
-    s.wb+=s.ws; s.x+=s.vx+Math.sin(s.wb)*.0002; s.y+=s.vy; s.r+=s.gr*.7;
-    s.a=s.a<s.ta?s.a+.0015:Math.max(0,s.a-.001);
-    if(s.y<-.2||s.a<=0){Object.assign(s,mkS());continue;}
-    const g=psx.createRadialGradient(s.x*psCV.width,s.y*psCV.height,0,s.x*psCV.width,s.y*psCV.height,s.r);
-    g.addColorStop(0,`rgba(70,50,30,${s.a*.7})`); g.addColorStop(1,'transparent');
-    psx.fillStyle=g; psx.beginPath(); psx.arc(s.x*psCV.width,s.y*psCV.height,s.r,0,Math.PI*2); psx.fill();
-  }
-  requestAnimationFrame(psL);
-})();
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 4: SPRING-PHYSICS CURSOR
+   Critically-damped spring: cursor lags behind mouse
+   with natural deceleration. Feels physically real.
+═══════════════════════════════════════════════════════ */
+let mx=window.innerWidth/2,my=window.innerHeight/2;
+let cx_=mx,cy_=my,cvx=0,cvy=0;
+const SPRING=0.14,DAMPING=0.78;
 
-/* ════════════════════════════
-   CURSOR
-════════════════════════════ */
-const curEl=document.getElementById('cursor');
-document.addEventListener('mousemove',e=>{ curEl.style.left=e.clientX+'px'; curEl.style.top=e.clientY+'px'; });
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  TX[TH_]=mx;TY[TH_]=my;
+  TH_=(TH_+1)%TL;
+});
 
-/* ════════════════════════════
-   TICKERS
-════════════════════════════ */
-const tkItems=['Brisket Plate — $10.99','Full Rack Ribs — $19.99','Pulled Pork — $9.99','Smoked Wings — $7.99','Ribeye Po-boy — $10.99','Crawfish Po-boy — $10.99','Boudin Balls','Pepper Jack Boudin','Corn Pudding','Bread Pudding','Creole Cream Cheesecake','½ Chicken — $9.99','Catfish Po-boy — $8.99','Cheeseburger — $7.99','Boudin Egg Rolls'];
-const d4=[...tkItems,...tkItems,...tkItems,...tkItems];
-const html=d4.map(t=>`<span class="t-item">${t}</span>`).join('');
-document.getElementById('ticker-track').innerHTML=html;
-document.getElementById('mob-ticker-track').innerHTML=d4.map(t=>`<span class="mt-item">${t}</span>`).join('');
-
-/* ════════════════════════════
-   HOURS
-════════════════════════════ */
-const dow=new Date().getDay();
-const hoursStr=dow===0?'Sun: 10am – 3pm':'Mon–Sat 10am–6pm';
-const mobHoursStr=dow===0?'10am – 3pm':'10am – 6pm';
-document.getElementById('hours-today').textContent=hoursStr;
-document.getElementById('mob-hours').textContent=mobHoursStr;
-
-/* ════════════════════════════
-   PAGE DATA
-════════════════════════════ */
-const PAGES={
-  menu:{num:'01',eyebrow:'The Menu',cta:'See Full Menu',title:'Pit to\nPlate.',italic:'BBQ plates · Po-boys · Burgers · Sandwiches',meta:'Smoked daily — 12+ hours minimum',mood:'radial-gradient(ellipse at 30% 80%,#3a1800 0%,#1a0c04 50%,#09070a 100%)',desc:`Everything on this menu spent <strong>a minimum of twelve hours over post oak and hickory.</strong> Brisket plate $10.99. Full rack ribs $19.99. Pulled pork $9.99. Half chicken $9.99. Smoked wings $7.99. All BBQ plates come with two sides. Ribeye po-boys, shrimp po-boys, crawfish po-boys and catfish po-boys also on the board. Burgers from $6.99.`,chips:['Brisket $10.99','Ribs $19.99','Pulled Pork $9.99','Wings $7.99','Ribeye Po-boy $10.99','2 Sides Included'],rule:'Low & slow, always.',dest:'menu.html'},
-  boudin:{num:'02',eyebrow:'Boudin & Sides',cta:'Explore the Deli Case',title:'Louisiana\nStaples.',italic:'Boudin · Specialty meats · House sides · Desserts',meta:'Made in-house — true Louisiana tradition',mood:'radial-gradient(ellipse at 30% 80%,#2a1200 0%,#180a02 50%,#09070a 100%)',desc:`The deli case is loaded. <strong>Steamed boudin links, classic boudin balls, pepper jack boudin balls, boudin egg rolls, meat pies and crawfish pies.</strong> Sides run small ($2.75) or large ($6.99): corn pudding, baked beans, potato salad, coleslaw, fries and sweet potato waffle fries. Desserts: homemade bread pudding, Creole cream cheesecake, chocolate & carrot cake.`,chips:['Boudin Links','Boudin Balls','Pepper Jack Boudin','Crawfish Pies','Corn Pudding','Bread Pudding'],rule:'Made from scratch.',dest:'boudin.html'},
-  specials:{num:'03',eyebrow:'Daily Specials',cta:"Check Today's Board",title:'Daily\nBoard.',italic:'Changes every morning — call to confirm',meta:'Board posted at 6am · (225) 245-5046',mood:'radial-gradient(ellipse at 30% 80%,#321800 0%,#1c0e02 50%,#09070a 100%)',desc:`The specials board rotates every single day. Recent features: <strong>Eggplant pirogue with Cajun seafood stuffing ($26). Blackened lemon fish with cream spinach & grilled crawfish tails ($28). Jack Daniel's BBQ shrimp with 14oz bone-in pork chop ($26). Grilled salmon with crabmeat & avocado cream sauce ($28).</strong> Sweet Thai chili wings app $16. Miss Mud Pie $7.`,chips:['Eggplant Pirogue $26','Blackened Fish $28','BBQ Shrimp $26','Salmon $28','Wings App $16','Mud Pie $7'],rule:'Fresh board, every day.',dest:'specials.html'},
-  story:{num:'04',eyebrow:'Our Story',cta:'Read Our Story',title:'St. Francisville\nProud.',italic:"Travellers' Choice · 4.5★ TripAdvisor · 4.7★ Google",meta:'143 TripAdvisor reviews · 505 Google reviews',mood:'radial-gradient(ellipse at 30% 80%,#281400 0%,#160a02 50%,#09070a 100%)',desc:`The Francis Smokehouse has been a fixture on <strong>US Highway 61 in St. Francisville</strong> since 2015. Rated Travellers' Choice on Tripadvisor — top 10% of restaurants worldwide. 4.7 across 505 Google reviews. <em>"Brisket practically melted in my mouth."</em> <em>"Boudin balls were AMAZING."</em> Locals fill the inside. The outdoor deck built around the old tree keeps everyone coming back.`,chips:['Est. 2015',"Travellers' Choice",'4.7★ Google','4.5★ TripAdvisor','Outdoor Deck',"Locals' Favorite"],rule:'Real food. Real people.',dest:'story.html'},
-  catering:{num:'05',eyebrow:'Catering',cta:'Contact Us Now',title:'Feed\nThe Crowd.',italic:'Large orders · Events · Private gatherings',meta:'(225) 245-5046 · francissmokehouse@att.net',mood:'radial-gradient(ellipse at 30% 80%,#301600 0%,#180b02 50%,#09070a 100%)',desc:`The team handles <strong>large catering orders</strong> for parties, corporate lunches, weddings and events. Brisket, wings and sides in bulk. Call <strong>(225) 245-5046</strong> or email <strong>francissmokehouse@att.net</strong>. On-site parking, fully wheelchair accessible.`,chips:['Brisket Catering','Wings & Sides','Takeout Available','Groups Welcome','Wheelchair Access','Free Parking'],rule:'Enough for the whole crew.',dest:'catering.html'},
-  find:{num:'06',eyebrow:'Find Us',cta:'Open in Google Maps',title:'Follow\nThe Smoke.',italic:'6779 US Highway 61 · St. Francisville, LA 70775',meta:'Mon–Sat 10am–6pm · Sun 10am–3pm',mood:'radial-gradient(ellipse at 30% 80%,#1e1000 0%,#120800 50%,#09070a 100%)',desc:`We're at <strong>6779 US Highway 61, St. Francisville, LA 70775</strong>. Mon–Sat 10am–6pm, Sunday 10am–3pm. On-site parking, fully wheelchair accessible. <strong>When the smoker is running you'll smell us before you see us.</strong> Travelers on the Great River Road call it a mandatory stop.`,chips:['6779 US Hwy 61','(225) 245-5046','Mon–Sat 10–6','Sun 10–3','Free Parking','Wheelchair OK'],rule:"You'll smell us first.",dest:'https://www.google.com/maps/search/?api=1&query=The+Francis+Smokehouse%2C+St+Francisville%2C+LA'},
-};
-
-/* ════════════════════════════
-   DESKTOP PREVIEW
-════════════════════════════ */
-const pvNums={menu:'01',boudin:'02',specials:'03',story:'04',catering:'05',find:'06'};
-function setPreview(id){
-  const p=PAGES[id];
-  document.getElementById('pv-title').textContent=p.title.replace('\n',' ');
-  document.getElementById('pv-desc').textContent=p.italic;
-  document.getElementById('pv-num').textContent=pvNums[id];
-  document.getElementById('pv-num').classList.add('lit');
-  document.getElementById('pv-chips').innerHTML=p.chips.slice(0,4).map((c,i)=>`<span class="pv-chip${i<2?' on':''}">${c}</span>`).join('');
-}
-function clearPreview(){
-  document.getElementById('pv-title').textContent='Hover any item to explore';
-  document.getElementById('pv-desc').textContent='Each destination has its own story. Take your time.';
-  document.getElementById('pv-num').classList.remove('lit');
-  document.getElementById('pv-num').textContent='—';
-  document.getElementById('pv-chips').innerHTML='';
+function stepCursor(){
+  cvx+=(mx-cx_)*SPRING;cvy+=(my-cy_)*SPRING;
+  cvx*=DAMPING;cvy*=DAMPING;
+  cx_+=cvx;cy_+=cvy;
+  document.getElementById('cursor').style.transform=`translate(${cx_}px,${cy_}px)`;
 }
 
-/* ════════════════════════════
-   DESKTOP PANEL
-════════════════════════════ */
-let currentPage=null, navigating=false;
-function openPanel(id){
-  const p=PAGES[id]; currentPage=p;
-  document.getElementById('panel-mood-bg').style.background=p.mood;
-  document.getElementById('panel-big-num').textContent=p.num;
-  document.getElementById('panel-eyebrow').textContent=p.eyebrow;
-  document.getElementById('panel-title').innerHTML=p.title.replace('\n','<br>');
-  document.getElementById('panel-italic').textContent=p.italic;
-  document.getElementById('panel-meta').textContent=p.meta;
-  document.getElementById('panel-desc').innerHTML=p.desc;
-  document.getElementById('panel-rule').textContent=p.rule;
-  document.getElementById('panel-idx').textContent=p.num;
-  document.getElementById('cta-label').textContent=p.cta;
-  document.getElementById('panel-chips').innerHTML=p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
-  document.getElementById('panel').classList.add('open');
-  document.getElementById('shell').style.pointerEvents='none';
-  navigating=false;
+/* Cursor scale on interactives */
+function setBig(v){
+  document.getElementById('c-dot').style.width=v?'5px':'10px';
+  document.getElementById('c-dot').style.height=v?'5px':'10px';
+  document.getElementById('c-ring').style.width=v?'58px':'40px';
+  document.getElementById('c-ring').style.height=v?'58px':'40px';
+  document.getElementById('c-ring').style.borderColor=v?'rgba(240,136,32,.65)':'rgba(240,136,32,.28)';
 }
-function closePanel(){ document.getElementById('panel').classList.remove('open'); document.getElementById('shell').style.pointerEvents=''; currentPage=null; }
-document.getElementById('panel-info').addEventListener('dblclick',goTo);
-
-/* ════════════════════════════
-   MOBILE BOTTOM SHEET
-════════════════════════════ */
-function openMobPanel(id){
-  const p=PAGES[id]; currentPage=p;
-  document.getElementById('mob-sheet-eyebrow').textContent=p.eyebrow;
-  document.getElementById('mob-sheet-title').innerHTML=p.title.replace('\n','<br>');
-  document.getElementById('mob-sheet-italic').textContent=p.italic;
-  document.getElementById('mob-sheet-meta').textContent=p.meta;
-  document.getElementById('mob-sheet-desc').innerHTML=p.desc;
-  document.getElementById('mob-sheet-rule').textContent=p.rule;
-  document.getElementById('mob-cta-label').textContent=p.cta;
-  document.getElementById('mob-sheet-chips').innerHTML=p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
-  document.getElementById('mob-panel').classList.add('open');
-  navigating=false;
-  // scroll sheet to top
-  document.getElementById('mob-sheet-body').scrollTop=0;
+function bindCursor(){
+  document.querySelectorAll('.tab,.mi,.sp-c,.ds-i,.ctab,.ic,#back-btn').forEach(el=>{
+    el.addEventListener('mouseenter',()=>setBig(true));
+    el.addEventListener('mouseleave',()=>setBig(false));
+  });
 }
-function closeMobPanel(){ document.getElementById('mob-panel').classList.remove('open'); currentPage=null; }
+bindCursor();
 
-/* ════════════════════════════
-   LOADER + NAVIGATE
-════════════════════════════ */
-function goTo(){
-  if(!currentPage||navigating) return;
-  navigating=true;
-  const ld=document.getElementById('loader');
-  document.getElementById('ld-going').textContent='Heading to '+currentPage.eyebrow.toLowerCase()+'...';
-  const fill=document.getElementById('ld-fill');
-  fill.style.animation='none'; void fill.offsetHeight;
-  ld.classList.add('show');
-  setTimeout(()=>{
-    if(currentPage.dest.startsWith('http')){ window.open(currentPage.dest,'_blank'); ld.classList.remove('show'); navigating=false; }
-    else { window.location.href=currentPage.dest; }
-  },1900);
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 5: 3D PERSPECTIVE TILT + SPECULAR HIGHLIGHT
+   Tracks mouse position relative to each card center.
+   Applies rotateX/rotateY transforms for real depth.
+   Specular highlight is a radial gradient that follows
+   the mouse — simulates a light source on the card.
+═══════════════════════════════════════════════════════ */
+function bindTilt(el,deg,tz){
+  const spec=el.querySelector('.mi-spec,.sp-sp');
+  el.addEventListener('mousemove',e=>{
+    const r=el.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    el.style.transform=`perspective(700px) rotateX(${-y*deg}deg) rotateY(${x*deg}deg) translateZ(${tz}px)`;
+    el.style.transition='transform .05s linear';
+    if(spec)spec.style.background=`radial-gradient(circle at ${(x+.5)*100}% ${(y+.5)*100}%,rgba(255,190,80,.11),transparent 65%)`;
+  });
+  el.addEventListener('mouseleave',()=>{
+    el.style.transform='perspective(700px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+    el.style.transition='transform .65s cubic-bezier(.16,1,.3,1)';
+    if(spec)spec.style.background='';
+  });
 }
 
-/* Touch ripple */
-document.addEventListener('touchstart',e=>{
-  const t=e.touches[0];
-  const r=document.createElement('div'); r.className='ripple';
-  r.style.left=t.clientX+'px'; r.style.top=t.clientY+'px';
-  document.body.appendChild(r); setTimeout(()=>r.remove(),700);
+function bindAllTilts(){
+  document.querySelectorAll('.mi:not(.hero)').forEach(el=>bindTilt(el,9,6));
+  document.querySelectorAll('.sp-c').forEach(el=>bindTilt(el,11,8));
+  document.querySelectorAll('.ds-i').forEach(el=>bindTilt(el,10,5));
+  bindCursor();
+}
+bindAllTilts();
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 6: FIRE CURTAIN TAB TRANSITION
+   Radial expand of fire-colored circle covers screen,
+   content swaps at peak, circle contracts out.
+   Uses eased timing so expansion feels organic.
+═══════════════════════════════════════════════════════ */
+const TCV=document.getElementById('transition-cv');
+const TCX=TCV.getContext('2d');
+let TVW=0,TVH=0;
+function rszT(){TVW=TCV.width=window.innerWidth;TVH=TCV.height=window.innerHeight;}
+rszT();window.addEventListener('resize',rszT);
+
+let tAnim=null,transitioning=false;
+
+function fireCurtain(cb){
+  if(transitioning)return;
+  transitioning=true;
+  TCV.style.opacity='1';
+  let t=0;
+  const ocx=TVW/2,ocy=TVH/2;
+  const maxR=Math.sqrt(ocx*ocx+ocy*ocy)*1.12;
+  if(tAnim)cancelAnimationFrame(tAnim);
+
+  (function expand(){
+    t+=.065;
+    const ease=t<1?1-Math.pow(1-t,3):1; /* cubic ease out */
+    const r=maxR*ease;
+    TCX.clearRect(0,0,TVW,TVH);
+    /* dark fill */
+    const g=TCX.createRadialGradient(ocx,ocy,0,ocx,ocy,r);
+    g.addColorStop(0,'rgba(24,12,4,1)');
+    g.addColorStop(.75,'rgba(16,9,3,.97)');
+    g.addColorStop(1,'transparent');
+    TCX.fillStyle=g;TCX.beginPath();TCX.arc(ocx,ocy,r,0,Math.PI*2);TCX.fill();
+    /* fire ring */
+    if(r>30&&r<maxR*.88){
+      const fR=r;
+      const fg=TCX.createRadialGradient(ocx,ocy,fR*.82,ocx,ocy,fR);
+      fg.addColorStop(0,'transparent');
+      fg.addColorStop(.5,'rgba(192,72,0,.38)');
+      fg.addColorStop(1,'rgba(240,136,32,.55)');
+      TCX.fillStyle=fg;TCX.beginPath();TCX.arc(ocx,ocy,fR,0,Math.PI*2);TCX.fill();
+    }
+    /* swap content at 55% */
+    if(t>=.55&&cb){cb();cb=null;}
+    if(t<1){tAnim=requestAnimationFrame(expand);}
+    else{
+      /* contract */
+      let t2=0;
+      (function contract(){
+        t2+=.07;
+        const ease2=Math.pow(t2,2); /* quad ease in */
+        const r2=maxR*(1-Math.min(ease2,1));
+        TCX.clearRect(0,0,TVW,TVH);
+        if(r2>5){
+          const g2=TCX.createRadialGradient(ocx,ocy,0,ocx,ocy,r2);
+          g2.addColorStop(0,'rgba(18,10,4,.95)');g2.addColorStop(1,'transparent');
+          TCX.fillStyle=g2;TCX.beginPath();TCX.arc(ocx,ocy,r2,0,Math.PI*2);TCX.fill();
+        }
+        if(t2<1){tAnim=requestAnimationFrame(contract);}
+        else{TCV.style.opacity='0';TCX.clearRect(0,0,TVW,TVH);transitioning=false;}
+      })();
+    }
+  })();
+}
+
+const ORDER=['bbq','sb','bd','sp','si','ds'];
+let current='bbq';
+
+function sw(id,btn){
+  if(id===current||transitioning)return;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  fireCurtain(()=>{
+    document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+    document.getElementById('s-'+id).classList.add('active');
+    current=id;
+    bindAllTilts();
+    triggerReveals();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 7: INTERSECTION OBSERVER SCROLL REVEALS
+   Staggered with delay based on sibling index.
+═══════════════════════════════════════════════════════ */
+const IO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const sibs=Array.from(e.target.parentElement.querySelectorAll('.reveal'));
+    const idx=sibs.indexOf(e.target);
+    e.target.style.transitionDelay=(idx*.055)+'s';
+    e.target.classList.add('in');
+    IO.unobserve(e.target);
+  });
+},{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+
+function triggerReveals(){
+  document.querySelectorAll('.reveal').forEach(el=>{
+    el.classList.remove('in');el.style.transitionDelay='';
+    IO.observe(el);
+  });
+}
+triggerReveals();
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 8: PROXIMITY GLOW
+   Items within 300px of cursor emit a warm glow.
+   Intensity falls off with distance squared.
+   Runs at 20fps (every 50ms) — no need for 60fps.
+═══════════════════════════════════════════════════════ */
+let PROX=[];
+function rebuildProx(){
+  PROX=Array.from(document.querySelectorAll('.mi:not(.hero),.sp-c,.ds-i'));
+}
+rebuildProx();
+
+setInterval(()=>{
+  PROX.forEach(el=>{
+    const r=el.getBoundingClientRect();
+    if(r.bottom<-100||r.top>window.innerHeight+100){el.style.boxShadow='';return;}
+    const ex=r.left+r.width/2,ey=r.top+r.height/2;
+    const dist=Math.sqrt((cx_-ex)**2+(cy_-ey)**2);
+    const RAD=300;
+    if(dist<RAD){
+      const s=Math.pow(1-dist/RAD,1.5);
+      el.style.boxShadow=`0 0 ${s*32}px rgba(192,72,0,${s*.16}),0 ${s*10}px ${s*24}px rgba(192,72,0,${s*.1})`;
+    } else {
+      el.style.boxShadow='';
+    }
+  });
+},50);
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 9: MASTER RAF LOOP — 60fps
+   Fire at ~24fps (every 42ms), smoke/embers/cursor at 60.
+═══════════════════════════════════════════════════════ */
+let lastFire=0;
+function loop(ts){
+  if(ts-lastFire>42){stepFire();renderFire();lastFire=ts;}
+  stepSmoke();
+  stepEmbers();
+  stepCursor();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 10: LIVE CLOCK
+═══════════════════════════════════════════════════════ */
+function tick(){
+  const d=new Date(),dow=d.getDay(),h=d.getHours();
+  const s=dow===0?(h>=10&&h<15?'Open · Sun 10am–3pm':'Closed · Sun closes 3pm')
+                 :(h>=10&&h<18?'Open · 10am–6pm':'Closed · Opens 10am');
+  document.getElementById('clk').textContent=s;
+}
+tick();setInterval(tick,60000);
+
+/* ═══════════════════════════════════════════════════════
+   SYSTEM 11: MOBILE SWIPE BETWEEN TABS
+   Horizontal swipe gesture with 60px threshold.
+═══════════════════════════════════════════════════════ */
+let tsX=0;
+document.addEventListener('touchstart',e=>{tsX=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tsX;
+  if(Math.abs(dx)<60)return;
+  const idx=ORDER.indexOf(current);
+  let next=idx+(dx<0?1:-1);
+  next=Math.max(0,Math.min(ORDER.length-1,next));
+  if(next!==idx)sw(ORDER[next],document.querySelectorAll('.tab')[next]);
 },{passive:true});
 
-/* ESC */
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closePanel(); closeMobPanel(); } });
-
-/* Sheet swipe down to close */
-let sheetStartY=0;
-document.getElementById('mob-sheet').addEventListener('touchstart',e=>{ sheetStartY=e.touches[0].clientY; },{passive:true});
-document.getElementById('mob-sheet').addEventListener('touchend',e=>{
-  const dy=e.changedTouches[0].clientY-sheetStartY;
-  if(dy>80) closeMobPanel();
-},{passive:true});
-
-/* ════════════════════════════
-   BOOT
-════════════════════════════ */
-document.body.style.opacity='0';
-document.body.style.transition='opacity .6s';
+/* BOOT */
 window.addEventListener('load',()=>{
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    document.body.style.opacity='1';
-    const isMobile=window.innerWidth<768;
-    setTimeout(()=>{
-      if(isMobile) document.getElementById('mobile-shell').classList.add('on');
-      else document.getElementById('shell').classList.add('on');
-    },200);
-  }));
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('on')));
 });
 </script>
 </body>
