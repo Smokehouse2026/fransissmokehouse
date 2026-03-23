@@ -21,7 +21,7 @@ const SITE_SPECIALS = [
   {
     hidden: false,
     type:   "Appetizer",
-    name:   "Sweet Thai Chili Wings",
+    name:   "Sweet Thai Chili Wings s s s s s ",
     desc:   "Smoked wings tossed in house-made sweet Thai chili glaze. Sticky, smoky, addictive.",
     price:  "$16"
   },
