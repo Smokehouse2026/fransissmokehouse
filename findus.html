@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Find Us — The Francis Smokehouse | 6779 US Hwy 61, St. Francisville, LA</title>
+<meta name="description" content="Find The Francis Smokehouse at 6779 US Highway 61, St. Francisville, Louisiana 70775. Open Mon–Sat 10am–6pm, Sunday 10am–3pm. Free parking, wheelchair accessible. (225) 245-5046.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,300;1,400;1,700&family=Barlow+Condensed:wght@300;400;500;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --void:#090704;--deep:#120d07;--coal:#1a1108;
+  --ember:#c04800;--fire:#e06010;--flame:#f08820;--glow:#f5a830;
+  --cream:#f5e8cc;--parch:#e8d4a8;--sand:#c4a070;--mid:#7a5830;
+  --serif:'Playfair Display',Georgia,serif;
+  --cond:'Barlow Condensed',sans-serif;
+  --body:'Barlow',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--cream);font-family:var(--body);overflow-x:hidden;cursor:none;-webkit-tap-highlight-color:transparent;}
+@media(hover:none){body{cursor:auto;}}
+body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.042'/%3E%3C/svg%3E");}
+#cv-bg,#cv-smoke,#cv-ember{position:fixed;inset:0;pointer-events:none;}
+#cv-bg{z-index:0;}#cv-smoke{z-index:1;}#cv-ember{z-index:2;}
+#vignette{position:fixed;inset:0;z-index:3;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 20%,transparent 30%,rgba(9,7,4,.65) 100%);}
+#cursor{position:fixed;z-index:9999;pointer-events:none;top:0;left:0;}
+#c-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--flame);
+  transform:translate(-50%,-50%);box-shadow:0 0 8px var(--flame),0 0 16px rgba(240,136,32,.25);
+  animation:cursor-breathe 2.5s ease-in-out infinite;}
+@keyframes cursor-breathe{0%,100%{box-shadow:0 0 6px var(--flame),0 0 12px rgba(240,136,32,.2)}50%{box-shadow:0 0 12px var(--flame),0 0 24px rgba(240,136,32,.4)}}
+@media(hover:none){#cursor{display:none;}}
+
+/* HEADER */
+#hdr{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;
+  padding:clamp(12px,1.8vh,18px) clamp(20px,5vw,60px);
+  background:rgba(9,7,4,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(196,160,112,.09);}
+#hdr-brand{font-family:var(--serif);font-weight:700;font-size:clamp(14px,2vw,22px);
+  letter-spacing:.01em;color:var(--cream);text-decoration:none;text-shadow:0 0 30px rgba(240,136,32,.15);}
+#hdr-brand em{font-style:italic;font-weight:400;color:var(--flame);}
+.hdr-sub{font-family:var(--cond);font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(196,160,112,.28);margin-top:2px;}
+#back-btn{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(196,160,112,.45);border:1px solid rgba(196,160,112,.18);
+  padding:7px 16px;border-radius:2px;background:none;cursor:none;-webkit-tap-highlight-color:transparent;
+  transition:all .3s;text-decoration:none;}
+#back-btn:hover{border-color:rgba(240,136,32,.45);color:var(--flame);}
+
+/* ══════════════════════
+   HERO
+══════════════════════ */
+#hero{
+  position:relative;z-index:10;
+  min-height:60vh;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
+  padding:clamp(60px,10vh,100px) clamp(24px,8vw,120px) clamp(40px,6vh,72px);
+  overflow:hidden;
+}
+#hero-ghost{
+  position:absolute;right:-5%;bottom:-10px;
+  font-family:var(--cond);font-weight:800;
+  font-size:clamp(100px,18vw,240px);
+  letter-spacing:-.06em;line-height:1;
+  color:rgba(192,72,0,.04);pointer-events:none;user-select:none;white-space:nowrap;
+}
+.h-eyebrow{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.4em;
+  text-transform:uppercase;color:var(--flame);opacity:.75;margin-bottom:clamp(14px,2.5vh,24px);
+  display:flex;align-items:center;gap:12px;
+  opacity:0;animation:fadeU .7s .3s ease forwards;}
+.h-eyebrow::before{content:'';width:28px;height:1px;background:currentColor;}
+#hero-title{font-family:var(--serif);font-weight:900;
+  font-size:clamp(44px,9vw,110px);letter-spacing:-.03em;line-height:.92;
+  color:var(--cream);text-shadow:0 4px 80px rgba(0,0,0,.9);
+  opacity:0;animation:fadeU .8s .5s ease forwards;}
+#hero-title em{font-style:italic;font-weight:300;color:var(--flame);display:block;font-size:.65em;}
+#hero-address{
+  margin-top:clamp(18px,3vh,28px);
+  font-family:var(--cond);font-weight:500;font-size:clamp(13px,1.6vw,18px);
+  letter-spacing:.08em;color:rgba(196,160,112,.55);
+  opacity:0;animation:fadeU .7s .7s ease forwards;
+}
+
+/* LIVE STATUS pill in hero */
+#live-status{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:clamp(14px,2.5vh,22px);
+  padding:8px 18px;border-radius:100px;
+  background:rgba(18,10,4,.8);border:1px solid rgba(196,160,112,.15);
+  font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  opacity:0;animation:fadeU .7s .9s ease forwards;
+}
+#status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+#status-text{transition:color .3s;}
+
+/* ══════════════════════
+   MAP EMBED
+══════════════════════ */
+#map-section{
+  position:relative;z-index:10;
+  padding:0 clamp(24px,8vw,120px) clamp(40px,6vh,64px);
+}
+#map-frame-wrap{
+  position:relative;border-radius:10px;overflow:hidden;
+  border:1px solid rgba(196,160,112,.12);
+  box-shadow:0 12px 60px rgba(0,0,0,.5);
+}
+#map-frame-wrap iframe{
+  width:100%;height:clamp(280px,45vh,520px);display:block;
+  filter:invert(90%) hue-rotate(180deg) saturate(0.6) brightness(0.85);
+}
+/* map overlay to match our dark aesthetic */
+#map-frame-wrap::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 0 0 40px rgba(9,7,4,.4);border-radius:10px;
+}
+/* directions button over map */
+#map-cta{
+  position:absolute;bottom:16px;right:16px;
+  font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:#fff;text-decoration:none;
+  background:linear-gradient(90deg,var(--ember),var(--fire));
+  padding:10px 20px;border-radius:4px;
+  box-shadow:0 4px 20px rgba(192,72,0,.5);
+  transition:transform .2s,box-shadow .2s;
+  cursor:pointer;z-index:2;
+}
+#map-cta:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(192,72,0,.6);}
+
+/* ══════════════════════
+   INFO GRID
+══════════════════════ */
+#info-section{
+  position:relative;z-index:10;
+  padding:clamp(40px,7vh,80px) clamp(24px,8vw,120px);
+}
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));
+  gap:clamp(12px,2vw,20px);
+  max-width:1100px;margin:0 auto;
+}
+
+.info-card{
+  background:rgba(22,14,6,.78);
+  border:1px solid rgba(196,160,112,.11);
+  border-radius:8px;
+  padding:clamp(20px,3vh,30px);
+  display:flex;flex-direction:column;gap:clamp(10px,1.8vh,16px);
+  position:relative;overflow:hidden;
+  transition:border-color .35s,transform .35s cubic-bezier(.16,1,.3,1);
+}
+.info-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:40%;
+  background:radial-gradient(ellipse at 50% 100%,rgba(192,72,0,.08),transparent 70%);pointer-events:none;}
+.info-card:hover{border-color:rgba(240,136,32,.2);transform:translateY(-3px);}
+.info-card.highlight{border-color:rgba(192,72,0,.3);background:rgba(26,10,4,.85);
+  box-shadow:0 4px 32px rgba(192,72,0,.14),inset 0 1px 0 rgba(240,136,32,.07);}
+
+.ic-icon{font-size:clamp(26px,3.5vw,36px);filter:drop-shadow(0 0 8px rgba(240,136,32,.3));}
+.ic-label{font-family:var(--cond);font-weight:700;font-size:8px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--flame);opacity:.75;}
+.ic-title{font-family:var(--serif);font-weight:700;font-size:clamp(18px,2vw,24px);
+  color:var(--cream);line-height:1.2;}
+.ic-body{font-family:var(--body);font-weight:300;font-size:clamp(13px,1.3vw,15px);
+  line-height:1.75;color:rgba(196,160,112,.55);}
+.ic-body strong{color:var(--parch);font-weight:400;}
+.ic-action{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--flame);text-decoration:none;margin-top:4px;
+  transition:letter-spacing .3s,opacity .2s;cursor:none;
+}
+.ic-action:hover{letter-spacing:.24em;opacity:.85;}
+.ic-action::after{content:'→';}
+
+/* HOURS TABLE */
+.hours-table{display:flex;flex-direction:column;gap:6px;}
+.hours-row{display:flex;justify-content:space-between;align-items:center;
+  padding:6px 0;border-bottom:1px solid rgba(196,160,112,.07);}
+.hours-row:last-child{border-bottom:none;}
+.hours-day{font-family:var(--cond);font-weight:600;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(196,160,112,.5);}
+.hours-time{font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.06em;color:var(--glow);}
+.hours-row.today .hours-day{color:var(--cream);}
+.hours-row.today .hours-time{color:var(--glow);text-shadow:0 0 12px rgba(245,168,48,.35);}
+.today-badge{font-family:var(--cond);font-weight:700;font-size:7px;letter-spacing:.16em;
+  text-transform:uppercase;padding:2px 8px;border-radius:2px;
+  background:rgba(192,72,0,.25);color:var(--flame);border:1px solid rgba(192,72,0,.35);margin-left:8px;}
+
+/* COUNTDOWN CARD */
+.countdown-wrap{display:flex;flex-direction:column;gap:4px;}
+.cd-label{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(196,160,112,.38);}
+.cd-time{font-family:var(--cond);font-weight:800;font-size:clamp(32px,5vw,52px);
+  letter-spacing:-.02em;color:var(--glow);
+  text-shadow:0 0 24px rgba(245,168,48,.4);font-variant-numeric:tabular-nums;line-height:1;}
+.cd-sub{font-family:var(--cond);font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(196,160,112,.32);}
+
+/* ══════════════════════
+   DIRECTIONS SECTION
+══════════════════════ */
+#directions-section{
+  position:relative;z-index:10;
+  padding:clamp(40px,7vh,80px) clamp(24px,8vw,120px);
+  border-top:1px solid rgba(196,160,112,.07);
+}
+.dir-inner{max-width:1100px;margin:0 auto;
+  display:grid;grid-template-columns:1fr;gap:clamp(32px,5vh,52px);}
+@media(min-width:768px){.dir-inner{grid-template-columns:1fr 1fr;align-items:start;}}
+
+.dir-eyebrow{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--flame);opacity:.75;margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;}
+.dir-eyebrow::before{content:'';width:20px;height:1px;background:currentColor;}
+.dir-title{font-family:var(--serif);font-weight:900;
+  font-size:clamp(28px,4.5vw,52px);letter-spacing:-.02em;line-height:1;
+  color:var(--cream);margin-bottom:clamp(16px,2.5vh,24px);}
+.dir-title em{font-style:italic;font-weight:300;color:var(--flame);}
+
+.from-list{display:flex;flex-direction:column;gap:clamp(14px,2.2vh,20px);}
+.from-item{
+  padding:clamp(14px,2vh,20px);
+  background:rgba(18,10,4,.7);border:1px solid rgba(196,160,112,.09);border-radius:6px;
+  display:flex;gap:14px;align-items:flex-start;
+  transition:border-color .3s;
+}
+.from-item:hover{border-color:rgba(240,136,32,.18);}
+.from-dot{width:8px;height:8px;border-radius:50%;background:var(--ember);
+  box-shadow:0 0 7px var(--ember);flex-shrink:0;margin-top:5px;}
+.from-text{display:flex;flex-direction:column;gap:4px;}
+.from-name{font-family:var(--serif);font-weight:700;font-size:clamp(15px,1.6vw,18px);color:var(--cream);}
+.from-dir{font-family:var(--body);font-weight:300;font-size:clamp(12px,1.2vw,14px);
+  line-height:1.6;color:rgba(196,160,112,.5);}
+.from-dist{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(196,160,112,.32);margin-top:2px;}
+
+/* landmarks */
+.landmarks{display:flex;flex-direction:column;gap:10px;}
+.lm-item{display:flex;align-items:center;gap:10px;padding:10px 0;
+  border-bottom:1px solid rgba(196,160,112,.07);}
+.lm-item:last-child{border-bottom:none;}
+.lm-icon{font-size:16px;filter:drop-shadow(0 0 5px rgba(240,136,32,.3));flex-shrink:0;}
+.lm-text{font-family:var(--body);font-weight:300;font-size:clamp(12px,1.2vw,14px);
+  color:rgba(196,160,112,.5);line-height:1.4;}
+.lm-text strong{color:rgba(196,160,112,.8);font-weight:400;}
+
+/* ══════════════════════
+   BIG CTA
+══════════════════════ */
+#cta-section{
+  position:relative;z-index:10;text-align:center;
+  padding:clamp(60px,10vh,100px) clamp(24px,8vw,120px);
+  border-top:1px solid rgba(196,160,112,.07);
+}
+#cta-section::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%,rgba(192,72,0,.08),transparent 65%);}
+.cta-title{font-family:var(--serif);font-weight:900;
+  font-size:clamp(36px,7vw,80px);letter-spacing:-.03em;line-height:.92;
+  color:var(--cream);margin-bottom:clamp(12px,2vh,20px);position:relative;z-index:1;}
+.cta-title em{font-style:italic;font-weight:300;color:var(--flame);}
+.cta-sub{font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(14px,1.6vw,20px);color:rgba(196,160,112,.42);
+  margin-bottom:clamp(28px,4.5vh,44px);position:relative;z-index:1;}
+.cta-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;position:relative;z-index:1;}
+.btn-fire{display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:#fff;text-decoration:none;
+  background:linear-gradient(90deg,var(--ember),var(--fire),var(--flame));
+  padding:14px 30px;border-radius:2px;box-shadow:0 6px 28px rgba(192,72,0,.4);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,letter-spacing .3s;
+  cursor:none;-webkit-tap-highlight-color:transparent;}
+.btn-fire:hover{transform:scale(1.05);box-shadow:0 10px 40px rgba(192,72,0,.55);letter-spacing:.26em;}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(196,160,112,.55);text-decoration:none;
+  border:1px solid rgba(196,160,112,.2);padding:13px 28px;border-radius:2px;
+  transition:all .3s;cursor:none;-webkit-tap-highlight-color:transparent;}
+.btn-ghost:hover{border-color:rgba(240,136,32,.4);color:var(--flame);}
+
+/* FOOTER */
+#ftr{position:relative;z-index:10;border-top:1px solid rgba(196,160,112,.08);
+  background:rgba(9,7,4,.9);padding:clamp(16px,2.5vh,24px) clamp(20px,5vw,60px);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.ftr-t{font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.22);}
+.ftr-flames{display:flex;gap:4px;align-items:flex-end;}
+.ff{font-size:13px;animation:flkr 2s ease-in-out infinite;filter:drop-shadow(0 0 4px rgba(240,136,32,.4));}
+.ff:nth-child(2){animation-delay:.3s;font-size:.8em;}
+.ff:nth-child(3){animation-delay:.65s;}
+@keyframes flkr{0%,100%{opacity:.6;transform:scaleY(1)}40%{opacity:1;transform:scaleY(1.1) translateY(-1px)}}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s,transform .85s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+@keyframes fadeU{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
+</style>
+</head>
+<body>
+<div id="cursor"><div id="c-dot"></div></div>
+<canvas id="cv-bg"></canvas><canvas id="cv-smoke"></canvas><canvas id="cv-ember"></canvas>
+<div id="vignette"></div>
+
+<!-- HEADER -->
+<header id="hdr">
+  <a href="LandingPage.html" id="back-btn">← Back</a>
+  <div style="text-align:center;">
+    <a href="LandingPage.html" id="hdr-brand">The Francis <em>Smokehouse</em></a>
+    <div class="hdr-sub">& Specialty Meats · St. Francisville, LA</div>
+  </div>
+  <a href="menu.html" class="btn-ghost" style="font-size:10px;padding:7px 14px;">See Menu →</a>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div id="hero-ghost">FIND US</div>
+  <div class="h-eyebrow">Where To Find Us</div>
+  <h1 id="hero-title">Follow<br>The <em>Smoke.</em></h1>
+  <div id="hero-address">6779 US Highway 61 · St. Francisville, Louisiana 70775</div>
+  <div id="live-status">
+    <span id="status-dot"></span>
+    <span id="status-text">Checking hours...</span>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="map-section">
+  <div class="reveal" id="map-frame-wrap">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3441.1!2d-91.3751!3d30.7835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8626e3b1b1b1b1b1%3A0x0!2sThe%20Francis%20Smokehouse%2C%206779%20US-61%2C%20St.%20Francisville%2C%20LA%2070775!5e0!3m2!1sen!2sus!4v1"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      title="The Francis Smokehouse on Google Maps">
+    </iframe>
+    <a id="map-cta"
+      href="https://www.google.com/maps/dir/?api=1&destination=The+Francis+Smokehouse%2C+6779+US-61%2C+St.+Francisville%2C+LA+70775"
+      target="_blank">
+      🧭 Get Directions
+    </a>
+  </div>
+</section>
+
+<!-- INFO CARDS -->
+<section id="info-section">
+  <div class="info-grid">
+
+    <!-- HOURS -->
+    <div class="info-card highlight reveal">
+      <div class="ic-icon">🕙</div>
+      <div class="ic-label">Hours</div>
+      <div class="hours-table" id="hours-table">
+        <div class="hours-row" id="row-mon"><span class="hours-day">Monday</span><span class="hours-time">10am – 6pm</span></div>
+        <div class="hours-row" id="row-tue"><span class="hours-day">Tuesday</span><span class="hours-time">10am – 6pm</span></div>
+        <div class="hours-row" id="row-wed"><span class="hours-day">Wednesday</span><span class="hours-time">10am – 6pm</span></div>
+        <div class="hours-row" id="row-thu"><span class="hours-day">Thursday</span><span class="hours-time">10am – 6pm</span></div>
+        <div class="hours-row" id="row-fri"><span class="hours-day">Friday</span><span class="hours-time">10am – 6pm</span></div>
+        <div class="hours-row" id="row-sat"><span class="hours-day">Saturday</span><span class="hours-time">10am – 6pm</span></div>
+        <div class="hours-row" id="row-sun"><span class="hours-day">Sunday</span><span class="hours-time">10am – 3pm</span></div>
+      </div>
+    </div>
+
+    <!-- COUNTDOWN -->
+    <div class="info-card reveal" style="transition-delay:.08s">
+      <div class="ic-icon" id="cd-icon">⏰</div>
+      <div class="ic-label" id="cd-label-top">Today</div>
+      <div class="countdown-wrap">
+        <div class="cd-label" id="cd-label">Loading...</div>
+        <div class="cd-time" id="cd-time">--:--:--</div>
+        <div class="cd-sub" id="cd-sub"></div>
+      </div>
+    </div>
+
+    <!-- ADDRESS -->
+    <div class="info-card reveal" style="transition-delay:.16s">
+      <div class="ic-icon">📍</div>
+      <div class="ic-label">Address</div>
+      <div class="ic-title">6779 US Highway 61</div>
+      <div class="ic-body">St. Francisville, Louisiana 70775<br><br>
+        On the <strong>Great River Road</strong>, between Baton Rouge and Natchez.<br>
+        When the smoker is running — you'll smell us first.</div>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=The+Francis+Smokehouse%2C+6779+US-61%2C+St.+Francisville%2C+LA+70775"
+        target="_blank" class="ic-action">Open in Google Maps </a>
+    </div>
+
+    <!-- PHONE -->
+    <div class="info-card reveal" style="transition-delay:.24s">
+      <div class="ic-icon">📞</div>
+      <div class="ic-label">Phone</div>
+      <div class="ic-title">(225) 245-5046</div>
+      <div class="ic-body">Call ahead for <strong>large orders</strong>, catering enquiries, or to check today's specials board.<br><br>
+        Specials are posted to Facebook every morning at 6am.</div>
+      <a href="tel:2252455046" class="ic-action">Call Now </a>
+    </div>
+
+    <!-- PARKING & ACCESS -->
+    <div class="info-card reveal" style="transition-delay:.32s">
+      <div class="ic-icon">🚗</div>
+      <div class="ic-label">Parking & Access</div>
+      <div class="ic-title">Free Parking</div>
+      <div class="ic-body">
+        Free on-site parking directly off US Highway 61.<br><br>
+        <strong>Fully wheelchair accessible.</strong><br><br>
+        Outdoor deck built around the old tree — great for dining in good weather.
+      </div>
+    </div>
+
+    <!-- FACEBOOK -->
+    <div class="info-card reveal" style="transition-delay:.40s">
+      <div class="ic-icon">📘</div>
+      <div class="ic-label">Facebook</div>
+      <div class="ic-title">The Francis Smokehouse</div>
+      <div class="ic-body">Daily specials posted every morning at <strong>6am</strong>. The fastest way to see what's on the board before you drive out.<br><br>
+        Send us a message for catering enquiries.</div>
+      <a href="https://www.facebook.com/1547733028788117/" target="_blank" class="ic-action">Visit Facebook Page </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- DIRECTIONS FROM NEARBY CITIES -->
+<section id="directions-section">
+  <div class="dir-inner">
+
+    <div>
+      <div class="dir-eyebrow reveal">Directions</div>
+      <h2 class="dir-title reveal">Getting <em>Here.</em></h2>
+      <div class="from-list">
+        <div class="from-item reveal">
+          <div class="from-dot"></div>
+          <div class="from-text">
+            <div class="from-name">From Baton Rouge</div>
+            <div class="from-dir">Take US-61 North (Scenic Highway / Airline Hwy) through Zachary and into St. Francisville. We're on the right side of US-61 as you enter town.</div>
+            <div class="from-dist">~35 miles · approx. 45 min</div>
+          </div>
+        </div>
+        <div class="from-item reveal" style="transition-delay:.08s">
+          <div class="from-dot"></div>
+          <div class="from-text">
+            <div class="from-name">From Natchez, MS</div>
+            <div class="from-dir">Head south on US-61 (the Great River Road) through Woodville into Louisiana. Continue south through Centerville — we're on the left on US-61 in St. Francisville.</div>
+            <div class="from-dist">~75 miles · approx. 1 hr 20 min</div>
+          </div>
+        </div>
+        <div class="from-item reveal" style="transition-delay:.16s">
+          <div class="from-dot"></div>
+          <div class="from-text">
+            <div class="from-name">From New Orleans</div>
+            <div class="from-dir">Take I-10 West to I-110 North to US-61 North. Follow US-61 through Baton Rouge and continue north to St. Francisville. We're on US-61 on the way into town.</div>
+            <div class="from-dist">~100 miles · approx. 1 hr 45 min</div>
+          </div>
+        </div>
+        <div class="from-item reveal" style="transition-delay:.24s">
+          <div class="from-dot"></div>
+          <div class="from-text">
+            <div class="from-name">From Jackson, MS</div>
+            <div class="from-dir">Take I-55 South to the Natchez Trace Parkway, or US-61 South through Natchez into Louisiana. Continue south on US-61 to St. Francisville.</div>
+            <div class="from-dist">~130 miles · approx. 2 hrs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="dir-eyebrow reveal">When You Arrive</div>
+      <h2 class="dir-title reveal">Look for <em>The Smoke.</em></h2>
+      <div class="ic-body reveal" style="margin-bottom:clamp(20px,3vh,28px);font-size:clamp(14px,1.4vw,17px);line-height:1.8;color:rgba(196,160,112,.55);">
+        On most days when the smoker is running you'll be able to smell us from down the road. Look for the sign on the right (northbound) or left (southbound) side of US Highway 61.
+      </div>
+      <div class="landmarks reveal">
+        <div class="lm-item">
+          <div class="lm-icon">🌳</div>
+          <div class="lm-text">Look for the <strong>outdoor deck built around the old tree</strong> — it's visible from the road.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-icon">🚗</div>
+          <div class="lm-text"><strong>Free parking lot</strong> directly off US-61. Pull in off the highway.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-icon">♿</div>
+          <div class="lm-text">Fully <strong>wheelchair accessible</strong> — both the building and the outdoor deck.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-icon">🔥</div>
+          <div class="lm-text">If the <strong>smoker is loaded</strong>, you'll smell post oak and hickory from down the road. That's us.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-icon">📍</div>
+          <div class="lm-text">We sit right on <strong>the Great River Road</strong> — a mandatory stop for anyone driving the route.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta-section">
+  <h2 class="cta-title reveal">Come <em>Eat.</em></h2>
+  <p class="cta-sub reveal">The fire's burning. The board just changed. We'll see you soon.</p>
+  <div class="cta-btns reveal">
+    <a href="https://www.google.com/maps/dir/?api=1&destination=The+Francis+Smokehouse%2C+6779+US-61%2C+St.+Francisville%2C+LA+70775"
+      target="_blank" class="btn-fire">🧭 Get Directions</a>
+    <a href="tel:2252455046" class="btn-ghost">📞 Call (225) 245-5046</a>
+    <a href="menu.html" class="btn-ghost">See The Menu →</a>
+  </div>
+</section>
+
+<footer id="ftr">
+  <span class="ftr-t">© 2025 The Francis Smokehouse & Specialty Meats</span>
+  <div class="ftr-flames"><span class="ff">🔥</span><span class="ff">🔥</span><span class="ff">🔥</span></div>
+  <span class="ftr-t">6779 US Hwy 61 · St. Francisville, LA · (225) 245-5046</span>
+</footer>
+
+<script>
+/* CANVAS */
+const cvBg=document.getElementById('cv-bg'),bx=cvBg.getContext('2d');
+const cvSm=document.getElementById('cv-smoke'),sx=cvSm.getContext('2d');
+const cvEm=document.getElementById('cv-ember'),ex=cvEm.getContext('2d');
+let W=0,H=0;
+function rsz(){W=cvBg.width=cvSm.width=cvEm.width=window.innerWidth;H=cvBg.height=cvSm.height=cvEm.height=window.innerHeight;}
+rsz();window.addEventListener('resize',rsz);
+let bgP=0;
+function drawBg(){
+  bgP+=.003;const p=.5+.5*Math.sin(bgP);
+  const g=bx.createRadialGradient(W*.5,H*.85,0,W*.5,H*.85,W*.9);
+  g.addColorStop(0,`rgba(28,16,4,${.8+p*.08})`);g.addColorStop(.35,'rgba(18,12,5,1)');g.addColorStop(1,'rgba(9,7,4,1)');
+  bx.fillStyle=g;bx.fillRect(0,0,W,H);
+  const g2=bx.createRadialGradient(W*.5,H,0,W*.5,H,W*.55);
+  g2.addColorStop(0,`rgba(160,50,0,${.06+p*.04})`);g2.addColorStop(1,'transparent');
+  bx.fillStyle=g2;bx.fillRect(0,0,W,H);
+}
+function mkS(){return{x:.15+Math.random()*.7,y:1.05+Math.random()*.05,vx:(Math.random()-.5)*.0003,vy:-.0006-Math.random()*.0005,r:35+Math.random()*55,a:0,ta:.018+Math.random()*.02,gr:.06+Math.random()*.04,wb:Math.random()*Math.PI*2,ws:.004+Math.random()*.007};}
+const SM=Array.from({length:14},mkS);
+function drawSmoke(){
+  sx.clearRect(0,0,W,H);
+  for(const s of SM){
+    s.wb+=s.ws;s.x+=s.vx+Math.sin(s.wb)*.00025;s.y+=s.vy;s.r+=s.gr;
+    s.a=s.a<s.ta?s.a+.0018:Math.max(0,s.a-.0012);
+    if(s.y<-.25||s.a<=0){Object.assign(s,mkS());continue;}
+    const g=sx.createRadialGradient(s.x*W,s.y*H,0,s.x*W,s.y*H,s.r);
+    g.addColorStop(0,`rgba(90,65,40,${s.a})`);g.addColorStop(.5,`rgba(60,42,25,${s.a*.45})`);g.addColorStop(1,'transparent');
+    sx.fillStyle=g;sx.beginPath();sx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);sx.fill();
+  }
+}
+function mkE(){return{x:.1+Math.random()*.8,y:1.02+Math.random()*.04,vx:(Math.random()-.5)*.003,vy:-.004-Math.random()*.008,r:.5+Math.random()*1.6,life:1,decay:.003+Math.random()*.007,h:8+Math.random()*24};}
+const EM=Array.from({length:18},mkE);
+function drawEmbers(){
+  ex.clearRect(0,0,W,H);
+  for(let i=0;i<EM.length;i++){
+    const e=EM[i];e.x+=e.vx+(Math.random()-.5)*.001;e.y+=e.vy;e.life-=e.decay;
+    if(e.life<=0||e.y<-.02){EM[i]=mkE();continue;}
+    ex.beginPath();ex.arc(e.x*W,e.y*H,e.r,0,Math.PI*2);
+    ex.fillStyle=`hsla(${e.h},100%,${52+e.life*34}%,${e.life*.82})`;
+    ex.shadowBlur=8;ex.shadowColor=`hsla(${e.h},100%,58%,${e.life*.5})`;
+    ex.fill();ex.shadowBlur=0;
+  }
+}
+(function loop(){drawBg();drawSmoke();drawEmbers();requestAnimationFrame(loop);})();
+
+/* CURSOR */
+const cur=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+
+/* HOURS + STATUS + COUNTDOWN */
+var HOURS={weekday:{open:10,close:18},sunday:{open:10,close:15}};
+var DAY_ROWS=['row-sun','row-mon','row-tue','row-wed','row-thu','row-fri','row-sat'];
+
+function getHrs(dow){return dow===0?HOURS.sunday:HOURS.weekday;}
+function isOpen(){
+  var n=new Date(),h=n.getHours()+n.getMinutes()/60,r=getHrs(n.getDay());
+  return h>=r.open&&h<r.close;
+}
+function getNextOpen(){
+  var n=new Date(),d=new Date(n),r=getHrs(n.getDay());
+  if(n.getHours()<r.open){d.setHours(r.open,0,0,0);return d;}
+  d.setDate(d.getDate()+1);
+  var nr=getHrs(d.getDay());d.setHours(nr.open,0,0,0);return d;
+}
+function getCloseTime(){var d=new Date(),r=getHrs(d.getDay());d.setHours(r.close,0,0,0);return d;}
+function fmt(ms){
+  if(ms<=0)return'0:00:00';
+  var s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=s%60;
+  return h+':'+String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0');
+}
+
+function updateAll(){
+  var now=new Date(),dow=now.getDay(),open=isOpen();
+  var hoursUntil=(getNextOpen()-now)/3600000;
+
+  /* highlight today's row */
+  DAY_ROWS.forEach(function(id){
+    var el=document.getElementById(id);
+    if(el){el.classList.remove('today');
+      var badge=el.querySelector('.today-badge');
+      if(badge)badge.remove();}
+  });
+  var todayRow=document.getElementById(DAY_ROWS[dow]);
+  if(todayRow){
+    todayRow.classList.add('today');
+    var badge=document.createElement('span');
+    badge.className='today-badge';badge.textContent='Today';
+    todayRow.querySelector('.hours-day').appendChild(badge);
+  }
+
+  /* live status pill */
+  var dot=document.getElementById('status-dot');
+  var txt=document.getElementById('status-text');
+  if(open){
+    dot.style.background='#90e060';dot.style.boxShadow='0 0 7px #90e060';
+    txt.style.color='#90e060';
+    var closeHr=getHrs(dow).close;
+    txt.textContent='Open Now · Closes '+(closeHr>12?closeHr-12:closeHr)+'pm';
+  } else if(hoursUntil<=4){
+    dot.style.background='#f08820';dot.style.boxShadow='0 0 7px #f08820';
+    txt.style.color='#f08820';
+    var openHr=getNextOpen().getHours();
+    txt.textContent='Opening Soon · Opens '+(openHr===10?'10am':openHr+'am');
+  } else {
+    dot.style.background='rgba(196,160,112,.3)';dot.style.boxShadow='none';
+    txt.style.color='rgba(196,160,112,.5)';
+    var oHr=getNextOpen().getHours();
+    txt.textContent='Closed · Opens '+(oHr===10?'10am':oHr+'am')+' Tomorrow';
+  }
+
+  /* countdown card */
+  var cdIcon=document.getElementById('cd-icon');
+  var cdLabel=document.getElementById('cd-label');
+  var cdTime=document.getElementById('cd-time');
+  var cdSub=document.getElementById('cd-sub');
+  var cdTop=document.getElementById('cd-label-top');
+
+  if(open){
+    cdIcon.textContent='🔥';
+    cdTop.textContent='Closing In';
+    cdLabel.textContent='Time Until Close';
+    cdTime.textContent=fmt(getCloseTime()-now);
+    cdSub.textContent='Fire\'s still burning — come on in';
+  } else if(hoursUntil<=4){
+    cdIcon.textContent='⏳';
+    cdTop.textContent='Opening In';
+    cdLabel.textContent='Time Until Open';
+    cdTime.textContent=fmt(getNextOpen()-now);
+    cdSub.textContent='Almost time — see you soon';
+  } else {
+    cdIcon.textContent='😴';
+    cdTop.textContent='Closed';
+    cdLabel.textContent='Opens In';
+    cdTime.textContent=fmt(getNextOpen()-now);
+    cdSub.textContent='We\'ll be back — check our hours above';
+  }
+}
+
+updateAll();
+setInterval(updateAll,1000);
+
+/* SCROLL REVEAL */
+const IO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');IO.unobserve(e.target);}});
+},{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>IO.observe(el));
+
+/* BOOT */
+window.addEventListener('load',()=>{
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('on')));
+});
+</script>
+</body>
+</html>
