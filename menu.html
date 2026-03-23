@@ -688,7 +688,7 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
   </div>
 </div>
 
-<!-- SPECIALS — loaded dynamically from site-data.html -->
+<!-- SPECIALS — loaded from site-data.js -->
 <div class="sec" id="s-sp">
   <div class="sh reveal"><div class="st">Daily Specials</div><div class="si">Board changes every morning at 6am</div></div>
   <div class="sn reveal">Call (225) 245-5046 or check Facebook for today's board</div>
@@ -1122,34 +1122,45 @@ document.addEventListener('touchend',e=>{
 },{passive:true});
 
 /* ═══════════════════════════════════════════════════════
-   FETCH SPECIALS FROM site-data.js
-   Loads the JS file as a script tag, reads SITE_SPECIALS
-   array, renders cards. Re-runs every time specials tab
-   is opened so updates show without a page reload.
+   SPECIALS — reads from site-data.js loaded in <head>
+   Just edit site-data.js to update the board daily.
 ═══════════════════════════════════════════════════════ */
-function renderSpecials() {
+function loadSpecials() {
   const container = document.getElementById('specials-container');
+  container.innerHTML = '';
 
-  /* SITE_SPECIALS injected by site-data.js */
-  if (typeof SITE_SPECIALS === 'undefined' || !SITE_SPECIALS.length) {
+  /* No data file found or empty array */
+  if (typeof SITE_SPECIALS === 'undefined' || !Array.isArray(SITE_SPECIALS)) {
     container.innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;padding:48px 0;">
-        <div style="font-family:var(--serif);font-style:italic;font-size:18px;color:rgba(196,160,112,.5);">
-          Check back soon — specials update every morning.
+      <div style="grid-column:1/-1;text-align:center;padding:56px 20px;">
+        <div style="font-family:var(--serif);font-style:italic;font-size:clamp(16px,2vw,20px);color:rgba(196,160,112,.6);margin-bottom:12px;">
+          No daily specials posted yet today.
         </div>
-        <div style="font-family:var(--cond);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.3);margin-top:10px;">
-          Call (225) 245-5046 for today's board
+        <div style="font-family:var(--cond);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,160,112,.3);">
+          Call (225) 245-5046 · Check Facebook for today's board
         </div>
       </div>`;
     return;
   }
 
-  container.innerHTML = '';
-  let count = 0;
+  /* Filter visible items */
+  const visible = SITE_SPECIALS.filter(item => !item.hidden);
 
-  SITE_SPECIALS.forEach(item => {
-    if (item.hidden) return;
-    count++;
+  if (visible.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:56px 20px;">
+        <div style="font-family:var(--serif);font-style:italic;font-size:clamp(16px,2vw,20px);color:rgba(196,160,112,.6);margin-bottom:12px;">
+          No daily specials posted yet today.
+        </div>
+        <div style="font-family:var(--cond);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,160,112,.3);">
+          Call (225) 245-5046 · Check Facebook for today's board
+        </div>
+      </div>`;
+    return;
+  }
+
+  /* Build cards */
+  visible.forEach(item => {
     const card = document.createElement('div');
     card.className = 'sp-c reveal';
     card.innerHTML = `
@@ -1163,54 +1174,17 @@ function renderSpecials() {
     container.appendChild(card);
   });
 
-  if (count === 0) {
-    container.innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;padding:48px 0;">
-        <div style="font-family:var(--serif);font-style:italic;font-size:18px;color:rgba(196,160,112,.5);">
-          No specials posted yet today — check back soon.
-        </div>
-        <div style="font-family:var(--cond);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.3);margin-top:10px;">
-          Call (225) 245-5046 for today's board
-        </div>
-      </div>`;
-    return;
-  }
-
   bindAllTilts();
   triggerReveals();
   rebuildProx();
 }
 
-function loadSpecials() {
-  /* Remove any previously injected script so we get a fresh load */
-  const old = document.getElementById('site-data-script');
-  if (old) old.remove();
-  /* Also clear the global so we can detect load failure */
-  window.SITE_SPECIALS = undefined;
-
-  const script = document.createElement('script');
-  script.id  = 'site-data-script';
-  script.src = 'site-data.js?v=' + Date.now(); /* cache bust */
-  script.onload = () => renderSpecials();
-  script.onerror = () => {
-    document.getElementById('specials-container').innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;padding:48px 0;">
-        <div style="font-family:var(--serif);font-style:italic;font-size:18px;color:rgba(196,160,112,.5);">
-          Today's specials are being prepared.
-        </div>
-        <div style="font-family:var(--cond);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.3);margin-top:10px;">
-          Call (225) 245-5046 for today's board
-        </div>
-      </div>`;
-  };
-  document.head.appendChild(script);
-}
-
-loadSpecials();
-
 /* BOOT */
 window.addEventListener('load',()=>{
-  requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('on')));
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.body.classList.add('on');
+    loadSpecials();
+  }));
 });
 </script>
 </body>
