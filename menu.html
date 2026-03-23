@@ -351,12 +351,11 @@ html,body{width:100%;min-height:100%;background:#07050302;color:var(--text-hi);
   background:radial-gradient(ellipse at 50% 30%,transparent 20%,rgba(10,7,3,.65) 100%);}
 
 #cursor{position:fixed;z-index:9999;pointer-events:none;top:0;left:0;will-change:transform;}
-#c-dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--flame);
-  transform:translate(-50%,-50%);box-shadow:0 0 12px var(--flame),0 0 28px rgba(240,136,32,.45);
-  transition:width .3s,height .3s;}
-#c-ring{position:absolute;width:40px;height:40px;border-radius:50%;
-  border:1px solid rgba(240,136,32,.4);transform:translate(-50%,-50%);
-  transition:width .5s cubic-bezier(.16,1,.3,1),height .5s,border-color .3s;}
+#c-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--flame);
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 8px var(--flame),0 0 16px rgba(240,136,32,.25);
+  animation:cursor-breathe 2.5s ease-in-out infinite;}
+@keyframes cursor-breathe{0%,100%{box-shadow:0 0 6px var(--flame),0 0 12px rgba(240,136,32,.2)}50%{box-shadow:0 0 12px var(--flame),0 0 24px rgba(240,136,32,.4)}}
 @media(hover:none){#cursor{display:none}}
 
 /* HEADER — semi-transparent frosted so fire glows through */
@@ -606,7 +605,7 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
 <canvas id="ember-cv"></canvas>
 <canvas id="transition-cv"></canvas>
 <div id="vignette"></div>
-<div id="cursor"><div id="c-dot"></div><div id="c-ring"></div></div>
+<div id="cursor"><div id="c-dot"></div></div>
 
 <div id="hdr">
   <div id="hdr-top">
@@ -915,20 +914,8 @@ function stepCursor(){
   document.getElementById('cursor').style.transform=`translate(${cx_}px,${cy_}px)`;
 }
 
-/* Cursor scale on interactives */
-function setBig(v){
-  document.getElementById('c-dot').style.width=v?'5px':'10px';
-  document.getElementById('c-dot').style.height=v?'5px':'10px';
-  document.getElementById('c-ring').style.width=v?'58px':'40px';
-  document.getElementById('c-ring').style.height=v?'58px':'40px';
-  document.getElementById('c-ring').style.borderColor=v?'rgba(240,136,32,.65)':'rgba(240,136,32,.28)';
-}
-function bindCursor(){
-  document.querySelectorAll('.tab,.mi,.sp-c,.ds-i,.ctab,.ic,#back-btn').forEach(el=>{
-    el.addEventListener('mouseenter',()=>setBig(true));
-    el.addEventListener('mouseleave',()=>setBig(false));
-  });
-}
+/* Cursor bound — no ring to resize */
+function bindCursor(){}
 bindCursor();
 
 /* ═══════════════════════════════════════════════════════
