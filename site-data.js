@@ -21,7 +21,7 @@ const SITE_SPECIALS = [
   {
     hidden: false,
     type:   "Appetizer",
-    name:   "Sweet Thai Chili Wings",
+    name:   "Sweet Thai Chili Wings ✓ Live from site-data.js",
     desc:   "Smoked wings tossed in house-made sweet Thai chili glaze. Sticky, smoky, addictive.",
     price:  "$16"
   },
@@ -61,7 +61,7 @@ const SITE_SPECIALS = [
   {
     hidden: false,
     type:   "Dessert Special",
-    name:   "Miss Mud Pi",
+    name:   "Miss Mud Pie",
     desc:   "The house dessert special. Rich, indulgent, worth every bite.",
     price:  "$7"
   }
