@@ -610,7 +610,7 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
 
 <div id="hdr">
   <div id="hdr-top">
-    <a id="back-btn" href="index.html">← Back</a>
+    <a id="back-btn" href="LandingPage.html">← Back</a>
     <div class="hdr-c">
       <img src="Images/Smokehouselogo.png" alt="The Francis Smokehouse & Specialty Meats logo — St. Francisville, Louisiana BBQ restaurant" id="hdr-logo" itemprop="image" width="48" height="48" style="height:clamp(36px,5vh,52px);width:auto;object-fit:contain;filter:drop-shadow(0 0 8px rgba(240,136,32,.3));vertical-align:middle;margin-right:10px;">
       <div class="hdr-n" itemprop="name">The Francis <em>Smokehouse</em></div>
@@ -690,12 +690,31 @@ body{opacity:0;transition:opacity .8s ease;}body.on{opacity:1;}
 <div class="sec" id="s-sp">
   <div class="sh reveal"><div class="st">Daily Specials</div><div class="si">Board changes every morning at 6am</div></div>
   <div class="sn reveal">Call (225) 245-5046 or check Facebook for today's board</div>
+
+  <!-- STATUS BAR — open/closed + countdowns -->
+  <div id="sp-status-bar" style="
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    background:rgba(18,10,4,.85);border:1px solid rgba(196,160,112,.15);
+    border-radius:6px;padding:12px 18px;margin-bottom:18px;">
+    <div id="sp-open-badge" style="display:flex;align-items:center;gap:8px;">
+      <span id="sp-status-dot" style="width:8px;height:8px;border-radius:50%;background:#90e060;
+        box-shadow:0 0 8px #90e060;flex-shrink:0;display:inline-block;"></span>
+      <span id="sp-status-text" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;
+        font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#d4b882;"></span>
+    </div>
+    <div id="sp-countdown-wrap" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;
+      letter-spacing:.14em;text-transform:uppercase;color:rgba(196,160,112,.55);
+      display:flex;align-items:center;gap:8px;">
+      <span id="sp-countdown-label"></span>
+      <span id="sp-countdown-timer" style="font-weight:700;font-size:15px;
+        color:#f5a830;letter-spacing:.05em;font-variant-numeric:tabular-nums;"></span>
+    </div>
+  </div>
+
   <div class="sp-g" id="specials-container">
-    <!-- loading state -->
-    <div id="specials-loading" style="grid-column:1/-1;text-align:center;padding:40px 0;">
-      <div style="font-family:var(--cond);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:rgba(196,160,112,.4);">
-        Loading today's specials...
-      </div>
+    <div style="grid-column:1/-1;text-align:center;padding:40px 0;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:.25em;
+        text-transform:uppercase;color:rgba(196,160,112,.35);">Loading today's specials...</div>
     </div>
   </div>
 </div>
@@ -1130,39 +1149,185 @@ window.addEventListener('load',()=>{
 </script>
 
 <script>
-/* ── loadSpecials: defined here, called by site-data.js onload ── */
-function showNoSpecials(){
-  document.getElementById('specials-container').innerHTML=
-    '<div style="grid-column:1/-1;text-align:center;padding:56px 20px">'
-    +'<div style="font-family:\'Playfair Display\',serif;font-style:italic;font-size:20px;color:rgba(196,160,112,.7);margin-bottom:12px">No daily specials posted yet today.</div>'
-    +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.35)">Call (225) 245-5046 &middot; Check Facebook for today\'s board</div>'
+/* ══════════════════════════════════════════════════════
+   SPECIALS ENGINE
+   - Reads SITE_SPECIALS from site-data.js
+   - Filters by today's date and hidden flag
+   - Shows open/closed status with live countdowns
+   - Countdown to close while open
+   - Countdown to open starting 4 hours before opening
+══════════════════════════════════════════════════════ */
+
+/* Hours config */
+var HOURS = {
+  /* Mon=1 Tue=2 Wed=3 Thu=4 Fri=5 Sat=6 */
+  weekday: { open: 10, close: 18 },
+  /* Sun=0 */
+  sunday:  { open: 10, close: 15 }
+};
+
+function getTodayString() {
+  var d = new Date();
+  var y = d.getFullYear();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+
+function getHoursToday() {
+  return new Date().getDay() === 0 ? HOURS.sunday : HOURS.weekday;
+}
+
+function isOpenNow() {
+  var h = new Date().getHours() + new Date().getMinutes()/60;
+  var hrs = getHoursToday();
+  return h >= hrs.open && h < hrs.close;
+}
+
+function getNextOpenTime() {
+  /* Returns a Date object for the next opening time */
+  var now = new Date();
+  var d = new Date(now);
+  var hrs = getHoursToday();
+  /* If we haven't opened yet today */
+  if (now.getHours() < hrs.open) {
+    d.setHours(hrs.open, 0, 0, 0);
+    return d;
+  }
+  /* Otherwise next day */
+  d.setDate(d.getDate() + 1);
+  var nextHrs = d.getDay() === 0 ? HOURS.sunday : HOURS.weekday;
+  d.setHours(nextHrs.open, 0, 0, 0);
+  return d;
+}
+
+function getCloseTime() {
+  var d = new Date();
+  var hrs = getHoursToday();
+  d.setHours(hrs.close, 0, 0, 0);
+  return d;
+}
+
+function fmtCountdown(ms) {
+  if (ms <= 0) return '0:00:00';
+  var totalSec = Math.floor(ms / 1000);
+  var h = Math.floor(totalSec / 3600);
+  var m = Math.floor((totalSec % 3600) / 60);
+  var s = totalSec % 60;
+  return h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+function updateStatusBar() {
+  var dot   = document.getElementById('sp-status-dot');
+  var txt   = document.getElementById('sp-status-text');
+  var label = document.getElementById('sp-countdown-label');
+  var timer = document.getElementById('sp-countdown-timer');
+  if (!dot || !txt) return;
+
+  var now   = new Date();
+  var open  = isOpenNow();
+  var hrs   = getHoursToday();
+  var hoursUntilOpen = (getNextOpenTime() - now) / 3600000;
+
+  if (open) {
+    /* OPEN — show countdown to close */
+    dot.style.background = '#90e060';
+    dot.style.boxShadow  = '0 0 8px #90e060';
+    txt.style.color      = '#90e060';
+    txt.textContent      = 'Open Now · Closes ' + (hrs.close > 12 ? hrs.close-12 : hrs.close) + 'pm';
+    label.textContent    = 'Closing in';
+    timer.textContent    = fmtCountdown(getCloseTime() - now);
+
+  } else if (hoursUntilOpen <= 4) {
+    /* WITHIN 4 HOURS OF OPENING — countdown to open */
+    dot.style.background = '#f08820';
+    dot.style.boxShadow  = '0 0 8px #f08820';
+    txt.style.color      = '#f08820';
+    var openHr = getNextOpenTime().getHours();
+    txt.textContent      = 'Opens at ' + (openHr > 12 ? openHr-12 : openHr) + 'am';
+    label.textContent    = 'Opening in';
+    timer.textContent    = fmtCountdown(getNextOpenTime() - now);
+
+  } else {
+    /* CLOSED — no countdown */
+    dot.style.background = 'rgba(196,160,112,.3)';
+    dot.style.boxShadow  = 'none';
+    txt.style.color      = 'rgba(196,160,112,.5)';
+    var openHr2 = getNextOpenTime().getHours();
+    txt.textContent      = 'Closed · Opens ' + (openHr2 > 12 ? openHr2-12 : openHr2) + 'am Tomorrow';
+    label.textContent    = '';
+    timer.textContent    = '';
+  }
+}
+
+function showNoSpecials(msg) {
+  var container = document.getElementById('specials-container');
+  if (!container) return;
+  container.innerHTML =
+    '<div style="grid-column:1/-1;text-align:center;padding:56px 20px;">'
+    +'<div style="font-family:\'Playfair Display\',serif;font-style:italic;'
+    +'font-size:clamp(16px,2vw,22px);color:rgba(196,160,112,.7);margin-bottom:12px;">'
+    +(msg||'No daily specials posted yet today.')+'</div>'
+    +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:10px;'
+    +'letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.35);">'
+    +'Call (225) 245-5046 &middot; Check Facebook for today\'s board</div>'
     +'</div>';
 }
 
-function loadSpecials(){
-  var c=document.getElementById('specials-container');
-  if(!c)return;
-  c.innerHTML='';
-  if(typeof SITE_SPECIALS==='undefined'||!Array.isArray(SITE_SPECIALS)){showNoSpecials();return;}
-  var v=SITE_SPECIALS.filter(function(i){return i&&!i.hidden;});
-  if(!v.length){showNoSpecials();return;}
-  v.forEach(function(item){
-    var d=document.createElement('div');
-    d.className='sp-c reveal';
-    d.innerHTML='<div class="sp-sp"></div><div class="sp-i">'
-      +(item.type?'<div class="sp-t">'+item.type+'</div>':'')
-      +'<div class="sp-n">'+(item.name||'')+'</div>'
-      +(item.desc?'<div class="sp-d">'+item.desc+'</div>':'')
-      +(item.price?'<div class="sp-p">'+item.price+'</div>':'')
-      +'</div>';
-    c.appendChild(d);
+function loadSpecials() {
+  var container = document.getElementById('specials-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  updateStatusBar();
+
+  /* If closed — show come back message */
+  if (!isOpenNow()) {
+    showNoSpecials('Come back tomorrow to see the daily specials.');
+    return;
+  }
+
+  /* No data */
+  if (typeof SITE_SPECIALS === 'undefined' || !Array.isArray(SITE_SPECIALS)) {
+    showNoSpecials('No daily specials posted yet today.');
+    return;
+  }
+
+  var today = getTodayString();
+
+  /* Filter: not hidden + date matches today OR no date set */
+  var visible = SITE_SPECIALS.filter(function(item) {
+    if (!item || item.hidden) return false;
+    if (item.date && item.date !== today) return false;
+    return true;
   });
-  if(typeof bindAllTilts==='function')bindAllTilts();
-  if(typeof triggerReveals==='function')triggerReveals();
-  if(typeof rebuildProx==='function')rebuildProx();
+
+  if (!visible.length) {
+    showNoSpecials('No daily specials posted yet today.');
+    return;
+  }
+
+  visible.forEach(function(item) {
+    var d = document.createElement('div');
+    d.className = 'sp-c reveal';
+    d.innerHTML = '<div class="sp-sp"></div><div class="sp-i">'
+      +(item.type ? '<div class="sp-t">'+item.type+'</div>' : '')
+      +'<div class="sp-n">'+(item.name||'')+'</div>'
+      +(item.desc  ? '<div class="sp-d">'+item.desc+'</div>'  : '')
+      +(item.price ? '<div class="sp-p">'+item.price+'</div>' : '')
+      +'</div>';
+    container.appendChild(d);
+  });
+
+  if (typeof bindAllTilts   === 'function') bindAllTilts();
+  if (typeof triggerReveals === 'function') triggerReveals();
+  if (typeof rebuildProx    === 'function') rebuildProx();
 }
+
+/* Tick the countdown every second */
+setInterval(updateStatusBar, 1000);
 </script>
 
-<script src="site-data.js" onload="loadSpecials()" onerror="showNoSpecials()"></script>
+<script src="site-data.js" onload="loadSpecials()" onerror="showNoSpecials('No daily specials posted yet today.')"></script>
 </body>
 </html>
