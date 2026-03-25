@@ -20,7 +20,7 @@
 var SITE_SPECIAL = {
 
   hidden: false,
-  date:   "2026-03-23",
+  date:   "2026-03-25",
 
   type:   "Today's Plate",
   name:   "Eggplant Pirogue",
