@@ -220,7 +220,7 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 
 /* 3D MODEL VIEWER */
 #panel-3d-wrap{
-  position:relative;width:100%;aspect-ratio:16/10;
+  position:relative;width:100%;height:clamp(120px,18vh,180px);
   border:1px solid rgba(196,168,130,.08);border-radius:6px;
   overflow:hidden;background:rgba(9,7,4,.6);
   margin:4px 0;
@@ -303,7 +303,7 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 .msc{font-family:var(--cond);font-weight:500;font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:5px 11px;border-radius:2px;border:1px solid rgba(196,168,130,.08);color:rgba(196,168,130,.22)}
 .msc.lit{border-color:rgba(240,140,40,.3);color:var(--flame);background:rgba(240,140,40,.05)}
 /* Mobile 3D */
-#mob-3d-wrap{position:relative;width:100%;aspect-ratio:16/10;border:1px solid rgba(196,168,130,.08);border-radius:6px;overflow:hidden;background:rgba(9,7,4,.6)}
+#mob-3d-wrap{position:relative;width:100%;height:clamp(100px,15vh,150px);border:1px solid rgba(196,168,130,.08);border-radius:6px;overflow:hidden;background:rgba(9,7,4,.6)}
 #mob-3d-wrap canvas{width:100%!important;height:100%!important;display:block}
 .mob-model-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,168,130,.25);transition:opacity .4s}
 .mob-model-loading.hidden{opacity:0;pointer-events:none}
@@ -361,10 +361,10 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
       <div><div class="sb-label" style="margin-bottom:8px">Connect</div>
         <div class="sb-links">
           <a class="sb-link" href="https://www.facebook.com/1547733028788117/" target="_blank">Facebook</a>
-          <a class="sb-link" href="mailto:francissmokehouse@att.net">Email Us</a>
+          <a class="sb-link" href="/cdn-cgi/l/email-protection#e58397848b868c9696888a8e808d8a909680a5849191cb8b8091">Email Us</a>
           <a class="sb-link" href="https://www.tripadvisor.ca/Restaurant_Review-g40411-d7851018-Reviews-The_Francis_Smokehouse-Saint_Francisville_Louisiana.html" target="_blank">TripAdvisor</a>
           <a class="sb-link" href="https://www.google.com/maps/search/?api=1&query=The+Francis+Smokehouse%2C+St+Francisville%2C+LA" target="_blank">Google Maps</a>
-          <a class="sb-link" href="mailto:francissmokehouse@att.net">Catering Enquiry</a>
+          <a class="sb-link" href="/cdn-cgi/l/email-protection#0660746768656f75756b696d636e697375634667727228686372">Catering Enquiry</a>
         </div>
       </div>
     </div>
@@ -431,7 +431,7 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 <!-- LOADER -->
 <div id="loader"><div class="ld-name">The Francis <em>Smokehouse</em></div><div class="ld-going" id="ld-going">Loading...</div><div class="ld-fire"><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div></div><div class="ld-track"><div class="ld-fill" id="ld-fill"></div></div><div class="ld-msg">Stoking the fire...</div></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ═══════════════════════════════════════
    CANVAS ATMOSPHERE (same as before)
    ═══════════════════════════════════════ */
@@ -558,7 +558,7 @@ function loadModel(path,scene,camera,loadingEl,fillEl,callback){
       const center=box.getCenter(new THREE.Vector3());
       const size=box.getSize(new THREE.Vector3());
       const maxDim=Math.max(size.x,size.y,size.z);
-      const scale=1.5/maxDim;
+      const scale=1.0/maxDim;
       model.scale.setScalar(scale);
       model.position.sub(center.multiplyScalar(scale));
       scene.add(model);
@@ -586,7 +586,7 @@ function loadModel(path,scene,camera,loadingEl,fillEl,callback){
 function animate3D(renderer,scene,camera,model){
   function loop(){
     if(model){
-      model.rotation.y+=0.005;
+      model.rotation.y+=0.001;
     }
     renderer.render(scene,camera);
     return requestAnimationFrame(loop);
@@ -717,8 +717,4 @@ function _todayStr(){var d=new Date();return d.getFullYear()+'-'+String(d.getMon
 function _hrs(){return new Date().getDay()===0?HOURS_CFG.sunday:HOURS_CFG.weekday}
 function _isOpen(){var n=new Date(),h=n.getHours()+n.getMinutes()/60,r=_hrs();return h>=r.open&&h<r.close}
 function _getSpecialItem(){var today=_todayStr();if(typeof SITE_SPECIAL!=='undefined'&&SITE_SPECIAL&&!SITE_SPECIAL.hidden){if(!SITE_SPECIAL.date||SITE_SPECIAL.date===today)return SITE_SPECIAL}if(typeof SITE_SPECIALS!=='undefined'&&Array.isArray(SITE_SPECIALS)){var vis=SITE_SPECIALS.filter(function(i){if(!i||i.hidden)return false;if(i.date&&i.date!==today)return false;return true});if(vis.length)return vis[0]}return null}
-function getTodaysSpecialHTML(){if(!_isOpen())return '';var item=_getSpecialItem();if(!item||!item.name)return '';return '<div style="margin-top:14px;padding:12px 14px;border-radius:6px;background:rgba(192,72,0,.1);border:1px solid rgba(192,72,0,.25);border-left:3px solid var(--fire)"><div style="font-family:var(--cond);font-weight:700;font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--flame);margin-bottom:6px;">🔥 '+(item.type||"Today's Special")+'</div><div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;"><strong style="font-family:var(--serif);font-size:clamp(14px,1.4vw,17px);color:var(--cream);font-weight:700;">'+item.name+'</strong>'+(item.price?'<span style="font-family:var(--cond);font-weight:800;font-size:clamp(14px,1.4vw,16px);color:var(--glow);white-space:nowrap;">'+item.price+'</span>':'')+'</div>'+(item.desc?'<div style="font-size:clamp(10px,1vw,12px);color:rgba(196,168,130,.5);margin-top:4px;line-height:1.5;">'+item.desc+'</div>':'')+(item.sides?'<div style="font-size:10px;color:rgba(196,168,130,.35);margin-top:5px;">With: '+item.sides+'</div>':'')+'</div>'}
-</script>
-<script src="site-data.js"></script>
-</body>
-</html>
+function getTodaysSpecialHTML(){if(!_isOpen())return '';var item=_getSpecialItem();if(!item||!item.name)return '';return '<div style="margin-top:14px;padding:12px 14px;border-radius:6px;background:rgba(192,72,0,.1);border:1px solid rgba(192,72,0,.25);border-left:3px solid var(--fire)"><div style="font-family:var(--cond);font-weight:700;font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--flame);margin-bottom:6px;">🔥 '+(item.type||"Today's Special")+'</div><div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;"><strong style="font-family:var(--serif);font-size:clamp(14px,1.4vw,17px);color:var(--cream);font-weight:700;">'+item.name+'</strong>'+(item.price?'<span style="font-family:var(--cond);font-weight:800;font-size:clamp(14px,1.4vw,16px);color:var(--glow);white-space:nowrap;">'+item.price+'</span>':'')+'</div>'+(item.desc?'<div style="font-size:clamp(10px,1vw,12px);color:rgba(196,168,130,.5);margin-top:4px;line-height:1.5;">'+item.desc
