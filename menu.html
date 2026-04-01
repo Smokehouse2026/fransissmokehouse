@@ -1,459 +1,1246 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
-import { Sparkles, Orbit, Brain, TimerReset, ScanSearch, MoonStar, Wand2, ArrowRight, Zap, Eye, ChefHat } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÆTHER — A Living Menu</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&display=swap');
 
-const problems = [
-  {
-    id: "memory",
-    title: "Perfect Memory, On Tap",
-    subtitle: "What if a menu remembered your life better than you do?",
-    problem: "People want frictionless memory retrieval, but no interface ever feels magical enough.",
-    solution: "This dish searches your mood, your favorite moments, and the energy of the room to serve a meal that feels remembered before it is ordered.",
-    icon: Brain,
-    flavor: "Taste: nostalgic citrus + impossible recall",
-    color: "from-fuchsia-500/40 via-violet-500/20 to-cyan-400/30",
-  },
-  {
-    id: "dream",
-    title: "Dream Recorder",
-    subtitle: "The breakfast you can only order half-awake.",
-    problem: "People would love to replay dreams, but nobody has solved the feeling of them.",
-    solution: "Our version turns dream fragments into a shifting visual menu that evolves as you hover, like a lucid order screen from another universe.",
-    icon: MoonStar,
-    flavor: "Texture: cloudfoam + midnight static",
-    color: "from-indigo-500/40 via-sky-500/20 to-teal-400/30",
-  },
-  {
-    id: "focus",
-    title: "Anti-Doomscroll Feast",
-    subtitle: "A menu designed to steal attention back from chaos.",
-    problem: "People crave a digital space that calms without becoming boring.",
-    solution: "Every motion on this site is tuned to feel rewarding enough to explore, yet soft enough to lower noise. The menu becomes a sanctuary.",
-    icon: TimerReset,
-    flavor: "Finish: silence, clarity, electric basil",
-    color: "from-emerald-500/40 via-cyan-500/20 to-blue-400/30",
-  },
-  {
-    id: "teleport",
-    title: "Teleport Tasting",
-    subtitle: "Not food delivery. Reality delivery.",
-    problem: "Instant arrival is a fantasy people want across every product category.",
-    solution: "We fake the impossible with presence: layered depth, reactive light, and cards that feel like portals opening into hidden worlds.",
-    icon: Orbit,
-    flavor: "Heat: solar pepper + zero travel time",
-    color: "from-orange-500/40 via-rose-500/20 to-yellow-400/30",
-  },
-  {
-    id: "oracle",
-    title: "Menu of Future Selves",
-    subtitle: "Order what tomorrow-you wishes you had today.",
-    problem: "People want guidance that feels intimate, not generic.",
-    solution: "This course predicts intent through atmosphere: color shifts, ambient phrases, and an interface that feels alive enough to advise you.",
-    icon: ScanSearch,
-    flavor: "Afterglow: silver mint + soft prophecy",
-    color: "from-cyan-500/40 via-blue-500/20 to-fuchsia-400/30",
-  },
-  {
-    id: "alchemy",
-    title: "Edible Light",
-    subtitle: "Cuisine designed like a physics glitch.",
-    problem: "People always want the thing that looks impossible to create and even more impossible to consume.",
-    solution: "We turn that urge into visual theater: glowing gradients, glass layers, and motion that makes every item feel half-physical and half-myth.",
-    icon: Wand2,
-    flavor: "Glow: prism sugar + aurora smoke",
-    color: "from-pink-500/40 via-purple-500/20 to-sky-400/30",
-  },
-];
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
-const floatingWords = [
-  "lucid",
-  "quantum",
-  "mythic",
-  "impossible",
-  "alive",
-  "sacred",
-  "future",
-  "delicious",
-  "portal",
-  "limitless",
-  "unknown",
-  "velvet",
-];
+:root {
+  --bg-deep: #0a0a0f;
+  --bg-mid: #12121a;
+  --gold: #c9a84c;
+  --gold-light: #e8d48b;
+  --gold-dim: #8a7234;
+  --cream: #f0ead6;
+  --smoke: #a09d93;
+  --ember: #c44b2f;
+  --forest: #2a4a3a;
+  --wine: #5a1a2a;
+  --midnight: #1a1a2e;
+}
 
-function StarField() {
-  const stars = useMemo(
-    () =>
-      Array.from({ length: 70 }, (_, i) => ({
-        id: i,
-        size: Math.random() * 3 + 1,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        duration: Math.random() * 6 + 4,
-        delay: Math.random() * 3,
-      })),
-    []
-  );
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {stars.map((star) => (
-        <motion.div
-          key={star.id}
-          className="absolute rounded-full bg-white/80 shadow-[0_0_18px_rgba(255,255,255,0.65)]"
-          style={{
-            width: star.size,
-            height: star.size,
-            left: `${star.x}%`,
-            top: `${star.y}%`,
-          }}
-          animate={{ opacity: [0.2, 1, 0.25], scale: [0.7, 1.5, 0.9] }}
-          transition={{
-            repeat: Infinity,
-            duration: star.duration,
-            delay: star.delay,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
+body {
+  background: var(--bg-deep);
+  color: var(--cream);
+  font-family: 'Cormorant Garamond', serif;
+  cursor: none;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* CUSTOM CURSOR */
+#cursor {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100000;
+  transition: transform 0.15s ease, border-color 0.3s;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+}
+#cursor.hovering {
+  transform: translate(-50%, -50%) scale(2.5);
+  border-color: var(--ember);
+  background: rgba(201,168,76,0.08);
+}
+#cursor-dot {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100001;
+  transform: translate(-50%, -50%);
+}
+
+/* LIVING CANVAS */
+#ecosystem {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+}
+
+/* PARTICLE LAYER */
+#particles {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* SCROLL CONTAINER */
+.scroll-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(4rem, 12vw, 11rem);
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  color: transparent;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 40%, var(--gold) 60%, var(--gold-dim) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: 0 0 80px rgba(201,168,76,0.15);
+  position: relative;
+  user-select: none;
+  opacity: 0;
+  animation: heroReveal 2.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+}
+
+@keyframes heroReveal {
+  0% { opacity: 0; letter-spacing: 0.6em; filter: blur(20px); }
+  60% { filter: blur(0); }
+  100% { opacity: 1; letter-spacing: 0.15em; }
+}
+
+.hero-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.9rem, 2vw, 1.4rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.4em;
+  color: var(--smoke);
+  margin-top: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 1.5s ease 1.8s forwards;
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 3s forwards;
+}
+
+.hero-scroll-hint span {
+  font-size: 0.7rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 2s ease infinite;
+}
+
+@keyframes scrollPulse {
+  0%,100% { opacity: 0.3; transform: scaleY(0.5); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* SECTION TITLES */
+.section-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.6em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  text-align: center;
+  padding: 6rem 0 1rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 700;
+  text-align: center;
+  color: var(--cream);
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  text-align: center;
+  max-width: 550px;
+  margin: 0 auto 4rem;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--smoke);
+  line-height: 1.8;
+}
+
+/* PHYSICS MENU ARENA */
+.menu-arena {
+  position: relative;
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 400px;
+  padding-bottom: 6rem;
+}
+
+/* MENU CARDS */
+.menu-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(18,18,26,0.92), rgba(10,10,15,0.97));
+  border: 1px solid rgba(201,168,76,0.12);
+  border-radius: 16px;
+  padding: 2.2rem;
+  margin-bottom: 2rem;
+  cursor: none;
+  transition: border-color 0.5s, box-shadow 0.5s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+.menu-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s, box-shadow 0.5s;
+}
+
+.menu-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(201,168,76,0.06) 0%, transparent 60%);
+  pointer-events: none;
+  border-radius: 16px;
+}
+
+.menu-card:hover {
+  border-color: rgba(201,168,76,0.35);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(201,168,76,0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.8rem;
+}
+
+.dish-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.2;
+}
+
+.dish-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gold);
+  white-space: nowrap;
+  padding-left: 1.5rem;
+}
+
+.dish-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.dish-tag {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.3em 0.8em;
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 100px;
+  color: var(--gold-dim);
+}
+
+.dish-description {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--smoke);
+  font-style: italic;
+}
+
+/* SYNESTHESIA VIZ */
+.synesthesia-bar {
+  margin-top: 1.2rem;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--s1, var(--gold-dim)), var(--s2, var(--ember)), var(--s3, var(--wine)));
+  opacity: 0;
+  transition: opacity 0.6s;
+  position: relative;
+  overflow: visible;
+}
+
+.menu-card:hover .synesthesia-bar {
+  opacity: 1;
+  animation: synPulse 3s ease infinite;
+}
+
+@keyframes synPulse {
+  0%,100% { filter: brightness(0.8); }
+  50% { filter: brightness(1.4); }
+}
+
+/* FLAVOR WHEEL — "IMPOSSIBLE" FEATURE */
+.flavor-wheel-wrap {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.5s 0.2s;
+}
+
+.menu-card:hover .flavor-wheel-wrap {
+  opacity: 1;
+}
+
+.flavor-wheel {
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+}
+
+.flavor-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.8rem;
+}
+
+.flavor-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--smoke);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.flavor-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+/* AI SOMMELIER */
+.ai-section {
+  width: 90%;
+  max-width: 900px;
+  margin: 6rem auto;
+  text-align: center;
+}
+
+.ai-input-wrap {
+  position: relative;
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+.ai-input {
+  width: 100%;
+  background: rgba(18,18,26,0.9);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 60px;
+  padding: 1.2rem 2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--cream);
+  outline: none;
+  transition: border-color 0.4s, box-shadow 0.4s;
+  cursor: none;
+}
+
+.ai-input::placeholder { color: rgba(160,157,147,0.5); }
+.ai-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 40px rgba(201,168,76,0.08);
+}
+
+.ai-response {
+  margin-top: 2rem;
+  font-size: 1.15rem;
+  line-height: 2;
+  color: var(--smoke);
+  font-style: italic;
+  min-height: 3rem;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.ai-response.active { opacity: 1; }
+
+.ai-typing::after {
+  content: '▍';
+  animation: blink 0.8s step-end infinite;
+  color: var(--gold);
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+/* SOUND TOGGLE */
+.sound-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  background: rgba(18,18,26,0.9);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  transition: border-color 0.3s;
+  color: var(--gold-dim);
+  font-size: 1.2rem;
+}
+.sound-toggle:hover { border-color: var(--gold); }
+
+/* GRID LAYOUTS */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 2rem;
+}
+
+@media (max-width: 500px) {
+  .menu-grid { grid-template-columns: 1fr; }
+  .menu-card { padding: 1.5rem; }
+  body { cursor: auto; }
+  #cursor, #cursor-dot { display: none; }
+}
+
+/* DIVIDER */
+.section-divider {
+  width: 60px;
+  height: 1px;
+  background: var(--gold-dim);
+  margin: 2rem auto;
+  position: relative;
+}
+.section-divider::before {
+  content: '✦';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--gold-dim);
+  font-size: 0.6rem;
+  background: var(--bg-deep);
+  padding: 0 0.8rem;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 6rem 2rem 3rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  color: rgba(160,157,147,0.3);
+  font-family: 'Syne', sans-serif;
+  text-transform: uppercase;
+}
+
+/* MAGNETIC HOVER ON CARDS — 3D TILT */
+.menu-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* NOISE OVERLAY */
+.noise {
+  position: fixed;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* EXPERIENCE COUNTER */
+.experience-bar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-dim));
+  z-index: 99999;
+  transition: width 0.3s ease;
+}
+
+/* INTRO OVERLAY */
+#intro-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg-deep);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  transition: opacity 1.2s ease, visibility 1.2s;
+}
+
+#intro-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.intro-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--smoke);
+  letter-spacing: 0.2em;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.3s forwards;
+}
+
+.intro-enter {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: none;
+  border: 1px solid rgba(201,168,76,0.3);
+  padding: 1em 3em;
+  border-radius: 60px;
+  cursor: none;
+  transition: all 0.4s;
+  opacity: 0;
+  animation: fadeUp 1s ease 1s forwards;
+}
+
+.intro-enter:hover {
+  background: rgba(201,168,76,0.08);
+  border-color: var(--gold);
+  box-shadow: 0 0 40px rgba(201,168,76,0.1);
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro-overlay">
+  <div class="intro-text">an experience for the senses</div>
+  <button class="intro-enter" onclick="enterExperience()">Enter Æther</button>
+</div>
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-dot"></div>
+
+<!-- NOISE -->
+<div class="noise"></div>
+
+<!-- SCROLL PROGRESS -->
+<div class="experience-bar" id="exp-bar"></div>
+
+<!-- LIVING BACKGROUND -->
+<canvas id="ecosystem"></canvas>
+<canvas id="particles"></canvas>
+
+<!-- SOUND TOGGLE -->
+<button class="sound-toggle" id="sound-btn" title="Toggle Ambience">♪</button>
+
+<div class="scroll-wrapper" id="main-content" style="opacity:0;transition:opacity 1.5s 0.3s">
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1 class="hero-title">ÆTHER</h1>
+    <p class="hero-sub">where cuisine transcends the tangible</p>
+    <div class="hero-scroll-hint">
+      <span>Descend</span>
+      <div class="scroll-line"></div>
     </div>
-  );
-}
+  </section>
 
-function AuroraBlob({ className }: { className?: string }) {
-  return (
-    <motion.div
-      className={className}
-      animate={{
-        x: [0, 50, -30, 0],
-        y: [0, -40, 20, 0],
-        scale: [1, 1.2, 0.95, 1],
-        rotate: [0, 40, -20, 0],
-      }}
-      transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-    />
-  );
-}
+  <!-- STARTERS -->
+  <div class="section-label">Chapter One</div>
+  <h2 class="section-title">Beginnings</h2>
+  <div class="section-divider"></div>
+  <p class="section-desc">Small plates to awaken dormant senses and prepare the palate for the journey ahead.</p>
 
-function CursorGlow() {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 120, damping: 18, mass: 0.4 });
-  const sy = useSpring(y, { stiffness: 120, damping: 18, mass: 0.4 });
+  <div class="menu-arena">
+    <div class="menu-grid" id="starters-grid"></div>
+  </div>
 
-  useEffect(() => {
-    const move = (e: MouseEvent) => {
-      x.set(e.clientX - 120);
-      y.set(e.clientY - 120);
-    };
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
-  }, [x, y]);
+  <!-- MAINS -->
+  <div class="section-label">Chapter Two</div>
+  <h2 class="section-title">The Main Passage</h2>
+  <div class="section-divider"></div>
+  <p class="section-desc">Centerpiece compositions — each plate a universe of flavor architecture.</p>
 
-  return (
-    <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-30 h-60 w-60 rounded-full bg-fuchsia-400/20 blur-3xl mix-blend-screen"
-      style={{ x: sx, y: sy }}
-    />
-  );
-}
+  <div class="menu-arena">
+    <div class="menu-grid" id="mains-grid"></div>
+  </div>
 
-function GlitchText({ text }: { text: string }) {
-  return (
-    <div className="relative inline-block">
-      <motion.span
-        className="absolute left-0 top-0 text-fuchsia-300/70"
-        animate={{ x: [0, -2, 1, 0], opacity: [0.1, 0.45, 0.15] }}
-        transition={{ repeat: Infinity, duration: 2.6, ease: "easeInOut" }}
-      >
-        {text}
-      </motion.span>
-      <motion.span
-        className="absolute left-0 top-0 text-cyan-300/70"
-        animate={{ x: [0, 2, -1, 0], opacity: [0.12, 0.4, 0.18] }}
-        transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-      >
-        {text}
-      </motion.span>
-      <span className="relative">{text}</span>
+  <!-- DESSERTS -->
+  <div class="section-label">Chapter Three</div>
+  <h2 class="section-title">Sweet Epilogues</h2>
+  <div class="section-divider"></div>
+  <p class="section-desc">Final movements that linger long after the last bite fades.</p>
+
+  <div class="menu-arena">
+    <div class="menu-grid" id="desserts-grid"></div>
+  </div>
+
+  <!-- AI SOMMELIER -->
+  <div class="section-label">The Oracle</div>
+  <h2 class="section-title">Ask the Æther</h2>
+  <div class="section-divider"></div>
+  <p class="section-desc">Our AI sommelier reads your mood, your cravings, your soul — and pairs accordingly.</p>
+
+  <div class="ai-section">
+    <div class="ai-input-wrap">
+      <input class="ai-input" id="ai-input" type="text" placeholder="Tell me your mood, and I shall guide you..." />
     </div>
-  );
+    <div class="ai-response" id="ai-response"></div>
+  </div>
+
+  <footer>
+    Æther — An experience beyond the plate · Est. 2026
+  </footer>
+
+</div>
+
+<script>
+// ========================
+// MENU DATA
+// ========================
+const menuData = {
+  starters: [
+    {
+      name: "Smoke & Mirrors",
+      price: "$24",
+      tags: ["Theatrical", "Umami"],
+      description: "Hickory-smoked quail egg suspended in a sphere of dashi consommé, shattered at the table to release a fog of cedar and wild thyme.",
+      flavors: { sweet: 0.1, salty: 0.6, umami: 0.9, bitter: 0.2, sour: 0.15, heat: 0.1 },
+      colors: ["#c9a84c", "#8a7234", "#5a4a2a"]
+    },
+    {
+      name: "Abyssal Garden",
+      price: "$22",
+      tags: ["Raw", "Oceanic"],
+      description: "Bioluminescent-inspired hamachi crudo with yuzu pearls, sea grapes, and frozen wasabi dust on obsidian stone.",
+      flavors: { sweet: 0.2, salty: 0.5, umami: 0.7, bitter: 0.1, sour: 0.6, heat: 0.4 },
+      colors: ["#1a4a6a", "#2a8a7a", "#0a2a3a"]
+    },
+    {
+      name: "Root Memory",
+      price: "$19",
+      tags: ["Earthy", "Fermented"],
+      description: "Ancient grain sourdough torn and served with 200-day fermented black garlic butter and smoked bone marrow salt.",
+      flavors: { sweet: 0.3, salty: 0.5, umami: 0.8, bitter: 0.3, sour: 0.4, heat: 0.05 },
+      colors: ["#4a3a2a", "#8a6a3a", "#2a1a0a"]
+    },
+    {
+      name: "Ghost Pepper Silk",
+      price: "$21",
+      tags: ["Heat", "Delicate"],
+      description: "Silken tofu draped in ghost pepper oil, tempered with honeycomb and charred shallot ash. A contradiction made edible.",
+      flavors: { sweet: 0.4, salty: 0.2, umami: 0.3, bitter: 0.2, sour: 0.1, heat: 0.95 },
+      colors: ["#c44b2f", "#e87040", "#6a1a0a"]
+    }
+  ],
+  mains: [
+    {
+      name: "Eternal Braise",
+      price: "$58",
+      tags: ["72-hour", "Heritage"],
+      description: "Wagyu short rib braised for three days in a reduction of nebbiolo, star anise, and burnt orange. Served over smoked parsnip silk with charred leek ash.",
+      flavors: { sweet: 0.5, salty: 0.4, umami: 0.95, bitter: 0.3, sour: 0.2, heat: 0.1 },
+      colors: ["#5a1a2a", "#8a3a4a", "#2a0a1a"]
+    },
+    {
+      name: "Ocean's Requiem",
+      price: "$52",
+      tags: ["Sustainable", "Complex"],
+      description: "Line-caught halibut poached in champagne beurre blanc, draped over squid ink risotto with a crown of gold leaf and sea urchin foam.",
+      flavors: { sweet: 0.3, salty: 0.6, umami: 0.8, bitter: 0.1, sour: 0.3, heat: 0.05 },
+      colors: ["#1a2a4a", "#c9a84c", "#0a1a2a"]
+    },
+    {
+      name: "Mycelium Dreams",
+      price: "$44",
+      tags: ["Vegan", "Avant-garde"],
+      description: "A living forest on a plate — king trumpet steak, truffle-infused mushroom duxelles, crispy enoki, and a soil of dehydrated porcini with moss gel.",
+      flavors: { sweet: 0.2, salty: 0.3, umami: 0.9, bitter: 0.4, sour: 0.1, heat: 0.05 },
+      colors: ["#2a4a3a", "#4a6a4a", "#1a2a1a"]
+    },
+    {
+      name: "Phoenix",
+      price: "$62",
+      tags: ["Fire-finished", "Signature"],
+      description: "Dry-aged duck breast torched tableside with hinoki wood, lacquered in miso-caramel, resting on a bed of black sesame and roasted fig compote.",
+      flavors: { sweet: 0.6, salty: 0.4, umami: 0.7, bitter: 0.2, sour: 0.15, heat: 0.3 },
+      colors: ["#c44b2f", "#c9a84c", "#3a1a0a"]
+    }
+  ],
+  desserts: [
+    {
+      name: "Gravity",
+      price: "$22",
+      tags: ["Anti-gravity", "Spectacle"],
+      description: "A levitating dark chocolate sphere melted by warm salted caramel rain, revealing a core of passionfruit mousse and edible gold dust.",
+      flavors: { sweet: 0.9, salty: 0.3, umami: 0.1, bitter: 0.5, sour: 0.3, heat: 0.0 },
+      colors: ["#c9a84c", "#3a2a1a", "#e8d48b"]
+    },
+    {
+      name: "Negative Space",
+      price: "$19",
+      tags: ["Minimalist", "Molecular"],
+      description: "Invisible dessert — clear spheres of lychee, rose, and elderflower that dissolve on contact, leaving only the memory of sweetness.",
+      flavors: { sweet: 0.7, salty: 0.05, umami: 0.0, bitter: 0.1, sour: 0.2, heat: 0.0 },
+      colors: ["#f0ead6", "#e8d48b", "#a09d93"]
+    },
+    {
+      name: "Ember & Ice",
+      price: "$24",
+      tags: ["Contrast", "Ritual"],
+      description: "Smoked vanilla ice cream encased in a cage of spun sugar, served beside a live coal of cinnamon crème brûlée. Fire meets frost.",
+      flavors: { sweet: 0.85, salty: 0.15, umami: 0.05, bitter: 0.2, sour: 0.05, heat: 0.15 },
+      colors: ["#c44b2f", "#1a3a5a", "#c9a84c"]
+    }
+  ]
+};
+
+// ========================
+// FLAVOR WHEEL SVG GENERATOR
+// ========================
+function createFlavorWheel(flavors, colors) {
+  const keys = Object.keys(flavors);
+  const n = keys.length;
+  const size = 70;
+  const cx = size / 2, cy = size / 2, r = 28;
+
+  let points = [];
+  let bgPoints = [];
+  keys.forEach((k, i) => {
+    const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
+    const val = flavors[k];
+    points.push([
+      cx + r * val * Math.cos(angle),
+      cy + r * val * Math.sin(angle)
+    ]);
+    bgPoints.push([
+      cx + r * Math.cos(angle),
+      cy + r * Math.sin(angle)
+    ]);
+  });
+
+  const poly = points.map(p => p.join(',')).join(' ');
+  const bgPoly = bgPoints.map(p => p.join(',')).join(' ');
+
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="${bgPoly}" fill="none" stroke="rgba(201,168,76,0.1)" stroke-width="0.5"/>
+    ${keys.map((k, i) => {
+      const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
+      return `<line x1="${cx}" y1="${cy}" x2="${cx + r * Math.cos(angle)}" y2="${cy + r * Math.sin(angle)}" stroke="rgba(201,168,76,0.07)" stroke-width="0.5"/>`;
+    }).join('')}
+    <polygon points="${poly}" fill="rgba(${parseInt(colors[0].slice(1,3),16)},${parseInt(colors[0].slice(3,5),16)},${parseInt(colors[0].slice(5,7),16)},0.2)" stroke="${colors[0]}" stroke-width="1.5"/>
+    ${points.map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="2" fill="${colors[Math.min(i, colors.length-1) % colors.length]}"/>`).join('')}
+  </svg>`;
 }
 
-export default function ImpossibleMenuWebsite() {
-  const [active, setActive] = useState(problems[0]);
-  const [pulse, setPulse] = useState(false);
+// ========================
+// CARD RENDERER
+// ========================
+function renderCard(item) {
+  const card = document.createElement('div');
+  card.className = 'menu-card';
 
-  useEffect(() => {
-    const t = setInterval(() => setPulse((p) => !p), 2600);
-    return () => clearInterval(t);
-  }, []);
+  const flavorLabels = Object.entries(item.flavors)
+    .filter(([, v]) => v > 0.2)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4)
+    .map(([k, v]) => {
+      const hue = k === 'sweet' ? '#e8d48b' : k === 'salty' ? '#7aaad4' : k === 'umami' ? '#c9a84c' : k === 'bitter' ? '#6a8a5a' : k === 'sour' ? '#d4aa4a' : '#c44b2f';
+      return `<span class="flavor-label"><span class="flavor-dot" style="background:${hue}"></span>${k} ${Math.round(v * 100)}%</span>`;
+    }).join('');
 
-  return (
-    <div className="min-h-screen overflow-hidden bg-[#04010d] text-white">
-      <CursorGlow />
-
-      <div className="fixed inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(139,92,246,0.16),transparent_28%),radial-gradient(circle_at_80%_20%,rgba(34,211,238,0.16),transparent_22%),radial-gradient(circle_at_50%_80%,rgba(236,72,153,0.14),transparent_30%),linear-gradient(180deg,#05010d_0%,#080314_45%,#020106_100%)]" />
-        <AuroraBlob className="absolute left-[-10%] top-[-10%] h-[28rem] w-[28rem] rounded-full bg-fuchsia-500/18 blur-3xl" />
-        <AuroraBlob className="absolute right-[-6%] top-[10%] h-[22rem] w-[22rem] rounded-full bg-cyan-500/16 blur-3xl" />
-        <AuroraBlob className="absolute bottom-[-10%] left-[25%] h-[26rem] w-[26rem] rounded-full bg-violet-500/14 blur-3xl" />
-        <StarField />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(circle_at_center,black,transparent_82%)]" />
-      </div>
-
-      <main className="relative z-10 mx-auto max-w-7xl px-6 py-8 md:px-10 lg:px-12">
-        <motion.nav
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-10 flex flex-col gap-4 rounded-[2rem] border border-white/10 bg-white/5 p-4 backdrop-blur-xl md:flex-row md:items-center md:justify-between"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-              <Sparkles className="h-6 w-6" />
-            </div>
-            <div>
-              <div className="text-xs uppercase tracking-[0.35em] text-white/55">Out of this world dining</div>
-              <div className="text-lg font-semibold"><GlitchText text="THE IMPOSSIBLE MENU" /></div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:justify-end">
-            {[
-              ["Menu", ChefHat],
-              ["Oracles", Eye],
-              ["Energy", Zap],
-              ["Reality", Orbit],
-            ].map(([label, Icon]) => (
-              <button
-                key={String(label)}
-                className="group rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-white/80 transition hover:bg-white/10"
-              >
-                <div className="flex items-center gap-2">
-                  <Icon className="h-4 w-4 transition group-hover:rotate-12" />
-                  <span>{label}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </motion.nav>
-
-        <section className="grid items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.1 }}
-            className="relative rounded-[2rem] border border-white/10 bg-white/6 p-8 backdrop-blur-2xl md:p-10"
-          >
-            <div className="mb-5 flex flex-wrap gap-2">
-              {floatingWords.slice(0, 6).map((word, i) => (
-                <motion.span
-                  key={word}
-                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/65"
-                  animate={{ y: [0, -4, 0] }}
-                  transition={{ duration: 2.5 + i * 0.2, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  {word}
-                </motion.span>
-              ))}
-            </div>
-
-            <h1 className="max-w-4xl text-5xl font-semibold leading-[0.95] tracking-tight md:text-7xl">
-              A website that feels like it
-              <span className="bg-gradient-to-r from-fuchsia-300 via-cyan-200 to-violet-300 bg-clip-text text-transparent"> should not exist.</span>
-            </h1>
-
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/72 md:text-xl">
-              This concept turns the menu into a spectacle: part sci-fi ritual, part luxury interface, part answer to things people have always wanted but nobody ever truly solved.
-            </p>
-
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Button className="group rounded-2xl bg-white text-black hover:bg-white/90">
-                Enter the impossible
-                <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-1" />
-              </Button>
-              <Button variant="outline" className="rounded-2xl border-white/15 bg-white/5 text-white hover:bg-white/10">
-                View reality breach
-              </Button>
-            </div>
-
-            <div className="mt-10 grid gap-4 md:grid-cols-3">
-              {[
-                ["06", "unsolved desires reimagined"],
-                ["∞", "possible futures layered in the UI"],
-                ["24/7", "ambient motion like a living organism"],
-              ].map(([value, label]) => (
-                <div key={String(value)} className="rounded-[1.5rem] border border-white/10 bg-black/20 p-4">
-                  <div className="text-3xl font-semibold">{value}</div>
-                  <div className="mt-1 text-sm text-white/58">{label}</div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.2 }}
-            className="relative"
-          >
-            <div className="absolute -inset-8 rounded-full bg-fuchsia-500/10 blur-3xl" />
-            <Card className="relative overflow-hidden rounded-[2rem] border-white/10 bg-white/7 backdrop-blur-2xl">
-              <CardContent className="p-0">
-                <div className={`relative min-h-[30rem] bg-gradient-to-br ${active.color}`}>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.35),transparent_18%),radial-gradient(circle_at_70%_40%,rgba(255,255,255,0.16),transparent_16%),linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))]" />
-
-                  <motion.div
-                    animate={{ rotate: pulse ? 8 : -8, scale: pulse ? 1.05 : 0.95 }}
-                    transition={{ duration: 2.6, ease: "easeInOut" }}
-                    className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-white/10 blur-sm"
-                  />
-
-                  <div className="relative flex min-h-[30rem] flex-col justify-between p-8">
-                    <div className="flex items-start justify-between gap-6">
-                      <div className="rounded-2xl border border-white/15 bg-black/20 p-3 backdrop-blur-md">
-                        <active.icon className="h-7 w-7" />
-                      </div>
-                      <div className="rounded-full border border-white/15 bg-black/20 px-3 py-1 text-xs uppercase tracking-[0.35em] text-white/75">
-                        live concept
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="text-sm uppercase tracking-[0.35em] text-white/65">Featured impossible</div>
-                      <h2 className="mt-3 text-4xl font-semibold leading-tight">{active.title}</h2>
-                      <p className="mt-3 max-w-md text-base leading-7 text-white/82">{active.subtitle}</p>
-                    </div>
-
-                    <div className="grid gap-3 rounded-[1.5rem] border border-white/15 bg-black/25 p-4 backdrop-blur-md">
-                      <div className="text-xs uppercase tracking-[0.28em] text-white/55">Flavor profile</div>
-                      <div className="text-lg text-white/90">{active.flavor}</div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </section>
-
-        <section className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {problems.map((item, index) => {
-            const Icon = item.icon;
-            const isActive = active.id === item.id;
-            return (
-              <motion.button
-                key={item.id}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.08 * index }}
-                onMouseEnter={() => setActive(item)}
-                onFocus={() => setActive(item)}
-                className={`group relative overflow-hidden rounded-[2rem] border p-0 text-left backdrop-blur-xl transition ${
-                  isActive
-                    ? "border-white/25 bg-white/10 shadow-[0_0_40px_rgba(168,85,247,0.18)]"
-                    : "border-white/10 bg-white/5 hover:bg-white/8"
-                }`}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-${isActive ? "80" : "30"}`} />
-                <div className="absolute inset-0 bg-black/40" />
-                <div className="relative p-6">
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-white/10">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div className="rounded-full border border-white/10 bg-white/8 px-3 py-1 text-[10px] uppercase tracking-[0.35em] text-white/60">
-                      unsolved → reimagined
-                    </div>
-                  </div>
-
-                  <h3 className="mt-6 text-2xl font-semibold leading-tight">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-white/68">{item.problem}</p>
-                  <div className="mt-6 flex items-center gap-2 text-sm text-white/88">
-                    Reveal concept
-                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                  </div>
-                </div>
-              </motion.button>
-            );
-          })}
-        </section>
-
-        <section className="mt-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <motion.div layout className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-xl md:p-8">
-            <div className="text-xs uppercase tracking-[0.35em] text-white/50">The unsolved problem</div>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active.id + "-problem"}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -14 }}
-                transition={{ duration: 0.35 }}
-              >
-                <h3 className="mt-4 text-3xl font-semibold">Why people crave this</h3>
-                <p className="mt-4 text-base leading-8 text-white/72">{active.problem}</p>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-
-          <motion.div layout className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-xl md:p-8">
-            <div className="text-xs uppercase tracking-[0.35em] text-white/50">Our impossible version</div>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active.id + "-solution"}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -14 }}
-                transition={{ duration: 0.35 }}
-              >
-                <h3 className="mt-4 text-3xl font-semibold">How the site makes it feel real</h3>
-                <p className="mt-4 text-base leading-8 text-white/72">{active.solution}</p>
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  {[
-                    "volumetric glow",
-                    "reactive card physics",
-                    "ambient future poetry",
-                  ].map((tag) => (
-                    <div key={tag} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/78">
-                      {tag}
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        </section>
-
-        <section className="mt-10 rounded-[2.2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-xl md:p-8">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div>
-              <div className="text-xs uppercase tracking-[0.35em] text-white/50">Menu transmission</div>
-              <h3 className="mt-3 text-3xl font-semibold md:text-4xl">A finale that feels bigger than a website</h3>
-            </div>
-            <div className="max-w-xl text-white/65">
-              The goal is not just beauty. It is disbelief. Every section is built to make someone pause and ask how this menu feels so alive.
-            </div>
-          </div>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {floatingWords.slice(6).map((word, i) => (
-              <motion.div
-                key={word}
-                className="group rounded-[1.6rem] border border-white/10 bg-black/20 p-5"
-                whileHover={{ y: -6, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 180, damping: 18 }}
-              >
-                <div className="text-xs uppercase tracking-[0.35em] text-white/45">signal {i + 1}</div>
-                <div className="mt-4 text-2xl font-medium capitalize">{word}</div>
-                <div className="mt-3 text-sm leading-7 text-white/62">
-                  A decorative concept token used to make the menu feel like it arrived from a more advanced civilization.
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-      </main>
+  card.innerHTML = `
+    <div class="card-header">
+      <span class="dish-name">${item.name}</span>
+      <span class="dish-price">${item.price}</span>
     </div>
-  );
+    <div class="dish-tags">${item.tags.map(t => `<span class="dish-tag">${t}</span>`).join('')}</div>
+    <p class="dish-description">${item.description}</p>
+    <div class="synesthesia-bar" style="--s1:${item.colors[0]};--s2:${item.colors[1]};--s3:${item.colors[2]}"></div>
+    <div class="flavor-wheel-wrap">
+      ${createFlavorWheel(item.flavors, item.colors)}
+      <div class="flavor-labels">${flavorLabels}</div>
+    </div>
+  `;
+
+  // 3D tilt effect
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    card.style.setProperty('--mx', (x * 100) + '%');
+    card.style.setProperty('--my', (y * 100) + '%');
+    card.style.transform = `perspective(800px) rotateY(${(x - 0.5) * 8}deg) rotateX(${(0.5 - y) * 6}deg) translateY(0)`;
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(800px) rotateY(0) rotateX(0) translateY(0)';
+  });
+
+  return card;
 }
+
+// ========================
+// POPULATE MENU
+// ========================
+function populateMenu() {
+  const starters = document.getElementById('starters-grid');
+  const mains = document.getElementById('mains-grid');
+  const desserts = document.getElementById('desserts-grid');
+
+  menuData.starters.forEach(item => starters.appendChild(renderCard(item)));
+  menuData.mains.forEach(item => mains.appendChild(renderCard(item)));
+  menuData.desserts.forEach(item => desserts.appendChild(renderCard(item)));
+}
+
+// ========================
+// SCROLL REVEAL
+// ========================
+function initScrollReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.menu-card').forEach(card => observer.observe(card));
+}
+
+// ========================
+// ECOSYSTEM — LIVING BACKGROUND
+// ========================
+function initEcosystem() {
+  const canvas = document.getElementById('ecosystem');
+  const ctx = canvas.getContext('2d');
+  let w, h;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Organic flowing shapes
+  const blobs = [];
+  for (let i = 0; i < 5; i++) {
+    blobs.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: 150 + Math.random() * 250,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      hue: [210, 30, 280, 160, 350][i],
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+
+  function drawEcosystem(time) {
+    ctx.clearRect(0, 0, w, h);
+
+    // Deep background gradient
+    const bg = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.7);
+    bg.addColorStop(0, '#12121a');
+    bg.addColorStop(1, '#0a0a0f');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, w, h);
+
+    // Animate blobs
+    blobs.forEach(b => {
+      b.x += b.vx;
+      b.y += b.vy;
+      b.phase += 0.003;
+
+      if (b.x < -b.r) b.x = w + b.r;
+      if (b.x > w + b.r) b.x = -b.r;
+      if (b.y < -b.r) b.y = h + b.r;
+      if (b.y > h + b.r) b.y = -b.r;
+
+      const pulsedR = b.r + Math.sin(b.phase) * 40;
+      const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, pulsedR);
+      grad.addColorStop(0, `hsla(${b.hue}, 40%, 15%, 0.08)`);
+      grad.addColorStop(0.5, `hsla(${b.hue}, 30%, 10%, 0.03)`);
+      grad.addColorStop(1, 'transparent');
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, pulsedR, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    requestAnimationFrame(drawEcosystem);
+  }
+  requestAnimationFrame(drawEcosystem);
+}
+
+// ========================
+// PARTICLE SYSTEM
+// ========================
+function initParticles() {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let w, h;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const particles = [];
+  const count = Math.min(80, Math.floor(window.innerWidth / 20));
+
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.5 + 0.3,
+      vx: (Math.random() - 0.5) * 0.2,
+      vy: -Math.random() * 0.3 - 0.05,
+      alpha: Math.random() * 0.4 + 0.1,
+      pulse: Math.random() * Math.PI * 2
+    });
+  }
+
+  let mx = w / 2, my = h / 2;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+
+    particles.forEach(p => {
+      p.pulse += 0.02;
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // Mouse influence
+      const dx = mx - p.x;
+      const dy = my - p.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 200) {
+        const force = (200 - dist) / 200 * 0.02;
+        p.vx += dx * force * 0.01;
+        p.vy += dy * force * 0.01;
+      }
+
+      // Damping
+      p.vx *= 0.99;
+      p.vy *= 0.99;
+
+      if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+      if (p.x < -10) p.x = w + 10;
+      if (p.x > w + 10) p.x = -10;
+
+      const glow = p.alpha * (0.7 + 0.3 * Math.sin(p.pulse));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(201, 168, 76, ${glow})`;
+      ctx.fill();
+    });
+
+    // Connection lines
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(201, 168, 76, ${0.04 * (1 - dist / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+// ========================
+// CUSTOM CURSOR
+// ========================
+function initCursor() {
+  const cursor = document.getElementById('cursor');
+  const dot = document.getElementById('cursor-dot');
+
+  let cx = 0, cy = 0, dx = 0, dy = 0;
+
+  document.addEventListener('mousemove', e => {
+    dx = e.clientX;
+    dy = e.clientY;
+    dot.style.left = dx + 'px';
+    dot.style.top = dy + 'px';
+  });
+
+  function animCursor() {
+    cx += (dx - cx) * 0.12;
+    cy += (dy - cy) * 0.12;
+    cursor.style.left = cx + 'px';
+    cursor.style.top = cy + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  // Hover state
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest('.menu-card, button, input, a, .intro-enter')) {
+      cursor.classList.add('hovering');
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest('.menu-card, button, input, a, .intro-enter')) {
+      cursor.classList.remove('hovering');
+    }
+  });
+}
+
+// ========================
+// SCROLL PROGRESS
+// ========================
+function initProgress() {
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    document.getElementById('exp-bar').style.width = progress + '%';
+  });
+}
+
+// ========================
+// AI SOMMELIER (local)
+// ========================
+function initAI() {
+  const input = document.getElementById('ai-input');
+  const resp = document.getElementById('ai-response');
+
+  const allDishes = [...menuData.starters, ...menuData.mains, ...menuData.desserts];
+
+  const moodMap = {
+    happy: ['sweet', 'heat'],
+    sad: ['umami', 'sweet'],
+    adventurous: ['heat', 'sour', 'bitter'],
+    tired: ['umami', 'sweet', 'salty'],
+    romantic: ['sweet', 'umami'],
+    bold: ['heat', 'umami', 'bitter'],
+    calm: ['sweet', 'salty'],
+    hungry: ['umami', 'salty', 'sweet'],
+    stressed: ['umami', 'sweet'],
+    excited: ['heat', 'sour', 'sweet'],
+    cozy: ['umami', 'sweet', 'salty'],
+    nostalgic: ['umami', 'sweet', 'bitter'],
+    curious: ['sour', 'bitter', 'heat'],
+    celebratory: ['sweet', 'umami', 'salty'],
+  };
+
+  const poeticIntros = [
+    "The Æther whispers to me of",
+    "I sense within you a longing for",
+    "The stars align — your palate craves",
+    "Tonight, your spirit calls for",
+    "I read the currents of your soul —",
+    "The universe conspires to offer you",
+  ];
+
+  input.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+
+    const query = input.value.toLowerCase().trim();
+    if (!query) return;
+
+    resp.classList.add('active');
+    resp.classList.add('ai-typing');
+    resp.textContent = '';
+
+    // Find matching mood
+    let bestFlavors = ['umami', 'sweet'];
+    for (const [mood, flavors] of Object.entries(moodMap)) {
+      if (query.includes(mood)) {
+        bestFlavors = flavors;
+        break;
+      }
+    }
+
+    // Score dishes
+    const scored = allDishes.map(dish => {
+      let score = 0;
+      bestFlavors.forEach(f => { score += dish.flavors[f] || 0; });
+      return { dish, score };
+    }).sort((a, b) => b.score - a.score);
+
+    const top = scored.slice(0, 2).map(s => s.dish);
+    const intro = poeticIntros[Math.floor(Math.random() * poeticIntros.length)];
+    const message = `${intro} ${top[0].name} — ${top[0].description.split('.')[0].toLowerCase()}. And to follow, ${top[1].name}, which shall complete the arc of your evening.`;
+
+    // Typewriter effect
+    let i = 0;
+    resp.textContent = '';
+    function type() {
+      if (i < message.length) {
+        resp.textContent += message[i];
+        i++;
+        setTimeout(type, 20 + Math.random() * 25);
+      } else {
+        resp.classList.remove('ai-typing');
+      }
+    }
+    setTimeout(type, 600);
+  });
+}
+
+// ========================
+// AMBIENT SOUND ENGINE (Web Audio API synesthesia)
+// ========================
+let audioCtx = null;
+let ambientPlaying = false;
+let ambientNodes = [];
+
+function initSound() {
+  const btn = document.getElementById('sound-btn');
+
+  btn.addEventListener('click', () => {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    if (ambientPlaying) {
+      ambientNodes.forEach(n => {
+        try { n.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1); } catch(e) {}
+      });
+      ambientPlaying = false;
+      btn.textContent = '♪';
+      btn.style.color = 'var(--gold-dim)';
+    } else {
+      createAmbience();
+      ambientPlaying = true;
+      btn.textContent = '♫';
+      btn.style.color = 'var(--gold)';
+    }
+  });
+}
+
+function createAmbience() {
+  if (!audioCtx) return;
+
+  // Pad drone
+  const freqs = [110, 164.81, 220, 329.63];
+  freqs.forEach(f => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const filter = audioCtx.createBiquadFilter();
+
+    osc.type = 'sine';
+    osc.frequency.value = f;
+    filter.type = 'lowpass';
+    filter.frequency.value = 400;
+    filter.Q.value = 1;
+    gain.gain.value = 0;
+    gain.gain.linearRampToValueAtTime(0.012, audioCtx.currentTime + 3);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+
+    // Slow frequency drift
+    const lfo = audioCtx.createOscillator();
+    const lfoGain = audioCtx.createGain();
+    lfo.frequency.value = 0.05 + Math.random() * 0.1;
+    lfoGain.gain.value = f * 0.003;
+    lfo.connect(lfoGain);
+    lfoGain.connect(osc.frequency);
+    lfo.start();
+
+    ambientNodes.push(gain);
+  });
+}
+
+// ========================
+// INTRO SEQUENCE
+// ========================
+function enterExperience() {
+  document.getElementById('intro-overlay').classList.add('hidden');
+  document.getElementById('main-content').style.opacity = '1';
+
+  // Start systems
+  initEcosystem();
+  initParticles();
+  initCursor();
+  initProgress();
+  initAI();
+  initSound();
+  populateMenu();
+
+  // Stagger card reveals
+  setTimeout(initScrollReveal, 300);
+}
+
+</script>
+</body>
+</html>
