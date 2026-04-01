@@ -29,7 +29,6 @@ body {
   background: var(--bg-deep);
   color: var(--cream);
   font-family: 'Cormorant Garamond', serif;
-  cursor: none;
   overflow-x: hidden;
   min-height: 100vh;
 }
@@ -43,10 +42,12 @@ body {
   border-radius: 50%;
   pointer-events: none;
   z-index: 100000;
-  transition: transform 0.15s ease, border-color 0.3s;
-  mix-blend-mode: difference;
+  transition: transform 0.15s ease, border-color 0.3s, background 0.3s;
   transform: translate(-50%, -50%);
+  display: none;
+  box-shadow: 0 0 10px rgba(201,168,76,0.2);
 }
+#cursor.active { display: block; }
 #cursor.hovering {
   transform: translate(-50%, -50%) scale(2.5);
   border-color: var(--ember);
@@ -61,6 +62,14 @@ body {
   pointer-events: none;
   z-index: 100001;
   transform: translate(-50%, -50%);
+  display: none;
+  box-shadow: 0 0 6px rgba(201,168,76,0.5);
+}
+#cursor-dot.active { display: block; }
+
+/* When custom cursor is running, hide native cursor */
+body.custom-cursor, body.custom-cursor * {
+  cursor: none !important;
 }
 
 /* LIVING CANVAS */
@@ -217,7 +226,7 @@ body {
   border-radius: 16px;
   padding: 2.2rem;
   margin-bottom: 2rem;
-  cursor: none;
+  cursor: pointer;
   transition: border-color 0.5s, box-shadow 0.5s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   backdrop-filter: blur(20px);
   overflow: hidden;
@@ -386,7 +395,7 @@ body {
   color: var(--cream);
   outline: none;
   transition: border-color 0.4s, box-shadow 0.4s;
-  cursor: none;
+  cursor: text;
 }
 
 .ai-input::placeholder { color: rgba(160,157,147,0.5); }
@@ -430,7 +439,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: none;
+  cursor: pointer;
   transition: border-color 0.3s;
   color: var(--gold-dim);
   font-size: 1.2rem;
@@ -447,8 +456,7 @@ body {
 @media (max-width: 500px) {
   .menu-grid { grid-template-columns: 1fr; }
   .menu-card { padding: 1.5rem; }
-  body { cursor: auto; }
-  #cursor, #cursor-dot { display: none; }
+  #cursor, #cursor-dot { display: none !important; }
 }
 
 /* DIVIDER */
@@ -523,7 +531,6 @@ footer {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  cursor: none;
   transition: opacity 1.2s ease, visibility 1.2s;
 }
 
@@ -555,7 +562,7 @@ footer {
   border: 1px solid rgba(201,168,76,0.3);
   padding: 1em 3em;
   border-radius: 60px;
-  cursor: none;
+  cursor: pointer;
   transition: all 0.4s;
   opacity: 0;
   animation: fadeUp 1s ease 1s forwards;
@@ -1030,13 +1037,22 @@ function initCursor() {
   const cursor = document.getElementById('cursor');
   const dot = document.getElementById('cursor-dot');
 
-  let cx = 0, cy = 0, dx = 0, dy = 0;
+  // Only activate custom cursor on real mouse devices
+  let activated = false;
+  let cx = -100, cy = -100, dx = -100, dy = -100;
 
   document.addEventListener('mousemove', e => {
     dx = e.clientX;
     dy = e.clientY;
     dot.style.left = dx + 'px';
     dot.style.top = dy + 'px';
+
+    if (!activated) {
+      activated = true;
+      cursor.classList.add('active');
+      dot.classList.add('active');
+      document.body.classList.add('custom-cursor');
+    }
   });
 
   function animCursor() {
