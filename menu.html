@@ -10,7 +10,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --board:#354042;--bd2:#3d4849;--bd3:#2a3234;
+  --board:#354042;--bd3:#2a3234;
   --chalk:#d4d0c8;--cdim:rgba(212,208,200,.5);--cfaint:rgba(212,208,200,.18);
   --green:#6ddb7a;--pink:#e87cb0;--yellow:#e8d44d;--cyan:#5ec4d4;--orange:#e8943a;
   --bright:#eceae4;--frame:#b0b4b0;
@@ -21,353 +21,408 @@
 html,body{width:100%;height:100%;overflow:hidden;background:#0e1112}
 
 #board{
-  position:fixed;inset:clamp(4px,.7vw,12px);
-  background:var(--board);border-radius:3px;overflow:hidden;
+  position:fixed;inset:clamp(4px,.7vw,12px);border-radius:3px;overflow:hidden;
   box-shadow:
     inset 0 2px 15px rgba(0,0,0,.4),inset 0 -2px 10px rgba(0,0,0,.25),
     0 0 0 clamp(5px,.7vw,10px) var(--frame),
     0 0 0 clamp(7px,.9vw,13px) #8a8e8a,
     0 8px 40px rgba(0,0,0,.6);
-  background-image:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E"),
-    radial-gradient(ellipse at 20% 15%,rgba(255,255,255,.02),transparent 50%),
-    radial-gradient(ellipse at 80% 70%,rgba(255,255,255,.015),transparent 45%),
-    linear-gradient(170deg,#3e4a4c 0%,#364244 30%,#313c3e 60%,#2b3537 100%);
-  display:flex;flex-direction:column;
+  display:flex;flex-direction:column;background:var(--board);
 }
-#board::after{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:50;
-  background-image:
-    radial-gradient(1px 1px at 8% 5%,rgba(255,255,255,.1) 50%,transparent 50%),
-    radial-gradient(1px 1px at 32% 18%,rgba(255,255,255,.07) 50%,transparent 50%),
-    radial-gradient(1.5px 1.5px at 65% 12%,rgba(255,255,255,.09) 50%,transparent 50%),
-    radial-gradient(1px 1px at 18% 42%,rgba(255,255,255,.06) 50%,transparent 50%),
-    radial-gradient(1px 1px at 78% 38%,rgba(255,255,255,.08) 50%,transparent 50%),
-    radial-gradient(1px 1px at 45% 65%,rgba(255,255,255,.05) 50%,transparent 50%),
-    radial-gradient(1.5px 1.5px at 90% 55%,rgba(255,255,255,.07) 50%,transparent 50%),
-    radial-gradient(1px 1px at 12% 85%,rgba(255,255,255,.08) 50%,transparent 50%),
-    radial-gradient(1px 1px at 55% 92%,rgba(255,255,255,.06) 50%,transparent 50%),
-    radial-gradient(1px 1px at 88% 82%,rgba(255,255,255,.09) 50%,transparent 50%);
-}
-#cv{position:absolute;inset:0;z-index:45;pointer-events:none}
 
-/* ═══════ TOP ═══════ */
+/* The chalk canvas — full background */
+#chalk-cv{position:absolute;inset:0;z-index:0}
+
+/* Ember canvas */
+#ember-cv{position:absolute;inset:0;z-index:1;pointer-events:none}
+
+/* Grain overlay */
+#board::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+}
+
+/* ═══════ UI LAYER — above canvas ═══════ */
+#ui{position:relative;z-index:5;display:flex;flex-direction:column;height:100%}
+
+/* Top bar */
 #top{
-  position:relative;z-index:10;flex-shrink:0;
-  display:flex;align-items:center;
+  flex-shrink:0;display:flex;align-items:center;
   padding:clamp(6px,1vh,12px) clamp(10px,1.8vw,22px);
   border-bottom:2px solid var(--cfaint);
+  background:rgba(53,64,66,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
 }
 .t-back{font-family:var(--cond);font-weight:500;font-size:clamp(9px,1vw,12px);letter-spacing:.18em;text-transform:uppercase;color:var(--cfaint);text-decoration:none;transition:color .3s}
 .t-back:hover{color:var(--chalk)}
-.t-brand{flex:1;text-align:center;font-family:var(--serif);font-weight:900;font-size:clamp(13px,2vw,24px);color:var(--bright);text-shadow:1px 1px 0 rgba(0,0,0,.3);letter-spacing:.02em}
-.t-brand i{font-style:italic;font-weight:400;color:var(--cdim);font-size:.6em;letter-spacing:.06em}
-.t-info{font-family:var(--cond);font-weight:400;font-size:clamp(8px,.9vw,11px);color:var(--cfaint);text-align:right;letter-spacing:.06em;line-height:1.4}
+.t-brand{flex:1;text-align:center;font-family:var(--serif);font-weight:900;font-size:clamp(13px,2vw,24px);color:var(--bright);text-shadow:1px 1px 0 rgba(0,0,0,.3)}
+.t-brand i{font-style:italic;font-weight:400;color:var(--cdim);font-size:.6em}
+.t-info{font-family:var(--cond);font-weight:400;font-size:clamp(8px,.9vw,11px);color:var(--cfaint);text-align:right;line-height:1.4}
 
-/* ═══════ CATEGORY NAV ═══════ */
+/* Category nav */
 #nav{
-  position:relative;z-index:10;flex-shrink:0;
-  display:flex;align-items:stretch;
-  border-bottom:1px solid var(--cfaint);
+  flex-shrink:0;display:flex;border-bottom:1px solid var(--cfaint);
   overflow-x:auto;scrollbar-width:none;
+  background:rgba(53,64,66,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
 }
 #nav::-webkit-scrollbar{display:none}
 .nb{
-  position:relative;flex:1;min-width:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:1px;padding:clamp(8px,1.2vh,14px) clamp(6px,1vw,14px);
   background:none;border:none;border-right:1px solid rgba(212,208,200,.06);
   cursor:pointer;transition:background .3s;color:var(--cdim);
   border-bottom:3px solid transparent;
 }
 .nb:last-child{border-right:none}
-.nb:hover{background:rgba(212,208,200,.03)}
-.nb.on{background:rgba(212,208,200,.05)}
+.nb:hover{background:rgba(212,208,200,.04)}
+.nb.on{background:rgba(212,208,200,.06)}
 .nb-icon{font-size:clamp(16px,2.2vw,24px);line-height:1;transition:transform .3s}
 .nb:hover .nb-icon{transform:scale(1.15)}
 .nb-label{font-family:var(--cond);font-weight:600;font-size:clamp(8px,.9vw,11px);letter-spacing:.1em;text-transform:uppercase;transition:color .3s;text-align:center;line-height:1.15}
 .nb.on .nb-label{color:var(--bright)}
 
-/* ═══════ STAGE ═══════ */
-#stage{position:relative;z-index:5;flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+/* ═══════ CONTENT AREA — transparent so canvas shows through ═══════ */
+#content{flex:1;min-height:0;overflow:hidden;position:relative}
 
-/* Eraser wipe overlay */
-#eraser{
-  position:absolute;inset:0;z-index:20;pointer-events:none;
-  background:rgba(53,64,66,.95);
-  transform:translateX(-101%);
+/* Item cards — float over the canvas chalk text */
+#cards{
+  position:absolute;inset:0;z-index:3;
+  overflow-y:auto;overflow-x:hidden;
+  padding:clamp(6px,1vh,10px) clamp(10px,1.5vw,20px);
+  scrollbar-width:thin;scrollbar-color:rgba(212,208,200,.1) transparent;
 }
-#eraser.wipe{
-  animation:wipeAcross .45s ease-in-out forwards;
-}
-@keyframes wipeAcross{
-  0%{transform:translateX(-101%)}
-  45%{transform:translateX(0)}
-  55%{transform:translateX(0)}
-  100%{transform:translateX(101%)}
-}
-/* Chalk dust cloud during erase */
-#eraser::after{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 50%,rgba(212,208,200,.08),transparent 70%);
-}
-
-/* Section header */
-#shdr{
-  flex-shrink:0;display:flex;align-items:center;
-  padding:clamp(8px,1.2vh,14px) clamp(12px,2vw,24px);
-  gap:clamp(6px,1vw,12px);
-  border-bottom:1px solid var(--cfaint);
-}
-#shdr-icon{font-size:clamp(20px,2.5vw,30px)}
-#shdr-title{
-  font-family:var(--cond);font-weight:800;
-  font-size:clamp(18px,2.8vw,32px);letter-spacing:.14em;
-  text-transform:uppercase;text-shadow:1px 1px 0 rgba(0,0,0,.25);
-  overflow:hidden;
-}
-/* The title writes in too */
-#shdr-title .ch{display:inline-block;opacity:0;transform:translateY(4px) rotate(-2deg);transition:opacity .06s,transform .1s}
-#shdr-title .ch.v{opacity:1;transform:translateY(0) rotate(0)}
-#shdr-sub{
-  font-family:var(--hand);font-size:clamp(12px,1.3vw,17px);
-  color:var(--cdim);margin-left:auto;font-style:italic;
-  opacity:0;transition:opacity .5s .3s;
-}
-#shdr-sub.v{opacity:1}
-
-/* ═══════ ITEM LIST — chalk style ═══════ */
-#list-wrap{
-  flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
-  padding:clamp(6px,1vh,12px) clamp(12px,2vw,24px) clamp(12px,2vh,20px);
-  scrollbar-width:thin;scrollbar-color:rgba(212,208,200,.12) transparent;
-}
-#list-wrap::-webkit-scrollbar{width:3px}
-#list-wrap::-webkit-scrollbar-thumb{background:rgba(212,208,200,.12);border-radius:2px}
-
-/* Two-column layout for items */
-#list{
+#cards::-webkit-scrollbar{width:3px}
+#cards::-webkit-scrollbar-thumb{background:rgba(212,208,200,.1);border-radius:2px}
+#card-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:0 clamp(20px,3vw,40px);
+  grid-template-columns:repeat(auto-fill,minmax(clamp(130px,15vw,200px),1fr));
+  gap:clamp(8px,1vw,12px);
+  padding-top:clamp(4px,.6vh,8px);
 }
-@media(max-width:600px){#list{grid-template-columns:1fr}}
 
-/* Special banner spans both cols */
-.sp-row{
-  grid-column:1/-1;
-  display:flex;align-items:center;gap:clamp(10px,1.5vw,18px);
-  padding:clamp(8px,1vh,14px) clamp(8px,1.2vw,14px);
-  border:2px solid var(--orange);border-radius:4px;
-  background:rgba(232,148,58,.04);margin-bottom:clamp(6px,1vh,10px);
-  animation:spGlow 3s ease-in-out infinite;
-}
-@keyframes spGlow{0%,100%{box-shadow:0 0 12px rgba(232,148,58,.05)}50%{box-shadow:0 0 24px rgba(232,148,58,.1)}}
-.sp-img{width:clamp(50px,7vw,90px);aspect-ratio:1;border-radius:3px;object-fit:cover;flex-shrink:0;border:1px solid rgba(232,148,58,.2);filter:brightness(.88) saturate(1.1)}
-.sp-body{flex:1;min-width:0}
-.sp-tag{font-family:var(--cond);font-weight:800;font-size:clamp(8px,.85vw,10px);letter-spacing:.25em;text-transform:uppercase;color:var(--orange)}
-.sp-name{font-family:var(--hand);font-weight:700;font-size:clamp(17px,2.2vw,26px);color:var(--bright);line-height:1.1}
-.sp-desc{font-family:var(--hand);font-size:clamp(11px,1.1vw,14px);color:var(--cdim);margin-top:1px}
-.sp-price{font-family:var(--block);font-size:clamp(20px,2.8vw,30px);color:var(--green);flex-shrink:0;text-shadow:0 0 12px rgba(109,219,122,.15)}
-
-/* ═══════ SINGLE ITEM ROW ═══════ */
-.ir{
-  display:flex;align-items:center;gap:clamp(8px,1vw,12px);
-  padding:clamp(6px,.8vh,10px) 0;
-  border-bottom:1px solid rgba(212,208,200,.04);
-  cursor:pointer;transition:background .25s;
-  border-radius:3px;
-}
-.ir:hover{background:rgba(212,208,200,.03)}
-
-/* Thumbnail */
-.ir-thumb{
-  width:clamp(48px,5.5vw,72px);aspect-ratio:1;border-radius:4px;
-  object-fit:cover;flex-shrink:0;
-  filter:brightness(.85) contrast(1.05) saturate(1.1);
+/* Individual card */
+.fc{
+  position:relative;border-radius:5px;overflow:hidden;
+  background:rgba(42,50,52,.85);cursor:pointer;
   border:1px solid rgba(212,208,200,.06);
-  transition:filter .3s,transform .3s,border-color .3s;
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  transition:transform .4s var(--ease),box-shadow .4s,border-color .4s;
+  opacity:0;transform:scale(.9);
+  animation:fcIn .5s var(--ease) forwards;
 }
-.ir:hover .ir-thumb{filter:brightness(.95) contrast(1.08) saturate(1.15);transform:scale(1.06);border-color:rgba(212,208,200,.15)}
-.ir-thumb-ph{
-  width:clamp(48px,5.5vw,72px);aspect-ratio:1;border-radius:4px;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--bd3);font-size:clamp(18px,2vw,24px);opacity:.35;flex-shrink:0;
+.fc:hover{
+  transform:translateY(-4px) scale(1.03);z-index:2;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);border-color:rgba(212,208,200,.12);
 }
+@keyframes fcIn{to{opacity:1;transform:scale(1)}}
+.fc-iw{position:relative;overflow:hidden}
+.fc-img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;filter:brightness(.82) contrast(1.08) saturate(1.12);transition:filter .4s,transform .6s var(--ease);background:var(--bd3)}
+.fc:hover .fc-img{filter:brightness(.92) contrast(1.1) saturate(1.18);transform:scale(1.08)}
+.fc-iw::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(42,50,52,.92) 0%,rgba(42,50,52,.4) 35%,transparent 65%);pointer-events:none}
+.fc-ph{width:100%;aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--bd3),var(--board));font-size:clamp(24px,3vw,32px);opacity:.35}
+.fc-body{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:clamp(6px,.8vw,10px)}
+.fc-name{font-family:var(--cond);font-weight:700;font-size:clamp(11px,1.1vw,14px);letter-spacing:.05em;text-transform:uppercase;color:var(--bright);line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.7)}
+.fc-price{font-family:var(--block);font-size:clamp(14px,1.5vw,19px);margin-top:2px;text-shadow:0 0 12px currentColor}
+.fc-sm{font-family:var(--cond);font-weight:400;font-size:.55em;color:var(--cdim);text-shadow:none}
 
-/* Name — chalk typewriter */
-.ir-text{flex:1;min-width:0}
-.ir-name{
-  font-family:var(--cond);font-weight:600;
-  font-size:clamp(13px,1.25vw,16px);letter-spacing:.05em;
-  text-transform:uppercase;color:var(--chalk);line-height:1.25;
-  overflow:hidden;
+/* Special card */
+.sp-c{
+  grid-column:1/-1;display:flex;align-items:center;gap:clamp(10px,1.5vw,16px);
+  padding:clamp(8px,1vh,14px) clamp(10px,1.2vw,14px);
+  border:2px solid var(--orange);border-radius:5px;
+  background:rgba(232,148,58,.06);backdrop-filter:blur(4px);
+  animation:spG 3s ease-in-out infinite;cursor:default;
 }
-/* Each character */
-.ir-name .ch{
-  display:inline-block;
-  opacity:0;
-  filter:blur(2px);
-  transform:translateY(3px) rotate(-1.5deg);
-  transition:opacity .07s ease-out,filter .12s ease-out,transform .12s ease-out;
-}
-.ir-name .ch.v{
-  opacity:1;
-  filter:blur(0);
-  transform:translateY(0) rotate(0);
-}
-/* Chalk cursor */
-.ir-name .cursor{
-  display:inline-block;width:2px;height:1em;
-  background:var(--chalk);opacity:0;
-  animation:blink .4s step-end infinite;
-  vertical-align:text-bottom;margin-left:1px;
-}
-.ir-name .cursor.on{opacity:1}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-
-.ir-note{
-  font-family:var(--hand);font-size:clamp(11px,1vw,13px);
-  color:var(--cdim);margin-top:1px;
-  opacity:0;transition:opacity .3s;
-}
-.ir-note.v{opacity:1}
-
-/* Price — writes in with color */
-.ir-price{
-  font-family:var(--block);
-  font-size:clamp(15px,1.5vw,20px);
-  flex-shrink:0;white-space:nowrap;
-  text-shadow:0 0 10px currentColor;
-}
-.ir-price .ch{
-  display:inline-block;opacity:0;filter:blur(2px);
-  transform:scale(.7);
-  transition:opacity .06s,filter .1s,transform .12s var(--ease);
-}
-.ir-price .ch.v{opacity:1;filter:blur(0);transform:scale(1)}
+@keyframes spG{0%,100%{box-shadow:0 0 12px rgba(232,148,58,.05)}50%{box-shadow:0 0 24px rgba(232,148,58,.12)}}
+.sp-img{width:clamp(50px,7vw,80px);aspect-ratio:1;border-radius:3px;object-fit:cover;flex-shrink:0;border:1px solid rgba(232,148,58,.2);filter:brightness(.88) saturate(1.1)}
+.sp-body{flex:1;min-width:0}
+.sp-tag{font-family:var(--cond);font-weight:800;font-size:clamp(8px,.8vw,10px);letter-spacing:.25em;text-transform:uppercase;color:var(--orange)}
+.sp-name{font-family:var(--hand);font-weight:700;font-size:clamp(16px,2vw,24px);color:var(--bright);line-height:1.1}
+.sp-desc{font-family:var(--hand);font-size:clamp(11px,1vw,13px);color:var(--cdim);margin-top:1px}
+.sp-price{font-family:var(--block);font-size:clamp(18px,2.5vw,28px);color:var(--green);flex-shrink:0;text-shadow:0 0 12px rgba(109,219,122,.15)}
 
 /* ═══════ LIGHTBOX ═══════ */
-#lb{
-  position:fixed;inset:0;z-index:200;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(14,17,18,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  opacity:0;pointer-events:none;transition:opacity .3s;
-  padding:clamp(16px,3vw,40px);
-}
+#lb{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(14,17,18,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .3s;padding:clamp(16px,3vw,40px)}
 #lb.on{opacity:1;pointer-events:all}
-#lbc{
-  max-width:480px;width:100%;border-radius:8px;overflow:hidden;
-  background:var(--bd3);border:1px solid rgba(212,208,200,.08);
-  box-shadow:0 24px 70px rgba(0,0,0,.7);
-  transform:scale(.88) translateY(24px);transition:transform .45s var(--ease);
-}
+#lbc{max-width:480px;width:100%;border-radius:8px;overflow:hidden;background:var(--bd3);border:1px solid rgba(212,208,200,.08);box-shadow:0 24px 70px rgba(0,0,0,.7);transform:scale(.88) translateY(24px);transition:transform .45s var(--ease)}
 #lb.on #lbc{transform:scale(1) translateY(0)}
 #lb-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;filter:brightness(.9) contrast(1.06) saturate(1.1)}
 #lb-b{padding:clamp(14px,2.5vw,22px)}
 #lb-n{font-family:var(--cond);font-weight:800;font-size:clamp(20px,3vw,28px);letter-spacing:.08em;text-transform:uppercase;color:var(--bright)}
 #lb-nt{font-family:var(--hand);font-size:15px;color:var(--cdim);margin-top:3px}
 #lb-p{font-family:var(--block);font-size:clamp(26px,4vw,36px);margin-top:8px;text-shadow:0 0 16px currentColor}
-#lb-x{
-  position:absolute;top:clamp(10px,2vh,18px);right:clamp(10px,2vw,18px);
-  font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--cdim);background:rgba(42,50,52,.8);border:1px solid var(--cfaint);
-  padding:6px 14px;border-radius:3px;cursor:pointer;transition:all .25s;z-index:210;
-}
+#lb-x{position:absolute;top:clamp(10px,2vh,18px);right:clamp(10px,2vw,18px);font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--cdim);background:rgba(42,50,52,.8);border:1px solid var(--cfaint);padding:6px 14px;border-radius:3px;cursor:pointer;transition:all .25s;z-index:210}
 #lb-x:hover{color:var(--bright);border-color:var(--chalk)}
 
 @media(max-width:600px){
   .nb{min-width:max-content;padding:8px 10px}
-  .sp-row{flex-direction:column;text-align:center}
+  #card-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px}
+  .sp-c{flex-direction:column;text-align:center}
 }
 </style>
 </head>
 <body>
 <div id="board">
-  <canvas id="cv"></canvas>
-  <div id="top">
-    <a class="t-back" href="index.html">← Home</a>
-    <div class="t-brand">THE FRANCIS <i>Smokehouse & Specialty Meats</i></div>
-    <div class="t-info" id="t-info"></div>
-  </div>
-  <div id="nav"></div>
-  <div id="stage">
-    <div id="eraser"></div>
-    <div id="shdr">
-      <span id="shdr-icon"></span>
-      <span id="shdr-title"></span>
-      <span id="shdr-sub"></span>
+  <canvas id="chalk-cv"></canvas>
+  <canvas id="ember-cv"></canvas>
+  <div id="ui">
+    <div id="top">
+      <a class="t-back" href="index.html">← Home</a>
+      <div class="t-brand">THE FRANCIS <i>Smokehouse & Specialty Meats</i></div>
+      <div class="t-info" id="t-info"></div>
     </div>
-    <div id="list-wrap"><div id="list"></div></div>
+    <div id="nav"></div>
+    <div id="content">
+      <div id="cards"><div id="card-grid"></div></div>
+    </div>
   </div>
 </div>
-
-<div id="lb" onclick="xLB(event)">
-  <button id="lb-x" onclick="xLB(event)">✕ Close</button>
-  <div id="lbc"><img id="lb-img" src="" alt=""><div id="lb-b"><div id="lb-n"></div><div id="lb-nt"></div><div id="lb-p"></div></div></div>
-</div>
+<div id="lb" onclick="xLB(event)"><button id="lb-x" onclick="xLB(event)">✕ Close</button><div id="lbc"><img id="lb-img" src="" alt=""><div id="lb-b"><div id="lb-n"></div><div id="lb-nt"></div><div id="lb-p"></div></div></div></div>
 
 <script src="site-data.js"></script>
 <script>
-/* ═══════ EMBERS ═══════ */
-var cv=document.getElementById('cv'),cx=cv.getContext('2d'),W,H;
-function rsz(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight}
-rsz();addEventListener('resize',rsz);
+/* ═══════════════════════════════════════════════════════
+   CHALK RENDERING ENGINE
+   Draws text onto canvas with realistic chalk texture
+   ═══════════════════════════════════════════════════════ */
+var chalkCv = document.getElementById('chalk-cv');
+var chalkCx = chalkCv.getContext('2d');
+var emberCv = document.getElementById('ember-cv');
+var emberCx = emberCv.getContext('2d');
+var W, H, dpr;
+
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  var board = document.getElementById('board');
+  W = board.offsetWidth;
+  H = board.offsetHeight;
+  chalkCv.width = W * dpr;
+  chalkCv.height = H * dpr;
+  chalkCv.style.width = W + 'px';
+  chalkCv.style.height = H + 'px';
+  chalkCx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  emberCv.width = W * dpr;
+  emberCv.height = H * dpr;
+  emberCv.style.width = W + 'px';
+  emberCv.style.height = H + 'px';
+  emberCx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resize();
+addEventListener('resize', function() { resize(); if (active) go(active, true); });
+
+/* ── Draw the slate background on canvas ── */
+function drawBoard() {
+  var g = chalkCx.createLinearGradient(0, 0, W, H);
+  g.addColorStop(0, '#3e4a4c');
+  g.addColorStop(0.3, '#364244');
+  g.addColorStop(0.6, '#313c3e');
+  g.addColorStop(1, '#2b3537');
+  chalkCx.fillStyle = g;
+  chalkCx.fillRect(0, 0, W, H);
+
+  /* Subtle chalk smudge spots */
+  for (var i = 0; i < 6; i++) {
+    var sx = Math.random() * W, sy = Math.random() * H, sr = 60 + Math.random() * 120;
+    var sg = chalkCx.createRadialGradient(sx, sy, 0, sx, sy, sr);
+    sg.addColorStop(0, 'rgba(212,208,200,' + (0.01 + Math.random() * 0.02) + ')');
+    sg.addColorStop(1, 'transparent');
+    chalkCx.fillStyle = sg;
+    chalkCx.fillRect(sx - sr, sy - sr, sr * 2, sr * 2);
+  }
+
+  /* Chalk dust specks */
+  for (var j = 0; j < 40; j++) {
+    chalkCx.fillStyle = 'rgba(255,255,255,' + (0.04 + Math.random() * 0.08) + ')';
+    chalkCx.fillRect(Math.random() * W, Math.random() * H, 0.5 + Math.random() * 1.5, 0.5 + Math.random() * 1.5);
+  }
+}
+
+/* ═══════ CHALK TEXT DRAWING ═══════
+   This is the magic — renders text character by character
+   with chalk texture (gritty, semi-transparent, slightly wobbly)
+*/
+var chalkQueue = [];
+var chalkTimer = null;
+
+function chalkText(text, x, y, opts) {
+  opts = opts || {};
+  var fontSize = opts.size || 16;
+  var color = opts.color || '#d4d0c8';
+  var font = opts.font || '700 ' + fontSize + 'px "Barlow Condensed", sans-serif';
+  var letterSpacing = opts.spacing || 0;
+  var delay = opts.delay || 0;
+  var speed = opts.charSpeed || 28;
+
+  /* Parse color to RGB for chalk texture */
+  var rgb = parseColor(color);
+
+  return new Promise(function(resolve) {
+    var chars = text.split('');
+    var cx = x;
+
+    chars.forEach(function(ch, i) {
+      chalkQueue.push({
+        time: delay + i * speed,
+        draw: function() {
+          /* Measure char width */
+          chalkCx.font = font;
+          var m = chalkCx.measureText(ch);
+          var cw = m.width + letterSpacing;
+
+          /* Slight random wobble — hand-drawn feel */
+          var wobbleY = (Math.random() - 0.5) * 1.2;
+          var wobbleR = (Math.random() - 0.5) * 0.015;
+
+          chalkCx.save();
+          chalkCx.translate(cx + cw / 2, y + wobbleY);
+          chalkCx.rotate(wobbleR);
+
+          /* Draw the character multiple times with slight offsets
+             and varying opacity to create chalk texture */
+          for (var pass = 0; pass < 3; pass++) {
+            var ox = (Math.random() - 0.5) * 0.6;
+            var oy = (Math.random() - 0.5) * 0.6;
+            var alpha = 0.5 + Math.random() * 0.35;
+
+            chalkCx.font = font;
+            chalkCx.fillStyle = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + alpha + ')';
+            chalkCx.fillText(ch, -cw / 2 + ox, oy);
+          }
+
+          /* Chalk dust particles around the character */
+          for (var d = 0; d < 2; d++) {
+            var dx = cx + Math.random() * cw;
+            var dy = y + (Math.random() - 0.5) * fontSize * 0.8;
+            chalkCx.fillStyle = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + (0.08 + Math.random() * 0.12) + ')';
+            chalkCx.fillRect(dx, dy, 0.5 + Math.random(), 0.5 + Math.random());
+          }
+
+          chalkCx.restore();
+          cx += cw;
+        }
+      });
+    });
+
+    /* Resolve when last char is drawn */
+    chalkQueue.push({
+      time: delay + chars.length * speed + 10,
+      draw: resolve
+    });
+  });
+}
+
+function parseColor(c) {
+  /* Handle named CSS colors and hex */
+  var d = document.createElement('div');
+  d.style.color = c;
+  document.body.appendChild(d);
+  var computed = getComputedStyle(d).color;
+  document.body.removeChild(d);
+  var m = computed.match(/(\d+)/g);
+  return { r: +m[0], g: +m[1], b: +m[2] };
+}
+
+/* Process the chalk queue — animation loop */
+var chalkStart = 0;
+function processChalk() {
+  if (!chalkQueue.length) { chalkTimer = null; return; }
+  if (!chalkStart) chalkStart = performance.now();
+  var elapsed = performance.now() - chalkStart;
+
+  while (chalkQueue.length && chalkQueue[0].time <= elapsed) {
+    var item = chalkQueue.shift();
+    item.draw();
+  }
+
+  if (chalkQueue.length) {
+    chalkTimer = requestAnimationFrame(processChalk);
+  } else {
+    chalkTimer = null;
+  }
+}
+
+function startChalk() {
+  chalkStart = 0;
+  if (chalkTimer) cancelAnimationFrame(chalkTimer);
+  chalkTimer = requestAnimationFrame(processChalk);
+}
+
+function clearChalk() {
+  chalkQueue = [];
+  chalkStart = 0;
+  if (chalkTimer) { cancelAnimationFrame(chalkTimer); chalkTimer = null; }
+}
+
+/* ═══════ ERASER ANIMATION ═══════ */
+function eraseBoard() {
+  return new Promise(function(resolve) {
+    var startTime = performance.now();
+    var duration = 400;
+
+    function step(now) {
+      var t = Math.min((now - startTime) / duration, 1);
+      /* Ease in-out */
+      var e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+      /* Draw eraser band sweeping across */
+      var eraserWidth = W * 0.25;
+      var eraserX = -eraserWidth + (W + eraserWidth) * e;
+
+      drawBoard();
+
+      /* Smudge trail behind eraser */
+      if (t < 0.95) {
+        var smudgeG = chalkCx.createLinearGradient(eraserX - eraserWidth, 0, eraserX, 0);
+        smudgeG.addColorStop(0, 'transparent');
+        smudgeG.addColorStop(1, 'rgba(212,208,200,0.02)');
+        chalkCx.fillStyle = smudgeG;
+
+        /* Get content area bounds */
+        var contentEl = document.getElementById('content');
+        var rect = contentEl.getBoundingClientRect();
+        var boardRect = document.getElementById('board').getBoundingClientRect();
+        var cy = rect.top - boardRect.top;
+        var ch = rect.height;
+        chalkCx.fillRect(eraserX - eraserWidth, cy, eraserWidth, ch);
+      }
+
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else {
+        drawBoard();
+        resolve();
+      }
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+/* ═══════ EMBER PARTICLES ═══════ */
 function mkE(){return{x:.08+Math.random()*.84,y:1.02+Math.random()*.04,vx:(Math.random()-.5)*.0018,vy:-.003-Math.random()*.006,r:.4+Math.random()*1.2,life:1,decay:.003+Math.random()*.005,h:10+Math.random()*22,tw:(Math.random()-.5)*.0007}}
 var EM=[];for(var ei=0;ei<14;ei++)EM.push(mkE());
-(function loop(){cx.clearRect(0,0,W,H);for(var i=0;i<EM.length;i++){var e=EM[i];e.x+=e.vx+e.tw;e.y+=e.vy;e.life-=e.decay;if(e.life<=0||e.y<-.02){EM[i]=mkE();continue}cx.beginPath();cx.arc(e.x*W,e.y*H,e.r,0,Math.PI*2);cx.fillStyle='hsla('+e.h+',100%,'+(50+e.life*36)+'%,'+e.life*.65+')';cx.shadowBlur=5;cx.shadowColor='hsla('+e.h+',100%,55%,'+e.life*.35+')';cx.fill();cx.shadowBlur=0}requestAnimationFrame(loop)})();
+(function eLoop(){
+  emberCx.clearRect(0,0,W,H);
+  for(var i=0;i<EM.length;i++){
+    var e=EM[i];e.x+=e.vx+e.tw;e.y+=e.vy;e.life-=e.decay;
+    if(e.life<=0||e.y<-.02){EM[i]=mkE();continue}
+    emberCx.beginPath();emberCx.arc(e.x*W,e.y*H,e.r,0,Math.PI*2);
+    emberCx.fillStyle='hsla('+e.h+',100%,'+(50+e.life*36)+'%,'+e.life*.6+')';
+    emberCx.shadowBlur=5;emberCx.shadowColor='hsla('+e.h+',100%,55%,'+e.life*.3+')';
+    emberCx.fill();emberCx.shadowBlur=0;
+  }
+  requestAnimationFrame(eLoop);
+})();
 
-/* ═══════ HELPERS ═══════ */
+/* ═══════ DATA + UI ═══════ */
 var $=function(id){return document.getElementById(id)};
 var fmt=function(n){if(n==null)return'Ask';return n===0?'Free':'$'+n.toFixed(2)};
 var CATS=['bbq_plates','burgers_sandwiches','fried_chicken','salads','sides','combos','by_the_pound','desserts'];
 var active=null;
-var writeTimers=[];
 
-/* ═══════ Wrap text into individual character spans ═══════ */
-function charWrap(text,cls){
-  var h='';
-  for(var i=0;i<text.length;i++){
-    if(text[i]===' ') h+='<span class="'+cls+' ch"> </span>';
-    else h+='<span class="'+cls+' ch">'+text[i]+'</span>';
-  }
-  return h;
-}
-
-/* ═══════ Typewriter reveal — shows chars one by one ═══════ */
-function typewrite(container,startDelay,speed,onDone){
-  var chars=container.querySelectorAll('.ch');
-  var cursor=container.querySelector('.cursor');
-  if(cursor)cursor.classList.add('on');
-  for(var i=0;i<chars.length;i++){
-    (function(c,idx){
-      var t=setTimeout(function(){
-        c.classList.add('v');
-        /* chalk scratch sound would go here */
-      },startDelay+idx*speed);
-      writeTimers.push(t);
-    })(chars[i],i);
-  }
-  /* Remove cursor + call onDone after all chars revealed */
-  var finishT=setTimeout(function(){
-    if(cursor)cursor.classList.remove('on');
-    if(onDone)onDone();
-  },startDelay+chars.length*speed+100);
-  writeTimers.push(finishT);
-}
-
-/* ═══════ Clear all pending animations ═══════ */
-function clearWrites(){
-  writeTimers.forEach(function(t){clearTimeout(t)});
-  writeTimers=[];
-}
-
-/* ═══════ INFO ═══════ */
 if(typeof SITE_INFO!=='undefined'){
   $('t-info').innerHTML=SITE_INFO.phone+'<br>'+SITE_INFO.hours.weekday;
 }
 
-/* ═══════ NAV ═══════ */
+/* Nav */
 var navEl=$('nav');
 CATS.forEach(function(k){
   var s=MENU[k];if(!s)return;
@@ -378,7 +433,7 @@ CATS.forEach(function(k){
   navEl.appendChild(b);
 });
 
-/* ═══════ SPECIAL ═══════ */
+/* Special */
 function getSP(){
   if(typeof SITE_SPECIAL==='undefined'||!SITE_SPECIAL||SITE_SPECIAL.hidden)return null;
   function ts(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
@@ -386,63 +441,110 @@ function getSP(){
   return SITE_SPECIAL;
 }
 
-/* ═══════ SWITCH CATEGORY ═══════ */
-function go(k){
-  if(active===k)return;
-  var prev=active;
-  active=k;
-  var s=MENU[k];if(!s)return;
+/* ═══════ MAIN SWITCH ═══════ */
+async function go(k, skipErase) {
+  if(active===k && !skipErase) return;
+  var prev = active;
+  active = k;
+  var s = MENU[k]; if(!s) return;
 
-  clearWrites();
-
-  /* Nav state */
+  /* Nav buttons */
   document.querySelectorAll('.nb').forEach(function(b){
-    var on=b.dataset.k===k;
+    var on = b.dataset.k===k;
     b.classList.toggle('on',on);
-    b.querySelector('.nb-label').style.color=on?s.color:'';
-    b.style.borderBottomColor=on?s.color:'transparent';
-    b.style.background=on?'rgba(212,208,200,.05)':'';
+    b.querySelector('.nb-label').style.color = on ? s.color : '';
+    b.style.borderBottomColor = on ? s.color : 'transparent';
+    b.style.background = on ? 'rgba(212,208,200,.06)' : '';
   });
 
-  /* Eraser wipe animation (skip on first load) */
-  var eraser=$('eraser');
-  var delay=0;
-  if(prev!==null){
-    eraser.classList.remove('wipe');
-    void eraser.offsetWidth; /* force reflow */
-    eraser.classList.add('wipe');
-    delay=250; /* start writing after eraser passes midpoint */
+  clearChalk();
+
+  /* Erase if not first load */
+  if (prev !== null && !skipErase) {
+    await eraseBoard();
+  } else {
+    drawBoard();
   }
 
-  setTimeout(function(){buildSection(k,s)},delay);
-}
+  /* ── Get content area position for chalk drawing ── */
+  var contentEl = $('content');
+  var rect = contentEl.getBoundingClientRect();
+  var boardRect = $('board').getBoundingClientRect();
+  var startY = rect.top - boardRect.top + 28;
+  var startX = rect.left - boardRect.left + 16;
+  var maxWidth = rect.width - 32;
 
-/* ═══════ BUILD SECTION WITH CHALK WRITING ═══════ */
-function buildSection(k,s){
-  /* Header */
-  var hdr=$('shdr');
-  $('shdr-icon').textContent=s.icon;
-  var titleEl=$('shdr-title');
-  titleEl.style.color=s.color||'var(--bright)';
-  titleEl.innerHTML=charWrap(s.title,'');
-  var subEl=$('shdr-sub');
-  subEl.textContent=s.subtitle||'';
-  subEl.classList.remove('v');
-
-  /* Start writing the title */
-  typewrite(titleEl,80,35,function(){
-    subEl.classList.add('v');
+  /* ── Chalk write the section title ── */
+  var titleSize = Math.min(Math.max(W * 0.025, 16), 28);
+  await chalkText(s.title.toUpperCase(), startX, startY, {
+    size: titleSize,
+    color: s.color,
+    font: '800 ' + titleSize + 'px "Barlow Condensed", sans-serif',
+    spacing: titleSize * 0.15,
+    delay: 0,
+    charSpeed: 35
   });
 
-  /* Build item list HTML */
-  var list=$('list');
-  var h='';
+  /* ── Chalk write subtitle ── */
+  var subSize = Math.min(Math.max(W * 0.013, 11), 15);
+  chalkText(s.subtitle || '', startX, startY + titleSize + 8, {
+    size: subSize,
+    color: 'rgba(212,208,200,0.4)',
+    font: '400 ' + subSize + 'px "Caveat", cursive',
+    delay: 80,
+    charSpeed: 18
+  });
 
-  /* Special on first category */
+  /* ── Chalk write each item name + price ── */
+  var itemY = startY + titleSize + subSize + 24;
+  var itemSize = Math.min(Math.max(W * 0.012, 11), 14);
+  var priceSize = Math.min(Math.max(W * 0.013, 12), 16);
+  var lineH = Math.max(itemSize * 1.8, 20);
+
+  /* Two columns */
+  var colW = maxWidth / 2 - 10;
+  var col2X = startX + colW + 20;
+  var halfIdx = Math.ceil(s.items.length / 2);
+
+  s.items.forEach(function(item, i) {
+    var col = i < halfIdx ? 0 : 1;
+    var row = col === 0 ? i : i - halfIdx;
+    var ix = col === 0 ? startX : col2X;
+    var iy = itemY + row * lineH;
+    var itemDelay = 200 + i * 100;
+
+    /* Item name */
+    chalkText('• ' + item.name.toUpperCase(), ix, iy, {
+      size: itemSize,
+      color: '#d4d0c8',
+      font: '600 ' + itemSize + 'px "Barlow Condensed", sans-serif',
+      spacing: itemSize * 0.04,
+      delay: itemDelay,
+      charSpeed: 22
+    });
+
+    /* Price — right aligned approximately */
+    var priceTxt = item.priceLg ? fmt(item.price) + ' / ' + fmt(item.priceLg) : fmt(item.price);
+    var priceX = ix + colW - priceTxt.length * priceSize * 0.55;
+    chalkText(priceTxt, priceX, iy, {
+      size: priceSize,
+      color: s.color,
+      font: '700 ' + priceSize + 'px "Permanent Marker", cursive',
+      delay: itemDelay + item.name.length * 12,
+      charSpeed: 30
+    });
+  });
+
+  startChalk();
+
+  /* ═══════ BUILD PHOTO CARDS (DOM overlay) ═══════ */
+  var grid = $('card-grid');
+  var h = '';
+
   if(k===CATS[0]){
     var sp=getSP();
     if(sp){
-      h+='<div class="sp-row">';
+      h+='<div class="sp-c">';
       if(sp.image)h+='<img class="sp-img" src="'+sp.image+'" alt="'+sp.name+'" onerror="this.style.display=\'none\'">';
       h+='<div class="sp-body"><div class="sp-tag">🔥 '+(sp.type||"Today's Special")+'</div>';
       h+='<div class="sp-name">'+sp.name+'</div>';
@@ -453,59 +555,22 @@ function buildSection(k,s){
     }
   }
 
-  /* Items */
   s.items.forEach(function(item,i){
-    h+='<div class="ir" data-cat="'+k+'" data-idx="'+i+'" onclick="oLB(\''+k+'\','+i+')">';
-
-    /* Thumbnail */
+    var d=(0.3+i*0.08).toFixed(2);
+    h+='<div class="fc" style="animation-delay:'+d+'s" onclick="oLB(\''+k+'\','+i+')">';
     if(item.img){
-      h+='<img class="ir-thumb" src="'+item.img+'" alt="'+item.name+'" loading="lazy" onerror="this.outerHTML=\'<div class=ir-thumb-ph>'+s.icon+'</div>\'">';
+      h+='<div class="fc-iw"><img class="fc-img" src="'+item.img+'" alt="'+item.name+'" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=fc-ph>'+s.icon+'</div>\'"></div>';
     } else {
-      h+='<div class="ir-thumb-ph">'+s.icon+'</div>';
+      h+='<div class="fc-iw"><div class="fc-ph">'+s.icon+'</div></div>';
     }
-
-    /* Name — character wrapped for typewriter */
-    h+='<div class="ir-text">';
-    h+='<div class="ir-name" data-row="'+i+'">'+charWrap(item.name,'')+' <span class="cursor"></span></div>';
-    if(item.note)h+='<div class="ir-note" data-row="'+i+'">'+item.note+'</div>';
-    h+='</div>';
-
-    /* Price — character wrapped */
-    var priceText;
-    if(item.priceLg) priceText=fmt(item.price)+' / '+fmt(item.priceLg);
-    else priceText=fmt(item.price);
-
-    h+='<div class="ir-price" style="color:'+s.color+'" data-row="'+i+'">'+charWrap(priceText,'')+'</div>';
-    h+='</div>';
+    h+='<div class="fc-body"><div class="fc-name">'+item.name+'</div>';
+    if(item.priceLg) h+='<div class="fc-price" style="color:'+s.color+'">'+fmt(item.price)+' <span class="fc-sm">sm</span> / '+fmt(item.priceLg)+' <span class="fc-sm">lg</span></div>';
+    else h+='<div class="fc-price" style="color:'+s.color+'">'+fmt(item.price)+'</div>';
+    h+='</div></div>';
   });
 
-  list.innerHTML=h;
-  $('list-wrap').scrollTop=0;
-
-  /* ═══════ STAGGERED TYPEWRITER for each row ═══════ */
-  var rows=list.querySelectorAll('.ir');
-  var baseDelay=300; /* after title finishes writing */
-  var rowGap=120;    /* ms between starting each row */
-  var charSpeed=25;  /* ms per character */
-
-  rows.forEach(function(row,i){
-    var nameEl=row.querySelector('.ir-name');
-    var priceEl=row.querySelector('.ir-price');
-    var noteEl=row.querySelector('.ir-note');
-
-    var rowStart=baseDelay+i*rowGap;
-
-    /* Write name */
-    typewrite(nameEl,rowStart,charSpeed,function(){
-      /* After name, show note */
-      if(noteEl)noteEl.classList.add('v');
-    });
-
-    /* Write price slightly after name starts */
-    var nameLen=nameEl.querySelectorAll('.ch').length;
-    var priceDelay=rowStart+nameLen*charSpeed*0.4;
-    typewrite(priceEl,priceDelay,30,null);
-  });
+  grid.innerHTML=h;
+  $('cards').scrollTop=0;
 }
 
 /* ═══════ LIGHTBOX ═══════ */
@@ -516,9 +581,8 @@ function oLB(k,i){
   $('lb-img').style.display='';
   $('lb-n').textContent=item.name;
   $('lb-nt').textContent=item.note||s.subtitle||'';
-  if(item.priceLg){
-    $('lb-p').innerHTML=fmt(item.price)+' <span style="font-size:.5em;color:var(--cdim)">sm</span> / '+fmt(item.priceLg)+' <span style="font-size:.5em;color:var(--cdim)">lg</span>';
-  } else $('lb-p').textContent=fmt(item.price);
+  if(item.priceLg) $('lb-p').innerHTML=fmt(item.price)+' <span style="font-size:.5em;color:var(--cdim)">sm</span> / '+fmt(item.priceLg)+' <span style="font-size:.5em;color:var(--cdim)">lg</span>';
+  else $('lb-p').textContent=fmt(item.price);
   $('lb-p').style.color=s.color||'var(--chalk)';
   $('lb').classList.add('on');
 }
@@ -531,6 +595,7 @@ document.addEventListener('keydown',function(e){
 });
 
 /* ═══════ INIT ═══════ */
+drawBoard();
 go(CATS[0]);
 </script>
 </body>
