@@ -183,7 +183,7 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 .mt-item::after{content:'✦';font-size:5px;color:rgba(240,140,40,.2)}
 
 /* ══════════════════════════════════════
-   DESKTOP PANEL — redesigned
+   DESKTOP PANEL
    ══════════════════════════════════════ */
 #panel{position:fixed;inset:0;z-index:500;display:grid;grid-template-columns:45% 55%;opacity:0;pointer-events:none;transition:opacity .5s}
 #panel.open{opacity:1;pointer-events:all}
@@ -216,21 +216,22 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 .panel-chip{font-family:var(--cond);font-weight:500;font-size:8px;letter-spacing:.13em;text-transform:uppercase;padding:4px 11px;border-radius:2px;border:1px solid rgba(196,168,130,.08);color:rgba(196,168,130,.22);transition:all .3s}
 .panel-chip.lit{border-color:rgba(240,140,40,.3);color:var(--flame);background:rgba(240,140,40,.05)}
 
-/* PANEL IMAGE */
+/* PANEL IMAGE — CHANGED: contain instead of cover for menu readability */
 #panel-img-wrap{
   position:relative;width:100%;flex:1;min-height:0;
   border:1px solid rgba(196,168,130,.08);border-radius:6px;
   overflow:hidden;background:rgba(9,7,4,.6);
 }
 #panel-img{
-  width:100%;height:100%;object-fit:cover;
+  width:100%;height:100%;object-fit:contain;
   opacity:0;transition:opacity .6s var(--ease);
-  filter:brightness(.85) contrast(1.05) saturate(1.1);
+  filter:brightness(.95) contrast(1.05) saturate(1.05);
+  background:#0d0906;
 }
 #panel-img.loaded{opacity:1}
 #panel-img-wrap::after{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(180deg,transparent 40%,rgba(9,7,4,.4) 100%);
+  background:linear-gradient(180deg,transparent 85%,rgba(9,7,4,.15) 100%);
   pointer-events:none;
 }
 
@@ -260,7 +261,6 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 #panel-cta span{position:relative;z-index:1}
 #panel-cta .cta-arrow{position:relative;z-index:1;font-size:1.2em;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
 #panel-cta:hover .cta-arrow{transform:translateX(8px)}
-/* Animated border glow */
 #panel-cta::after{
   content:'';position:absolute;inset:-2px;
   background:linear-gradient(90deg,var(--ember),var(--flame),var(--glow),var(--flame),var(--ember));
@@ -299,10 +299,10 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 #mob-sheet-chips{display:flex;flex-wrap:wrap;gap:6px}
 .msc{font-family:var(--cond);font-weight:500;font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:5px 11px;border-radius:2px;border:1px solid rgba(196,168,130,.08);color:rgba(196,168,130,.22)}
 .msc.lit{border-color:rgba(240,140,40,.3);color:var(--flame);background:rgba(240,140,40,.05)}
-/* Mobile image */
-#mob-img-wrap{position:relative;width:100%;height:180px;border:1px solid rgba(196,168,130,.08);border-radius:6px;overflow:hidden;background:rgba(9,7,4,.6)}
-#mob-img{width:100%;height:100%;object-fit:cover;filter:brightness(.85) contrast(1.05) saturate(1.1)}
-#mob-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(9,7,4,.4) 100%);pointer-events:none}
+/* Mobile image — CHANGED: contain + auto height for full menu visibility */
+#mob-img-wrap{position:relative;width:100%;height:auto;aspect-ratio:3/2;min-height:160px;border:1px solid rgba(196,168,130,.08);border-radius:6px;overflow:hidden;background:rgba(9,7,4,.6)}
+#mob-img{width:100%;height:100%;object-fit:contain;filter:brightness(.95) contrast(1.05) saturate(1.05);background:#0d0906}
+#mob-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 85%,rgba(9,7,4,.15) 100%);pointer-events:none}
 
 #mob-sheet-cta{width:100%;padding:18px;font-family:var(--cond);font-weight:800;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream);border:none;background:linear-gradient(90deg,var(--ember),var(--fire),var(--flame),var(--glow));background-size:200% 100%;animation:ctaGlow 3s linear infinite;border-radius:4px;display:flex;align-items:center;justify-content:center;gap:10px;-webkit-tap-highlight-color:transparent;box-shadow:0 8px 30px rgba(192,74,0,.35);transition:transform .2s,box-shadow .2s}
 #mob-sheet-cta:active{transform:scale(.98);box-shadow:0 4px 15px rgba(192,74,0,.2)}
@@ -357,10 +357,10 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
       <div><div class="sb-label" style="margin-bottom:8px">Connect</div>
         <div class="sb-links">
           <a class="sb-link" href="https://www.facebook.com/1547733028788117/" target="_blank">Facebook</a>
-          <a class="sb-link" href="/cdn-cgi/l/email-protection#e58397848b868c9696888a8e808d8a909680a5849191cb8b8091">Email Us</a>
+          <a class="sb-link" href="#">Email Us</a>
           <a class="sb-link" href="https://www.tripadvisor.ca/Restaurant_Review-g40411-d7851018-Reviews-The_Francis_Smokehouse-Saint_Francisville_Louisiana.html" target="_blank">TripAdvisor</a>
           <a class="sb-link" href="https://www.google.com/maps/search/?api=1&query=The+Francis+Smokehouse%2C+St+Francisville%2C+LA" target="_blank">Google Maps</a>
-          <a class="sb-link" href="/cdn-cgi/l/email-protection#0660746768656f75756b696d636e697375634667727228686372">Catering Enquiry</a>
+          <a class="sb-link" href="#">Catering Enquiry</a>
         </div>
       </div>
     </div>
@@ -392,11 +392,9 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
       <div class="pi-meta" id="panel-meta"></div>
       <p id="panel-desc"></p>
       <div id="panel-chips"></div>
-      <!-- SECTION IMAGE -->
       <div id="panel-img-wrap">
         <img id="panel-img" src="" alt="">
       </div>
-      <!-- MASSIVE CTA -->
       <button id="panel-cta" onclick="goTo()"><span id="cta-label">Enter</span><span class="cta-arrow">→</span></button>
     </div>
     <div class="pi-bottom"><span class="pi-foot-rule" id="panel-rule"></span><span class="pi-foot-idx" id="panel-idx"></span></div>
@@ -424,10 +422,7 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 <!-- LOADER -->
 <div id="loader"><div class="ld-name">The Francis <em>Smokehouse</em></div><div class="ld-going" id="ld-going">Loading...</div><div class="ld-fire"><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div><div class="lff"></div></div><div class="ld-track"><div class="ld-fill" id="ld-fill"></div></div><div class="ld-msg">Stoking the fire...</div></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-/* ═══════════════════════════════════════
-   CANVAS ATMOSPHERE (same as before)
-   ═══════════════════════════════════════ */
+<script>
 const cvBg=document.getElementById('cv-bg'),bx=cvBg.getContext('2d');
 const cvSm=document.getElementById('cv-smoke'),sx=cvSm.getContext('2d');
 const cvEm=document.getElementById('cv-ember'),ex=cvEm.getContext('2d');
@@ -453,14 +448,12 @@ function rszPS(){psCV.width=innerWidth;psCV.height=innerHeight}rszPS();addEventL
 const PS=Array.from({length:10},mkS);
 (function psL(){psx.clearRect(0,0,psCV.width,psCV.height);for(const s of PS){s.wb+=s.ws;s.x+=s.vx+Math.sin(s.wb)*.0002;s.y+=s.vy;s.r+=s.gr*.7;s.a=s.a<s.ta?s.a+.0015:Math.max(0,s.a-.001);if(s.y<-.2||s.a<=0){Object.assign(s,mkS());continue}const g=psx.createRadialGradient(s.x*psCV.width,s.y*psCV.height,0,s.x*psCV.width,s.y*psCV.height,s.r);g.addColorStop(0,`rgba(70,50,30,${s.a*.7})`);g.addColorStop(1,'transparent');psx.fillStyle=g;psx.beginPath();psx.arc(s.x*psCV.width,s.y*psCV.height,s.r,0,Math.PI*2);psx.fill()}requestAnimationFrame(psL)})();
 
-/* CURSOR */
 const curEl=document.getElementById('cursor');let mX=0,mY=0;
 document.addEventListener('mousemove',e=>{mX=e.clientX;mY=e.clientY;curEl.style.left=mX+'px';curEl.style.top=mY+'px'});
 const hT='a,button,.nav-item,.sb-link,.pm-back,#panel-cta,#mob-sheet-cta';
 document.addEventListener('mouseover',e=>{if(e.target.closest(hT))curEl.classList.add('hover')});
 document.addEventListener('mouseout',e=>{if(e.target.closest(hT))curEl.classList.remove('hover')});
 
-/* TICKERS */
 const tkI=['Brisket Plate — $10.99','Full Rack Ribs — $19.99','Pulled Pork — $9.99','Smoked Wings — $7.99','Ribeye Po-boy — $10.99','Crawfish Po-boy — $10.99','Boudin Balls','Pepper Jack Boudin','Corn Pudding','Bread Pudding','Creole Cream Cheesecake','½ Chicken — $9.99','Catfish Po-boy — $8.99','Cheeseburger — $7.99','Boudin Egg Rolls'];
 const d4=[...tkI,...tkI,...tkI,...tkI];
 document.getElementById('ticker-track').innerHTML=d4.map(t=>`<span class="t-item">${t}</span>`).join('');
@@ -469,15 +462,8 @@ const dow=new Date().getDay();
 document.getElementById('hours-today').textContent=dow===0?'Sun: 10am – 3pm':'Mon–Sat 10am–6pm';
 document.getElementById('mob-hours').textContent=dow===0?'10am – 3pm':'10am – 6pm';
 
-/* ═══════════════════════════════════════
-   PAGE DATA — with .glb model paths
-   ═══════════════════════════════════════
-   ► TO ADD YOUR 3D MODELS:
-   ► Place .glb files in a "models/" folder
-   ► Update the "model" path for each page below
-   ═══════════════════════════════════════ */
 const PAGES={
-  menu:{num:'01',eyebrow:'The Menu',cta:'Visit The Menu →',title:'Pit to\nPlate.',italic:'BBQ plates · Po-boys · Burgers · Sandwiches',meta:'Smoked daily — 12+ hours minimum',mood:'radial-gradient(ellipse at 30% 80%,#3a1800 0%,#1a0c04 50%,#09070a 100%)',desc:`Everything on this menu spent <strong>a minimum of twelve hours over post oak and hickory.</strong> Brisket plate $10.99. Full rack ribs $19.99. Pulled pork $9.99.`,chips:['Brisket $10.99','Ribs $19.99','Pulled Pork $9.99','Wings $7.99','Ribeye Po-boy $10.99','2 Sides Included'],rule:'Low & slow, always.',dest:'menu.html',img:'Images/Menu.jpg'},
+  menu:{num:'01',eyebrow:'The Menu',cta:'Visit The Menu →',title:'Pit to\nPlate.',italic:'BBQ plates · Po-boys · Burgers · Sandwiches',meta:'Smoked daily — 12+ hours minimum',mood:'radial-gradient(ellipse at 30% 80%,#3a1800 0%,#1a0c04 50%,#09070a 100%)',desc:`Everything on this menu spent <strong>a minimum of twelve hours over post oak and hickory.</strong> Brisket plate $10.99. Full rack ribs $19.99. Pulled pork $9.99.`,chips:['Brisket $10.99','Ribs $19.99','Pulled Pork $9.99','Wings $7.99','Ribeye Po-boy $10.99','2 Sides Included'],rule:'Low & slow, always.',dest:'menu.html',img:'Images/Menu_cropped.jpg'},
   special:{num:'✦',eyebrow:'Daily Special',cta:"See Today's Special →",title:'Daily\nSpecial.',italic:'One plate — changes every morning at 6am',meta:'Posted at 6am · Call (225) 245-5046',mood:'radial-gradient(ellipse at 30% 80%,#3a1800 0%,#1a0c04 50%,#09070a 100%)',desc:`The daily special changes every morning at 6am. <strong>Check back daily or follow us on Facebook.</strong>`,chips:['Changes Daily','Posted at 6am','Check Facebook','(225) 245-5046'],rule:'Fresh every morning.',dest:'menu.html#specials',img:'Images/special.jpg'},
   about:{num:'02',eyebrow:'About Us',cta:'Read Our Story →',title:'Who\nWe Are.',italic:'Family owned · St. Francisville · Since 2015',meta:'4.7★ Google · 4.5★ TripAdvisor · 505 reviews',mood:'radial-gradient(ellipse at 30% 80%,#2a1200 0%,#180a02 50%,#09070a 100%)',desc:`The Francis Smokehouse has been a fixture on <strong>US Highway 61 in St. Francisville</strong> since 2015. Rated <strong>Travellers' Choice</strong> on TripAdvisor.`,chips:['Est. 2015',"Travellers' Choice",'4.7★ Google','4.5★ TripAdvisor','Outdoor Deck','Family Owned'],rule:'Real food. Real people.',dest:'about.html',img:'Images/about.jpg'},
   giftcards:{num:'03',eyebrow:'Gift Cards',cta:'Get a Gift Card →',title:'Give the\nGift.',italic:'Load any amount · Available in-store',meta:'Available at 6779 US Hwy 61 · No minimum',mood:'radial-gradient(ellipse at 30% 80%,#321800 0%,#1c0e02 50%,#09070a 100%)',desc:`Give the gift of slow-smoked BBQ. <strong>Load any amount</strong> onto a gift card — no minimum, no expiry.`,chips:['Any Amount','No Minimum','No Expiry','Available In-Store'],rule:'The best gift for a BBQ lover.',dest:'giftcards.html',img:'Images/giftcard.jpg'},
@@ -486,9 +472,6 @@ const PAGES={
   find:{num:'06',eyebrow:'Find Us',cta:'Open in Google Maps →',title:'Follow\nThe Smoke.',italic:'6779 US Highway 61 · St. Francisville, LA 70775',meta:'Mon–Sat 10am–6pm · Sun 10am–3pm',mood:'radial-gradient(ellipse at 30% 80%,#1e1000 0%,#120800 50%,#09070a 100%)',desc:`<strong>6779 US Highway 61, St. Francisville, LA 70775.</strong> Mon–Sat 10am–6pm, Sunday 10am–3pm. <strong>You'll smell us before you see us.</strong>`,chips:['6779 US Hwy 61','(225) 245-5046','Mon–Sat 10–6','Sun 10–3','Free Parking','Wheelchair OK'],rule:"You'll smell us first.",dest:'findus.html',img:'Images/findus.jpg'},
 };
 
-/* ═══════════════════════════════════════
-   BUILD NAV
-   ═══════════════════════════════════════ */
 const NAV_ORDER=[
   {id:'menu',num:'01',name:'The Menu',sub:'BBQ plates, po-boys & sandwiches'},
   {id:'special',num:'✦',name:'Daily Special',sub:'Today\'s plate · Changes at 6am',special:true},
@@ -503,15 +486,11 @@ NAV_ORDER.forEach(n=>{const el=document.createElement('div');el.className='nav-i
 const mobNav=document.getElementById('mob-nav');
 NAV_ORDER.forEach(n=>{const el=document.createElement('div');el.className='mob-nav-item';el.onclick=()=>openMobPanel(n.id);el.innerHTML=`<span class="mni-num"${n.special?' style="font-size:8px;opacity:.5"':''}>${n.num}</span><div class="mni-body"><div class="mni-name"${n.special?' style="font-size:clamp(17px,4.2vw,22px);color:rgba(240,140,40,.75)"':''}>${n.name}</div><div class="mni-sub">${n.sub}</div></div><span class="mni-arrow">↗</span>`;mobNav.appendChild(el)});
 
-/* PREVIEW */
 function setPreview(id){const p=PAGES[id];document.getElementById('pv-title').textContent=p.title.replace('\n',' ');document.getElementById('pv-desc').textContent=p.italic;document.getElementById('pv-num').textContent=p.num;document.getElementById('pv-num').classList.add('lit');const c=document.getElementById('pv-chips');c.innerHTML=p.chips.slice(0,4).map((ch,i)=>`<span class="pv-chip${i<2?' on':''}">${ch}</span>`).join('');setTimeout(()=>c.querySelectorAll('.pv-chip').forEach((ch,i)=>setTimeout(()=>ch.classList.add('show'),i*60)),10)}
 function clearPreview(){document.getElementById('pv-title').textContent='Hover any item to explore';document.getElementById('pv-desc').textContent='Each destination has its own story. Take your time.';document.getElementById('pv-num').classList.remove('lit');document.getElementById('pv-num').textContent='—';document.getElementById('pv-chips').innerHTML=''}
 
 let currentPage=null,navigating=false;
 
-/* ═══════════════════════════════════════
-   PANEL — images, no scroll, big CTA
-   ═══════════════════════════════════════ */
 function openPanel(id){
   const p=PAGES[id];currentPage=p;
   spawnBurst(mX,mY);
@@ -526,14 +505,11 @@ function openPanel(id){
   document.getElementById('cta-label').textContent=p.cta;
   document.getElementById('panel-desc').innerHTML=p.desc;
   document.getElementById('panel-chips').innerHTML=p.chips.map((c,i)=>`<span class="panel-chip${i<3?' lit':''}">${c}</span>`).join('');
-
-  // Load image
   const img=document.getElementById('panel-img');
   img.classList.remove('loaded');
   img.onload=()=>img.classList.add('loaded');
   img.src=p.img;
   img.alt=p.eyebrow;
-
   document.getElementById('panel').classList.add('open');
   document.getElementById('shell').style.pointerEvents='none';
   navigating=false;
@@ -555,12 +531,9 @@ function openMobPanel(id){
   document.getElementById('mob-cta-label').textContent=p.cta;
   document.getElementById('mob-sheet-desc').innerHTML=p.desc;
   document.getElementById('mob-sheet-chips').innerHTML=p.chips.map((c,i)=>`<span class="msc${i<3?' lit':''}">${c}</span>`).join('');
-
-  // Load image
   const img=document.getElementById('mob-img');
   img.src=p.img;
   img.alt=p.eyebrow;
-
   document.getElementById('mob-panel').classList.add('open');
   navigating=false;
   document.getElementById('mob-sheet-body').scrollTop=0;
@@ -594,11 +567,5 @@ addEventListener('load',()=>{requestAnimationFrame(()=>requestAnimationFrame(()=
   setTimeout(()=>{if(innerWidth<768)document.getElementById('mobile-shell').classList.add('on');else document.getElementById('shell').classList.add('on')},200);
 }))});
 </script>
-<script>
-/* SPECIALS ENGINE */
-var HOURS_CFG={weekday:{open:10,close:18},sunday:{open:10,close:15}};
-function _todayStr(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function _hrs(){return new Date().getDay()===0?HOURS_CFG.sunday:HOURS_CFG.weekday}
-function _isOpen(){var n=new Date(),h=n.getHours()+n.getMinutes()/60,r=_hrs();return h>=r.open&&h<r.close}
-function _getSpecialItem(){var today=_todayStr();if(typeof SITE_SPECIAL!=='undefined'&&SITE_SPECIAL&&!SITE_SPECIAL.hidden){if(!SITE_SPECIAL.date||SITE_SPECIAL.date===today)return SITE_SPECIAL}if(typeof SITE_SPECIALS!=='undefined'&&Array.isArray(SITE_SPECIALS)){var vis=SITE_SPECIALS.filter(function(i){if(!i||i.hidden)return false;if(i.date&&i.date!==today)return false;return true});if(vis.length)return vis[0]}return null}
-function getTodaysSpecialHTML(){if(!_isOpen())return '';var item=_getSpecialItem();if(!item||!item.name)return '';return '<div style="margin-top:14px;padding:12px 14px;border-radius:6px;background:rgba(192,72,0,.1);border:1px solid rgba(192,72,0,.25);border-left:3px solid var(--fire)"><div style="font-family:var(--cond);font-weight:700;font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--flame);margin-bottom:6px;">🔥 '+(item.type||"Today's Special")+'</div><div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;"><strong style="font-family:var(--serif);font-size:clamp(14px,1.4vw,17px);color:var(--cream);font-weight:700;">'+item.name+'</strong>'+(item.price?'<span style="font-family:var(--cond);font-weight:800;font-size:clamp(14px,1.4vw,16px);color:var(--glow);white-space:nowrap;">'+item.price+'</span>':'')+'</div>'+(item.desc?'<div style="font-size:clamp(10px,1vw,12px);color:rgba(196,168,130,.5);margin-top:4px;line-height:1.5;">'+item.desc
+</body>
+</html>
