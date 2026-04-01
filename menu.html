@@ -180,6 +180,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0e1112}
 
 <script src="site-data.js"></script>
 <script>
+/* Wait for site-data.js to be available */
+function bootWhenReady() {
+  if (typeof MENU === 'undefined') {
+    setTimeout(bootWhenReady, 50);
+    return;
+  }
+  boot();
+}
+window.addEventListener('load', bootWhenReady);
+function boot() {
 /* ═══════════════════════════════════════════════════════
    CHALK RENDERING ENGINE
    Draws text onto canvas with realistic chalk texture
@@ -342,6 +352,8 @@ function processChalk() {
 
 function startChalk() {
   chalkStart = 0;
+  /* Sort queue by time to handle interleaved items */
+  chalkQueue.sort(function(a, b) { return a.time - b.time; });
   if (chalkTimer) cancelAnimationFrame(chalkTimer);
   chalkTimer = requestAnimationFrame(processChalk);
 }
@@ -352,49 +364,7 @@ function clearChalk() {
   if (chalkTimer) { cancelAnimationFrame(chalkTimer); chalkTimer = null; }
 }
 
-/* ═══════ ERASER ANIMATION ═══════ */
-function eraseBoard() {
-  return new Promise(function(resolve) {
-    var startTime = performance.now();
-    var duration = 400;
-
-    function step(now) {
-      var t = Math.min((now - startTime) / duration, 1);
-      /* Ease in-out */
-      var e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-
-      /* Draw eraser band sweeping across */
-      var eraserWidth = W * 0.25;
-      var eraserX = -eraserWidth + (W + eraserWidth) * e;
-
-      drawBoard();
-
-      /* Smudge trail behind eraser */
-      if (t < 0.95) {
-        var smudgeG = chalkCx.createLinearGradient(eraserX - eraserWidth, 0, eraserX, 0);
-        smudgeG.addColorStop(0, 'transparent');
-        smudgeG.addColorStop(1, 'rgba(212,208,200,0.02)');
-        chalkCx.fillStyle = smudgeG;
-
-        /* Get content area bounds */
-        var contentEl = document.getElementById('content');
-        var rect = contentEl.getBoundingClientRect();
-        var boardRect = document.getElementById('board').getBoundingClientRect();
-        var cy = rect.top - boardRect.top;
-        var ch = rect.height;
-        chalkCx.fillRect(eraserX - eraserWidth, cy, eraserWidth, ch);
-      }
-
-      if (t < 1) {
-        requestAnimationFrame(step);
-      } else {
-        drawBoard();
-        resolve();
-      }
-    }
-    requestAnimationFrame(step);
-  });
-}
+/* eraseBoard is now inline in go() */
 
 /* ═══════ EMBER PARTICLES ═══════ */
 function mkE(){return{x:.08+Math.random()*.84,y:1.02+Math.random()*.04,vx:(Math.random()-.5)*.0018,vy:-.003-Math.random()*.006,r:.4+Math.random()*1.2,life:1,decay:.003+Math.random()*.005,h:10+Math.random()*22,tw:(Math.random()-.5)*.0007}}
@@ -442,7 +412,7 @@ function getSP(){
 }
 
 /* ═══════ MAIN SWITCH ═══════ */
-async function go(k, skipErase) {
+function go(k, skipErase) {
   if(active===k && !skipErase) return;
   var prev = active;
   active = k;
@@ -459,118 +429,149 @@ async function go(k, skipErase) {
 
   clearChalk();
 
-  /* Erase if not first load */
+  /* Erase delay — if not first load, wait for erase to finish */
+  var eraseDelay = 0;
   if (prev !== null && !skipErase) {
-    await eraseBoard();
+    eraseDelay = 450;
+    /* Run eraser wipe — redraws the board background with a sweep */
+    var eraseStart = performance.now();
+    var eraseDur = 400;
+    function eraseStep(now) {
+      var t = Math.min((now - eraseStart) / eraseDur, 1);
+      var e = t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2;
+      drawBoard();
+      /* Subtle smudge trail */
+      var ew = W * 0.3;
+      var ex = -ew + (W + ew) * e;
+      var sg = chalkCx.createLinearGradient(ex - ew * 0.5, 0, ex + ew * 0.3, 0);
+      sg.addColorStop(0, 'transparent');
+      sg.addColorStop(0.5, 'rgba(212,208,200,0.035)');
+      sg.addColorStop(1, 'transparent');
+      chalkCx.fillStyle = sg;
+      chalkCx.fillRect(ex - ew, 0, ew * 1.5, H);
+      if (t < 1) requestAnimationFrame(eraseStep);
+      else drawBoard();
+    }
+    requestAnimationFrame(eraseStep);
   } else {
     drawBoard();
   }
 
   /* ── Get content area position for chalk drawing ── */
-  var contentEl = $('content');
-  var rect = contentEl.getBoundingClientRect();
-  var boardRect = $('board').getBoundingClientRect();
-  var startY = rect.top - boardRect.top + 28;
-  var startX = rect.left - boardRect.left + 16;
-  var maxWidth = rect.width - 32;
+  /* Use a small timeout to ensure layout is computed */
+  setTimeout(function() {
+    var contentEl = $('content');
+    var rect = contentEl.getBoundingClientRect();
+    var boardRect = $('board').getBoundingClientRect();
+    var startY = rect.top - boardRect.top + 28;
+    var startX = rect.left - boardRect.left + 16;
+    var maxWidth = rect.width - 32;
 
-  /* ── Chalk write the section title ── */
-  var titleSize = Math.min(Math.max(W * 0.025, 16), 28);
-  await chalkText(s.title.toUpperCase(), startX, startY, {
-    size: titleSize,
-    color: s.color,
-    font: '800 ' + titleSize + 'px "Barlow Condensed", sans-serif',
-    spacing: titleSize * 0.15,
-    delay: 0,
-    charSpeed: 35
-  });
-
-  /* ── Chalk write subtitle ── */
-  var subSize = Math.min(Math.max(W * 0.013, 11), 15);
-  chalkText(s.subtitle || '', startX, startY + titleSize + 8, {
-    size: subSize,
-    color: 'rgba(212,208,200,0.4)',
-    font: '400 ' + subSize + 'px "Caveat", cursive',
-    delay: 80,
-    charSpeed: 18
-  });
-
-  /* ── Chalk write each item name + price ── */
-  var itemY = startY + titleSize + subSize + 24;
-  var itemSize = Math.min(Math.max(W * 0.012, 11), 14);
-  var priceSize = Math.min(Math.max(W * 0.013, 12), 16);
-  var lineH = Math.max(itemSize * 1.8, 20);
-
-  /* Two columns */
-  var colW = maxWidth / 2 - 10;
-  var col2X = startX + colW + 20;
-  var halfIdx = Math.ceil(s.items.length / 2);
-
-  s.items.forEach(function(item, i) {
-    var col = i < halfIdx ? 0 : 1;
-    var row = col === 0 ? i : i - halfIdx;
-    var ix = col === 0 ? startX : col2X;
-    var iy = itemY + row * lineH;
-    var itemDelay = 200 + i * 100;
-
-    /* Item name */
-    chalkText('• ' + item.name.toUpperCase(), ix, iy, {
-      size: itemSize,
-      color: '#d4d0c8',
-      font: '600 ' + itemSize + 'px "Barlow Condensed", sans-serif',
-      spacing: itemSize * 0.04,
-      delay: itemDelay,
-      charSpeed: 22
-    });
-
-    /* Price — right aligned approximately */
-    var priceTxt = item.priceLg ? fmt(item.price) + ' / ' + fmt(item.priceLg) : fmt(item.price);
-    var priceX = ix + colW - priceTxt.length * priceSize * 0.55;
-    chalkText(priceTxt, priceX, iy, {
-      size: priceSize,
+    /* ── Chalk write the section title ── */
+    var titleSize = Math.min(Math.max(W * 0.025, 16), 28);
+    var titleText = s.title.toUpperCase();
+    chalkText(titleText, startX, startY, {
+      size: titleSize,
       color: s.color,
-      font: '700 ' + priceSize + 'px "Permanent Marker", cursive',
-      delay: itemDelay + item.name.length * 12,
-      charSpeed: 30
+      font: '800 ' + titleSize + 'px "Barlow Condensed", sans-serif',
+      spacing: titleSize * 0.15,
+      delay: 0,
+      charSpeed: 35
     });
-  });
 
-  startChalk();
+    /* ── Chalk write subtitle ── */
+    var subSize = Math.min(Math.max(W * 0.013, 11), 15);
+    var subDelay = titleText.length * 35 + 50;
+    chalkText(s.subtitle || '', startX, startY + titleSize + 8, {
+      size: subSize,
+      color: 'rgba(212,208,200,0.4)',
+      font: '400 ' + subSize + 'px "Caveat", cursive',
+      delay: subDelay,
+      charSpeed: 18
+    });
 
-  /* ═══════ BUILD PHOTO CARDS (DOM overlay) ═══════ */
-  var grid = $('card-grid');
-  var h = '';
+    /* ── Chalk write each item name + price ── */
+    var itemY = startY + titleSize + subSize + 24;
+    var itemSize = Math.min(Math.max(W * 0.012, 11), 14);
+    var priceSize = Math.min(Math.max(W * 0.013, 12), 16);
+    var lineH = Math.max(itemSize * 1.8, 20);
 
-  if(k===CATS[0]){
-    var sp=getSP();
-    if(sp){
-      h+='<div class="sp-c">';
-      if(sp.image)h+='<img class="sp-img" src="'+sp.image+'" alt="'+sp.name+'" onerror="this.style.display=\'none\'">';
-      h+='<div class="sp-body"><div class="sp-tag">🔥 '+(sp.type||"Today's Special")+'</div>';
-      h+='<div class="sp-name">'+sp.name+'</div>';
-      if(sp.desc)h+='<div class="sp-desc">'+sp.desc+'</div>';
-      h+='</div>';
-      if(sp.price)h+='<div class="sp-price">'+sp.price+'</div>';
-      h+='</div>';
+    /* Two columns */
+    var colW = maxWidth / 2 - 10;
+    var col2X = startX + colW + 20;
+    var halfIdx = Math.ceil(s.items.length / 2);
+    var baseItemDelay = subDelay + (s.subtitle||'').length * 18 + 80;
+
+    s.items.forEach(function(item, i) {
+      var col = i < halfIdx ? 0 : 1;
+      var row = col === 0 ? i : i - halfIdx;
+      var ix = col === 0 ? startX : col2X;
+      var iy = itemY + row * lineH;
+      var itemDelay = baseItemDelay + i * 100;
+
+      /* Item name */
+      chalkText('• ' + item.name.toUpperCase(), ix, iy, {
+        size: itemSize,
+        color: '#d4d0c8',
+        font: '600 ' + itemSize + 'px "Barlow Condensed", sans-serif',
+        spacing: itemSize * 0.04,
+        delay: itemDelay,
+        charSpeed: 22
+      });
+
+      /* Price */
+      var priceTxt = item.priceLg ? fmt(item.price) + ' / ' + fmt(item.priceLg) : fmt(item.price);
+      var priceX = ix + colW - priceTxt.length * priceSize * 0.55;
+      chalkText(priceTxt, priceX, iy, {
+        size: priceSize,
+        color: s.color,
+        font: '700 ' + priceSize + 'px "Permanent Marker", cursive',
+        delay: itemDelay + item.name.length * 12,
+        charSpeed: 30
+      });
+    });
+
+    /* Start processing the chalk queue */
+    startChalk();
+
+  }, eraseDelay + 20);
+
+  /* ═══════ BUILD PHOTO CARDS ═══════ */
+  setTimeout(function() {
+    var grid = $('card-grid');
+    var h = '';
+
+    if(k===CATS[0]){
+      var sp=getSP();
+      if(sp){
+        h+='<div class="sp-c">';
+        if(sp.image)h+='<img class="sp-img" src="'+sp.image+'" alt="'+sp.name+'" onerror="this.style.display=\'none\'">';
+        h+='<div class="sp-body"><div class="sp-tag">🔥 '+(sp.type||"Today's Special")+'</div>';
+        h+='<div class="sp-name">'+sp.name+'</div>';
+        if(sp.desc)h+='<div class="sp-desc">'+sp.desc+'</div>';
+        h+='</div>';
+        if(sp.price)h+='<div class="sp-price">'+sp.price+'</div>';
+        h+='</div>';
+      }
     }
-  }
 
-  s.items.forEach(function(item,i){
-    var d=(0.3+i*0.08).toFixed(2);
-    h+='<div class="fc" style="animation-delay:'+d+'s" onclick="oLB(\''+k+'\','+i+')">';
-    if(item.img){
-      h+='<div class="fc-iw"><img class="fc-img" src="'+item.img+'" alt="'+item.name+'" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=fc-ph>'+s.icon+'</div>\'"></div>';
-    } else {
-      h+='<div class="fc-iw"><div class="fc-ph">'+s.icon+'</div></div>';
-    }
-    h+='<div class="fc-body"><div class="fc-name">'+item.name+'</div>';
-    if(item.priceLg) h+='<div class="fc-price" style="color:'+s.color+'">'+fmt(item.price)+' <span class="fc-sm">sm</span> / '+fmt(item.priceLg)+' <span class="fc-sm">lg</span></div>';
-    else h+='<div class="fc-price" style="color:'+s.color+'">'+fmt(item.price)+'</div>';
-    h+='</div></div>';
-  });
+    s.items.forEach(function(item,i){
+      var d=(0.3+i*0.08).toFixed(2);
+      h+='<div class="fc" style="animation-delay:'+d+'s" onclick="oLB(\''+k+'\','+i+')">';
+      if(item.img){
+        h+='<div class="fc-iw"><img class="fc-img" src="'+item.img+'" alt="'+item.name+'" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=fc-ph>'+s.icon+'</div>\'"></div>';
+      } else {
+        h+='<div class="fc-iw"><div class="fc-ph">'+s.icon+'</div></div>';
+      }
+      h+='<div class="fc-body"><div class="fc-name">'+item.name+'</div>';
+      if(item.priceLg) h+='<div class="fc-price" style="color:'+s.color+'">'+fmt(item.price)+' <span class="fc-sm">sm</span> / '+fmt(item.priceLg)+' <span class="fc-sm">lg</span></div>';
+      else h+='<div class="fc-price" style="color:'+s.color+'">'+fmt(item.price)+'</div>';
+      h+='</div></div>';
+    });
 
-  grid.innerHTML=h;
-  $('cards').scrollTop=0;
+    grid.innerHTML=h;
+    $('cards').scrollTop=0;
+  }, eraseDelay + 30);
 }
 
 /* ═══════ LIGHTBOX ═══════ */
@@ -597,6 +598,7 @@ document.addEventListener('keydown',function(e){
 /* ═══════ INIT ═══════ */
 drawBoard();
 go(CATS[0]);
+} /* end boot() */
 </script>
 </body>
 </html>
