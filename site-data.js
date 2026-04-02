@@ -9,7 +9,7 @@
    ───────────
    Images use full URLs so they never fail regardless of where
    the page is opened. Upload photos to your Images/ folder and
-   the URL will be:  https://www.thefrancissmokehouse.com/Images/YourFile.jpg
+   the URL will be:  https://www.thefrancismokehouse.com/Images/YourFile.jpg
    Recommended size: 800×540px, JPG, under 200KB.
    Leave img as "" if you haven't uploaded a photo yet —
    the card shows an emoji placeholder instead.
@@ -70,7 +70,7 @@ var SITE_SPECIAL = {
   type:   "Lunch Special",
   sides:  "",
   note:   "",
-  image:  "https://www.thefrancissmokehouse.com/Images/BackyardBBQPlate.jpg",
+  image:  "https://www.thefrancismokehouse.com/Images/BackyardBBQPlate.jpg",
   date:   "",
   hidden: false
 };
@@ -89,7 +89,7 @@ var SITE_SPECIAL = {
    name       Item name  (required)
    price      Number, or null for "Ask"
    priceLg    Optional second price  (e.g. large size)
-   img        Full URL to photo — https://www.thefrancissmokehouse.com/Images/FileName.jpg
+   img        Full URL to photo — https://www.thefrancismokehouse.com/Images/FileName.jpg
               Leave ""  if no photo yet
    desc       Short description shown under the name
    note       Fine-print line  (e.g. "+ 2 Sides")
@@ -108,7 +108,7 @@ var MENU = {
       {
         name:       "Brisket",
         price:      16.66,
-        img:        "https://www.thefrancissmokehouse.com/Images/Brisket.jpg",
+        img:        "https://www.thefrancismokehouse.com/Images/Brisket.jpg",
         desc:       "Slow-smoked beef brisket, sliced to order. Bark-crusted, smoke-ringed, impossibly tender.",
         badge:      "Most Ordered",
         badgeStyle: "pop"
@@ -116,7 +116,7 @@ var MENU = {
       {
         name:       "Full Rack of Ribs",
         price:      33.32,
-        img:        "https://www.thefrancissmokehouse.com/Images/FullRackRibs.jpg",
+        img:        "https://www.thefrancismokehouse.com/Images/FullRackRibs.jpg",
         desc:       "Pork spare ribs, rubbed and smoked until fall-off-the-bone tender.",
         badge:      "Fan Favorite",
         badgeStyle: "pop"
@@ -124,25 +124,25 @@ var MENU = {
       {
         name:  "½ Rack of Ribs",
         price: 18.74,
-        img:   "https://www.thefrancissmokehouse.com/Images/HalfRackRibs.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/HalfRackRibs.jpg",
         desc:  "Half rack of our signature smoked pork spare ribs."
       },
       {
         name:  "Pulled Pork",
         price: 15.62,
-        img:   "https://www.thefrancissmokehouse.com/Images/PulledPork.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/PulledPork.jpg",
         desc:  "Pork shoulder smoked until it pulls apart like silk. House sauce on the side."
       },
       {
         name:  "½ Chicken Plate",
         price: 15.62,
-        img:   "https://www.thefrancissmokehouse.com/Images/HalfChicken.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/HalfChicken.jpg",
         desc:  "Half chicken, brined and smoked whole, juicy straight through to the bone."
       },
       {
         name:       "Smoked Wings",
         price:      13.53,
-        img:        "https://www.thefrancissmokehouse.com/Images/SmokedWings.jpg",
+        img:        "https://www.thefrancismokehouse.com/Images/SmokedWings.jpg",
         desc:       "Whole wings smoked low, finished hot. Crispy skin. Smoke all the way through.",
         badge:      "Try It",
         badgeStyle: "new"
@@ -159,7 +159,7 @@ var MENU = {
       {
         name:       "Ribeye Po-Boy",
         price:      16.66,
-        img:        "https://www.thefrancissmokehouse.com/Images/RibeyePoBoy.jpg",
+        img:        "https://www.thefrancismokehouse.com/Images/RibeyePoBoy.jpg",
         desc:       "Shaved ribeye on French bread, dressed. A house signature.",
         badge:      "Signature",
         badgeStyle: "sig"
@@ -167,7 +167,7 @@ var MENU = {
       {
         name:       "Brisket Sandwich",
         price:      13.53,
-        img:        "https://www.thefrancissmokehouse.com/Images/BrisketSandwich.jpg",
+        img:        "https://www.thefrancismokehouse.com/Images/BrisketSandwich.jpg",
         desc:       "Sliced smoked brisket piled high. Simple. Perfect.",
         badge:      "Best Seller",
         badgeStyle: "pop"
@@ -175,31 +175,31 @@ var MENU = {
       {
         name:  "Pulled Pork Sandwich",
         price: 12.49,
-        img:   "https://www.thefrancissmokehouse.com/Images/PulledPorkSandwich.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/PulledPorkSandwich.jpg",
         desc:  "House-smoked pulled pork on a toasted bun."
       },
       {
         name:  "Chicken Sandwich",
         price: 12.49,
-        img:   "https://www.thefrancissmokehouse.com/Images/ChickenSandwich.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/ChickenSandwich.jpg",
         desc:  "Smoked chicken breast on a brioche bun with house slaw."
       },
       {
         name:  "Hamburger",
         price: 11.45,
-        img:   "https://www.thefrancissmokehouse.com/Images/Hamburger.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/Hamburger.jpg",
         desc:  "Hand-formed beef patty. Toasted bun. Dressed."
       },
       {
         name:  "Cheeseburger",
         price: 12.49,
-        img:   "https://www.thefrancissmokehouse.com/Images/Cheeseburger.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/Cheeseburger.jpg",
         desc:  "American cheese. The classic."
       },
       {
         name:       "Bacon Cheeseburger",
         price:      13.53,
-        img:        "https://www.thefrancissmokehouse.com/Images/BaconCheeseburger.jpg",
+        img:        "https://www.thefrancismokehouse.com/Images/BaconCheeseburger.jpg",
         desc:       "Smoked bacon, American cheese, dressed.",
         badge:      "Top Pick",
         badgeStyle: "pop"
@@ -207,19 +207,19 @@ var MENU = {
       {
         name:  "Shrimp Po-Boy",
         price: 13.53,
-        img:   "https://www.thefrancissmokehouse.com/Images/ShrimpPoBoy.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/ShrimpPoBoy.jpg",
         desc:  "Gulf shrimp, fried golden, dressed on French bread."
       },
       {
         name:  "Catfish Po-Boy",
         price: 13.53,
-        img:   "https://www.thefrancissmokehouse.com/Images/CatfishPoBoy.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/CatfishPoBoy.jpg",
         desc:  "Cornmeal-crusted catfish, fried to order, dressed."
       },
       {
         name:  "Catfish Plate",
         price: 13.53,
-        img:   "https://www.thefrancissmokehouse.com/Images/CatfishPlate.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/CatfishPlate.jpg",
         desc:  "Fried catfish served as a plate.",
         note:  "+ 2 Sides"
       }
@@ -235,37 +235,37 @@ var MENU = {
       {
         name:  "2 Pc. Tender",
         price: 8.32,
-        img:   "https://www.thefrancissmokehouse.com/Images/ChickenTenders2pc.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/ChickenTenders2pc.jpg",
         desc:  "Two crispy fried chicken tenders."
       },
       {
         name:  "3 Pc. Tender",
         price: 10.41,
-        img:   "https://www.thefrancissmokehouse.com/Images/ChickenTenders3pc.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/ChickenTenders3pc.jpg",
         desc:  "Three crispy fried chicken tenders."
       },
       {
         name:  "4 Pc. Tender",
         price: 12.49,
-        img:   "https://www.thefrancissmokehouse.com/Images/ChickenTenders4pc.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/ChickenTenders4pc.jpg",
         desc:  "Four crispy fried chicken tenders."
       },
       {
         name:  "2 Pc. Mix",
         price: 7.28,
-        img:   "https://www.thefrancissmokehouse.com/Images/ChickenMix2pc.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/ChickenMix2pc.jpg",
         desc:  "Two pieces of mixed fried chicken."
       },
       {
         name:  "3 Pc. Mix",
         price: 8.32,
-        img:   "https://www.thefrancissmokehouse.com/Images/ChickenMix3pc.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/ChickenMix3pc.jpg",
         desc:  "Three pieces of mixed fried chicken."
       },
       {
         name:  "4 Pc. Mix",
         price: 9.36,
-        img:   "https://www.thefrancissmokehouse.com/Images/ChickenMix4pc.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/ChickenMix4pc.jpg",
         desc:  "Four pieces of mixed fried chicken."
       }
     ]
@@ -280,32 +280,32 @@ var MENU = {
       {
         name:  "Grilled Chicken Salad",
         price: 11.45,
-        img:   "https://www.thefrancissmokehouse.com/Images/GrilledChickenSalad.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/GrilledChickenSalad.jpg"
       },
       {
         name:  "Fried Chicken Salad",
         price: 11.45,
-        img:   "https://www.thefrancissmokehouse.com/Images/FriedChickenSalad.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/FriedChickenSalad.jpg"
       },
       {
         name:  "Grilled Shrimp Salad",
         price: 12.49,
-        img:   "https://www.thefrancissmokehouse.com/Images/GrilledShrimpSalad.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/GrilledShrimpSalad.jpg"
       },
       {
         name:  "Fried Shrimp Salad",
         price: 12.49,
-        img:   "https://www.thefrancissmokehouse.com/Images/FriedShrimpSalad.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/FriedShrimpSalad.jpg"
       },
       {
         name:  "Pulled Pork Salad",
         price: 11.45,
-        img:   "https://www.thefrancissmokehouse.com/Images/PulledPorkSalad.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/PulledPorkSalad.jpg"
       },
       {
         name:  "Chopped Brisket Salad",
         price: 12.49,
-        img:   "https://www.thefrancissmokehouse.com/Images/BrisketSalad.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/BrisketSalad.jpg"
       }
     ]
   },
@@ -320,7 +320,7 @@ var MENU = {
         name:       "Corn Pudding",
         price:      3.39,
         priceLg:    10.94,
-        img:        "https://www.thefrancissmokehouse.com/Images/CornPudding.jpg",
+        img:        "https://www.thefrancismokehouse.com/Images/CornPudding.jpg",
         desc:       "Creamy, sweet Southern corn pudding. Our most-loved side.",
         badge:      "Most Loved",
         badgeStyle: "pop"
@@ -329,35 +329,35 @@ var MENU = {
         name:    "Baked Beans",
         price:   3.39,
         priceLg: 10.94,
-        img:     "https://www.thefrancissmokehouse.com/Images/BakedBeans.jpg",
+        img:     "https://www.thefrancismokehouse.com/Images/BakedBeans.jpg",
         desc:    "Slow-cooked with smoked meat drippings and brown sugar."
       },
       {
         name:    "Potato Salad",
         price:   3.39,
         priceLg: 10.94,
-        img:     "https://www.thefrancissmokehouse.com/Images/PotatoSalad.jpg",
+        img:     "https://www.thefrancismokehouse.com/Images/PotatoSalad.jpg",
         desc:    "Classic Southern-style creamy potato salad."
       },
       {
         name:    "Cole Slaw",
         price:   3.39,
         priceLg: 10.94,
-        img:     "https://www.thefrancissmokehouse.com/Images/ColeSlaw.jpg",
+        img:     "https://www.thefrancismokehouse.com/Images/ColeSlaw.jpg",
         desc:    "House-made with a tangy, slightly sweet dressing."
       },
       {
         name:    "French Fry",
         price:   3.39,
         priceLg: 10.94,
-        img:     "https://www.thefrancissmokehouse.com/Images/FrenchFry.jpg",
+        img:     "https://www.thefrancismokehouse.com/Images/FrenchFry.jpg",
         desc:    "Golden, crispy, seasoned fries."
       },
       {
         name:       "Sweet Potato Waffle Fries",
         price:      3.39,
         priceLg:    10.94,
-        img:        "https://www.thefrancissmokehouse.com/Images/WaffleFries.jpg",
+        img:        "https://www.thefrancismokehouse.com/Images/WaffleFries.jpg",
         desc:       "Sweet potato waffle-cut fries, lightly seasoned.",
         badge:      "House Pick",
         badgeStyle: "sig"
@@ -366,7 +366,7 @@ var MENU = {
         name:    "Mac & Cheese",
         price:   4.43,
         priceLg: 13.53,
-        img:     "https://www.thefrancissmokehouse.com/Images/MacCheese.jpg",
+        img:     "https://www.thefrancismokehouse.com/Images/MacCheese.jpg",
         desc:    "Creamy Southern mac & cheese."
       }
     ]
@@ -381,7 +381,7 @@ var MENU = {
       {
         name:  "2-Meat Combo Plate",
         price: 20.82,
-        img:   "https://www.thefrancissmokehouse.com/Images/ComboPlate.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/ComboPlate.jpg",
         desc:  "Choose any two: Ribs (3 bones), ½ Chicken, Pulled Pork, Smoked Wings, or Brisket."
       }
     ]
@@ -396,27 +396,27 @@ var MENU = {
       {
         name:  "Brisket",
         price: 19.78,
-        img:   "https://www.thefrancissmokehouse.com/Images/BrisketBulk.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/BrisketBulk.jpg"
       },
       {
         name:  "Pulled Pork",
         price: 13.53,
-        img:   "https://www.thefrancissmokehouse.com/Images/PulledPorkBulk.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/PulledPorkBulk.jpg"
       },
       {
         name:  "Baby Back Ribs",
         price: 13.53,
-        img:   "https://www.thefrancissmokehouse.com/Images/BabyBackRibs.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/BabyBackRibs.jpg"
       },
       {
         name:  "½ Chicken",
         price: 8.32,
-        img:   "https://www.thefrancissmokehouse.com/Images/HalfChickenBulk.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/HalfChickenBulk.jpg"
       },
       {
         name:  "Smoked Wings",
         price: 11.45,
-        img:   "https://www.thefrancissmokehouse.com/Images/SmokedWingsBulk.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/SmokedWingsBulk.jpg"
       }
     ]
   },
@@ -430,23 +430,23 @@ var MENU = {
       {
         name:  "Bread Pudding",
         price: null,
-        img:   "https://www.thefrancissmokehouse.com/Images/BreadPudding.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/BreadPudding.jpg",
         desc:  "House-made Louisiana bread pudding."
       },
       {
         name:  "Blueberry Cheesecake",
         price: null,
-        img:   "https://www.thefrancissmokehouse.com/Images/BlueberryCheesecake.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/BlueberryCheesecake.jpg"
       },
       {
         name:  "Creole Cream Cheesecake",
         price: null,
-        img:   "https://www.thefrancissmokehouse.com/Images/CreoleCheesecake.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/CreoleCheesecake.jpg"
       },
       {
         name:  "Milky Way Pie",
         price: null,
-        img:   "https://www.thefrancissmokehouse.com/Images/MilkyWayPie.jpg"
+        img:   "https://www.thefrancismokehouse.com/Images/MilkyWayPie.jpg"
       }
     ]
   }
