@@ -110,7 +110,7 @@ var MENU = {
       {
         name:       "Brisket",
         price:      16.66,
-        img:        "Images/menu/brisket-plate.jpg",
+        img:        "Images/menu/Brisket.jpg",
         desc:       "Slow-smoked beef brisket, sliced to order. Bark-crusted, smoke-ringed, impossibly tender.",
         badge:      "Most Ordered",
         badgeStyle: "pop"
