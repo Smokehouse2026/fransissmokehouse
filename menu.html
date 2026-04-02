@@ -326,7 +326,7 @@ body{cursor:none;}
   <span class="ft" id="ftr-info">St. Francisville, LA · (225) 245-5046</span>
 </div>
 
-<script src="menu-data.js"></script>
+<script src="site-data.js"></script>
 <script>
 /* FIRE */
 const FCV=document.getElementById('fire-cv'),FCX=FCV.getContext('2d'),FW=144,FH=80;
@@ -593,7 +593,7 @@ function loadFromUrl(){const p=new URLSearchParams(location.search).get('plate')
 /* BOOT — body is already visible (no opacity trick) */
 function boot(){
   if(typeof MENU==='undefined'||!MENU){
-    document.getElementById('left-col').innerHTML=`<div style="padding:60px 20px;text-align:center"><div style="font-family:var(--cond);font-size:13px;letter-spacing:.12em;color:var(--lo);margin-bottom:10px">menu-data.js not loaded</div><div style="font-family:var(--sans);font-weight:300;font-size:13px;color:var(--md);line-height:1.7">Make sure <strong style="color:var(--parch)">menu-data.js</strong> is in the same folder as this file on your web server. Both files must be served over HTTP, not opened directly as local files.</div></div>`;
+    document.getElementById('left-col').innerHTML=`<div style="padding:60px 20px;text-align:center"><div style="font-family:var(--cond);font-size:13px;letter-spacing:.12em;color:var(--lo);margin-bottom:10px">site-data.js not loaded</div><div style="font-family:var(--sans);font-weight:300;font-size:13px;color:var(--md);line-height:1.7">Make sure <strong style="color:var(--parch)">site-data.js</strong> is in the same folder as this file on your web server. Both files must be served over HTTP, not opened directly as local files.</div></div>`;
     buildSidebar();return;
   }
   buildTabs();buildAll();buildSidebar();loadFromUrl();
