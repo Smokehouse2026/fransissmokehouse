@@ -177,8 +177,8 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 .mob-nav-item:nth-child(5){animation:fadeSlideU .5s .67s ease both}
 .mob-nav-item:nth-child(6){animation:fadeSlideU .5s .75s ease both}
 .mob-nav-item:nth-child(7){animation:fadeSlideU .5s .83s ease both}
-#mob-botbar{flex-shrink:0;height:36px;display:flex;align-items:center;justify-content:center;border-top:1px solid rgba(196,168,130,.06);background:linear-gradient(to top,rgba(9,7,4,.95),transparent);padding-bottom:env(safe-area-inset-bottom,0px);overflow:hidden}
-#mob-ticker-track{display:flex;white-space:nowrap;animation:tkr 28s linear infinite}
+#mob-botbar{flex-shrink:0;height:36px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(196,168,130,.06);background:linear-gradient(to top,rgba(9,7,4,.95),transparent);padding-bottom:env(safe-area-inset-bottom,0px);overflow:hidden}
+#mob-ticker-track{display:flex;white-space:nowrap;animation:tkr 28s linear infinite;flex:1;overflow:hidden}
 .mt-item{font-family:var(--cond);font-weight:400;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,168,130,.14);padding:0 22px;display:inline-flex;align-items:center;gap:22px;flex-shrink:0}
 .mt-item::after{content:'✦';font-size:5px;color:rgba(240,140,40,.2)}
 
@@ -216,59 +216,19 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 .panel-chip{font-family:var(--cond);font-weight:500;font-size:8px;letter-spacing:.13em;text-transform:uppercase;padding:4px 11px;border-radius:2px;border:1px solid rgba(196,168,130,.08);color:rgba(196,168,130,.22);transition:all .3s}
 .panel-chip.lit{border-color:rgba(240,140,40,.3);color:var(--flame);background:rgba(240,140,40,.05)}
 
-/* PANEL IMAGE — CHANGED: contain instead of cover for menu readability */
-#panel-img-wrap{
-  position:relative;width:100%;flex:1;min-height:0;
-  border:1px solid rgba(196,168,130,.08);border-radius:6px;
-  overflow:hidden;background:rgba(9,7,4,.6);
-}
-#panel-img{
-  width:100%;height:100%;object-fit:contain;
-  opacity:0;transition:opacity .6s var(--ease);
-  filter:brightness(.95) contrast(1.05) saturate(1.05);
-  background:#0d0906;
-}
+#panel-img-wrap{position:relative;width:100%;flex:1;min-height:0;border:1px solid rgba(196,168,130,.08);border-radius:6px;overflow:hidden;background:rgba(9,7,4,.6)}
+#panel-img{width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .6s var(--ease);filter:brightness(.95) contrast(1.05) saturate(1.05);background:#0d0906}
 #panel-img.loaded{opacity:1}
-#panel-img-wrap::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(180deg,transparent 85%,rgba(9,7,4,.15) 100%);
-  pointer-events:none;
-}
+#panel-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 85%,rgba(9,7,4,.15) 100%);pointer-events:none}
 
-/* ══ MASSIVE CTA BUTTON ══ */
-#panel-cta{
-  position:relative;overflow:hidden;width:100%;
-  font-family:var(--cond);font-weight:800;
-  font-size:clamp(16px,2vw,22px);
-  letter-spacing:.22em;text-transform:uppercase;
-  color:var(--cream);border:2px solid rgba(240,140,40,.4);
-  cursor:none;
-  padding:clamp(18px,2.5vh,28px) clamp(22px,2.8vw,34px);
-  background:linear-gradient(135deg,rgba(192,74,0,.15),rgba(240,140,40,.08));
-  transition:letter-spacing .35s,border-color .35s,box-shadow .35s;
-  display:flex;align-items:center;justify-content:center;gap:14px;
-  text-align:center;
-  box-shadow:0 4px 30px rgba(192,74,0,.15),inset 0 0 40px rgba(240,140,40,.03);
-}
-#panel-cta::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,var(--ember) 0%,var(--fire) 40%,var(--flame) 70%,var(--glow) 100%);
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .55s cubic-bezier(.77,0,.18,1);z-index:0;
-}
+#panel-cta{position:relative;overflow:hidden;width:100%;font-family:var(--cond);font-weight:800;font-size:clamp(16px,2vw,22px);letter-spacing:.22em;text-transform:uppercase;color:var(--cream);border:2px solid rgba(240,140,40,.4);cursor:none;padding:clamp(18px,2.5vh,28px) clamp(22px,2.8vw,34px);background:linear-gradient(135deg,rgba(192,74,0,.15),rgba(240,140,40,.08));transition:letter-spacing .35s,border-color .35s,box-shadow .35s;display:flex;align-items:center;justify-content:center;gap:14px;text-align:center;box-shadow:0 4px 30px rgba(192,74,0,.15),inset 0 0 40px rgba(240,140,40,.03)}
+#panel-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--ember) 0%,var(--fire) 40%,var(--flame) 70%,var(--glow) 100%);transform:scaleX(0);transform-origin:left;transition:transform .55s cubic-bezier(.77,0,.18,1);z-index:0}
 #panel-cta:hover::before{transform:scaleX(1)}
 #panel-cta:hover{letter-spacing:.3em;border-color:var(--flame);box-shadow:0 8px 50px rgba(192,74,0,.35),0 0 80px rgba(240,140,40,.1)}
 #panel-cta span{position:relative;z-index:1}
 #panel-cta .cta-arrow{position:relative;z-index:1;font-size:1.2em;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
 #panel-cta:hover .cta-arrow{transform:translateX(8px)}
-#panel-cta::after{
-  content:'';position:absolute;inset:-2px;
-  background:linear-gradient(90deg,var(--ember),var(--flame),var(--glow),var(--flame),var(--ember));
-  background-size:300% 100%;
-  animation:ctaGlow 3s linear infinite;
-  z-index:-1;border-radius:inherit;
-  opacity:.4;
-}
+#panel-cta::after{content:'';position:absolute;inset:-2px;background:linear-gradient(90deg,var(--ember),var(--flame),var(--glow),var(--flame),var(--ember));background-size:300% 100%;animation:ctaGlow 3s linear infinite;z-index:-1;border-radius:inherit;opacity:.4}
 @keyframes ctaGlow{0%{background-position:0% 0}100%{background-position:300% 0}}
 
 .pi-bottom{display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:14px;border-top:1px solid rgba(196,168,130,.06)}
@@ -299,11 +259,9 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 #mob-sheet-chips{display:flex;flex-wrap:wrap;gap:6px}
 .msc{font-family:var(--cond);font-weight:500;font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:5px 11px;border-radius:2px;border:1px solid rgba(196,168,130,.08);color:rgba(196,168,130,.22)}
 .msc.lit{border-color:rgba(240,140,40,.3);color:var(--flame);background:rgba(240,140,40,.05)}
-/* Mobile image — CHANGED: contain + auto height for full menu visibility */
 #mob-img-wrap{position:relative;width:100%;height:auto;aspect-ratio:3/2;min-height:160px;border:1px solid rgba(196,168,130,.08);border-radius:6px;overflow:hidden;background:rgba(9,7,4,.6)}
 #mob-img{width:100%;height:100%;object-fit:contain;filter:brightness(.95) contrast(1.05) saturate(1.05);background:#0d0906}
 #mob-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 85%,rgba(9,7,4,.15) 100%);pointer-events:none}
-
 #mob-sheet-cta{width:100%;padding:18px;font-family:var(--cond);font-weight:800;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream);border:none;background:linear-gradient(90deg,var(--ember),var(--fire),var(--flame),var(--glow));background-size:200% 100%;animation:ctaGlow 3s linear infinite;border-radius:4px;display:flex;align-items:center;justify-content:center;gap:10px;-webkit-tap-highlight-color:transparent;box-shadow:0 8px 30px rgba(192,74,0,.35);transition:transform .2s,box-shadow .2s}
 #mob-sheet-cta:active{transform:scale(.98);box-shadow:0 4px 15px rgba(192,74,0,.2)}
 .msc-arrow{transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
@@ -370,7 +328,15 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
       <div id="pv-num">—</div>
     </div>
   </div>
-  <div id="botbar"><div id="ticker-track"></div><div id="botbar-right">© 2025 The Francis Smokehouse</div></div>
+
+  <!-- DESKTOP BOTTOM BAR — with NorthStar Digital credit -->
+  <div id="botbar">
+    <div id="ticker-track"></div>
+    <div id="botbar-right" style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0;padding-left:20px">
+      <span>© 2025 The Francis Smokehouse</span>
+      <span style="font-size:7px;letter-spacing:.13em;color:rgba(196,168,130,.07)">Built by <a href="https://northstardigitalllc.com" target="_blank" style="color:rgba(240,140,40,.2);text-decoration:none;transition:color .25s" onmouseover="this.style.color='rgba(240,140,40,.55)'" onmouseout="this.style.color='rgba(240,140,40,.2)'">NorthStar Digital LLC</a> · Westyn Ardoin</span>
+    </div>
+  </div>
 </div>
 
 <!-- MOBILE SHELL -->
@@ -379,7 +345,14 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
     <div id="mob-info-strip"><div class="mob-info-bit"><span class="mob-info-lbl">Phone</span><span class="mob-info-val">(225) 245-5046</span></div><div class="mob-info-bit"><span class="mob-info-lbl">Status</span><span class="mob-info-val mob-status"><span class="mob-status-dot"></span>Fire's Burning</span></div><div class="mob-info-bit"><span class="mob-info-lbl">Hours</span><span class="mob-info-val" id="mob-hours">10am – 6pm</span></div></div>
   </div>
   <div id="mob-nav"></div>
-  <div id="mob-botbar"><div id="mob-ticker-track"></div></div>
+
+  <!-- MOBILE BOTTOM BAR — with NorthStar Digital credit -->
+  <div id="mob-botbar">
+    <div id="mob-ticker-track"></div>
+    <div style="flex-shrink:0;padding:0 14px;display:flex;align-items:center">
+      <a href="https://northstardigitalllc.com" target="_blank" style="font-family:'Barlow Condensed',sans-serif;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,140,40,.18);text-decoration:none;white-space:nowrap">NorthStar Digital LLC</a>
+    </div>
+  </div>
 </div>
 
 <!-- DESKTOP PANEL -->
