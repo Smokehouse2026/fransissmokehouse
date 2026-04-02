@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Smokehouse Market — The Francis Smokehouse | St. Francisville, LA</title>
+<meta name="description" content="The Francis Smokehouse Market. House-made boudin, sausage, smoked meats by the pound, specialty items and family-size sides. Available in-store at 6779 US Highway 61, St. Francisville, LA.">
+<link rel="icon" type="image/png" href="Images/Smokehouselogo.png">
+<link rel="apple-touch-icon" href="Images/Smokehouselogo.png">
+<meta name="theme-color" content="#090704">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,300;1,400;1,700&family=Barlow+Condensed:wght@300;400;500;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ember:#c04800;--fire:#e06010;--flame:#f08820;--glow:#f5a830;
+  --parch:#e8d4a8;
+  --surface:rgba(18,10,4,.82);--surface2:rgba(26,15,5,.92);
+  --border:rgba(196,160,112,.18);--border2:rgba(240,136,32,.38);
+  --hi:#f5e8cc;--md:#d4b882;--lo:#8a6840;
+  --serif:'Playfair Display',Georgia,serif;
+  --cond:'Barlow Condensed',sans-serif;
+  --sans:'Barlow',sans-serif;
+  --tray:0px;
+}
+html,body{width:100%;min-height:100%;background:#070503;color:var(--hi);font-family:var(--sans);overflow-x:hidden;-webkit-tap-highlight-color:transparent;}
+body{cursor:none;}
+@media(hover:none){body{cursor:auto}}
+
+#grain{position:fixed;inset:0;z-index:9998;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");}
+#fire-cv{position:fixed;bottom:0;left:0;width:100%;height:40vh;z-index:1;pointer-events:none;image-rendering:pixelated;mask-image:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.5) 55%,transparent 100%);-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.5) 55%,transparent 100%);}
+#smoke-cv{position:fixed;inset:0;z-index:2;pointer-events:none;}
+#ember-cv{position:fixed;inset:0;z-index:3;pointer-events:none;}
+#vignette{position:fixed;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse at 50% 30%,transparent 18%,rgba(10,7,3,.65) 100%);}
+#cursor{position:fixed;z-index:9999;pointer-events:none;top:0;left:0;will-change:transform;}
+#c-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--flame);transform:translate(-50%,-50%);box-shadow:0 0 8px var(--flame);animation:cb 2.5s ease-in-out infinite;}
+@keyframes cb{0%,100%{box-shadow:0 0 6px var(--flame)}50%{box-shadow:0 0 16px var(--flame),0 0 28px rgba(240,136,32,.4)}}
+@media(hover:none){#cursor{display:none}}
+
+/* HEADER */
+#hdr{position:sticky;top:0;z-index:500;background:rgba(8,5,2,.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(196,160,112,.08);}
+#hdr-top{display:flex;align-items:center;justify-content:space-between;padding:clamp(10px,1.8vh,16px) clamp(16px,4vw,48px);border-bottom:1px solid rgba(196,160,112,.06);}
+#back-btn{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--lo);background:rgba(255,255,255,.03);border:1px solid rgba(196,160,112,.22);padding:7px 16px;border-radius:2px;cursor:none;transition:all .3s;text-decoration:none;display:inline-block;}
+#back-btn:hover{border-color:rgba(240,136,32,.5);color:var(--flame);}
+@media(hover:none){#back-btn{cursor:auto}}
+.hdr-c{text-align:center;}
+.hdr-logo{height:clamp(28px,3.8vh,42px);width:auto;object-fit:contain;filter:drop-shadow(0 0 8px rgba(240,136,32,.3));vertical-align:middle;margin-right:6px;}
+.hdr-name{font-family:var(--serif);font-weight:700;font-size:clamp(15px,2.2vw,22px);color:var(--hi);line-height:1;}
+.hdr-name em{font-style:italic;font-weight:400;color:var(--flame);}
+.hdr-sub{font-family:var(--cond);font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--lo);margin-top:3px;}
+.hdr-right{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--flame);display:flex;align-items:center;gap:6px;}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--glow);box-shadow:0 0 8px var(--glow);animation:dp 1.8s ease-in-out infinite;}
+@keyframes dp{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+
+/* HERO */
+#hero{position:relative;z-index:10;padding:clamp(48px,8vh,80px) clamp(16px,4vw,48px) clamp(32px,5vh,56px);overflow:hidden;}
+#hero-ghost{position:absolute;right:-2%;bottom:-20px;font-family:var(--cond);font-weight:800;font-size:clamp(80px,14vw,180px);letter-spacing:-.05em;line-height:1;color:rgba(192,72,0,.04);pointer-events:none;user-select:none;white-space:nowrap;}
+.hero-eyebrow{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.38em;text-transform:uppercase;color:var(--flame);opacity:.8;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.hero-eyebrow::before{content:'';width:22px;height:1px;background:currentColor;}
+#hero-title{font-family:var(--serif);font-weight:900;font-size:clamp(38px,7vw,90px);letter-spacing:-.03em;line-height:.95;color:#fff;text-shadow:0 2px 40px rgba(0,0,0,.7);max-width:700px;}
+#hero-title em{font-style:italic;font-weight:300;color:var(--flame);}
+#hero-rule{width:clamp(40px,6vw,80px);height:2px;background:linear-gradient(90deg,var(--ember),var(--flame),transparent);margin:clamp(16px,2.8vh,28px) 0;}
+#hero-lead{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(14px,1.6vw,19px);line-height:1.7;color:rgba(196,160,112,.55);max-width:520px;}
+
+/* LAYOUT */
+#layout{position:relative;z-index:10;padding:clamp(16px,3vh,32px) clamp(16px,4vw,48px) 80px;display:flex;flex-direction:column;gap:clamp(48px,7vh,72px);}
+
+/* SECTION */
+.mkt-sec{}
+.mkt-sec-hdr{margin-bottom:clamp(16px,2.4vh,24px);padding-bottom:14px;border-bottom:1px solid rgba(196,160,112,.12);position:relative;}
+.mkt-sec-hdr::after{content:'';position:absolute;bottom:-1px;left:0;width:0;height:1px;background:linear-gradient(90deg,var(--ember),var(--flame));transition:width .8s cubic-bezier(.16,1,.3,1);}
+.mkt-sec.reveal.in .mkt-sec-hdr::after{width:80px;}
+.mkt-sec-icon{font-size:clamp(18px,2.5vw,26px);margin-right:10px;filter:drop-shadow(0 0 6px rgba(240,136,32,.35));}
+.mkt-sec-title{font-family:var(--serif);font-weight:900;font-size:clamp(22px,4vw,44px);letter-spacing:-.02em;line-height:1;color:#fff;display:inline;}
+.mkt-sec-sub{display:inline-block;margin-top:8px;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(11px,1.2vw,14px);color:var(--parch);background:rgba(22,12,4,.88);border:1px solid rgba(196,160,112,.2);border-radius:100px;padding:4px 14px;margin-left:10px;}
+.mkt-sec-desc{font-family:var(--sans);font-weight:300;font-size:clamp(12px,1.2vw,14px);line-height:1.65;color:var(--md);margin-top:10px;max-width:640px;}
+
+/* ITEM GRID */
+.mkt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:clamp(8px,1.4vw,14px);}
+
+/* ITEM CARD */
+.mkt-card{position:relative;background:var(--surface);border:1px solid rgba(196,160,112,.1);border-radius:10px;overflow:hidden;cursor:zoom-in;transition:border-color .35s,box-shadow .4s,background .35s,transform .4s cubic-bezier(.16,1,.3,1);}
+.mkt-card:hover{border-color:var(--border2);background:var(--surface2);box-shadow:0 10px 44px rgba(192,72,0,.22);transform:translateY(-3px);}
+.mkt-card.sold-out{cursor:default;}
+
+/* card image */
+.mkt-img-wrap{position:relative;width:100%;aspect-ratio:1/1;background:#0a0402;overflow:hidden;}
+.mkt-img{width:100%;height:100%;object-fit:contain;display:block;opacity:0;transition:opacity .4s;}
+.mkt-img.rdy{opacity:1;}
+.mkt-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
+.mkt-ph-e{font-size:clamp(32px,5vw,52px);opacity:.28;}
+.mkt-ph-t{font-family:var(--cond);font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:rgba(196,160,112,.2);}
+
+/* sold out overlay */
+.sold-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;}
+.sold-label{font-family:var(--cond);font-weight:700;font-size:clamp(11px,1.4vw,14px);letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.25);padding:6px 16px;border-radius:2px;}
+
+/* zoom badge */
+.zoom-badge{position:absolute;bottom:6px;right:6px;width:22px;height:22px;border-radius:4px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;pointer-events:none;}
+.mkt-card:hover .zoom-badge{opacity:1;}
+.zoom-badge svg{width:11px;height:11px;}
+
+/* card body */
+.mkt-body{padding:clamp(12px,1.8vh,16px) clamp(12px,1.8vw,16px);}
+.mkt-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;}
+.mkt-name{font-family:var(--serif);font-weight:700;font-size:clamp(15px,1.7vw,19px);color:var(--hi);line-height:1.2;}
+.mkt-price-wrap{text-align:right;flex-shrink:0;}
+.mkt-price{font-family:var(--cond);font-weight:800;font-size:clamp(15px,1.7vw,19px);color:var(--glow);white-space:nowrap;}
+.mkt-price-unit{font-family:var(--cond);font-size:9px;color:var(--lo);letter-spacing:.08em;margin-top:1px;}
+.mkt-desc{font-family:var(--sans);font-weight:300;font-size:clamp(11px,1.1vw,13px);line-height:1.55;color:var(--md);margin-bottom:6px;}
+.mkt-note{font-family:var(--cond);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--lo);margin-bottom:6px;}
+.mkt-bot{display:flex;align-items:center;justify-content:flex-end;margin-top:8px;}
+.badge{font-family:var(--cond);font-weight:700;font-size:7px;letter-spacing:.14em;text-transform:uppercase;padding:3px 7px;border-radius:2px;margin-right:auto;}
+.b-pop{background:rgba(255,107,53,.2);color:#ff8c5a;border:1px solid rgba(255,107,53,.35);}
+.b-sig{background:rgba(240,136,32,.18);color:var(--flame);border:1px solid rgba(240,136,32,.35);}
+.b-new{background:rgba(100,200,80,.15);color:#a0f060;border:1px solid rgba(100,200,80,.3);}
+
+/* IN-STORE CTA */
+#cta-strip{position:relative;z-index:10;margin:0 clamp(16px,4vw,48px) 60px;background:linear-gradient(135deg,rgba(192,72,0,.22),rgba(224,96,16,.08));border:1px solid rgba(192,72,0,.32);border-radius:10px;padding:clamp(22px,3.5vh,36px) clamp(20px,4vw,40px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px;overflow:hidden;}
+#cta-strip::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 0% 100%,rgba(192,72,0,.12),transparent 60%);pointer-events:none;}
+.cta-text{position:relative;z-index:1;}
+.cta-text-title{font-family:var(--serif);font-weight:900;font-size:clamp(20px,2.8vw,32px);letter-spacing:-.02em;color:#fff;line-height:1;}
+.cta-text-title em{font-style:italic;font-weight:300;color:var(--flame);}
+.cta-text-sub{font-family:var(--sans);font-weight:300;font-size:clamp(12px,1.2vw,14px);color:var(--md);margin-top:6px;line-height:1.6;}
+.cta-btns{display:flex;flex-wrap:wrap;gap:10px;position:relative;z-index:1;}
+.btn-fire{display:inline-flex;align-items:center;gap:8px;font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#fff;text-decoration:none;background:linear-gradient(90deg,var(--ember),var(--fire),var(--flame));padding:13px 24px;border-radius:2px;box-shadow:0 6px 24px rgba(192,72,0,.4);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;cursor:none;}
+.btn-fire:hover{transform:scale(1.05);box-shadow:0 10px 36px rgba(192,72,0,.55);}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;font-family:var(--cond);font-weight:600;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--md);text-decoration:none;border:1px solid rgba(196,160,112,.2);padding:12px 22px;border-radius:2px;transition:all .3s;cursor:none;}
+.btn-ghost:hover{border-color:rgba(240,136,32,.4);color:var(--flame);}
+@media(hover:none){.btn-fire,.btn-ghost{cursor:auto}}
+
+/* FOOTER */
+#ftr{position:relative;z-index:10;background:rgba(8,5,2,.9);border-top:1px solid rgba(196,160,112,.08);padding:clamp(12px,2vh,18px) clamp(16px,4vw,48px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.ft{font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--lo);}
+.ffs{display:flex;gap:4px;}
+.ff{font-size:clamp(10px,1.5vw,13px);animation:flkr 2s ease-in-out infinite;filter:drop-shadow(0 0 5px rgba(240,136,32,.5));}
+.ff:nth-child(2){animation-delay:.3s;font-size:.8em;}.ff:nth-child(3){animation-delay:.65s;}
+@keyframes flkr{0%,100%{opacity:.6}40%{opacity:1}}
+
+/* LIGHTBOX */
+#lightbox{position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.93);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .22s;cursor:zoom-out;}
+#lightbox.open{opacity:1;pointer-events:all;}
+#lb-img{max-width:100%;max-height:88vh;object-fit:contain;border-radius:6px;box-shadow:0 8px 60px rgba(0,0,0,.8);transform:scale(.93);transition:transform .28s cubic-bezier(.16,1,.3,1);}
+#lightbox.open #lb-img{transform:scale(1);}
+#lb-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .18s;z-index:1;}
+#lb-close:hover{background:rgba(192,72,0,.6);}
+#lb-caption{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-family:var(--cond);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);white-space:nowrap;pointer-events:none;}
+
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .75s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+<div id="grain"></div>
+<canvas id="fire-cv"></canvas>
+<canvas id="smoke-cv"></canvas>
+<canvas id="ember-cv"></canvas>
+<div id="vignette"></div>
+<div id="cursor"><div id="c-dot"></div></div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lb-close" onclick="closeLightbox(event)">×</button>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-caption"></div>
+</div>
+
+<!-- HEADER -->
+<div id="hdr">
+  <div id="hdr-top">
+    <a id="back-btn" href="index.html">← Back</a>
+    <div class="hdr-c">
+      <img class="hdr-logo" src="Images/Smokehouselogo.png" alt="The Francis Smokehouse" onerror="this.style.display='none'">
+      <div class="hdr-name">The Francis <em>Smokehouse</em></div>
+      <div class="hdr-sub">Smokehouse Market · St. Francisville, LA</div>
+    </div>
+    <a href="menu.html" class="btn-ghost" style="font-size:10px;padding:7px 14px;">See Menu →</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div id="hero-ghost">MARKET</div>
+  <div class="hero-eyebrow">In-Store · 6779 US Hwy 61</div>
+  <h1 id="hero-title">The Smokehouse<br><em>Market.</em></h1>
+  <div id="hero-rule"></div>
+  <p id="hero-lead">Specialty meats, house-made boudin and sausage, smoked meats by the pound, and family-size sides. Available at the counter during business hours.</p>
+</section>
+
+<!-- MARKET CONTENT -->
+<div id="layout">
+  <div id="market-content">
+    <div style="padding:60px 0;text-align:center;font-family:var(--cond);font-size:11px;letter-spacing:.18em;color:var(--lo);">Loading market...</div>
+  </div>
+</div>
+
+<!-- IN-STORE CTA -->
+<div id="cta-strip">
+  <div class="cta-text">
+    <div class="cta-text-title">Everything's <em>In-Store.</em></div>
+    <div class="cta-text-sub">Mon–Sat 10am–6pm · Sun 10am–3pm · 6779 US Highway 61, St. Francisville, LA</div>
+  </div>
+  <div class="cta-btns">
+    <a href="https://www.google.com/maps/dir/?api=1&destination=The+Francis+Smokehouse%2C+6779+US-61%2C+St.+Francisville%2C+LA+70775" target="_blank" class="btn-fire">🧭 Get Directions</a>
+    <a href="tel:2252455046" class="btn-ghost">📞 (225) 245-5046</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div id="ftr">
+  <span class="ft" id="ftr-name">The Francis Smokehouse &amp; Specialty Meats</span>
+  <div class="ffs"><span class="ff">🔥</span><span class="ff">🔥</span><span class="ff">🔥</span></div>
+  <span class="ft" id="ftr-info">St. Francisville, LA · (225) 245-5046</span>
+</div>
+
+<script src="market-data.js" onerror="marketDataMissing()"></script>
+<script>
+/* FIRE */
+const FCV=document.getElementById('fire-cv'),FCX=FCV.getContext('2d'),FW=144,FH=80;
+FCV.width=FW;FCV.height=FH;
+const FPAL=new Uint32Array(256);
+for(let i=0;i<256;i++){let r,g,b;if(i<64){r=Math.min(255,i*3);g=0;b=0;}else if(i<128){r=255;g=(i-64)*2;b=0;}else if(i<200){r=255;g=128+(i-128);b=0;}else{r=255;g=255;b=(i-200)*3;}FPAL[i]=(255<<24)|(b<<16)|(g<<8)|r;}
+const FB=new Uint8Array(FW*FH),FI=FCX.createImageData(FW,FH),FP=new Uint32Array(FI.data.buffer);
+for(let x=0;x<FW;x++)FB[(FH-1)*FW+x]=255;
+function stepFire(){for(let y=0;y<FH-1;y++)for(let x=0;x<FW;x++){const s=FB[(y+1)*FW+x],d=Math.random()<.4?1:0;FB[y*FW+((x-d+FW)%FW)]=Math.max(0,s-(Math.random()<.25?1:0));}}
+function renderFire(){for(let i=0;i<FW*FH;i++)FP[i]=FB[i]===0?0:FPAL[FB[i]];FCX.putImageData(FI,0,0);}
+
+/* SMOKE */
+const SCV=document.getElementById('smoke-cv'),SCX=SCV.getContext('2d');
+let SW=0,SH=0;
+function rsz(){SW=SCV.width=innerWidth;SH=SCV.height=innerHeight;}rsz();window.addEventListener('resize',rsz);
+function mkS(){return{x:.15+Math.random()*.7,y:1.04,vx:(Math.random()-.5)*.0003,vy:-.0007-Math.random()*.0005,r:36+Math.random()*.55,a:0,ta:.02+Math.random()*.02,gr:.07+Math.random()*.04,wb:Math.random()*6.28,ws:.004+Math.random()*.007};}
+const SM=Array.from({length:14},mkS);
+function stepSmoke(){SCX.clearRect(0,0,SW,SH);for(const s of SM){s.wb+=s.ws;s.x+=s.vx+Math.sin(s.wb)*.00022;s.y+=s.vy;s.r+=s.gr;s.a=s.a<s.ta?s.a+.002:Math.max(0,s.a-.0014);if(s.y<-.3||s.a<=0){Object.assign(s,mkS());continue;}const g=SCX.createRadialGradient(s.x*SW,s.y*SH,0,s.x*SW,s.y*SH,s.r);g.addColorStop(0,`rgba(85,60,36,${s.a})`);g.addColorStop(.55,`rgba(56,38,22,${s.a*.4})`);g.addColorStop(1,'transparent');SCX.fillStyle=g;SCX.beginPath();SCX.arc(s.x*SW,s.y*SH,s.r,0,6.28);SCX.fill();}}
+
+/* EMBERS */
+const ECV=document.getElementById('ember-cv'),ECX=ECV.getContext('2d');
+let EW=0,EH=0;
+function erz(){EW=ECV.width=innerWidth;EH=ECV.height=innerHeight;}erz();window.addEventListener('resize',erz);
+function mkE(){return{x:.1+Math.random()*.8,y:1.02,vx:(Math.random()-.5)*.003,vy:-.004-Math.random()*.009,r:.6+Math.random()*1.8,life:1,decay:.003+Math.random()*.007,h:8+Math.random()*24};}
+const EM=Array.from({length:20},mkE);
+function stepEmbers(){ECX.clearRect(0,0,EW,EH);for(let i=0;i<EM.length;i++){const e=EM[i];e.x+=e.vx+(Math.random()-.5)*.001;e.y+=e.vy;e.life-=e.decay;if(e.life<=0||e.y<-.02){EM[i]=mkE();continue;}ECX.beginPath();ECX.arc(e.x*EW,e.y*EH,e.r,0,6.28);ECX.fillStyle=`hsla(${e.h},100%,${52+e.life*34}%,${e.life*.82})`;ECX.shadowBlur=8;ECX.shadowColor=`hsla(${e.h},100%,58%,${e.life*.5})`;ECX.fill();ECX.shadowBlur=0;}}
+
+/* CURSOR */
+let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+const CUR=document.getElementById('cursor');
+function stepCursor(){cx+=(mx-cx)*.35;cy+=(my-cy)*.35;CUR.style.transform=`translate(${cx}px,${cy}px)`;}
+
+let lastF=0;
+function loop(ts){if(ts-lastF>42){stepFire();renderFire();lastF=ts;}stepSmoke();stepEmbers();stepCursor();requestAnimationFrame(loop);}
+requestAnimationFrame(loop);
+
+/* LIGHTBOX */
+const ZSVG=`<svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="5" cy="5" r="3.2"/><line x1="7.5" y1="7.5" x2="11" y2="11" stroke-linecap="round"/></svg>`;
+function openLightbox(src,name){if(!src)return;document.getElementById('lb-img').src=src;document.getElementById('lb-img').alt=name||'';document.getElementById('lb-caption').textContent=name||'';document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(e){if(e)e.stopPropagation();document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+
+/* EMOJI FALLBACKS */
+const EMO={boudin:'🌭',sausage:'🌭',andouille:'🌭',brisket:'🥩',pork:'🐷',chicken:'🍗',wing:'🍗',rib:'🍖',turkey:'🦃',tasso:'🥩',cracklin:'🍖',corn:'🌽',bean:'🫘',potato:'🥔',mac:'🧀',smoked:'🔥',specialty:'⭐',side:'🫙'};
+function emo(name){const n=(name||'').toLowerCase();for(const[k,v]of Object.entries(EMO))if(n.includes(k))return v;return'🛒';}
+
+/* HELPERS */
+function fmt(p,unit){
+  if(p===null||p===undefined)return`<span style="color:var(--lo);font-size:10px;letter-spacing:.1em">ASK AT COUNTER</span>`;
+  return`$${Number(p).toFixed(2)}`;
+}
+function badgeTag(item){if(!item.badge)return'';const m={pop:'b-pop',sig:'b-sig',new:'b-new'};return`<span class="badge ${m[item.badgeStyle]||'b-pop'}">${item.badge}</span>`;}
+
+/* BUILD CARD */
+function buildCard(item){
+  const e=emo(item.name);
+  const s=(item.img||'').replace(/'/g,'%27'),n=(item.name||'').replace(/'/g,'\u2019');
+  const clickHandler=item.img&&!item.soldOut?`onclick="openLightbox('${s}','${n}')" style="cursor:zoom-in"`:'';
+  const imgHtml=item.img
+    ?`<img class="mkt-img" src="${item.img}" alt="${n}" loading="lazy" onload="this.classList.add('rdy')" onerror="this.parentElement.innerHTML='<div class=\\'mkt-ph\\'><span class=\\'mkt-ph-e\\'>${e}</span><span class=\\'mkt-ph-t\\'>No image</span></div>'">`
+    :`<div class="mkt-ph"><span class="mkt-ph-e">${e}</span><span class="mkt-ph-t">No image</span></div>`;
+  const soldOverlay=item.soldOut?`<div class="sold-overlay"><div class="sold-label">Sold Out</div></div>`:'';
+  const zoomBadge=item.img&&!item.soldOut?`<div class="zoom-badge">${ZSVG}</div>`:'';
+  const priceHtml=item.price!==null&&item.price!==undefined
+    ?`<div class="mkt-price">${fmt(item.price)}</div>${item.priceUnit?`<div class="mkt-price-unit">${item.priceUnit}</div>`:''}`
+    :`<div style="font-family:var(--cond);font-size:9px;letter-spacing:.1em;color:var(--lo);margin-top:2px">Ask at counter</div>`;
+
+  return`<div class="mkt-card reveal${item.soldOut?' sold-out':''}" ${clickHandler}>
+    <div class="mkt-img-wrap">${imgHtml}${soldOverlay}${zoomBadge}</div>
+    <div class="mkt-body">
+      <div class="mkt-top">
+        <div class="mkt-name">${item.name}</div>
+        <div class="mkt-price-wrap">${priceHtml}</div>
+      </div>
+      ${item.desc?`<div class="mkt-desc">${item.desc}</div>`:''}
+      ${item.note?`<div class="mkt-note">${item.note}</div>`:''}
+      <div class="mkt-bot">${badgeTag(item)}</div>
+    </div>
+  </div>`;
+}
+
+/* BUILD SECTIONS */
+function buildMarket(){
+  if(typeof MARKET==='undefined'||!MARKET){marketDataMissing();return;}
+  let html='';
+  Object.keys(MARKET).forEach(key=>{
+    const cat=MARKET[key];
+    const items=(cat.items||[]).filter(i=>!i.hidden);
+    if(!items.length)return;
+    html+=`<div class="mkt-sec reveal">
+      <div class="mkt-sec-hdr">
+        <span class="mkt-sec-icon">${cat.icon||'🛒'}</span>
+        <span class="mkt-sec-title">${cat.title}</span>
+        ${cat.subtitle?`<span class="mkt-sec-sub">${cat.subtitle}</span>`:''}
+        ${cat.desc?`<div class="mkt-sec-desc">${cat.desc}</div>`:''}
+      </div>
+      <div class="mkt-grid">${items.map(buildCard).join('')}</div>
+    </div>`;
+  });
+  document.getElementById('market-content').innerHTML=html||'<p style="font-family:var(--cond);color:var(--lo);padding:40px 0;font-size:11px;letter-spacing:.18em">No items yet — check back soon.</p>';
+  triggerReveals();
+}
+
+function marketDataMissing(){
+  document.getElementById('market-content').innerHTML=`<div style="padding:60px 20px;text-align:center"><div style="font-family:var(--cond);font-size:11px;letter-spacing:.14em;color:var(--lo);margin-bottom:10px">market-data.js not loaded</div><div style="font-family:var(--sans);font-weight:300;font-size:13px;color:var(--md);line-height:1.7">Make sure <strong style="color:var(--parch)">market-data.js</strong> is in the same folder as this file on your web server.</div></div>`;
+}
+
+/* REVEALS */
+const RIO=new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersecting)return;const sibs=Array.from(e.target.parentElement.querySelectorAll('.reveal'));e.target.style.transitionDelay=(sibs.indexOf(e.target)*.06)+'s';e.target.classList.add('in');RIO.unobserve(e.target);});},{threshold:.08,rootMargin:'0px 0px -20px 0px'});
+function triggerReveals(){document.querySelectorAll('.reveal').forEach(el=>{el.classList.remove('in');el.style.transitionDelay='';RIO.observe(el);});}
+
+/* BOOT */
+function boot(){
+  buildMarket();
+  // footer info from site-data.js if available
+  if(typeof SITE_INFO!=='undefined'&&SITE_INFO){
+    document.getElementById('ftr-name').textContent=(SITE_INFO.name||'The Francis Smokehouse')+' '+(SITE_INFO.tagline||'& Specialty Meats');
+    document.getElementById('ftr-info').textContent=`${SITE_INFO.city||'St. Francisville'}, ${SITE_INFO.state||'LA'} · ${SITE_INFO.phone||'(225) 245-5046'}`;
+  }
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot);}else{boot();}
+</script>
+<!-- Also load site-data.js for shared info like hours and footer -->
+<script src="site-data.js" onerror=""></script>
+</body>
+</html>
