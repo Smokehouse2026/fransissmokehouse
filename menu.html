@@ -447,24 +447,24 @@ const ZSVG=`<svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="1.6
 
 function fmt(p){if(p===null||p===undefined)return'Ask';if(typeof p==='string')return p.startsWith('$')?p:'$'+p;return'$'+Number(p).toFixed(2);}
 
-/* image with zoom-in click */
 function imgEl(src,name,imgCls,phCls,e){
   if(!src)return`<div class="${phCls}"><span class="mi-ph-e">${e}</span><span class="mi-ph-t">No image</span></div>`;
-  const s=src.replace(/'/g,'%27'),n=(name||'').replace(/'/g,'\u2019').replace(/"/g,'&quot;');
+  const n=(name||'').replace(/'/g,'\u2019').replace(/"/g,'&quot;');
   return`<img class="${imgCls}" src="${src}" alt="${n}" loading="lazy"
     onload="this.classList.add('rdy')"
-    onerror="this.parentElement.innerHTML='<div class=&quot;${phCls}&quot;><span class=&quot;mi-ph-e&quot;>${e}</span></div>'"
-    onclick="openLightbox('${s}','${n}')" style="cursor:zoom-in">
+    onerror="this.parentElement.innerHTML='<div class=&quot;${phCls}&quot;><span class=&quot;mi-ph-e&quot;>${e}</span></div>'">
   <div class="zoom-badge">${ZSVG}</div>`;
 }
 
 function badgeTag(item){if(!item.badge)return'';const m={pop:'b-pop',sig:'b-sig',new:'b-new'};return`<span class="badge ${m[item.badgeStyle]||'b-pop'}">${item.badge}</span>`;}
-function addBtn(lbl){return`<button class="add-btn" onclick="addToPlate(this)">${PLUS}${lbl||'Add'}</button>`;}
+function addBtn(lbl){return`<button class="add-btn" onclick="event.stopPropagation();addToPlate(this)">${PLUS}${lbl||'Add'}</button>`;}
 
-/* ── ALL CARDS IDENTICAL — no special first-item treatment ── */
+/* ── ALL CARDS IDENTICAL — click anywhere on card opens lightbox ── */
 function itemCard(item){
   const e=emo(item.name);
-  return`<div class="mi reveal" data-name="${item.name}" data-price="${item.price||0}" data-emoji="${e}" data-img="${item.img||''}">
+  const s=(item.img||'').replace(/'/g,'%27'),n=(item.name||'').replace(/'/g,'\u2019');
+  const clickHandler=item.img?`onclick="openLightbox('${s}','${n}')" style="cursor:zoom-in"`:'';
+  return`<div class="mi reveal" data-name="${item.name}" data-price="${item.price||0}" data-emoji="${e}" data-img="${item.img||''}" ${clickHandler}>
     <div class="mi-img-col">${imgEl(item.img,item.name,'mi-img','mi-ph',e)}</div>
     <div class="mi-body">
       <div class="mi-top">
@@ -486,11 +486,9 @@ function itemCard(item){
 function dessertCard(item){
   const e=emo(item.name);
   const s=(item.img||'').replace(/'/g,'%27'),n=(item.name||'').replace(/'/g,'\u2019');
-  const imgHtml=item.img
-    ?`<img class="ds-img" src="${item.img}" alt="${n}" loading="lazy" onload="this.classList.add('rdy')" onerror="this.parentElement.innerHTML='<div class=&quot;ds-ph&quot;>${e}</div>'" onclick="openLightbox('${s}','${n}')" style="cursor:zoom-in"><div class="zoom-badge">${ZSVG}</div>`
-    :`<div class="ds-ph">${e}</div>`;
-  return`<div class="ds-card reveal" data-name="${item.name}" data-price="${item.price||0}" data-emoji="${e}" data-img="${item.img||''}">
-    <div class="ds-img-wrap">${imgHtml}</div>
+  const clickHandler=item.img?`onclick="openLightbox('${s}','${n}')" style="cursor:zoom-in"`:'';
+  return`<div class="ds-card reveal" data-name="${item.name}" data-price="${item.price||0}" data-emoji="${e}" data-img="${item.img||''}" ${clickHandler}>
+    <div class="ds-img-wrap">${item.img?`<img class="ds-img" src="${item.img}" alt="${n}" loading="lazy" onload="this.classList.add('rdy')" onerror="this.parentElement.innerHTML='<div class=&quot;ds-ph&quot;>${e}</div>'"><div class="zoom-badge">${ZSVG}</div>`:`<div class="ds-ph">${e}</div>`}</div>
     <div class="ds-body">
       <div class="ds-name">${item.name}</div>
       <div class="ds-price">${fmt(item.price)}</div>
@@ -566,9 +564,10 @@ function renderSpecials(){
   const price=typeof item.price==='number'?item.price:(parseFloat(String(item.price||'').replace(/[^0-9.]/g,''))||0);
   const sn=(item.name||'').replace(/'/g,'\u2019'),ss=(item.image||'').replace(/'/g,'%27');
   const imgHtml=item.image
-    ?`<img class="sp-img" src="${item.image}" alt="${sn}" loading="lazy" onload="this.classList.add('rdy')" onerror="this.parentElement.innerHTML='<div class=&quot;sp-ph&quot;>${e}</div>'" onclick="openLightbox('${ss}','${sn}')" style="cursor:zoom-in"><div class="zoom-badge" style="width:24px;height:24px;bottom:8px;right:8px">${ZSVG}</div>`
+    ?`<img class="sp-img" src="${item.image}" alt="${sn}" loading="lazy" onload="this.classList.add('rdy')" onerror="this.parentElement.innerHTML='<div class=&quot;sp-ph&quot;>${e}</div>'"><div class="zoom-badge" style="width:24px;height:24px;bottom:8px;right:8px">${ZSVG}</div>`
     :`<div class="sp-ph">${e}</div>`;
-  c.innerHTML=`<div class="sp-card reveal">
+  const spClick=item.image?`onclick="openLightbox('${ss}','${sn}')" style="cursor:zoom-in"`:'';
+  c.innerHTML=`<div class="sp-card reveal" ${spClick}>
     <div class="sp-img-wrap">${imgHtml}</div>
     <div class="sp-body">
       ${item.type?`<div class="sp-type">${item.type}</div>`:''}
@@ -577,7 +576,7 @@ function renderSpecials(){
       ${item.desc?`<div class="sp-desc">${item.desc}</div>`:''}
       <div class="sp-foot">
         ${item.sides?`<span style="font-family:var(--sans);font-weight:300;font-size:13px;color:rgba(196,160,112,.45)">Served with ${item.sides}</span>`:''}
-        ${price?`<button class="add-btn" onclick="addSpecial(${JSON.stringify(item.name)},${price},${JSON.stringify(item.image||'')},${JSON.stringify(e)})">${PLUS}Add to Plate</button>`:''}
+        ${price?`<button class="add-btn" onclick="event.stopPropagation();addSpecial(${JSON.stringify(item.name)},${price},${JSON.stringify(item.image||'')},${JSON.stringify(e)})">${PLUS}Add to Plate</button>`:''}
       </div>
     </div>
   </div>`;
