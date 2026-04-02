@@ -84,7 +84,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   color:rgba(196,160,112,.55);max-width:540px;
   opacity:0;animation:fadeU .7s .9s ease forwards;}
 
-/* ══ CARD VISUAL ══ */
+/* ══ CARD SECTION ══ */
 #card-section{
   position:relative;z-index:10;
   padding:clamp(40px,7vh,80px) clamp(24px,8vw,120px);
@@ -92,46 +92,15 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
 }
 @media(min-width:768px){#card-section{grid-template-columns:1fr 1fr;align-items:center;}}
 
-/* the gift card mockup */
 #card-mockup{
-  position:relative;
-  aspect-ratio:1.586/1;
-  border-radius:16px;
-  background:linear-gradient(135deg,#1a0c04 0%,#2c1408 40%,#1e0f06 70%,#0f0702 100%);
-  border:1px solid rgba(192,72,0,.35);
-  box-shadow:0 24px 80px rgba(192,72,0,.25),0 4px 20px rgba(0,0,0,.6),inset 0 1px 0 rgba(240,136,32,.1);
-  overflow:hidden;
   opacity:0;animation:fadeU .9s .6s ease forwards;
 }
-/* ember glow spots */
-#card-mockup::before{content:'';position:absolute;bottom:-20%;left:-10%;width:70%;height:70%;
-  background:radial-gradient(ellipse,rgba(192,72,0,.2),transparent 65%);pointer-events:none;}
-#card-mockup::after{content:'';position:absolute;top:-20%;right:-10%;width:50%;height:50%;
-  background:radial-gradient(ellipse,rgba(240,136,32,.08),transparent 65%);pointer-events:none;}
-.cm-inner{position:absolute;inset:0;padding:clamp(18px,4%,32px);display:flex;flex-direction:column;justify-content:space-between;}
-.cm-top{display:flex;justify-content:space-between;align-items:flex-start;}
-.cm-logo-text{font-family:var(--serif);font-weight:700;font-size:clamp(12px,2.2%,18px);
-  color:rgba(232,212,176,.8);letter-spacing:.01em;line-height:1;}
-.cm-logo-text em{font-style:italic;font-weight:400;color:var(--flame);}
-.cm-logo-sub{font-family:var(--cond);font-size:clamp(7px,1.2%,10px);letter-spacing:.22em;
-  text-transform:uppercase;color:rgba(196,160,112,.4);margin-top:3px;}
-.cm-chip{width:clamp(24px,5%,36px);height:clamp(18px,3.8%,28px);border-radius:3px;
-  background:linear-gradient(135deg,rgba(245,168,48,.6),rgba(192,72,0,.4));
-  border:1px solid rgba(245,168,48,.25);}
-.cm-mid{display:flex;flex-direction:column;gap:4px;}
-.cm-gift-label{font-family:var(--cond);font-weight:700;font-size:clamp(8px,1.4%,11px);
-  letter-spacing:.35em;text-transform:uppercase;color:rgba(196,160,112,.35);}
-.cm-gift-title{font-family:var(--serif);font-weight:900;font-size:clamp(18px,4%,32px);
-  letter-spacing:-.02em;color:var(--cream);line-height:1;}
-.cm-gift-title em{font-style:italic;font-weight:300;color:var(--glow);}
-.cm-bot{display:flex;justify-content:space-between;align-items:flex-end;}
-.cm-detail{display:flex;flex-direction:column;gap:2px;}
-.cm-detail-label{font-family:var(--cond);font-size:clamp(6px,1%,8px);letter-spacing:.22em;
-  text-transform:uppercase;color:rgba(196,160,112,.28);}
-.cm-detail-val{font-family:var(--cond);font-weight:600;font-size:clamp(8px,1.5%,12px);
-  letter-spacing:.06em;color:rgba(196,160,112,.55);}
-.cm-flames{display:flex;gap:2px;font-size:clamp(12px,2.5%,20px);
-  filter:drop-shadow(0 0 6px rgba(240,136,32,.5));}
+#card-mockup img{
+  width:100%;
+  border-radius:16px;
+  box-shadow:0 24px 80px rgba(192,72,0,.25),0 4px 20px rgba(0,0,0,.6);
+  display:block;
+}
 
 /* card info panel */
 #card-info{display:flex;flex-direction:column;gap:clamp(20px,3.5vh,32px);}
@@ -211,7 +180,6 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   margin-bottom:clamp(28px,4.5vh,44px);position:relative;z-index:1;}
 .cta-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;position:relative;z-index:1;}
 
-/* info cards row */
 .info-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
   margin-bottom:clamp(28px,4vh,40px);position:relative;z-index:1;}
 .info-card{display:flex;flex-direction:column;align-items:center;gap:6px;
@@ -283,16 +251,14 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
 
 <!-- CARD MOCKUP + INFO -->
 <section id="card-section">
-  <!-- Gift Card Photo -->
-  <div id="card-mockup" style="aspect-ratio:auto;background:none;border:none;box-shadow:none;border-radius:0;overflow:visible;opacity:0;animation:fadeU .9s .6s ease forwards;">
-    <img src="Images/FrancisGiftCard.jpg"
+  <div id="card-mockup">
+    <img
+      src="https://www.thefrancismokehouse.com/Images/Giftcard.jpg"
       alt="The Francis Smokehouse Gift Card"
-      style="width:100%;border-radius:16px;
-        box-shadow:0 24px 80px rgba(192,72,0,.25),0 4px 20px rgba(0,0,0,.6);
-        display:block;" />
+      onerror="this.style.opacity='.3'"
+    />
   </div>
 
-  <!-- Info -->
   <div id="card-info">
     <div class="ci-eyebrow reveal">Available In-Store</div>
     <h2 class="ci-title reveal">Load Any <em>Amount.</em></h2>
@@ -374,7 +340,7 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
 </section>
 
 <footer id="ftr">
-  <span class="ftr-t">© 2025 The Francis Smokehouse & Specialty Meats</span>
+  <span class="ftr-t">© 2025 The Francis Smokehouse &amp; Specialty Meats</span>
   <div class="ftr-flames"><span class="ff">🔥</span><span class="ff">🔥</span><span class="ff">🔥</span></div>
   <span class="ftr-t">St. Francisville, LA · (225) 245-5046</span>
 </footer>
