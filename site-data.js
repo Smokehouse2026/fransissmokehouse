@@ -124,7 +124,7 @@ var MENU = {
       {
         name:  "½ Rack of Ribs",
         price: 18.74,
-        img:   "https://www.thefrancismokehouse.com/Images/HalfRackRibs.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/RibHalfRack.jpg",
         desc:  "Half rack of our signature smoked pork spare ribs."
       },
       {
