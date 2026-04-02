@@ -108,6 +108,8 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 .ni-arrow::before{content:'';position:absolute;bottom:0;left:0;right:0;height:0;background:linear-gradient(to top,rgba(240,140,40,.15),transparent);transition:height .4s var(--ease);border-radius:50%}
 .nav-item:hover .ni-arrow{transform:rotate(-45deg) scale(1.15);border-color:rgba(240,140,40,.45);color:var(--flame);box-shadow:0 0 20px rgba(240,140,40,.18)}
 .nav-item:hover .ni-arrow::before{height:100%}
+.nav-market .ni-name{font-size:clamp(18px,2.6vw,38px);}
+.nav-market:hover .ni-name{color:var(--cream);letter-spacing:.01em;text-shadow:0 0 40px rgba(240,140,40,.2),0 0 80px rgba(192,74,0,.15)}
 .nav-item:nth-child(1){animation:fadeSlideU .6s .4s ease both}
 .nav-item:nth-child(2){animation:fadeSlideU .6s .48s ease both}
 .nav-item:nth-child(3){animation:fadeSlideU .6s .56s ease both}
@@ -459,9 +461,9 @@ const NAV_ORDER=[
   {id:'find',num:'06',name:'Find Us',sub:'6779 US Hwy 61 · Follow the smoke'},
 ];
 const navC=document.getElementById('nav-items');
-NAV_ORDER.forEach(n=>{const el=document.createElement('div');el.className='nav-item'+(n.special?' nav-special':'');el.onclick=()=>{if(DIRECT_NAV.has(n.id)){navigateDirect(n.id);}else{openPanel(n.id);}};el.onmouseenter=()=>setPreview(n.id);el.onmouseleave=clearPreview;el.innerHTML=`<span class="ni-num"${n.special?' style="font-size:7px;opacity:.35"':''}>${n.num}</span><span class="ni-name" data-text="${n.name}"${n.special?' style="font-size:clamp(13px,1.6vw,22px);letter-spacing:.01em"':''}>${n.name}</span><span class="ni-sub">${n.sub}</span><span class="ni-arrow"${n.special?' style="width:clamp(16px,1.6vw,22px);height:clamp(16px,1.6vw,22px);font-size:9px"':''}>↗</span>`;navC.appendChild(el)});
+NAV_ORDER.forEach(n=>{const el=document.createElement('div');el.className='nav-item'+(n.special?' nav-special':'')+(n.id==='market'?' nav-market':'');el.onclick=()=>{if(DIRECT_NAV.has(n.id)){navigateDirect(n.id);}else{openPanel(n.id);}};el.onmouseenter=()=>setPreview(n.id);el.onmouseleave=clearPreview;el.innerHTML=`<span class="ni-num"${n.special?' style="font-size:7px;opacity:.35"':''}>${n.num}</span><span class="ni-name" data-text="${n.name}"${n.special?' style="font-size:clamp(13px,1.6vw,22px);letter-spacing:.01em"':''}>${n.name}</span><span class="ni-sub">${n.sub}</span><span class="ni-arrow"${n.special?' style="width:clamp(16px,1.6vw,22px);height:clamp(16px,1.6vw,22px);font-size:9px"':''}>↗</span>`;navC.appendChild(el)});
 const mobNav=document.getElementById('mob-nav');
-NAV_ORDER.forEach(n=>{const el=document.createElement('div');el.className='mob-nav-item'+(n.special?' nav-special':'');el.onclick=()=>{if(DIRECT_NAV.has(n.id)){navigateDirect(n.id);}else{openMobPanel(n.id);}};el.innerHTML=`<span class="mni-num"${n.special?' style="font-size:7px;opacity:.35"':''}>${n.num}</span><div class="mni-body"><div class="mni-name"${n.special?' style="font-size:clamp(13px,3.2vw,17px);color:rgba(240,140,40,.65)"':''}>${n.name}</div><div class="mni-sub">${n.sub}</div></div><span class="mni-arrow"${n.special?' style="width:22px;height:22px;font-size:10px"':''}>↗</span>`;mobNav.appendChild(el)});
+NAV_ORDER.forEach(n=>{const el=document.createElement('div');el.className='mob-nav-item'+(n.special?' nav-special':'');el.onclick=()=>{if(DIRECT_NAV.has(n.id)){navigateDirect(n.id);}else{openMobPanel(n.id);}};el.innerHTML=`<span class="mni-num"${n.special?' style="font-size:7px;opacity:.35"':''}>${n.num}</span><div class="mni-body"><div class="mni-name"${n.special?' style="font-size:clamp(13px,3.2vw,17px);color:rgba(240,140,40,.65)"':n.id==='market'?' style="font-size:clamp(16px,4vw,22px)"':''}>${n.name}</div><div class="mni-sub">${n.sub}</div></div><span class="mni-arrow"${n.special?' style="width:22px;height:22px;font-size:10px"':''}>↗</span>`;mobNav.appendChild(el)});
 
 /* Direct navigation — fires loader then goes straight to dest */
 function navigateDirect(id){
