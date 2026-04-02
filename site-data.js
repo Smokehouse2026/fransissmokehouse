@@ -175,7 +175,7 @@ var MENU = {
       {
         name:  "Pulled Pork Sandwich",
         price: 12.49,
-        img:   "https://www.thefrancismokehouse.com/Images/PulledPorkSandwich.jpg",
+        img:   "https://www.thefrancismokehouse.com/Images/PorkSandwich.jpg",
         desc:  "House-smoked pulled pork on a toasted bun."
       },
       {
@@ -199,7 +199,7 @@ var MENU = {
       {
         name:       "Bacon Cheeseburger",
         price:      13.53,
-        img:        "https://www.thefrancismokehouse.com/Images/BaconCheeseburger.jpg",
+        img:        "https://www.thefrancismokehouse.com/Images/BaconCheeseBurger.jpg",
         desc:       "Smoked bacon, American cheese, dressed.",
         badge:      "Top Pick",
         badgeStyle: "pop"
