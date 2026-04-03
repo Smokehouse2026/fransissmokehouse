@@ -67,6 +67,7 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 #main{flex:1;overflow:hidden;display:grid;grid-template-columns:clamp(160px,18vw,230px) 1fr clamp(160px,18vw,230px)}
 #main > * + *{border-left:1px solid rgba(196,168,130,.06)}
 #sidebar-l,#sidebar-r{display:flex;flex-direction:column;justify-content:space-between;padding:clamp(16px,2.4vh,26px) clamp(14px,1.8vw,24px)}
+#sidebar-r{gap:12px;justify-content:flex-start;}
 #sidebar-l{animation:fadeSlideR .8s .5s ease both}
 #sidebar-r{animation:fadeSlideL .8s .5s ease both}
 .sb-group{display:flex;flex-direction:column;gap:clamp(14px,2vh,22px)}
@@ -131,16 +132,31 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 #pv-num{font-family:var(--cond);font-weight:800;font-size:clamp(60px,11vw,120px);line-height:1;letter-spacing:-.03em;color:rgba(192,74,0,.04);text-align:right;margin-top:auto;transition:color .6s var(--ease)}
 #pv-num.lit{color:rgba(240,140,40,.14)}
 
-#ad-spot{position:relative;border:1px solid rgba(196,168,130,.1);border-radius:6px;padding:clamp(12px,1.8vh,18px) clamp(12px,1.6vw,16px);background:rgba(14,8,3,.7);overflow:hidden;display:flex;flex-direction:column;gap:6px;}
-#ad-spot::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(192,74,0,.07),transparent 70%);pointer-events:none;}
-#ad-eyebrow{font-family:var(--cond);font-weight:600;font-size:7px;letter-spacing:.32em;text-transform:uppercase;color:rgba(240,140,40,.35);display:flex;align-items:center;gap:6px;}
-#ad-eyebrow::before{content:'';width:12px;height:1px;background:rgba(240,140,40,.3);}
-#ad-headline{font-family:var(--serif);font-weight:700;font-size:clamp(11px,1.1vw,14px);color:rgba(232,217,188,.65);line-height:1.2;}
-#ad-body{font-family:var(--body);font-weight:300;font-size:clamp(9px,.9vw,11px);line-height:1.6;color:rgba(196,168,130,.38);}
-#ad-cta{display:inline-flex;align-items:center;gap:5px;font-family:var(--cond);font-weight:700;font-size:clamp(8px,.9vw,10px);letter-spacing:.16em;text-transform:uppercase;color:var(--flame);text-decoration:none;background:rgba(192,74,0,.12);border:1px solid rgba(192,74,0,.28);padding:6px 11px;border-radius:2px;transition:all .25s;cursor:none;margin-top:2px;width:fit-content;}
-#ad-cta:hover{background:rgba(192,74,0,.22);border-color:rgba(240,140,40,.45);color:var(--glow);}
-@media(hover:none){#ad-cta{cursor:auto;}}
-#ad-fine{font-family:var(--cond);font-size:6px;letter-spacing:.16em;text-transform:uppercase;color:rgba(196,168,130,.16);margin-top:2px;}
+/* ── BILLBOARD AD SLOTS ─────────────────────────────────── */
+#ad-slots{display:flex;flex-direction:column;gap:6px;flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;}
+#ad-slots::-webkit-scrollbar{display:none;}
+.mob-ad-slots{display:flex;flex-direction:column;gap:8px;}
+
+/* each slot is a fixed-ratio box — image fills it, placeholder shows when empty */
+.ad-slot{position:relative;width:100%;aspect-ratio:4/3;border-radius:6px;overflow:hidden;border:1px solid rgba(196,168,130,.1);background:rgba(10,5,2,.9);flex-shrink:0;}
+
+/* uploaded ad image — covers everything when loaded */
+.ad-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s;z-index:2;}
+.ad-img.loaded{opacity:1;}
+
+/* placeholder — visible until image loads */
+.ad-placeholder{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:clamp(10px,1.4vh,16px) clamp(10px,1.2vw,14px);background:radial-gradient(ellipse at 50% 100%,rgba(192,74,0,.1),transparent 70%);}
+.ad-pl-eyebrow{font-family:var(--cond);font-weight:600;font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(240,140,40,.4);display:flex;align-items:center;gap:5px;}
+.ad-pl-eyebrow::before{content:'';width:10px;height:1px;background:rgba(240,140,40,.35);}
+.ad-pl-headline{font-family:var(--serif);font-weight:700;font-size:clamp(10px,1vw,13px);color:rgba(232,217,188,.65);line-height:1.2;}
+.ad-pl-body{font-family:var(--body);font-weight:300;font-size:clamp(8px,.8vw,10px);line-height:1.5;color:rgba(196,168,130,.38);}
+.ad-pl-cta{display:inline-flex;align-items:center;gap:4px;font-family:var(--cond);font-weight:700;font-size:clamp(7px,.75vw,9px);letter-spacing:.14em;text-transform:uppercase;color:var(--flame);text-decoration:none;background:rgba(192,74,0,.14);border:1px solid rgba(192,74,0,.3);padding:5px 9px;border-radius:2px;transition:all .2s;width:fit-content;cursor:none;}
+.ad-pl-cta:hover,.ad-pl-cta:active{background:rgba(192,74,0,.26);color:var(--glow);}
+@media(hover:none){.ad-pl-cta{cursor:auto;}}
+.ad-pl-fine{font-family:var(--cond);font-size:6px;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,168,130,.2);}
+
+/* mobile slot sizing — wider aspect ratio to fit horizontal space */
+#mob-sidebar-r .ad-slot{aspect-ratio:16/7;border-radius:5px;}
 
 #botbar{flex-shrink:0;height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(14px,2.5vw,28px);border-top:1px solid rgba(196,168,130,.06);background:linear-gradient(to top,rgba(9,7,4,.92),transparent);overflow:hidden}
 #ticker-track{display:flex;white-space:nowrap;animation:tkr 34s linear infinite;flex:1;overflow:hidden}
@@ -196,16 +212,7 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 .msb-link{font-family:var(--cond);font-weight:500;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,168,130,.32);text-decoration:none;padding:4px 8px;border:1px solid rgba(196,168,130,.1);border-radius:2px;transition:all .2s;}
 .msb-link:active{color:var(--flame);border-color:rgba(240,140,40,.3);}
 
-#mob-sidebar-r{flex-shrink:0;padding:12px 20px;border-top:1px solid rgba(196,168,130,.07);background:rgba(9,7,4,.5);}
-#mob-ad-spot{position:relative;border:1px solid rgba(196,168,130,.1);border-radius:6px;padding:12px 14px;background:rgba(14,8,3,.8);display:flex;flex-direction:column;gap:5px;overflow:hidden;}
-#mob-ad-spot::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(192,74,0,.07),transparent 70%);pointer-events:none;}
-#mob-ad-eyebrow{font-family:var(--cond);font-weight:600;font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(240,140,40,.38);display:flex;align-items:center;gap:6px;}
-#mob-ad-eyebrow::before{content:'';width:10px;height:1px;background:rgba(240,140,40,.3);}
-#mob-ad-headline{font-family:var(--serif);font-weight:700;font-size:13px;color:rgba(232,217,188,.7);line-height:1.2;}
-#mob-ad-body{font-family:var(--body);font-weight:300;font-size:11px;line-height:1.55;color:rgba(196,168,130,.42);}
-#mob-ad-cta{display:inline-flex;align-items:center;gap:5px;font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--flame);text-decoration:none;background:rgba(192,74,0,.12);border:1px solid rgba(192,74,0,.3);padding:7px 12px;border-radius:2px;transition:all .2s;width:fit-content;margin-top:2px;}
-#mob-ad-cta:active{background:rgba(192,74,0,.24);color:var(--glow);}
-#mob-ad-fine{font-family:var(--cond);font-size:6px;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,168,130,.18);}
+#mob-sidebar-r{flex-shrink:0;padding:10px 20px 16px;border-top:1px solid rgba(196,168,130,.07);background:rgba(9,7,4,.5);}
 .mob-nav-item:nth-child(2){animation:fadeSlideU .5s .43s ease both}
 .mob-nav-item:nth-child(3){animation:fadeSlideU .5s .51s ease both}
 .mob-nav-item:nth-child(4){animation:fadeSlideU .5s .59s ease both}
@@ -361,13 +368,38 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
     <div id="sidebar-r">
       <div><div class="pv-label">Section Preview</div><div id="pv-title">Hover any item to explore</div><div id="pv-desc">Each destination has its own story. Take your time.</div><div id="pv-chips"></div></div>
 
-      <!-- AD SPOT -->
-      <div id="ad-spot">
-        <div id="ad-eyebrow">Advertise Here</div>
-        <div id="ad-headline">Want to grow your business?</div>
-        <div id="ad-body">Reach locals & visitors right here on the Francis Smokehouse homepage. Weekly &amp; monthly spots available.</div>
-        <a href="tel:3373729118" id="ad-cta">📞 Call (337) 372-9118</a>
-        <div id="ad-fine">Sponsored placement · thefrancismokehouse.com</div>
+      <!-- AD BILLBOARDS — upload Images/ad1.jpg / ad2.jpg / ad3.jpg to activate -->
+      <div id="ad-slots">
+        <div class="ad-slot" id="ad-slot-1">
+          <img class="ad-img" src="Images/ad1.jpg" alt="Advertisement" onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+          <div class="ad-placeholder">
+            <div class="ad-pl-eyebrow">Advertise Here</div>
+            <div class="ad-pl-headline">Want to grow<br>your business?</div>
+            <div class="ad-pl-body">Reach locals &amp; visitors on the Francis Smokehouse homepage.</div>
+            <a href="tel:3373729118" class="ad-pl-cta">📞 (337) 372-9118</a>
+            <div class="ad-pl-fine">Spot 1 · Weekly &amp; monthly rates</div>
+          </div>
+        </div>
+        <div class="ad-slot" id="ad-slot-2">
+          <img class="ad-img" src="Images/ad2.jpg" alt="Advertisement" onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+          <div class="ad-placeholder">
+            <div class="ad-pl-eyebrow">Advertise Here</div>
+            <div class="ad-pl-headline">Want to grow<br>your business?</div>
+            <div class="ad-pl-body">Reach locals &amp; visitors on the Francis Smokehouse homepage.</div>
+            <a href="tel:3373729118" class="ad-pl-cta">📞 (337) 372-9118</a>
+            <div class="ad-pl-fine">Spot 2 · Weekly &amp; monthly rates</div>
+          </div>
+        </div>
+        <div class="ad-slot" id="ad-slot-3">
+          <img class="ad-img" src="Images/ad3.jpg" alt="Advertisement" onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+          <div class="ad-placeholder">
+            <div class="ad-pl-eyebrow">Advertise Here</div>
+            <div class="ad-pl-headline">Want to grow<br>your business?</div>
+            <div class="ad-pl-body">Reach locals &amp; visitors on the Francis Smokehouse homepage.</div>
+            <a href="tel:3373729118" class="ad-pl-cta">📞 (337) 372-9118</a>
+            <div class="ad-pl-fine">Spot 3 · Weekly &amp; monthly rates</div>
+          </div>
+        </div>
       </div>
 
       <div id="pv-num">—</div>
@@ -405,14 +437,39 @@ body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;back
 
   <div id="mob-nav"></div>
 
-  <!-- MOBILE RIGHT SIDEBAR — ad spot -->
+  <!-- MOBILE RIGHT SIDEBAR — ad billboards -->
   <div id="mob-sidebar-r">
-    <div id="mob-ad-spot">
-      <div id="mob-ad-eyebrow">Advertise Here</div>
-      <div id="mob-ad-headline">Want to grow your business?</div>
-      <div id="mob-ad-body">Reach locals &amp; visitors right here on the Francis Smokehouse homepage. Weekly &amp; monthly spots available.</div>
-      <a href="tel:3373729118" id="mob-ad-cta">📞 Call (337) 372-9118</a>
-      <div id="mob-ad-fine">Sponsored placement · thefrancismokehouse.com</div>
+    <div class="mob-ad-slots">
+      <div class="ad-slot">
+        <img class="ad-img" src="Images/ad1.jpg" alt="Advertisement" onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+        <div class="ad-placeholder">
+          <div class="ad-pl-eyebrow">Advertise Here</div>
+          <div class="ad-pl-headline">Want to grow your business?</div>
+          <div class="ad-pl-body">Reach locals &amp; visitors on the Francis Smokehouse homepage.</div>
+          <a href="tel:3373729118" class="ad-pl-cta">📞 (337) 372-9118</a>
+          <div class="ad-pl-fine">Spot 1 · Weekly &amp; monthly rates</div>
+        </div>
+      </div>
+      <div class="ad-slot">
+        <img class="ad-img" src="Images/ad2.jpg" alt="Advertisement" onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+        <div class="ad-placeholder">
+          <div class="ad-pl-eyebrow">Advertise Here</div>
+          <div class="ad-pl-headline">Want to grow your business?</div>
+          <div class="ad-pl-body">Reach locals &amp; visitors on the Francis Smokehouse homepage.</div>
+          <a href="tel:3373729118" class="ad-pl-cta">📞 (337) 372-9118</a>
+          <div class="ad-pl-fine">Spot 2 · Weekly &amp; monthly rates</div>
+        </div>
+      </div>
+      <div class="ad-slot">
+        <img class="ad-img" src="Images/ad3.jpg" alt="Advertisement" onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+        <div class="ad-placeholder">
+          <div class="ad-pl-eyebrow">Advertise Here</div>
+          <div class="ad-pl-headline">Want to grow your business?</div>
+          <div class="ad-pl-body">Reach locals &amp; visitors on the Francis Smokehouse homepage.</div>
+          <a href="tel:3373729118" class="ad-pl-cta">📞 (337) 372-9118</a>
+          <div class="ad-pl-fine">Spot 3 · Weekly &amp; monthly rates</div>
+        </div>
+      </div>
     </div>
   </div>
 
