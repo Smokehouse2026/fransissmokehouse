@@ -19,6 +19,24 @@
    Use a plain number  e.g.  16.66
    Use  null  when the price is market rate / ask your server.
 
+   ── NEW: SCARCITY TICKER ────────────────────────────────────
+   SOLD_OUT and SELLING_FAST power the scrolling banner at the
+   top of the page. Update these daily as things sell out.
+   Just add the item names as strings. Leave arrays empty if
+   nothing to report — the banner won't show.
+
+   Example:
+     var SOLD_OUT     = ["Beef Rib", "Smoked Turkey"];
+     var SELLING_FAST = ["Cracklins", "Brisket"];
+
+   ── NEW: PAIRING SUGGESTIONS ────────────────────────────────
+   Add  pairs: "jalapeño cornbread, sweet tea"  to any item.
+   A subtle "↳ Pairs with ..." line appears on that card and
+   brightens when the customer hovers over it.
+
+   ── NEW: BADGE STYLES ───────────────────────────────────────
+   "pop" = orange   "sig" = amber   "new" = green   "out" = gray/struck-through
+
    ADDING A NEW CATEGORY
    ─────────────────────
    Copy any category block below, give it a new unique key,
@@ -57,6 +75,24 @@ var HOURS_CFG = {
 };
 
 
+/* ── SCARCITY TICKER ─────────────────────────────────────── */
+/*
+   These feed the scrolling banner at the top of the menu.
+   Update each morning as things sell out or run low.
+   Leave as empty arrays if nothing to report today —
+   the banner hides itself automatically.
+*/
+var SOLD_OUT = [
+  // "Beef Rib",
+  // "Smoked Turkey"
+];
+
+var SELLING_FAST = [
+  // "Brisket",
+  // "Cracklins"
+];
+
+
 /* ── TODAY'S SPECIAL ─────────────────────────────────────── */
 /*
    date: ""            → show every day
@@ -86,16 +122,17 @@ var SITE_SPECIAL = {
 
    ITEM FIELDS
    ───────────
-   name       Item name  (required)
-   price      Number, or null for "Ask"
-   priceLg    Optional second price  (e.g. large size)
-   img        Full URL to photo — https://www.thefrancismokehouse.com/Images/FileName.jpg
-              Leave ""  if no photo yet
-   desc       Short description shown under the name
-   note       Fine-print line  (e.g. "+ 2 Sides")
-   badge      Short badge label  (e.g. "Most Ordered")
-   badgeStyle "pop" = orange · "sig" = amber · "new" = green
-   hidden     true to hide without deleting
+   name        Item name  (required)
+   price       Number, or null for "Ask"
+   priceLg     Optional second price  (e.g. large size)
+   img         Full URL — https://www.thefrancismokehouse.com/Images/FileName.jpg
+               Leave ""  if no photo yet
+   desc        Short description shown under the name
+   note        Fine-print line  (e.g. "+ 2 Sides")
+   pairs       Pairing suggestion shown on hover — e.g. "sweet tea, cornbread"
+   badge       Short badge label  (e.g. "Most Ordered")
+   badgeStyle  "pop" = orange · "sig" = amber · "new" = green · "out" = gray/struck
+   hidden      true to hide without deleting
 */
 var MENU = {
 
@@ -110,6 +147,7 @@ var MENU = {
         price:      16.66,
         img:        "https://www.thefrancismokehouse.com/Images/Brisket.jpg",
         desc:       "Slow-smoked beef brisket, sliced to order. Bark-crusted, smoke-ringed, impossibly tender.",
+        pairs:      "corn pudding, sweet tea",
         badge:      "Most Ordered",
         badgeStyle: "pop"
       },
@@ -118,6 +156,7 @@ var MENU = {
         price:      33.32,
         img:        "https://www.thefrancismokehouse.com/Images/FullRackRibs.jpg",
         desc:       "Pork spare ribs, rubbed and smoked until fall-off-the-bone tender.",
+        pairs:      "baked beans, cold beer",
         badge:      "Fan Favorite",
         badgeStyle: "pop"
       },
@@ -125,25 +164,29 @@ var MENU = {
         name:  "½ Rack of Ribs",
         price: 18.74,
         img:   "https://www.thefrancismokehouse.com/Images/RibHalfRack.jpg",
-        desc:  "Half rack of our signature smoked pork spare ribs."
+        desc:  "Half rack of our signature smoked pork spare ribs.",
+        pairs: "baked beans, potato salad"
       },
       {
         name:  "Pulled Pork",
         price: 15.62,
         img:   "https://www.thefrancismokehouse.com/Images/PulledPork.jpg",
-        desc:  "Pork shoulder smoked until it pulls apart like silk. House sauce on the side."
+        desc:  "Pork shoulder smoked until it pulls apart like silk. House sauce on the side.",
+        pairs: "cole slaw, jalapeño cornbread"
       },
       {
         name:  "½ Chicken Plate",
         price: 15.62,
         img:   "https://www.thefrancismokehouse.com/Images/HalfChicken.jpg",
-        desc:  "Half chicken, brined and smoked whole, juicy straight through to the bone."
+        desc:  "Half chicken, brined and smoked whole, juicy straight through to the bone.",
+        pairs: "sweet potato waffle fries, sweet tea"
       },
       {
         name:       "Smoked Wings",
         price:      13.53,
         img:        "https://www.thefrancismokehouse.com/Images/SmokedWings.jpg",
         desc:       "Whole wings smoked low, finished hot. Crispy skin. Smoke all the way through.",
+        pairs:      "french fries, ranch",
         badge:      "Try It",
         badgeStyle: "new"
       }
@@ -161,6 +204,7 @@ var MENU = {
         price:      16.66,
         img:        "https://www.thefrancismokehouse.com/Images/RibeyePoBoy.jpg",
         desc:       "Shaved ribeye on French bread, dressed. A house signature.",
+        pairs:      "potato salad, sweet tea",
         badge:      "Signature",
         badgeStyle: "sig"
       },
@@ -169,6 +213,7 @@ var MENU = {
         price:      13.53,
         img:        "https://www.thefrancismokehouse.com/Images/BrisketSandwich.jpg",
         desc:       "Sliced smoked brisket piled high. Simple. Perfect.",
+        pairs:      "baked beans, lemonade",
         badge:      "Best Seller",
         badgeStyle: "pop"
       },
@@ -176,13 +221,15 @@ var MENU = {
         name:  "Pulled Pork Sandwich",
         price: 12.49,
         img:   "https://www.thefrancismokehouse.com/Images/PorkSandwich.jpg",
-        desc:  "House-smoked pulled pork on a toasted bun."
+        desc:  "House-smoked pulled pork on a toasted bun.",
+        pairs: "cole slaw, sweet tea"
       },
       {
         name:  "Chicken Sandwich",
         price: 12.49,
         img:   "https://www.thefrancismokehouse.com/Images/ChickenSandwich.jpg",
-        desc:  "Smoked chicken breast on a brioche bun with house slaw."
+        desc:  "Smoked chicken breast on a brioche bun with house slaw.",
+        pairs: "french fries, lemonade"
       },
       {
         name:  "Hamburger",
@@ -201,6 +248,7 @@ var MENU = {
         price:      13.53,
         img:        "https://www.thefrancismokehouse.com/Images/BaconCheeseBurger.jpg",
         desc:       "Smoked bacon, American cheese, dressed.",
+        pairs:      "waffle fries, sweet tea",
         badge:      "Top Pick",
         badgeStyle: "pop"
       },
@@ -208,13 +256,15 @@ var MENU = {
         name:  "Shrimp Po-Boy",
         price: 13.53,
         img:   "https://www.thefrancismokehouse.com/Images/ShrimpPoBoy.jpg",
-        desc:  "Gulf shrimp, fried golden, dressed on French bread."
+        desc:  "Gulf shrimp, fried golden, dressed on French bread.",
+        pairs: "potato salad, lemonade"
       },
       {
         name:  "Catfish Po-Boy",
         price: 13.53,
         img:   "https://www.thefrancismokehouse.com/Images/CatfishPoBoy.jpg",
-        desc:  "Cornmeal-crusted catfish, fried to order, dressed."
+        desc:  "Cornmeal-crusted catfish, fried to order, dressed.",
+        pairs: "cole slaw, sweet tea"
       },
       {
         name:  "Catfish Plate",
@@ -382,7 +432,8 @@ var MENU = {
         name:  "2-Meat Combo Plate",
         price: 20.82,
         img:   "https://www.thefrancismokehouse.com/Images/ComboPlate.jpg",
-        desc:  "Choose any two: Ribs (3 bones), ½ Chicken, Pulled Pork, Smoked Wings, or Brisket."
+        desc:  "Choose any two: Ribs (3 bones), ½ Chicken, Pulled Pork, Smoked Wings, or Brisket.",
+        pairs: "corn pudding, baked beans"
       }
     ]
   },
