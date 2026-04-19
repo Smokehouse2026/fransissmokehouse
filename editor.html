@@ -2,70 +2,1809 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Francis — Renderer Test</title>
-<link rel="stylesheet" href="render.css">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Francis CMS</title>
+<link rel="icon" type="image/png" href="Images/Smokehouselogo.png">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  body { margin: 0; background: #090704; }
-  #test-bar {
-    position: fixed; top: 0; left: 0; right: 0;
-    background: rgba(22,14,6,.95);
-    border-bottom: 1px solid rgba(196,160,112,.22);
-    padding: 8px 14px;
-    z-index: 100;
-    display: flex; align-items: center; gap: 10px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700; font-size: 11px; letter-spacing: .14em;
-    text-transform: uppercase; color: rgba(196,160,112,.72);
-    overflow-x: auto;
-  }
-  #test-bar strong { color: #f08820; }
-  #test-bar button {
-    background: transparent; border: 1px solid rgba(196,160,112,.22);
-    color: rgba(196,160,112,.72);
-    font-family: inherit; font-weight: 700; font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
-    padding: 6px 10px; border-radius: 4px; cursor: pointer;
-    white-space: nowrap;
-  }
-  #test-bar button:hover { border-color: #f08820; color: #f08820; }
-  #test-bar button.active { background: rgba(192,72,0,.2); border-color: #f08820; color: #f08820; }
-  #fs-root { padding-top: 44px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:#07060a;
+  --bg:#0d0a0f;
+  --bg2:#141016;
+  --bg3:#1b1520;
+  --raised:#241c2b;
+  --line:rgba(196,160,112,.09);
+  --line2:rgba(196,160,112,.18);
+  --line3:rgba(196,160,112,.32);
+  --ember:#c04800;--fire:#e06010;--flame:#f08820;--glow:#f5a830;
+  --cream:#f5e8cc;
+  --t1:var(--cream);
+  --t2:rgba(196,160,112,.72);
+  --t3:rgba(196,160,112,.48);
+  --t4:rgba(196,160,112,.28);
+  --ok:#9ad060;
+  --warn:#f5a830;
+  --err:#ff6a3a;
+  --blue:#6a9fd0;
+  --purple:#a67fe0;
+  --serif:'Playfair Display',Georgia,serif;
+  --cond:'Barlow Condensed',sans-serif;
+  --body:'Barlow',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--void);color:var(--t1);font-family:var(--body);font-weight:400;-webkit-tap-highlight-color:transparent;font-size:14px;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 0%,rgba(192,72,0,.08),transparent 50%),
+    radial-gradient(ellipse at 85% 100%,rgba(240,136,32,.05),transparent 50%);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════════════════════ */
+#toastBox{position:fixed;top:14px;right:14px;z-index:10000;display:flex;flex-direction:column;gap:6px;pointer-events:none;}
+.toast{pointer-events:auto;padding:9px 14px;border-radius:7px;font-family:var(--cond);font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);animation:tIn .24s ease, tOut .3s 2.5s ease forwards;max-width:320px;}
+.toast.ok{background:rgba(22,42,22,.94);border:1px solid rgba(154,208,96,.3);color:var(--ok);}
+.toast.err{background:rgba(58,20,14,.94);border:1px solid rgba(255,106,58,.35);color:var(--err);}
+.toast.info{background:rgba(28,22,36,.94);border:1px solid var(--line2);color:var(--t1);}
+@keyframes tIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes tOut{to{opacity:0;transform:translateX(40px)}}
+
+/* ══════════════════════════════════════════════════════════════════
+   PIN
+══════════════════════════════════════════════════════════════════ */
+#pin-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 30% 20%,#1c1016,#0a070c 55%,#040304);transition:opacity .4s;}
+#pin-screen.gone{opacity:0;pointer-events:none;}
+.pin-box{max-width:400px;width:100%;text-align:center;}
+.pin-brand{font-family:var(--serif);font-weight:700;font-size:24px;color:var(--cream);margin-bottom:4px;}
+.pin-brand em{font-style:italic;color:var(--flame);font-weight:400;}
+.pin-sub{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--t4);margin-bottom:40px;}
+.pin-title{font-family:var(--serif);font-weight:900;font-size:34px;color:var(--cream);line-height:1;margin-bottom:12px;letter-spacing:-.02em;}
+.pin-title em{font-style:italic;font-weight:400;color:var(--flame);}
+.pin-instruction{font-weight:300;font-size:14px;color:var(--t3);margin-bottom:32px;line-height:1.6;}
+.pin-dots{display:flex;justify-content:center;gap:12px;margin-bottom:28px;}
+.pin-dot{width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(196,160,112,.3);transition:all .2s;}
+.pin-dot.filled{background:var(--flame);border-color:var(--flame);box-shadow:0 0 10px rgba(240,136,32,.5);}
+.pin-dot.error{background:var(--ember);border-color:var(--ember);animation:shk .4s;}
+@keyframes shk{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:260px;margin:0 auto;}
+.pin-btn{aspect-ratio:1.3;font-family:var(--serif);font-weight:400;font-size:22px;color:var(--cream);background:rgba(22,16,26,.75);border:1px solid rgba(196,160,112,.14);border-radius:8px;cursor:pointer;transition:all .18s;}
+.pin-btn:hover,.pin-btn:active{border-color:rgba(240,136,32,.4);background:rgba(192,72,0,.14);color:var(--flame);}
+.pin-btn.del{font-size:18px;color:var(--t3);}
+.pin-btn.submit{background:linear-gradient(135deg,var(--ember),var(--fire));border:none;color:#fff;font-family:var(--cond);font-weight:800;font-size:13px;letter-spacing:.16em;}
+.pin-msg{font-family:var(--cond);font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ember);margin-top:16px;height:16px;opacity:0;transition:opacity .25s;}
+.pin-msg.show{opacity:1;}
+
+/* ══════════════════════════════════════════════════════════════════
+   APP
+══════════════════════════════════════════════════════════════════ */
+#app{display:none;position:fixed;inset:0;z-index:5;flex-direction:column;}
+#app.on{display:flex;}
+
+/* ── TOP BAR ── */
+.topbar{flex-shrink:0;height:48px;display:flex;align-items:center;gap:10px;padding:0 16px;background:rgba(13,10,15,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);position:relative;z-index:30;}
+.brand{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--cream);}
+.brand em{font-style:italic;color:var(--flame);font-weight:400;}
+.vsep{width:1px;height:18px;background:var(--line);}
+
+.tb-btn{height:30px;padding:0 12px;border-radius:6px;border:1px solid var(--line2);background:transparent;color:var(--t2);font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
+.tb-btn:hover{border-color:var(--flame);color:var(--flame);background:rgba(192,72,0,.08);}
+.tb-btn.danger:hover{border-color:var(--err);color:var(--err);background:rgba(255,106,58,.08);}
+.tb-btn.primary{background:linear-gradient(135deg,var(--ember),var(--fire));border:none;color:#fff;font-weight:800;box-shadow:0 2px 8px rgba(192,72,0,.3);}
+.tb-btn.primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(192,72,0,.45);}
+
+.spacer{flex:1;}
+
+.conn{width:7px;height:7px;border-radius:50%;background:var(--t4);}
+.conn.ok{background:var(--ok);box-shadow:0 0 8px var(--ok);}
+.conn.err{background:var(--err);}
+
+.status{font-family:var(--cond);font-weight:600;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);white-space:nowrap;display:flex;align-items:center;gap:6px;}
+.status.saving{color:var(--flame);}
+.status.saving::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;animation:puls 1s ease-in-out infinite;}
+.status.saved{color:var(--ok);}
+.status.err{color:var(--err);}
+@keyframes puls{0%,100%{opacity:.3}50%{opacity:1}}
+
+.kbd{display:inline-flex;align-items:center;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.4);border:1px solid var(--line);font-family:var(--mono);font-size:9.5px;color:var(--t3);}
+
+/* ══════════════════════════════════════════════════════════════════
+   SEARCH BAR
+══════════════════════════════════════════════════════════════════ */
+.searchbar{flex-shrink:0;border-bottom:1px solid var(--line);background:var(--bg);position:relative;z-index:20;}
+.search-wrap{max-width:900px;margin:0 auto;padding:14px 20px 10px;display:flex;align-items:center;gap:10px;}
+.search-ico{font-size:16px;color:var(--t3);flex-shrink:0;}
+.search{flex:1;background:transparent;border:none;outline:none;color:var(--t1);font-family:var(--body);font-weight:400;font-size:16px;padding:4px 0;}
+.search::placeholder{color:var(--t4);}
+.search-hint{font-family:var(--mono);font-size:10.5px;color:var(--t4);flex-shrink:0;}
+.search-hint kbd{padding:1px 5px;border-radius:2px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--t3);font-family:inherit;font-size:9.5px;}
+.search-clear{background:none;border:none;color:var(--t3);cursor:pointer;font-size:16px;padding:2px 6px;opacity:0;transition:opacity .15s;}
+.search.filled~.search-clear,.search-wrap:hover .search-clear.filled{opacity:1;}
+.search-clear:hover{color:var(--flame);}
+
+/* Quick-chips row */
+.chips{display:flex;gap:6px;padding:0 20px 10px;max-width:900px;margin:0 auto;flex-wrap:wrap;}
+.chip{padding:5px 12px;border:1px solid var(--line2);border-radius:100px;background:transparent;color:var(--t2);font-family:var(--cond);font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .15s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;}
+.chip:hover{border-color:var(--flame);color:var(--flame);background:rgba(192,72,0,.08);}
+.chip.on{background:rgba(192,72,0,.18);border-color:var(--flame);color:var(--flame);}
+.chip-ct{display:inline-block;min-width:16px;padding:0 5px;background:rgba(0,0,0,.3);border-radius:100px;font-size:9.5px;font-variant-numeric:tabular-nums;text-align:center;}
+.chip.on .chip-ct{background:rgba(240,136,32,.3);}
+
+/* ══════════════════════════════════════════════════════════════════
+   LIST
+══════════════════════════════════════════════════════════════════ */
+.list-wrap{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:140px;}
+.list-wrap::-webkit-scrollbar{width:10px;}
+.list-wrap::-webkit-scrollbar-thumb{background:rgba(196,160,112,.12);border-radius:5px;}
+.list-wrap::-webkit-scrollbar-thumb:hover{background:rgba(196,160,112,.22);}
+.list-wrap::-webkit-scrollbar-track{background:transparent;}
+.list{max-width:900px;margin:0 auto;padding:10px 20px 40px;}
+
+/* GROUP HEADER (page break) */
+.grp{margin-top:24px;margin-bottom:8px;display:flex;align-items:baseline;gap:10px;padding:0 4px;position:sticky;top:0;background:linear-gradient(to bottom,var(--void) 60%,transparent);padding-top:10px;padding-bottom:6px;z-index:5;}
+.grp:first-child{margin-top:4px;}
+.grp-ico{font-size:15px;opacity:.85;}
+.grp-name{font-family:var(--serif);font-weight:800;font-size:18px;color:var(--cream);letter-spacing:-.01em;line-height:1;}
+.grp-name em{font-style:italic;color:var(--flame);font-weight:400;}
+.grp-ct{font-family:var(--mono);font-size:10px;color:var(--t4);margin-left:auto;letter-spacing:.06em;}
+.grp-acts{display:flex;gap:4px;opacity:0;transition:opacity .15s;}
+.grp:hover .grp-acts{opacity:1;}
+.grp-act{width:22px;height:22px;border-radius:4px;border:1px solid transparent;background:transparent;color:var(--t3);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.grp-act:hover{border-color:var(--line2);color:var(--flame);background:rgba(192,72,0,.08);}
+
+/* SECTION HEADER (inside a page group) */
+.sec{margin-top:10px;padding:4px 0 2px 4px;display:flex;align-items:center;gap:8px;}
+.sec-ico{font-size:12px;opacity:.7;}
+.sec-name{font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--t2);}
+.sec-kind{font-family:var(--mono);font-size:9.5px;color:var(--t4);letter-spacing:.06em;padding:1px 6px;border:1px solid var(--line);border-radius:3px;}
+.sec-ct{font-family:var(--mono);font-size:10px;color:var(--t4);margin-left:auto;}
+.sec-acts{display:flex;gap:3px;opacity:0;transition:opacity .15s;}
+.sec:hover .sec-acts{opacity:1;}
+.sec-act{width:22px;height:22px;border-radius:4px;border:1px solid transparent;background:transparent;color:var(--t3);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.sec-act:hover{border-color:var(--line2);color:var(--flame);}
+.sec-act.danger:hover{color:var(--err);border-color:rgba(255,106,58,.25);}
+
+/* ROW — THE MAIN UNIT */
+.row{display:flex;align-items:center;gap:12px;padding:9px 10px;margin-bottom:1px;border-radius:6px;background:var(--bg2);border:1px solid transparent;cursor:pointer;transition:all .14s;position:relative;min-height:46px;}
+.row:hover{background:var(--bg3);border-color:var(--line);}
+.row.open{background:var(--bg3);border-color:var(--flame);box-shadow:0 0 0 2px rgba(240,136,32,.1);}
+.row.hidden-flag{opacity:.52;}
+.row.dirty::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--flame);border-radius:0 2px 2px 0;}
+
+.row-kind{flex-shrink:0;width:4px;height:32px;border-radius:2px;background:var(--t4);}
+.row-kind.page-setting{background:var(--purple);}
+.row-kind.section-setting{background:var(--blue);}
+.row-kind.item{background:var(--flame);}
+.row-kind.global{background:var(--glow);}
+
+.row-thumb{width:38px;height:38px;border-radius:5px;background:var(--bg);border:1px solid var(--line);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
+.row-thumb img{width:100%;height:100%;object-fit:cover;}
+.row-thumb-ph{font-size:16px;opacity:.3;}
+
+.row-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;}
+.row-name{font-family:var(--body);font-weight:500;font-size:14px;color:var(--t1);line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.row-name em{font-style:italic;color:var(--flame);font-weight:400;}
+.row-name mark{background:rgba(240,136,32,.28);color:var(--cream);padding:1px 2px;border-radius:2px;font-weight:600;}
+.row-sub{font-family:var(--body);font-weight:300;font-size:12px;color:var(--t3);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.row-sub mark{background:rgba(240,136,32,.2);color:var(--cream);padding:1px 2px;border-radius:2px;}
+
+.row-meta{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.row-price{font-family:var(--cond);font-weight:800;font-size:13px;color:var(--glow);letter-spacing:.02em;}
+.row-tag{font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:rgba(255,255,255,.05);color:var(--t3);border:1px solid var(--line);}
+.row-tag.err{color:var(--err);border-color:rgba(255,106,58,.3);background:rgba(255,106,58,.08);}
+.row-tag.ok{color:var(--ok);border-color:rgba(154,208,96,.3);background:rgba(154,208,96,.08);}
+.row-tag.warn{color:var(--warn);border-color:rgba(245,168,48,.3);background:rgba(245,168,48,.08);}
+
+.row-chevron{width:14px;color:var(--t4);font-size:10px;transition:transform .2s;flex-shrink:0;}
+.row.open .row-chevron{transform:rotate(90deg);color:var(--flame);}
+
+/* INLINE EDITOR (expands on row click) */
+.edt{display:none;margin:2px 0 10px;padding:14px 16px 12px;background:var(--raised);border:1px solid var(--line2);border-left:3px solid var(--flame);border-radius:6px;animation:sld .2s ease-out;}
+.row.open + .edt{display:block;}
+@keyframes sld{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+.edt-breadcrumb{font-family:var(--mono);font-size:10px;color:var(--t4);margin-bottom:10px;letter-spacing:.04em;display:flex;align-items:center;gap:6px;}
+.edt-breadcrumb span{color:var(--t2);}
+.edt-breadcrumb .edt-sep{color:var(--t4);opacity:.5;}
+.edt-breadcrumb .here{color:var(--flame);}
+
+/* Fields */
+.f{margin-bottom:10px;}
+.fl{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:4px;}
+.fl-l{font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);}
+.fl-l em{color:var(--glow);font-style:normal;font-weight:700;margin-left:6px;font-size:9px;}
+.fl-meta{display:flex;gap:3px;opacity:0;transition:opacity .15s;}
+.f:hover .fl-meta,.f:focus-within .fl-meta{opacity:1;}
+.fl-mb{width:18px;height:18px;border-radius:3px;border:none;background:transparent;color:var(--t3);font-size:10px;cursor:pointer;transition:all .15s;}
+.fl-mb:hover{background:rgba(196,160,112,.1);color:var(--flame);}
+.fl-mb.del:hover{color:var(--err);}
+
+.fi{width:100%;font-family:var(--body);font-weight:400;font-size:14px;color:var(--t1);background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:8px 10px;outline:none;transition:border-color .15s;line-height:1.4;}
+.fi:focus{border-color:var(--flame);box-shadow:0 0 0 2px rgba(192,72,0,.12);}
+.fi.ta{resize:vertical;min-height:58px;line-height:1.6;}
+.fi.ta.long{min-height:100px;}
+.fi.ta.html{font-family:var(--mono);font-size:12px;}
+select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23f08820' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:28px;appearance:none;}
+select.fi option{background:var(--bg2);color:var(--t1);}
+.fhint{font-family:var(--body);font-weight:300;font-size:11px;color:var(--t4);margin-top:3px;line-height:1.5;}
+.fhint code{font-family:var(--mono);font-size:10.5px;color:var(--flame);background:rgba(192,72,0,.1);padding:1px 5px;border-radius:2px;}
+.f.customf .fi{border-left:3px solid var(--glow);}
+
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+@media(max-width:640px){.fr2,.fr3{grid-template-columns:1fr;}}
+
+/* Image field */
+.imgf{display:flex;gap:10px;align-items:flex-start;}
+.imgf .fi{flex:1;}
+.imgprev{width:56px;height:56px;border-radius:4px;background:var(--bg);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;cursor:pointer;transition:border-color .18s;}
+.imgprev:hover{border-color:var(--flame);}
+.imgprev img{width:100%;height:100%;object-fit:cover;}
+.imgph{font-size:18px;opacity:.3;}
+
+/* Toggle */
+.cbx{display:flex;align-items:center;gap:10px;padding:4px 0;cursor:pointer;user-select:none;}
+.cbxb{width:18px;height:18px;border-radius:4px;border:1.5px solid rgba(196,160,112,.3);background:var(--bg);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.cbx.on .cbxb{background:var(--fire);border-color:var(--fire);}
+.cbx.on .cbxb::after{content:'✓';color:#fff;font-weight:700;font-size:12px;}
+.cbx-l{font-family:var(--body);font-size:13px;color:var(--t1);}
+
+/* Edit toolbar — bottom of editor */
+.edt-bar{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.edt-bar-spacer{flex:1;}
+.edt-btn{height:26px;padding:0 10px;border-radius:4px;border:1px solid var(--line2);background:transparent;color:var(--t2);font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
+.edt-btn:hover{border-color:var(--flame);color:var(--flame);background:rgba(192,72,0,.08);}
+.edt-btn.danger:hover{border-color:var(--err);color:var(--err);background:rgba(255,106,58,.08);}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:70px 20px 40px;color:var(--t3);}
+.empty-i{font-size:52px;margin-bottom:16px;opacity:.4;display:block;filter:grayscale(.3);}
+.empty-t{font-family:var(--serif);font-weight:700;font-size:22px;color:var(--cream);margin-bottom:6px;}
+.empty-s{font-family:var(--body);font-weight:300;font-size:14px;line-height:1.6;color:var(--t3);max-width:380px;margin:0 auto;}
+.empty-hint{margin-top:20px;font-family:var(--mono);font-size:11px;color:var(--t4);}
+.empty-hint kbd{padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--t2);font-family:inherit;}
+
+/* FLOATING SAVE BAR */
+.savebar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(80px);z-index:60;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 18px;background:var(--bg3);border:1px solid var(--line2);border-radius:100px;box-shadow:0 16px 48px rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.16,1,.3,1);}
+.savebar.show{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0);}
+.sb-ct{font-family:var(--cond);font-weight:700;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--flame);}
+.sb-sep{width:1px;height:18px;background:var(--line);}
+.sb-btn{height:30px;padding:0 16px;border-radius:100px;border:none;background:linear-gradient(135deg,var(--ember),var(--fire));color:#fff;font-family:var(--cond);font-weight:800;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;box-shadow:0 2px 8px rgba(192,72,0,.3);transition:all .2s;}
+.sb-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(192,72,0,.5);}
+.sb-btn.ghost{background:transparent;color:var(--t3);box-shadow:none;padding:0 12px;}
+.sb-btn.ghost:hover{color:var(--cream);transform:none;}
+
+/* FAB — floating add */
+.fab{position:fixed;bottom:16px;right:16px;z-index:55;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--ember),var(--fire));border:none;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 6px 20px rgba(192,72,0,.45);transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.fab:hover{transform:scale(1.05) rotate(90deg);box-shadow:0 8px 26px rgba(192,72,0,.6);}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;}
+.modal-bg.show{opacity:1;pointer-events:all;}
+.modal{background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:clamp(20px,3vh,28px) clamp(20px,4vw,30px);max-width:460px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(12px) scale(.98);transition:transform .25s cubic-bezier(.16,1,.3,1);box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-bg.show .modal{transform:translateY(0) scale(1);}
+.modal h3{font-family:var(--serif);font-weight:800;font-size:22px;color:var(--cream);letter-spacing:-.01em;margin-bottom:6px;}
+.modal h3 em{font-style:italic;color:var(--flame);font-weight:400;}
+.modal p{font-weight:300;font-size:13px;color:var(--t3);line-height:1.6;margin-bottom:18px;}
+.modal-row{margin-bottom:12px;}
+.modal-row label{display:block;font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:5px;}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;}
+
+/* MOBILE */
+@media(max-width:640px){
+  .topbar{padding:0 10px;gap:6px;}
+  .brand{font-size:13px;}
+  .tb-btn{padding:0 8px;font-size:10.5px;}
+  .search-wrap{padding:12px 14px 8px;}
+  .chips{padding:0 14px 10px;}
+  .list{padding:10px 14px 40px;}
+  .row{padding:8px;gap:9px;}
+  .row-sub{display:none;}
+  .grp-name{font-size:16px;}
+  .kbd,.search-hint{display:none;}
+}
 </style>
 </head>
 <body>
 
-<div id="test-bar">
-  <strong>Renderer Test ·</strong>
-  <button data-slug="home">Home</button>
-  <button data-slug="menu">Menu</button>
-  <button data-slug="market">Market</button>
-  <button data-slug="gift">Gift Cards</button>
-  <button data-slug="find">Find Us</button>
-  <button data-slug="cater">Catering</button>
-  <button data-slug="about">About</button>
+<!-- TOASTS -->
+<div id="toastBox"></div>
+
+<!-- PIN -->
+<div id="pin-screen">
+  <div class="pin-box">
+    <div class="pin-brand">Francis <em>Smokehouse</em></div>
+    <div class="pin-sub">CMS · Admin</div>
+    <h1 class="pin-title">Enter <em>PIN</em></h1>
+    <p class="pin-instruction">Your 6-digit editor PIN.</p>
+    <div class="pin-dots" id="pin-dots">
+      <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+      <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+    </div>
+    <div class="pin-pad" id="pin-pad"></div>
+    <div class="pin-msg" id="pin-msg">Wrong PIN. Try again.</div>
+  </div>
 </div>
 
-<div id="fs-root"></div>
+<!-- APP -->
+<div id="app">
+  <header class="topbar">
+    <div class="brand">Francis <em>CMS</em></div>
+    <div class="vsep"></div>
+    <div class="conn" id="conn" title="Connection"></div>
+    <div class="status" id="status"><span id="status-txt">All saved</span></div>
+    <div class="spacer"></div>
+    <button class="tb-btn" onclick="openHelp()">? <span class="kbd">?</span></button>
+    <button class="tb-btn danger" onclick="logout()">🔒 Lock</button>
+  </header>
 
-<script src="render.js"></script>
+  <div class="searchbar">
+    <div class="search-wrap">
+      <span class="search-ico">🔍</span>
+      <input class="search" id="search" placeholder="Search anything — items, sections, pages, settings..." autocomplete="off" spellcheck="false">
+      <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+      <div class="search-hint"><kbd>/</kbd> focus · <kbd>Esc</kbd> clear</div>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <main class="list-wrap" id="list-wrap">
+    <div class="list" id="list"></div>
+  </main>
+</div>
+
+<!-- FAB -->
+<button class="fab" id="fab" onclick="openFabMenu()" title="Add new" style="display:none">＋</button>
+
+<!-- SAVE BAR -->
+<div class="savebar" id="savebar">
+  <span class="sb-ct" id="sb-ct">0 unsaved</span>
+  <span class="sb-sep"></span>
+  <button class="sb-btn ghost" onclick="discardChanges()">Discard</button>
+  <button class="sb-btn" onclick="flushSaves(true)">💾 Save</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal"></div>
+</div>
+
 <script>
-  async function load(slug) {
-    document.querySelectorAll('#test-bar button').forEach(b =>
-      b.classList.toggle('active', b.dataset.slug === slug));
-    history.replaceState(null, '', '?page=' + slug);
-    await window.FrancisRender.mount({
-      root: '#fs-root',
-      pageSlug: slug,
-      editMode: false,
+/* ══════════════════════════════════════════════════════════════════
+   CONFIG
+══════════════════════════════════════════════════════════════════ */
+const SB_URL = 'https://vncecutxggodthugxgeu.supabase.co';
+const SB_KEY = 'sb_publishable_4cC-iVqs9qE3xmADrXnCNA_DChq4xBL';
+
+const KINDS = {
+  items_grid:   { lbl:'Items Grid', ic:'▦', color:'var(--flame)' },
+  steps:        { lbl:'Steps',      ic:'▤', color:'var(--blue)' },
+  stats:        { lbl:'Stats',      ic:'#', color:'var(--purple)' },
+  quote_list:   { lbl:'Quotes',     ic:'❝', color:'var(--ok)' },
+  value_list:   { lbl:'Values',     ic:'❖', color:'var(--warn)' },
+  rich_text:    { lbl:'Prose',      ic:'¶', color:'var(--purple)' },
+  contact_form: { lbl:'Form',       ic:'✉', color:'var(--blue)' },
+};
+
+const TMPL = {
+  home_nav:           'Home / Landing',
+  hero_with_sections: 'Hero + Sections',
+  menu_tabs:          'Menu Tabs',
+  items_grid_page:    'Items Grid Page',
+  story_chapters:     'Story Chapters',
+};
+
+/* ── Kind-specific default field schemas ── */
+const ITEM_FIELDS = {
+  items_grid: [
+    { k:'name', l:'Name', t:'text' },
+    { k:'price', l:'Price', t:'number', hint:'e.g. 15.62 — blank = "Ask"' },
+    { k:'priceLg', l:'Large Price', t:'number' },
+    { k:'priceUnit', l:'Price Unit', t:'text', hint:'e.g. "/ lb"' },
+    { k:'img', l:'Image URL', t:'url' },
+    { k:'desc', l:'Description', t:'textarea' },
+    { k:'note', l:'Note', t:'text' },
+    { k:'pairs', l:'Pairs With', t:'text' },
+    { k:'badge', l:'Badge', t:'text' },
+    { k:'badgeStyle', l:'Badge Style', t:'select', opts:['','pop','sig','new','out'] },
+    { k:'soldOut', l:'Sold Out', t:'bool' },
+  ],
+  steps: [
+    { k:'title', l:'Title', t:'text' },
+    { k:'desc', l:'Description', t:'textarea' },
+  ],
+  stats: [
+    { k:'num', l:'Number', t:'text', hint:'e.g. "4.7★" or "505"' },
+    { k:'label', l:'Label', t:'text' },
+  ],
+  quote_list: [
+    { k:'stars', l:'Stars', t:'text', hint:'e.g. ★★★★★' },
+    { k:'text', l:'Quote', t:'textarea' },
+    { k:'source', l:'Source', t:'text' },
+  ],
+  value_list: [
+    { k:'icon', l:'Icon (emoji)', t:'text' },
+    { k:'title', l:'Title', t:'text' },
+    { k:'desc', l:'Description', t:'textarea' },
+  ],
+  rich_text: [], // rich_text uses section.settings instead of items
+  contact_form: [],
+};
+
+const SECTION_SETTING_FIELDS = {
+  items_grid:   [ {k:'eyebrow',l:'Eyebrow'}, {k:'subtitle',l:'Subtitle'}, {k:'desc',l:'Description',t:'textarea'} ],
+  steps:        [ {k:'eyebrow',l:'Eyebrow'}, {k:'subtitle',l:'Subtitle'} ],
+  stats:        [ {k:'eyebrow',l:'Eyebrow'}, {k:'intro',l:'Intro',t:'textarea'} ],
+  quote_list:   [ {k:'eyebrow',l:'Eyebrow'}, {k:'subtitle',l:'Subtitle'} ],
+  value_list:   [ {k:'eyebrow',l:'Eyebrow'}, {k:'intro',l:'Intro',t:'textarea'} ],
+  rich_text: [
+    { k:'eyebrow', l:'Eyebrow' },
+    { k:'title', l:'Title', t:'html', hint:'Use &lt;em&gt;...&lt;/em&gt; for flame-color italic' },
+    { k:'lead', l:'Lead paragraph', t:'textarea' },
+    { k:'body', l:'Body HTML', t:'html', long:true },
+    { k:'quote', l:'Pull Quote', t:'textarea' },
+    { k:'quote_src', l:'Quote Source', t:'text' },
+    { k:'image', l:'Image URL', t:'url' },
+    { k:'address', l:'Address', t:'text' },
+  ],
+  contact_form: [
+    { k:'title', l:'Form Title', t:'html' },
+    { k:'subtitle', l:'Subtitle', t:'textarea' },
+    { k:'success_title', l:'Success Title', t:'html' },
+    { k:'success_sub', l:'Success Subtitle', t:'textarea' },
+    { k:'email_to', l:'Send To Email', t:'email' },
+  ],
+};
+
+const PAGE_SETTING_FIELDS = [
+  { k:'hero_eyebrow', l:'Hero Eyebrow' },
+  { k:'hero_title', l:'Hero Title', t:'html', hint:'Use &lt;em&gt; for flame italic, &lt;br&gt; for line break' },
+  { k:'hero_subtitle', l:'Hero Subtitle' },
+  { k:'hero_lead', l:'Hero Lead', t:'textarea' },
+  { k:'header_subtitle', l:'Header Subtitle' },
+];
+
+/* ══════════════════════════════════════════════════════════════════
+   SUPABASE HELPERS
+══════════════════════════════════════════════════════════════════ */
+const sbH = { apikey:SB_KEY, Authorization:'Bearer '+SB_KEY, 'Content-Type':'application/json' };
+async function sbGet(t, qs=''){
+  const r = await fetch(SB_URL+'/rest/v1/'+t+(qs||'?select=*'), {headers:sbH});
+  if(!r.ok) throw new Error(t+' GET '+r.status+' '+await r.text()); return r.json();
+}
+async function sbPost(t, row){
+  const r = await fetch(SB_URL+'/rest/v1/'+t, {method:'POST', headers:{...sbH,'Prefer':'return=representation'}, body:JSON.stringify(Array.isArray(row)?row:[row])});
+  if(!r.ok) throw new Error(t+' POST '+r.status+' '+await r.text()); return r.json();
+}
+async function sbPatch(t, id, patch){
+  const r = await fetch(SB_URL+'/rest/v1/'+t+'?id=eq.'+id, {method:'PATCH', headers:{...sbH,'Prefer':'return=representation'}, body:JSON.stringify(patch)});
+  if(!r.ok) throw new Error(t+' PATCH '+r.status+' '+await r.text()); return r.json();
+}
+async function sbPatchSetting(k, v){
+  const r = await fetch(SB_URL+'/rest/v1/cms_settings?key=eq.'+encodeURIComponent(k), {method:'PATCH', headers:{...sbH,'Prefer':'return=representation'}, body:JSON.stringify({value:v})});
+  if(!r.ok) throw new Error('setting PATCH '+r.status); return r.json();
+}
+async function sbDel(t, id){
+  const r = await fetch(SB_URL+'/rest/v1/'+t+'?id=eq.'+id, {method:'DELETE', headers:sbH});
+  if(!r.ok) throw new Error(t+' DELETE '+r.status);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════════════════ */
+const S = {
+  authed:false, pin:'',
+  pages:[], sections:[], items:[], settings:{},
+  q:'',                    // current search query
+  activeChip:null,         // null | 'hidden' | 'empty' | 'missing-img' | 'no-price' | 'soldout' | page-id
+  openRowId:null,          // currently-expanded row
+  dirty:new Set(),
+  dirtyBackup:{},          // original values for discard
+  saveTimer:null,
+};
+
+/* UTILS */
+const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const escA = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const slugify = s => (s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,50);
+function hlite(text, q) {
+  if (!q || !text) return esc(text||'');
+  const t = String(text), L = t.toLowerCase(), Q = q.toLowerCase();
+  let out = '', i = 0;
+  while (i < t.length) {
+    const ix = L.indexOf(Q, i);
+    if (ix < 0) { out += esc(t.slice(i)); break; }
+    out += esc(t.slice(i, ix)) + '<mark>' + esc(t.slice(ix, ix+Q.length)) + '</mark>';
+    i = ix + Q.length;
+  }
+  return out;
+}
+
+function toast(msg, kind='info'){
+  const tb = document.getElementById('toastBox');
+  const el = document.createElement('div');
+  el.className = 'toast '+kind; el.textContent = msg;
+  tb.appendChild(el);
+  setTimeout(()=>el.remove(), 3000);
+}
+function setConn(s){ document.getElementById('conn').className = 'conn '+(s||''); }
+function setStatus(s, txt){ const e = document.getElementById('status'); e.className = 'status '+(s||''); document.getElementById('status-txt').textContent = txt; }
+
+
+/* ══════════════════════════════════════════════════════════════════
+   PIN
+══════════════════════════════════════════════════════════════════ */
+function buildPinPad(){
+  const pad = document.getElementById('pin-pad');
+  const keys = ['1','2','3','4','5','6','7','8','9','del','0','submit'];
+  pad.innerHTML = keys.map(k => {
+    if (k==='del') return '<button class="pin-btn del" data-v="del">⌫</button>';
+    if (k==='submit') return '<button class="pin-btn submit" data-v="submit">Enter</button>';
+    return '<button class="pin-btn" data-v="'+k+'">'+k+'</button>';
+  }).join('');
+  pad.querySelectorAll('.pin-btn').forEach(b => { b.onclick = ()=>onPinKey(b.dataset.v); });
+  document.addEventListener('keydown', e => {
+    if (S.authed) return;
+    if (/^[0-9]$/.test(e.key)) onPinKey(e.key);
+    else if (e.key==='Backspace') onPinKey('del');
+    else if (e.key==='Enter') onPinKey('submit');
+  });
+}
+function onPinKey(k){
+  const dots = document.querySelectorAll('.pin-dot');
+  if (k==='del') S.pin = S.pin.slice(0,-1);
+  else if (k==='submit'){ if (S.pin.length < 4) return flashPinErr(); return tryLogin(); }
+  else if (S.pin.length < 6) S.pin += k;
+  dots.forEach((d,i) => d.classList.toggle('filled', i < S.pin.length));
+  if (S.pin.length === 6) setTimeout(tryLogin, 120);
+}
+function flashPinErr(msg){
+  const dots = document.querySelectorAll('.pin-dot');
+  dots.forEach(d => d.classList.add('error'));
+  const m = document.getElementById('pin-msg');
+  if (msg) m.textContent = msg;
+  m.classList.add('show');
+  setTimeout(()=>{ dots.forEach(d=>d.classList.remove('error','filled')); m.classList.remove('show'); S.pin=''; }, 900);
+}
+async function tryLogin(){
+  try {
+    const rows = await sbGet('cms_settings', '?select=*&key=eq.editor_pin');
+    if (!rows || !rows.length) return flashPinErr('No PIN set in DB.');
+    let pinVal = rows[0].value;
+    if (typeof pinVal === 'string') pinVal = pinVal.replace(/^"|"$/g,'');
+    if (S.pin !== String(pinVal)) return flashPinErr();
+    S.authed = true;
+    sessionStorage.setItem('fs_cms_auth','1');
+    await bootApp();
+  } catch(err){ console.error(err); flashPinErr('Connection error.'); }
+}
+function logout(){
+  if (S.dirty.size > 0 && !confirm('You have unsaved changes. Leave anyway?')) return;
+  sessionStorage.removeItem('fs_cms_auth');
+  location.reload();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   BOOT + LOAD
+══════════════════════════════════════════════════════════════════ */
+async function bootApp(){
+  try {
+    setConn('');
+    await reloadAll();
+    document.getElementById('pin-screen').classList.add('gone');
+    setTimeout(()=>{
+      document.getElementById('pin-screen').style.display = 'none';
+      document.getElementById('app').classList.add('on');
+      document.getElementById('fab').style.display = '';
+    }, 380);
+    renderAll();
+    setConn('ok');
+    // Auto-focus search
+    setTimeout(()=>document.getElementById('search').focus(), 500);
+  } catch(err){
+    console.error(err); setConn('err');
+    toast('Failed to load: '+err.message,'err');
+  }
+}
+
+async function reloadAll(){
+  const [pages, sections, items, settings] = await Promise.all([
+    sbGet('pages', '?select=*&order=order_idx.asc'),
+    sbGet('sections', '?select=*&order=order_idx.asc'),
+    sbGet('items', '?select=*&order=order_idx.asc'),
+    sbGet('cms_settings'),
+  ]);
+  S.pages = pages; S.sections = sections; S.items = items;
+  S.settings = {}; settings.forEach(r => { S.settings[r.key] = r.value; });
+}
+
+function renderAll(){ renderChips(); renderList(); }
+
+/* ══════════════════════════════════════════════════════════════════
+   CHIPS (filter pills)
+══════════════════════════════════════════════════════════════════ */
+function renderChips(){
+  const ch = document.getElementById('chips');
+  const hiddenCt = S.items.filter(i => !i.visible).length;
+  const emptyCt = S.sections.filter(s => {
+    if (s.kind === 'rich_text' || s.kind === 'contact_form') return !Object.keys(s.settings||{}).length;
+    return !S.items.some(i => i.section_id === s.id);
+  }).length;
+  const noImgCt = S.items.filter(i => {
+    const d = i.data || {};
+    // Only count items where an image is expected (items_grid kind)
+    const sec = S.sections.find(s => s.id === i.section_id);
+    return sec && sec.kind === 'items_grid' && !(d.img || d.image);
+  }).length;
+  const noPriceCt = S.items.filter(i => {
+    const d = i.data || {};
+    const sec = S.sections.find(s => s.id === i.section_id);
+    return sec && sec.kind === 'items_grid' && (d.price == null || d.price === '');
+  }).length;
+  const soldCt = S.items.filter(i => i.data?.soldOut).length;
+
+  const chips = [
+    { id:null, label:'All', ct:S.items.length + S.sections.length + S.pages.length },
+    { id:'hidden', label:'Hidden', ct:hiddenCt, show:hiddenCt>0, color:'err' },
+    { id:'soldout', label:'Sold Out', ct:soldCt, show:soldCt>0, color:'err' },
+    { id:'empty', label:'Empty Sections', ct:emptyCt, show:emptyCt>0, color:'warn' },
+    { id:'missing-img', label:'No Image', ct:noImgCt, show:noImgCt>0, color:'warn' },
+    { id:'no-price', label:'No Price', ct:noPriceCt, show:noPriceCt>0, color:'warn' },
+    { divider:true },
+    ...S.pages.map(p => ({ id:'page:'+p.id, label:p.title, ct:countPageStuff(p.id), ic:p.icon||'📄' })),
+  ];
+
+  ch.innerHTML = chips.map(c => {
+    if (c.divider) return '<span style="width:1px;height:18px;background:var(--line);margin:0 4px;align-self:center"></span>';
+    if (c.show === false) return '';
+    const active = S.activeChip === c.id ? ' on' : '';
+    const ic = c.ic ? esc(c.ic)+' ' : '';
+    return '<button class="chip'+active+'" data-chip="'+escA(c.id==null?'all':c.id)+'">'+ic+esc(c.label)+' <span class="chip-ct">'+c.ct+'</span></button>';
+  }).join('');
+
+  ch.querySelectorAll('.chip').forEach(el => {
+    el.onclick = ()=> {
+      const v = el.dataset.chip === 'all' ? null : el.dataset.chip;
+      S.activeChip = S.activeChip === v ? null : v;
+      S.openRowId = null;
+      renderAll();
+      document.getElementById('list-wrap').scrollTop = 0;
+    };
+  });
+}
+
+function countPageStuff(pid){
+  const secs = S.sections.filter(s => s.page_id === pid);
+  let ct = secs.length;
+  secs.forEach(s => { ct += S.items.filter(i => i.section_id === s.id).length; });
+  return ct;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SEARCH
+══════════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const inp = document.getElementById('search');
+  if (inp) {
+    inp.oninput = ()=> {
+      S.q = inp.value.trim();
+      inp.classList.toggle('filled', !!S.q);
+      document.getElementById('search-clear').classList.toggle('filled', !!S.q);
+      S.openRowId = null;
+      renderList();
+    };
+  }
+});
+function clearSearch(){
+  const inp = document.getElementById('search');
+  inp.value=''; inp.classList.remove('filled');
+  document.getElementById('search-clear').classList.remove('filled');
+  S.q = ''; renderList(); inp.focus();
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   LIST RENDERING — the main view
+══════════════════════════════════════════════════════════════════ */
+function renderList(){
+  const list = document.getElementById('list');
+  const q = S.q.toLowerCase();
+
+  // Build a flat, searchable list of EVERYTHING
+  const entries = collectEntries();
+
+  // Filter by active chip
+  const chipFiltered = filterByChip(entries);
+
+  // Filter by search query
+  const filtered = q ? chipFiltered.filter(e => matchesQuery(e, q)) : chipFiltered;
+
+  if (filtered.length === 0) {
+    list.innerHTML = emptyState(q);
+    return;
+  }
+
+  // Group by page for display (even when searching — keeps context)
+  const byPage = {};
+  const orderedPageIds = [];
+  filtered.forEach(e => {
+    const pid = e.page_id || '__global__';
+    if (!byPage[pid]) { byPage[pid] = []; orderedPageIds.push(pid); }
+    byPage[pid].push(e);
+  });
+
+  // Sort entries within each page: page-settings first, then sections in order, with items after each section
+  let html = '';
+  orderedPageIds.forEach(pid => {
+    const entries = byPage[pid];
+
+    if (pid === '__global__') {
+      html += '<div class="grp"><span class="grp-ico">⚙</span><span class="grp-name">Global <em>Settings</em></span><span class="grp-ct">'+entries.length+' fields</span></div>';
+      entries.forEach(e => { html += renderRow(e); });
+    } else {
+      const page = S.pages.find(p => p.id === pid);
+      if (!page) return;
+      const pageSettings = entries.filter(e => e.kind === 'page-setting');
+      const sectionGroups = groupBySection(entries.filter(e => e.kind !== 'page-setting'));
+
+      html += '<div class="grp">'+
+        '<span class="grp-ico">'+esc(page.icon||'📄')+'</span>'+
+        '<span class="grp-name">'+esc(page.title)+'</span>'+
+        '<span class="grp-ct">'+esc(TMPL[page.template]||page.template)+' · /'+esc(page.slug)+'</span>'+
+        '<div class="grp-acts">'+
+          '<button class="grp-act" title="Open page live" onclick="openPageLive(\''+page.id+'\')">↗</button>'+
+        '</div>'+
+        '</div>';
+
+      // Page settings rows (hero, eyebrow, etc.)
+      pageSettings.forEach(e => { html += renderRow(e); });
+
+      // Sections with their items
+      Object.keys(sectionGroups).forEach(sid => {
+        const sec = S.sections.find(s => s.id === sid);
+        if (!sec) return;
+        const kind = KINDS[sec.kind] || KINDS.items_grid;
+        const itemCt = S.items.filter(i => i.section_id === sid).length;
+        html += '<div class="sec" data-sec="'+sec.id+'">'+
+          '<span class="sec-ico" style="color:'+kind.color+'">'+esc(sec.icon||kind.ic)+'</span>'+
+          '<span class="sec-name">'+esc(sec.title)+'</span>'+
+          '<span class="sec-kind">'+esc(kind.lbl)+'</span>'+
+          '<span class="sec-ct">'+itemCt+' item'+(itemCt===1?'':'s')+'</span>'+
+          '<div class="sec-acts">'+
+            '<button class="sec-act" title="Edit section" onclick="openRow(\'sec:'+sec.id+'\',event)">✎</button>'+
+            '<button class="sec-act" title="Add item" onclick="addItem(\''+sec.id+'\')">＋</button>'+
+            '<button class="sec-act danger" title="Delete section" onclick="confirmDelete(\'section\',\''+sec.id+'\')">✕</button>'+
+          '</div>'+
+        '</div>';
+        sectionGroups[sid].forEach(e => { html += renderRow(e); });
+      });
+    }
+  });
+
+  list.innerHTML = html;
+  bindRowClicks();
+}
+
+function groupBySection(entries) {
+  // Group section & item entries, order by section order_idx, items inside each section
+  const groups = {};
+  const ordered = S.sections.slice().sort((a,b)=>a.order_idx-b.order_idx);
+  ordered.forEach(s => {
+    const secEntries = entries.filter(e => {
+      if (e.kind === 'section' || e.kind === 'section-setting') return e.section_id === s.id;
+      if (e.kind === 'item') return e.section_id === s.id;
+      return false;
+    });
+    if (secEntries.length) groups[s.id] = secEntries;
+  });
+  return groups;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   COLLECT ENTRIES — turn everything into searchable flat list
+══════════════════════════════════════════════════════════════════ */
+function collectEntries() {
+  const out = [];
+
+  // Global settings (excluding editor_pin which stays secret)
+  Object.keys(S.settings).forEach(k => {
+    if (k === 'editor_pin') return;
+    const v = S.settings[k];
+    out.push({
+      kind:'global', id:k, page_id:null, section_id:null,
+      searchText: k + ' ' + JSON.stringify(v || ''),
+      row:{ name:humanize(k), sub:summarize(v), tags:['global'] },
+    });
+  });
+
+  // Pages → page-settings entries (one per hero_* field + page meta)
+  S.pages.forEach(p => {
+    const settings = p.settings || {};
+    // Page meta (title, icon, slug)
+    out.push({
+      kind:'page-meta', id:p.id, page_id:p.id, section_id:null,
+      searchText: p.title + ' ' + p.slug + ' ' + (p.icon||'') + ' ' + p.template,
+      row:{ name:'Page · '+p.title, sub:'Template: '+(TMPL[p.template]||p.template)+' · Slug: /'+p.slug, icon:p.icon, tags:['page'] },
+    });
+    // Individual hero fields as entries
+    PAGE_SETTING_FIELDS.forEach(f => {
+      if (settings[f.k] === undefined) return;
+      out.push({
+        kind:'page-setting', id:p.id+':'+f.k, page_id:p.id, section_id:null, field_key:f.k, field_scope:'page_settings',
+        searchText: f.l + ' ' + (settings[f.k] || ''),
+        row:{ name:f.l, sub:summarize(settings[f.k]), tags:[p.title], where:p.title },
+      });
+    });
+    // Custom page settings
+    const knownKeys = PAGE_SETTING_FIELDS.map(f => f.k);
+    Object.keys(settings).forEach(k => {
+      if (knownKeys.includes(k)) return;
+      out.push({
+        kind:'page-setting', id:p.id+':'+k, page_id:p.id, section_id:null, field_key:k, field_scope:'page_settings', custom:true,
+        searchText: k + ' ' + (settings[k] || ''),
+        row:{ name:humanize(k), sub:summarize(settings[k]), tags:['custom', p.title], where:p.title, customField:true },
+      });
+    });
+  });
+
+  // Sections → one entry per section
+  S.sections.forEach(s => {
+    out.push({
+      kind:'section', id:s.id, page_id:s.page_id, section_id:s.id,
+      searchText: s.title + ' ' + (s.subtitle||'') + ' ' + (s.slug||'') + ' ' + (s.kind||'') + ' ' + (s.icon||''),
+      row:{ name:s.title, sub:s.subtitle || (KINDS[s.kind]?.lbl || s.kind), icon:s.icon, tags:[s.kind] },
+    });
+  });
+
+  // Items → one entry per item
+  S.items.forEach(i => {
+    const d = i.data || {};
+    const sec = S.sections.find(s => s.id === i.section_id);
+    const name = d.name || d.title || '(unnamed)';
+    const searchText = [
+      name, d.desc||'', d.note||'', d.pairs||'', d.badge||'',
+      d.source||'', d.text||'', d.label||'',
+      d.price != null ? '$'+d.price : '',
+    ].join(' ');
+    out.push({
+      kind:'item', id:i.id, page_id:sec?.page_id, section_id:i.section_id,
+      searchText,
+      visible: i.visible,
+      row:{
+        name,
+        sub:d.desc || d.text || d.source || d.label || '',
+        img:d.img || d.image,
+        price:d.price,
+        priceUnit:d.priceUnit,
+        soldOut:d.soldOut,
+        visible:i.visible,
+        tags:[],
+      },
+    });
+  });
+
+  return out;
+}
+
+function filterByChip(entries) {
+  const chip = S.activeChip;
+  if (!chip) return entries;
+  if (chip === 'hidden')      return entries.filter(e => e.kind === 'item' && !e.visible);
+  if (chip === 'soldout')     return entries.filter(e => e.kind === 'item' && e.row.soldOut);
+  if (chip === 'missing-img') return entries.filter(e => {
+    if (e.kind !== 'item') return false;
+    const sec = S.sections.find(s => s.id === e.section_id);
+    return sec?.kind === 'items_grid' && !e.row.img;
+  });
+  if (chip === 'no-price') return entries.filter(e => {
+    if (e.kind !== 'item') return false;
+    const sec = S.sections.find(s => s.id === e.section_id);
+    return sec?.kind === 'items_grid' && (e.row.price == null || e.row.price === '');
+  });
+  if (chip === 'empty') {
+    const emptySecs = S.sections.filter(s => !S.items.some(i => i.section_id === s.id) && s.kind !== 'rich_text' && s.kind !== 'contact_form');
+    const emptyIds = new Set(emptySecs.map(s => s.id));
+    return entries.filter(e => e.kind === 'section' && emptyIds.has(e.id));
+  }
+  if (chip.startsWith('page:')) {
+    const pid = chip.slice(5);
+    return entries.filter(e => e.page_id === pid);
+  }
+  return entries;
+}
+
+function matchesQuery(e, q) {
+  return (e.searchText || '').toLowerCase().includes(q);
+}
+
+function humanize(k) {
+  return String(k).replace(/_/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+}
+function summarize(v) {
+  if (v == null) return '';
+  if (typeof v === 'object') return JSON.stringify(v).slice(0, 100);
+  const s = String(v);
+  return s.length > 120 ? s.slice(0, 120) + '…' : s;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ROW RENDERING
+══════════════════════════════════════════════════════════════════ */
+function renderRow(e) {
+  const q = S.q;
+  const row = e.row;
+  const rowId = rowIdOf(e);
+  const open = S.openRowId === rowId;
+  const dirty = hasDirtyFor(e);
+
+  const kindClass = {
+    'page-setting':'page-setting', 'page-meta':'page-setting',
+    'section':'section-setting', 'section-setting':'section-setting',
+    'item':'item', 'global':'global'
+  }[e.kind] || '';
+
+  const hidden = e.kind === 'item' && e.visible === false;
+
+  let html = '<div class="row'+(open?' open':'')+(hidden?' hidden-flag':'')+(dirty?' dirty':'')+'" data-row="'+escA(rowId)+'">';
+  html += '<div class="row-kind '+kindClass+'"></div>';
+
+  // Thumb (only items with images get a real thumb; others get a type icon)
+  if (e.kind === 'item') {
+    const img = row.img;
+    html += '<div class="row-thumb">'+(img?'<img src="'+escA(img)+'" onerror="this.outerHTML=\'<span class=row-thumb-ph>📷</span>\'">':'<span class="row-thumb-ph">📷</span>')+'</div>';
+  } else if (e.kind === 'section') {
+    const ic = row.icon || KINDS[S.sections.find(s=>s.id===e.id)?.kind]?.ic || '▦';
+    html += '<div class="row-thumb" style="background:rgba(240,136,32,.08);border-color:rgba(240,136,32,.2)"><span class="row-thumb-ph" style="opacity:.7;font-size:18px">'+esc(ic)+'</span></div>';
+  } else if (e.kind === 'page-setting' || e.kind === 'page-meta') {
+    html += '<div class="row-thumb" style="background:rgba(166,127,224,.08);border-color:rgba(166,127,224,.2)"><span class="row-thumb-ph" style="opacity:.8;font-size:18px">📄</span></div>';
+  } else if (e.kind === 'global') {
+    html += '<div class="row-thumb" style="background:rgba(245,168,48,.08);border-color:rgba(245,168,48,.25)"><span class="row-thumb-ph" style="opacity:.8;font-size:18px">⚙</span></div>';
+  }
+
+  html += '<div class="row-body">';
+  html += '<div class="row-name">'+hlite(row.name, q)+'</div>';
+  if (row.sub) html += '<div class="row-sub">'+hlite(row.sub, q)+'</div>';
+  html += '</div>';
+
+  // Meta (right side: price, tags)
+  html += '<div class="row-meta">';
+  if (e.kind === 'item') {
+    if (row.price != null && row.price !== '') {
+      html += '<span class="row-price">$'+Number(row.price).toFixed(2)+(row.priceUnit?esc(row.priceUnit):'')+'</span>';
+    }
+    if (row.soldOut) html += '<span class="row-tag err">Sold Out</span>';
+    if (row.visible === false) html += '<span class="row-tag err">Hidden</span>';
+  }
+  if (e.custom || row.customField) html += '<span class="row-tag warn">Custom</span>';
+  html += '</div>';
+
+  html += '<span class="row-chevron">▸</span>';
+  html += '</div>';
+
+  // Inline editor (renders if open)
+  if (open) html += renderInlineEditor(e);
+
+  return html;
+}
+
+function rowIdOf(e) {
+  return e.kind + ':' + e.id;
+}
+
+function hasDirtyFor(e) {
+  const prefix = e.kind === 'item' ? 'item:'+e.id
+             : e.kind === 'section' ? 'section:'+e.id
+             : e.kind === 'page-setting' ? 'page_settings:'+e.page_id+':'+e.field_key
+             : e.kind === 'page-meta' ? 'page:'+e.id
+             : e.kind === 'global' ? 'global:'+e.id
+             : '';
+  if (!prefix) return false;
+  for (const p of S.dirty) if (p.startsWith(prefix)) return true;
+  return false;
+}
+
+function emptyState(q) {
+  if (q) return '<div class="empty"><span class="empty-i">🔎</span><div class="empty-t">No matches for "<em>'+esc(q)+'</em>"</div><div class="empty-s">Try a shorter word, or clear the search.</div><div class="empty-hint"><kbd>Esc</kbd> to clear</div></div>';
+  if (S.activeChip) return '<div class="empty"><span class="empty-i">✓</span><div class="empty-t">Nothing here</div><div class="empty-s">This filter has no results — which is probably a good thing.</div></div>';
+  return '<div class="empty"><span class="empty-i">📭</span><div class="empty-t">Nothing yet</div><div class="empty-s">Start by adding a section to a page.</div></div>';
+}
+
+function bindRowClicks() {
+  document.querySelectorAll('.row').forEach(el => {
+    el.onclick = (ev) => {
+      if (ev.target.closest('.edt, .sec-acts, .grp-acts')) return;
+      openRow(el.dataset.row, ev);
+    };
+  });
+}
+
+function openRow(rowId, ev) {
+  ev?.stopPropagation?.();
+  S.openRowId = S.openRowId === rowId ? null : rowId;
+  renderList();
+  if (S.openRowId) {
+    setTimeout(()=>{
+      const el = document.querySelector('[data-row="'+cssEsc(S.openRowId)+'"]');
+      if (el) el.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }, 50);
+  }
+}
+function cssEsc(s){return window.CSS?.escape ? CSS.escape(s) : String(s).replace(/[^a-zA-Z0-9_:-]/g,'\\$&');}
+
+function openPageLive(pid) {
+  const p = S.pages.find(x => x.id === pid);
+  if (!p) return;
+  const urlMap = { home:'/', menu:'/menu.html', market:'/market.html', about:'/about.html', find:'/findus.html', cater:'/catering.html', gift:'/giftcards.html' };
+  const u = urlMap[p.slug] || ('/' + p.slug + '.html');
+  window.open(u, '_blank');
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   INLINE EDITOR — renders when a row is expanded
+══════════════════════════════════════════════════════════════════ */
+function renderInlineEditor(e) {
+  if (e.kind === 'item')          return renderItemEditor(e);
+  if (e.kind === 'section')       return renderSectionEditor(e);
+  if (e.kind === 'page-meta')     return renderPageMetaEditor(e);
+  if (e.kind === 'page-setting')  return renderPageSettingEditor(e);
+  if (e.kind === 'global')        return renderGlobalEditor(e);
+  return '';
+}
+
+/* ── ITEM EDITOR ── */
+function renderItemEditor(e) {
+  const it = S.items.find(x => x.id === e.id);
+  if (!it) return '';
+  const sec = S.sections.find(s => s.id === it.section_id);
+  const page = sec ? S.pages.find(p => p.id === sec.page_id) : null;
+  const kind = KINDS[sec?.kind] || KINDS.items_grid;
+  const fields = ITEM_FIELDS[sec?.kind] || ITEM_FIELDS.items_grid;
+
+  let html = '<div class="edt">';
+
+  // Breadcrumb
+  html += '<div class="edt-breadcrumb">'+
+    (page?'<span>'+esc(page.icon||'📄')+' '+esc(page.title)+'</span>':'')+
+    (sec?'<span class="edt-sep">›</span><span>'+esc(sec.title)+'</span>':'')+
+    '<span class="edt-sep">›</span><span class="here">Item</span>'+
+    '</div>';
+
+  // Visibility toggle
+  html += '<div class="f"><div class="cbx '+(it.visible?'on':'')+'" data-patch="item:'+it.id+':visible" data-cbx="1">'+
+    '<div class="cbxb"></div><span class="cbx-l">'+(it.visible?'Visible on site':'Hidden from site')+'</span></div></div>';
+
+  // Fields
+  const used = new Set();
+  fields.forEach(f => {
+    used.add(f.k);
+    html += fieldHtml(f.k, f.l, it.data?.[f.k], f, 'item_data:'+it.id+':'+f.k);
+  });
+
+  // Custom fields
+  const custom = Object.keys(it.data || {}).filter(k => !used.has(k));
+  if (custom.length) {
+    html += '<div style="margin-top:10px;font-family:var(--cond);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--t4)">Custom</div>';
+    custom.forEach(k => {
+      const v = it.data[k];
+      let t = 'text';
+      if (typeof v === 'boolean') t = 'bool';
+      else if (typeof v === 'number') t = 'number';
+      else if (typeof v === 'string' && (v.length > 80 || v.includes('\n'))) t = 'textarea';
+      html += fieldHtml(k, k, v, {t}, 'item_data:'+it.id+':'+k, true);
     });
   }
 
-  document.querySelectorAll('#test-bar button').forEach(btn => {
-    btn.onclick = () => load(btn.dataset.slug);
-  });
+  // Toolbar
+  html += '<div class="edt-bar">'+
+    '<button class="edt-btn" onclick="openAddCustomField(\'item\',\''+it.id+'\')">＋ Custom field</button>'+
+    '<button class="edt-btn" onclick="duplicateItem(\''+it.id+'\')">⎘ Duplicate</button>'+
+    '<div class="edt-bar-spacer"></div>'+
+    '<button class="edt-btn" onclick="moveItem(\''+it.id+'\',-1)">▲ Up</button>'+
+    '<button class="edt-btn" onclick="moveItem(\''+it.id+'\',1)">▼ Down</button>'+
+    '<button class="edt-btn danger" onclick="confirmDelete(\'item\',\''+it.id+'\')">✕ Delete</button>'+
+    '</div>';
+  html += '</div>';
+  return html;
+}
 
-  const initSlug = new URLSearchParams(location.search).get('page') || 'home';
-  load(initSlug);
+/* ── SECTION EDITOR ── */
+function renderSectionEditor(e) {
+  const sec = S.sections.find(s => s.id === e.id);
+  if (!sec) return '';
+  const page = S.pages.find(p => p.id === sec.page_id);
+  const kind = KINDS[sec.kind] || KINDS.items_grid;
+  const fields = SECTION_SETTING_FIELDS[sec.kind] || SECTION_SETTING_FIELDS.items_grid;
+
+  let html = '<div class="edt">';
+  html += '<div class="edt-breadcrumb">'+
+    (page?'<span>'+esc(page.icon||'📄')+' '+esc(page.title)+'</span>':'')+
+    '<span class="edt-sep">›</span><span class="here">Section · '+esc(kind.lbl)+'</span>'+
+    '</div>';
+
+  // Main fields (title, subtitle, icon, kind)
+  html += '<div class="fr2">';
+  html += fieldHtml('title', 'Title', sec.title, {t:'text'}, 'section:'+sec.id+':title');
+  html += fieldHtml('icon', 'Icon', sec.icon, {t:'text', hint:'Emoji or character'}, 'section:'+sec.id+':icon');
+  html += '</div>';
+  html += fieldHtml('subtitle', 'Subtitle', sec.subtitle, {t:'text'}, 'section:'+sec.id+':subtitle');
+
+  html += '<div class="f"><div class="fl"><span class="fl-l">Kind (how it renders)</span></div>'+
+    '<select class="fi" data-patch="section:'+sec.id+':kind">'+
+      Object.entries(KINDS).map(([k,d])=>'<option value="'+k+'"' + (sec.kind===k?' selected':'') + '>'+d.ic+' '+d.lbl+'</option>').join('')+
+    '</select></div>';
+
+  // Kind-specific settings
+  if (fields.length) {
+    html += '<div style="margin-top:8px;font-family:var(--cond);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--t4)">Section Settings</div>';
+    const settings = sec.settings || {};
+    const knownKeys = fields.map(f => f.k);
+    fields.forEach(f => {
+      html += fieldHtml(f.k, f.l, settings[f.k], f, 'section_settings:'+sec.id+':'+f.k);
+    });
+    // Custom section settings
+    Object.keys(settings).forEach(k => {
+      if (knownKeys.includes(k)) return;
+      const v = settings[k];
+      let t = 'text';
+      if (typeof v === 'string' && (v.length > 80 || v.includes('\n'))) t = 'textarea';
+      html += fieldHtml(k, k, v, {t}, 'section_settings:'+sec.id+':'+k, true);
+    });
+  }
+
+  html += '<div class="edt-bar">'+
+    '<button class="edt-btn" onclick="addItem(\''+sec.id+'\')">＋ Add item</button>'+
+    '<button class="edt-btn" onclick="openAddCustomField(\'section\',\''+sec.id+'\')">＋ Custom field</button>'+
+    '<button class="edt-btn" onclick="duplicateSection(\''+sec.id+'\')">⎘ Duplicate</button>'+
+    '<div class="edt-bar-spacer"></div>'+
+    '<button class="edt-btn" onclick="moveSection(\''+sec.id+'\',-1)">▲ Up</button>'+
+    '<button class="edt-btn" onclick="moveSection(\''+sec.id+'\',1)">▼ Down</button>'+
+    '<button class="edt-btn danger" onclick="confirmDelete(\'section\',\''+sec.id+'\')">✕ Delete</button>'+
+    '</div>';
+  html += '</div>';
+  return html;
+}
+
+/* ── PAGE META EDITOR (title/icon/slug/template) ── */
+function renderPageMetaEditor(e) {
+  const p = S.pages.find(x => x.id === e.id);
+  if (!p) return '';
+
+  let html = '<div class="edt">';
+  html += '<div class="edt-breadcrumb"><span class="here">Page Settings</span></div>';
+  html += '<div class="fr2">';
+  html += fieldHtml('title', 'Title', p.title, {t:'text'}, 'page:'+p.id+':title');
+  html += fieldHtml('icon', 'Icon', p.icon, {t:'text'}, 'page:'+p.id+':icon');
+  html += '</div>';
+  html += fieldHtml('slug', 'Slug', p.slug, {t:'text', hint:'URL path — lowercase, no spaces'}, 'page:'+p.id+':slug');
+  html += '<div class="f"><div class="fl"><span class="fl-l">Template</span></div>'+
+    '<select class="fi" data-patch="page:'+p.id+':template">'+
+      Object.entries(TMPL).map(([k,l])=>'<option value="'+k+'"' + (p.template===k?' selected':'') + '>'+l+'</option>').join('')+
+    '</select></div>';
+
+  html += '<div class="edt-bar">'+
+    '<button class="edt-btn" onclick="openAddCustomField(\'page\',\''+p.id+'\')">＋ Hero/settings field</button>'+
+    '<button class="edt-btn" onclick="openPageLive(\''+p.id+'\')">↗ View live</button>'+
+    '</div>';
+  html += '</div>';
+  return html;
+}
+
+/* ── PAGE SETTING EDITOR (single hero/etc. field) ── */
+function renderPageSettingEditor(e) {
+  const p = S.pages.find(x => x.id === e.page_id);
+  if (!p) return '';
+  const fdef = PAGE_SETTING_FIELDS.find(f => f.k === e.field_key) || { k:e.field_key, l:humanize(e.field_key), t:'text' };
+  const v = p.settings?.[e.field_key];
+
+  let html = '<div class="edt">';
+  html += '<div class="edt-breadcrumb">'+
+    '<span>'+esc(p.icon||'📄')+' '+esc(p.title)+'</span>'+
+    '<span class="edt-sep">›</span><span class="here">'+esc(fdef.l)+'</span>'+
+    '</div>';
+  html += fieldHtml(fdef.k, fdef.l, v, fdef, 'page_settings:'+p.id+':'+fdef.k, e.custom);
+  if (e.custom) {
+    html += '<div class="edt-bar">'+
+      '<button class="edt-btn danger" onclick="removeCustomField(\'page_settings:'+p.id+':'+e.field_key+'\')">✕ Remove field</button>'+
+      '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+/* ── GLOBAL SETTING EDITOR ── */
+function renderGlobalEditor(e) {
+  const v = S.settings[e.id];
+  let html = '<div class="edt">';
+  html += '<div class="edt-breadcrumb"><span>⚙ Global</span><span class="edt-sep">›</span><span class="here">'+esc(e.id)+'</span></div>';
+
+  if (v !== null && typeof v === 'object' && !Array.isArray(v)) {
+    // Object — show each key as a field
+    Object.keys(v).forEach(k => {
+      const val = v[k];
+      const isLong = typeof val === 'string' && (val.length > 80 || val.includes('\n'));
+      html += fieldHtml(k, humanize(k), val, {t: isLong?'textarea':'text'}, 'global:'+e.id+':'+k);
+    });
+    html += '<div class="edt-bar">'+
+      '<button class="edt-btn" onclick="openAddGlobalSubField(\''+e.id+'\')">＋ Add sub-field</button>'+
+      '</div>';
+  } else {
+    // Scalar — single input
+    const isLong = typeof v === 'string' && (v.length > 80 || v.includes('\n'));
+    html += fieldHtml(e.id, humanize(e.id), v, {t: isLong?'textarea':'text'}, 'global:'+e.id+':__scalar');
+  }
+
+  html += '</div>';
+  return html;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   FIELD HTML
+══════════════════════════════════════════════════════════════════ */
+function fieldHtml(key, label, value, opts, patchPath, isCustom) {
+  opts = opts || {};
+  const t = opts.t || 'text';
+  const dirty = S.dirty.has(patchPath) ? '' : '';
+  const custom = isCustom ? ' customf' : '';
+  let inp = '';
+
+  if (t === 'bool') {
+    const on = value === true || value === 'true';
+    inp = '<div class="cbx '+(on?'on':'')+'" data-patch="'+patchPath+'" data-cbx="1"><div class="cbxb"></div><span class="cbx-l">'+(on?'Yes':'No')+'</span></div>';
+  } else if (t === 'select') {
+    inp = '<select class="fi" data-patch="'+patchPath+'">'+
+      (opts.opts||[]).map(o=>'<option value="'+escA(o)+'"' + (value===o?' selected':'') + '>'+esc(o||'—')+'</option>').join('')+
+      '</select>';
+  } else if (t === 'textarea' || t === 'html') {
+    const cls = 'fi ta'+(opts.long?' long':'')+(t==='html'?' html':'');
+    inp = '<textarea class="'+cls+'" data-patch="'+patchPath+'">'+esc(value==null?'':value)+'</textarea>';
+  } else if (t === 'url' && (key === 'img' || key === 'image')) {
+    inp = '<div class="imgf">'+
+      '<input class="fi" type="url" data-patch="'+patchPath+'" value="'+escA(value||'')+'" placeholder="https://...">'+
+      '<div class="imgprev" onclick="document.querySelector(\'[data-patch=&quot;'+patchPath+'&quot;]\').focus()">'+
+        (value?'<img src="'+escA(value)+'" onerror="this.outerHTML=\'<span class=imgph>📷</span>\'">':'<span class="imgph">📷</span>')+
+      '</div>'+
+      '</div>';
+  } else {
+    const tt = t === 'number' ? 'number' : (t === 'url' ? 'url' : (t === 'email' ? 'email' : (t === 'tel' ? 'tel' : 'text')));
+    inp = '<input class="fi" type="'+tt+'" ' + (tt==='number'?'step="0.01"':'') + ' data-patch="'+patchPath+'" value="'+escA(value==null?'':value)+'">';
+  }
+
+  const badge = isCustom ? '<em>Custom</em>' : '';
+  const meta = isCustom ? '<div class="fl-meta"><button class="fl-mb del" onclick="removeCustomField(\''+patchPath+'\')" title="Remove field">✕</button></div>' : '';
+  const hint = opts.hint ? '<div class="fhint">'+opts.hint+'</div>' : '';
+
+  return '<div class="f'+custom+'" data-field="'+patchPath+'">'+
+    '<div class="fl"><span class="fl-l">'+esc(label)+badge+'</span>'+meta+'</div>'+
+    inp+hint+'</div>';
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   EDIT HANDLING — field → queue → save
+══════════════════════════════════════════════════════════════════ */
+
+// Delegated event listener — handles all field edits
+document.addEventListener('input', (e)=>{
+  const el = e.target;
+  if (el.dataset?.patch) handleEdit(el.dataset.patch, el.value);
+});
+document.addEventListener('change', (e)=>{
+  const el = e.target;
+  if (el.dataset?.patch && el.tagName === 'SELECT') handleEdit(el.dataset.patch, el.value);
+});
+// Checkbox toggle
+document.addEventListener('click', (e)=>{
+  const cb = e.target.closest('.cbx[data-cbx]');
+  if (!cb) return;
+  e.preventDefault(); e.stopPropagation();
+  const cur = cb.classList.contains('on');
+  cb.classList.toggle('on', !cur);
+  const lbl = cb.querySelector('.cbx-l');
+  if (lbl) {
+    const p = cb.dataset.patch || '';
+    if (p.includes('item:') && p.endsWith(':visible')) lbl.textContent = !cur ? 'Visible on site' : 'Hidden from site';
+    else lbl.textContent = !cur ? 'Yes' : 'No';
+  }
+  handleEdit(cb.dataset.patch, !cur);
+});
+
+function handleEdit(patchPath, newValue) {
+  const parts = patchPath.split(':');
+  const scope = parts[0];
+  const id = parts[1];
+  const key = parts.slice(2).join(':');
+
+  // Snapshot original
+  if (!(patchPath in S.dirtyBackup)) {
+    S.dirtyBackup[patchPath] = getCurrentValue(scope, id, key);
+  }
+
+  // Apply in memory
+  if (scope === 'page') {
+    const p = S.pages.find(x => x.id === id); if (p) p[key] = newValue;
+  } else if (scope === 'section') {
+    const s = S.sections.find(x => x.id === id);
+    if (s) {
+      if (key === 'icon' || key === 'title' || key === 'subtitle' || key === 'kind' || key === 'slug') s[key] = newValue;
+    }
+  } else if (scope === 'item') {
+    const i = S.items.find(x => x.id === id);
+    if (i && key === 'visible') i.visible = !!newValue;
+  } else if (scope === 'page_settings') {
+    const p = S.pages.find(x => x.id === id);
+    if (p) p.settings = { ...(p.settings||{}), [key]: newValue };
+  } else if (scope === 'section_settings') {
+    const s = S.sections.find(x => x.id === id);
+    if (s) s.settings = { ...(s.settings||{}), [key]: newValue };
+  } else if (scope === 'item_data') {
+    const i = S.items.find(x => x.id === id);
+    if (i) {
+      let v = newValue;
+      if (key === 'price' || key === 'priceLg') v = (newValue === '' ? null : Number(newValue));
+      if (key === 'soldOut') v = !!newValue;
+      i.data = { ...(i.data||{}), [key]: v };
+    }
+  } else if (scope === 'global') {
+    const cur = S.settings[id];
+    if (key === '__scalar') S.settings[id] = newValue;
+    else if (cur && typeof cur === 'object') S.settings[id] = { ...cur, [key]: newValue };
+    else S.settings[id] = { [key]: newValue };
+  }
+
+  S.dirty.add(patchPath);
+  updateSaveUI();
+  queueSave();
+}
+
+function getCurrentValue(scope, id, key) {
+  if (scope === 'page')             return S.pages.find(x=>x.id===id)?.[key];
+  if (scope === 'section')          return S.sections.find(x=>x.id===id)?.[key];
+  if (scope === 'item')             return S.items.find(x=>x.id===id)?.[key];
+  if (scope === 'page_settings')    return (S.pages.find(x=>x.id===id)?.settings||{})[key];
+  if (scope === 'section_settings') return (S.sections.find(x=>x.id===id)?.settings||{})[key];
+  if (scope === 'item_data')        return (S.items.find(x=>x.id===id)?.data||{})[key];
+  if (scope === 'global') {
+    const v = S.settings[id];
+    if (key === '__scalar') return v;
+    return v && typeof v === 'object' ? v[key] : undefined;
+  }
+}
+
+function updateSaveUI() {
+  const n = S.dirty.size;
+  if (n > 0) { setStatus('', n+' unsaved'); }
+  else { setStatus('saved','All saved'); }
+  const bar = document.getElementById('savebar');
+  bar.classList.toggle('show', n > 0);
+  document.getElementById('sb-ct').textContent = n + ' unsaved change' + (n===1?'':'s');
+}
+
+function queueSave() {
+  if (S.saveTimer) clearTimeout(S.saveTimer);
+  S.saveTimer = setTimeout(()=>flushSaves(false), 1500);
+}
+
+async function flushSaves(manual) {
+  if (S.dirty.size === 0) return;
+  setStatus('saving','Saving…');
+  const pageIds = new Set(), sectionIds = new Set(), itemIds = new Set(), globalKeys = new Set();
+  for (const p of S.dirty) {
+    const [scope, id] = p.split(':');
+    if (scope === 'page' || scope === 'page_settings') pageIds.add(id);
+    else if (scope === 'section' || scope === 'section_settings') sectionIds.add(id);
+    else if (scope === 'item' || scope === 'item_data') itemIds.add(id);
+    else if (scope === 'global') globalKeys.add(id);
+  }
+  try {
+    const promises = [];
+    for (const id of pageIds) {
+      const r = S.pages.find(x=>x.id===id);
+      if (r) promises.push(sbPatch('pages', id, { title:r.title, slug:r.slug, icon:r.icon, template:r.template, settings:r.settings }));
+    }
+    for (const id of sectionIds) {
+      const r = S.sections.find(x=>x.id===id);
+      if (r) promises.push(sbPatch('sections', id, { title:r.title, subtitle:r.subtitle, icon:r.icon, slug:r.slug, kind:r.kind, settings:r.settings }));
+    }
+    for (const id of itemIds) {
+      const r = S.items.find(x=>x.id===id);
+      if (r) promises.push(sbPatch('items', id, { data:r.data, visible:r.visible }));
+    }
+    for (const k of globalKeys) {
+      promises.push(sbPatchSetting(k, S.settings[k]));
+    }
+    await Promise.all(promises);
+    S.dirty.clear();
+    S.dirtyBackup = {};
+    setStatus('saved','Saved ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
+    document.getElementById('savebar').classList.remove('show');
+    if (manual) toast('Saved ✓','ok');
+  } catch(err) {
+    console.error(err);
+    setStatus('err','Save failed');
+    toast('Save failed: '+err.message,'err');
+  }
+}
+
+function discardChanges() {
+  if (S.dirty.size === 0) return;
+  if (!confirm('Discard all unsaved changes?')) return;
+  for (const [patchPath, origVal] of Object.entries(S.dirtyBackup)) {
+    const parts = patchPath.split(':');
+    const scope = parts[0], id = parts[1], key = parts.slice(2).join(':');
+    if (scope === 'page') { const r = S.pages.find(x=>x.id===id); if (r) r[key] = origVal; }
+    else if (scope === 'section') { const r = S.sections.find(x=>x.id===id); if (r) r[key] = origVal; }
+    else if (scope === 'item') { const r = S.items.find(x=>x.id===id); if (r) r[key] = origVal; }
+    else if (scope === 'page_settings') { const r = S.pages.find(x=>x.id===id); if (r) r.settings = {...r.settings, [key]:origVal}; }
+    else if (scope === 'section_settings') { const r = S.sections.find(x=>x.id===id); if (r) r.settings = {...r.settings, [key]:origVal}; }
+    else if (scope === 'item_data') { const r = S.items.find(x=>x.id===id); if (r) r.data = {...r.data, [key]:origVal}; }
+    else if (scope === 'global') {
+      if (key === '__scalar') S.settings[id] = origVal;
+      else if (S.settings[id] && typeof S.settings[id] === 'object') S.settings[id] = {...S.settings[id], [key]:origVal};
+    }
+  }
+  S.dirty.clear();
+  S.dirtyBackup = {};
+  renderAll();
+  updateSaveUI();
+  toast('Changes discarded','info');
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CRUD — ADD / DUP / DELETE / REORDER
+══════════════════════════════════════════════════════════════════ */
+
+async function addItem(sectionId) {
+  try {
+    const s = S.sections.find(x => x.id === sectionId);
+    if (!s) return toast('Section not found','err');
+    const fields = ITEM_FIELDS[s.kind] || ITEM_FIELDS.items_grid;
+    const data = {};
+    fields.forEach(f => {
+      if (f.t === 'bool') data[f.k] = false;
+      else if (f.t === 'number') data[f.k] = null;
+      else data[f.k] = '';
+    });
+    if (data.name !== undefined) data.name = 'New Item';
+    else if (data.title !== undefined) data.title = 'New Item';
+    const maxOrder = Math.max(0, ...S.items.filter(it=>it.section_id===sectionId).map(it=>it.order_idx||0));
+    const rows = await sbPost('items', { section_id:sectionId, data, order_idx:maxOrder+1, visible:true });
+    await reloadAll();
+    S.openRowId = 'item:'+rows[0].id;
+    renderAll();
+    toast('Item added ✓','ok');
+    setTimeout(()=>{
+      const el = document.querySelector('[data-row="item:'+cssEsc(rows[0].id)+'"]');
+      if (el) el.scrollIntoView({behavior:'smooth',block:'center'});
+    }, 100);
+  } catch(err) { toast('Error: '+err.message,'err'); }
+}
+
+async function duplicateItem(id) {
+  try {
+    const it = S.items.find(x=>x.id===id); if (!it) return;
+    const maxOrder = Math.max(0, ...S.items.filter(x=>x.section_id===it.section_id).map(x=>x.order_idx||0));
+    const rows = await sbPost('items', { section_id:it.section_id, data:{...it.data}, visible:it.visible, order_idx:maxOrder+1 });
+    await reloadAll();
+    S.openRowId = 'item:'+rows[0].id;
+    renderAll();
+    toast('Duplicated ✓','ok');
+  } catch(err) { toast('Error: '+err.message,'err'); }
+}
+
+async function duplicateSection(id) {
+  try {
+    const s = S.sections.find(x=>x.id===id); if (!s) return;
+    const maxOrder = Math.max(0, ...S.sections.filter(x=>x.page_id===s.page_id).map(x=>x.order_idx||0));
+    const newS = await sbPost('sections', { page_id:s.page_id, title:s.title+' (copy)', subtitle:s.subtitle, icon:s.icon, slug:(s.slug||'')+'-copy-'+Date.now().toString(36).slice(-4), kind:s.kind, settings:s.settings, order_idx:maxOrder+1 });
+    for (const it of S.items.filter(x=>x.section_id===id)) {
+      await sbPost('items', { section_id:newS[0].id, data:it.data, visible:it.visible, order_idx:it.order_idx });
+    }
+    await reloadAll();
+    renderAll();
+    toast('Section duplicated ✓','ok');
+  } catch(err) { toast('Error: '+err.message,'err'); }
+}
+
+async function moveItem(id, delta) {
+  const it = S.items.find(x=>x.id===id); if (!it) return;
+  const siblings = S.items.filter(x=>x.section_id===it.section_id).sort((a,b)=>a.order_idx-b.order_idx);
+  const idx = siblings.findIndex(x=>x.id===id);
+  const target = idx + delta;
+  if (target < 0 || target >= siblings.length) return toast('Cannot move further','info');
+  try {
+    const other = siblings[target];
+    await sbPatch('items', id, { order_idx: other.order_idx });
+    await sbPatch('items', other.id, { order_idx: it.order_idx });
+    await reloadAll();
+    renderList();
+  } catch(err) { toast('Error: '+err.message,'err'); }
+}
+
+async function moveSection(id, delta) {
+  const s = S.sections.find(x=>x.id===id); if (!s) return;
+  const siblings = S.sections.filter(x=>x.page_id===s.page_id).sort((a,b)=>a.order_idx-b.order_idx);
+  const idx = siblings.findIndex(x=>x.id===id);
+  const target = idx + delta;
+  if (target < 0 || target >= siblings.length) return toast('Cannot move further','info');
+  try {
+    const other = siblings[target];
+    await sbPatch('sections', id, { order_idx: other.order_idx });
+    await sbPatch('sections', other.id, { order_idx: s.order_idx });
+    await reloadAll();
+    renderList();
+  } catch(err) { toast('Error: '+err.message,'err'); }
+}
+
+function confirmDelete(type, id) {
+  const rec = type === 'page' ? S.pages.find(x=>x.id===id)
+            : type === 'section' ? S.sections.find(x=>x.id===id)
+            : S.items.find(x=>x.id===id);
+  const name = rec ? (rec.title || rec.data?.name || rec.data?.title || 'this') : 'this';
+  const warning = type === 'page' ? ' — THIS DELETES ALL SECTIONS AND ITEMS UNDER IT.'
+                : type === 'section' ? ' — This also deletes all items in it.'
+                : '';
+  openModal(
+    '<h3>Delete <em>'+esc(name)+'</em>?</h3>'+
+    '<p>This cannot be undone.'+warning+'</p>'+
+    '<div class="modal-btns">'+
+      '<button class="tb-btn" onclick="closeModal()">Cancel</button>'+
+      '<button class="tb-btn" style="background:linear-gradient(135deg,#a02010,#c04800);border:none;color:#fff" onclick="doDelete(\''+type+'\',\''+id+'\')">Delete</button>'+
+    '</div>'
+  );
+}
+async function doDelete(type, id) {
+  try {
+    const table = type === 'page' ? 'pages' : type === 'section' ? 'sections' : 'items';
+    await sbDel(table, id);
+    closeModal();
+    await reloadAll();
+    if (S.openRowId?.endsWith(':'+id)) S.openRowId = null;
+    renderAll();
+    toast('Deleted ✓','ok');
+  } catch(err) { toast('Error: '+err.message,'err'); }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   CUSTOM FIELDS
+══════════════════════════════════════════════════════════════════ */
+function openAddCustomField(scope, id) {
+  openModal(
+    '<h3>Add <em>Custom Field</em></h3>'+
+    '<p>Add any field. Letters, numbers, underscores only.</p>'+
+    '<div class="modal-row"><label>Field Name</label><input class="fi" id="m-key" placeholder="e.g. spice_level"></div>'+
+    '<div class="modal-row"><label>Type</label><select class="fi" id="m-type">'+
+      '<option value="text">Short Text</option>'+
+      '<option value="textarea">Long Text</option>'+
+      '<option value="number">Number</option>'+
+      '<option value="url">URL / Image</option>'+
+      '<option value="bool">Yes / No</option>'+
+    '</select></div>'+
+    '<div class="modal-btns">'+
+      '<button class="tb-btn" onclick="closeModal()">Cancel</button>'+
+      '<button class="tb-btn primary" onclick="submitCustomField(\''+scope+'\',\''+id+'\')">Add</button>'+
+    '</div>'
+  );
+  setTimeout(()=>document.getElementById('m-key').focus(), 80);
+}
+async function submitCustomField(scope, id) {
+  const key = document.getElementById('m-key').value.trim().replace(/\s+/g,'_');
+  const type = document.getElementById('m-type').value;
+  if (!key) return toast('Field name required','err');
+  if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(key)) return toast('Letters, numbers, underscores only','err');
+  const dv = type === 'bool' ? false : type === 'number' ? null : '';
+  try {
+    if (scope === 'page') {
+      const p = S.pages.find(x=>x.id===id);
+      if ((p.settings||{})[key] !== undefined) return toast('Already exists','err');
+      await sbPatch('pages', id, { settings:{...(p.settings||{}), [key]:dv} });
+    } else if (scope === 'section') {
+      const s = S.sections.find(x=>x.id===id);
+      if ((s.settings||{})[key] !== undefined) return toast('Already exists','err');
+      await sbPatch('sections', id, { settings:{...(s.settings||{}), [key]:dv} });
+    } else if (scope === 'item') {
+      const it = S.items.find(x=>x.id===id);
+      if ((it.data||{})[key] !== undefined) return toast('Already exists','err');
+      await sbPatch('items', id, { data:{...(it.data||{}), [key]:dv} });
+    }
+    closeModal();
+    await reloadAll();
+    renderAll();
+    toast('Field added ✓','ok');
+  } catch(err) { toast('Error: '+err.message,'err'); }
+}
+
+async function removeCustomField(patchPath) {
+  const parts = patchPath.split(':');
+  const scope = parts[0], id = parts[1], key = parts.slice(2).join(':');
+  if (!confirm('Remove the "'+key+'" field? Its value is lost.')) return;
+  try {
+    if (scope === 'page_settings') {
+      const p = S.pages.find(x=>x.id===id);
+      const ns = {...(p.settings||{})}; delete ns[key];
+      await sbPatch('pages', id, { settings:ns });
+    } else if (scope === 'section_settings') {
+      const s = S.sections.find(x=>x.id===id);
+      const ns = {...(s.settings||{})}; delete ns[key];
+      await sbPatch('sections', id, { settings:ns });
+    } else if (scope === 'item_data') {
+      const it = S.items.find(x=>x.id===id);
+      const nd = {...(it.data||{})}; delete nd[key];
+      await sbPatch('items', id, { data:nd });
+    }
+    await reloadAll();
+    renderAll();
+    toast('Field removed','ok');
+  } catch(err) { toast('Error: '+err.message,'err'); }
+}
+
+async function openAddGlobalSubField(settingKey) {
+  openModal(
+    '<h3>Add to <em>'+esc(settingKey)+'</em></h3>'+
+    '<div class="modal-row"><label>Sub-field Name</label><input class="fi" id="m-key" placeholder="e.g. twitter"></div>'+
+    '<div class="modal-row"><label>Value</label><input class="fi" id="m-val" placeholder=""></div>'+
+    '<div class="modal-btns">'+
+      '<button class="tb-btn" onclick="closeModal()">Cancel</button>'+
+      '<button class="tb-btn primary" onclick="submitGlobalSubField(\''+settingKey+'\')">Add</button>'+
+    '</div>'
+  );
+  setTimeout(()=>document.getElementById('m-key').focus(), 80);
+}
+async function submitGlobalSubField(settingKey) {
+  const k = document.getElementById('m-key').value.trim().replace(/\s+/g,'_');
+  const v = document.getElementById('m-val').value;
+  if (!k) return toast('Name required','err');
+  try {
+    const cur = S.settings[settingKey] || {};
+    const next = { ...(typeof cur === 'object' ? cur : {}), [k]: v };
+    await sbPatchSetting(settingKey, next);
+    closeModal();
+    await reloadAll();
+    renderAll();
+    toast('Added ✓','ok');
+  } catch(err) { toast('Error: '+err.message,'err'); }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   FAB — add new section
+══════════════════════════════════════════════════════════════════ */
+function openFabMenu() {
+  const pages = S.pages.map(p => 
+    '<button class="edt-btn" style="justify-content:flex-start;height:auto;padding:10px 12px" onclick="openAddSectionModal(\''+p.id+'\')">'+
+    '<span style="font-size:14px">'+esc(p.icon||'📄')+'</span> '+esc(p.title)+
+    '</button>'
+  ).join('');
+  openModal(
+    '<h3>Add <em>Section</em></h3>'+
+    '<p>Pick a page to add a section to:</p>'+
+    '<div style="display:flex;flex-direction:column;gap:4px">'+pages+'</div>'+
+    '<div class="modal-btns"><button class="tb-btn" onclick="closeModal()">Cancel</button></div>'
+  );
+}
+
+function openAddSectionModal(pageId) {
+  const p = S.pages.find(x=>x.id===pageId);
+  openModal(
+    '<h3>New <em>Section</em> in '+esc(p?.title||'')+'</h3>'+
+    '<div class="modal-row"><label>Title</label><input class="fi" id="m-title" placeholder="e.g. Seasonal Menu"></div>'+
+    '<div class="modal-row"><label>Kind</label><select class="fi" id="m-kind">'+
+      Object.entries(KINDS).map(([k,d])=>'<option value="'+k+'">'+d.ic+' '+d.lbl+'</option>').join('')+
+    '</select></div>'+
+    '<div class="modal-row"><label>Icon (optional)</label><input class="fi" id="m-icon" placeholder="Emoji"></div>'+
+    '<div class="modal-btns">'+
+      '<button class="tb-btn" onclick="closeModal()">Cancel</button>'+
+      '<button class="tb-btn primary" onclick="submitAddSection(\''+pageId+'\')">Create</button>'+
+    '</div>'
+  );
+  setTimeout(()=>document.getElementById('m-title').focus(), 80);
+}
+async function submitAddSection(pageId) {
+  const title = document.getElementById('m-title').value.trim();
+  const kind  = document.getElementById('m-kind').value;
+  const icon  = document.getElementById('m-icon').value.trim();
+  if (!title) return toast('Title required','err');
+  try {
+    const maxOrder = Math.max(0, ...S.sections.filter(s=>s.page_id===pageId).map(s=>s.order_idx||0));
+    const rows = await sbPost('sections', { page_id:pageId, title, kind, icon:icon||null, slug:slugify(title), order_idx:maxOrder+1, settings:{} });
+    closeModal();
+    await reloadAll();
+    // Focus the new section
+    S.activeChip = 'page:'+pageId;
+    S.openRowId = 'section:'+rows[0].id;
+    renderAll();
+    toast('Section created ✓','ok');
+    setTimeout(()=>{
+      const el = document.querySelector('[data-row="section:'+cssEsc(rows[0].id)+'"]');
+      if (el) el.scrollIntoView({behavior:'smooth',block:'center'});
+    }, 100);
+  } catch(err) { toast('Error: '+err.message,'err'); }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════════════════════════════ */
+function openModal(html){
+  document.getElementById('modal').innerHTML = html;
+  document.getElementById('modal-bg').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modal-bg').classList.remove('show');
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   HELP
+══════════════════════════════════════════════════════════════════ */
+function openHelp() {
+  openModal(
+    '<h3>Quick <em>Help</em></h3>'+
+    '<div style="display:flex;flex-direction:column;gap:12px;font-family:var(--body);font-size:13px;color:var(--t2);line-height:1.6">'+
+      '<div><strong style="color:var(--cream);font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--flame)">Search</strong><br>Press <kbd style="padding:1px 5px;border-radius:3px;background:rgba(0,0,0,.4);border:1px solid var(--line);font-family:var(--mono);font-size:10.5px">/</kbd> to focus. Type anything — item names, descriptions, prices, field keys. Press <kbd style="padding:1px 5px;border-radius:3px;background:rgba(0,0,0,.4);border:1px solid var(--line);font-family:var(--mono);font-size:10.5px">Esc</kbd> to clear.</div>'+
+      '<div><strong style="color:var(--cream);font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--flame)">Quick Filters</strong><br>Tap a chip under search to see only Hidden items, Sold Out, Empty sections, No Image, No Price, or a specific page.</div>'+
+      '<div><strong style="color:var(--cream);font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--flame)">Edit</strong><br>Click any row to expand its editor inline. Changes save automatically after 1.5 seconds, or hit <kbd style="padding:1px 5px;border-radius:3px;background:rgba(0,0,0,.4);border:1px solid var(--line);font-family:var(--mono);font-size:10.5px">⌘S</kbd>.</div>'+
+      '<div><strong style="color:var(--cream);font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--flame)">Add</strong><br>The <strong style="color:var(--flame)">＋</strong> button adds a new section. Every section has an Add Item button in its toolbar. Each field has + Custom Field.</div>'+
+      '<div><strong style="color:var(--cream);font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--flame)">Tips</strong><br>Orange stripe = unsaved change. Hit Discard on the save bar to undo everything.</div>'+
+    '</div>'+
+    '<div class="modal-btns"><button class="tb-btn primary" onclick="closeModal()">Got it</button></div>'
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+══════════════════════════════════════════════════════════════════ */
+document.addEventListener('keydown', (e)=>{
+  if (!S.authed) return;
+
+  // Don't trigger shortcuts when typing in an input
+  const inEdit = ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName);
+
+  // ⌘S / Ctrl+S — save
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+    e.preventDefault();
+    flushSaves(true);
+    return;
+  }
+
+  // / — focus search
+  if (e.key === '/' && !inEdit) {
+    e.preventDefault();
+    document.getElementById('search').focus();
+    return;
+  }
+
+  // ? — help
+  if (e.key === '?' && !inEdit) {
+    e.preventDefault();
+    openHelp();
+    return;
+  }
+
+  // Escape — close modal, clear search, close row
+  if (e.key === 'Escape') {
+    if (document.getElementById('modal-bg').classList.contains('show')) return closeModal();
+    const si = document.getElementById('search');
+    if (si === document.activeElement && si.value) { si.value=''; clearSearch(); return; }
+    if (S.openRowId) { S.openRowId = null; renderList(); return; }
+    if (S.activeChip) { S.activeChip = null; renderAll(); return; }
+  }
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   BEFOREUNLOAD + INIT
+══════════════════════════════════════════════════════════════════ */
+window.addEventListener('beforeunload', (e)=>{
+  if (S.dirty.size > 0) { e.preventDefault(); e.returnValue = 'Unsaved changes.'; return e.returnValue; }
+});
+
+buildPinPad();
+if (sessionStorage.getItem('fs_cms_auth') === '1') {
+  S.authed = true;
+  bootApp();
+}
 </script>
 </body>
 </html>
