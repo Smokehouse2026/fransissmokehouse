@@ -12,40 +12,46 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --void:#090704;--deep:#120d07;--surface:#1a1108;--card:#22160a;
-  --border:rgba(196,160,112,.12);
-  --border-str:rgba(196,160,112,.24);
+  --void:#090704;--deep:#120d07;--surface:#1a1108;--card:#22160a;--raised:#2b1c0e;
+  --border:rgba(196,160,112,.11);
+  --border2:rgba(196,160,112,.22);
   --ember:#c04800;--fire:#e06010;--flame:#f08820;--glow:#f5a830;
   --cream:#f5e8cc;--parch:#e8d4a8;--sand:#c4a070;--mid:#7a5830;--lo:#8a6840;
   --text:var(--cream);
   --text2:rgba(196,160,112,.72);
   --text3:rgba(196,160,112,.44);
   --ember-bg:rgba(192,72,0,.14);
+  --flame-bg:rgba(240,136,32,.08);
   --danger:#ff6a3a;
   --success:#9ad060;
+  --blue:#6a9fd0;
   --serif:'Playfair Display',Georgia,serif;
   --cond:'Barlow Condensed',sans-serif;
   --body:'Barlow',sans-serif;
   --mono:'JetBrains Mono',ui-monospace,monospace;
-  --rd:12px;--rd-sm:8px;
+  --rd:10px;--rd-sm:7px;--rd-xs:4px;
+  --shadow-sm:0 2px 8px rgba(0,0,0,.2);
+  --shadow-md:0 6px 24px rgba(0,0,0,.35);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.5);
+  --shadow-flame:0 0 0 2px rgba(240,136,32,.2), 0 6px 20px rgba(192,72,0,.25);
 }
 html,body{width:100%;height:100%;overflow:hidden;background:var(--void);color:var(--text);font-family:var(--body);font-weight:400;-webkit-tap-highlight-color:transparent;}
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.028'/%3E%3C/svg%3E");}
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.025'/%3E%3C/svg%3E");}
 
 /* ══════════════════════════════════
    TOAST
 ══════════════════════════════════ */
 #toastBox{position:fixed;top:16px;right:16px;z-index:100000;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
-.toast{pointer-events:auto;padding:11px 18px;border-radius:var(--rd-sm);font-family:var(--cond);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;backdrop-filter:blur(12px);animation:tIn .3s ease, tOut .4s 2.6s ease forwards;box-shadow:0 8px 30px rgba(0,0,0,.45);max-width:340px;}
+.toast{pointer-events:auto;padding:11px 18px;border-radius:var(--rd-sm);font-family:var(--cond);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);animation:tIn .3s ease, tOut .4s 2.6s ease forwards;box-shadow:var(--shadow-md);max-width:340px;}
 .toast.ok{background:rgba(30,60,40,.92);border:1px solid rgba(154,208,96,.22);color:var(--success);}
 .toast.err{background:rgba(60,20,10,.92);border:1px solid rgba(255,106,58,.25);color:var(--danger);}
-.toast.info{background:rgba(30,20,10,.92);border:1px solid var(--border-str);color:var(--cream);}
+.toast.info{background:rgba(30,20,10,.92);border:1px solid var(--border2);color:var(--cream);}
 @keyframes tIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
 @keyframes tOut{to{opacity:0;transform:translateX(40px)}}
 
 /* ══════════════════════════════════
-   PIN SCREEN
+   PIN
 ══════════════════════════════════ */
 #pin-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 30% 20%,#1e1510,#0a0806 50%,#050404);transition:opacity .4s;}
 #pin-screen.gone{opacity:0;pointer-events:none;}
@@ -75,14 +81,36 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 #app{display:none;position:fixed;inset:0;z-index:5;background:var(--void);flex-direction:column;}
 #app.on{display:flex;}
 
-/* TOP BAR */
-.topbar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--deep);flex-shrink:0;min-height:58px;}
-.tb-brand{font-family:var(--serif);font-weight:700;font-size:17px;color:var(--cream);letter-spacing:.01em;white-space:nowrap;}
+/* ── TOP BAR ── */
+.topbar{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);background:rgba(9,7,4,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:20;position:relative;min-height:56px;}
+.tb-brand{font-family:var(--serif);font-weight:700;font-size:16px;color:var(--cream);white-space:nowrap;}
 .tb-brand em{font-style:italic;color:var(--flame);font-weight:400;}
-.tb-sep{width:1px;height:24px;background:var(--border);flex-shrink:0;}
-.tb-role{font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--flame);padding:4px 10px;border:1px solid rgba(240,136,32,.28);border-radius:100px;flex-shrink:0;}
+.tb-sep{width:1px;height:22px;background:var(--border);flex-shrink:0;}
 
-.tb-save{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;gap:6px;white-space:nowrap;margin-left:auto;}
+/* PAGE SWITCHER DROPDOWN */
+.page-switcher{position:relative;flex-shrink:0;}
+.ps-trigger{display:flex;align-items:center;gap:8px;padding:7px 12px 7px 10px;border-radius:var(--rd-sm);border:1px solid var(--border2);background:var(--card);color:var(--cream);font-family:var(--body);font-weight:500;font-size:14px;cursor:pointer;transition:all .18s;}
+.ps-trigger:hover{background:var(--raised);border-color:rgba(240,136,32,.4);}
+.ps-trigger.open{background:var(--raised);border-color:var(--flame);}
+.ps-icon{font-size:16px;filter:drop-shadow(0 0 4px rgba(240,136,32,.3));}
+.ps-name{font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;}
+.ps-chev{font-size:9px;color:var(--text3);transition:transform .2s;margin-left:2px;}
+.ps-trigger.open .ps-chev{transform:rotate(180deg);color:var(--flame);}
+
+.ps-menu{position:absolute;top:calc(100% + 6px);left:0;min-width:260px;background:var(--card);border:1px solid var(--border2);border-radius:var(--rd);box-shadow:var(--shadow-lg);overflow:hidden;z-index:40;opacity:0;pointer-events:none;transform:translateY(-4px);transition:all .18s;}
+.ps-menu.show{opacity:1;pointer-events:all;transform:translateY(0);}
+.ps-menu-inner{padding:6px;max-height:72vh;overflow-y:auto;}
+.ps-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--rd-xs);cursor:pointer;transition:background .12s;color:var(--text2);}
+.ps-item:hover{background:rgba(255,255,255,.04);color:var(--cream);}
+.ps-item.active{background:var(--ember-bg);color:var(--flame);}
+.ps-item-icon{font-size:15px;flex-shrink:0;}
+.ps-item-name{font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;flex:1;}
+.ps-item-count{font-size:10px;font-weight:600;color:var(--text3);font-family:var(--cond);letter-spacing:.08em;padding:2px 8px;border-radius:100px;background:rgba(0,0,0,.3);}
+.ps-item.active .ps-item-count{background:rgba(240,136,32,.2);color:var(--flame);}
+
+.tb-spacer{flex:1;}
+
+.tb-save{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;gap:6px;white-space:nowrap;}
 .tb-save .dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
 .tb-save.saving{color:var(--flame);}
 .tb-save.saving .dot{animation:pulse 1s ease-in-out infinite;}
@@ -90,99 +118,146 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .tb-save.err{color:var(--danger);}
 @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
 
-.tb-btn{padding:8px 14px;border-radius:var(--rd-sm);border:1px solid var(--border-str);background:rgba(22,14,6,.65);color:var(--text2);font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .18s;display:inline-flex;align-items:center;gap:6px;flex-shrink:0;}
-.tb-btn:hover{background:rgba(192,72,0,.12);border-color:rgba(240,136,32,.4);color:var(--flame);}
+.tb-kbd{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:var(--rd-xs);background:rgba(0,0,0,.35);border:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:500;}
+
+.tb-btn{padding:7px 12px;border-radius:var(--rd-sm);border:1px solid var(--border2);background:rgba(22,14,6,.65);color:var(--text2);font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .16s;display:inline-flex;align-items:center;gap:6px;}
+.tb-btn:hover{background:rgba(192,72,0,.1);border-color:rgba(240,136,32,.4);color:var(--flame);}
 .tb-btn.lock:hover{border-color:rgba(255,106,58,.4);color:var(--danger);}
-.tb-btn.primary{background:linear-gradient(135deg,var(--ember),var(--fire));border:none;color:#fff;font-weight:800;box-shadow:0 3px 14px rgba(192,72,0,.35);}
-.tb-btn.primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(192,72,0,.5);}
+.tb-btn.primary{background:linear-gradient(135deg,var(--ember),var(--fire));border:none;color:#fff;font-weight:800;box-shadow:0 3px 12px rgba(192,72,0,.3);}
+.tb-btn.primary:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(192,72,0,.45);}
 
-/* TAB STRIP */
-.tabstrip{display:flex;align-items:center;gap:4px;padding:6px 14px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-.tabstrip::-webkit-scrollbar{display:none;}
-.tab{padding:8px 16px;border-radius:var(--rd-sm);border:1px solid transparent;background:transparent;color:var(--text2);font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .15s;display:inline-flex;align-items:center;gap:7px;flex-shrink:0;}
-.tab:hover{background:rgba(255,255,255,.03);color:var(--cream);}
-.tab.active{background:var(--ember-bg);color:var(--flame);border-color:rgba(240,136,32,.22);}
-.tab-icon{font-size:14px;filter:drop-shadow(0 0 4px rgba(240,136,32,.3));}
-.tab-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:100px;background:rgba(0,0,0,.3);color:var(--text3);}
-.tab.active .tab-badge{background:rgba(240,136,32,.2);color:var(--flame);}
-.tab-add{padding:7px 12px;border-radius:var(--rd-sm);border:1px dashed var(--border-str);background:transparent;color:var(--text3);font-size:14px;cursor:pointer;transition:all .15s;flex-shrink:0;margin-left:4px;}
-.tab-add:hover{border-color:var(--flame);color:var(--flame);background:rgba(192,72,0,.06);}
+.conn-dot{width:7px;height:7px;border-radius:50%;background:var(--lo);flex-shrink:0;}
+.conn-dot.ok{background:var(--success);box-shadow:0 0 8px var(--success);}
+.conn-dot.err{background:var(--danger);}
 
-/* BODY */
-.body{flex:1;display:flex;min-height:0;overflow:hidden;}
-.scrollarea{flex:1;overflow-y:auto;overflow-x:hidden;padding:clamp(16px,2.5vw,28px) clamp(14px,2.5vw,32px) 60px;}
-.scrollarea::-webkit-scrollbar{width:8px;}
-.scrollarea::-webkit-scrollbar-thumb{background:rgba(196,160,112,.15);border-radius:4px;}
-.scrollarea::-webkit-scrollbar-track{background:transparent;}
+/* ══════════════════════════════════
+   CANVAS (scrolling preview)
+══════════════════════════════════ */
+.canvas{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;}
+.canvas::-webkit-scrollbar{width:10px;}
+.canvas::-webkit-scrollbar-thumb{background:rgba(196,160,112,.13);border-radius:5px;}
+.canvas::-webkit-scrollbar-thumb:hover{background:rgba(196,160,112,.22);}
+.canvas::-webkit-scrollbar-track{background:transparent;}
+
+.canvas-inner{max-width:960px;margin:0 auto;padding:clamp(24px,3vw,40px) clamp(16px,3vw,36px) 140px;}
 
 /* PAGE HEADER */
-.page-head{max-width:1100px;margin:0 auto 22px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid var(--border);}
-.ph-left{flex:1;min-width:0;}
-.ph-eyebrow{font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--flame);opacity:.8;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
-.ph-eyebrow::before{content:'';width:14px;height:1px;background:currentColor;}
-.ph-title{font-family:var(--serif);font-weight:900;font-size:clamp(26px,4vw,40px);letter-spacing:-.02em;line-height:1;color:var(--cream);}
-.ph-title em{font-style:italic;color:var(--flame);font-weight:400;}
-.ph-sub{font-family:var(--body);font-weight:300;font-size:13.5px;color:var(--text3);margin-top:8px;line-height:1.55;max-width:760px;}
-.ph-actions{display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0;}
+.pg-head{margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--border);}
+.pg-eyebrow{font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--flame);opacity:.85;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.pg-eyebrow::before{content:'';width:16px;height:1px;background:currentColor;}
+.pg-title{font-family:var(--serif);font-weight:900;font-size:clamp(32px,4.5vw,48px);letter-spacing:-.025em;line-height:1;color:var(--cream);}
+.pg-title em{font-style:italic;color:var(--flame);font-weight:400;}
+.pg-desc{font-family:var(--body);font-weight:300;font-size:14px;color:var(--text3);margin-top:10px;line-height:1.6;max-width:640px;}
+.pg-meta{font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:8px;}
+.pg-meta code{color:var(--flame);}
 
-/* PAGE-LEVEL SETTINGS CARD */
-.settings-card{max-width:1100px;margin:0 auto 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--rd);overflow:hidden;}
-.sc-head{padding:12px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none;transition:background .15s;}
-.sc-head:hover{background:rgba(255,255,255,.025);}
-.sc-arrow{font-size:10px;color:var(--text3);transition:transform .2s;flex-shrink:0;}
-.settings-card.open .sc-arrow{transform:rotate(90deg);color:var(--flame);}
-.sc-title{font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--text);flex:1;}
-.sc-badge{font-size:9px;font-weight:700;letter-spacing:.12em;padding:3px 9px;border-radius:100px;background:var(--ember-bg);color:var(--flame);text-transform:uppercase;}
-.sc-body{display:none;padding:0 18px 18px;}
-.settings-card.open .sc-body{display:block;}
+/* "HERO / PAGE SETTINGS" ZONE — clickable region */
+.zone{position:relative;margin-bottom:28px;padding:24px 26px;background:var(--card);border:1px solid var(--border);border-radius:var(--rd);transition:border-color .18s, box-shadow .18s;}
+.zone:hover{border-color:var(--border2);}
+.zone.editing{border-color:var(--flame);box-shadow:var(--shadow-flame);}
+.zone-label{font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.zone-label-l{display:flex;align-items:center;gap:6px;}
+.zone-label-l::before{content:'';width:12px;height:1px;background:currentColor;}
+.zone-actions{display:flex;gap:3px;opacity:0;transition:opacity .15s;}
+.zone:hover .zone-actions, .zone.editing .zone-actions{opacity:1;}
+.zone-act{width:26px;height:26px;border-radius:var(--rd-xs);border:1px solid transparent;background:transparent;color:var(--text3);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.zone-act:hover{background:rgba(196,160,112,.1);color:var(--flame);border-color:var(--border);}
+.zone-act.danger:hover{color:var(--danger);border-color:rgba(255,106,58,.3);}
 
-/* ACCORDION SECTIONS */
-.sections-wrap{max-width:1100px;margin:0 auto;}
-.section-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rd);margin-bottom:10px;overflow:hidden;transition:border-color .2s;}
-.section-card.open{border-color:var(--border-str);}
-.sh{display:flex;align-items:center;gap:10px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .15s;}
-.sh:hover{background:rgba(255,255,255,.025);}
-.sh-arrow{font-size:10px;color:var(--text3);transition:transform .2s;flex-shrink:0;}
-.section-card.open .sh-arrow{transform:rotate(90deg);color:var(--flame);}
-.sh-icon{font-size:16px;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(240,136,32,.25));}
-.sh-title{font-family:var(--serif);font-weight:700;font-size:17px;color:var(--cream);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.1;}
-.sh-meta{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);white-space:nowrap;}
-.sh-count{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;background:var(--ember-bg);color:var(--flame);font-family:var(--cond);letter-spacing:.08em;}
-.sh-acts{display:flex;gap:3px;opacity:0;transition:opacity .2s;flex-shrink:0;}
-.sh:hover .sh-acts, .section-card.open .sh-acts{opacity:1;}
-.sh-act{width:26px;height:26px;border-radius:5px;border:1px solid transparent;background:transparent;color:var(--text3);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
-.sh-act:hover{background:rgba(196,160,112,.1);color:var(--flame);border-color:var(--border);}
-.sh-act.danger:hover{color:var(--danger);border-color:rgba(255,106,58,.3);}
+/* EDITABLE TEXT (inline) */
+.edt{position:relative;cursor:text;transition:all .15s;border-radius:var(--rd-xs);outline:none;}
+.edt:hover{background:var(--flame-bg);box-shadow:0 0 0 4px var(--flame-bg);}
+.edt:focus,.edt.editing{background:rgba(240,136,32,.12);box-shadow:0 0 0 4px rgba(240,136,32,.12), inset 0 -2px 0 var(--flame);}
+.edt[contenteditable]{cursor:text;-webkit-user-select:text;user-select:text;}
+.edt[data-empty="1"]:not(:focus)::before{content:attr(data-placeholder);color:var(--text3);font-style:italic;opacity:.6;}
+.edt.title-style{font-family:var(--serif);font-weight:900;}
+.edt.title-style em{font-style:italic;color:var(--flame);font-weight:400;}
 
-.sb{display:none;padding:4px 18px 18px;border-top:1px solid var(--border);background:rgba(9,7,4,.28);}
-.section-card.open .sb{display:block;}
+.edt-inline-hint{position:absolute;bottom:calc(100% + 4px);left:0;font-family:var(--mono);font-size:10px;color:var(--flame);background:var(--raised);border:1px solid var(--border2);padding:3px 8px;border-radius:var(--rd-xs);pointer-events:none;white-space:nowrap;opacity:0;transition:opacity .18s;}
+.edt.editing .edt-inline-hint{opacity:1;}
 
-/* SECTION SETTINGS SUBSECTION */
-.sb-part{padding-top:16px;}
-.sb-part-title{font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
-.sb-part-title::before{content:'';width:14px;height:1px;background:currentColor;}
+/* SECTION CARD in the flow */
+.sec{position:relative;margin-bottom:18px;background:var(--card);border:1px solid var(--border);border-radius:var(--rd);overflow:hidden;transition:border-color .18s, box-shadow .18s;}
+.sec:hover{border-color:var(--border2);}
+.sec.editing{border-color:var(--flame);box-shadow:var(--shadow-flame);}
 
-/* FIELDS */
-.field{margin-bottom:11px;}
+.sec-head{padding:20px 22px 14px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(43,28,14,.6),transparent);}
+.sec-eyebrow{font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--flame);opacity:.78;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.sec-eyebrow::before{content:'';width:12px;height:1px;background:currentColor;}
+.sec-head-row{display:flex;align-items:center;gap:12px;}
+.sec-icon{font-size:22px;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(240,136,32,.25));}
+.sec-icon.edt{cursor:text;display:inline-block;min-width:28px;text-align:center;padding:2px 4px;}
+.sec-title{font-family:var(--serif);font-weight:800;font-size:clamp(20px,3vw,28px);letter-spacing:-.01em;color:var(--cream);flex:1;min-width:0;line-height:1.15;}
+.sec-sub{font-family:var(--body);font-weight:300;font-size:13px;color:var(--text3);margin-top:4px;font-style:italic;}
+.sec-acts{display:flex;gap:3px;opacity:0;transition:opacity .15s;flex-shrink:0;}
+.sec:hover .sec-acts, .sec.editing .sec-acts{opacity:1;}
+.sec-act{width:30px;height:30px;border-radius:var(--rd-xs);border:1px solid transparent;background:transparent;color:var(--text3);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.sec-act:hover{background:rgba(196,160,112,.1);color:var(--flame);border-color:var(--border);}
+.sec-act.danger:hover{color:var(--danger);border-color:rgba(255,106,58,.3);}
+
+.sec-body{padding:4px 22px 18px;}
+
+/* ITEM ROW */
+.item{display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:4px;border-radius:var(--rd-sm);background:transparent;border:1px solid transparent;transition:all .18s;cursor:pointer;position:relative;}
+.item:hover{background:rgba(43,28,14,.55);border-color:var(--border);}
+.item.editing{background:rgba(43,28,14,.85);border-color:var(--flame);box-shadow:0 0 0 2px rgba(240,136,32,.12);}
+.item.hidden-flag::after{content:'hidden';position:absolute;top:6px;right:56px;font-family:var(--cond);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--danger);background:rgba(255,106,58,.12);padding:2px 7px;border-radius:100px;}
+
+.item-drag{width:16px;color:var(--text3);font-size:12px;cursor:grab;opacity:0;transition:opacity .15s;user-select:none;flex-shrink:0;text-align:center;}
+.item:hover .item-drag{opacity:1;}
+.item-drag:active{cursor:grabbing;}
+.item-idx{font-family:var(--mono);font-weight:500;font-size:10px;color:var(--text3);min-width:22px;text-align:right;flex-shrink:0;}
+.item-thumb{width:48px;height:48px;border-radius:var(--rd-sm);background:rgba(9,7,4,.65);border:1px solid var(--border);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:border-color .18s;}
+.item-thumb:hover{border-color:var(--flame);}
+.item-thumb img{width:100%;height:100%;object-fit:cover;}
+.item-thumb-ph{font-size:16px;opacity:.3;}
+.item-thumb-overlay{position:absolute;inset:0;background:rgba(9,7,4,.75);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;opacity:0;transition:opacity .15s;letter-spacing:.08em;}
+.item-thumb:hover .item-thumb-overlay{opacity:1;}
+.item-body{flex:1;min-width:0;}
+.item-name{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--cream);line-height:1.15;}
+.item-desc{font-family:var(--body);font-weight:300;font-size:12px;color:var(--text3);margin-top:2px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.item-price{font-family:var(--cond);font-weight:800;font-size:14px;color:var(--glow);letter-spacing:.02em;white-space:nowrap;flex-shrink:0;}
+.item-acts{display:flex;gap:2px;opacity:0;transition:opacity .15s;flex-shrink:0;}
+.item:hover .item-acts, .item.editing .item-acts{opacity:1;}
+.item-act{width:26px;height:26px;border-radius:var(--rd-xs);border:1px solid transparent;background:transparent;color:var(--text3);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.item-act:hover{background:rgba(196,160,112,.12);color:var(--flame);border-color:var(--border);}
+.item-act.danger:hover{color:var(--danger);border-color:rgba(255,106,58,.3);}
+.item-act:disabled{opacity:.3;cursor:not-allowed;}
+
+/* INLINE ITEM EDITOR (expands below the row) */
+.item-editor{display:none;margin:4px 0 12px;padding:16px 14px 14px;background:var(--raised);border:1px solid var(--border2);border-left:3px solid var(--flame);border-radius:var(--rd-sm);animation:slideDown .2s ease-out;}
+.item.editing + .item-editor{display:block;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ADD ITEM / ADD SECTION BUTTONS */
+.btn-add{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--flame);background:transparent;border:1px dashed rgba(240,136,32,.3);border-radius:var(--rd-sm);cursor:pointer;transition:all .18s;margin-top:8px;}
+.btn-add:hover{background:var(--flame-bg);border-style:solid;border-color:var(--flame);}
+.btn-add.inline{margin:6px 0 0;padding:8px;font-size:10px;}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:40px 20px;color:var(--text3);font-family:var(--body);font-weight:300;font-size:13px;}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:.5;display:block;}
+
+/* FIELD (used in item editor + page settings) */
+.field{margin-bottom:10px;}
 .fl{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:5px;}
 .fl-l{font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);}
 .fl-l em{color:var(--glow);font-style:normal;font-weight:700;margin-left:6px;font-size:9px;}
-.fl-meta{display:flex;gap:4px;opacity:0;transition:opacity .15s;}
+.fl-meta{display:flex;gap:3px;opacity:0;transition:opacity .15s;}
 .field:hover .fl-meta, .field:focus-within .fl-meta{opacity:1;}
-.fl-mb{width:20px;height:20px;border-radius:4px;border:none;background:transparent;color:var(--text3);font-size:10px;cursor:pointer;transition:all .15s;}
+.fl-mb{width:18px;height:18px;border-radius:var(--rd-xs);border:none;background:transparent;color:var(--text3);font-size:10px;cursor:pointer;transition:all .15s;}
 .fl-mb:hover{background:rgba(196,160,112,.1);color:var(--flame);}
 .fl-mb.del:hover{color:var(--danger);}
 
-.fi{width:100%;font-family:var(--body);font-weight:400;font-size:14px;color:var(--cream);background:rgba(9,7,4,.55);border:1px solid rgba(196,160,112,.1);border-radius:6px;padding:9px 12px;outline:none;transition:border-color .18s, box-shadow .18s;-webkit-appearance:none;line-height:1.5;}
+.fi{width:100%;font-family:var(--body);font-weight:400;font-size:14px;color:var(--cream);background:rgba(9,7,4,.55);border:1px solid rgba(196,160,112,.1);border-radius:var(--rd-xs);padding:8px 11px;outline:none;transition:border-color .18s, box-shadow .18s;-webkit-appearance:none;line-height:1.5;}
 .fi:focus{border-color:rgba(240,136,32,.5);box-shadow:0 0 0 2px rgba(192,72,0,.1);}
-.fi-ta{resize:vertical;min-height:68px;line-height:1.6;}
+.fi-ta{resize:vertical;min-height:64px;line-height:1.6;}
 .fi-ta.long{min-height:110px;}
 .fi-ta.html{font-family:var(--mono);font-size:12.5px;}
-select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23f08820' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;appearance:none;}
+select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23f08820' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px;appearance:none;}
 select.fi option{background:#1a1108;color:var(--cream);}
-.fhint{font-family:var(--body);font-weight:300;font-size:11.5px;color:var(--text3);margin-top:5px;line-height:1.5;}
+.fhint{font-family:var(--body);font-weight:300;font-size:11px;color:var(--text3);margin-top:4px;line-height:1.5;}
 .fhint code{font-family:var(--mono);font-size:10.5px;color:var(--flame);background:rgba(192,72,0,.1);padding:1px 5px;border-radius:2px;}
-
 .field.dirty .fi{border-left:3px solid var(--flame);}
 .field.custom .fi{border-left:3px solid var(--glow);}
 
@@ -190,108 +265,102 @@ select.fi option{background:#1a1108;color:var(--cream);}
 .fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 @media(max-width:640px){.fr,.fr3{grid-template-columns:1fr;}}
 
-/* IMAGE FIELD */
 .img-field{display:flex;gap:10px;align-items:flex-start;}
 .img-field .fi{flex:1;}
-.img-preview{width:60px;height:60px;border-radius:6px;background:rgba(9,7,4,.7);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.img-preview{width:54px;height:54px;border-radius:var(--rd-xs);background:rgba(9,7,4,.7);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
 .img-preview img{width:100%;height:100%;object-fit:cover;}
-.img-ph{font-size:18px;opacity:.3;}
+.img-ph{font-size:16px;opacity:.3;}
 
-/* CHECKBOX */
-.cbx-row{display:flex;align-items:center;gap:10px;padding:5px 0;}
-.cbx{width:18px;height:18px;border-radius:4px;border:1.5px solid rgba(196,160,112,.3);background:rgba(9,7,4,.6);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;}
+.cbx-row{display:flex;align-items:center;gap:10px;padding:4px 0;}
+.cbx{width:18px;height:18px;border-radius:var(--rd-xs);border:1.5px solid rgba(196,160,112,.3);background:rgba(9,7,4,.6);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;}
 .cbx.on{background:var(--fire);border-color:var(--fire);}
 .cbx.on::after{content:'✓';color:#fff;font-weight:700;font-size:12px;}
-.cbx-lbl{font-family:var(--body);font-weight:400;font-size:13px;color:var(--text);cursor:pointer;}
+.cbx-lbl{font-family:var(--body);font-weight:400;font-size:13px;color:var(--text);cursor:pointer;user-select:none;}
 
-/* ITEMS */
-.items-ctrl{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;}
-.items-count{font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);}
+.editor-section{margin-bottom:16px;}
+.editor-section-head{font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.editor-section-head::before{content:'';width:12px;height:1px;background:currentColor;}
 
-.item{background:var(--surface);border:1px solid var(--border);border-radius:var(--rd-sm);margin-bottom:8px;overflow:hidden;transition:border-color .18s;}
-.item.open{border-color:var(--border-str);}
-.ih{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;user-select:none;transition:background .15s;}
-.ih:hover{background:rgba(255,255,255,.03);}
-.ih-arrow{font-size:10px;color:var(--text3);transition:transform .2s;flex-shrink:0;}
-.item.open .ih-arrow{transform:rotate(90deg);color:var(--flame);}
-.ih-idx{font-family:var(--mono);font-weight:500;font-size:10px;color:var(--text3);min-width:22px;}
-.ih-thumb{width:34px;height:34px;border-radius:5px;background:rgba(9,7,4,.6);border:1px solid var(--border);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.ih-thumb img{width:100%;height:100%;object-fit:cover;}
-.ih-thumb-ph{font-size:13px;opacity:.3;}
-.ih-body{flex:1;min-width:0;}
-.ih-name{font-family:var(--serif);font-weight:700;font-size:14.5px;color:var(--cream);line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.ih-sub{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.1em;color:var(--text3);margin-top:2px;}
-.ih-price{font-family:var(--cond);font-weight:800;font-size:14px;color:var(--glow);letter-spacing:.02em;white-space:nowrap;flex-shrink:0;}
-.ih-acts{display:flex;gap:2px;flex-shrink:0;opacity:0;transition:opacity .15s;}
-.ih:hover .ih-acts, .item.open .ih-acts{opacity:1;}
-.ih-act{width:24px;height:24px;border-radius:4px;border:1px solid transparent;background:transparent;color:var(--text3);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
-.ih-act:hover{background:rgba(196,160,112,.1);color:var(--flame);border-color:var(--border);}
-.ih-act.danger:hover{color:var(--danger);border-color:rgba(255,106,58,.3);}
-.ih-act:disabled{opacity:.3;cursor:not-allowed;}
+/* FLOATING SAVE BAR */
+.savebar{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);z-index:60;display:flex;align-items:center;gap:14px;padding:10px 14px 10px 20px;background:var(--card);border:1px solid var(--border2);border-radius:100px;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.16,1,.3,1);}
+.savebar.show{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0);}
+.savebar-count{font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--flame);}
+.savebar-sep{width:1px;height:18px;background:var(--border);}
+.savebar-btn{padding:8px 18px;border-radius:100px;border:none;background:linear-gradient(135deg,var(--ember),var(--fire));color:#fff;font-family:var(--cond);font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;box-shadow:0 3px 12px rgba(192,72,0,.3);transition:all .2s;}
+.savebar-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(192,72,0,.5);}
+.savebar-btn.secondary{background:transparent;color:var(--text3);box-shadow:none;padding:8px 14px;}
+.savebar-btn.secondary:hover{color:var(--cream);transform:none;}
 
-.ib{display:none;padding:4px 14px 14px;background:rgba(9,7,4,.28);border-top:1px solid var(--border);}
-.item.open .ib{display:block;}
-.ib-part{padding-top:12px;}
+/* ══════════════════════════════════
+   CONTEXT MENU (popup on ⋮ click)
+══════════════════════════════════ */
+.ctx{position:fixed;min-width:180px;background:var(--card);border:1px solid var(--border2);border-radius:var(--rd);box-shadow:var(--shadow-lg);padding:4px;z-index:200;opacity:0;pointer-events:none;transform:translateY(-4px);transition:all .15s;}
+.ctx.show{opacity:1;pointer-events:all;transform:translateY(0);}
+.ctx-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--rd-xs);cursor:pointer;transition:background .12s;color:var(--text2);font-family:var(--body);font-weight:500;font-size:13px;}
+.ctx-item:hover{background:rgba(255,255,255,.05);color:var(--cream);}
+.ctx-item.danger{color:var(--danger);}
+.ctx-item.danger:hover{background:rgba(255,106,58,.1);}
+.ctx-icon{font-size:13px;width:16px;text-align:center;opacity:.75;}
+.ctx-sep{height:1px;background:var(--border);margin:4px 0;}
+.ctx-hdr{padding:6px 12px 4px;font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--text3);}
 
-/* ADD BUTTONS */
-.btn-add{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--flame);background:transparent;border:1px dashed rgba(240,136,32,.3);border-radius:var(--rd-sm);cursor:pointer;transition:all .18s;margin-top:8px;}
-.btn-add:hover{background:rgba(192,72,0,.07);border-style:solid;border-color:var(--flame);}
+/* ══════════════════════════════════
+   COMMAND PALETTE (⌘K)
+══════════════════════════════════ */
+.cmdk-bg{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-start;justify-content:center;padding:15vh 20px 20px;opacity:0;pointer-events:none;transition:opacity .18s;}
+.cmdk-bg.show{opacity:1;pointer-events:all;}
+.cmdk{width:100%;max-width:560px;background:var(--card);border:1px solid var(--border2);border-radius:var(--rd);box-shadow:var(--shadow-lg);overflow:hidden;transform:translateY(-8px);transition:transform .2s cubic-bezier(.16,1,.3,1);}
+.cmdk-bg.show .cmdk{transform:translateY(0);}
+.cmdk-input{width:100%;padding:16px 20px;background:transparent;border:none;outline:none;font-family:var(--body);font-weight:400;font-size:16px;color:var(--cream);border-bottom:1px solid var(--border);}
+.cmdk-input::placeholder{color:var(--text3);}
+.cmdk-list{max-height:50vh;overflow-y:auto;padding:6px;}
+.cmdk-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:var(--rd-xs);cursor:pointer;color:var(--text2);transition:background .12s;}
+.cmdk-item:hover,.cmdk-item.sel{background:var(--ember-bg);color:var(--cream);}
+.cmdk-icon{font-size:14px;opacity:.7;width:20px;text-align:center;flex-shrink:0;}
+.cmdk-body{flex:1;min-width:0;}
+.cmdk-title{font-family:var(--body);font-weight:500;font-size:14px;color:var(--cream);line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cmdk-crumb{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-top:2px;}
+.cmdk-item.sel .cmdk-crumb{color:var(--flame);}
+.cmdk-kind{font-size:10px;font-family:var(--cond);font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;border-radius:100px;background:rgba(0,0,0,.35);color:var(--text3);}
+.cmdk-item.sel .cmdk-kind{background:rgba(240,136,32,.2);color:var(--flame);}
 
-.empty{text-align:center;padding:34px 20px;color:var(--text3);font-family:var(--body);font-weight:300;font-size:13px;}
-.empty-icon{font-size:32px;margin-bottom:10px;opacity:.4;}
-
-/* WELCOME */
-.welcome{max-width:640px;margin:40px auto;padding:0 20px;text-align:center;}
-.welcome-icon{font-size:50px;margin-bottom:18px;filter:drop-shadow(0 0 20px rgba(240,136,32,.35));}
-.welcome h1{font-family:var(--serif);font-weight:900;font-size:clamp(28px,4vw,42px);letter-spacing:-.02em;color:var(--cream);margin-bottom:10px;line-height:1;}
-.welcome h1 em{font-style:italic;font-weight:400;color:var(--flame);}
-.welcome p{font-family:var(--body);font-weight:300;font-size:14px;color:var(--text3);line-height:1.65;margin-bottom:24px;}
-.welcome-tips{text-align:left;background:var(--card);border:1px solid var(--border);border-radius:var(--rd);padding:20px 22px;}
-.welcome-tips h3{font-family:var(--cond);font-weight:800;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--flame);margin-bottom:12px;}
-.welcome-tips ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
-.welcome-tips li{font-family:var(--body);font-weight:400;font-size:13px;color:var(--text2);line-height:1.5;display:flex;gap:10px;}
-.welcome-tips li::before{content:'→';color:var(--flame);flex-shrink:0;}
-
-/* CONN PILL */
-.conn-pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--lo);padding:5px 10px;border-radius:100px;background:rgba(0,0,0,.25);flex-shrink:0;}
-.conn-dot{width:5px;height:5px;border-radius:50%;background:var(--lo);}
-.conn-pill.ok{color:var(--success);}
-.conn-pill.ok .conn-dot{background:var(--success);box-shadow:0 0 6px var(--success);}
-.conn-pill.err{color:var(--danger);}
-.conn-pill.err .conn-dot{background:var(--danger);}
-
-/* MODAL */
-.modal-bg{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;}
+/* ══════════════════════════════════
+   MODAL (for confirm, add custom field)
+══════════════════════════════════ */
+.modal-bg{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;}
 .modal-bg.show{opacity:1;pointer-events:all;}
-.modal{background:var(--card);border:1px solid var(--border-str);border-radius:var(--rd);padding:clamp(20px,3vh,28px) clamp(20px,4vw,30px);max-width:460px;width:100%;max-height:86vh;overflow-y:auto;transform:translateY(12px) scale(.98);transition:transform .28s cubic-bezier(.16,1,.3,1);box-shadow:0 20px 50px rgba(0,0,0,.55);}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:var(--rd);padding:clamp(20px,3vh,28px) clamp(20px,4vw,30px);max-width:460px;width:100%;max-height:86vh;overflow-y:auto;transform:translateY(12px) scale(.98);transition:transform .25s cubic-bezier(.16,1,.3,1);box-shadow:var(--shadow-lg);}
 .modal-bg.show .modal{transform:translateY(0) scale(1);}
-.modal h3{font-family:var(--serif);font-weight:800;font-size:21px;color:var(--cream);letter-spacing:-.01em;margin-bottom:6px;}
+.modal h3{font-family:var(--serif);font-weight:800;font-size:22px;color:var(--cream);letter-spacing:-.01em;margin-bottom:6px;}
 .modal h3 em{font-style:italic;color:var(--flame);font-weight:400;}
 .modal p{font-family:var(--body);font-weight:300;font-size:13px;color:var(--text3);line-height:1.6;margin-bottom:18px;}
 .modal-row{margin-bottom:12px;}
 .modal-row label{display:block;font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-bottom:5px;}
-.modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;}
 
 /* MOBILE */
 @media(max-width:760px){
-  .topbar{padding:8px 10px;gap:6px;min-height:50px;}
+  .topbar{padding:8px 10px;gap:8px;min-height:48px;}
   .tb-brand{font-size:14px;}
-  .tb-role{display:none;}
-  .tb-sep{display:none;}
-  .tb-save{font-size:9px;letter-spacing:.12em;}
-  .tabstrip{padding:6px 10px;}
-  .tab{padding:7px 12px;font-size:11px;}
-  .scrollarea{padding:14px 12px 60px;}
-  .sh-title{font-size:15px;}
-  .sh-meta{font-size:9px;}
-  .page-head{margin-bottom:16px;padding-bottom:14px;}
-  .sh-acts{opacity:1;}
-  .ih-acts{opacity:1;}
+  .tb-kbd{display:none;}
+  .ps-name{font-size:11px;}
+  .tb-save span:first-of-type{display:none;}
+  .canvas-inner{padding:16px 12px 140px;}
+  .pg-title{font-size:30px;}
+  .zone{padding:18px 16px;}
+  .sec-head{padding:16px 16px 12px;}
+  .sec-body{padding:4px 16px 14px;}
+  .item{padding:8px 8px;gap:9px;}
+  .item-thumb{width:42px;height:42px;}
+  .item-desc{display:none;}
+  .item-acts,.sec-acts,.zone-actions{opacity:1;}
+  .item-drag{display:none;}
 }
 </style>
 </head>
 <body>
 
+<!-- TOASTS -->
 <div id="toastBox"></div>
 
 <!-- PIN -->
@@ -317,20 +386,48 @@ select.fi option{background:#1a1108;color:var(--cream);}
   <header class="topbar">
     <div class="tb-brand">Francis <em>CMS</em></div>
     <div class="tb-sep"></div>
-    <div class="tb-role">Editor</div>
-    <div class="conn-pill" id="conn-pill" style="margin-left:6px"><span class="conn-dot"></span><span id="conn-text">Connecting</span></div>
+    <div class="page-switcher">
+      <button class="ps-trigger" id="ps-trigger" onclick="togglePageSwitcher(event)">
+        <span class="ps-icon" id="ps-icon">🏠</span>
+        <span class="ps-name" id="ps-name">Loading...</span>
+        <span class="ps-chev">▾</span>
+      </button>
+      <div class="ps-menu" id="ps-menu">
+        <div class="ps-menu-inner" id="ps-menu-inner"></div>
+      </div>
+    </div>
+    <button class="tb-btn" onclick="openCmdk()" title="Search (⌘K)">
+      🔍 <span class="tb-kbd">⌘ K</span>
+    </button>
+    <div class="tb-spacer"></div>
+    <div class="conn-dot" id="conn-dot" title="Connection"></div>
     <div class="tb-save" id="tb-save"><span class="dot"></span><span id="tb-save-txt">All saved</span></div>
-    <button class="tb-btn lock" onclick="logout()">Lock</button>
+    <button class="tb-btn lock" onclick="logout()">🔒 Lock</button>
   </header>
 
-  <!-- TABS -->
-  <div class="tabstrip" id="tabstrip"></div>
+  <!-- CANVAS -->
+  <main class="canvas" id="canvas">
+    <div class="canvas-inner" id="canvas-inner"></div>
+  </main>
 
-  <!-- BODY -->
-  <div class="body">
-    <div class="scrollarea" id="scroll">
-      <div id="view"></div>
-    </div>
+</div>
+
+<!-- FLOATING SAVE BAR -->
+<div class="savebar" id="savebar">
+  <span class="savebar-count" id="savebar-count">0 unsaved</span>
+  <span class="savebar-sep"></span>
+  <button class="savebar-btn secondary" onclick="discardDirty()">Discard</button>
+  <button class="savebar-btn" onclick="flushSaves(true)">💾 Save Now</button>
+</div>
+
+<!-- CONTEXT MENU -->
+<div class="ctx" id="ctx"></div>
+
+<!-- COMMAND PALETTE -->
+<div class="cmdk-bg" id="cmdk-bg" onclick="if(event.target===this)closeCmdk()">
+  <div class="cmdk">
+    <input class="cmdk-input" id="cmdk-input" placeholder="Search pages, sections, items..." autocomplete="off">
+    <div class="cmdk-list" id="cmdk-list"></div>
   </div>
 </div>
 
@@ -357,7 +454,7 @@ const KINDS = {
     ],
     defaultItemFields: [
       {key:'name', label:'Name', type:'text'},
-      {key:'price', label:'Price', type:'number', hint:'e.g. 15.62 — leave blank for "Ask"'},
+      {key:'price', label:'Price', type:'number', hint:'e.g. 15.62 — blank = "Ask"'},
       {key:'priceLg', label:'Large Price', type:'number'},
       {key:'priceUnit', label:'Price Unit', type:'text', hint:'e.g. "/ lb", "each"'},
       {key:'img', label:'Image URL', type:'url'},
@@ -370,36 +467,24 @@ const KINDS = {
     ],
   },
   steps: {
-    label: 'Numbered Steps', icon: '▤',
-    desc: 'Sequential steps (how-it-works).',
-    settingsFields: [
-      {key:'eyebrow', label:'Eyebrow'},
-      {key:'subtitle', label:'Subtitle'},
-    ],
+    label: 'Numbered Steps', icon: '▤', desc: 'Sequential steps (how-it-works).',
+    settingsFields: [{key:'eyebrow', label:'Eyebrow'}, {key:'subtitle', label:'Subtitle'}],
     defaultItemFields: [
       {key:'title', label:'Step Title', type:'text'},
       {key:'desc', label:'Step Description', type:'textarea'},
     ],
   },
   stats: {
-    label: 'Stats', icon: '#',
-    desc: 'Big numbers with labels.',
-    settingsFields: [
-      {key:'eyebrow', label:'Eyebrow'},
-      {key:'intro', label:'Intro text', textarea:true},
-    ],
+    label: 'Stats', icon: '#', desc: 'Big numbers with labels.',
+    settingsFields: [{key:'eyebrow', label:'Eyebrow'}, {key:'intro', label:'Intro text', textarea:true}],
     defaultItemFields: [
       {key:'num', label:'Number', type:'text', hint:'e.g. "4.7★" or "505"'},
       {key:'label', label:'Label', type:'text'},
     ],
   },
   quote_list: {
-    label: 'Quotes / Reviews', icon: '❝',
-    desc: 'Testimonials and reviews.',
-    settingsFields: [
-      {key:'eyebrow', label:'Eyebrow'},
-      {key:'subtitle', label:'Subtitle'},
-    ],
+    label: 'Quotes / Reviews', icon: '❝', desc: 'Testimonials and reviews.',
+    settingsFields: [{key:'eyebrow', label:'Eyebrow'}, {key:'subtitle', label:'Subtitle'}],
     defaultItemFields: [
       {key:'stars', label:'Stars', type:'text', hint:'e.g. ★★★★★'},
       {key:'text', label:'Quote', type:'textarea'},
@@ -407,12 +492,8 @@ const KINDS = {
     ],
   },
   value_list: {
-    label: 'Value List', icon: '❖',
-    desc: 'Icon + title + description blocks.',
-    settingsFields: [
-      {key:'eyebrow', label:'Eyebrow'},
-      {key:'intro', label:'Intro', textarea:true},
-    ],
+    label: 'Value List', icon: '❖', desc: 'Icon + title + description blocks.',
+    settingsFields: [{key:'eyebrow', label:'Eyebrow'}, {key:'intro', label:'Intro', textarea:true}],
     defaultItemFields: [
       {key:'icon', label:'Icon (emoji)', type:'text'},
       {key:'title', label:'Title', type:'text'},
@@ -420,11 +501,10 @@ const KINDS = {
     ],
   },
   rich_text: {
-    label: 'Rich Text', icon: '¶',
-    desc: 'Hero or prose section with HTML body.',
+    label: 'Rich Text', icon: '¶', desc: 'Hero or prose section with HTML body.',
     settingsFields: [
       {key:'eyebrow', label:'Eyebrow'},
-      {key:'title', label:'Title', html:true, hint:'Use <em>...</em> for italic flame color'},
+      {key:'title', label:'Title', html:true, hint:'Use &lt;em&gt;...&lt;/em&gt; for italic flame color'},
       {key:'lead', label:'Lead paragraph', textarea:true},
       {key:'body', label:'Body HTML', textarea:true, long:true, html:true},
       {key:'quote', label:'Pull Quote', textarea:true},
@@ -435,8 +515,7 @@ const KINDS = {
     defaultItemFields: [],
   },
   contact_form: {
-    label: 'Contact Form', icon: '✉',
-    desc: 'Inquiry form that emails on submit.',
+    label: 'Contact Form', icon: '✉', desc: 'Inquiry form.',
     settingsFields: [
       {key:'title', label:'Form Title', html:true},
       {key:'subtitle', label:'Subtitle', textarea:true},
@@ -465,8 +544,7 @@ const sbHeaders = {
   'Content-Type': 'application/json',
 };
 async function sbSelect(table, qs='') {
-  const url = SB_URL + '/rest/v1/' + table + (qs || '?select=*');
-  const r = await fetch(url, { headers: sbHeaders });
+  const r = await fetch(SB_URL + '/rest/v1/' + table + (qs || '?select=*'), { headers: sbHeaders });
   if (!r.ok) throw new Error(table + ' GET ' + r.status + ' ' + await r.text());
   return r.json();
 }
@@ -487,9 +565,7 @@ async function sbUpdate(table, id, patch) {
   return r.json();
 }
 async function sbDelete(table, id) {
-  const r = await fetch(SB_URL + '/rest/v1/' + table + '?id=eq.' + id, {
-    method:'DELETE', headers: sbHeaders
-  });
+  const r = await fetch(SB_URL + '/rest/v1/' + table + '?id=eq.' + id, { method:'DELETE', headers: sbHeaders });
   if (!r.ok) throw new Error(table + ' DELETE ' + r.status);
 }
 
@@ -497,18 +573,17 @@ async function sbDelete(table, id) {
    STATE
 ══════════════════════════════════════════════════════════════════ */
 const S = {
-  authed: false,
-  pin: '',
-  pages: [],
-  sections: [],
-  items: [],
-  settings: {},
+  authed: false, pin: '',
+  pages: [], sections: [], items: [], settings: {},
   activePageId: null,
-  openSections: new Set(),  // section ids currently expanded
-  openItems: new Set(),     // item ids currently expanded
-  openPageSettings: false,
-  dirty: new Set(),         // patch paths pending save
+  editingItemId: null,    // which item has its inline editor open
+  editingZone: null,      // 'page' | 'section:<id>' | null — which zone is being edited inline
+  dirty: new Set(),       // patch paths
+  dirtySnapshot: {},      // for discard: {patchPath: originalValue}
   saveTimer: null,
+  undoStack: [],          // {patchPath, before, after}
+  redoStack: [],
+  cmdkSel: 0,
 };
 
 /* UTILS */
@@ -525,10 +600,8 @@ function toast(msg, kind='info') {
   tb.appendChild(el);
   setTimeout(() => el.remove(), 3200);
 }
-function setConn(state, txt) {
-  const p = document.getElementById('conn-pill');
-  p.className = 'conn-pill ' + state;
-  document.getElementById('conn-text').textContent = txt;
+function setConn(state) {
+  document.getElementById('conn-dot').className = 'conn-dot ' + (state||'');
 }
 function setSave(state, txt) {
   const e = document.getElementById('tb-save');
@@ -593,27 +666,30 @@ function logout() {
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   BOOT
+   BOOT + LOAD
 ══════════════════════════════════════════════════════════════════ */
 async function bootApp() {
   try {
-    setConn('ok', 'Loading...');
+    setConn('');
     await reloadAll();
     document.getElementById('pin-screen').classList.add('gone');
     setTimeout(() => {
       document.getElementById('pin-screen').style.display = 'none';
       document.getElementById('app').classList.add('on');
     }, 380);
-    if (S.pages.length && !S.activePageId) S.activePageId = S.pages[0].id;
-    renderTabs();
-    renderView();
-    setConn('ok','Connected');
+    // Restore last active page from sessionStorage
+    const stored = sessionStorage.getItem('fs_cms_page');
+    if (stored && S.pages.find(p => p.id === stored)) S.activePageId = stored;
+    else if (S.pages.length) S.activePageId = S.pages[0].id;
+    renderAll();
+    setConn('ok');
   } catch (err) {
     console.error(err);
-    setConn('err','Error');
+    setConn('err');
     toast('Failed to load: ' + err.message, 'err');
   }
 }
+
 async function reloadAll() {
   const [pages, sections, items, settings] = await Promise.all([
     sbSelect('pages', '?select=*&order=order_idx.asc'),
@@ -628,290 +704,312 @@ async function reloadAll() {
   settings.forEach(r => { S.settings[r.key] = r.value; });
 }
 
+function renderAll() {
+  renderPageSwitcher();
+  renderCanvas();
+}
+
 /* ══════════════════════════════════════════════════════════════════
-   TABS
+   PAGE SWITCHER (dropdown)
 ══════════════════════════════════════════════════════════════════ */
-function renderTabs() {
-  const strip = document.getElementById('tabstrip');
-  if (!S.pages.length) {
-    strip.innerHTML = '<button class="tab-add" onclick="openAddPageModal()">＋ First Page</button>';
-    return;
-  }
-  let html = S.pages.map(p => {
+function renderPageSwitcher() {
+  const trigger = document.getElementById('ps-trigger');
+  const active = S.pages.find(p => p.id === S.activePageId);
+  if (!active) return;
+  document.getElementById('ps-icon').textContent = active.icon || '📄';
+  document.getElementById('ps-name').textContent = active.title;
+
+  const menu = document.getElementById('ps-menu-inner');
+  menu.innerHTML = S.pages.map(p => {
     const count = S.sections.filter(s => s.page_id === p.id).length;
-    const active = S.activePageId === p.id;
-    return '<button class="tab' + (active?' active':'') + '" data-page="' + p.id + '">' +
-      '<span class="tab-icon">' + esc(p.icon || '📄') + '</span>' +
-      '<span>' + esc(p.title) + '</span>' +
-      '<span class="tab-badge">' + count + '</span>' +
-      '</button>';
+    const isActive = p.id === S.activePageId;
+    return '<div class="ps-item' + (isActive?' active':'') + '" data-page="' + p.id + '">' +
+      '<span class="ps-item-icon">' + esc(p.icon || '📄') + '</span>' +
+      '<span class="ps-item-name">' + esc(p.title) + '</span>' +
+      '<span class="ps-item-count">' + count + '</span>' +
+      '</div>';
   }).join('');
-  html += '<button class="tab-add" onclick="openAddPageModal()" title="Add page">＋</button>';
-  strip.innerHTML = html;
-  strip.querySelectorAll('.tab[data-page]').forEach(t => {
-    t.onclick = () => {
-      S.activePageId = t.dataset.page;
-      S.openSections.clear();
-      S.openItems.clear();
-      S.openPageSettings = false;
-      renderTabs();
-      renderView();
-      document.getElementById('scroll').scrollTop = 0;
+  menu.querySelectorAll('.ps-item').forEach(el => {
+    el.onclick = () => {
+      S.activePageId = el.dataset.page;
+      sessionStorage.setItem('fs_cms_page', el.dataset.page);
+      S.editingItemId = null;
+      S.editingZone = null;
+      closePageSwitcher();
+      renderAll();
+      document.getElementById('canvas').scrollTop = 0;
     };
   });
 }
+function togglePageSwitcher(e) {
+  e?.stopPropagation();
+  const menu = document.getElementById('ps-menu');
+  const trig = document.getElementById('ps-trigger');
+  const open = !menu.classList.contains('show');
+  menu.classList.toggle('show', open);
+  trig.classList.toggle('open', open);
+}
+function closePageSwitcher() {
+  document.getElementById('ps-menu').classList.remove('show');
+  document.getElementById('ps-trigger').classList.remove('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.page-switcher')) closePageSwitcher();
+  if (!e.target.closest('.ctx') && !e.target.closest('[data-ctx]')) closeCtx();
+});
 
 
 /* ══════════════════════════════════════════════════════════════════
-   VIEW (main body)
+   CANVAS RENDER (main view)
 ══════════════════════════════════════════════════════════════════ */
-function renderView() {
-  const v = document.getElementById('view');
-  if (!S.pages.length) {
-    v.innerHTML = '<div class="welcome">' +
-      '<div class="welcome-icon">🔥</div>' +
-      '<h1>Welcome to Francis <em>CMS</em></h1>' +
-      '<p>No pages yet. Click "＋ First Page" above to get started.</p></div>';
-    return;
-  }
-  if (!S.activePageId) { S.activePageId = S.pages[0].id; }
+function renderCanvas() {
   const page = S.pages.find(p => p.id === S.activePageId);
-  if (!page) { S.activePageId = S.pages[0]?.id; return renderView(); }
+  const inner = document.getElementById('canvas-inner');
+  if (!page) { inner.innerHTML = '<div class="empty">No page selected.</div>'; return; }
 
-  const sections = S.sections.filter(s => s.page_id === page.id).sort((a,b)=>a.order_idx-b.order_idx);
+  const sections = S.sections.filter(s => s.page_id === page.id).sort((a,b) => a.order_idx - b.order_idx);
   const tmpl = TEMPLATES[page.template] || TEMPLATES.hero_with_sections;
+  const settings = page.settings || {};
 
   let html = '';
-  // PAGE HEADER
-  html += '<div class="page-head"><div class="ph-left">';
-  html +=   '<div class="ph-eyebrow">' + esc(tmpl.label) + ' · ' + sections.length + ' section' + (sections.length===1?'':'s') + '</div>';
-  html +=   '<h1 class="ph-title">' + esc(page.icon||'') + ' ' + esc(page.title) + '</h1>';
-  html +=   '<p class="ph-sub">URL slug: <code style="font-family:var(--mono);font-size:12px;color:var(--flame)">/' + esc(page.slug) + '</code></p>';
-  html += '</div><div class="ph-actions">';
-  html +=   '<button class="tb-btn" onclick="openRenameModal(\'page\',\'' + page.id + '\')">✎ Rename</button>';
-  html +=   '<button class="tb-btn" onclick="duplicateNode(\'page\',\'' + page.id + '\')">⎘ Duplicate</button>';
-  html +=   '<button class="tb-btn" style="color:var(--danger);border-color:rgba(255,106,58,.3)" onclick="confirmDelete(\'page\',\'' + page.id + '\')">✕ Delete</button>';
-  html += '</div></div>';
 
-  // PAGE SETTINGS CARD (collapsible)
-  html += renderPageSettings(page);
-
-  // SECTIONS LIST
-  html += '<div class="sections-wrap">';
-  if (sections.length === 0) {
-    html += '<div class="empty"><div class="empty-icon">📭</div>No sections on this page yet.<br>Click the button below to add the first one.</div>';
-  } else {
-    sections.forEach(s => { html += renderSection(s); });
-  }
-  html += '<button class="btn-add" onclick="openAddSectionModal(\'' + page.id + '\')">＋ Add Section</button>';
+  /* PAGE HEADER */
+  html += '<div class="pg-head">';
+  html +=   '<div class="pg-eyebrow">' + esc(tmpl.label) + ' · ' + sections.length + ' section' + (sections.length===1?'':'s') + '</div>';
+  html +=   '<h1 class="pg-title">' +
+              '<span class="edt title-style" contenteditable="plaintext-only" data-patch="page:'+page.id+':icon" data-placeholder="🏠" data-empty="'+(page.icon?'0':'1')+'">' + esc(page.icon||'') + '</span> ' +
+              '<span class="edt title-style" contenteditable="plaintext-only" data-patch="page:'+page.id+':title">' + esc(page.title) + '</span>' +
+            '</h1>';
+  html +=   '<div class="pg-meta">URL slug: <code>/' + esc(page.slug) + '</code></div>';
   html += '</div>';
 
-  v.innerHTML = html;
-  bindAll();
+  /* PAGE SETTINGS ZONE (hero + template) */
+  html += renderPageZone(page, settings);
+
+  /* SECTIONS */
+  sections.forEach(s => { html += renderSectionCard(s); });
+
+  /* ADD SECTION BUTTON */
+  html += '<button class="btn-add" onclick="openAddSectionModal(\''+page.id+'\')">＋ Add Section</button>';
+
+  inner.innerHTML = html;
+  bindCanvas();
 }
 
-/* PAGE SETTINGS CARD */
-function renderPageSettings(page) {
-  const s = page.settings || {};
-  const known = ['hero_eyebrow','hero_title','hero_subtitle','hero_lead','header_subtitle'];
-  const isOpen = S.openPageSettings;
-  let html = '<div class="settings-card' + (isOpen?' open':'') + '" id="page-settings">';
-  html += '<div class="sc-head" onclick="togglePageSettings()">';
-  html +=   '<span class="sc-arrow">▸</span>';
-  html +=   '<span class="sc-title">Page Settings · Title, Slug, Template, Hero</span>';
-  html +=   '<span class="sc-badge">Page</span>';
-  html += '</div>';
-  html += '<div class="sc-body">';
-  html += '<div class="fr">';
-  html +=   fieldHtml('title', 'Page Title', page.title, {}, 'page:'+page.id+':title');
-  html +=   fieldHtml('icon', 'Icon (emoji)', page.icon||'', {}, 'page:'+page.id+':icon');
-  html += '</div>';
-  html += fieldHtml('slug', 'URL Slug', page.slug, {hint:'Lowercase, hyphens only. Changes the page URL.'}, 'page:'+page.id+':slug');
-  html += '<div class="field"><div class="fl"><span class="fl-l">Page Template</span></div>';
-  html += '<select class="fi" data-patch="page:'+page.id+':template">' +
-          Object.entries(TEMPLATES).map(([k,t]) =>
-            '<option value="'+k+'"' + (page.template===k?' selected':'') + '>' + t.label + '</option>'
-          ).join('') + '</select>';
-  html += '<div class="fhint">Controls the overall page layout on the live site.</div></div>';
-
-  html += '<div class="sb-part-title" style="margin-top:14px">Hero / Header Fields</div>';
+/* ── Page-level Zone (hero + template) ── */
+function renderPageZone(page, settings) {
+  const isEditing = S.editingZone === 'page';
   const heroFields = [
     {k:'hero_eyebrow', l:'Hero Eyebrow'},
-    {k:'hero_title', l:'Hero Title', html:true, hint:'Use <em>...</em> for italic flame color. Use &lt;br&gt; for line break.'},
+    {k:'hero_title', l:'Hero Title', html:true, hint:'Use &lt;em&gt;...&lt;/em&gt; for italic flame. Use &lt;br&gt; for line break.'},
     {k:'hero_subtitle', l:'Hero Subtitle'},
-    {k:'hero_lead', l:'Hero Lead Paragraph', textarea:true},
+    {k:'hero_lead', l:'Hero Lead', textarea:true},
     {k:'header_subtitle', l:'Header Subtitle (menu only)'},
   ];
-  heroFields.forEach(f => {
-    html += fieldHtml(f.k, f.l, s[f.k]||'', {textarea:f.textarea, html:f.html, hint:f.hint}, 'page_settings:'+page.id+':'+f.k);
-  });
+  const knownKeys = ['hero_eyebrow','hero_title','hero_subtitle','hero_lead','header_subtitle'];
 
-  // Custom page settings (anything not in known list)
-  const customKeys = Object.keys(s).filter(k => !known.includes(k));
+  let html = '<div class="zone ' + (isEditing?'editing':'') + '" data-zone="page">';
+  html += '<div class="zone-label">';
+  html +=   '<span class="zone-label-l">Page Settings · Hero · Template</span>';
+  html +=   '<div class="zone-actions">';
+  html +=     '<button class="zone-act" onclick="openZoneEditor(\'page\')" title="Expand editor">⚙</button>';
+  html +=     '<button class="zone-act" data-ctx="page:'+page.id+'" onclick="openCtxMenu(event, \'page\', \''+page.id+'\')" title="More">⋮</button>';
+  html +=   '</div>';
+  html += '</div>';
+
+  // Fields grid
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 22px">';
+  html += '<div>';
+  html +=   '<div class="editor-section-head">Slug & Template</div>';
+  html +=   fieldHtml('slug', 'URL Slug', page.slug, {hint:'Lowercase, hyphens only'}, 'page:'+page.id+':slug');
+  html +=   '<div class="field"><div class="fl"><span class="fl-l">Template</span></div>' +
+            '<select class="fi" data-patch="page:'+page.id+':template">' +
+              Object.entries(TEMPLATES).map(([k,t]) => '<option value="'+k+'"' + (page.template===k?' selected':'') + '>' + t.label + '</option>').join('') +
+            '</select></div>';
+  html += '</div>';
+
+  html += '<div>';
+  html +=   '<div class="editor-section-head">Hero Content</div>';
+  heroFields.forEach(f => {
+    if (settings[f.k] !== undefined || ['hero_title','hero_eyebrow'].includes(f.k)) {
+      html += fieldHtml(f.k, f.l, settings[f.k]||'', {textarea:f.textarea, html:f.html, hint:f.hint}, 'page_settings:'+page.id+':'+f.k);
+    }
+  });
+  html += '</div>';
+  html += '</div>';
+
+  // Custom page settings
+  const customKeys = Object.keys(settings).filter(k => !knownKeys.includes(k));
   if (customKeys.length) {
-    html += '<div class="sb-part-title" style="margin-top:14px">Custom Fields</div>';
+    html += '<div class="editor-section-head" style="margin-top:16px">Custom Fields</div>';
     customKeys.forEach(k => {
-      const val = s[k];
+      const val = settings[k];
       html += fieldHtml(k, k, val, {textarea: typeof val === 'string' && val.length > 80}, 'page_settings:'+page.id+':'+k, true);
     });
   }
-  html += '<button class="btn-add" onclick="openAddCustomField(\'page\',\''+page.id+'\')">＋ Add Custom Page Field</button>';
-  html += '</div></div>';
+  html += '<button class="btn-add inline" onclick="openAddCustomField(\'page\',\''+page.id+'\')">＋ Custom Page Field</button>';
+
+  html += '</div>';
   return html;
 }
 
-function togglePageSettings() {
-  S.openPageSettings = !S.openPageSettings;
-  const card = document.getElementById('page-settings');
-  if (card) card.classList.toggle('open', S.openPageSettings);
-}
-
-
 /* ══════════════════════════════════════════════════════════════════
-   SECTION ACCORDION
+   SECTION CARD
 ══════════════════════════════════════════════════════════════════ */
-function renderSection(s) {
+function renderSectionCard(s) {
   const kind = KINDS[s.kind] || KINDS.items_grid;
-  const items = S.items.filter(it => it.section_id === s.id).sort((a,b)=>a.order_idx-b.order_idx);
-  const isOpen = S.openSections.has(s.id);
+  const items = S.items.filter(it => it.section_id === s.id).sort((a,b) => a.order_idx - b.order_idx);
+  const isEditingZone = S.editingZone === 'section:'+s.id;
   const settings = s.settings || {};
 
-  let html = '<div class="section-card' + (isOpen?' open':'') + '" data-section="'+s.id+'">';
+  let html = '<div class="sec ' + (isEditingZone?'editing':'') + '" data-section="'+s.id+'">';
 
-  // HEADER
-  html += '<div class="sh" data-toggle="'+s.id+'">';
-  html +=   '<span class="sh-arrow">▸</span>';
-  html +=   '<span class="sh-icon">' + esc(s.icon || kind.icon) + '</span>';
-  html +=   '<div style="flex:1;min-width:0"><div class="sh-title">' + esc(s.title) + '</div>';
-  html +=   '<div class="sh-meta">' + esc(kind.label) + '</div></div>';
-  html +=   '<span class="sh-count">' + items.length + ' item' + (items.length===1?'':'s') + '</span>';
-  html +=   '<span class="sh-acts">';
-  html +=     '<button class="sh-act" data-act="rename-section" data-id="'+s.id+'" title="Rename">✎</button>';
-  html +=     '<button class="sh-act" data-act="dup-section" data-id="'+s.id+'" title="Duplicate">⎘</button>';
-  html +=     '<button class="sh-act danger" data-act="del-section" data-id="'+s.id+'" title="Delete">✕</button>';
-  html +=   '</span>';
+  /* SECTION HEADER */
+  html += '<div class="sec-head">';
+  html += '<div class="sec-eyebrow">' + esc(kind.label) + ' · ' + items.length + ' item' + (items.length===1?'':'s') + '</div>';
+  html += '<div class="sec-head-row">';
+  html +=   '<span class="sec-icon edt" contenteditable="plaintext-only" data-patch="section:'+s.id+':icon" data-placeholder="▦" data-empty="'+(s.icon?'0':'1')+'">' + esc(s.icon||'') + '</span>';
+  html +=   '<div style="flex:1;min-width:0">';
+  html +=     '<h2 class="sec-title edt" contenteditable="plaintext-only" data-patch="section:'+s.id+':title">' + esc(s.title) + '</h2>';
+  if (s.subtitle || isEditingZone) {
+    html +=   '<div class="sec-sub edt" contenteditable="plaintext-only" data-patch="section:'+s.id+':subtitle" data-placeholder="add subtitle..." data-empty="'+(s.subtitle?'0':'1')+'">' + esc(s.subtitle||'') + '</div>';
+  }
+  html +=   '</div>';
+  html +=   '<div class="sec-acts">';
+  html +=     '<button class="sec-act" onclick="openZoneEditor(\'section\',\''+s.id+'\')" title="Settings">⚙</button>';
+  html +=     '<button class="sec-act" data-ctx="section:'+s.id+'" onclick="openCtxMenu(event, \'section\', \''+s.id+'\')" title="More">⋮</button>';
+  html +=   '</div>';
+  html += '</div>';
   html += '</div>';
 
-  // BODY
-  html += '<div class="sb">';
+  /* SECTION BODY */
+  html += '<div class="sec-body">';
 
-  // PART 1 — section meta (title, subtitle, icon, kind)
-  html += '<div class="sb-part"><div class="sb-part-title">Section Details</div>';
-  html += '<div class="fr">';
-  html +=   fieldHtml('title', 'Title', s.title, {}, 'section:'+s.id+':title');
-  html +=   fieldHtml('icon', 'Icon (emoji)', s.icon||'', {}, 'section:'+s.id+':icon');
-  html += '</div>';
-  html += fieldHtml('subtitle', 'Subtitle', s.subtitle||'', {}, 'section:'+s.id+':subtitle');
-  html += '<div class="field"><div class="fl"><span class="fl-l">Kind (layout style)</span></div>';
-  html += '<select class="fi" data-patch="section:'+s.id+':kind">' +
-          Object.entries(KINDS).map(([k,kd]) =>
-            '<option value="'+k+'"' + (s.kind===k?' selected':'') + '>' + kd.label + ' — ' + kd.desc + '</option>'
-          ).join('') + '</select></div>';
-  html += '</div>';
+  // Expanded settings panel (when editing zone)
+  if (isEditingZone) {
+    html += '<div style="background:var(--raised);border:1px solid var(--border2);border-radius:var(--rd-sm);padding:14px;margin-bottom:14px">';
+    html += '<div class="editor-section-head">Section Settings</div>';
 
-  // PART 2 — kind-specific settings (eyebrow, subtitle, body, etc.)
-  if (kind.settingsFields && kind.settingsFields.length) {
-    html += '<div class="sb-part"><div class="sb-part-title">' + esc(kind.label) + ' Settings</div>';
-    kind.settingsFields.forEach(f => {
-      html += fieldHtml(f.key, f.label, settings[f.key]||'', {
-        textarea: f.textarea, html: f.html, hint: f.hint, type: f.type, long: f.long
-      }, 'section_settings:'+s.id+':'+f.key);
-    });
-    // Custom section settings
-    const knownKeys = kind.settingsFields.map(f => f.key);
-    Object.keys(settings).forEach(k => {
-      if (!knownKeys.includes(k)) {
-        const val = settings[k];
-        const isLong = typeof val === 'string' && (val.length > 80 || val.includes('\n'));
-        html += fieldHtml(k, k, val, {textarea: isLong}, 'section_settings:'+s.id+':'+k, true);
-      }
-    });
-    html += '<button class="btn-add" onclick="openAddCustomField(\'section\',\''+s.id+'\')">＋ Add Custom Section Field</button>';
+    // Kind selector
+    html += '<div class="field"><div class="fl"><span class="fl-l">Section Kind (renders as)</span></div>' +
+            '<select class="fi" data-patch="section:'+s.id+':kind">' +
+              Object.entries(KINDS).map(([k,kd]) => '<option value="'+k+'"' + (s.kind===k?' selected':'') + '>' + kd.label + ' — ' + kd.desc + '</option>').join('') +
+            '</select></div>';
+
+    // Kind-specific settings
+    if (kind.settingsFields && kind.settingsFields.length) {
+      kind.settingsFields.forEach(f => {
+        html += fieldHtml(f.key, f.label, settings[f.key]||'', {textarea:f.textarea, html:f.html, hint:f.hint, type:f.type, long:f.long}, 'section_settings:'+s.id+':'+f.key);
+      });
+      // Custom settings
+      const known = kind.settingsFields.map(f => f.key);
+      Object.keys(settings).forEach(k => {
+        if (!known.includes(k)) {
+          const val = settings[k];
+          const isLong = typeof val === 'string' && (val.length > 80 || val.includes('\n'));
+          html += fieldHtml(k, k, val, {textarea:isLong}, 'section_settings:'+s.id+':'+k, true);
+        }
+      });
+    }
+    html += '<button class="btn-add inline" onclick="openAddCustomField(\'section\',\''+s.id+'\')">＋ Custom Section Field</button>';
     html += '</div>';
   }
 
-  // PART 3 — items list
+  // Items list
   if (kind.defaultItemFields.length > 0) {
-    html += '<div class="sb-part"><div class="sb-part-title">Items in this Section</div>';
     if (items.length === 0) {
-      html += '<div class="empty" style="padding:20px 14px"><div class="empty-icon">📋</div>No items yet. Click "Add Item" to create the first.</div>';
+      html += '<div class="empty" style="padding:20px 12px"><span class="empty-icon">📋</span>No items yet</div>';
     } else {
-      items.forEach((it, idx) => { html += renderItem(it, idx, items.length, kind); });
+      items.forEach((it, idx) => { html += renderItemRow(it, idx, items.length, kind, s); });
     }
-    html += '<button class="btn-add" onclick="addItem(\''+s.id+'\')">＋ Add Item</button>';
-    html += '</div>';
+    html += '<button class="btn-add inline" onclick="addItem(\''+s.id+'\')">＋ Add Item</button>';
   }
 
   html += '</div></div>';
   return html;
 }
 
+
 /* ══════════════════════════════════════════════════════════════════
-   ITEM ACCORDION
+   ITEM ROW + INLINE EDITOR
 ══════════════════════════════════════════════════════════════════ */
-function renderItem(it, idx, total, kind) {
+function renderItemRow(it, idx, total, kind, section) {
   const data = it.data || {};
   const name = data.name || data.title || '(unnamed)';
   const img = data.img || data.image;
   const price = data.price;
-  const priceDisplay = price != null && price !== '' ? '$' + Number(price).toFixed(2) : '';
-  const isOpen = S.openItems.has(it.id);
-  const subtitle = data.icon ? esc(data.icon) + ' · ' + esc(kind.label) : esc(kind.label);
+  const priceDisplay = (price != null && price !== '') ? '$' + Number(price).toFixed(2) : '';
+  const isEditing = S.editingItemId === it.id;
+  const hasImg = data.img !== undefined || data.image !== undefined;
 
-  let html = '<div class="item' + (isOpen?' open':'') + '" data-item="'+it.id+'">';
-
-  // HEADER
-  html += '<div class="ih" data-toggle-item="'+it.id+'">';
-  html +=   '<span class="ih-arrow">▸</span>';
-  html +=   '<span class="ih-idx">#'+(idx+1)+'</span>';
-  html +=   '<span class="ih-thumb">' + (img ? '<img src="'+escA(img)+'" onerror="this.outerHTML=\'<span class=ih-thumb-ph>📷</span>\'">' : '<span class="ih-thumb-ph">·</span>') + '</span>';
-  html +=   '<div class="ih-body"><div class="ih-name">' + esc(name) + '</div>' +
-            (data.note || data.badge ? '<div class="ih-sub">' + esc(data.badge || data.note) + '</div>' : '') +
-            '</div>';
-  if (priceDisplay) html += '<span class="ih-price">' + priceDisplay + '</span>';
-  html +=   '<span class="ih-acts">';
-  html +=     '<button class="ih-act" data-act="move-up" data-id="'+it.id+'"' + (idx===0?' disabled':'') + ' title="Move up">▲</button>';
-  html +=     '<button class="ih-act" data-act="move-dn" data-id="'+it.id+'"' + (idx===total-1?' disabled':'') + ' title="Move down">▼</button>';
-  html +=     '<button class="ih-act" data-act="dup-item" data-id="'+it.id+'" title="Duplicate">⎘</button>';
-  html +=     '<button class="ih-act danger" data-act="del-item" data-id="'+it.id+'" title="Delete">✕</button>';
-  html +=   '</span>';
+  let html = '<div class="item' + (isEditing?' editing':'') + (!it.visible?' hidden-flag':'') + '" data-item="'+it.id+'">';
+  html += '<span class="item-drag" title="Drag to reorder">⋮⋮</span>';
+  html += '<span class="item-idx">'+(idx+1)+'</span>';
+  if (hasImg) {
+    html += '<div class="item-thumb" onclick="event.stopPropagation();openImagePicker(\''+it.id+'\')">' +
+            (img ? '<img src="'+escA(img)+'" onerror="this.outerHTML=\'<span class=item-thumb-ph>📷</span>\'">' : '<span class="item-thumb-ph">📷</span>') +
+            '<span class="item-thumb-overlay">EDIT</span></div>';
+  }
+  html += '<div class="item-body">';
+  html +=   '<div class="item-name">' + esc(name) + '</div>';
+  if (data.desc) html += '<div class="item-desc">' + esc(data.desc) + '</div>';
+  html += '</div>';
+  if (priceDisplay) html += '<span class="item-price">' + priceDisplay + '</span>';
+  html += '<div class="item-acts">';
+  html +=   '<button class="item-act" data-act="move-up" data-id="'+it.id+'"' + (idx===0?' disabled':'') + ' title="Up">▲</button>';
+  html +=   '<button class="item-act" data-act="move-dn" data-id="'+it.id+'"' + (idx===total-1?' disabled':'') + ' title="Down">▼</button>';
+  html +=   '<button class="item-act" data-ctx="item:'+it.id+'" onclick="event.stopPropagation();openCtxMenu(event, \'item\', \''+it.id+'\')" title="More">⋮</button>';
+  html += '</div>';
   html += '</div>';
 
-  // BODY
-  html += '<div class="ib"><div class="ib-part">';
+  // Inline editor (shows when this item is selected)
+  if (isEditing) {
+    html += renderItemInlineEditor(it, kind);
+  }
 
-  // Visibility
-  html += '<div class="cbx-row" style="margin-bottom:10px">' +
+  return html;
+}
+
+function renderItemInlineEditor(it, kind) {
+  const data = it.data || {};
+  let html = '<div class="item-editor" data-item-editor="'+it.id+'">';
+
+  // Visibility toggle
+  html += '<div class="cbx-row" style="margin-bottom:12px">' +
           '<div class="cbx ' + (it.visible?'on':'') + '" data-patch="item:'+it.id+':visible" data-cbx="1"></div>' +
           '<span class="cbx-lbl">' + (it.visible?'Visible on site':'Hidden from site') + '</span></div>';
 
-  // Kind-default fields
+  // Kind-default fields in a smart grid
+  const fields = kind.defaultItemFields;
   const usedKeys = new Set();
-  kind.defaultItemFields.forEach(f => {
+  html += '<div>';
+  fields.forEach(f => {
     usedKeys.add(f.key);
     html += fieldHtml(f.key, f.label, data[f.key], f, 'item_data:'+it.id+':'+f.key);
   });
+  html += '</div>';
 
-  // Custom fields (keys in data that aren't in defaults)
-  Object.keys(data).forEach(k => {
-    if (!usedKeys.has(k)) {
+  // Custom fields
+  const customKeys = Object.keys(data).filter(k => !usedKeys.has(k));
+  if (customKeys.length) {
+    html += '<div class="editor-section-head" style="margin-top:10px">Custom Fields</div>';
+    customKeys.forEach(k => {
       const val = data[k];
       let type = 'text';
       if (typeof val === 'boolean') type = 'boolean';
       else if (typeof val === 'number') type = 'number';
       else if (typeof val === 'string' && (val.length > 80 || val.includes('\n'))) type = 'textarea';
       html += fieldHtml(k, k, val, {type}, 'item_data:'+it.id+':'+k, true);
-    }
-  });
+    });
+  }
 
-  html += '<button class="btn-add" onclick="openAddCustomField(\'item\',\''+it.id+'\')">＋ Add Custom Field</button>';
-  html += '</div></div></div>';
+  html += '<button class="btn-add inline" onclick="openAddCustomField(\'item\',\''+it.id+'\')">＋ Custom Field</button>';
+  html += '</div>';
   return html;
 }
 
-
 /* ══════════════════════════════════════════════════════════════════
-   FIELD HTML
+   FIELD RENDERING
 ══════════════════════════════════════════════════════════════════ */
 function fieldHtml(key, label, value, opts, patchPath, isCustom) {
   opts = opts || {};
@@ -926,9 +1024,8 @@ function fieldHtml(key, label, value, opts, patchPath, isCustom) {
           '<span class="cbx-lbl">' + (on?'Yes':'No') + '</span></div>';
   } else if (type === 'select') {
     inp = '<select class="fi" data-patch="'+patchPath+'">' +
-          (opts.options||[]).map(o =>
-            '<option value="'+escA(o)+'"' + (value===o?' selected':'') + '>' + esc(o||'—') + '</option>'
-          ).join('') + '</select>';
+          (opts.options||[]).map(o => '<option value="'+escA(o)+'"' + (value===o?' selected':'') + '>' + esc(o||'—') + '</option>').join('') +
+          '</select>';
   } else if (type === 'textarea' || opts.html) {
     const cls = 'fi fi-ta' + (opts.long?' long':'') + (opts.html?' html':'');
     inp = '<textarea class="'+cls+'" data-patch="'+patchPath+'">' + esc(value==null?'':value) + '</textarea>';
@@ -951,84 +1048,93 @@ function fieldHtml(key, label, value, opts, patchPath, isCustom) {
          inp + hint + '</div>';
 }
 
+
 /* ══════════════════════════════════════════════════════════════════
-   EVENT BINDING
+   BIND CANVAS EVENTS
 ══════════════════════════════════════════════════════════════════ */
-function bindAll() {
-  const v = document.getElementById('view');
-  // Section toggle
-  v.querySelectorAll('[data-toggle]').forEach(el => {
+function bindCanvas() {
+  const root = document.getElementById('canvas-inner');
+
+  // Click on item row → toggle inline editor
+  root.querySelectorAll('.item').forEach(el => {
     el.onclick = e => {
-      if (e.target.closest('.sh-act')) return; // don't toggle on action buttons
-      const id = el.dataset.toggle;
-      if (S.openSections.has(id)) S.openSections.delete(id);
-      else S.openSections.add(id);
-      renderView();
+      if (e.target.closest('.item-act, .item-thumb, .item-editor, .edt, .fi, .cbx')) return;
+      const id = el.dataset.item;
+      S.editingItemId = S.editingItemId === id ? null : id;
+      renderCanvas();
     };
   });
-  // Item toggle
-  v.querySelectorAll('[data-toggle-item]').forEach(el => {
-    el.onclick = e => {
-      if (e.target.closest('.ih-act')) return;
-      const id = el.dataset.toggleItem;
-      if (S.openItems.has(id)) S.openItems.delete(id);
-      else S.openItems.add(id);
-      renderView();
+
+  // Inline edit via contenteditable (.edt)
+  root.querySelectorAll('.edt[contenteditable]').forEach(el => {
+    el.onfocus = () => {
+      el.classList.add('editing');
+      el.dataset.originalValue = el.textContent;
+    };
+    el.onblur = () => {
+      el.classList.remove('editing');
+      const newVal = el.textContent.trim();
+      if (newVal !== el.dataset.originalValue) {
+        handleEdit(el.dataset.patch, newVal);
+      }
+      if (!newVal && el.dataset.placeholder) {
+        el.dataset.empty = '1';
+      } else {
+        el.dataset.empty = '0';
+      }
+    };
+    el.onkeydown = e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); el.blur(); }
+      if (e.key === 'Escape') { el.textContent = el.dataset.originalValue || ''; el.blur(); }
     };
   });
-  // Section actions
-  v.querySelectorAll('.sh-act').forEach(el => {
-    el.onclick = e => {
-      e.stopPropagation();
-      const id = el.dataset.id;
-      const act = el.dataset.act;
-      if (act === 'rename-section') openRenameModal('section', id);
-      else if (act === 'dup-section') duplicateNode('section', id);
-      else if (act === 'del-section') confirmDelete('section', id);
-    };
+
+  // Item reorder buttons
+  root.querySelectorAll('.item-act').forEach(el => {
+    if (el.dataset.act === 'move-up' || el.dataset.act === 'move-dn') {
+      el.onclick = e => {
+        e.stopPropagation();
+        if (el.disabled) return;
+        moveItem(el.dataset.id, el.dataset.act === 'move-up' ? -1 : 1);
+      };
+    }
   });
-  // Item actions
-  v.querySelectorAll('.ih-act').forEach(el => {
-    el.onclick = e => {
-      e.stopPropagation();
-      if (el.disabled) return;
-      const id = el.dataset.id;
-      const act = el.dataset.act;
-      if (act === 'move-up') moveItem(id, -1);
-      else if (act === 'move-dn') moveItem(id, 1);
-      else if (act === 'dup-item') duplicateNode('item', id);
-      else if (act === 'del-item') confirmDelete('item', id);
-    };
-  });
-  // Field inputs
-  v.querySelectorAll('input[data-patch],textarea[data-patch],select[data-patch]').forEach(el => {
+
+  // Inputs inside inline editor, zone editor
+  root.querySelectorAll('input[data-patch],textarea[data-patch],select[data-patch]').forEach(el => {
     el.addEventListener('input', () => handleEdit(el.dataset.patch, el.value));
     el.addEventListener('change', () => handleEdit(el.dataset.patch, el.value));
   });
-  // Checkbox
-  v.querySelectorAll('.cbx[data-cbx]').forEach(cb => {
-    cb.onclick = () => {
+  root.querySelectorAll('.cbx[data-cbx]').forEach(cb => {
+    cb.onclick = e => {
+      e.stopPropagation();
       const cur = cb.classList.contains('on');
       cb.classList.toggle('on', !cur);
       const lbl = cb.nextElementSibling;
       if (lbl && lbl.classList.contains('cbx-lbl')) {
-        // figure out what label to show based on context
-        const path = cb.dataset.patch;
-        if (path && path.includes('item:') && path.endsWith(':visible')) lbl.textContent = !cur ? 'Visible on site' : 'Hidden from site';
+        const path = cb.dataset.patch || '';
+        if (path.includes('item:') && path.endsWith(':visible')) lbl.textContent = !cur ? 'Visible on site' : 'Hidden from site';
         else lbl.textContent = !cur ? 'Yes' : 'No';
       }
       handleEdit(cb.dataset.patch, !cur);
     };
   });
-  // Restore page settings card open-state
-  if (S.openPageSettings) document.getElementById('page-settings')?.classList.add('open');
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   HANDLE EDIT (inline or form)
+══════════════════════════════════════════════════════════════════ */
 function handleEdit(patchPath, newValue) {
   const [scope, id, key] = patchPath.split(':');
   const rec = findRec(scope, id);
   if (!rec) return;
 
+  // Snapshot original for discard (only first time)
+  if (!(patchPath in S.dirtySnapshot)) {
+    S.dirtySnapshot[patchPath] = getValueAt(scope, id, key);
+  }
+
+  // Apply
   if (scope === 'page') rec[key] = newValue;
   else if (scope === 'section') rec[key] = newValue;
   else if (scope === 'item' && key === 'visible') rec[key] = !!newValue;
@@ -1045,24 +1151,60 @@ function handleEdit(patchPath, newValue) {
   updateSaveState();
   queueSave();
 
-  // Mark field visually dirty
-  const el = document.querySelector('[data-field-key="'+cssEsc(patchPath)+'"]');
-  if (el) el.classList.add('dirty');
+  // Visual dirty marker
+  const fieldEl = document.querySelector('[data-field-key="'+cssEsc(patchPath)+'"]');
+  if (fieldEl) fieldEl.classList.add('dirty');
 
-  // Tab counts + titles that need re-render on text changes
-  const isTitleEdit = (scope === 'page' && key === 'title') ||
-                     (scope === 'page' && key === 'icon') ||
-                     (scope === 'section' && key === 'title') ||
-                     (scope === 'item_data' && (key === 'name' || key === 'title'));
-  if (scope === 'page' && (key === 'title' || key === 'icon')) renderTabs();
-  // Lightweight DOM updates for section/item titles without full rerender
-  if (scope === 'section' && key === 'title') {
-    const card = document.querySelector('[data-section="'+id+'"] .sh-title');
-    if (card) card.textContent = newValue;
+  // Live DOM updates without full re-render
+  liveUpdate(scope, id, key, newValue);
+}
+
+function getValueAt(scope, id, key) {
+  const rec = findRec(scope, id);
+  if (!rec) return undefined;
+  if (scope === 'page' || scope === 'section' || scope === 'item') return rec[key];
+  if (scope === 'page_settings' || scope === 'section_settings') return (rec.settings||{})[key];
+  if (scope === 'item_data') return (rec.data||{})[key];
+}
+
+function liveUpdate(scope, id, key, newValue) {
+  // Update tab dropdown if page title/icon changed
+  if (scope === 'page' && (key === 'title' || key === 'icon')) {
+    renderPageSwitcher();
   }
+  // Update section header title when typed
+  if (scope === 'section' && key === 'title') {
+    const el = document.querySelector('[data-section="'+id+'"] .sec-title');
+    // Don't overwrite an actively-editing contenteditable
+    if (el && !el.classList.contains('editing')) el.textContent = newValue;
+  }
+  // Update item name
   if (scope === 'item_data' && (key === 'name' || key === 'title')) {
-    const card = document.querySelector('[data-item="'+id+'"] .ih-name');
-    if (card) card.textContent = newValue || '(unnamed)';
+    const nameEl = document.querySelector('[data-item="'+id+'"] .item-name');
+    if (nameEl) nameEl.textContent = newValue || '(unnamed)';
+  }
+  // Update item price
+  if (scope === 'item_data' && key === 'price') {
+    const priceEl = document.querySelector('[data-item="'+id+'"] .item-price');
+    const it = S.items.find(x => x.id === id);
+    const disp = (it?.data?.price != null && it.data.price !== '') ? '$' + Number(it.data.price).toFixed(2) : '';
+    if (priceEl) priceEl.textContent = disp;
+    else if (disp) {
+      // Need to insert — just re-render this one item
+      const wrap = document.querySelector('[data-item="'+id+'"]');
+      if (wrap) setTimeout(() => renderCanvas(), 0);
+    }
+  }
+  // Image preview in field
+  if (scope === 'item_data' && (key === 'img' || key === 'image')) {
+    const fieldEl = document.querySelector('[data-field-key="item_data:'+id+':'+key+'"] .img-preview');
+    if (fieldEl) fieldEl.innerHTML = newValue ? '<img src="'+escA(newValue)+'" onerror="this.outerHTML=\'<span class=img-ph>📷</span>\'">' : '<span class="img-ph">📷</span>';
+    // Also update thumbnail in item row
+    const thumb = document.querySelector('[data-item="'+id+'"] .item-thumb');
+    if (thumb) {
+      const overlay = thumb.querySelector('.item-thumb-overlay');
+      thumb.innerHTML = (newValue ? '<img src="'+escA(newValue)+'" onerror="this.outerHTML=\'<span class=item-thumb-ph>📷</span>\'">' : '<span class="item-thumb-ph">📷</span>') + (overlay?overlay.outerHTML:'<span class="item-thumb-overlay">EDIT</span>');
+    }
   }
 }
 
@@ -1074,8 +1216,13 @@ function findRec(scope, id) {
 }
 
 function updateSaveState() {
-  if (S.dirty.size > 0) setSave('', S.dirty.size + ' unsaved');
+  const n = S.dirty.size;
+  if (n > 0) setSave('', n + ' unsaved');
   else setSave('saved', 'All saved');
+  // Save bar
+  const bar = document.getElementById('savebar');
+  bar.classList.toggle('show', n > 0);
+  document.getElementById('savebar-count').textContent = n + ' unsaved change' + (n===1?'':'s');
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -1083,14 +1230,13 @@ function updateSaveState() {
 ══════════════════════════════════════════════════════════════════ */
 function queueSave() {
   if (S.saveTimer) clearTimeout(S.saveTimer);
-  S.saveTimer = setTimeout(flushSaves, 1500);
+  S.saveTimer = setTimeout(() => flushSaves(false), 1500);
 }
-async function flushSaves() {
+
+async function flushSaves(manual) {
   if (S.dirty.size === 0) return;
   setSave('saving','Saving...');
-  const pageSet = new Set();
-  const sectionSet = new Set();
-  const itemSet = new Set();
+  const pageSet = new Set(), sectionSet = new Set(), itemSet = new Set();
   for (const path of S.dirty) {
     const [scope, id] = path.split(':');
     if (scope.startsWith('page')) pageSet.add(id);
@@ -1101,26 +1247,23 @@ async function flushSaves() {
     const promises = [];
     for (const id of pageSet) {
       const r = S.pages.find(x=>x.id===id);
-      if (r) promises.push(sbUpdate('pages', id, {
-        title: r.title, slug: r.slug, icon: r.icon, template: r.template, settings: r.settings, order_idx: r.order_idx
-      }));
+      if (r) promises.push(sbUpdate('pages', id, { title:r.title, slug:r.slug, icon:r.icon, template:r.template, settings:r.settings, order_idx:r.order_idx }));
     }
     for (const id of sectionSet) {
       const r = S.sections.find(x=>x.id===id);
-      if (r) promises.push(sbUpdate('sections', id, {
-        title: r.title, subtitle: r.subtitle, icon: r.icon, slug: r.slug, kind: r.kind, settings: r.settings, order_idx: r.order_idx
-      }));
+      if (r) promises.push(sbUpdate('sections', id, { title:r.title, subtitle:r.subtitle, icon:r.icon, slug:r.slug, kind:r.kind, settings:r.settings, order_idx:r.order_idx }));
     }
     for (const id of itemSet) {
       const r = S.items.find(x=>x.id===id);
-      if (r) promises.push(sbUpdate('items', id, {
-        data: r.data, visible: r.visible, order_idx: r.order_idx
-      }));
+      if (r) promises.push(sbUpdate('items', id, { data:r.data, visible:r.visible, order_idx:r.order_idx }));
     }
     await Promise.all(promises);
     S.dirty.clear();
+    S.dirtySnapshot = {};
     document.querySelectorAll('.field.dirty').forEach(el => el.classList.remove('dirty'));
     setSave('saved', 'Saved ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
+    document.getElementById('savebar').classList.remove('show');
+    if (manual) toast('Saved ✓','ok');
   } catch (err) {
     console.error(err);
     setSave('err', 'Save failed');
@@ -1128,53 +1271,171 @@ async function flushSaves() {
   }
 }
 
+function discardDirty() {
+  if (S.dirty.size === 0) return;
+  if (!confirm('Discard all unsaved changes?')) return;
+  // Restore from snapshot
+  for (const [patchPath, origVal] of Object.entries(S.dirtySnapshot)) {
+    const [scope, id, key] = patchPath.split(':');
+    const rec = findRec(scope, id);
+    if (!rec) continue;
+    if (scope === 'page' || scope === 'section' || scope === 'item') rec[key] = origVal;
+    else if (scope === 'page_settings' || scope === 'section_settings') rec.settings = {...(rec.settings||{}), [key]: origVal};
+    else if (scope === 'item_data') rec.data = {...(rec.data||{}), [key]: origVal};
+  }
+  S.dirty.clear();
+  S.dirtySnapshot = {};
+  renderAll();
+  updateSaveState();
+  toast('Changes discarded', 'info');
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   CONTEXT MENU (⋮ button popup)
+══════════════════════════════════════════════════════════════════ */
+function openCtxMenu(e, type, id) {
+  e.stopPropagation();
+  const ctx = document.getElementById('ctx');
+  const rec = findRec(type, id);
+  const name = rec ? (rec.title || rec.data?.name || rec.data?.title || 'Item') : '';
+
+  let items = [];
+  if (type === 'page') {
+    items = [
+      { icon:'⚙', label:'Settings & Hero', action:() => openZoneEditor('page') },
+      { icon:'⎘', label:'Duplicate Page', action:() => duplicateNode('page', id) },
+    ];
+  } else if (type === 'section') {
+    items = [
+      { icon:'⚙', label:'Section Settings', action:() => openZoneEditor('section', id) },
+      { icon:'✎', label:'Rename', action:() => openRenameModal('section', id) },
+      { icon:'⎘', label:'Duplicate', action:() => duplicateNode('section', id) },
+      { sep:true },
+      { icon:'✕', label:'Delete Section', danger:true, action:() => confirmDelete('section', id) },
+    ];
+  } else if (type === 'item') {
+    const it = S.items.find(x=>x.id===id);
+    items = [
+      { icon:'✎', label:it?.visible?'Mark as Hidden':'Mark as Visible', action:() => { toggleItemVisible(id); closeCtx(); } },
+      { icon:'＋', label:'Add Custom Field', action:() => openAddCustomField('item', id) },
+      { icon:'⎘', label:'Duplicate Item', action:() => duplicateNode('item', id) },
+      { sep:true },
+      { icon:'✕', label:'Delete Item', danger:true, action:() => confirmDelete('item', id) },
+    ];
+  }
+
+  let html = '<div class="ctx-hdr">' + esc(name) + '</div>';
+  items.forEach((it, i) => {
+    if (it.sep) { html += '<div class="ctx-sep"></div>'; return; }
+    html += '<div class="ctx-item' + (it.danger?' danger':'') + '" data-ctx-idx="'+i+'">' +
+            '<span class="ctx-icon">'+it.icon+'</span>'+esc(it.label)+'</div>';
+  });
+  ctx.innerHTML = html;
+  ctx.classList.add('show');
+
+  // Position near click
+  const btn = e.currentTarget;
+  const r = btn.getBoundingClientRect();
+  const ctxW = ctx.offsetWidth, ctxH = ctx.offsetHeight;
+  let left = r.right - ctxW, top = r.bottom + 4;
+  if (left < 8) left = 8;
+  if (left + ctxW > window.innerWidth - 8) left = window.innerWidth - ctxW - 8;
+  if (top + ctxH > window.innerHeight - 8) top = r.top - ctxH - 4;
+  ctx.style.left = left + 'px';
+  ctx.style.top = top + 'px';
+
+  // Bind items
+  ctx.querySelectorAll('.ctx-item').forEach(el => {
+    el.onclick = ev => {
+      ev.stopPropagation();
+      const idx = Number(el.dataset.ctxIdx);
+      items[idx]?.action?.();
+      closeCtx();
+    };
+  });
+}
+function closeCtx() {
+  const ctx = document.getElementById('ctx');
+  ctx.classList.remove('show');
+}
+
+async function toggleItemVisible(id) {
+  const it = S.items.find(x=>x.id===id);
+  if (!it) return;
+  try {
+    await sbUpdate('items', id, { visible: !it.visible });
+    it.visible = !it.visible;
+    renderCanvas();
+    toast(it.visible ? 'Item visible' : 'Item hidden', 'ok');
+  } catch (err) { toast('Error: ' + err.message, 'err'); }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ZONE EDITOR — expand the page/section zone with all settings
+══════════════════════════════════════════════════════════════════ */
+function openZoneEditor(scope, id) {
+  if (scope === 'page') S.editingZone = 'page';
+  else if (scope === 'section') S.editingZone = 'section:'+id;
+  renderCanvas();
+  setTimeout(() => {
+    const target = scope === 'page'
+      ? document.querySelector('.zone[data-zone="page"]')
+      : document.querySelector('[data-section="'+id+'"]');
+    if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 40);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   IMAGE PICKER (simple URL prompt for now; drag-drop in Part 3)
+══════════════════════════════════════════════════════════════════ */
+function openImagePicker(itemId) {
+  const it = S.items.find(x=>x.id===itemId);
+  if (!it) return;
+  const cur = it.data?.img || it.data?.image || '';
+  openModal(
+    '<h3>Change <em>Image</em></h3>' +
+    '<p>Paste an image URL. Drag-and-drop uploads coming soon.</p>' +
+    '<div class="modal-row"><label>Image URL</label><input class="fi" id="m-img" value="'+escA(cur)+'" placeholder="https://..."></div>' +
+    '<div class="img-preview" style="width:120px;height:120px;margin:10px auto;" id="m-preview">' +
+      (cur ? '<img src="'+escA(cur)+'">' : '<span class="img-ph">📷</span>') +
+    '</div>' +
+    '<div class="modal-btns">' +
+      '<button class="tb-btn" onclick="closeModal()">Cancel</button>' +
+      '<button class="tb-btn primary" onclick="submitImage(\''+itemId+'\')">Save</button>' +
+    '</div>'
+  );
+  setTimeout(() => {
+    const inp = document.getElementById('m-img');
+    inp.focus();
+    inp.oninput = () => {
+      const v = inp.value.trim();
+      document.getElementById('m-preview').innerHTML = v ? '<img src="'+escA(v)+'">' : '<span class="img-ph">📷</span>';
+    };
+  }, 80);
+}
+async function submitImage(itemId) {
+  const v = document.getElementById('m-img').value.trim();
+  const it = S.items.find(x=>x.id===itemId);
+  if (!it) return;
+  const key = it.data?.img !== undefined ? 'img' : 'image';
+  const newData = {...it.data, [key]: v};
+  try {
+    await sbUpdate('items', itemId, { data: newData });
+    it.data = newData;
+    closeModal();
+    renderCanvas();
+    toast('Image updated ✓','ok');
+  } catch (err) { toast('Error: ' + err.message, 'err'); }
+}
 
 /* ══════════════════════════════════════════════════════════════════
    CRUD — ADD/DUP/DELETE/RENAME
 ══════════════════════════════════════════════════════════════════ */
-function openAddPageModal() {
-  openModal(
-    '<h3>Add <em>Page</em></h3>' +
-    '<p>Create a new page for the site. You can add sections and items after.</p>' +
-    '<div class="modal-row"><label>Page Title</label><input class="fi" id="m-title" placeholder="e.g. Specials Archive"></div>' +
-    '<div class="modal-row"><label>URL Slug</label><input class="fi" id="m-slug" placeholder="auto-generated from title"></div>' +
-    '<div class="modal-row"><label>Icon (emoji)</label><input class="fi" id="m-icon" value="📄"></div>' +
-    '<div class="modal-row"><label>Template</label><select class="fi" id="m-tmpl">' +
-      Object.entries(TEMPLATES).map(([k,t])=>'<option value="'+k+'">'+t.label+'</option>').join('') +
-    '</select></div>' +
-    '<div class="modal-btns"><button class="tb-btn" onclick="closeModal()">Cancel</button>' +
-    '<button class="tb-btn primary" onclick="submitAddPage()">Create Page</button></div>'
-  );
-  setTimeout(() => {
-    const t = document.getElementById('m-title');
-    t.focus();
-    t.addEventListener('input', e => {
-      document.getElementById('m-slug').value = slugify(e.target.value);
-    });
-  }, 80);
-}
-async function submitAddPage() {
-  const title = document.getElementById('m-title').value.trim();
-  const slug  = document.getElementById('m-slug').value.trim() || slugify(title);
-  const icon  = document.getElementById('m-icon').value.trim() || '📄';
-  const template = document.getElementById('m-tmpl').value;
-  if (!title) return toast('Title required', 'err');
-  try {
-    const maxOrder = Math.max(0, ...S.pages.map(p => p.order_idx || 0));
-    const rows = await sbInsert('pages', { title, slug, icon, template, order_idx: maxOrder+1, settings: {} });
-    closeModal();
-    await reloadAll();
-    S.activePageId = rows[0].id;
-    renderTabs();
-    renderView();
-    toast('Page created ✓', 'ok');
-  } catch (err) { toast('Error: ' + err.message, 'err'); }
-}
-
 function openAddSectionModal(pageId) {
   openModal(
     '<h3>Add <em>Section</em></h3>' +
-    '<p>Sections are the building blocks of a page — menu categories, review lists, step guides, etc.</p>' +
+    '<p>Sections are the building blocks of a page. Menu categories, review lists, step guides, etc.</p>' +
     '<div class="modal-row"><label>Section Title</label><input class="fi" id="m-title" placeholder="e.g. Seasonal Menu"></div>' +
     '<div class="modal-row"><label>Kind (what it renders as)</label><select class="fi" id="m-kind">' +
       Object.entries(KINDS).map(([k,kd])=>'<option value="'+k+'">'+kd.label+' — '+kd.desc+'</option>').join('') +
@@ -1195,10 +1456,12 @@ async function submitAddSection(pageId) {
     const rows = await sbInsert('sections', { page_id: pageId, title, kind, icon: icon||null, slug: slugify(title), order_idx: maxOrder+1, settings:{} });
     closeModal();
     await reloadAll();
-    renderTabs();
-    S.openSections.add(rows[0].id);
-    renderView();
-    toast('Section created ✓', 'ok');
+    renderAll();
+    toast('Section created ✓','ok');
+    setTimeout(() => {
+      const el = document.querySelector('[data-section="'+rows[0].id+'"]');
+      if (el) el.scrollIntoView({behavior:'smooth', block:'center'});
+    }, 100);
   } catch (err) { toast('Error: ' + err.message, 'err'); }
 }
 
@@ -1217,15 +1480,13 @@ async function addItem(sectionId) {
     const maxOrder = Math.max(0, ...S.items.filter(it=>it.section_id===sectionId).map(it=>it.order_idx||0));
     const rows = await sbInsert('items', { section_id: sectionId, data, order_idx: maxOrder+1, visible: true });
     await reloadAll();
-    S.openSections.add(sectionId);
-    S.openItems.add(rows[0].id);
-    renderView();
-    toast('Item added ✓', 'ok');
-    // Scroll to new item
+    S.editingItemId = rows[0].id;
+    renderCanvas();
+    toast('Item added ✓','ok');
     setTimeout(() => {
       const el = document.querySelector('[data-item="'+rows[0].id+'"]');
-      if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
-    }, 120);
+      if (el) el.scrollIntoView({behavior:'smooth', block:'center'});
+    }, 100);
   } catch (err) { toast('Error: ' + err.message, 'err'); }
 }
 
@@ -1244,8 +1505,7 @@ async function duplicateNode(type, id) {
       }
       await reloadAll();
       S.activePageId = newP[0].id;
-      renderTabs();
-      renderView();
+      renderAll();
     } else if (type === 'section') {
       const s = S.sections.find(x=>x.id===id);
       if (!s) return;
@@ -1255,18 +1515,17 @@ async function duplicateNode(type, id) {
         await sbInsert('items', { section_id: newS[0].id, data: it.data, visible: it.visible, order_idx: it.order_idx });
       }
       await reloadAll();
-      S.openSections.add(newS[0].id);
-      renderView();
+      renderCanvas();
     } else if (type === 'item') {
       const it = S.items.find(x=>x.id===id);
       if (!it) return;
       const maxOrder = Math.max(0, ...S.items.filter(x=>x.section_id===it.section_id).map(x=>x.order_idx||0));
       const newIt = await sbInsert('items', { section_id: it.section_id, data: {...it.data}, visible: it.visible, order_idx: maxOrder+1 });
       await reloadAll();
-      S.openItems.add(newIt[0].id);
-      renderView();
+      S.editingItemId = newIt[0].id;
+      renderCanvas();
     }
-    toast('Duplicated ✓', 'ok');
+    toast('Duplicated ✓','ok');
   } catch (err) { toast('Error: ' + err.message, 'err'); }
 }
 
@@ -1278,9 +1537,11 @@ function confirmDelete(type, id) {
               : 'item';
   openModal(
     '<h3>Delete <em>'+esc(name)+'</em>?</h3>' +
-    '<p>This removes the ' + label + ' permanently. Cannot be undone.</p>' +
-    '<div class="modal-btns"><button class="tb-btn" onclick="closeModal()">Cancel</button>' +
-    '<button class="tb-btn primary" style="background:linear-gradient(135deg,#a02010,#c04800)" onclick="doDelete(\''+type+'\',\''+id+'\')">Delete</button></div>'
+    '<p>This removes the '+label+' permanently. Cannot be undone.</p>' +
+    '<div class="modal-btns">' +
+      '<button class="tb-btn" onclick="closeModal()">Cancel</button>' +
+      '<button class="tb-btn primary" style="background:linear-gradient(135deg,#a02010,#c04800)" onclick="doDelete(\''+type+'\',\''+id+'\')">Delete</button>' +
+    '</div>'
   );
 }
 async function doDelete(type, id) {
@@ -1289,12 +1550,10 @@ async function doDelete(type, id) {
     await sbDelete(table, id);
     closeModal();
     await reloadAll();
-    if (type === 'page' && S.activePageId === id) {
-      S.activePageId = S.pages[0]?.id || null;
-    }
-    renderTabs();
-    renderView();
-    toast('Deleted ✓', 'ok');
+    if (type === 'page' && S.activePageId === id) S.activePageId = S.pages[0]?.id || null;
+    if (type === 'item' && S.editingItemId === id) S.editingItemId = null;
+    renderAll();
+    toast('Deleted ✓','ok');
   } catch (err) { toast('Error: ' + err.message, 'err'); }
 }
 
@@ -1305,8 +1564,10 @@ function openRenameModal(type, id) {
   openModal(
     '<h3>Rename</h3>' +
     '<div class="modal-row"><label>New Title</label><input class="fi" id="m-title" value="'+escA(cur)+'"></div>' +
-    '<div class="modal-btns"><button class="tb-btn" onclick="closeModal()">Cancel</button>' +
-    '<button class="tb-btn primary" onclick="submitRename(\''+type+'\',\''+id+'\')">Save</button></div>'
+    '<div class="modal-btns">' +
+      '<button class="tb-btn" onclick="closeModal()">Cancel</button>' +
+      '<button class="tb-btn primary" onclick="submitRename(\''+type+'\',\''+id+'\')">Save</button>' +
+    '</div>'
   );
   setTimeout(() => { const el=document.getElementById('m-title'); el.focus(); el.select(); }, 80);
 }
@@ -1325,9 +1586,8 @@ async function submitRename(type, id) {
     }
     closeModal();
     await reloadAll();
-    renderTabs();
-    renderView();
-    toast('Renamed ✓', 'ok');
+    renderAll();
+    toast('Renamed ✓','ok');
   } catch (err) { toast('Error: ' + err.message, 'err'); }
 }
 
@@ -1343,7 +1603,7 @@ async function moveItem(id, delta) {
     await sbUpdate('items', id, { order_idx: other.order_idx });
     await sbUpdate('items', other.id, { order_idx: it.order_idx });
     await reloadAll();
-    renderView();
+    renderCanvas();
   } catch (err) { toast('Error: ' + err.message, 'err'); }
 }
 
@@ -1351,17 +1611,19 @@ async function moveItem(id, delta) {
 function openAddCustomField(scope, id) {
   openModal(
     '<h3>Add <em>Custom Field</em></h3>' +
-    '<p>Add any field you want to this '+scope+'. Field name: letters, numbers, underscores only.</p>' +
-    '<div class="modal-row"><label>Field Name (key)</label><input class="fi" id="m-key" placeholder="e.g. spice_level"></div>' +
-    '<div class="modal-row"><label>Field Type</label><select class="fi" id="m-type">' +
+    '<p>Add any field to this '+scope+'. Letters, numbers, underscores only.</p>' +
+    '<div class="modal-row"><label>Field Name</label><input class="fi" id="m-key" placeholder="e.g. spice_level"></div>' +
+    '<div class="modal-row"><label>Type</label><select class="fi" id="m-type">' +
       '<option value="text">Short Text</option>' +
       '<option value="textarea">Long Text</option>' +
       '<option value="number">Number</option>' +
       '<option value="url">URL / Image</option>' +
       '<option value="boolean">Yes / No</option>' +
     '</select></div>' +
-    '<div class="modal-btns"><button class="tb-btn" onclick="closeModal()">Cancel</button>' +
-    '<button class="tb-btn primary" onclick="submitAddCustomField(\''+scope+'\',\''+id+'\')">Add Field</button></div>'
+    '<div class="modal-btns">' +
+      '<button class="tb-btn" onclick="closeModal()">Cancel</button>' +
+      '<button class="tb-btn primary" onclick="submitAddCustomField(\''+scope+'\',\''+id+'\')">Add Field</button>' +
+    '</div>'
   );
   setTimeout(() => document.getElementById('m-key').focus(), 80);
 }
@@ -1369,7 +1631,7 @@ async function submitAddCustomField(scope, id) {
   const key = document.getElementById('m-key').value.trim().replace(/\s+/g,'_');
   const type = document.getElementById('m-type').value;
   if (!key) return toast('Field name required', 'err');
-  if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(key)) return toast('Letters/numbers/underscores, start with letter', 'err');
+  if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(key)) return toast('Letters/numbers/underscores', 'err');
   const defaultVal = type === 'boolean' ? false : type === 'number' ? null : '';
   try {
     if (scope === 'page') {
@@ -1387,8 +1649,8 @@ async function submitAddCustomField(scope, id) {
     }
     closeModal();
     await reloadAll();
-    renderView();
-    toast('Field added ✓', 'ok');
+    renderCanvas();
+    toast('Field added ✓','ok');
   } catch (err) { toast('Error: ' + err.message, 'err'); }
 }
 
@@ -1410,9 +1672,94 @@ async function removeCustomField(patchPath) {
       await sbUpdate('items', id, { data: nd });
     }
     await reloadAll();
-    renderView();
+    renderCanvas();
     toast('Field removed', 'ok');
   } catch (err) { toast('Error: ' + err.message, 'err'); }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   COMMAND PALETTE (⌘K)
+══════════════════════════════════════════════════════════════════ */
+function openCmdk() {
+  const bg = document.getElementById('cmdk-bg');
+  bg.classList.add('show');
+  const input = document.getElementById('cmdk-input');
+  input.value = '';
+  renderCmdkList('');
+  setTimeout(() => input.focus(), 50);
+  input.oninput = () => renderCmdkList(input.value);
+  input.onkeydown = e => {
+    const items = document.querySelectorAll('.cmdk-item');
+    if (e.key === 'ArrowDown') { e.preventDefault(); S.cmdkSel = Math.min(items.length-1, S.cmdkSel+1); updateCmdkSel(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); S.cmdkSel = Math.max(0, S.cmdkSel-1); updateCmdkSel(); }
+    else if (e.key === 'Enter') { e.preventDefault(); items[S.cmdkSel]?.click(); }
+    else if (e.key === 'Escape') closeCmdk();
+  };
+}
+function closeCmdk() {
+  document.getElementById('cmdk-bg').classList.remove('show');
+}
+function renderCmdkList(q) {
+  const list = document.getElementById('cmdk-list');
+  const Q = q.toLowerCase();
+  const results = [];
+  S.pages.forEach(p => {
+    if (!Q || p.title.toLowerCase().includes(Q)) results.push({ kind:'Page', icon:p.icon||'📄', title:p.title, crumb:'Page', action:() => { S.activePageId = p.id; sessionStorage.setItem('fs_cms_page', p.id); renderAll(); } });
+  });
+  S.sections.forEach(s => {
+    const p = S.pages.find(x => x.id === s.page_id);
+    if (!Q || s.title.toLowerCase().includes(Q)) results.push({ kind:'Section', icon:s.icon||KINDS[s.kind]?.icon||'▦', title:s.title, crumb:(p?.title||'')+' · Section', action:() => {
+      S.activePageId = s.page_id; sessionStorage.setItem('fs_cms_page', s.page_id);
+      renderAll();
+      setTimeout(() => {
+        const el = document.querySelector('[data-section="'+s.id+'"]');
+        if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      }, 100);
+    }});
+  });
+  S.items.forEach(it => {
+    const name = it.data?.name || it.data?.title || '';
+    if (!name) return;
+    if (Q && !name.toLowerCase().includes(Q)) return;
+    const s = S.sections.find(x => x.id === it.section_id);
+    const p = s ? S.pages.find(x => x.id === s.page_id) : null;
+    results.push({ kind:'Item', icon:it.data?.img ? '🖼️' : '·', title:name, crumb:(p?.title||'')+' · '+(s?.title||''), action:() => {
+      S.activePageId = s.page_id; sessionStorage.setItem('fs_cms_page', s.page_id);
+      S.editingItemId = it.id;
+      renderAll();
+      setTimeout(() => {
+        const el = document.querySelector('[data-item="'+it.id+'"]');
+        if (el) el.scrollIntoView({behavior:'smooth', block:'center'});
+      }, 100);
+    }});
+  });
+
+  if (!results.length) {
+    list.innerHTML = '<div class="empty" style="padding:30px 10px">No results</div>';
+    S.cmdkSel = -1;
+    return;
+  }
+  list.innerHTML = results.slice(0, 30).map((r, i) =>
+    '<div class="cmdk-item ' + (i===0?'sel':'') + '" data-cmdk-idx="'+i+'">' +
+      '<span class="cmdk-icon">'+esc(r.icon)+'</span>' +
+      '<div class="cmdk-body">' +
+        '<div class="cmdk-title">'+esc(r.title)+'</div>' +
+        '<div class="cmdk-crumb">'+esc(r.crumb)+'</div>' +
+      '</div>' +
+      '<span class="cmdk-kind">'+r.kind+'</span>' +
+    '</div>'
+  ).join('');
+  S.cmdkSel = 0;
+  list.querySelectorAll('.cmdk-item').forEach((el, i) => {
+    el.onclick = () => { results[i]?.action?.(); closeCmdk(); };
+    el.onmouseenter = () => { S.cmdkSel = i; updateCmdkSel(); };
+  });
+}
+function updateCmdkSel() {
+  document.querySelectorAll('.cmdk-item').forEach((el, i) => el.classList.toggle('sel', i === S.cmdkSel));
+  const sel = document.querySelector('.cmdk-item.sel');
+  if (sel) sel.scrollIntoView({ block:'nearest' });
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -1425,14 +1772,41 @@ function openModal(html) {
 function closeModal() {
   document.getElementById('modal-bg').classList.remove('show');
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-/* WARN ON UNSAVED */
+/* ══════════════════════════════════════════════════════════════════
+   GLOBAL KEYBOARD
+══════════════════════════════════════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (!S.authed) return;
+  // ⌘K / Ctrl+K — command palette
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    openCmdk();
+    return;
+  }
+  // ⌘S / Ctrl+S — save now
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+    e.preventDefault();
+    flushSaves(true);
+    return;
+  }
+  // Escape — close things
+  if (e.key === 'Escape') {
+    if (document.getElementById('cmdk-bg').classList.contains('show')) return closeCmdk();
+    if (document.getElementById('modal-bg').classList.contains('show')) return closeModal();
+    closeCtx();
+    if (S.editingItemId) { S.editingItemId = null; renderCanvas(); }
+    if (S.editingZone) { S.editingZone = null; renderCanvas(); }
+  }
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   WARN ON UNSAVED + INIT
+══════════════════════════════════════════════════════════════════ */
 window.addEventListener('beforeunload', e => {
   if (S.dirty.size > 0) { e.preventDefault(); e.returnValue = 'Unsaved changes.'; return e.returnValue; }
 });
 
-/* INIT */
 buildPinPad();
 if (sessionStorage.getItem('fs_cms_auth') === '1') {
   S.authed = true;
