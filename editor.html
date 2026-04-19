@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Site Editor · The Francis Smokehouse</title>
+<link rel="icon" type="image/png" href="Images/Smokehouselogo.png">
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;500;600;700;800&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:#090704;--deep:#120d07;--coal:#1a1108;--ash:#2c1f0e;
+  --ember:#c04800;--fire:#e06010;--flame:#f08820;--glow:#f5a830;
+  --cream:#f5e8cc;--parch:#e8d4a8;--sand:#c4a070;--mid:#7a5830;
+  --lo:#8a6840;
+  --serif:'Playfair Display',Georgia,serif;
+  --cond:'Barlow Condensed',sans-serif;
+  --body:'Barlow',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --panel:rgba(22,14,6,.92);
+  --panel2:rgba(14,9,4,.85);
+  --border:rgba(196,160,112,.14);
+  --border2:rgba(240,136,32,.38);
+}
+html,body{min-height:100%;background:var(--void);color:var(--cream);font-family:var(--body);font-weight:300;overflow-x:hidden;-webkit-tap-highlight-color:transparent;}
+
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.032'/%3E%3C/svg%3E");}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 0%,rgba(192,72,0,.05),transparent 65%);}
+
+/* PIN LOGIN */
+#pin-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(9,7,4,.98);transition:opacity .4s;}
+#pin-screen.gone{opacity:0;pointer-events:none;}
+.pin-box{max-width:420px;width:100%;text-align:center;}
+.pin-brand{font-family:var(--serif);font-weight:700;font-size:clamp(22px,3vw,30px);color:var(--cream);margin-bottom:4px;letter-spacing:.01em;}
+.pin-brand em{font-style:italic;color:var(--flame);font-weight:400;}
+.pin-sub{font-family:var(--cond);font-weight:500;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(196,160,112,.38);margin-bottom:44px;}
+.pin-title{font-family:var(--serif);font-weight:900;font-size:clamp(26px,4vw,40px);letter-spacing:-.02em;color:var(--cream);line-height:1;margin-bottom:14px;}
+.pin-title em{font-style:italic;font-weight:400;color:var(--flame);}
+.pin-instruction{font-family:var(--body);font-weight:300;font-size:14px;color:rgba(196,160,112,.55);margin-bottom:32px;line-height:1.6;}
+.pin-dots{display:flex;justify-content:center;gap:12px;margin-bottom:28px;}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(196,160,112,.3);background:transparent;transition:all .2s;}
+.pin-dot.filled{background:var(--flame);border-color:var(--flame);box-shadow:0 0 12px rgba(240,136,32,.5);}
+.pin-dot.error{background:var(--ember);border-color:var(--ember);animation:shakeDot .4s;}
+@keyframes shakeDot{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+#pin-input{position:absolute;left:-9999px;opacity:0;}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto;}
+.pin-btn{aspect-ratio:1.2;font-family:var(--serif);font-weight:400;font-size:26px;color:var(--cream);background:rgba(22,14,6,.75);border:1px solid rgba(196,160,112,.15);border-radius:8px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.pin-btn:hover,.pin-btn:active{border-color:rgba(240,136,32,.4);background:rgba(192,72,0,.12);color:var(--flame);transform:scale(1.03);}
+.pin-btn.del{font-size:20px;color:rgba(196,160,112,.6);}
+.pin-btn.submit{background:linear-gradient(135deg,var(--ember),var(--fire));border-color:var(--fire);color:#fff;font-family:var(--cond);font-weight:700;font-size:14px;letter-spacing:.15em;}
+.pin-btn.submit:hover{box-shadow:0 4px 20px rgba(192,72,0,.5);}
+.pin-msg{font-family:var(--cond);font-weight:500;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ember);margin-top:18px;height:16px;opacity:0;transition:opacity .25s;}
+.pin-msg.show{opacity:1;}
+
+/* EDITOR */
+#editor{display:none;min-height:100vh;position:relative;z-index:1;}
+#editor.on{display:flex;}
+@media(max-width:860px){#editor.on{flex-direction:column;}}
+
+#sidebar{width:clamp(240px,22vw,320px);flex-shrink:0;background:var(--panel2);border-right:1px solid var(--border);min-height:100vh;display:flex;flex-direction:column;position:sticky;top:0;max-height:100vh;overflow-y:auto;}
+@media(max-width:860px){#sidebar{width:100%;position:relative;border-right:none;border-bottom:1px solid var(--border);max-height:none;}}
+#sidebar::-webkit-scrollbar{width:6px;}
+#sidebar::-webkit-scrollbar-thumb{background:rgba(196,160,112,.15);border-radius:3px;}
+
+.sb-hdr{padding:22px 20px 18px;border-bottom:1px solid var(--border);}
+.sb-brand{font-family:var(--serif);font-weight:700;font-size:17px;color:var(--cream);letter-spacing:.01em;line-height:1.1;}
+.sb-brand em{font-style:italic;color:var(--flame);font-weight:400;}
+.sb-role{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--flame);margin-top:5px;display:flex;align-items:center;gap:8px;}
+.sb-role::before{content:'';width:14px;height:1px;background:currentColor;}
+
+.sb-nav{padding:12px 0;flex:1;}
+.sb-group{padding:4px 0;}
+.sb-group-label{font-family:var(--cond);font-weight:600;font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(196,160,112,.3);padding:16px 20px 8px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:11px 20px;font-family:var(--body);font-weight:400;font-size:14px;color:rgba(196,160,112,.65);cursor:pointer;transition:all .2s;border-left:2px solid transparent;user-select:none;}
+.sb-item:hover{background:rgba(192,72,0,.06);color:var(--cream);}
+.sb-item.active{background:rgba(192,72,0,.12);color:var(--cream);border-left-color:var(--fire);}
+.sb-icon{font-size:16px;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(240,136,32,.25));}
+.sb-arrow{margin-left:auto;font-size:10px;opacity:.4;transition:transform .2s;}
+.sb-item.expanded .sb-arrow{transform:rotate(90deg);}
+
+.sb-children{display:none;background:rgba(9,7,4,.35);}
+.sb-children.show{display:block;}
+.sb-child{display:flex;align-items:center;gap:10px;padding:9px 20px 9px 44px;font-family:var(--body);font-weight:300;font-size:13px;color:rgba(196,160,112,.5);cursor:pointer;transition:all .18s;user-select:none;}
+.sb-child:hover{color:var(--cream);background:rgba(192,72,0,.06);}
+.sb-child.active{color:var(--glow);background:rgba(192,72,0,.15);}
+.sb-child-dot{width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0;}
+.sb-child.active .sb-child-dot{opacity:1;}
+
+.sb-footer{padding:16px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.sb-logout{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.38);background:none;border:1px solid rgba(196,160,112,.15);padding:6px 12px;border-radius:3px;cursor:pointer;transition:all .2s;}
+.sb-logout:hover{border-color:var(--ember);color:var(--ember);}
+
+.conn-pill{display:flex;align-items:center;gap:6px;font-family:var(--cond);font-weight:500;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--lo);}
+.conn-dot{width:5px;height:5px;border-radius:50%;background:var(--lo);}
+.conn-pill.ok .conn-dot{background:#90e060;box-shadow:0 0 6px #90e060;}
+.conn-pill.ok{color:#90e060;}
+.conn-pill.err .conn-dot{background:var(--ember);}
+.conn-pill.err{color:var(--ember);}
+
+#main{flex:1;min-width:0;padding:clamp(24px,4vw,48px) clamp(20px,4vw,44px) 80px;position:relative;}
+
+.breadcrumb{font-family:var(--cond);font-weight:500;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.4);margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.bc-sep{color:rgba(196,160,112,.2);}
+.bc-link{color:rgba(196,160,112,.5);cursor:pointer;transition:color .2s;}
+.bc-link:hover{color:var(--flame);}
+.bc-cur{color:var(--cream);}
+
+.page-title{font-family:var(--serif);font-weight:900;font-size:clamp(28px,4vw,42px);letter-spacing:-.02em;line-height:1;color:var(--cream);margin-bottom:6px;}
+.page-title em{font-style:italic;font-weight:400;color:var(--flame);}
+.page-subtitle{font-family:var(--body);font-weight:300;font-size:14px;color:rgba(196,160,112,.5);line-height:1.65;max-width:700px;margin-bottom:clamp(24px,4vh,36px);}
+
+.page-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:14px;margin-top:8px;}
+.page-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:22px 22px 20px;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;}
+.page-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 100%,rgba(192,72,0,.08),transparent 60%);opacity:0;transition:opacity .35s;pointer-events:none;}
+.page-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 10px 36px rgba(192,72,0,.12);}
+.page-card:hover::before{opacity:1;}
+.pc-icon{font-size:26px;margin-bottom:10px;display:block;filter:drop-shadow(0 0 6px rgba(240,136,32,.25));}
+.pc-title{font-family:var(--serif);font-weight:700;font-size:18px;color:var(--cream);line-height:1.2;margin-bottom:4px;}
+.pc-desc{font-family:var(--body);font-weight:300;font-size:12px;color:rgba(196,160,112,.45);line-height:1.6;}
+.pc-count{font-family:var(--cond);font-weight:600;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--flame);margin-top:8px;opacity:.75;}
+
+.section-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:12px;}
+.section-card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:18px 20px 16px;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:6px;}
+.section-card:hover{border-color:var(--border2);background:rgba(26,15,5,.95);}
+.sc-title{font-family:var(--serif);font-weight:700;font-size:16px;color:var(--cream);display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+.sc-count{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--flame);opacity:.8;white-space:nowrap;}
+.sc-desc{font-family:var(--body);font-weight:300;font-size:12px;color:rgba(196,160,112,.45);line-height:1.55;}
+.sc-arrow{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--flame);margin-top:8px;opacity:.7;transition:letter-spacing .2s,opacity .2s;}
+.section-card:hover .sc-arrow{letter-spacing:.24em;opacity:1;}
+
+.section-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:clamp(20px,3vh,28px);flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.section-title-wrap{flex:1;min-width:0;}
+.section-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+
+.save-btn{font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#fff;background:linear-gradient(90deg,var(--ember),var(--fire));border:none;padding:12px 24px;border-radius:3px;cursor:pointer;box-shadow:0 4px 20px rgba(192,72,0,.35);transition:all .25s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:8px;}
+.save-btn:hover:not(:disabled){transform:scale(1.04);box-shadow:0 8px 30px rgba(192,72,0,.55);letter-spacing:.22em;}
+.save-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+.save-btn.saved{background:#4a7c3a;box-shadow:0 4px 20px rgba(74,124,58,.35);}
+
+.save-indicator{font-family:var(--cond);font-weight:500;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,160,112,.4);display:flex;align-items:center;gap:6px;}
+.save-indicator.saving{color:var(--flame);}
+.save-indicator.saved{color:#90e060;}
+.save-indicator.error{color:var(--ember);}
+.save-indicator .dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.save-indicator.saving .dot{animation:pulse 1s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+.fields{display:flex;flex-direction:column;gap:14px;max-width:820px;}
+.field{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px 18px;transition:border-color .25s;}
+.field:focus-within{border-color:var(--border2);}
+.field.dirty{border-left:3px solid var(--flame);}
+
+.field-label{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:rgba(196,160,112,.5);margin-bottom:8px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+.field-hint{font-family:var(--body);font-weight:300;font-size:11px;color:rgba(196,160,112,.35);font-style:italic;letter-spacing:0;text-transform:none;}
+.field-key{font-family:var(--mono);font-weight:500;font-size:9px;color:rgba(196,160,112,.25);letter-spacing:0;text-transform:none;}
+
+.field input[type="text"],.field input[type="number"],.field input[type="email"],.field input[type="tel"],.field input[type="url"],.field textarea{
+  width:100%;font-family:var(--body);font-weight:400;font-size:14px;color:var(--cream);
+  background:rgba(9,7,4,.7);border:1px solid rgba(196,160,112,.12);border-radius:4px;
+  padding:10px 12px;outline:none;transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;line-height:1.5;
+}
+.field input:focus,.field textarea:focus{border-color:rgba(240,136,32,.5);box-shadow:0 0 0 2px rgba(192,72,0,.12);}
+.field textarea{resize:vertical;min-height:72px;font-family:var(--body);line-height:1.65;}
+.field textarea.long{min-height:120px;}
+.field textarea.html{font-family:var(--mono);font-size:12.5px;line-height:1.55;}
+
+.field-hint-html{font-family:var(--body);font-weight:300;font-size:11px;color:rgba(196,160,112,.35);margin-top:6px;line-height:1.5;}
+.field-hint-html code{font-family:var(--mono);font-size:10.5px;color:var(--flame);background:rgba(192,72,0,.1);padding:1px 5px;border-radius:2px;}
+
+.cbx-wrap{display:flex;align-items:center;gap:10px;padding:6px 0;}
+.cbx{width:18px;height:18px;border-radius:3px;border:1.5px solid rgba(196,160,112,.3);background:rgba(9,7,4,.6);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.cbx.on{background:var(--fire);border-color:var(--fire);}
+.cbx.on::after{content:'✓';color:#fff;font-weight:700;font-size:12px;}
+.cbx-label{font-family:var(--body);font-weight:400;font-size:13px;color:var(--cream);cursor:pointer;}
+
+.items-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.items-count{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,160,112,.5);}
+.add-item-btn{font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--flame);background:rgba(192,72,0,.1);border:1px solid rgba(192,72,0,.3);padding:8px 16px;border-radius:3px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.add-item-btn:hover{background:rgba(192,72,0,.2);border-color:var(--fire);color:#fff;}
+
+.item-card{background:var(--panel);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden;transition:border-color .25s;}
+.item-card.dirty{border-left:3px solid var(--flame);}
+.item-head{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;user-select:none;transition:background .2s;}
+.item-head:hover{background:rgba(192,72,0,.04);}
+.item-handle{font-family:var(--mono);font-weight:500;font-size:11px;color:rgba(196,160,112,.35);width:28px;text-align:right;}
+.item-name{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--cream);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.item-price{font-family:var(--cond);font-weight:700;font-size:14px;color:var(--glow);letter-spacing:.02em;white-space:nowrap;}
+.item-toggle{font-family:var(--cond);font-weight:600;font-size:14px;color:var(--flame);opacity:.6;transition:transform .2s,opacity .2s;}
+.item-head:hover .item-toggle{opacity:1;}
+.item-card.open .item-toggle{transform:rotate(90deg);}
+
+.item-body{display:none;padding:4px 16px 18px;border-top:1px solid var(--border);background:rgba(9,7,4,.25);}
+.item-card.open .item-body{display:block;}
+.item-fields{display:flex;flex-direction:column;gap:10px;padding-top:14px;}
+.item-del{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.4);background:none;border:1px solid rgba(196,160,112,.15);padding:7px 14px;border-radius:3px;cursor:pointer;transition:all .2s;margin-top:6px;align-self:flex-start;}
+.item-del:hover{border-color:var(--ember);color:var(--ember);background:rgba(192,72,0,.08);}
+
+.item-reorder{display:flex;gap:4px;}
+.reorder-btn{width:24px;height:24px;background:rgba(9,7,4,.5);border:1px solid rgba(196,160,112,.15);border-radius:3px;color:rgba(196,160,112,.5);font-size:11px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.reorder-btn:hover{border-color:var(--flame);color:var(--flame);}
+.reorder-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+.empty-state{text-align:center;padding:60px 20px;color:rgba(196,160,112,.35);font-family:var(--body);font-weight:300;font-size:14px;}
+.empty-state .icon{font-size:42px;margin-bottom:14px;opacity:.5;}
+
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:200;background:var(--panel);border:1px solid var(--border2);border-radius:6px;padding:12px 22px;font-family:var(--cond);font-weight:600;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;gap:10px;box-shadow:0 8px 40px rgba(0,0,0,.6);}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#toast.ok{border-color:rgba(144,224,96,.4);color:#90e060;}
+#toast.err{border-color:rgba(192,72,0,.6);color:var(--ember);}
+
+.spin{width:14px;height:14px;border:2px solid transparent;border-top-color:currentColor;border-right-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+#menu-toggle{display:none;position:fixed;top:12px;right:12px;z-index:90;width:42px;height:42px;background:var(--panel);border:1px solid var(--border);border-radius:6px;color:var(--cream);font-size:18px;cursor:pointer;}
+@media(max-width:860px){
+  #menu-toggle{display:flex;align-items:center;justify-content:center;}
+  #sidebar{display:none;}
+  #sidebar.mob-open{display:flex;position:fixed;inset:0;z-index:80;max-height:100vh;}
+}
+</style>
+</head>
+<body>
+
+<div id="pin-screen">
+  <div class="pin-box">
+    <div class="pin-brand">The Francis <em>Smokehouse</em></div>
+    <div class="pin-sub">Site Editor · Admin Access</div>
+    <h1 class="pin-title">Enter <em>PIN</em></h1>
+    <p class="pin-instruction">Type your 6-digit editor PIN to make changes.</p>
+    <input id="pin-input" type="password" inputmode="numeric" maxlength="6" autocomplete="off">
+    <div class="pin-dots" id="pin-dots">
+      <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+      <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+    </div>
+    <div class="pin-pad" id="pin-pad"></div>
+    <div class="pin-msg" id="pin-msg">Wrong PIN. Try again.</div>
+  </div>
+</div>
+
+<button id="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+<div id="editor">
+  <aside id="sidebar">
+    <div class="sb-hdr">
+      <div class="sb-brand">The Francis <em>Smokehouse</em></div>
+      <div class="sb-role">Site Editor</div>
+    </div>
+    <nav class="sb-nav" id="sb-nav"></nav>
+    <div class="sb-footer">
+      <div class="conn-pill" id="conn-pill"><span class="conn-dot"></span><span id="conn-text">Connecting</span></div>
+      <button class="sb-logout" onclick="logout()">Lock</button>
+    </div>
+  </aside>
+  <main id="main">
+    <div id="main-inner"></div>
+  </main>
+</div>
+
+<div id="toast"><span id="toast-txt"></span></div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   CONFIG — Supabase (replace these after creating the project)
+══════════════════════════════════════════════════════════════════ */
+const SB_URL = 'https://YOUR-FRANCIS-PROJECT.supabase.co';
+const SB_KEY = 'YOUR-ANON-KEY-HERE';
+
+/* SUPABASE REST HELPERS */
+const sbHeaders = {
+  'apikey': SB_KEY,
+  'Authorization': 'Bearer ' + SB_KEY,
+  'Content-Type': 'application/json',
+  'Prefer': 'return=representation'
+};
+async function sbSelectAll(table) {
+  const r = await fetch(SB_URL + '/rest/v1/' + table + '?select=*', { headers: sbHeaders });
+  if (!r.ok) throw new Error(table + ' select failed: ' + r.status);
+  return r.json();
+}
+async function sbUpsert(table, rows) {
+  const body = Array.isArray(rows) ? rows : [rows];
+  const r = await fetch(SB_URL + '/rest/v1/' + table, {
+    method: 'POST',
+    headers: { ...sbHeaders, 'Prefer': 'return=representation,resolution=merge-duplicates' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(table + ' upsert failed: ' + r.status + ' — ' + await r.text());
+  return r.json();
+}
+
+/* STATE */
+let STATE = {
+  authed: false,
+  content: {},
+  pin: '',
+  currentPage: null,
+  currentSection: null,
+  dirty: new Set(),
+  pendingSaves: {},
+  autoSaveTimer: null,
+};
+
+/* UTILITIES */
+function escapeHtml(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escapeAttr(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   PAGES DEFINITIONS
+══════════════════════════════════════════════════════════════════ */
+const PAGES = {
+  site: {
+    label: 'Site-Wide',
+    desc: 'Shared info that shows on every page (name, phone, hours, special).',
+    icon: '🏠',
+    sections: {
+      info: { label: 'Restaurant Info', desc: 'Name, address, phone, email, facebook.', type: 'fields', fields: [
+        {key:'site.info.name', label:'Business Name'},
+        {key:'site.info.tagline', label:'Tagline', hint:'Shown after the name everywhere'},
+        {key:'site.info.address', label:'Street Address'},
+        {key:'site.info.city', label:'City'},
+        {key:'site.info.state', label:'State'},
+        {key:'site.info.zip', label:'Zip'},
+        {key:'site.info.phone', label:'Phone', input:'tel'},
+        {key:'site.info.email', label:'Email', input:'email'},
+        {key:'site.info.facebook', label:'Facebook URL', input:'url'},
+        {key:'site.info.tripadvisor', label:'TripAdvisor URL', input:'url'},
+        {key:'site.info.cash_note', label:'Cash Discount Note'},
+      ]},
+      ratings: { label: 'Ratings', desc: 'Star ratings shown on menu sidebar & cards.', type: 'fields', fields: [
+        {key:'site.ratings.google_stars', label:'Google Stars'},
+        {key:'site.ratings.google_count', label:'Google Review Count'},
+        {key:'site.ratings.google_label', label:'Google Label'},
+        {key:'site.ratings.tripadvisor_stars', label:'TripAdvisor Stars'},
+        {key:'site.ratings.tripadvisor_label', label:'TripAdvisor Label'},
+      ]},
+      hours: { label: 'Hours', desc: 'Mon–Sat & Sunday open/close times.', type: 'fields', fields: [
+        {key:'site.hours.weekday_open', label:'Weekday Open Hour', input:'number', hint:'24hr format (10 = 10am)'},
+        {key:'site.hours.weekday_close', label:'Weekday Close Hour', input:'number', hint:'24hr format (18 = 6pm)'},
+        {key:'site.hours.weekday_label', label:'Weekday Display Label'},
+        {key:'site.hours.sunday_open', label:'Sunday Open Hour', input:'number'},
+        {key:'site.hours.sunday_close', label:'Sunday Close Hour', input:'number'},
+        {key:'site.hours.sunday_label', label:'Sunday Display Label'},
+      ]},
+      ticker: { label: 'Scarcity Ticker', desc: 'Top-of-menu ticker. Update daily. Leave blank to hide.', type: 'fields', fields: [
+        {key:'site.ticker.sold_out', label:'Sold Out Today', hint:'Comma-separated: "Beef Rib, Smoked Turkey"'},
+        {key:'site.ticker.selling_fast', label:'Selling Fast', hint:'Comma-separated: "Brisket, Cracklins"'},
+      ]},
+      special: { label: "Today's Special", desc: 'The daily rotating feature (menu page).', type: 'fields', fields: [
+        {key:'site.special.name', label:'Special Name'},
+        {key:'site.special.price', label:'Price', input:'number', hint:'Numeric — e.g. 15.02'},
+        {key:'site.special.desc', label:'Description', textarea:true},
+        {key:'site.special.type', label:'Type', hint:'E.g. "Lunch Special"'},
+        {key:'site.special.sides', label:'Served With Sides (optional)'},
+        {key:'site.special.note', label:'Note (optional)'},
+        {key:'site.special.image', label:'Image URL', input:'url'},
+        {key:'site.special.date', label:'Show On Date (optional)', hint:'YYYY-MM-DD or blank for every day'},
+        {key:'site.special.hidden', label:'Hide Today', checkbox:true},
+      ]},
+    }
+  },
+  menu: {
+    label: 'Menu',
+    desc: 'The full menu — BBQ plates, sandwiches, chicken, salads, sides, combos, and desserts.',
+    icon: '🔥',
+    sections: {
+      bbq_plates:         { label:'BBQ Plates',           type:'itemList', keyBase:'menu.bbq_plates',         itemFields:['name','price','img','desc','pairs','badge','badgeStyle'] },
+      burgers_sandwiches: { label:'Burgers & Sandwiches', type:'itemList', keyBase:'menu.burgers_sandwiches', itemFields:['name','price','img','desc','pairs','note','badge','badgeStyle'] },
+      fried_chicken:      { label:'Fried Chicken',        type:'itemList', keyBase:'menu.fried_chicken',      itemFields:['name','price','img','desc'] },
+      salads:             { label:'Salads',               type:'itemList', keyBase:'menu.salads',             itemFields:['name','price','img','desc'] },
+      sides:              { label:'Sides & Extras',       type:'itemList', keyBase:'menu.sides',              itemFields:['name','price','priceLg','img','desc','badge','badgeStyle'] },
+      combos:             { label:'Combos',               type:'itemList', keyBase:'menu.combos',             itemFields:['name','price','img','desc','pairs'] },
+      by_the_pound:       { label:'By the Pound',         type:'itemList', keyBase:'menu.by_the_pound',       itemFields:['name','price','img','desc'] },
+      desserts:           { label:'The Scoop (Desserts)', type:'itemList', keyBase:'menu.desserts',           itemFields:['name','price','img','desc'] },
+      page_text: { label:'Menu Page Text', desc:'Sidebar quotes, CTA, and misc text on menu.html.', type:'fields', fields: [
+        {key:'menu.page.sidebar_pit_title', label:'Pit Card Title', html:true},
+        {key:'menu.page.sidebar_pit_body', label:'Pit Card Body', html:true, textarea:true, long:true},
+        {key:'menu.page.sidebar_quote_1', label:'Sidebar Quote 1'},
+        {key:'menu.page.sidebar_quote_2', label:'Sidebar Quote 2'},
+        {key:'menu.page.cta_title', label:'CTA Card Title'},
+        {key:'menu.page.cta_sub', label:'CTA Card Subtitle', textarea:true},
+      ]},
+    }
+  },
+  market: {
+    label: 'Market',
+    desc: 'Smokehouse Market — boudin, sausage, smoked meats, specialty, sides to go.',
+    icon: '🛒',
+    sections: {
+      boudin:       { label:'Boudin',          type:'itemList', keyBase:'market.boudin',       itemFields:['name','price','priceUnit','img','desc','note','badge','badgeStyle','soldOut'] },
+      sausage:      { label:'Sausage',         type:'itemList', keyBase:'market.sausage',      itemFields:['name','price','priceUnit','img','desc','note','badge','badgeStyle','soldOut'] },
+      smoked_meats: { label:'Smoked Meats',    type:'itemList', keyBase:'market.smoked_meats', itemFields:['name','price','priceUnit','img','desc','note','badge','badgeStyle','soldOut'] },
+      specialty:    { label:'Specialty Items', type:'itemList', keyBase:'market.specialty',    itemFields:['name','price','priceUnit','img','desc','note','badge','badgeStyle','soldOut'] },
+      sides_to_go:  { label:'Sides To Go',     type:'itemList', keyBase:'market.sides_to_go',  itemFields:['name','price','priceUnit','img','desc','note','badge','badgeStyle','soldOut'] },
+      page_text: { label:'Market Page Text', type:'fields', fields: [
+        {key:'market.page.hero_eyebrow', label:'Hero Eyebrow'},
+        {key:'market.page.hero_title', label:'Hero Title', html:true, hint:'<em>...</em> = italic flame. Use &lt;br&gt; for new line.'},
+        {key:'market.page.hero_lead', label:'Hero Lead', textarea:true, long:true},
+        {key:'market.page.cta_title', label:'CTA Title', html:true},
+        {key:'market.page.cta_sub', label:'CTA Subtitle', textarea:true},
+      ]},
+    }
+  },
+  gift: {
+    label: 'Gift Cards',
+    desc: 'Gift cards page — hero, card info, how it works, occasions, CTA.',
+    icon: '🎁',
+    sections: {
+      hero: { label:'Hero', type:'fields', fields: [
+        {key:'gift.hero.eyebrow', label:'Eyebrow'},
+        {key:'gift.hero.title', label:'Title', html:true},
+        {key:'gift.hero.lead', label:'Lead paragraph', textarea:true, long:true},
+      ]},
+      card: { label:'Card Info Block', type:'fields', fields: [
+        {key:'gift.card.eyebrow', label:'Eyebrow'},
+        {key:'gift.card.title', label:'Title', html:true},
+        {key:'gift.card.body_1', label:'Paragraph 1', html:true, textarea:true, long:true},
+        {key:'gift.card.body_2', label:'Paragraph 2', html:true, textarea:true, long:true},
+      ]},
+      how: { label:'How It Works', type:'fields', fields: [
+        {key:'gift.how.eyebrow', label:'Eyebrow'},
+        {key:'gift.how.title', label:'Title', html:true},
+        {key:'gift.how.step1_title', label:'Step 1 Title'},
+        {key:'gift.how.step1_desc', label:'Step 1 Description', textarea:true},
+        {key:'gift.how.step2_title', label:'Step 2 Title'},
+        {key:'gift.how.step2_desc', label:'Step 2 Description', textarea:true},
+        {key:'gift.how.step3_title', label:'Step 3 Title'},
+        {key:'gift.how.step3_desc', label:'Step 3 Description', textarea:true},
+        {key:'gift.how.step4_title', label:'Step 4 Title'},
+        {key:'gift.how.step4_desc', label:'Step 4 Description', textarea:true},
+      ]},
+      for: { label:'Perfect For (Occasions)', type:'fields', fields: [
+        {key:'gift.for.eyebrow', label:'Eyebrow'},
+        {key:'gift.for.title', label:'Title', html:true},
+        {key:'gift.for.occasions', label:'Occasions JSON', textarea:true, long:true, html:true, hint:'Array of {icon, text}. Example: [{"icon":"🎂","text":"Birthdays"}, ...]'},
+      ]},
+      cta: { label:'CTA Section', type:'fields', fields: [
+        {key:'gift.cta.title', label:'Title', html:true},
+        {key:'gift.cta.sub', label:'Subtitle'},
+      ]},
+    }
+  },
+  find: {
+    label: 'Find Us',
+    desc: 'Find Us page — hero, info cards, directions from cities, when you arrive.',
+    icon: '📍',
+    sections: {
+      hero: { label:'Hero', type:'fields', fields: [
+        {key:'find.hero.eyebrow', label:'Eyebrow'},
+        {key:'find.hero.title', label:'Title', html:true},
+        {key:'find.hero.address', label:'Address Line'},
+      ]},
+      cards: { label:'Info Cards (Address/Phone/Parking/Facebook)', type:'fields', fields: [
+        {key:'find.address.title', label:'Address Card Title'},
+        {key:'find.address.body', label:'Address Card Body', html:true, textarea:true, long:true},
+        {key:'find.phone.body', label:'Phone Card Body', html:true, textarea:true, long:true},
+        {key:'find.parking.body', label:'Parking Card Body', html:true, textarea:true, long:true},
+        {key:'find.facebook.body', label:'Facebook Card Body', html:true, textarea:true, long:true},
+      ]},
+      dir: { label:'Directions From Cities', type:'fields', fields: [
+        {key:'find.dir.title', label:'Section Title', html:true},
+        {key:'find.dir.br_name', label:'Baton Rouge — Name'},
+        {key:'find.dir.br_text', label:'Baton Rouge — Directions', textarea:true, long:true},
+        {key:'find.dir.br_dist', label:'Baton Rouge — Distance'},
+        {key:'find.dir.nat_name', label:'Natchez — Name'},
+        {key:'find.dir.nat_text', label:'Natchez — Directions', textarea:true, long:true},
+        {key:'find.dir.nat_dist', label:'Natchez — Distance'},
+        {key:'find.dir.nola_name', label:'New Orleans — Name'},
+        {key:'find.dir.nola_text', label:'New Orleans — Directions', textarea:true, long:true},
+        {key:'find.dir.nola_dist', label:'New Orleans — Distance'},
+        {key:'find.dir.jx_name', label:'Jackson MS — Name'},
+        {key:'find.dir.jx_text', label:'Jackson MS — Directions', textarea:true, long:true},
+        {key:'find.dir.jx_dist', label:'Jackson MS — Distance'},
+      ]},
+      arrive: { label:'When You Arrive', type:'fields', fields: [
+        {key:'find.arrive.title', label:'Title', html:true},
+        {key:'find.arrive.intro', label:'Intro Paragraph', textarea:true, long:true},
+      ]},
+      cta: { label:'CTA Section', type:'fields', fields: [
+        {key:'find.cta.title', label:'Title', html:true},
+        {key:'find.cta.sub', label:'Subtitle'},
+      ]},
+    }
+  },
+  cater: {
+    label: 'Catering',
+    desc: 'Catering page — hero, offer cards, steps, form, testimonials.',
+    icon: '🍽️',
+    sections: {
+      hero: { label:'Hero', type:'fields', fields: [
+        {key:'cater.hero.eyebrow', label:'Eyebrow'},
+        {key:'cater.hero.title', label:'Title', html:true},
+        {key:'cater.hero.lead', label:'Lead', textarea:true, long:true},
+      ]},
+      contact: { label:'Contact Card (Hero Right)', type:'fields', fields: [
+        {key:'cater.contact.title', label:'Contact Card Title'},
+        {key:'cater.contact.sub', label:'Contact Card Subtitle', textarea:true, long:true},
+      ]},
+      offers: { label:'What We Offer (Section Headers)', type:'fields', fields: [
+        {key:'cater.offer.title', label:'Section Title', html:true},
+        {key:'cater.offer.sub', label:'Section Subtitle', html:true, textarea:true, long:true},
+        {key:'cater.events.title', label:'"Events We Cater" Title', html:true},
+        {key:'cater.events.sub', label:'"Events We Cater" Subtitle', textarea:true, long:true},
+      ]},
+      steps: { label:'How It Works Steps', type:'fields', fields: [
+        {key:'cater.how.title', label:'Section Title', html:true},
+        {key:'cater.how.sub', label:'Section Subtitle', textarea:true, long:true},
+        {key:'cater.how.step1_title', label:'Step 1 Title'},
+        {key:'cater.how.step1_desc', label:'Step 1 Description', textarea:true, long:true},
+        {key:'cater.how.step2_title', label:'Step 2 Title'},
+        {key:'cater.how.step2_desc', label:'Step 2 Description', textarea:true, long:true},
+        {key:'cater.how.step3_title', label:'Step 3 Title'},
+        {key:'cater.how.step3_desc', label:'Step 3 Description', textarea:true, long:true},
+        {key:'cater.how.step4_title', label:'Step 4 Title'},
+        {key:'cater.how.step4_desc', label:'Step 4 Description', textarea:true, long:true},
+      ]},
+      form: { label:'Quote Form', type:'fields', fields: [
+        {key:'cater.form.title', label:'Form Title', html:true},
+        {key:'cater.form.sub', label:'Form Subtitle', textarea:true, long:true},
+        {key:'cater.form.success_title', label:'Success Message Title', html:true},
+        {key:'cater.form.success_sub', label:'Success Message Subtitle', html:true, textarea:true, long:true},
+      ]},
+    }
+  },
+  about: {
+    label: 'About',
+    desc: 'About Us page — 6 story chapters, reviews, stats, values.',
+    icon: '📖',
+    sections: {
+      hero: { label:'Hero', type:'fields', fields: [
+        {key:'about.hero.eyebrow', label:'Eyebrow'},
+        {key:'about.hero.title', label:'Title', html:true},
+        {key:'about.hero.lead', label:'Lead Paragraph', textarea:true, long:true},
+      ]},
+      ch1: { label:'Chapter 01 · How It Started', type:'fields', fields: [
+        {key:'about.ch1.eyebrow', label:'Chapter Eyebrow'},
+        {key:'about.ch1.title', label:'Chapter Title', html:true},
+        {key:'about.ch1.para1', label:'Paragraph 1', html:true, textarea:true, long:true},
+        {key:'about.ch1.para2', label:'Paragraph 2', html:true, textarea:true, long:true},
+        {key:'about.ch1.quote', label:'Pull Quote', textarea:true},
+        {key:'about.ch1.quote_src', label:'Pull Quote Source'},
+      ]},
+      ch2: { label:'Chapter 02 · The Craft (Values)', type:'fields', fields: [
+        {key:'about.ch2.eyebrow', label:'Chapter Eyebrow'},
+        {key:'about.ch2.title', label:'Chapter Title', html:true},
+        {key:'about.ch2.para1', label:'Paragraph', html:true, textarea:true, long:true},
+        {key:'about.ch2.values', label:'Values JSON', textarea:true, long:true, html:true, hint:'Array of {icon, title, desc}.'},
+      ]},
+      ch3: { label:'Chapter 03 · Louisiana Roots', type:'fields', fields: [
+        {key:'about.ch3.eyebrow', label:'Chapter Eyebrow'},
+        {key:'about.ch3.title', label:'Chapter Title', html:true},
+        {key:'about.ch3.para1', label:'Paragraph 1', html:true, textarea:true, long:true},
+        {key:'about.ch3.para2', label:'Paragraph 2', html:true, textarea:true, long:true},
+        {key:'about.ch3.quote', label:'Pull Quote', textarea:true},
+        {key:'about.ch3.quote_src', label:'Pull Quote Source'},
+      ]},
+      ch4: { label:'Chapter 04 · The Numbers (Stats)', type:'fields', fields: [
+        {key:'about.ch4.eyebrow', label:'Chapter Eyebrow'},
+        {key:'about.ch4.title', label:'Chapter Title', html:true},
+        {key:'about.ch4.intro', label:'Intro Paragraph', textarea:true, long:true},
+        {key:'about.ch4.stats', label:'Stats JSON', textarea:true, long:true, html:true, hint:'Array of {num, label}.'},
+      ]},
+      ch5: { label:'Chapter 05 · Reviews', type:'fields', fields: [
+        {key:'about.ch5.eyebrow', label:'Chapter Eyebrow'},
+        {key:'about.ch5.title', label:'Chapter Title', html:true},
+        {key:'about.ch5.reviews', label:'Reviews JSON', textarea:true, long:true, html:true, hint:'Array of {stars, text, source}.'},
+      ]},
+      ch6: { label:'Chapter 06 · Where We Are', type:'fields', fields: [
+        {key:'about.ch6.eyebrow', label:'Chapter Eyebrow'},
+        {key:'about.ch6.title', label:'Chapter Title', html:true},
+        {key:'about.ch6.para1', label:'Paragraph', html:true, textarea:true, long:true},
+      ]},
+      cta: { label:'CTA Section', type:'fields', fields: [
+        {key:'about.cta.title', label:'Title', html:true},
+        {key:'about.cta.sub', label:'Subtitle'},
+      ]},
+    }
+  },
+};
+
+
+/* ══════════════════════════════════════════════════════════════════
+   PIN FLOW
+══════════════════════════════════════════════════════════════════ */
+function buildPinPad() {
+  const pad = document.getElementById('pin-pad');
+  const btns = ['1','2','3','4','5','6','7','8','9','del','0','submit'];
+  pad.innerHTML = btns.map(b => {
+    if (b === 'del') return '<button class="pin-btn del" data-v="del">⌫</button>';
+    if (b === 'submit') return '<button class="pin-btn submit" data-v="submit">Enter</button>';
+    return '<button class="pin-btn" data-v="' + b + '">' + b + '</button>';
+  }).join('');
+  pad.querySelectorAll('.pin-btn').forEach(b => {
+    b.onclick = () => onPinKey(b.dataset.v);
+  });
+  document.addEventListener('keydown', e => {
+    if (STATE.authed) return;
+    if (/^[0-9]$/.test(e.key)) onPinKey(e.key);
+    else if (e.key === 'Backspace') onPinKey('del');
+    else if (e.key === 'Enter') onPinKey('submit');
+  });
+}
+function onPinKey(k) {
+  const dots = document.querySelectorAll('.pin-dot');
+  if (k === 'del') {
+    STATE.pin = STATE.pin.slice(0, -1);
+  } else if (k === 'submit') {
+    if (STATE.pin.length < 4) return flashPinError();
+    return tryLogin();
+  } else if (STATE.pin.length < 6) {
+    STATE.pin += k;
+  }
+  dots.forEach((d, i) => d.classList.toggle('filled', i < STATE.pin.length));
+  if (STATE.pin.length === 6) setTimeout(tryLogin, 120);
+}
+function flashPinError(msg) {
+  const dots = document.querySelectorAll('.pin-dot');
+  dots.forEach(d => d.classList.add('error'));
+  const m = document.getElementById('pin-msg');
+  if (msg) m.textContent = msg;
+  m.classList.add('show');
+  setTimeout(() => {
+    dots.forEach(d => d.classList.remove('error','filled'));
+    m.classList.remove('show');
+    STATE.pin = '';
+  }, 900);
+}
+async function tryLogin() {
+  try {
+    const settings = await sbSelectAll('editor_settings');
+    const pinRow = settings.find(r => r.key === 'editor_pin');
+    if (!pinRow) return flashPinError('No PIN set in DB.');
+    if (STATE.pin !== pinRow.value) return flashPinError();
+    STATE.authed = true;
+    sessionStorage.setItem('fs_editor_auth', '1');
+    await bootEditor();
+  } catch (err) {
+    console.error(err);
+    flashPinError('Connection error.');
+  }
+}
+function logout() {
+  sessionStorage.removeItem('fs_editor_auth');
+  location.reload();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   BOOT
+══════════════════════════════════════════════════════════════════ */
+async function bootEditor() {
+  try {
+    setConn('ok', 'Loading...');
+    const rows = await sbSelectAll('site_content');
+    STATE.content = {};
+    rows.forEach(r => STATE.content[r.key] = r.value);
+    document.getElementById('pin-screen').classList.add('gone');
+    setTimeout(() => {
+      document.getElementById('pin-screen').style.display = 'none';
+      document.getElementById('editor').classList.add('on');
+    }, 400);
+    buildSidebar();
+    showPageList();
+    setConn('ok', 'Connected');
+  } catch (err) {
+    console.error(err);
+    setConn('err', 'Error');
+    toast('Failed to load content', 'err');
+  }
+}
+function setConn(state, txt) {
+  const p = document.getElementById('conn-pill');
+  p.className = 'conn-pill ' + state;
+  document.getElementById('conn-text').textContent = txt;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SIDEBAR NAV
+══════════════════════════════════════════════════════════════════ */
+function buildSidebar() {
+  const nav = document.getElementById('sb-nav');
+  let html = '<div class="sb-group"><div class="sb-group-label">Navigation</div>';
+  html += '<div class="sb-item" data-nav="home"><span class="sb-icon">🏡</span><span>All Pages</span></div>';
+  html += '</div><div class="sb-group"><div class="sb-group-label">Pages</div>';
+  Object.entries(PAGES).forEach(([pKey, p]) => {
+    html += '<div class="sb-item" data-page="' + pKey + '">';
+    html += '<span class="sb-icon">' + p.icon + '</span><span>' + p.label + '</span>';
+    html += '<span class="sb-arrow">▸</span></div>';
+    html += '<div class="sb-children" id="children-' + pKey + '">';
+    Object.entries(p.sections).forEach(([sKey, s]) => {
+      html += '<div class="sb-child" data-page="' + pKey + '" data-section="' + sKey + '">';
+      html += '<span class="sb-child-dot"></span><span>' + s.label + '</span></div>';
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+  nav.innerHTML = html;
+  nav.querySelectorAll('.sb-item').forEach(el => {
+    el.onclick = () => {
+      if (el.dataset.nav === 'home') showPageList();
+      else { togglePageExpand(el.dataset.page); showSectionList(el.dataset.page); }
+      closeMobSidebar();
+    };
+  });
+  nav.querySelectorAll('.sb-child').forEach(el => {
+    el.onclick = e => {
+      e.stopPropagation();
+      showSection(el.dataset.page, el.dataset.section);
+      closeMobSidebar();
+    };
+  });
+}
+function togglePageExpand(pKey) {
+  document.querySelectorAll('.sb-item[data-page]').forEach(el => {
+    el.classList.toggle('expanded', el.dataset.page === pKey);
+  });
+  document.querySelectorAll('.sb-children').forEach(el => el.classList.remove('show'));
+  const c = document.getElementById('children-' + pKey);
+  if (c) c.classList.add('show');
+}
+function updateSidebarActive() {
+  document.querySelectorAll('.sb-item,.sb-child').forEach(el => el.classList.remove('active'));
+  if (STATE.currentPage) {
+    const pItem = document.querySelector('.sb-item[data-page="' + STATE.currentPage + '"]');
+    if (pItem) pItem.classList.add('active');
+    if (STATE.currentSection) {
+      const c = document.querySelector('.sb-child[data-page="' + STATE.currentPage + '"][data-section="' + STATE.currentSection + '"]');
+      if (c) c.classList.add('active');
+    }
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   VIEWS — page list, section list, section editor
+══════════════════════════════════════════════════════════════════ */
+function showPageList() {
+  STATE.currentPage = null;
+  STATE.currentSection = null;
+  updateSidebarActive();
+  const main = document.getElementById('main-inner');
+  main.innerHTML =
+    '<div class="breadcrumb"><span class="bc-cur">All Pages</span></div>' +
+    '<h1 class="page-title">Francis <em>Content Editor</em></h1>' +
+    '<p class="page-subtitle">Pick a page to edit. Every word, price, and photo across the site is editable here. Changes save to the live site right away.</p>' +
+    '<div class="page-list">' +
+    Object.entries(PAGES).map(([k,p]) =>
+      '<div class="page-card" data-page="' + k + '">' +
+        '<span class="pc-icon">' + p.icon + '</span>' +
+        '<div class="pc-title">' + p.label + '</div>' +
+        '<div class="pc-desc">' + p.desc + '</div>' +
+        '<div class="pc-count">' + Object.keys(p.sections).length + ' sections</div>' +
+      '</div>'
+    ).join('') +
+    '</div>';
+  main.querySelectorAll('.page-card').forEach(c => {
+    c.onclick = () => { togglePageExpand(c.dataset.page); showSectionList(c.dataset.page); };
+  });
+}
+function showSectionList(pKey) {
+  STATE.currentPage = pKey;
+  STATE.currentSection = null;
+  updateSidebarActive();
+  const p = PAGES[pKey];
+  const main = document.getElementById('main-inner');
+  main.innerHTML =
+    '<div class="breadcrumb">' +
+      '<span class="bc-link" onclick="showPageList()">All Pages</span>' +
+      '<span class="bc-sep">›</span><span class="bc-cur">' + p.label + '</span>' +
+    '</div>' +
+    '<h1 class="page-title">' + p.icon + ' ' + p.label + '</h1>' +
+    '<p class="page-subtitle">' + p.desc + '</p>' +
+    '<div class="section-list">' +
+    Object.entries(p.sections).map(([sKey,s]) => {
+      const count = sectionFieldCount(s);
+      const desc = s.desc || (s.type === 'itemList' ? 'Edit the individual items in this category.' : 'Edit this section.');
+      return '<div class="section-card" data-section="' + sKey + '">' +
+        '<div class="sc-title"><span>' + s.label + '</span><span class="sc-count">' + count + '</span></div>' +
+        '<div class="sc-desc">' + desc + '</div>' +
+        '<div class="sc-arrow">Open →</div></div>';
+    }).join('') +
+    '</div>';
+  main.querySelectorAll('.section-card').forEach(c => {
+    c.onclick = () => showSection(pKey, c.dataset.section);
+  });
+}
+function sectionFieldCount(s) {
+  if (s.type === 'itemList') {
+    const items = getItems(s.keyBase);
+    return items.length + ' item' + (items.length === 1 ? '' : 's');
+  }
+  return (s.fields || []).length + ' field' + ((s.fields || []).length === 1 ? '' : 's');
+}
+
+function showSection(pKey, sKey) {
+  STATE.currentPage = pKey;
+  STATE.currentSection = sKey;
+  STATE.dirty = new Set();
+  STATE.pendingSaves = {};
+  updateSidebarActive();
+  const p = PAGES[pKey];
+  const s = p.sections[sKey];
+  const main = document.getElementById('main-inner');
+  const header =
+    '<div class="breadcrumb">' +
+      '<span class="bc-link" onclick="showPageList()">All Pages</span>' +
+      '<span class="bc-sep">›</span>' +
+      '<span class="bc-link" onclick="showSectionList(\'' + pKey + '\')">' + p.label + '</span>' +
+      '<span class="bc-sep">›</span><span class="bc-cur">' + s.label + '</span>' +
+    '</div>' +
+    '<div class="section-header">' +
+      '<div class="section-title-wrap">' +
+        '<h1 class="page-title">' + s.label + '</h1>' +
+        (s.desc ? '<p class="page-subtitle" style="margin-bottom:0">' + s.desc + '</p>' : '') +
+      '</div>' +
+      '<div class="section-actions">' +
+        '<div class="save-indicator" id="save-indicator"><span class="dot"></span><span id="save-ind-text">All saved</span></div>' +
+        '<button class="save-btn" id="save-btn" disabled onclick="saveSection()"><span>💾</span> Save Changes</button>' +
+      '</div>' +
+    '</div>';
+  if (s.type === 'itemList') {
+    main.innerHTML = header + renderItemList(s);
+    bindItemListEvents(s);
+  } else {
+    main.innerHTML = header + renderFields(s.fields);
+    bindFieldEvents(s.fields);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   FIELDS RENDERING
+══════════════════════════════════════════════════════════════════ */
+function renderFields(fields) {
+  return '<div class="fields">' + fields.map(renderField).join('') + '</div>';
+}
+function renderField(f) {
+  const v = STATE.content[f.key] == null ? '' : STATE.content[f.key];
+  let inputHtml = '';
+  if (f.checkbox) {
+    const on = v === 'true';
+    inputHtml = '<div class="cbx-wrap">' +
+      '<div class="cbx ' + (on?'on':'') + '" data-key="' + f.key + '" data-cbx="1"></div>' +
+      '<span class="cbx-label">' + (on ? 'On' : 'Off') + '</span></div>';
+  } else if (f.textarea) {
+    inputHtml = '<textarea class="' + (f.long?'long':'') + ' ' + (f.html?'html':'') + '" data-key="' + f.key + '">' + escapeHtml(v) + '</textarea>';
+  } else {
+    inputHtml = '<input type="' + (f.input||'text') + '" data-key="' + f.key + '" value="' + escapeAttr(v) + '">';
+  }
+  const hint = f.hint ? '<div class="field-hint-html">' + f.hint + '</div>' : '';
+  const htmlHint = (f.html && !f.hint) ? '<div class="field-hint-html">HTML allowed — <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;br&gt;</code>.</div>' : '';
+  return '<div class="field" data-field="' + f.key + '">' +
+    '<div class="field-label"><span>' + f.label + '</span><span class="field-key">' + f.key + '</span></div>' +
+    inputHtml + hint + htmlHint + '</div>';
+}
+function bindFieldEvents(fields) {
+  const main = document.getElementById('main-inner');
+  main.querySelectorAll('input,textarea').forEach(el => {
+    if (!el.dataset.key) return;
+    el.addEventListener('input', () => markDirty(el.dataset.key, el.value));
+  });
+  main.querySelectorAll('.cbx[data-cbx]').forEach(cb => {
+    cb.onclick = () => {
+      const cur = cb.classList.contains('on');
+      cb.classList.toggle('on', !cur);
+      cb.nextElementSibling.textContent = !cur ? 'On' : 'Off';
+      markDirty(cb.dataset.key, (!cur).toString());
+    };
+  });
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   ITEM LIST (menu/market)
+══════════════════════════════════════════════════════════════════ */
+function getItems(keyBase) {
+  const raw = STATE.content[keyBase + '.items'];
+  if (!raw) return [];
+  try { return JSON.parse(raw); } catch(e) { console.warn('Bad JSON for', keyBase, e); return []; }
+}
+function renderItemList(s) {
+  const items = getItems(s.keyBase);
+  const titleKey = s.keyBase + '.title';
+  const subKey = s.keyBase + '.subtitle';
+  const iconKey = s.keyBase + '.icon';
+  const descKey = s.keyBase + '.desc';
+  const catFields = [
+    {key:titleKey, label:'Category Title'},
+    {key:subKey, label:'Category Subtitle'},
+    {key:iconKey, label:'Category Icon (emoji)'},
+  ];
+  if (STATE.content[descKey] !== undefined) {
+    catFields.push({key:descKey, label:'Category Description', textarea:true, long:true});
+  }
+  return '<div style="margin-bottom:28px">' +
+    '<div class="field-label" style="margin-bottom:10px;padding:0"><span>Category Header</span></div>' +
+    renderFields(catFields).replace('<div class="fields">', '<div class="fields" id="cat-fields">') +
+    '</div>' +
+    '<div class="items-header">' +
+      '<div class="items-count">' + items.length + ' item' + (items.length===1?'':'s') + ' in this category</div>' +
+      '<button class="add-item-btn" id="add-item-btn"><span>＋</span> Add Item</button>' +
+    '</div>' +
+    '<div id="items-container">' +
+    (items.length === 0
+      ? '<div class="empty-state"><div class="icon">📋</div>No items yet. Click <strong>Add Item</strong> above to create one.</div>'
+      : items.map((it, i) => renderItemCard(it, i, s, items.length)).join('')) +
+    '</div>';
+}
+function renderItemCard(item, idx, s, total) {
+  const displayName = item.name || '(unnamed)';
+  const priceDisplay = formatPrice(item);
+  return '<div class="item-card" data-idx="' + idx + '">' +
+    '<div class="item-head">' +
+      '<div class="item-reorder">' +
+        '<button class="reorder-btn up" data-idx="' + idx + '" ' + (idx===0?'disabled':'') + ' title="Move up">▲</button>' +
+        '<button class="reorder-btn dn" data-idx="' + idx + '" ' + (idx===total-1?'disabled':'') + ' title="Move down">▼</button>' +
+      '</div>' +
+      '<span class="item-handle">#' + (idx+1) + '</span>' +
+      '<span class="item-name">' + escapeHtml(displayName) + '</span>' +
+      (priceDisplay ? '<span class="item-price">' + priceDisplay + '</span>' : '') +
+      '<span class="item-toggle">▸</span>' +
+    '</div>' +
+    '<div class="item-body">' +
+      '<div class="item-fields">' +
+        s.itemFields.map(field => renderItemField(item, field, idx)).join('') +
+      '</div>' +
+      '<button class="item-del" data-idx="' + idx + '">✕ Delete Item</button>' +
+    '</div>' +
+  '</div>';
+}
+function formatPrice(item) {
+  if (item.price === null || item.price === undefined || item.price === '') return 'Ask';
+  const p = '$' + Number(item.price).toFixed(2);
+  if (item.priceLg) return p + ' / Lg $' + Number(item.priceLg).toFixed(2);
+  if (item.priceUnit) return p + ' ' + item.priceUnit;
+  return p;
+}
+function renderItemField(item, field, idx) {
+  const v = item[field] == null ? '' : item[field];
+  const labelMap = {
+    name:'Name', price:'Price', priceLg:'Large Price', priceUnit:'Price Unit',
+    img:'Image URL', desc:'Description', note:'Note (fine print)',
+    pairs:'Pairs With', badge:'Badge Text', badgeStyle:'Badge Style',
+    soldOut:'Sold Out'
+  };
+  const label = labelMap[field] || field;
+  const hints = {
+    price:'Number only — e.g. 15.62. Leave blank for "Ask"',
+    priceLg:'Optional large-size price',
+    priceUnit:'E.g. "/ lb", "/ dozen", "each"',
+    img:'Full URL to image',
+    pairs:'E.g. "corn pudding, sweet tea"',
+    badgeStyle:'pop = orange, sig = amber, new = green, out = strikethrough'
+  };
+  const hint = hints[field] || '';
+  if (field === 'soldOut') {
+    const on = v === true || v === 'true';
+    return '<div class="field"><div class="field-label"><span>' + label + '</span></div>' +
+      '<div class="cbx-wrap">' +
+        '<div class="cbx ' + (on?'on':'') + '" data-item-cbx="1" data-idx="' + idx + '" data-field="' + field + '"></div>' +
+        '<span class="cbx-label">' + (on?'Yes — show "Sold Out" overlay':'No') + '</span>' +
+      '</div></div>';
+  }
+  if (field === 'desc' || field === 'note') {
+    return '<div class="field"><div class="field-label"><span>' + label + '</span></div>' +
+      '<textarea data-idx="' + idx + '" data-field="' + field + '">' + escapeHtml(v) + '</textarea>' +
+      (hint ? '<div class="field-hint-html">' + hint + '</div>' : '') +
+    '</div>';
+  }
+  const type = (field === 'price' || field === 'priceLg') ? 'number' : (field === 'img') ? 'url' : 'text';
+  const displayV = (v === null || v === undefined) ? '' : v;
+  return '<div class="field"><div class="field-label"><span>' + label + '</span></div>' +
+    '<input type="' + type + '" ' + (type==='number'?'step="0.01"':'') + ' data-idx="' + idx + '" data-field="' + field + '" value="' + escapeAttr(displayV) + '">' +
+    (hint ? '<div class="field-hint-html">' + hint + '</div>' : '') +
+  '</div>';
+}
+
+function bindItemListEvents(s) {
+  const main = document.getElementById('main-inner');
+  const catFields = main.querySelectorAll('#cat-fields input, #cat-fields textarea');
+  catFields.forEach(el => el.addEventListener('input', () => markDirty(el.dataset.key, el.value)));
+
+  main.querySelectorAll('.item-head').forEach(h => {
+    h.onclick = e => {
+      if (e.target.closest('.reorder-btn')) return;
+      h.closest('.item-card').classList.toggle('open');
+    };
+  });
+
+  const itemsKey = s.keyBase + '.items';
+  function editItem(idx, field, value) {
+    const items = getItems(s.keyBase);
+    if (idx < 0 || idx >= items.length) return;
+    if (field === 'price' || field === 'priceLg') {
+      items[idx][field] = value === '' ? null : Number(value);
+    } else {
+      items[idx][field] = value;
+    }
+    const newJson = JSON.stringify(items);
+    STATE.content[itemsKey] = newJson;
+    markDirty(itemsKey, newJson);
+    const card = main.querySelector('.item-card[data-idx="' + idx + '"]');
+    if (card && field === 'name') {
+      card.querySelector('.item-name').textContent = value || '(unnamed)';
+    }
+    if (card && (field === 'price' || field === 'priceLg' || field === 'priceUnit')) {
+      let priceEl = card.querySelector('.item-price');
+      const pd = formatPrice(items[idx]);
+      if (priceEl) priceEl.textContent = pd;
+      else if (pd) {
+        priceEl = document.createElement('span');
+        priceEl.className = 'item-price';
+        priceEl.textContent = pd;
+        card.querySelector('.item-toggle').before(priceEl);
+      }
+    }
+  }
+
+  main.querySelectorAll('[data-idx][data-field]').forEach(el => {
+    if (el.dataset.itemCbx) {
+      el.onclick = () => {
+        const cur = el.classList.contains('on');
+        el.classList.toggle('on', !cur);
+        el.nextElementSibling.textContent = !cur ? 'Yes — show "Sold Out" overlay' : 'No';
+        editItem(Number(el.dataset.idx), el.dataset.field, !cur);
+      };
+    } else {
+      el.addEventListener('input', () => {
+        editItem(Number(el.dataset.idx), el.dataset.field, el.value);
+      });
+    }
+  });
+
+  main.querySelectorAll('.reorder-btn').forEach(b => {
+    b.onclick = () => {
+      const idx = Number(b.dataset.idx);
+      const items = getItems(s.keyBase);
+      const swap = b.classList.contains('up') ? idx - 1 : idx + 1;
+      if (swap < 0 || swap >= items.length) return;
+      [items[idx], items[swap]] = [items[swap], items[idx]];
+      const json = JSON.stringify(items);
+      STATE.content[itemsKey] = json;
+      markDirty(itemsKey, json);
+      const prevOpen = [...main.querySelectorAll('.item-card.open')].map(c => Number(c.dataset.idx));
+      const newlyOpen = prevOpen.map(i => i === idx ? swap : (i === swap ? idx : i));
+      document.getElementById('items-container').innerHTML = items.map((it,i) => renderItemCard(it, i, s, items.length)).join('');
+      newlyOpen.forEach(i => {
+        const c = main.querySelector('.item-card[data-idx="' + i + '"]');
+        if (c) c.classList.add('open');
+      });
+      bindItemListEvents(s);
+    };
+  });
+
+  main.querySelectorAll('.item-del').forEach(b => {
+    b.onclick = () => {
+      const idx = Number(b.dataset.idx);
+      const items = getItems(s.keyBase);
+      if (!confirm('Delete "' + (items[idx].name || 'this item') + '"? Changes save when you click Save.')) return;
+      items.splice(idx, 1);
+      const json = JSON.stringify(items);
+      STATE.content[itemsKey] = json;
+      markDirty(itemsKey, json);
+      showSection(STATE.currentPage, STATE.currentSection);
+    };
+  });
+
+  const addBtn = document.getElementById('add-item-btn');
+  if (addBtn) addBtn.onclick = () => {
+    const items = getItems(s.keyBase);
+    const newItem = { name: 'New Item' };
+    s.itemFields.forEach(f => {
+      if (f === 'price' || f === 'priceLg') newItem[f] = null;
+      else if (f === 'soldOut') newItem[f] = false;
+      else if (f !== 'name') newItem[f] = '';
+    });
+    items.push(newItem);
+    const json = JSON.stringify(items);
+    STATE.content[itemsKey] = json;
+    markDirty(itemsKey, json);
+    showSection(STATE.currentPage, STATE.currentSection);
+    setTimeout(() => {
+      const card = document.querySelector('.item-card[data-idx="' + (items.length-1) + '"]');
+      if (card) { card.classList.add('open'); card.scrollIntoView({behavior:'smooth',block:'center'}); }
+    }, 80);
+  };
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   DIRTY TRACKING, AUTOSAVE, SAVE
+══════════════════════════════════════════════════════════════════ */
+function markDirty(key, newValue) {
+  STATE.dirty.add(key);
+  STATE.pendingSaves[key] = newValue;
+  STATE.content[key] = newValue;
+  updateSaveButton();
+  queueAutoSave();
+  const fEl = document.querySelector('.field[data-field="' + cssEscape(key) + '"]');
+  if (fEl) fEl.classList.add('dirty');
+}
+function cssEscape(s) {
+  if (window.CSS && CSS.escape) return CSS.escape(s);
+  return String(s).replace(/[^a-zA-Z0-9_-]/g, ch => '\\' + ch);
+}
+function updateSaveButton() {
+  const btn = document.getElementById('save-btn');
+  const ind = document.getElementById('save-indicator');
+  const txt = document.getElementById('save-ind-text');
+  if (!btn) return;
+  if (STATE.dirty.size > 0) {
+    btn.disabled = false;
+    btn.classList.remove('saved');
+    btn.innerHTML = '<span>💾</span> Save ' + STATE.dirty.size + ' Change' + (STATE.dirty.size === 1 ? '' : 's');
+    if (ind) ind.className = 'save-indicator';
+    if (txt) txt.textContent = STATE.dirty.size + ' unsaved';
+  } else {
+    btn.disabled = true;
+    btn.innerHTML = '<span>💾</span> All Saved';
+    if (ind) ind.className = 'save-indicator saved';
+    if (txt) txt.textContent = 'All saved';
+  }
+}
+function queueAutoSave() {
+  if (STATE.autoSaveTimer) clearTimeout(STATE.autoSaveTimer);
+  STATE.autoSaveTimer = setTimeout(() => {
+    if (STATE.dirty.size > 0) saveSection(true);
+  }, 1500);
+}
+
+async function saveSection(isAuto) {
+  if (STATE.dirty.size === 0) return;
+  const btn = document.getElementById('save-btn');
+  const ind = document.getElementById('save-indicator');
+  const txt = document.getElementById('save-ind-text');
+
+  if (ind) ind.className = 'save-indicator saving';
+  if (txt) txt.textContent = 'Saving...';
+  if (btn && !isAuto) btn.innerHTML = '<span class="spin"></span> Saving...';
+
+  try {
+    const toSave = Object.entries(STATE.pendingSaves).map(([key, value]) => ({ key, value: String(value) }));
+    await sbUpsert('site_content', toSave);
+    STATE.dirty.clear();
+    STATE.pendingSaves = {};
+    document.querySelectorAll('.field.dirty').forEach(el => el.classList.remove('dirty'));
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('saved');
+      btn.innerHTML = '<span>✓</span> Saved!';
+      setTimeout(() => {
+        btn.classList.remove('saved');
+        btn.innerHTML = '<span>💾</span> All Saved';
+      }, 1400);
+    }
+    if (ind) ind.className = 'save-indicator saved';
+    if (txt) txt.textContent = 'All saved ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    if (!isAuto) toast('Saved ✓', 'ok');
+  } catch (err) {
+    console.error(err);
+    if (ind) ind.className = 'save-indicator error';
+    if (txt) txt.textContent = 'Save failed';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>⚠</span> Retry Save';
+    }
+    toast('Save failed — ' + err.message, 'err');
+  }
+}
+
+/* TOAST */
+function toast(msg, kind) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-txt').textContent = msg;
+  t.className = kind || '';
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+/* MOBILE SIDEBAR */
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('mob-open');
+}
+function closeMobSidebar() {
+  document.getElementById('sidebar').classList.remove('mob-open');
+}
+
+/* WARN ON LEAVE IF UNSAVED */
+window.addEventListener('beforeunload', e => {
+  if (STATE.dirty.size > 0) {
+    e.preventDefault();
+    e.returnValue = 'You have unsaved changes.';
+    return e.returnValue;
+  }
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════════════ */
+buildPinPad();
+
+// If already authed this session (and creds are set), skip PIN
+if (sessionStorage.getItem('fs_editor_auth') === '1'
+    && SB_URL !== 'https://YOUR-FRANCIS-PROJECT.supabase.co') {
+  STATE.authed = true;
+  bootEditor();
+}
+
+// If config placeholder still present, show a notice on the PIN screen
+if (SB_URL === 'https://YOUR-FRANCIS-PROJECT.supabase.co') {
+  const msg = document.getElementById('pin-msg');
+  msg.textContent = '⚠ Edit this file and set SB_URL + SB_KEY to your Supabase project';
+  msg.classList.add('show');
+  msg.style.color = 'var(--flame)';
+}
+</script>
+</body>
+</html>
