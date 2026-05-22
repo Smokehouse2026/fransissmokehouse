@@ -214,6 +214,7 @@ body{cursor:none;}
   <span class="ft" id="ftr-info">St. Francisville, LA · (225) 245-5046</span>
 </div>
 
+<script src="supabase.js"></script>
 <script src="market-data.js" onerror="marketDataMissing()"></script>
 <script>
 /* FIRE */
@@ -336,7 +337,30 @@ function boot(){
     document.getElementById('ftr-info').textContent=`${SITE_INFO.city||'St. Francisville'}, ${SITE_INFO.state||'LA'} · ${SITE_INFO.phone||'(225) 245-5046'}`;
   }
 }
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot);}else{boot();}
+
+/* SUPABASE OVERRIDE */
+async function loadMarketFromSupabase(rerender){
+  try {
+    const fresh = await loadMarketData();
+    window.MARKET = fresh.MARKET || window.MARKET;
+    cacheSet('market_full', fresh);
+    if (rerender) buildMarket();
+  } catch(e) {
+    console.warn('Supabase market load failed, using market-data.js fallback:', e.message);
+  }
+}
+
+if (typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL && !SUPABASE_URL.includes('YOUR-PROJECT-REF')) {
+  const cached = cacheGet('market_full');
+  if (cached) window.MARKET = cached.MARKET || window.MARKET;
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', () => { boot(); loadMarketFromSupabase(true); });
+  } else {
+    boot(); loadMarketFromSupabase(true);
+  }
+} else {
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot);}else{boot();}
+}
 </script>
 <!-- Also load site-data.js for shared info like hours and footer -->
 <script src="site-data.js" onerror=""></script>
