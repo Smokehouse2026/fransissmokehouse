@@ -340,7 +340,10 @@ async function bootApp(){
   DATA.special = DATA.special || {};
   DATA.sold = DATA.sold || [];
   DATA.fast = DATA.fast || [];
-  renderAll(); // render whatever we have (probably empty placeholders)
+  renderAll();
+
+  // ── Diagnostic test: hit Supabase directly and show the raw response ──
+  const diagInfo = await runDiagnostic();
 
   try {
     const [menu, market] = await Promise.all([loadMenuData(), loadMarketData()]);
@@ -354,20 +357,36 @@ async function bootApp(){
   } catch(e) {
     console.error(e);
     setStatus('Connection failed', 'err');
-    const msg = `<div class="empty" style="line-height:1.7">
-      <strong style="color:var(--flame)">Can't reach Supabase.</strong><br><br>
-      Two things to check:<br>
-      <span style="font-family:var(--cond);font-size:13px">
-      1. Did you run <code>SCHEMA.sql</code> in Supabase → SQL Editor?<br>
-      2. Is your domain added to the Supabase API allowlist?
-      </span><br><br>
-      <span style="font-family:var(--mono);font-size:11px;opacity:.6">${escapeHtml(e.message || String(e))}</span>
+    const msg = `<div class="empty" style="line-height:1.7;text-align:left;max-width:680px;margin:0 auto">
+      <strong style="color:var(--flame);font-size:15px">Can't reach Supabase. Here's what it told us:</strong>
+      <pre style="background:rgba(10,6,3,.7);border:1px solid rgba(196,168,130,.2);padding:14px;margin-top:14px;border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--paper);white-space:pre-wrap;word-break:break-all;line-height:1.5">${escapeHtml(diagInfo)}</pre>
+      <div style="margin-top:14px;font-family:var(--cond);font-size:13px;color:rgba(196,168,130,.7)">
+        Copy this whole message and send it to Westyn so he can fix it.
+      </div>
     </div>`;
     const mc = document.getElementById('menu-cats');   if (mc) mc.innerHTML = msg;
     const kc = document.getElementById('market-cats'); if (kc) kc.innerHTML = msg;
     const sb = document.getElementById('special-block'); if (sb) sb.innerHTML = msg;
     const scb = document.getElementById('scarcity-block'); if (scb) scb.innerHTML = msg;
   }
+}
+
+async function runDiagnostic(){
+  const lines = [];
+  lines.push('URL:  ' + (typeof SUPABASE_URL !== 'undefined' ? SUPABASE_URL : '(not set)'));
+  lines.push('KEY:  ' + (typeof SUPABASE_ANON_KEY !== 'undefined' ? (SUPABASE_ANON_KEY.slice(0,20)+'...') : '(not set)'));
+  lines.push('FROM: ' + location.origin);
+  lines.push('');
+  try {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/menu_categories?select=id&limit=1', { headers: SB_HEADERS });
+    lines.push('HTTP Status: ' + r.status + ' ' + r.statusText);
+    const body = await r.text();
+    lines.push('Response body:');
+    lines.push(body.slice(0, 500));
+  } catch(e) {
+    lines.push('Network error: ' + e.message);
+  }
+  return lines.join('\n');
 }
 
 /* ═══════════════════════════════════════════════════════════
