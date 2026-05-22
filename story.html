@@ -66,11 +66,11 @@ body::before{
 }
 #hdr-brand em{font-style:italic;font-weight:400;color:var(--flame);}
 .hdr-sub{font-family:var(--cond);font-size:8px;letter-spacing:.28em;
-  text-transform:uppercase;color:rgba(196,160,112,.28);margin-top:2px;}
+  text-transform:uppercase;color:rgba(196,160,112,.45);margin-top:2px;}
 #back-btn{
   font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.22em;
-  text-transform:uppercase;color:rgba(196,160,112,.45);
-  border:1px solid rgba(196,160,112,.18);padding:7px 16px;border-radius:2px;
+  text-transform:uppercase;color:rgba(196,160,112,.68);
+  border:1px solid rgba(196,160,112,.32);padding:7px 16px;border-radius:2px;
   background:none;cursor:none;-webkit-tap-highlight-color:transparent;
   transition:all .3s;text-decoration:none;
 }
@@ -132,7 +132,7 @@ body::before{
 #opener-lead{
   font-family:var(--serif);font-style:italic;font-weight:300;
   font-size:clamp(15px,1.8vw,22px);line-height:1.65;
-  color:rgba(196,160,112,.55);max-width:520px;
+  color:rgba(196,160,112,.78);max-width:520px;
   opacity:0;animation:fadeSlideU .7s .9s ease forwards;
 }
 
@@ -141,7 +141,7 @@ body::before{
   position:absolute;right:clamp(20px,4vw,48px);top:50%;
   transform:translateY(-50%) rotate(90deg);transform-origin:center;
   font-family:var(--cond);font-weight:600;font-size:8px;letter-spacing:.4em;
-  text-transform:uppercase;color:rgba(196,160,112,.18);
+  text-transform:uppercase;color:rgba(196,160,112,.32);
   white-space:nowrap;
 }
 
@@ -151,7 +151,7 @@ body::before{
   display:flex;flex-direction:column;align-items:center;gap:8px;
   opacity:0;animation:fadeIn 1s 1.3s ease forwards;
 }
-.sh-label{font-family:var(--cond);font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:rgba(196,160,112,.28);}
+.sh-label{font-family:var(--cond);font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:rgba(196,160,112,.45);}
 .sh-bar{width:1px;height:36px;background:linear-gradient(to bottom,rgba(240,136,32,.4),transparent);animation:shBar 2s ease-in-out infinite;}
 @keyframes shBar{0%,100%{opacity:.4;transform:scaleY(1)}50%{opacity:.9;transform:scaleY(1.15)}}
 
@@ -180,7 +180,7 @@ body::before{
 .narr-para{
   font-family:var(--body);font-weight:300;
   font-size:clamp(16px,1.6vw,20px);line-height:1.9;
-  color:rgba(196,160,112,.6);
+  color:rgba(196,160,112,.82);
   margin-bottom:clamp(24px,4vh,40px);
 }
 .narr-para strong{color:var(--parch);font-weight:400;}
@@ -196,7 +196,7 @@ body::before{
 .ch-mark-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(196,160,112,.15),transparent);}
 .ch-mark-label{
   font-family:var(--cond);font-weight:700;font-size:8px;
-  letter-spacing:.35em;text-transform:uppercase;color:rgba(196,160,112,.3);
+  letter-spacing:.35em;text-transform:uppercase;color:rgba(196,160,112,.48);
   white-space:nowrap;
 }
 .ch-mark-ember{font-size:10px;filter:drop-shadow(0 0 4px rgba(240,136,32,.5));animation:flkr 2.5s ease-in-out infinite;}
@@ -221,7 +221,7 @@ body::before{
   margin-top:clamp(12px,2vh,20px);
   font-family:var(--cond);font-weight:600;font-size:9px;
   letter-spacing:.28em;text-transform:uppercase;
-  color:rgba(196,160,112,.32);
+  color:rgba(196,160,112,.5);
 }
 
 /* INLINE STAT */
@@ -266,7 +266,7 @@ body::before{
 .mc-text{
   font-family:var(--body);font-weight:300;
   font-size:clamp(13px,1.3vw,16px);line-height:1.7;
-  color:rgba(196,160,112,.5);max-width:540px;position:relative;z-index:1;
+  color:rgba(196,160,112,.72);max-width:540px;position:relative;z-index:1;
 }
 .mc-facts{
   display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;position:relative;z-index:1;
@@ -302,7 +302,7 @@ body::before{
 .closing-sub{
   font-family:var(--serif);font-style:italic;font-weight:300;
   font-size:clamp(14px,1.6vw,20px);
-  color:rgba(196,160,112,.42);
+  color:rgba(196,160,112,.65);
   margin-bottom:clamp(28px,4.5vh,44px);
   position:relative;z-index:1;
 }
@@ -321,8 +321,8 @@ body::before{
 .btn-ghost{
   font-family:var(--cond);font-weight:600;font-size:12px;
   letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(196,160,112,.55);text-decoration:none;
-  border:1px solid rgba(196,160,112,.2);
+  color:rgba(196,160,112,.78);text-decoration:none;
+  border:1px solid rgba(196,160,112,.34);
   padding:13px 28px;border-radius:2px;
   transition:all .3s;cursor:none;-webkit-tap-highlight-color:transparent;display:inline-block;
 }
@@ -336,7 +336,7 @@ body::before{
   padding:clamp(16px,2.5vh,24px) clamp(20px,5vw,60px);
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
 }
-.ftr-t{font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.22);}
+.ftr-t{font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.36);}
 .ftr-flames{display:flex;gap:4px;align-items:flex-end;}
 .ff{font-size:13px;animation:flkr 2s ease-in-out infinite;filter:drop-shadow(0 0 4px rgba(240,136,32,.4));}
 .ff:nth-child(2){animation-delay:.3s;font-size:.8em;}
@@ -376,7 +376,7 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
   <div id="opener-eyebrow">Our Story</div>
   <h1 id="opener-title">St.<br>Francisville<br><em>Proud.</em></h1>
   <div id="opener-rule"></div>
-  <p id="opener-lead">This is where it started, why it started, and what keeps the fire going every morning at 4am.</p>
+  <p id="opener-lead">This is where it started, why it started, and what keeps the fire going every morning.</p>
 
   <div id="scroll-hint">
     <span class="sh-label">Read On</span>
@@ -392,7 +392,7 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
   </p>
 
   <p class="narr-para reveal">
-    That was <strong>2015</strong>. The Francis Smokehouse & Specialty Meats wasn't built on a marketing plan or a trend. It was built on a conviction that <em>the best BBQ is the simplest BBQ</em> — real wood, real fire, real time. No gas assist. No shortcuts dressed up as technique. Post oak and hickory, 225 degrees, and a pit that gets loaded before most people set their alarms.
+    That was <strong>2015</strong>. The Francis Smokehouse & Specialty Meats wasn't built on a marketing plan or a trend. It was built on a conviction that <em>the best BBQ is the simplest BBQ</em> — real wood, real fire, real time. No gas assist. No shortcuts dressed up as technique. Just a pit that gets loaded before most people set their alarms.
   </p>
 
   <div class="ch-mark reveal">
@@ -405,19 +405,17 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
 
   <div class="moment-card reveal">
     <div class="mc-label">Every Morning</div>
-    <div class="mc-title">The fire starts at 4am.</div>
-    <div class="mc-text">Before the sun comes up, before the highway gets busy, before anyone else in St. Francisville has had their first coffee — the pit is loaded. The wood is set. The temperature climbs to 225°F and it stays there. It doesn't leave until the meat decides it's ready.</div>
+    <div class="mc-title">The fire starts early.</div>
+    <div class="mc-text">Before the highway gets busy, before most of St. Francisville has had their first coffee — the pit is loaded. The wood is set. The fire builds. And it doesn't leave until the meat decides it's ready.</div>
     <div class="mc-facts">
-      <span class="mc-fact">Post Oak</span>
-      <span class="mc-fact">Hickory</span>
-      <span class="mc-fact">225°F</span>
-      <span class="mc-fact">12+ Hours</span>
+      <span class="mc-fact">Real Wood</span>
+      <span class="mc-fact">Low &amp; Slow</span>
       <span class="mc-fact">No Gas</span>
     </div>
   </div>
 
   <p class="narr-para reveal">
-    The brisket gets <span class="narr-stat">12+ hrs</span> minimum. The ribs are rubbed and left to develop a bark that cracks when you pull them apart. The pulled pork shoulder smokes low and slow until the collagen breaks down completely and the meat separates with nothing more than a look. This isn't impatience dressed up as efficiency. <em>It's the actual way.</em>
+    The brisket smokes low and slow until the bark is set and the smoke ring shows. The ribs are rubbed and left to develop a bark that cracks when you pull them apart. The pulled pork shoulder smokes until the collagen breaks down completely and the meat separates with nothing more than a look. This isn't impatience dressed up as efficiency. <em>It's the actual way.</em>
   </p>
 
   <div class="big-quote reveal">
@@ -478,7 +476,7 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
   </div>
 
   <p class="narr-para reveal">
-    People ask sometimes why we start so early. Why the 4am fire. Why the twelve-hour minimum when you could probably get away with eight. The honest answer is that <strong>there's no such thing as getting away with it</strong> when the person eating can taste the difference. They always can. They may not know what they're tasting — they may just call it good — but they know.
+    People ask sometimes why we start so early. Why so much time when you could probably get away with less. The honest answer is that <strong>there's no such thing as getting away with it</strong> when the person eating can taste the difference. They always can. They may not know what they're tasting — they may just call it good — but they know.
   </p>
 
   <p class="narr-para reveal">
