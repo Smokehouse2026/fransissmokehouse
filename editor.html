@@ -242,6 +242,21 @@ a{color:var(--flame);text-decoration:none}
 ═══════════════════════════════════════════════════════════ */
 let DATA = { menu:null, market:null, special:null, sold:[], fast:[] };
 
+/* Catch any error and show it on screen so we can see what's failing */
+window.addEventListener('error', e => {
+  const err = document.getElementById('gate-err');
+  if (err && document.getElementById('gate') && !document.getElementById('gate').classList.contains('hide')) {
+    err.textContent = 'Page error: ' + (e.message || 'unknown');
+  }
+  console.error('Page error:', e.error || e.message);
+});
+
+/* Fallback if supabase.js didn't load — make sure password check still works */
+if (typeof EDITOR_PASSWORD === 'undefined') {
+  window.EDITOR_PASSWORD = '2172';
+  console.warn('supabase.js did not load — using fallback password');
+}
+
 /* ═══════════════════════════════════════════════════════════
    GATE
 ═══════════════════════════════════════════════════════════ */
@@ -250,7 +265,11 @@ function unlock(){
   document.getElementById('gate').classList.add('hide');
   document.getElementById('app').classList.add('show');
   sessionStorage.setItem(SESSION_KEY, '1');
-  bootApp();
+  // bootApp may fail if Supabase isn't set up — wrap it
+  try { bootApp(); } catch(e) {
+    console.error('bootApp error:', e);
+    setStatus('Setup needed', 'err');
+  }
 }
 function checkGate(){
   if (sessionStorage.getItem(SESSION_KEY) === '1') unlock();
@@ -258,7 +277,8 @@ function checkGate(){
 document.getElementById('gate-btn').onclick = () => {
   const pw = document.getElementById('gate-pw').value;
   const err = document.getElementById('gate-err');
-  if (pw === EDITOR_PASSWORD) { err.textContent=''; unlock(); }
+  const expected = (typeof EDITOR_PASSWORD !== 'undefined') ? EDITOR_PASSWORD : '2172';
+  if (pw === expected) { err.textContent=''; unlock(); }
   else { err.textContent = 'Wrong password.'; document.getElementById('gate-pw').select(); }
 };
 document.getElementById('gate-pw').addEventListener('keydown', e => {
@@ -314,6 +334,14 @@ modalBg.addEventListener('click', e => { if(e.target===modalBg) closeModal(); })
 ═══════════════════════════════════════════════════════════ */
 async function bootApp(){
   setStatus('Loading…', 'saving');
+  // Initialize empty so renderAll doesn't crash even if Supabase fails
+  DATA.menu = DATA.menu || {};
+  DATA.market = DATA.market || {};
+  DATA.special = DATA.special || {};
+  DATA.sold = DATA.sold || [];
+  DATA.fast = DATA.fast || [];
+  renderAll(); // render whatever we have (probably empty placeholders)
+
   try {
     const [menu, market] = await Promise.all([loadMenuData(), loadMarketData()]);
     DATA.menu = menu.MENU;
@@ -326,7 +354,19 @@ async function bootApp(){
   } catch(e) {
     console.error(e);
     setStatus('Connection failed', 'err');
-    document.getElementById('menu-cats').innerHTML = `<div class="empty">Couldn't load. Check the Supabase URL and anon key in <code>supabase.js</code>.<br><br><span style="font-family:var(--mono);font-size:11px;opacity:.6">${e.message}</span></div>`;
+    const msg = `<div class="empty" style="line-height:1.7">
+      <strong style="color:var(--flame)">Can't reach Supabase.</strong><br><br>
+      Two things to check:<br>
+      <span style="font-family:var(--cond);font-size:13px">
+      1. Did you run <code>SCHEMA.sql</code> in Supabase → SQL Editor?<br>
+      2. Is your domain added to the Supabase API allowlist?
+      </span><br><br>
+      <span style="font-family:var(--mono);font-size:11px;opacity:.6">${escapeHtml(e.message || String(e))}</span>
+    </div>`;
+    const mc = document.getElementById('menu-cats');   if (mc) mc.innerHTML = msg;
+    const kc = document.getElementById('market-cats'); if (kc) kc.innerHTML = msg;
+    const sb = document.getElementById('special-block'); if (sb) sb.innerHTML = msg;
+    const scb = document.getElementById('scarcity-block'); if (scb) scb.innerHTML = msg;
   }
 }
 
