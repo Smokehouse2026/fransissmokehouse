@@ -415,6 +415,7 @@ body{cursor:none;}
   <span class="ft" id="ftr-info">St. Francisville, LA · (225) 245-5046</span>
 </div>
 
+<script src="supabase.js"></script>
 <script src="site-data.js" onerror="menuDataMissing()"></script>
 <script>
 /* ════════════════════════════════════════════
@@ -887,7 +888,59 @@ function boot(){
   bindTilts();triggerReveals();
   if(currentTab==='specials')renderSpecials();
 }
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot);}else{boot();}
+
+/* ────────────────────────────────────────────────────────
+   SUPABASE OVERRIDE
+   Pulls live menu/special/scarcity from Supabase, replacing
+   the seed data from site-data.js. Uses localStorage cache
+   so the page renders instantly; refreshes in background.
+   If Supabase is unreachable, the seed data still shows.
+──────────────────────────────────────────────────────── */
+async function loadFromSupabase(rerender){
+  try {
+    const fresh = await loadMenuData();
+    window.MENU         = fresh.MENU         || window.MENU;
+    window.SITE_SPECIAL = fresh.SITE_SPECIAL || window.SITE_SPECIAL;
+    window.SOLD_OUT     = fresh.SOLD_OUT     || [];
+    window.SELLING_FAST = fresh.SELLING_FAST || [];
+    cacheSet('menu_full', fresh);
+    if (rerender) {
+      document.getElementById('tabs').innerHTML = '';
+      document.getElementById('left-col').innerHTML = '';
+      document.getElementById('sidebar').innerHTML = sidebarBackupHTML || '';
+      const sb = document.getElementById('scarcity-bar');
+      if (sb) { sb.style.display='none'; sb.innerHTML=''; }
+      boot();
+    }
+  } catch(e) {
+    console.warn('Supabase menu load failed, using site-data.js fallback:', e.message);
+  }
+}
+let sidebarBackupHTML = '';
+
+if (typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL && !SUPABASE_URL.includes('YOUR-PROJECT-REF')) {
+  // Try cache first for instant content
+  const cached = cacheGet('menu_full');
+  if (cached) {
+    window.MENU         = cached.MENU         || window.MENU;
+    window.SITE_SPECIAL = cached.SITE_SPECIAL || window.SITE_SPECIAL;
+    window.SOLD_OUT     = cached.SOLD_OUT     || [];
+    window.SELLING_FAST = cached.SELLING_FAST || [];
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', () => {
+      boot();
+      sidebarBackupHTML = document.getElementById('sidebar').innerHTML;
+      loadFromSupabase(true);
+    });
+  } else {
+    boot();
+    sidebarBackupHTML = document.getElementById('sidebar').innerHTML;
+    loadFromSupabase(true);
+  }
+} else {
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot);}else{boot();}
+}
 </script>
 </body>
 </html>
