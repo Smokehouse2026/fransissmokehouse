@@ -40,9 +40,9 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
 #hdr-brand{font-family:var(--serif);font-weight:700;font-size:clamp(14px,2vw,22px);
   letter-spacing:.01em;color:var(--cream);text-decoration:none;text-shadow:0 0 30px rgba(240,136,32,.15);}
 #hdr-brand em{font-style:italic;font-weight:400;color:var(--flame);}
-.hdr-sub{font-family:var(--cond);font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(196,160,112,.28);margin-top:2px;}
+.hdr-sub{font-family:var(--cond);font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(196,160,112,.45);margin-top:2px;}
 #back-btn{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.22em;
-  text-transform:uppercase;color:rgba(196,160,112,.45);border:1px solid rgba(196,160,112,.18);
+  text-transform:uppercase;color:rgba(196,160,112,.68);border:1px solid rgba(196,160,112,.32);
   padding:7px 16px;border-radius:2px;background:none;cursor:none;-webkit-tap-highlight-color:transparent;
   transition:all .3s;text-decoration:none;}
 #back-btn:hover{border-color:rgba(240,136,32,.45);color:var(--flame);}
@@ -77,7 +77,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
 #hero-address{
   margin-top:clamp(18px,3vh,28px);
   font-family:var(--cond);font-weight:500;font-size:clamp(13px,1.6vw,18px);
-  letter-spacing:.08em;color:rgba(196,160,112,.55);
+  letter-spacing:.08em;color:rgba(196,160,112,.78);
   opacity:0;animation:fadeU .7s .7s ease forwards;
 }
 
@@ -162,7 +162,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
 .ic-title{font-family:var(--serif);font-weight:700;font-size:clamp(18px,2vw,24px);
   color:var(--cream);line-height:1.2;}
 .ic-body{font-family:var(--body);font-weight:300;font-size:clamp(13px,1.3vw,15px);
-  line-height:1.75;color:rgba(196,160,112,.55);}
+  line-height:1.75;color:rgba(196,160,112,.78);}
 .ic-body strong{color:var(--parch);font-weight:400;}
 .ic-action{
   display:inline-flex;align-items:center;gap:8px;
@@ -179,7 +179,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   padding:6px 0;border-bottom:1px solid rgba(196,160,112,.07);}
 .hours-row:last-child{border-bottom:none;}
 .hours-day{font-family:var(--cond);font-weight:600;font-size:11px;letter-spacing:.1em;
-  text-transform:uppercase;color:rgba(196,160,112,.5);}
+  text-transform:uppercase;color:rgba(196,160,112,.72);}
 .hours-time{font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.06em;color:var(--glow);}
 .hours-row.today .hours-day{color:var(--cream);}
 .hours-row.today .hours-time{color:var(--glow);text-shadow:0 0 12px rgba(245,168,48,.35);}
@@ -190,12 +190,12 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
 /* COUNTDOWN CARD */
 .countdown-wrap{display:flex;flex-direction:column;gap:4px;}
 .cd-label{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.22em;
-  text-transform:uppercase;color:rgba(196,160,112,.38);}
+  text-transform:uppercase;color:rgba(196,160,112,.55);}
 .cd-time{font-family:var(--cond);font-weight:800;font-size:clamp(32px,5vw,52px);
   letter-spacing:-.02em;color:var(--glow);
   text-shadow:0 0 24px rgba(245,168,48,.4);font-variant-numeric:tabular-nums;line-height:1;}
 .cd-sub{font-family:var(--cond);font-size:9px;letter-spacing:.16em;
-  text-transform:uppercase;color:rgba(196,160,112,.32);}
+  text-transform:uppercase;color:rgba(196,160,112,.5);}
 
 /* ══════════════════════
    DIRECTIONS SECTION
@@ -231,9 +231,9 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
 .from-text{display:flex;flex-direction:column;gap:4px;}
 .from-name{font-family:var(--serif);font-weight:700;font-size:clamp(15px,1.6vw,18px);color:var(--cream);}
 .from-dir{font-family:var(--body);font-weight:300;font-size:clamp(12px,1.2vw,14px);
-  line-height:1.6;color:rgba(196,160,112,.5);}
+  line-height:1.6;color:rgba(196,160,112,.72);}
 .from-dist{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.14em;
-  text-transform:uppercase;color:rgba(196,160,112,.32);margin-top:2px;}
+  text-transform:uppercase;color:rgba(196,160,112,.5);margin-top:2px;}
 
 /* landmarks */
 .landmarks{display:flex;flex-direction:column;gap:10px;}
@@ -242,7 +242,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
 .lm-item:last-child{border-bottom:none;}
 .lm-icon{font-size:16px;filter:drop-shadow(0 0 5px rgba(240,136,32,.3));flex-shrink:0;}
 .lm-text{font-family:var(--body);font-weight:300;font-size:clamp(12px,1.2vw,14px);
-  color:rgba(196,160,112,.5);line-height:1.4;}
+  color:rgba(196,160,112,.72);line-height:1.4;}
 .lm-text strong{color:rgba(196,160,112,.8);font-weight:400;}
 
 /* ══════════════════════
@@ -260,7 +260,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   color:var(--cream);margin-bottom:clamp(12px,2vh,20px);position:relative;z-index:1;}
 .cta-title em{font-style:italic;font-weight:300;color:var(--flame);}
 .cta-sub{font-family:var(--serif);font-style:italic;font-weight:300;
-  font-size:clamp(14px,1.6vw,20px);color:rgba(196,160,112,.42);
+  font-size:clamp(14px,1.6vw,20px);color:rgba(196,160,112,.65);
   margin-bottom:clamp(28px,4.5vh,44px);position:relative;z-index:1;}
 .cta-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;position:relative;z-index:1;}
 .btn-fire{display:inline-flex;align-items:center;gap:8px;
@@ -273,8 +273,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
 .btn-fire:hover{transform:scale(1.05);box-shadow:0 10px 40px rgba(192,72,0,.55);letter-spacing:.26em;}
 .btn-ghost{display:inline-flex;align-items:center;gap:8px;
   font-family:var(--cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(196,160,112,.55);text-decoration:none;
-  border:1px solid rgba(196,160,112,.2);padding:13px 28px;border-radius:2px;
+  color:rgba(196,160,112,.78);text-decoration:none;
+  border:1px solid rgba(196,160,112,.34);padding:13px 28px;border-radius:2px;
   transition:all .3s;cursor:none;-webkit-tap-highlight-color:transparent;}
 .btn-ghost:hover{border-color:rgba(240,136,32,.4);color:var(--flame);}
 
@@ -282,7 +282,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
 #ftr{position:relative;z-index:10;border-top:1px solid rgba(196,160,112,.08);
   background:rgba(9,7,4,.9);padding:clamp(16px,2.5vh,24px) clamp(20px,5vw,60px);
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.ftr-t{font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.22);}
+.ftr-t{font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.36);}
 .ftr-flames{display:flex;gap:4px;align-items:flex-end;}
 .ff{font-size:13px;animation:flkr 2s ease-in-out infinite;filter:drop-shadow(0 0 4px rgba(240,136,32,.4));}
 .ff:nth-child(2){animation-delay:.3s;font-size:.8em;}
@@ -461,7 +461,7 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
     <div>
       <div class="dir-eyebrow reveal">When You Arrive</div>
       <h2 class="dir-title reveal">Look for <em>The Smoke.</em></h2>
-      <div class="ic-body reveal" style="margin-bottom:clamp(20px,3vh,28px);font-size:clamp(14px,1.4vw,17px);line-height:1.8;color:rgba(196,160,112,.55);">
+      <div class="ic-body reveal" style="margin-bottom:clamp(20px,3vh,28px);font-size:clamp(14px,1.4vw,17px);line-height:1.8;color:rgba(196,160,112,.78);">
         On most days when the smoker is running you'll be able to smell us from down the road. Look for the sign on the right (northbound) or left (southbound) side of US Highway 61.
       </div>
       <div class="landmarks reveal">
@@ -479,7 +479,7 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
         </div>
         <div class="lm-item">
           <div class="lm-icon">🔥</div>
-          <div class="lm-text">If the <strong>smoker is loaded</strong>, you'll smell post oak and hickory from down the road. That's us.</div>
+          <div class="lm-text">If the <strong>smoker is loaded</strong>, you'll smell it from down the road. That's us.</div>
         </div>
         <div class="lm-item">
           <div class="lm-icon">📍</div>
@@ -614,8 +614,8 @@ function updateAll(){
     var openHr=getNextOpen().getHours();
     txt.textContent='Opening Soon · Opens '+(openHr===10?'10am':openHr+'am');
   } else {
-    dot.style.background='rgba(196,160,112,.3)';dot.style.boxShadow='none';
-    txt.style.color='rgba(196,160,112,.5)';
+    dot.style.background='rgba(196,160,112,.48)';dot.style.boxShadow='none';
+    txt.style.color='rgba(196,160,112,.72)';
     var oHr=getNextOpen().getHours();
     txt.textContent='Closed · Opens '+(oHr===10?'10am':oHr+'am')+' Tomorrow';
   }
