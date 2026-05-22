@@ -276,6 +276,25 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
 
 </div>
 
+<!-- Hidden editor trigger — tap top-left 18×18 corner 3 times to open editor -->
+<div id="editor-trigger" style="position:fixed;top:0;left:0;width:18px;height:18px;z-index:9999;cursor:default" title=""></div>
+
+<script>
+(function(){
+  let taps = 0, timer;
+  const el = document.getElementById('editor-trigger');
+  el.addEventListener('click', () => {
+    taps++;
+    clearTimeout(timer);
+    timer = setTimeout(() => { taps = 0; }, 1200);
+    if (taps >= 3) {
+      taps = 0;
+      location.href = 'editor.html';
+    }
+  });
+})();
+</script>
+
 <script>
 const emCv=document.getElementById('emberCanvas'),ex=emCv.getContext('2d');
 const smCv=document.getElementById('smokeCanvas'),sx=smCv.getContext('2d');
