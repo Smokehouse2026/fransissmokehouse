@@ -45,12 +45,12 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
   font-family:var(--cond);font-weight:600;
   font-size:clamp(9px,1vw,11px);
   letter-spacing:.5em;text-transform:uppercase;
-  color:rgba(196,168,130,.45);
+  color:rgba(196,168,130,.68);
   margin-bottom:max(8px,1.2vh);
   display:flex;align-items:center;justify-content:center;gap:max(10px,1.5vw);
 }
-.eyebrow::before,.eyebrow::after{content:'';width:clamp(24px,4vw,52px);height:1px;background:linear-gradient(90deg,transparent,rgba(196,168,130,.5))}
-.eyebrow::after{background:linear-gradient(90deg,rgba(196,168,130,.5),transparent)}
+.eyebrow::before,.eyebrow::after{content:'';width:clamp(24px,4vw,52px);height:1px;background:linear-gradient(90deg,transparent,rgba(196,168,130,.72))}
+.eyebrow::after{background:linear-gradient(90deg,rgba(196,168,130,.72),transparent)}
 
 .title{
   font-family:var(--serif);font-weight:400;
@@ -64,7 +64,7 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
   font-family:var(--cond);font-weight:500;
   font-size:clamp(11px,1.2vw,14px);
   letter-spacing:.28em;text-transform:uppercase;
-  color:rgba(196,168,130,.55);
+  color:rgba(196,168,130,.78);
   margin-top:max(8px,1.2vh);
 }
 
@@ -83,7 +83,7 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
   position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-decoration:none;color:inherit;
   background:linear-gradient(180deg,rgba(31,20,9,.6),rgba(15,9,5,.85));
-  border:1.5px solid rgba(196,168,130,.18);
+  border:1.5px solid rgba(196,168,130,.32);
   padding:max(16px,2vh) max(14px,1.5vw);
   overflow:hidden;cursor:pointer;
   transition:all .35s var(--ease);
@@ -110,6 +110,18 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
 .nav-btn:hover::before{opacity:1}
 .nav-btn:hover::after{transform:scaleX(1)}
 
+/* Featured catering button — visually prominent so no one misses it */
+.nav-btn.featured{
+  background:linear-gradient(180deg,rgba(192,74,0,.22),rgba(31,20,9,.85) 60%,rgba(122,26,10,.18));
+  border-color:rgba(240,140,40,.55);
+  box-shadow:0 0 30px rgba(192,74,0,.15) inset, 0 4px 20px rgba(192,74,0,.18);
+}
+.nav-btn.featured::before{opacity:.4}
+.nav-btn.featured::after{transform:scaleX(.6);opacity:.6}
+.nav-btn.featured:hover{border-color:var(--glow);box-shadow:0 10px 40px rgba(240,140,40,.4),0 0 80px rgba(245,176,64,.12)}
+.nav-btn.featured:hover::after{transform:scaleX(1);opacity:1}
+.nav-btn.featured .nav-btn-sub{color:var(--flame);font-weight:700}
+
 .nav-btn-name{
   position:relative;z-index:1;
   font-family:var(--serif);font-weight:400;
@@ -126,7 +138,7 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
   font-family:var(--cond);font-weight:500;
   font-size:clamp(9px,0.95vw,11px);
   letter-spacing:.28em;text-transform:uppercase;
-  color:rgba(196,168,130,.45);
+  color:rgba(196,168,130,.68);
   transition:color .3s;
 }
 .nav-btn:hover .nav-btn-sub{color:var(--flame)}
@@ -140,17 +152,17 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
   gap:14px;flex-wrap:wrap;
   font-family:var(--cond);font-size:clamp(9px,0.9vw,11px);
   letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(196,168,130,.5);
+  color:rgba(196,168,130,.72);
 }
 .footer-info{display:flex;align-items:center;gap:max(12px,2vw);flex-wrap:wrap}
-.footer-info a{color:rgba(196,168,130,.7);text-decoration:none;transition:color .25s;font-weight:600}
+.footer-info a{color:rgba(196,168,130,.88);text-decoration:none;transition:color .25s;font-weight:600}
 .footer-info a:hover{color:var(--flame)}
-.footer-info .dot{color:rgba(196,168,130,.25)}
+.footer-info .dot{color:rgba(196,168,130,.4)}
 .live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--glow);box-shadow:0 0 7px var(--glow);animation:pulse 1.6s ease-in-out infinite;margin-right:6px;vertical-align:middle}
 @keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
 .status{color:var(--flame);font-weight:700}
-.status.closed{color:rgba(196,168,130,.5)}
-.status.closed .live-dot{background:rgba(196,168,130,.4);box-shadow:none;animation:none}
+.status.closed{color:rgba(196,168,130,.72)}
+.status.closed .live-dot{background:rgba(196,168,130,.62);box-shadow:none;animation:none}
 .credit a{color:rgba(240,140,40,.45);text-decoration:none}
 .credit a:hover{color:var(--flame)}
 
@@ -235,9 +247,9 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
       <span class="nav-btn-name">Market</span>
       <span class="nav-btn-sub">Smokehouse Market</span>
     </a>
-    <a href="catering.html" class="nav-btn">
+    <a href="catering.html" class="nav-btn featured">
       <span class="nav-btn-name">Catering</span>
-      <span class="nav-btn-sub">Feed the crew</span>
+      <span class="nav-btn-sub">Book Your Event →</span>
     </a>
     <a href="about.html" class="nav-btn">
       <span class="nav-btn-name">About</span>
