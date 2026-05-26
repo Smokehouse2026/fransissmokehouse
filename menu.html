@@ -761,13 +761,12 @@ function openLightbox(src, name){
 
 function closeLightbox(e){
   if (e) {
+    // Only close when the user clicked the backdrop itself or the close button.
+    // Clicks on the image, collage, gallery, nav arrows, dots, etc. should NOT close.
+    const isBackdrop = e.target.id === 'lightbox';
+    const isCloseBtn = e.target.id === 'lb-close' || e.target.closest('#lb-close');
+    if (!isBackdrop && !isCloseBtn) return;
     e.stopPropagation();
-    // If clicked on the gallery nav or dots, ignore close
-    if (e.target.closest('.lb-nav') || e.target.closest('#lb-dots span')) return;
-    // Allow close on backdrop or close button or main image
-    if (e.target.id !== 'lightbox' && e.target.id !== 'lb-close' && e.target.id !== 'lb-img' && e.target.id !== 'lb-gallery-img' && !e.target.closest('#lb-collage')) {
-      // Inside other content — let it propagate normally
-    }
   }
   document.getElementById('lightbox').classList.remove('open');
   document.body.style.overflow = '';
