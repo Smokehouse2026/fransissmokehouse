@@ -149,17 +149,30 @@ async function sbDeleteFile(urlOrPath) {
 /**
  * Normalize the images field. Accepts the new `images` jsonb array OR
  * the legacy single `img` string. Returns always an array of
- * { url, crop:{x,y,zoom,rotation} } objects.
+ * { url, pos?, fit? } objects. Older `crop:{x,y,zoom,rotation}` records
+ * get migrated to `fit:{offsetX,offsetY,scale}` automatically.
  */
 function normalizeImages(images, legacyImg) {
   if (Array.isArray(images) && images.length) {
-    return images.map(im => ({
-      url: im.url || im,
-      crop: im.crop || { x: 0, y: 0, zoom: 1, rotation: 0 }
-    }));
+    return images.map(im => {
+      const url = im.url || im;
+      const out = { url };
+      // Pass through pos/fit if present
+      if (im.pos) out.pos = im.pos;
+      if (im.fit) out.fit = im.fit;
+      // Migrate old crop format to fit
+      if (!im.fit && im.crop) {
+        out.fit = {
+          offsetX: im.crop.x || 0,
+          offsetY: im.crop.y || 0,
+          scale:   im.crop.zoom || 1
+        };
+      }
+      return out;
+    });
   }
   if (legacyImg) {
-    return [{ url: legacyImg, crop: { x: 0, y: 0, zoom: 1, rotation: 0 } }];
+    return [{ url: legacyImg }];
   }
   return [];
 }
