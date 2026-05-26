@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Editor — The Francis Smokehouse</title>
 <meta name="robots" content="noindex,nofollow">
-<link rel="icon" type="image/png" href="Images/Smokehouselogo.png">
+<link rel="icon" type="image/png" href="../Images/Smokehouselogo.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Barlow+Condensed:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --void:#0a0604;--deep:#140c06;--coal:#1f1409;--ash:#2a1d10;
-  --cream:#f5edda;--paper:#faf3e3;--sand:#c4a882;--leather:#7a5c38;
-  --ember:#c04a00;--fire:#e06510;--flame:#f08c28;--glow:#f5b040;
+  --cream:#fbf0dc;--paper:#fdf6e8;--sand:#c4a882;--leather:#7a5c38;
+  --ember:#d45200;--fire:#ed6e14;--flame:#ff9930;--glow:#ffc24a;
   --green:#4a9c5c;--red:#c0392b;
   --serif:'DM Serif Display',Georgia,serif;
   --cond:'Barlow Condensed',sans-serif;
@@ -29,9 +29,9 @@ a{color:var(--flame);text-decoration:none}
 .gate-title em{font-style:italic;color:var(--flame)}
 .gate-sub{font-family:var(--cond);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(196,168,130,.6);margin-bottom:24px}
 .gate-input{width:100%;background:rgba(10,6,3,.6);border:1px solid rgba(196,168,130,.25);color:var(--paper);font-family:var(--mono);font-size:15px;padding:12px 14px;border-radius:3px;text-align:center;letter-spacing:.1em}
-.gate-input:focus{outline:none;border-color:var(--flame);box-shadow:0 0 0 3px rgba(240,140,40,.15)}
+.gate-input:focus{outline:none;border-color:var(--flame);box-shadow:0 0 0 3px rgba(255,153,48,.15)}
 .gate-btn{margin-top:14px;width:100%;background:linear-gradient(135deg,var(--ember),var(--fire));border:none;color:var(--cream);font-family:var(--cond);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;padding:12px;border-radius:3px;cursor:pointer;transition:transform .2s,box-shadow .2s}
-.gate-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(192,74,0,.4)}
+.gate-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(212,82,0,.4)}
 .gate-err{color:var(--red);font-size:12px;margin-top:10px;min-height:14px;font-family:var(--cond);letter-spacing:.06em}
 
 /* ═══ APP LAYOUT ═══ */
@@ -67,8 +67,8 @@ a{color:var(--flame);text-decoration:none}
 .pane-hdr p{font-family:var(--cond);font-size:13px;color:rgba(196,168,130,.65);margin-top:4px;letter-spacing:.04em}
 
 .btn{font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:9px 16px;border-radius:3px;cursor:pointer;transition:all .2s;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px}
-.btn-primary{background:linear-gradient(135deg,var(--ember),var(--fire));color:var(--cream);border-color:rgba(240,140,40,.5)}
-.btn-primary:hover{box-shadow:0 4px 14px rgba(192,74,0,.4);transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(135deg,var(--ember),var(--fire));color:var(--cream);border-color:rgba(255,153,48,.5)}
+.btn-primary:hover{box-shadow:0 4px 14px rgba(212,82,0,.4);transform:translateY(-1px)}
 .btn-secondary{background:transparent;color:var(--sand);border-color:rgba(196,168,130,.35)}
 .btn-secondary:hover{color:var(--cream);border-color:var(--flame)}
 .btn-danger{background:transparent;color:var(--red);border-color:rgba(192,57,43,.4)}
@@ -78,7 +78,7 @@ a{color:var(--flame);text-decoration:none}
 
 /* ═══ CATEGORY BLOCKS ═══ */
 .cat-block{background:linear-gradient(180deg,rgba(31,20,9,.55),rgba(15,9,5,.8));border:1px solid rgba(196,168,130,.15);border-radius:6px;margin-bottom:18px;overflow:hidden}
-.cat-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(192,74,0,.08);border-bottom:1px solid rgba(196,168,130,.12);flex-wrap:wrap;gap:10px}
+.cat-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(212,82,0,.08);border-bottom:1px solid rgba(196,168,130,.12);flex-wrap:wrap;gap:10px}
 .cat-hdr-info{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
 .cat-icon{font-size:22px;line-height:1}
 .cat-title-block{min-width:0}
@@ -89,14 +89,14 @@ a{color:var(--flame);text-decoration:none}
 /* ═══ ITEM ROWS ═══ */
 .items-list{padding:8px 12px}
 .item-row{display:grid;grid-template-columns:1fr 100px auto;gap:12px;align-items:center;padding:10px;border-radius:4px;transition:background .15s;border:1px solid transparent}
-.item-row:hover{background:rgba(192,74,0,.06);border-color:rgba(196,168,130,.12)}
+.item-row:hover{background:rgba(212,82,0,.06);border-color:rgba(196,168,130,.12)}
 .item-row.hidden-row{opacity:.45}
 .item-main{min-width:0}
 .item-name{font-family:var(--cond);font-weight:700;font-size:15px;color:var(--cream);letter-spacing:.02em}
 .item-desc{font-family:var(--cond);font-size:12px;color:rgba(196,168,130,.65);margin-top:2px;line-height:1.35}
 .item-meta{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap}
 .meta-pill{font-family:var(--cond);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:2px 8px;background:rgba(196,168,130,.1);border:1px solid rgba(196,168,130,.18);color:rgba(196,168,130,.75);border-radius:2px}
-.meta-pill.pop{background:rgba(240,140,40,.12);border-color:rgba(240,140,40,.35);color:var(--flame)}
+.meta-pill.pop{background:rgba(255,153,48,.12);border-color:rgba(255,153,48,.35);color:var(--flame)}
 .meta-pill.new{background:rgba(74,156,92,.12);border-color:rgba(74,156,92,.35);color:var(--green)}
 .meta-pill.out{background:rgba(196,168,130,.08);color:rgba(196,168,130,.4);text-decoration:line-through}
 .item-price{font-family:var(--mono);font-size:14px;color:var(--flame);text-align:right;font-weight:600}
@@ -114,11 +114,67 @@ a{color:var(--flame);text-decoration:none}
 .field label{display:block;font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,168,130,.65);margin-bottom:5px}
 .field input,.field select,.field textarea{width:100%;background:rgba(10,6,3,.7);border:1px solid rgba(196,168,130,.25);color:var(--paper);font-family:var(--cond);font-size:14px;padding:9px 12px;border-radius:3px;transition:border-color .2s}
 .field textarea{font-family:var(--cond);min-height:60px;resize:vertical;line-height:1.4}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--flame);box-shadow:0 0 0 2px rgba(240,140,40,.15)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--flame);box-shadow:0 0 0 2px rgba(255,153,48,.15)}
 .field-hint{font-family:var(--cond);font-size:10px;color:rgba(196,168,130,.5);margin-top:4px;letter-spacing:.04em}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .modal-actions{display:flex;justify-content:space-between;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid rgba(196,168,130,.12);flex-wrap:wrap}
 .modal-actions-r{display:flex;gap:8px;margin-left:auto}
+
+/* ═══ IMAGE MANAGER ═══ */
+.imgmgr{margin-bottom:14px}
+.imgmgr-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.imgmgr-head label{font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,168,130,.65);margin:0}
+.imgmgr-layout{display:flex;gap:0;border:1px solid rgba(196,168,130,.25);border-radius:3px;overflow:hidden}
+.imgmgr-layout button{background:transparent;border:none;color:rgba(196,168,130,.65);font-family:var(--cond);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:6px 12px;cursor:pointer;transition:all .2s}
+.imgmgr-layout button.on{background:linear-gradient(135deg,var(--ember),var(--fire));color:var(--cream)}
+.imgmgr-layout button:not(.on):hover{color:var(--flame)}
+
+.imgmgr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;background:rgba(10,6,3,.5);border:1px dashed rgba(196,168,130,.2);border-radius:4px;padding:10px;min-height:118px}
+.imgmgr-tile{position:relative;width:100%;aspect-ratio:1/1;background:#0a0402;border-radius:3px;overflow:hidden;cursor:grab;border:1px solid rgba(196,168,130,.15)}
+.imgmgr-tile.dragging{opacity:.4;cursor:grabbing}
+.imgmgr-tile.drop-target{outline:2px dashed var(--flame);outline-offset:-2px}
+.imgmgr-tile img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
+.imgmgr-tile-actions{position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.75));opacity:0;transition:opacity .2s;display:flex;flex-direction:column;justify-content:space-between;padding:5px;pointer-events:none}
+.imgmgr-tile:hover .imgmgr-tile-actions{opacity:1}
+.imgmgr-tile-num{align-self:flex-start;background:rgba(0,0,0,.65);color:var(--cream);font-family:var(--mono);font-size:9px;padding:2px 5px;border-radius:2px;letter-spacing:.05em}
+.imgmgr-tile-btns{display:flex;gap:4px;justify-content:flex-end;pointer-events:auto}
+.imgmgr-tile-btn{background:rgba(10,6,3,.92);border:1px solid rgba(196,168,130,.3);color:var(--cream);font-size:12px;width:22px;height:22px;border-radius:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0;transition:all .15s}
+.imgmgr-tile-btn:hover{border-color:var(--flame);color:var(--flame)}
+.imgmgr-tile-btn.del:hover{border-color:var(--red);color:var(--red);background:rgba(192,57,43,.2)}
+
+.imgmgr-add{aspect-ratio:1/1;border:1.5px dashed rgba(255,153,48,.35);background:rgba(212,82,0,.04);color:var(--flame);font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;border-radius:3px;transition:all .2s;padding:8px;text-align:center;line-height:1.2}
+.imgmgr-add:hover{border-color:var(--flame);background:rgba(212,82,0,.12);transform:translateY(-1px)}
+.imgmgr-add-icon{font-size:22px;line-height:1}
+.imgmgr-add.uploading{cursor:wait;opacity:.6;animation:imgmgrPulse 1.4s ease-in-out infinite}
+@keyframes imgmgrPulse{0%,100%{opacity:.5}50%{opacity:.85}}
+
+.imgmgr-empty{grid-column:1/-1;display:flex;align-items:center;justify-content:center;font-family:var(--cond);font-style:italic;color:rgba(196,168,130,.45);font-size:12px;letter-spacing:.04em;padding:18px 0}
+
+.imgmgr-url-fallback{margin-top:8px}
+.imgmgr-url-fallback summary{font-family:var(--cond);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,168,130,.5);cursor:pointer;padding:4px 0}
+.imgmgr-url-fallback summary:hover{color:var(--flame)}
+.imgmgr-url-fallback input{margin-top:6px}
+
+/* ═══ CROPPER MODAL ═══ */
+#crop-bg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1100;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+#crop-bg.show{display:flex}
+#crop-modal{background:linear-gradient(180deg,#1a1108,#0a0604);border:1px solid rgba(196,168,130,.25);border-radius:6px;padding:24px;width:100%;max-width:520px;max-height:92vh;overflow:auto}
+.crop-title{font-family:var(--serif);font-size:22px;color:var(--cream);margin-bottom:4px}
+.crop-title em{font-style:italic;color:var(--flame)}
+.crop-sub{font-family:var(--cond);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,168,130,.55);margin-bottom:18px}
+
+.crop-stage{position:relative;width:100%;aspect-ratio:1/1;max-width:380px;margin:0 auto;background:#000;border-radius:4px;overflow:hidden;cursor:move;user-select:none;touch-action:none;border:1px solid rgba(196,168,130,.2)}
+.crop-stage img{position:absolute;top:50%;left:50%;transform-origin:center;pointer-events:none;user-select:none;-webkit-user-drag:none;max-width:none}
+.crop-mask{position:absolute;inset:0;pointer-events:none;box-shadow:0 0 0 9999px rgba(0,0,0,.55);border:1px dashed rgba(255,153,48,.5)}
+.crop-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:33.33% 33.33%;opacity:0;transition:opacity .2s}
+.crop-stage.dragging .crop-grid{opacity:1}
+
+.crop-controls{margin-top:16px;display:flex;flex-direction:column;gap:12px}
+.crop-row{display:flex;align-items:center;gap:10px}
+.crop-row label{font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,168,130,.7);min-width:54px}
+.crop-row input[type=range]{flex:1;accent-color:var(--flame)}
+.crop-val{font-family:var(--mono);font-size:11px;color:var(--glow);min-width:42px;text-align:right}
+.crop-help{font-family:var(--cond);font-size:10px;color:rgba(196,168,130,.5);text-align:center;letter-spacing:.04em;font-style:italic}
 
 /* ═══ SPECIAL & SCARCITY PANES ═══ */
 .special-block{background:linear-gradient(180deg,rgba(31,20,9,.55),rgba(15,9,5,.8));border:1px solid rgba(196,168,130,.15);border-radius:6px;padding:24px;max-width:720px}
@@ -128,7 +184,7 @@ a{color:var(--flame);text-decoration:none}
 .scarcity-card h3{font-family:var(--serif);font-size:18px;margin-bottom:4px}
 .scarcity-card h3 em{font-style:italic;color:var(--flame)}
 .scarcity-list{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
-.scarcity-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(192,74,0,.1);border:1px solid rgba(240,140,40,.3);color:var(--flame);font-family:var(--cond);font-size:12px;font-weight:600;padding:5px 10px;border-radius:3px}
+.scarcity-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(212,82,0,.1);border:1px solid rgba(255,153,48,.3);color:var(--flame);font-family:var(--cond);font-size:12px;font-weight:600;padding:5px 10px;border-radius:3px}
 .scarcity-tag button{background:none;border:none;color:rgba(196,168,130,.5);cursor:pointer;font-size:14px;line-height:1;padding:0;margin-left:4px}
 .scarcity-tag button:hover{color:var(--red)}
 .scarcity-add{display:flex;gap:8px;margin-top:8px}
@@ -232,10 +288,46 @@ a{color:var(--flame);text-decoration:none}
   <div class="modal" id="modal"></div>
 </div>
 
+<!-- ═══ CROPPER MODAL ═══ -->
+<div id="crop-bg" onclick="if(event.target.id==='crop-bg')cropCancel()">
+  <div id="crop-modal">
+    <div class="crop-title">Crop <em>Image</em></div>
+    <div class="crop-sub">Drag to position · Scroll or slider to zoom</div>
+    <div class="crop-stage" id="crop-stage">
+      <img id="crop-img" alt="" />
+      <div class="crop-grid"></div>
+      <div class="crop-mask"></div>
+    </div>
+    <div class="crop-controls">
+      <div class="crop-row">
+        <label>Zoom</label>
+        <input type="range" id="crop-zoom" min="1" max="4" step="0.01" value="1" />
+        <span class="crop-val" id="crop-zoom-val">1.00×</span>
+      </div>
+      <div class="crop-row">
+        <label>Rotate</label>
+        <input type="range" id="crop-rot" min="-180" max="180" step="1" value="0" />
+        <span class="crop-val" id="crop-rot-val">0°</span>
+      </div>
+      <div class="crop-help">The square frame is exactly how it appears on the menu.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="cropReset()">Reset</button>
+      <div class="modal-actions-r">
+        <button class="btn btn-secondary" onclick="cropCancel()">Cancel</button>
+        <button class="btn btn-primary" onclick="cropSave()">Save Crop</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden file input used by image manager -->
+<input type="file" id="img-file-input" accept="image/*" style="display:none" />
+
 <!-- ═══ TOAST ═══ -->
 <div id="toast">Saved</div>
 
-<script src="supabase.js"></script>
+<script src="../supabase.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════
    STATE
@@ -604,7 +696,7 @@ async function openItemModal(type, catId, item){
       </div>
     </div>
 
-    <div class="field"><label>Image URL (optional)</label><input id="i-img" value="${escapeHtml(it.img||'')}" placeholder="https://www.thefrancismokehouse.com/Images/Brisket.jpg" /></div>
+    ${imgmgrHtml('item', it.images || [], it.imageLayout || 'collage', it.img || '')}
 
     <div class="modal-actions">
       <div></div>
@@ -614,6 +706,7 @@ async function openItemModal(type, catId, item){
       </div>
     </div>
   `);
+  imgmgrAttach('item');
 }
 
 async function saveItem(isNew){
@@ -626,11 +719,15 @@ async function saveItem(isNew){
   if (!name) { toast('Name is required', true); return; }
 
   const priceVal = document.getElementById('i-price').value.trim();
+  const imgState = imgmgrState['item'] || { images: [], layout: 'collage', urlOverride: '' };
+  const firstUrl = imgState.images[0]?.url || imgState.urlOverride || '';
   const row = {
     category_id: catId,
     name,
     price: priceVal === '' ? null : Number(priceVal),
-    img:         document.getElementById('i-img').value.trim(),
+    img:         firstUrl, // legacy fallback — kept in sync
+    images:      imgState.images,
+    image_layout: imgState.layout,
     description: document.getElementById('i-desc').value.trim(),
     note:        document.getElementById('i-note').value.trim(),
     badge:       document.getElementById('i-badge').value.trim(),
@@ -691,7 +788,7 @@ function renderSpecial(){
       <div class="field"><label>Type</label><input id="sp-type" value="${escapeHtml(s.type||'')}" placeholder="Lunch Special" /></div>
     </div>
     <div class="field"><label>Description</label><textarea id="sp-desc" placeholder="BBQ chicken, smoked sausage, dirty rice, green beans...">${escapeHtml(s.desc||'')}</textarea></div>
-    <div class="field"><label>Image URL (optional)</label><input id="sp-image" value="${escapeHtml(s.image||'')}" placeholder="https://..." /></div>
+    ${imgmgrHtml('sp', s.images || [], s.imageLayout || 'collage', s.image || '')}
     <div class="field">
       <label><input type="checkbox" id="sp-hidden" ${s.hidden?'checked':''} style="width:auto;margin-right:8px;vertical-align:middle"> Hide today (no special running)</label>
     </div>
@@ -699,22 +796,27 @@ function renderSpecial(){
       <button class="btn btn-primary" onclick="saveSpecial()">Save Special</button>
     </div>
   `;
+  imgmgrAttach('sp');
 }
 
 async function saveSpecial(){
+  const imgState = imgmgrState['sp'] || { images: [], layout: 'collage', urlOverride: '' };
+  const firstUrl = imgState.images[0]?.url || imgState.urlOverride || '';
   const row = {
     id: 'current',
     name:        document.getElementById('sp-name').value.trim(),
     price:       document.getElementById('sp-price').value.trim() === '' ? null : Number(document.getElementById('sp-price').value),
     description: document.getElementById('sp-desc').value.trim(),
     type:        document.getElementById('sp-type').value.trim(),
-    image:       document.getElementById('sp-image').value.trim(),
+    image:       firstUrl,
+    images:      imgState.images,
+    image_layout: imgState.layout,
     hidden:      document.getElementById('sp-hidden').checked
   };
   try {
     setStatus('Saving…','saving');
     await sbUpsert('daily_special', row);
-    DATA.special = { name: row.name, price: row.price, desc: row.description, type: row.type, image: row.image, hidden: row.hidden };
+    DATA.special = { name: row.name, price: row.price, desc: row.description, type: row.type, image: row.image, images: row.images, imageLayout: row.image_layout, hidden: row.hidden };
     renderSpecial();
     toast('Special saved');
     setStatus('Ready');
@@ -791,6 +893,299 @@ async function reloadAndRender(type){
   }
   renderAll();
 }
+
+/* ═══════════════════════════════════════════════════════════
+   IMAGE MANAGER  — multi-image, drag-reorder, layout toggle
+   Used by the item modal (key='item') and special panel (key='sp').
+═══════════════════════════════════════════════════════════ */
+const imgmgrState = {}; // { item: {images, layout, urlOverride}, sp: {...} }
+
+function imgmgrHtml(key, images, layout, legacyUrl){
+  // Seed state
+  const seeded = (images && images.length)
+    ? images.map(im => ({ url: im.url, crop: im.crop || {x:0,y:0,zoom:1,rotation:0} }))
+    : (legacyUrl ? [{ url: legacyUrl, crop: {x:0,y:0,zoom:1,rotation:0} }] : []);
+  imgmgrState[key] = { images: seeded, layout: layout || 'collage', urlOverride: '' };
+  return `
+    <div class="imgmgr" id="imgmgr-${key}">
+      <div class="imgmgr-head">
+        <label>Images</label>
+        <div class="imgmgr-layout">
+          <button type="button" data-layout="collage" onclick="imgmgrSetLayout('${key}','collage')">Collage</button>
+          <button type="button" data-layout="slideshow" onclick="imgmgrSetLayout('${key}','slideshow')">Slideshow</button>
+        </div>
+      </div>
+      <div class="imgmgr-grid" id="imgmgr-grid-${key}"></div>
+      <details class="imgmgr-url-fallback">
+        <summary>Paste an image URL instead</summary>
+        <div class="field" style="margin:0">
+          <input type="url" id="imgmgr-url-${key}" placeholder="https://..." oninput="imgmgrUrlChange('${key}',this.value)">
+          <div class="field-hint">For external images (Instagram, Facebook, etc). Tap "+ Add" to add it.</div>
+          <button type="button" class="btn btn-secondary btn-sm" style="margin-top:6px" onclick="imgmgrAddUrl('${key}')">+ Add URL</button>
+        </div>
+      </details>
+    </div>
+  `;
+}
+
+function imgmgrAttach(key){
+  imgmgrRender(key);
+  // Set the layout toggle visual state
+  const head = document.querySelector(`#imgmgr-${key} .imgmgr-layout`);
+  if (head) {
+    head.querySelectorAll('button').forEach(b => {
+      b.classList.toggle('on', b.dataset.layout === imgmgrState[key].layout);
+    });
+  }
+}
+
+function imgmgrRender(key){
+  const grid = document.getElementById(`imgmgr-grid-${key}`);
+  if (!grid) return;
+  const st = imgmgrState[key];
+  const tiles = st.images.map((im, idx) => `
+    <div class="imgmgr-tile" draggable="true" data-idx="${idx}"
+         ondragstart="imgmgrDragStart(event,'${key}',${idx})"
+         ondragover="imgmgrDragOver(event)"
+         ondragleave="imgmgrDragLeave(event)"
+         ondrop="imgmgrDrop(event,'${key}',${idx})"
+         ondragend="imgmgrDragEnd(event)">
+      <img src="${escapeHtml(im.url)}" alt="" style="${imgmgrCropStyle(im.crop)}">
+      <div class="imgmgr-tile-actions">
+        <span class="imgmgr-tile-num">${idx+1}</span>
+        <div class="imgmgr-tile-btns">
+          <button type="button" class="imgmgr-tile-btn" title="Re-crop" onclick="imgmgrRecrop('${key}',${idx})">✎</button>
+          <button type="button" class="imgmgr-tile-btn del" title="Delete" onclick="imgmgrDelete('${key}',${idx})">×</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  const addBtn = `
+    <button type="button" class="imgmgr-add" id="imgmgr-add-${key}" onclick="imgmgrPick('${key}')">
+      <span class="imgmgr-add-icon">+</span>
+      <span>Add Image</span>
+    </button>
+  `;
+  grid.innerHTML = tiles + addBtn;
+  if (st.images.length === 0 && false) {
+    grid.insertAdjacentHTML('afterbegin', `<div class="imgmgr-empty">No images yet — tap + to add one</div>`);
+  }
+}
+
+/** Build a CSS transform string from a crop object for use inside a square frame */
+function imgmgrCropStyle(crop){
+  const c = crop || {x:0,y:0,zoom:1,rotation:0};
+  // x/y are offsets in % of the tile, zoom is multiplier, rotation in deg
+  const tx = (c.x || 0);
+  const ty = (c.y || 0);
+  const z  = c.zoom || 1;
+  const r  = c.rotation || 0;
+  return `transform:translate(${tx}%,${ty}%) scale(${z}) rotate(${r}deg);transform-origin:center;object-fit:cover;`;
+}
+
+function imgmgrSetLayout(key, layout){
+  imgmgrState[key].layout = layout;
+  document.querySelectorAll(`#imgmgr-${key} .imgmgr-layout button`).forEach(b => {
+    b.classList.toggle('on', b.dataset.layout === layout);
+  });
+}
+
+function imgmgrDelete(key, idx){
+  const im = imgmgrState[key].images[idx];
+  if (!confirm('Remove this image?')) return;
+  imgmgrState[key].images.splice(idx, 1);
+  imgmgrRender(key);
+  // Best-effort delete from storage (don't block UI)
+  if (im && im.url) sbDeleteFile(im.url).catch(()=>{});
+}
+
+function imgmgrUrlChange(key, val){
+  imgmgrState[key].urlOverride = val.trim();
+}
+
+function imgmgrAddUrl(key){
+  const inp = document.getElementById(`imgmgr-url-${key}`);
+  const url = (inp?.value || '').trim();
+  if (!url) { toast('Paste a URL first', true); return; }
+  imgmgrState[key].images.push({ url, crop: {x:0,y:0,zoom:1,rotation:0} });
+  inp.value = '';
+  imgmgrState[key].urlOverride = '';
+  imgmgrRender(key);
+}
+
+/* ─── drag to reorder ─── */
+let _dragSrc = null;
+function imgmgrDragStart(e, key, idx){ _dragSrc = {key, idx}; e.target.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+function imgmgrDragOver(e){ if(_dragSrc){ e.preventDefault(); e.currentTarget.classList.add('drop-target'); } }
+function imgmgrDragLeave(e){ e.currentTarget.classList.remove('drop-target'); }
+function imgmgrDrop(e, key, idx){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drop-target');
+  if (!_dragSrc || _dragSrc.key !== key || _dragSrc.idx === idx) return;
+  const arr = imgmgrState[key].images;
+  const [moved] = arr.splice(_dragSrc.idx, 1);
+  arr.splice(idx, 0, moved);
+  imgmgrRender(key);
+}
+function imgmgrDragEnd(e){ e.target.classList.remove('dragging'); document.querySelectorAll('.imgmgr-tile').forEach(t=>t.classList.remove('drop-target')); _dragSrc = null; }
+
+/* ─── file pick + upload ─── */
+function imgmgrPick(key){
+  const inp = document.getElementById('img-file-input');
+  inp.value = ''; // reset so picking same file twice still fires
+  inp.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    await imgmgrUpload(key, file);
+  };
+  inp.click();
+}
+
+async function imgmgrUpload(key, file){
+  const btn = document.getElementById(`imgmgr-add-${key}`);
+  if (btn) { btn.classList.add('uploading'); btn.querySelector('span:last-child').textContent = 'Uploading…'; }
+  try {
+    const folder = key === 'sp' ? 'special' : (document.getElementById('i-type')?.value === 'market' ? 'market' : 'menu');
+    const { url } = await sbUpload(file, folder);
+    // Open cropper before adding to list
+    cropOpen(url, (crop) => {
+      imgmgrState[key].images.push({ url, crop });
+      imgmgrRender(key);
+      toast('Image added');
+    }, () => {
+      // Cancel: remove the uploaded file from storage since user bailed
+      sbDeleteFile(url).catch(()=>{});
+    });
+  } catch(err) {
+    console.error(err);
+    toast('Upload failed: ' + (err.message || 'unknown'), true);
+  } finally {
+    if (btn) { btn.classList.remove('uploading'); btn.querySelector('span:last-child').textContent = 'Add Image'; }
+  }
+}
+
+function imgmgrRecrop(key, idx){
+  const im = imgmgrState[key].images[idx];
+  cropOpen(im.url, (crop) => {
+    imgmgrState[key].images[idx].crop = crop;
+    imgmgrRender(key);
+  }, null, im.crop);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CROPPER
+═══════════════════════════════════════════════════════════ */
+let _cropOnSave = null, _cropOnCancel = null;
+let _cropState = { x:0, y:0, zoom:1, rotation:0, imgW:0, imgH:0, stageSize:0 };
+let _cropDrag  = null;
+
+function cropOpen(url, onSave, onCancel, existingCrop){
+  _cropOnSave = onSave;
+  _cropOnCancel = onCancel;
+  const bg  = document.getElementById('crop-bg');
+  const img = document.getElementById('crop-img');
+  const stage = document.getElementById('crop-stage');
+  img.onload = () => {
+    const r = stage.getBoundingClientRect();
+    _cropState.stageSize = r.width;
+    _cropState.imgW = img.naturalWidth;
+    _cropState.imgH = img.naturalHeight;
+    // Set base size: image fills the stage's shorter axis (cover behavior)
+    const baseScale = Math.max(r.width / img.naturalWidth, r.width / img.naturalHeight);
+    img.style.width  = (img.naturalWidth  * baseScale) + 'px';
+    img.style.height = (img.naturalHeight * baseScale) + 'px';
+    img.style.marginLeft = -(img.naturalWidth  * baseScale) / 2 + 'px';
+    img.style.marginTop  = -(img.naturalHeight * baseScale) / 2 + 'px';
+    // Seed with existing crop if present
+    const c = existingCrop || {x:0,y:0,zoom:1,rotation:0};
+    _cropState.x = c.x || 0;
+    _cropState.y = c.y || 0;
+    _cropState.zoom = c.zoom || 1;
+    _cropState.rotation = c.rotation || 0;
+    document.getElementById('crop-zoom').value = _cropState.zoom;
+    document.getElementById('crop-rot').value = _cropState.rotation;
+    cropUpdateValDisplays();
+    cropApply();
+  };
+  img.src = url;
+  bg.classList.add('show');
+}
+
+function cropClose(){ document.getElementById('crop-bg').classList.remove('show'); _cropOnSave = _cropOnCancel = null; }
+
+function cropCancel(){
+  if (_cropOnCancel) _cropOnCancel();
+  cropClose();
+}
+
+function cropSave(){
+  if (_cropOnSave) _cropOnSave({ x: _cropState.x, y: _cropState.y, zoom: _cropState.zoom, rotation: _cropState.rotation });
+  cropClose();
+}
+
+function cropReset(){
+  _cropState.x = 0; _cropState.y = 0; _cropState.zoom = 1; _cropState.rotation = 0;
+  document.getElementById('crop-zoom').value = 1;
+  document.getElementById('crop-rot').value = 0;
+  cropUpdateValDisplays();
+  cropApply();
+}
+
+function cropUpdateValDisplays(){
+  document.getElementById('crop-zoom-val').textContent = _cropState.zoom.toFixed(2) + '×';
+  document.getElementById('crop-rot-val').textContent = Math.round(_cropState.rotation) + '°';
+}
+
+function cropApply(){
+  const img = document.getElementById('crop-img');
+  // x/y are in % of the stage size (so they're meaningful regardless of img size)
+  const px = (_cropState.x / 100) * _cropState.stageSize;
+  const py = (_cropState.y / 100) * _cropState.stageSize;
+  img.style.transform = `translate(${px}px,${py}px) scale(${_cropState.zoom}) rotate(${_cropState.rotation}deg)`;
+}
+
+/* Drag to pan */
+(function(){
+  const stage = () => document.getElementById('crop-stage');
+  function start(clientX, clientY){
+    _cropDrag = { sx: clientX, sy: clientY, ox: _cropState.x, oy: _cropState.y };
+    stage().classList.add('dragging');
+  }
+  function move(clientX, clientY){
+    if (!_cropDrag) return;
+    const dx = (clientX - _cropDrag.sx) / _cropState.stageSize * 100;
+    const dy = (clientY - _cropDrag.sy) / _cropState.stageSize * 100;
+    _cropState.x = _cropDrag.ox + dx;
+    _cropState.y = _cropDrag.oy + dy;
+    cropApply();
+  }
+  function end(){
+    _cropDrag = null;
+    const s = stage(); if (s) s.classList.remove('dragging');
+  }
+  // attach on bg show so stage exists
+  document.addEventListener('mousedown', e => { if (e.target.closest('#crop-stage')) { e.preventDefault(); start(e.clientX, e.clientY); }});
+  document.addEventListener('mousemove', e => { if (_cropDrag) move(e.clientX, e.clientY); });
+  document.addEventListener('mouseup',   end);
+  document.addEventListener('touchstart', e => { if (e.target.closest('#crop-stage')) { const t=e.touches[0]; start(t.clientX, t.clientY); }}, {passive:true});
+  document.addEventListener('touchmove',  e => { if (_cropDrag) { const t=e.touches[0]; move(t.clientX, t.clientY); e.preventDefault(); }}, {passive:false});
+  document.addEventListener('touchend',   end);
+  // Wheel-to-zoom
+  document.addEventListener('wheel', e => {
+    if (!e.target.closest('#crop-stage')) return;
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.05 : 0.05;
+    _cropState.zoom = Math.max(1, Math.min(4, _cropState.zoom + delta));
+    document.getElementById('crop-zoom').value = _cropState.zoom;
+    cropUpdateValDisplays();
+    cropApply();
+  }, {passive:false});
+  // Slider changes
+  document.addEventListener('input', e => {
+    if (e.target.id === 'crop-zoom') { _cropState.zoom = parseFloat(e.target.value); cropUpdateValDisplays(); cropApply(); }
+    if (e.target.id === 'crop-rot')  { _cropState.rotation = parseFloat(e.target.value); cropUpdateValDisplays(); cropApply(); }
+  });
+})();
 
 /* ═══════════════════════════════════════════════════════════
    GO
