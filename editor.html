@@ -129,52 +129,69 @@ a{color:var(--flame);text-decoration:none}
 .imgmgr-layout button.on{background:linear-gradient(135deg,var(--ember),var(--fire));color:var(--cream)}
 .imgmgr-layout button:not(.on):hover{color:var(--flame)}
 
-.imgmgr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;background:rgba(10,6,3,.5);border:1px dashed rgba(196,168,130,.2);border-radius:4px;padding:10px;min-height:118px}
-.imgmgr-tile{position:relative;width:100%;aspect-ratio:1/1;background:#0a0402;border-radius:3px;overflow:hidden;cursor:grab;border:1px solid rgba(196,168,130,.15)}
-.imgmgr-tile.dragging{opacity:.4;cursor:grabbing}
-.imgmgr-tile.drop-target{outline:2px dashed var(--flame);outline-offset:-2px}
-.imgmgr-tile img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
-.imgmgr-tile-actions{position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.75));opacity:0;transition:opacity .2s;display:flex;flex-direction:column;justify-content:space-between;padding:5px;pointer-events:none}
-.imgmgr-tile:hover .imgmgr-tile-actions{opacity:1}
-.imgmgr-tile-num{align-self:flex-start;background:rgba(0,0,0,.65);color:var(--cream);font-family:var(--mono);font-size:9px;padding:2px 5px;border-radius:2px;letter-spacing:.05em}
-.imgmgr-tile-btns{display:flex;gap:4px;justify-content:flex-end;pointer-events:auto}
-.imgmgr-tile-btn{background:rgba(10,6,3,.92);border:1px solid rgba(196,168,130,.3);color:var(--cream);font-size:12px;width:22px;height:22px;border-radius:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0;transition:all .15s}
-.imgmgr-tile-btn:hover{border-color:var(--flame);color:var(--flame)}
-.imgmgr-tile-btn.del:hover{border-color:var(--red);color:var(--red);background:rgba(192,57,43,.2)}
+/* The collage canvas — square, shows the actual final card layout */
+.collage-stage-wrap{background:rgba(10,6,3,.5);border:1px dashed rgba(196,168,130,.2);border-radius:4px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.collage-stage{position:relative;width:100%;max-width:340px;aspect-ratio:1/1;background:#0a0402;border:1px solid rgba(196,168,130,.25);border-radius:4px;overflow:hidden;user-select:none;touch-action:none}
+.collage-stage.empty{display:flex;align-items:center;justify-content:center;color:rgba(196,168,130,.4);font-family:var(--cond);font-style:italic;font-size:12px;letter-spacing:.05em;text-align:center;padding:20px}
 
-.imgmgr-add{aspect-ratio:1/1;border:1.5px dashed rgba(255,153,48,.35);background:rgba(212,82,0,.04);color:var(--flame);font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;border-radius:3px;transition:all .2s;padding:8px;text-align:center;line-height:1.2}
-.imgmgr-add:hover{border-color:var(--flame);background:rgba(212,82,0,.12);transform:translateY(-1px)}
-.imgmgr-add-icon{font-size:22px;line-height:1}
-.imgmgr-add.uploading{cursor:wait;opacity:.6;animation:imgmgrPulse 1.4s ease-in-out infinite}
+/* Each tile inside the stage */
+.ctile{position:absolute;overflow:hidden;cursor:move;background:#0a0402;outline:1px solid rgba(255,255,255,.06)}
+.ctile.selected{outline:2px solid var(--flame);outline-offset:-2px;z-index:10}
+.ctile img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none;user-select:none}
+.ctile-num{position:absolute;top:3px;left:3px;background:rgba(0,0,0,.7);color:#fff;font-family:var(--mono);font-size:9px;padding:1px 5px;border-radius:2px;letter-spacing:.05em;pointer-events:none;opacity:0;transition:opacity .15s;z-index:2}
+.ctile:hover .ctile-num,.ctile.selected .ctile-num{opacity:1}
+
+/* 8 resize handles around the tile when selected */
+.ctile-handle{position:absolute;width:14px;height:14px;background:var(--flame);border:1.5px solid #fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.6);z-index:3;opacity:0;pointer-events:none;transition:opacity .15s}
+.ctile.selected .ctile-handle{opacity:1;pointer-events:auto}
+.ctile-h-n{top:-7px;left:50%;margin-left:-7px;cursor:ns-resize}
+.ctile-h-s{bottom:-7px;left:50%;margin-left:-7px;cursor:ns-resize}
+.ctile-h-e{right:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
+.ctile-h-w{left:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
+.ctile-h-ne{top:-7px;right:-7px;cursor:nesw-resize;border-radius:2px}
+.ctile-h-nw{top:-7px;left:-7px;cursor:nwse-resize;border-radius:2px}
+.ctile-h-se{bottom:-7px;right:-7px;cursor:nwse-resize;border-radius:2px}
+.ctile-h-sw{bottom:-7px;left:-7px;cursor:nesw-resize;border-radius:2px}
+
+/* Pan-image overlay — appears when pan mode is on */
+.ctile.panning{cursor:grab}
+.ctile.panning.dragging{cursor:grabbing}
+.ctile-pan-hint{position:absolute;bottom:3px;right:3px;background:rgba(0,0,0,.7);color:var(--glow);font-family:var(--cond);font-size:8px;padding:2px 5px;border-radius:2px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;pointer-events:none;opacity:0;transition:opacity .15s}
+.ctile.selected .ctile-pan-hint{opacity:1}
+
+/* Toolbar below the stage */
+.collage-tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;width:100%}
+.collage-tools button{background:transparent;border:1px solid rgba(196,168,130,.3);color:rgba(196,168,130,.85);font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:6px 11px;border-radius:3px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.collage-tools button:hover{color:var(--flame);border-color:var(--flame)}
+.collage-tools button.primary{background:linear-gradient(135deg,var(--ember),var(--fire));color:var(--cream);border-color:transparent}
+.collage-tools button.primary:hover{box-shadow:0 3px 12px rgba(212,82,0,.35)}
+.collage-tools button.danger:hover{color:var(--red);border-color:var(--red)}
+.collage-tools button[disabled]{opacity:.35;cursor:not-allowed;pointer-events:none}
+
+.collage-help{font-family:var(--cond);font-size:10px;color:rgba(196,168,130,.5);text-align:center;font-style:italic;letter-spacing:.03em;line-height:1.4;max-width:340px}
+
+/* Slideshow preview when layout is slideshow */
+.slideshow-preview{width:100%;max-width:340px;aspect-ratio:1/1;background:#0a0402;border:1px solid rgba(196,168,130,.25);border-radius:4px;position:relative;overflow:hidden}
+.slideshow-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease}
+.slideshow-preview img.active{opacity:1}
+.slideshow-preview-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(196,168,130,.4);font-family:var(--cond);font-style:italic;font-size:12px;letter-spacing:.05em}
+.slideshow-thumbs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;justify-content:center;width:100%;max-width:340px}
+.slideshow-thumb{position:relative;width:54px;height:54px;border-radius:3px;overflow:hidden;border:1px solid rgba(196,168,130,.25);background:#0a0402;cursor:grab}
+.slideshow-thumb.dragging{opacity:.4}
+.slideshow-thumb.drop-target{outline:2px dashed var(--flame);outline-offset:-2px}
+.slideshow-thumb img{width:100%;height:100%;object-fit:cover;pointer-events:none}
+.slideshow-thumb-del{position:absolute;top:1px;right:1px;background:rgba(0,0,0,.7);border:none;color:#fff;width:16px;height:16px;border-radius:50%;font-size:11px;line-height:14px;cursor:pointer;padding:0;opacity:0;transition:opacity .15s}
+.slideshow-thumb:hover .slideshow-thumb-del{opacity:1}
+
+.imgmgr-add-btn{background:rgba(212,82,0,.12);border:1.5px dashed rgba(255,153,48,.4);color:var(--flame);font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:9px 18px;border-radius:3px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.imgmgr-add-btn:hover{background:rgba(212,82,0,.22);border-color:var(--flame);transform:translateY(-1px)}
+.imgmgr-add-btn.uploading{cursor:wait;opacity:.6;animation:imgmgrPulse 1.4s ease-in-out infinite}
 @keyframes imgmgrPulse{0%,100%{opacity:.5}50%{opacity:.85}}
 
-.imgmgr-empty{grid-column:1/-1;display:flex;align-items:center;justify-content:center;font-family:var(--cond);font-style:italic;color:rgba(196,168,130,.45);font-size:12px;letter-spacing:.04em;padding:18px 0}
-
-.imgmgr-url-fallback{margin-top:8px}
-.imgmgr-url-fallback summary{font-family:var(--cond);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,168,130,.5);cursor:pointer;padding:4px 0}
+.imgmgr-url-fallback{margin-top:8px;width:100%;max-width:340px}
+.imgmgr-url-fallback summary{font-family:var(--cond);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,168,130,.5);cursor:pointer;padding:4px 0;text-align:center}
 .imgmgr-url-fallback summary:hover{color:var(--flame)}
 .imgmgr-url-fallback input{margin-top:6px}
-
-/* ═══ CROPPER MODAL ═══ */
-#crop-bg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1100;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
-#crop-bg.show{display:flex}
-#crop-modal{background:linear-gradient(180deg,#1a1108,#0a0604);border:1px solid rgba(196,168,130,.25);border-radius:6px;padding:24px;width:100%;max-width:520px;max-height:92vh;overflow:auto}
-.crop-title{font-family:var(--serif);font-size:22px;color:var(--cream);margin-bottom:4px}
-.crop-title em{font-style:italic;color:var(--flame)}
-.crop-sub{font-family:var(--cond);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,168,130,.55);margin-bottom:18px}
-
-.crop-stage{position:relative;width:100%;aspect-ratio:1/1;max-width:380px;margin:0 auto;background:#000;border-radius:4px;overflow:hidden;cursor:move;user-select:none;touch-action:none;border:1px solid rgba(196,168,130,.2)}
-.crop-stage img{position:absolute;top:50%;left:50%;transform-origin:center;pointer-events:none;user-select:none;-webkit-user-drag:none;max-width:none}
-.crop-mask{position:absolute;inset:0;pointer-events:none;box-shadow:0 0 0 9999px rgba(0,0,0,.55);border:1px dashed rgba(255,153,48,.5)}
-.crop-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:33.33% 33.33%;opacity:0;transition:opacity .2s}
-.crop-stage.dragging .crop-grid{opacity:1}
-
-.crop-controls{margin-top:16px;display:flex;flex-direction:column;gap:12px}
-.crop-row{display:flex;align-items:center;gap:10px}
-.crop-row label{font-family:var(--cond);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,168,130,.7);min-width:54px}
-.crop-row input[type=range]{flex:1;accent-color:var(--flame)}
-.crop-val{font-family:var(--mono);font-size:11px;color:var(--glow);min-width:42px;text-align:right}
-.crop-help{font-family:var(--cond);font-size:10px;color:rgba(196,168,130,.5);text-align:center;letter-spacing:.04em;font-style:italic}
 
 /* ═══ SPECIAL & SCARCITY PANES ═══ */
 .special-block{background:linear-gradient(180deg,rgba(31,20,9,.55),rgba(15,9,5,.8));border:1px solid rgba(196,168,130,.15);border-radius:6px;padding:24px;max-width:720px}
@@ -286,39 +303,6 @@ a{color:var(--flame);text-decoration:none}
 <!-- ═══ MODAL ═══ -->
 <div class="modal-bg" id="modal-bg">
   <div class="modal" id="modal"></div>
-</div>
-
-<!-- ═══ CROPPER MODAL ═══ -->
-<div id="crop-bg" onclick="if(event.target.id==='crop-bg')cropCancel()">
-  <div id="crop-modal">
-    <div class="crop-title">Crop <em>Image</em></div>
-    <div class="crop-sub">Drag to position · Scroll or slider to zoom</div>
-    <div class="crop-stage" id="crop-stage">
-      <img id="crop-img" alt="" />
-      <div class="crop-grid"></div>
-      <div class="crop-mask"></div>
-    </div>
-    <div class="crop-controls">
-      <div class="crop-row">
-        <label>Zoom</label>
-        <input type="range" id="crop-zoom" min="1" max="4" step="0.01" value="1" />
-        <span class="crop-val" id="crop-zoom-val">1.00×</span>
-      </div>
-      <div class="crop-row">
-        <label>Rotate</label>
-        <input type="range" id="crop-rot" min="-180" max="180" step="1" value="0" />
-        <span class="crop-val" id="crop-rot-val">0°</span>
-      </div>
-      <div class="crop-help">The square frame is exactly how it appears on the menu.</div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary btn-sm" onclick="cropReset()">Reset</button>
-      <div class="modal-actions-r">
-        <button class="btn btn-secondary" onclick="cropCancel()">Cancel</button>
-        <button class="btn btn-primary" onclick="cropSave()">Save Crop</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Hidden file input used by image manager -->
@@ -894,18 +878,30 @@ async function reloadAndRender(type){
   renderAll();
 }
 
+
 /* ═══════════════════════════════════════════════════════════
-   IMAGE MANAGER  — multi-image, drag-reorder, layout toggle
-   Used by the item modal (key='item') and special panel (key='sp').
+   IMAGE MANAGER  — freeform collage editor + slideshow
+   ───────────────────────────────────────────────────────────
+   Per image: { url, pos:{x,y,w,h}, fit:{offsetX,offsetY,scale} }
+     pos = tile rect in % of canvas (0-100)
+     fit = image pan/zoom inside its tile (offsetX/Y in %, scale multiplier)
+   Item-level: imageLayout = 'collage' | 'slideshow'
 ═══════════════════════════════════════════════════════════ */
-const imgmgrState = {}; // { item: {images, layout, urlOverride}, sp: {...} }
+const imgmgrState = {}; // { item:{images,layout,selected,urlOverride}, sp:{...} }
 
 function imgmgrHtml(key, images, layout, legacyUrl){
-  // Seed state
+  // Migrate any incoming data (old crop format → new pos/fit format)
   const seeded = (images && images.length)
-    ? images.map(im => ({ url: im.url, crop: im.crop || {x:0,y:0,zoom:1,rotation:0} }))
-    : (legacyUrl ? [{ url: legacyUrl, crop: {x:0,y:0,zoom:1,rotation:0} }] : []);
-  imgmgrState[key] = { images: seeded, layout: layout || 'collage', urlOverride: '' };
+    ? images.map(im => migrateImage(im))
+    : (legacyUrl ? [migrateImage({ url: legacyUrl })] : []);
+  // If anything is missing pos, auto-arrange now
+  if (seeded.some(im => !im.pos)) autoArrange(seeded);
+  imgmgrState[key] = {
+    images: seeded,
+    layout: layout || 'collage',
+    selected: -1,
+    urlOverride: ''
+  };
   return `
     <div class="imgmgr" id="imgmgr-${key}">
       <div class="imgmgr-head">
@@ -915,12 +911,12 @@ function imgmgrHtml(key, images, layout, legacyUrl){
           <button type="button" data-layout="slideshow" onclick="imgmgrSetLayout('${key}','slideshow')">Slideshow</button>
         </div>
       </div>
-      <div class="imgmgr-grid" id="imgmgr-grid-${key}"></div>
+      <div id="imgmgr-body-${key}"></div>
       <details class="imgmgr-url-fallback">
         <summary>Paste an image URL instead</summary>
         <div class="field" style="margin:0">
-          <input type="url" id="imgmgr-url-${key}" placeholder="https://..." oninput="imgmgrUrlChange('${key}',this.value)">
-          <div class="field-hint">For external images (Instagram, Facebook, etc). Tap "+ Add" to add it.</div>
+          <input type="url" id="imgmgr-url-${key}" placeholder="https://...">
+          <div class="field-hint">For external images (Instagram, Facebook, etc).</div>
           <button type="button" class="btn btn-secondary btn-sm" style="margin-top:6px" onclick="imgmgrAddUrl('${key}')">+ Add URL</button>
         </div>
       </details>
@@ -928,59 +924,58 @@ function imgmgrHtml(key, images, layout, legacyUrl){
   `;
 }
 
+/** Convert any old image shape to the new {url, pos, fit} shape. */
+function migrateImage(im){
+  const out = { url: im.url || im };
+  // Old crop {x,y,zoom,rotation} — port translate/zoom into fit, drop rotation
+  if (im.crop && !im.pos && !im.fit) {
+    out.fit = {
+      offsetX: im.crop.x || 0,
+      offsetY: im.crop.y || 0,
+      scale:   im.crop.zoom || 1
+    };
+  }
+  out.pos = im.pos || null;        // assigned by autoArrange if missing
+  out.fit = im.fit || out.fit || { offsetX:0, offsetY:0, scale:1 };
+  return out;
+}
+
+/** Auto-arrange images into a sensible grid layout based on count. */
+function autoArrange(images){
+  const n = images.length;
+  if (n === 0) return;
+  if (n === 1) {
+    images[0].pos = { x:0, y:0, w:100, h:100 };
+  } else if (n === 2) {
+    images[0].pos = { x:0,  y:0, w:50, h:100 };
+    images[1].pos = { x:50, y:0, w:50, h:100 };
+  } else if (n === 3) {
+    images[0].pos = { x:0,  y:0,  w:50, h:100 };
+    images[1].pos = { x:50, y:0,  w:50, h:50  };
+    images[2].pos = { x:50, y:50, w:50, h:50  };
+  } else if (n === 4) {
+    images[0].pos = { x:0,  y:0,  w:50, h:50 };
+    images[1].pos = { x:50, y:0,  w:50, h:50 };
+    images[2].pos = { x:0,  y:50, w:50, h:50 };
+    images[3].pos = { x:50, y:50, w:50, h:50 };
+  } else {
+    // 5+ → top row 2/3 split, bottom row equally divided
+    const top = Math.ceil(n / 2);
+    const bot = n - top;
+    const tw = 100 / top;
+    const bw = bot ? 100 / bot : 100;
+    for (let i = 0; i < top; i++) images[i].pos = { x: i*tw, y:0,  w:tw, h:bot?50:100 };
+    for (let i = 0; i < bot; i++) images[top+i].pos = { x: i*bw, y:50, w:bw, h:50 };
+  }
+}
+
 function imgmgrAttach(key){
   imgmgrRender(key);
-  // Set the layout toggle visual state
+  // Layout toggle visual state
   const head = document.querySelector(`#imgmgr-${key} .imgmgr-layout`);
-  if (head) {
-    head.querySelectorAll('button').forEach(b => {
-      b.classList.toggle('on', b.dataset.layout === imgmgrState[key].layout);
-    });
-  }
-}
-
-function imgmgrRender(key){
-  const grid = document.getElementById(`imgmgr-grid-${key}`);
-  if (!grid) return;
-  const st = imgmgrState[key];
-  const tiles = st.images.map((im, idx) => `
-    <div class="imgmgr-tile" draggable="true" data-idx="${idx}"
-         ondragstart="imgmgrDragStart(event,'${key}',${idx})"
-         ondragover="imgmgrDragOver(event)"
-         ondragleave="imgmgrDragLeave(event)"
-         ondrop="imgmgrDrop(event,'${key}',${idx})"
-         ondragend="imgmgrDragEnd(event)">
-      <img src="${escapeHtml(im.url)}" alt="" style="${imgmgrCropStyle(im.crop)}">
-      <div class="imgmgr-tile-actions">
-        <span class="imgmgr-tile-num">${idx+1}</span>
-        <div class="imgmgr-tile-btns">
-          <button type="button" class="imgmgr-tile-btn" title="Re-crop" onclick="imgmgrRecrop('${key}',${idx})">✎</button>
-          <button type="button" class="imgmgr-tile-btn del" title="Delete" onclick="imgmgrDelete('${key}',${idx})">×</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-  const addBtn = `
-    <button type="button" class="imgmgr-add" id="imgmgr-add-${key}" onclick="imgmgrPick('${key}')">
-      <span class="imgmgr-add-icon">+</span>
-      <span>Add Image</span>
-    </button>
-  `;
-  grid.innerHTML = tiles + addBtn;
-  if (st.images.length === 0 && false) {
-    grid.insertAdjacentHTML('afterbegin', `<div class="imgmgr-empty">No images yet — tap + to add one</div>`);
-  }
-}
-
-/** Build a CSS transform string from a crop object for use inside a square frame */
-function imgmgrCropStyle(crop){
-  const c = crop || {x:0,y:0,zoom:1,rotation:0};
-  // x/y are offsets in % of the tile, zoom is multiplier, rotation in deg
-  const tx = (c.x || 0);
-  const ty = (c.y || 0);
-  const z  = c.zoom || 1;
-  const r  = c.rotation || 0;
-  return `transform:translate(${tx}%,${ty}%) scale(${z}) rotate(${r}deg);transform-origin:center;object-fit:cover;`;
+  if (head) head.querySelectorAll('button').forEach(b => {
+    b.classList.toggle('on', b.dataset.layout === imgmgrState[key].layout);
+  });
 }
 
 function imgmgrSetLayout(key, layout){
@@ -988,51 +983,322 @@ function imgmgrSetLayout(key, layout){
   document.querySelectorAll(`#imgmgr-${key} .imgmgr-layout button`).forEach(b => {
     b.classList.toggle('on', b.dataset.layout === layout);
   });
+  imgmgrRender(key);
 }
 
-function imgmgrDelete(key, idx){
+function imgmgrRender(key){
+  const body = document.getElementById(`imgmgr-body-${key}`);
+  if (!body) return;
+  const st = imgmgrState[key];
+  if (st.layout === 'slideshow') {
+    renderSlideshowUI(key, body);
+  } else {
+    renderCollageUI(key, body);
+  }
+}
+
+/* ─── COLLAGE UI ───────────────────────────────────────── */
+
+function renderCollageUI(key, body){
+  const st = imgmgrState[key];
+  if (!st.images.length) {
+    body.innerHTML = `
+      <div class="collage-stage-wrap">
+        <div class="collage-stage empty">No images yet — tap "Add Image" below to start your collage.</div>
+        <div class="collage-tools">
+          <button type="button" class="primary" onclick="imgmgrPick('${key}')">+ Add Image</button>
+        </div>
+        <div class="collage-help">Auto-arranges into a nice grid as you add. Drag tiles, drag corner/edge handles to resize and crop. Click a tile to select.</div>
+      </div>`;
+    return;
+  }
+  const tiles = st.images.map((im, idx) => `
+    <div class="ctile ${idx===st.selected?'selected':''} ${st.panMode?'panning':''}"
+         data-idx="${idx}"
+         style="left:${im.pos.x}%;top:${im.pos.y}%;width:${im.pos.w}%;height:${im.pos.h}%;z-index:${idx===st.selected?10:1}"
+         onmousedown="ctileMouseDown(event,'${key}',${idx})"
+         ontouchstart="ctileTouchStart(event,'${key}',${idx})">
+      <img src="${escapeHtml(im.url)}" alt="" style="${fitStyle(im.fit)}">
+      <span class="ctile-num">${idx+1}</span>
+      <span class="ctile-pan-hint">${st.panMode?'PAN':'TAP TO PAN'}</span>
+      <span class="ctile-handle ctile-h-n"  data-h="n"  onmousedown="ctileHandleDown(event,'${key}',${idx},'n')"  ontouchstart="ctileHandleTouch(event,'${key}',${idx},'n')"></span>
+      <span class="ctile-handle ctile-h-s"  data-h="s"  onmousedown="ctileHandleDown(event,'${key}',${idx},'s')"  ontouchstart="ctileHandleTouch(event,'${key}',${idx},'s')"></span>
+      <span class="ctile-handle ctile-h-e"  data-h="e"  onmousedown="ctileHandleDown(event,'${key}',${idx},'e')"  ontouchstart="ctileHandleTouch(event,'${key}',${idx},'e')"></span>
+      <span class="ctile-handle ctile-h-w"  data-h="w"  onmousedown="ctileHandleDown(event,'${key}',${idx},'w')"  ontouchstart="ctileHandleTouch(event,'${key}',${idx},'w')"></span>
+      <span class="ctile-handle ctile-h-ne" data-h="ne" onmousedown="ctileHandleDown(event,'${key}',${idx},'ne')" ontouchstart="ctileHandleTouch(event,'${key}',${idx},'ne')"></span>
+      <span class="ctile-handle ctile-h-nw" data-h="nw" onmousedown="ctileHandleDown(event,'${key}',${idx},'nw')" ontouchstart="ctileHandleTouch(event,'${key}',${idx},'nw')"></span>
+      <span class="ctile-handle ctile-h-se" data-h="se" onmousedown="ctileHandleDown(event,'${key}',${idx},'se')" ontouchstart="ctileHandleTouch(event,'${key}',${idx},'se')"></span>
+      <span class="ctile-handle ctile-h-sw" data-h="sw" onmousedown="ctileHandleDown(event,'${key}',${idx},'sw')" ontouchstart="ctileHandleTouch(event,'${key}',${idx},'sw')"></span>
+    </div>
+  `).join('');
+  const selected = st.selected >= 0 && st.selected < st.images.length;
+  body.innerHTML = `
+    <div class="collage-stage-wrap">
+      <div class="collage-stage" id="cstage-${key}" data-key="${key}" onclick="ctileStageClick(event,'${key}')">
+        ${tiles}
+      </div>
+      <div class="collage-tools">
+        <button type="button" class="primary" onclick="imgmgrPick('${key}')">+ Add Image</button>
+        <button type="button" onclick="autoArrangeKey('${key}')">Auto-Arrange</button>
+        <button type="button" onclick="togglePanMode('${key}')" ${!selected?'disabled':''}>${st.panMode?'Done Panning':'Pan Image'}</button>
+        <button type="button" onclick="bringForward('${key}')" ${!selected?'disabled':''}>Forward</button>
+        <button type="button" onclick="sendBackward('${key}')" ${!selected?'disabled':''}>Back</button>
+        <button type="button" class="danger" onclick="deleteSelected('${key}')" ${!selected?'disabled':''}>Delete</button>
+      </div>
+      <div class="collage-help">${st.panMode
+        ? 'Drag the selected image to reposition what shows inside its tile.'
+        : 'Tap a tile to select it. Drag the body to move it, drag handles to resize/crop. "Pan Image" lets you reposition the image inside the tile.'}</div>
+    </div>
+  `;
+}
+
+function fitStyle(fit){
+  const f = fit || {offsetX:0,offsetY:0,scale:1};
+  const ox = f.offsetX || 0, oy = f.offsetY || 0, s = f.scale || 1;
+  if (ox===0 && oy===0 && s===1) return '';
+  return `transform:translate(${ox}%,${oy}%) scale(${s});transform-origin:center;`;
+}
+
+/* ─── tile mouse/touch interactions ─────────────────────── */
+let _drag = null;
+
+function ctileStageClick(e, key){
+  // Click on empty stage = deselect
+  if (e.target.id === `cstage-${key}` || e.target.classList.contains('collage-stage')) {
+    imgmgrState[key].selected = -1;
+    imgmgrState[key].panMode = false;
+    imgmgrRender(key);
+  }
+}
+
+function ctileMouseDown(e, key, idx){
+  if (e.target.classList.contains('ctile-handle')) return;
+  e.preventDefault(); e.stopPropagation();
+  const st = imgmgrState[key];
+  if (st.selected !== idx) {
+    st.selected = idx;
+    st.panMode = false;
+    imgmgrRender(key);
+    return;
+  }
+  startDrag(key, idx, e.clientX, e.clientY, st.panMode ? 'pan' : 'move');
+}
+function ctileTouchStart(e, key, idx){
+  if (e.target.classList.contains('ctile-handle')) return;
+  const t = e.touches[0];
+  const st = imgmgrState[key];
+  if (st.selected !== idx) {
+    st.selected = idx; st.panMode = false;
+    imgmgrRender(key);
+    return;
+  }
+  e.preventDefault();
+  startDrag(key, idx, t.clientX, t.clientY, st.panMode ? 'pan' : 'move');
+}
+function ctileHandleDown(e, key, idx, dir){
+  e.preventDefault(); e.stopPropagation();
+  imgmgrState[key].selected = idx;
+  startDrag(key, idx, e.clientX, e.clientY, 'resize', dir);
+}
+function ctileHandleTouch(e, key, idx, dir){
+  e.preventDefault(); e.stopPropagation();
+  const t = e.touches[0];
+  imgmgrState[key].selected = idx;
+  startDrag(key, idx, t.clientX, t.clientY, 'resize', dir);
+}
+
+function startDrag(key, idx, cx, cy, mode, dir){
+  const stage = document.getElementById(`cstage-${key}`);
+  if (!stage) return;
+  const r = stage.getBoundingClientRect();
   const im = imgmgrState[key].images[idx];
-  if (!confirm('Remove this image?')) return;
-  imgmgrState[key].images.splice(idx, 1);
+  _drag = {
+    key, idx, mode, dir,
+    sx: cx, sy: cy,
+    stageW: r.width, stageH: r.height,
+    origPos: { ...im.pos },
+    origFit: { ...im.fit }
+  };
+}
+
+document.addEventListener('mousemove', e => { if (_drag) onDragMove(e.clientX, e.clientY); });
+document.addEventListener('mouseup',   () => { if (_drag) { _drag = null; }});
+document.addEventListener('touchmove', e => {
+  if (!_drag) return;
+  const t = e.touches[0]; onDragMove(t.clientX, t.clientY);
+  e.preventDefault();
+}, {passive:false});
+document.addEventListener('touchend', () => { if (_drag) _drag = null; });
+
+function onDragMove(cx, cy){
+  const d = _drag;
+  const dx = (cx - d.sx) / d.stageW * 100;
+  const dy = (cy - d.sy) / d.stageH * 100;
+  const im = imgmgrState[d.key].images[d.idx];
+  if (d.mode === 'move') {
+    im.pos = {
+      x: clamp(d.origPos.x + dx, 0, 100 - d.origPos.w),
+      y: clamp(d.origPos.y + dy, 0, 100 - d.origPos.h),
+      w: d.origPos.w, h: d.origPos.h
+    };
+  } else if (d.mode === 'resize') {
+    let { x, y, w, h } = d.origPos;
+    if (d.dir.includes('n')) { y = d.origPos.y + dy; h = d.origPos.h - dy; }
+    if (d.dir.includes('s')) { h = d.origPos.h + dy; }
+    if (d.dir.includes('w')) { x = d.origPos.x + dx; w = d.origPos.w - dx; }
+    if (d.dir.includes('e')) { w = d.origPos.w + dx; }
+    // enforce minimum 8% size
+    if (w < 8) { if (d.dir.includes('w')) x = d.origPos.x + d.origPos.w - 8; w = 8; }
+    if (h < 8) { if (d.dir.includes('n')) y = d.origPos.y + d.origPos.h - 8; h = 8; }
+    // clamp to canvas
+    if (x < 0) { w += x; x = 0; }
+    if (y < 0) { h += y; y = 0; }
+    if (x + w > 100) w = 100 - x;
+    if (y + h > 100) h = 100 - y;
+    im.pos = { x, y, w, h };
+  } else if (d.mode === 'pan') {
+    im.fit = {
+      ...d.origFit,
+      offsetX: d.origFit.offsetX + dx,
+      offsetY: d.origFit.offsetY + dy
+    };
+  }
+  // Light, in-place update (don't re-render whole tree, just update the one tile)
+  const tile = document.querySelector(`#cstage-${d.key} .ctile[data-idx="${d.idx}"]`);
+  if (tile) {
+    tile.style.left   = im.pos.x + '%';
+    tile.style.top    = im.pos.y + '%';
+    tile.style.width  = im.pos.w + '%';
+    tile.style.height = im.pos.h + '%';
+    if (d.mode === 'pan') {
+      const img = tile.querySelector('img');
+      if (img) img.style.cssText = fitStyle(im.fit);
+    }
+  }
+}
+
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+/* ─── tool buttons ─── */
+function autoArrangeKey(key){
+  const st = imgmgrState[key];
+  // Reset all positions to fresh auto layout
+  st.images.forEach(im => im.pos = null);
+  autoArrange(st.images);
+  // Reset fits too
+  st.images.forEach(im => im.fit = { offsetX:0, offsetY:0, scale:1 });
   imgmgrRender(key);
-  // Best-effort delete from storage (don't block UI)
+}
+function togglePanMode(key){
+  const st = imgmgrState[key];
+  if (st.selected < 0) return;
+  st.panMode = !st.panMode;
+  imgmgrRender(key);
+}
+function bringForward(key){
+  const st = imgmgrState[key];
+  if (st.selected < 0 || st.selected >= st.images.length - 1) return;
+  const i = st.selected;
+  [st.images[i], st.images[i+1]] = [st.images[i+1], st.images[i]];
+  st.selected = i + 1;
+  imgmgrRender(key);
+}
+function sendBackward(key){
+  const st = imgmgrState[key];
+  if (st.selected <= 0) return;
+  const i = st.selected;
+  [st.images[i], st.images[i-1]] = [st.images[i-1], st.images[i]];
+  st.selected = i - 1;
+  imgmgrRender(key);
+}
+function deleteSelected(key){
+  const st = imgmgrState[key];
+  if (st.selected < 0) return;
+  const im = st.images[st.selected];
+  if (!confirm('Remove this image?')) return;
+  st.images.splice(st.selected, 1);
+  st.selected = -1;
+  st.panMode = false;
+  imgmgrRender(key);
   if (im && im.url) sbDeleteFile(im.url).catch(()=>{});
 }
 
-function imgmgrUrlChange(key, val){
-  imgmgrState[key].urlOverride = val.trim();
+/* ─── SLIDESHOW UI ──────────────────────────────────────── */
+let _slideshowTimer = null;
+function renderSlideshowUI(key, body){
+  const st = imgmgrState[key];
+  if (_slideshowTimer) { clearInterval(_slideshowTimer); _slideshowTimer = null; }
+  if (!st.images.length) {
+    body.innerHTML = `
+      <div class="collage-stage-wrap">
+        <div class="slideshow-preview"><div class="slideshow-preview-empty">No images yet — tap "Add Image" to start.</div></div>
+        <div class="collage-tools">
+          <button type="button" class="primary" onclick="imgmgrPick('${key}')">+ Add Image</button>
+        </div>
+        <div class="collage-help">Slideshow mode shows your images one at a time, cross-fading every 4 seconds.</div>
+      </div>`;
+    return;
+  }
+  const slides = st.images.map((im, i) => `<img src="${escapeHtml(im.url)}" class="${i===0?'active':''}" alt="">`).join('');
+  const thumbs = st.images.map((im, idx) => `
+    <div class="slideshow-thumb" draggable="true" data-idx="${idx}"
+         ondragstart="thumbDragStart(event,'${key}',${idx})"
+         ondragover="thumbDragOver(event)"
+         ondragleave="thumbDragLeave(event)"
+         ondrop="thumbDrop(event,'${key}',${idx})"
+         ondragend="thumbDragEnd(event)">
+      <img src="${escapeHtml(im.url)}" alt="">
+      <button type="button" class="slideshow-thumb-del" onclick="deleteSlideshowImg('${key}',${idx})">×</button>
+    </div>`).join('');
+  body.innerHTML = `
+    <div class="collage-stage-wrap">
+      <div class="slideshow-preview" id="sspv-${key}">${slides}</div>
+      <div class="slideshow-thumbs">${thumbs}</div>
+      <div class="collage-tools">
+        <button type="button" class="primary" onclick="imgmgrPick('${key}')">+ Add Image</button>
+      </div>
+      <div class="collage-help">Drag thumbnails to reorder. Tap × to remove an image.</div>
+    </div>
+  `;
+  // Start preview rotation
+  const pv = document.getElementById(`sspv-${key}`);
+  if (pv && st.images.length > 1) {
+    const imgs = pv.querySelectorAll('img');
+    let idx = 0;
+    _slideshowTimer = setInterval(() => {
+      imgs[idx].classList.remove('active');
+      idx = (idx + 1) % imgs.length;
+      imgs[idx].classList.add('active');
+    }, 2500);
+  }
 }
 
-function imgmgrAddUrl(key){
-  const inp = document.getElementById(`imgmgr-url-${key}`);
-  const url = (inp?.value || '').trim();
-  if (!url) { toast('Paste a URL first', true); return; }
-  imgmgrState[key].images.push({ url, crop: {x:0,y:0,zoom:1,rotation:0} });
-  inp.value = '';
-  imgmgrState[key].urlOverride = '';
-  imgmgrRender(key);
-}
-
-/* ─── drag to reorder ─── */
-let _dragSrc = null;
-function imgmgrDragStart(e, key, idx){ _dragSrc = {key, idx}; e.target.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
-function imgmgrDragOver(e){ if(_dragSrc){ e.preventDefault(); e.currentTarget.classList.add('drop-target'); } }
-function imgmgrDragLeave(e){ e.currentTarget.classList.remove('drop-target'); }
-function imgmgrDrop(e, key, idx){
-  e.preventDefault();
-  e.currentTarget.classList.remove('drop-target');
-  if (!_dragSrc || _dragSrc.key !== key || _dragSrc.idx === idx) return;
+let _thumbDrag = null;
+function thumbDragStart(e, key, idx){ _thumbDrag = {key, idx}; e.target.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+function thumbDragOver(e){ if (_thumbDrag) { e.preventDefault(); e.currentTarget.classList.add('drop-target'); }}
+function thumbDragLeave(e){ e.currentTarget.classList.remove('drop-target'); }
+function thumbDrop(e, key, idx){
+  e.preventDefault(); e.currentTarget.classList.remove('drop-target');
+  if (!_thumbDrag || _thumbDrag.key !== key || _thumbDrag.idx === idx) return;
   const arr = imgmgrState[key].images;
-  const [moved] = arr.splice(_dragSrc.idx, 1);
-  arr.splice(idx, 0, moved);
+  const [m] = arr.splice(_thumbDrag.idx, 1);
+  arr.splice(idx, 0, m);
   imgmgrRender(key);
 }
-function imgmgrDragEnd(e){ e.target.classList.remove('dragging'); document.querySelectorAll('.imgmgr-tile').forEach(t=>t.classList.remove('drop-target')); _dragSrc = null; }
+function thumbDragEnd(e){ e.target.classList.remove('dragging'); document.querySelectorAll('.slideshow-thumb').forEach(t=>t.classList.remove('drop-target')); _thumbDrag = null; }
 
-/* ─── file pick + upload ─── */
+function deleteSlideshowImg(key, idx){
+  if (!confirm('Remove this image?')) return;
+  const im = imgmgrState[key].images[idx];
+  imgmgrState[key].images.splice(idx, 1);
+  imgmgrRender(key);
+  if (im && im.url) sbDeleteFile(im.url).catch(()=>{});
+}
+
+/* ─── add image flow (file + URL) ──────────────────────── */
 function imgmgrPick(key){
   const inp = document.getElementById('img-file-input');
-  inp.value = ''; // reset so picking same file twice still fires
+  inp.value = '';
   inp.onchange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -1042,150 +1308,39 @@ function imgmgrPick(key){
 }
 
 async function imgmgrUpload(key, file){
-  const btn = document.getElementById(`imgmgr-add-${key}`);
-  if (btn) { btn.classList.add('uploading'); btn.querySelector('span:last-child').textContent = 'Uploading…'; }
+  const btns = document.querySelectorAll(`#imgmgr-body-${key} .collage-tools button.primary`);
+  btns.forEach(b => { b.classList.add('uploading'); b.textContent = 'Uploading…'; });
   try {
     const folder = key === 'sp' ? 'special' : (document.getElementById('i-type')?.value === 'market' ? 'market' : 'menu');
     const { url } = await sbUpload(file, folder);
-    // Open cropper before adding to list
-    cropOpen(url, (crop) => {
-      imgmgrState[key].images.push({ url, crop });
-      imgmgrRender(key);
-      toast('Image added');
-    }, () => {
-      // Cancel: remove the uploaded file from storage since user bailed
-      sbDeleteFile(url).catch(()=>{});
-    });
+    const newImg = { url, fit: { offsetX:0, offsetY:0, scale:1 } };
+    imgmgrState[key].images.push(newImg);
+    // Re-auto-arrange so the new image fits in nicely
+    if (imgmgrState[key].layout === 'collage') {
+      imgmgrState[key].images.forEach(im => im.pos = null);
+      autoArrange(imgmgrState[key].images);
+    }
+    imgmgrRender(key);
+    toast('Image added');
   } catch(err) {
     console.error(err);
     toast('Upload failed: ' + (err.message || 'unknown'), true);
-  } finally {
-    if (btn) { btn.classList.remove('uploading'); btn.querySelector('span:last-child').textContent = 'Add Image'; }
+    btns.forEach(b => { b.classList.remove('uploading'); b.textContent = '+ Add Image'; });
   }
 }
 
-function imgmgrRecrop(key, idx){
-  const im = imgmgrState[key].images[idx];
-  cropOpen(im.url, (crop) => {
-    imgmgrState[key].images[idx].crop = crop;
-    imgmgrRender(key);
-  }, null, im.crop);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   CROPPER
-═══════════════════════════════════════════════════════════ */
-let _cropOnSave = null, _cropOnCancel = null;
-let _cropState = { x:0, y:0, zoom:1, rotation:0, imgW:0, imgH:0, stageSize:0 };
-let _cropDrag  = null;
-
-function cropOpen(url, onSave, onCancel, existingCrop){
-  _cropOnSave = onSave;
-  _cropOnCancel = onCancel;
-  const bg  = document.getElementById('crop-bg');
-  const img = document.getElementById('crop-img');
-  const stage = document.getElementById('crop-stage');
-  img.onload = () => {
-    const r = stage.getBoundingClientRect();
-    _cropState.stageSize = r.width;
-    _cropState.imgW = img.naturalWidth;
-    _cropState.imgH = img.naturalHeight;
-    // Set base size: image fills the stage's shorter axis (cover behavior)
-    const baseScale = Math.max(r.width / img.naturalWidth, r.width / img.naturalHeight);
-    img.style.width  = (img.naturalWidth  * baseScale) + 'px';
-    img.style.height = (img.naturalHeight * baseScale) + 'px';
-    img.style.marginLeft = -(img.naturalWidth  * baseScale) / 2 + 'px';
-    img.style.marginTop  = -(img.naturalHeight * baseScale) / 2 + 'px';
-    // Seed with existing crop if present
-    const c = existingCrop || {x:0,y:0,zoom:1,rotation:0};
-    _cropState.x = c.x || 0;
-    _cropState.y = c.y || 0;
-    _cropState.zoom = c.zoom || 1;
-    _cropState.rotation = c.rotation || 0;
-    document.getElementById('crop-zoom').value = _cropState.zoom;
-    document.getElementById('crop-rot').value = _cropState.rotation;
-    cropUpdateValDisplays();
-    cropApply();
-  };
-  img.src = url;
-  bg.classList.add('show');
-}
-
-function cropClose(){ document.getElementById('crop-bg').classList.remove('show'); _cropOnSave = _cropOnCancel = null; }
-
-function cropCancel(){
-  if (_cropOnCancel) _cropOnCancel();
-  cropClose();
-}
-
-function cropSave(){
-  if (_cropOnSave) _cropOnSave({ x: _cropState.x, y: _cropState.y, zoom: _cropState.zoom, rotation: _cropState.rotation });
-  cropClose();
-}
-
-function cropReset(){
-  _cropState.x = 0; _cropState.y = 0; _cropState.zoom = 1; _cropState.rotation = 0;
-  document.getElementById('crop-zoom').value = 1;
-  document.getElementById('crop-rot').value = 0;
-  cropUpdateValDisplays();
-  cropApply();
-}
-
-function cropUpdateValDisplays(){
-  document.getElementById('crop-zoom-val').textContent = _cropState.zoom.toFixed(2) + '×';
-  document.getElementById('crop-rot-val').textContent = Math.round(_cropState.rotation) + '°';
-}
-
-function cropApply(){
-  const img = document.getElementById('crop-img');
-  // x/y are in % of the stage size (so they're meaningful regardless of img size)
-  const px = (_cropState.x / 100) * _cropState.stageSize;
-  const py = (_cropState.y / 100) * _cropState.stageSize;
-  img.style.transform = `translate(${px}px,${py}px) scale(${_cropState.zoom}) rotate(${_cropState.rotation}deg)`;
-}
-
-/* Drag to pan */
-(function(){
-  const stage = () => document.getElementById('crop-stage');
-  function start(clientX, clientY){
-    _cropDrag = { sx: clientX, sy: clientY, ox: _cropState.x, oy: _cropState.y };
-    stage().classList.add('dragging');
+function imgmgrAddUrl(key){
+  const inp = document.getElementById(`imgmgr-url-${key}`);
+  const url = (inp?.value || '').trim();
+  if (!url) { toast('Paste a URL first', true); return; }
+  imgmgrState[key].images.push({ url, fit: { offsetX:0, offsetY:0, scale:1 } });
+  if (imgmgrState[key].layout === 'collage') {
+    imgmgrState[key].images.forEach(im => im.pos = null);
+    autoArrange(imgmgrState[key].images);
   }
-  function move(clientX, clientY){
-    if (!_cropDrag) return;
-    const dx = (clientX - _cropDrag.sx) / _cropState.stageSize * 100;
-    const dy = (clientY - _cropDrag.sy) / _cropState.stageSize * 100;
-    _cropState.x = _cropDrag.ox + dx;
-    _cropState.y = _cropDrag.oy + dy;
-    cropApply();
-  }
-  function end(){
-    _cropDrag = null;
-    const s = stage(); if (s) s.classList.remove('dragging');
-  }
-  // attach on bg show so stage exists
-  document.addEventListener('mousedown', e => { if (e.target.closest('#crop-stage')) { e.preventDefault(); start(e.clientX, e.clientY); }});
-  document.addEventListener('mousemove', e => { if (_cropDrag) move(e.clientX, e.clientY); });
-  document.addEventListener('mouseup',   end);
-  document.addEventListener('touchstart', e => { if (e.target.closest('#crop-stage')) { const t=e.touches[0]; start(t.clientX, t.clientY); }}, {passive:true});
-  document.addEventListener('touchmove',  e => { if (_cropDrag) { const t=e.touches[0]; move(t.clientX, t.clientY); e.preventDefault(); }}, {passive:false});
-  document.addEventListener('touchend',   end);
-  // Wheel-to-zoom
-  document.addEventListener('wheel', e => {
-    if (!e.target.closest('#crop-stage')) return;
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? -0.05 : 0.05;
-    _cropState.zoom = Math.max(1, Math.min(4, _cropState.zoom + delta));
-    document.getElementById('crop-zoom').value = _cropState.zoom;
-    cropUpdateValDisplays();
-    cropApply();
-  }, {passive:false});
-  // Slider changes
-  document.addEventListener('input', e => {
-    if (e.target.id === 'crop-zoom') { _cropState.zoom = parseFloat(e.target.value); cropUpdateValDisplays(); cropApply(); }
-    if (e.target.id === 'crop-rot')  { _cropState.rotation = parseFloat(e.target.value); cropUpdateValDisplays(); cropApply(); }
-  });
-})();
+  inp.value = '';
+  imgmgrRender(key);
+}
 
 /* ═══════════════════════════════════════════════════════════
    GO
