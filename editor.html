@@ -15,23 +15,23 @@
 ═══════════════════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 :root{
-  /* Surfaces — warm browns, not black */
-  --void:#0d0805;
-  --bg:#100a06;
-  --panel:#1a110a;
-  --panel-2:#22170d;
-  --panel-3:#2b1d11;
-  --line:rgba(196,168,130,.14);
-  --line-2:rgba(196,168,130,.22);
+  /* Surfaces — warm leather/sand, much lighter than before */
+  --void:#2a1d12;
+  --bg:#322317;
+  --panel:#3d2c1c;
+  --panel-2:#473423;
+  --panel-3:#523d29;
+  --line:rgba(232,212,168,.18);
+  --line-2:rgba(232,212,168,.3);
 
-  /* Text */
-  --ink:#faf0db;
-  --ink-2:#e8d7b3;
-  --ink-3:#b89d72;
-  --ink-4:#8a7551;
-  --ink-5:#5a4a35;
+  /* Text — near-white cream for max readability */
+  --ink:#fdf6e8;
+  --ink-2:#f3e4c3;
+  --ink-3:#dcc59a;
+  --ink-4:#b59f78;
+  --ink-5:#8a7855;
 
-  /* Ember accents */
+  /* Ember accents — kept warm, tuned for new brighter background */
   --ember:#d45200;
   --fire:#ed6e14;
   --flame:#ff9930;
@@ -39,8 +39,8 @@
   --gold:#e8b85c;
 
   /* Status */
-  --green:#5cb074;
-  --red:#d65447;
+  --green:#7ec98a;
+  --red:#ec6e60;
   --amber:#e8b85c;
 
   /* Typography */
@@ -57,9 +57,9 @@
   --ease-out:cubic-bezier(.16,1,.3,1);
 
   /* Shadows */
-  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
-  --shadow:0 4px 16px rgba(0,0,0,.45);
-  --shadow-lg:0 16px 48px rgba(0,0,0,.55);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3);
+  --shadow:0 4px 16px rgba(0,0,0,.35);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.45);
   --glow-flame:0 0 0 1px rgba(255,153,48,.18),0 4px 24px rgba(212,82,0,.22);
 }
 
@@ -73,8 +73,8 @@ html,body{
 }
 body{
   background:
-    radial-gradient(ellipse 90% 60% at 50% 0%,rgba(212,82,0,.06),transparent 60%),
-    radial-gradient(ellipse 70% 50% at 0% 100%,rgba(212,82,0,.04),transparent 60%),
+    radial-gradient(ellipse 90% 60% at 50% 0%,rgba(255,153,48,.05),transparent 60%),
+    radial-gradient(ellipse 70% 50% at 0% 100%,rgba(255,153,48,.04),transparent 60%),
     var(--void);
 }
 a{color:var(--flame);text-decoration:none;transition:color .2s}
@@ -130,7 +130,7 @@ body::before{
 }
 .gate-input{
   width:100%;
-  background:rgba(10,6,3,.6);
+  background:rgba(20,12,6,.55);
   border:1px solid var(--line-2);
   color:var(--ink);
   font-family:var(--mono);
@@ -242,8 +242,8 @@ body::before{
 .tab:hover .ic{color:var(--flame)}
 .tab.active{
   color:var(--ink);
-  background:linear-gradient(90deg,rgba(212,82,0,.18),rgba(212,82,0,.04));
-  box-shadow:inset 2px 0 0 var(--flame);
+  background:linear-gradient(90deg,rgba(255,153,48,.22),rgba(255,153,48,.05));
+  box-shadow:inset 3px 0 0 var(--flame);
 }
 .tab.active .ic{color:var(--flame)}
 .tab.active::after{
@@ -304,7 +304,7 @@ body::before{
   #mobile-bar{
     display:flex;align-items:center;justify-content:space-between;
     padding:14px 18px;
-    background:rgba(16,10,6,.94);
+    background:rgba(50,35,23,.94);
     backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
     border-bottom:1px solid var(--line);
     position:sticky;top:0;z-index:5;
@@ -420,7 +420,7 @@ body::before{
 .cat-hdr{
   display:flex;align-items:center;justify-content:space-between;gap:14px;
   padding:18px 22px;
-  background:linear-gradient(90deg,rgba(212,82,0,.05),transparent 60%);
+  background:linear-gradient(90deg,rgba(255,153,48,.08),transparent 60%);
   border-bottom:1px solid var(--line);
   flex-wrap:wrap;
 }
@@ -457,14 +457,14 @@ body::before{
   grid-template-columns:1fr auto auto;
   align-items:center;gap:18px;
   padding:14px 16px;
-  background:rgba(255,255,255,.018);
+  background:rgba(20,12,6,.45);
   border:1px solid var(--line);
   border-radius:var(--r);
   transition:all .2s var(--ease);
 }
 .item-row:hover{
-  border-color:var(--line-2);
-  background:rgba(255,153,48,.04);
+  border-color:var(--flame);
+  background:rgba(255,153,48,.08);
   transform:translateX(2px);
 }
 .item-main{min-width:0;flex:1}
@@ -572,7 +572,7 @@ body::before{
 }
 .field input:not([type=checkbox]),.field select,.field textarea{
   width:100%;
-  background:rgba(10,6,3,.6);
+  background:rgba(20,12,6,.55);
   border:1px solid var(--line-2);
   color:var(--ink);
   font-family:var(--sans);
@@ -639,7 +639,7 @@ body::before{
 .imgmgr-layout button:not(.on):hover{color:var(--flame)}
 
 .collage-stage-wrap{
-  background:rgba(10,6,3,.55);
+  background:rgba(20,12,6,.5);
   border:1px dashed rgba(196,168,130,.2);
   border-radius:var(--r);
   padding:16px;
@@ -795,7 +795,7 @@ body::before{
 .scarcity-add{display:flex;gap:8px;margin-top:10px}
 .scarcity-add input{
   flex:1;
-  background:rgba(10,6,3,.6);
+  background:rgba(20,12,6,.55);
   border:1px solid var(--line-2);
   color:var(--ink);
   font-family:var(--sans);font-size:14px;
@@ -1096,7 +1096,7 @@ async function bootApp(){
     setStatus('Connection failed', 'err');
     const msg = `<div class="empty" style="line-height:1.7;text-align:left;max-width:680px;margin:0 auto">
       <strong style="color:var(--flame);font-size:15px">Can't reach Supabase. Here's what it told us:</strong>
-      <pre style="background:rgba(10,6,3,.7);border:1px solid rgba(196,168,130,.2);padding:14px;margin-top:14px;border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--paper);white-space:pre-wrap;word-break:break-all;line-height:1.5">${escapeHtml(diagInfo)}</pre>
+      <pre style="background:rgba(20,12,6,.65);border:1px solid rgba(196,168,130,.2);padding:14px;margin-top:14px;border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--paper);white-space:pre-wrap;word-break:break-all;line-height:1.5">${escapeHtml(diagInfo)}</pre>
       <div style="margin-top:14px;font-family:var(--cond);font-size:13px;color:rgba(196,168,130,.7)">
         Copy this whole message and send it to Westyn so he can fix it.
       </div>
