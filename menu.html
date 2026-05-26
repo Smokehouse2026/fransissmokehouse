@@ -706,105 +706,55 @@ let _galleryImgs = [];
 let _galleryIdx = 0;
 
 function openItemLightbox(regKey){
-  try {
-    console.log('━━━ LIGHTBOX DEBUG ━━━');
-    console.log('1. regKey:', regKey);
+  const item = ITEM_REGISTRY.get(regKey);
+  if (!item) { showLbError('No item found for key: ' + regKey); return; }
+  const imgs = (item.images && item.images.length) ? item.images : (item.img ? [{url:item.img}] : []);
+  if (!imgs.length) { showLbError('Item has no images'); return; }
+  const layout = item.imageLayout || 'collage';
+  const name = item.name || '';
 
-    const item = ITEM_REGISTRY.get(regKey);
-    console.log('2. item from registry:', item);
-    if (!item) { showLbError('No item found for key: ' + regKey); return; }
+  const lb    = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbCol = document.getElementById('lb-collage');
+  const lbGal = document.getElementById('lb-gallery');
 
-    const imgs = (item.images && item.images.length) ? item.images : (item.img ? [{url:item.img}] : []);
-    console.log('3. imgs array:', imgs);
-    console.log('3a. imgs.length:', imgs.length);
-    console.log('3b. item.imageLayout:', item.imageLayout);
-    if (!imgs.length) { showLbError('Item has no images'); return; }
+  // Force-hide everything inline (don't rely on CSS classes)
+  lbImg.style.setProperty('display', 'none', 'important');
+  lbCol.style.setProperty('display', 'none', 'important');
+  lbGal.style.setProperty('display', 'none', 'important');
+  lbCol.innerHTML = '';
 
-    const layout = item.imageLayout || 'collage';
-    const name = item.name || '';
-    console.log('4. layout chosen:', layout, '| name:', name);
-
-    const lbImg = document.getElementById('lb-img');
-    const lbCol = document.getElementById('lb-collage');
-    const lbGal = document.getElementById('lb-gallery');
-    console.log('5. elements found?', { lbImg: !!lbImg, lbCol: !!lbCol, lbGal: !!lbGal });
-
-    lbImg.style.display = 'none';
-    lbCol.classList.remove('show');
-    lbGal.classList.remove('show');
-    lbCol.innerHTML = '';
-
-    if (imgs.length === 1) {
-      console.log('6. → SINGLE IMAGE branch, src:', imgs[0].url);
-      lbImg.src = imgs[0].url;
-      lbImg.alt = name;
-      lbImg.style.display = 'block';
-    } else if (layout === 'slideshow') {
-      console.log('6. → SLIDESHOW branch, count:', imgs.length);
-      _galleryImgs = imgs;
-      _galleryIdx = 0;
-      const dots = imgs.map((_,i) => `<span class="${i===0?'on':''}" onclick="event.stopPropagation();galleryGo(${i})"></span>`).join('');
-      document.getElementById('lb-dots').innerHTML = dots;
-      galleryGo(0, true);
-      lbGal.classList.add('show');
-    } else {
-      console.log('6. → COLLAGE branch, count:', imgs.length);
-      imgs.forEach((im, idx) => {
-        console.log(`   image ${idx}: url=${im.url} | pos=${JSON.stringify(im.pos)} | fit=${JSON.stringify(im.fit)}`);
-      });
-      const cells = imgs.map(im => {
-        const pos = im.pos || { x:0, y:0, w:100, h:100 };
-        const url = im.url || '';
-        const fit = fitStyle(im.fit);
-        return `<div class="mi-collage-cell" style="left:${pos.x}%;top:${pos.y}%;width:${pos.w}%;height:${pos.h}%">
-          <img src="${url}" alt="${name.replace(/"/g,'&quot;')}" style="${fit}" onerror="this.style.background='#5a1a0e';this.style.opacity='0.5';console.warn('[lightbox] image failed to load:',this.src)">
-        </div>`;
-      }).join('');
-      console.log('7. cells HTML length:', cells.length, ' (first 200 chars):', cells.slice(0,200));
-      lbCol.innerHTML = cells;
-      lbCol.classList.add('show');
-    }
-    document.getElementById('lb-caption').textContent = name;
-    const lbE = document.getElementById('lightbox');
-    lbE.classList.add('open');
-    console.log('7a. JUST ADDED .open. classList=', lbE.classList.toString(), '| opacity=', getComputedStyle(lbE).opacity);
-    document.body.style.overflow = 'hidden';
-
-    // Check immediately on next tick
-    Promise.resolve().then(() => {
-      console.log('7b. NEXT TICK. classList=', lbE.classList.toString(), '| opacity=', getComputedStyle(lbE).opacity);
-    });
-
-    // Also check after a short delay
-    setTimeout(() => {
-      console.log('7c. +10ms. classList=', lbE.classList.toString(), '| opacity=', getComputedStyle(lbE).opacity);
-    }, 10);
-
-    // After opening, log computed sizes/visibility
-    setTimeout(() => {
-      const lb = document.getElementById('lightbox');
-      const cs = getComputedStyle(lb);
-      console.log('8. AFTER OPEN — lightbox className=', JSON.stringify(lb.className), '| classList=', lb.classList.toString());
-      console.log('8a. lightbox computed: opacity=', cs.opacity, '| display=', cs.display, '| z-index=', cs.zIndex, '| pointer-events=', cs.pointerEvents);
-      if (lbCol.classList.contains('show')) {
-        const ccs = getComputedStyle(lbCol);
-        const rect = lbCol.getBoundingClientRect();
-        console.log('9. lb-collage computed: display=', ccs.display, '| width=', ccs.width, '| height=', ccs.height);
-        console.log('9a. lb-collage bounding rect:', { w: rect.width, h: rect.height, x: rect.x, y: rect.y });
-        const cellCount = lbCol.querySelectorAll('.mi-collage-cell').length;
-        const imgCount = lbCol.querySelectorAll('img').length;
-        console.log('9b. cells rendered in DOM:', cellCount, '| imgs rendered:', imgCount);
-        if (cellCount > 0) {
-          const firstCell = lbCol.querySelector('.mi-collage-cell');
-          const fcRect = firstCell.getBoundingClientRect();
-          console.log('9c. first cell rect:', { w: fcRect.width, h: fcRect.height, x: fcRect.x, y: fcRect.y });
-        }
-      }
-    }, 50);
-  } catch (err) {
-    console.error('[lightbox] FATAL ERROR:', err);
-    showLbError('Crashed: ' + err.message + '\n\n' + err.stack);
+  if (imgs.length === 1) {
+    lbImg.src = imgs[0].url;
+    lbImg.alt = name;
+    lbImg.style.setProperty('display', 'block', 'important');
+  } else if (layout === 'slideshow') {
+    _galleryImgs = imgs;
+    _galleryIdx = 0;
+    const dots = imgs.map((_,i) => `<span class="${i===0?'on':''}" onclick="event.stopPropagation();galleryGo(${i})"></span>`).join('');
+    document.getElementById('lb-dots').innerHTML = dots;
+    galleryGo(0, true);
+    lbGal.style.setProperty('display', 'flex', 'important');
+  } else {
+    // Collage — render each tile inline with explicit styling
+    const cells = imgs.map(im => {
+      const pos = im.pos || { x:0, y:0, w:100, h:100 };
+      const url = im.url || '';
+      const fit = fitStyle(im.fit);
+      return `<div style="position:absolute;left:${pos.x}%;top:${pos.y}%;width:${pos.w}%;height:${pos.h}%;overflow:hidden;background:#0a0402;outline:1px solid rgba(0,0,0,.3);">
+        <img src="${url}" alt="${name.replace(/"/g,'&quot;')}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;${fit}" onerror="this.style.background='#5a1a0e';this.style.opacity='0.4';">
+      </div>`;
+    }).join('');
+    lbCol.innerHTML = cells;
+    // Force the collage container with inline styles — bypass any CSS issues
+    lbCol.style.cssText = 'display:block !important;width:min(85vw,75vh);height:min(85vw,75vh);background:#0a0402;border-radius:6px;box-shadow:0 8px 60px rgba(0,0,0,.8);position:relative;overflow:hidden;flex-shrink:0;';
   }
+  document.getElementById('lb-caption').textContent = name;
+  // Force-open the lightbox with inline styles too
+  lb.classList.add('open');
+  lb.style.setProperty('opacity', '1', 'important');
+  lb.style.setProperty('pointer-events', 'all', 'important');
+  document.body.style.overflow = 'hidden';
 }
 
 /** Visible error overlay so the user can see what failed even with no console. */
@@ -837,14 +787,20 @@ function openLightbox(src, name){
 
 function closeLightbox(e){
   if (e) {
-    // Only close when the user clicked the backdrop itself or the close button.
-    // Clicks on the image, collage, gallery, nav arrows, dots, etc. should NOT close.
     const isBackdrop = e.target.id === 'lightbox';
     const isCloseBtn = e.target.id === 'lb-close' || e.target.closest('#lb-close');
     if (!isBackdrop && !isCloseBtn) return;
     e.stopPropagation();
   }
-  document.getElementById('lightbox').classList.remove('open');
+  const lb = document.getElementById('lightbox');
+  lb.classList.remove('open');
+  // Clear the forced inline styles so the CSS transition can fade out
+  lb.style.removeProperty('opacity');
+  lb.style.removeProperty('pointer-events');
+  document.getElementById('lb-collage').style.removeProperty('display');
+  document.getElementById('lb-collage').style.cssText = '';
+  document.getElementById('lb-gallery').style.removeProperty('display');
+  document.getElementById('lb-img').style.removeProperty('display');
   document.body.style.overflow = '';
 }
 
