@@ -765,14 +765,27 @@ function openItemLightbox(regKey){
       lbCol.classList.add('show');
     }
     document.getElementById('lb-caption').textContent = name;
-    document.getElementById('lightbox').classList.add('open');
+    const lbE = document.getElementById('lightbox');
+    lbE.classList.add('open');
+    console.log('7a. JUST ADDED .open. classList=', lbE.classList.toString(), '| opacity=', getComputedStyle(lbE).opacity);
     document.body.style.overflow = 'hidden';
+
+    // Check immediately on next tick
+    Promise.resolve().then(() => {
+      console.log('7b. NEXT TICK. classList=', lbE.classList.toString(), '| opacity=', getComputedStyle(lbE).opacity);
+    });
+
+    // Also check after a short delay
+    setTimeout(() => {
+      console.log('7c. +10ms. classList=', lbE.classList.toString(), '| opacity=', getComputedStyle(lbE).opacity);
+    }, 10);
 
     // After opening, log computed sizes/visibility
     setTimeout(() => {
       const lb = document.getElementById('lightbox');
       const cs = getComputedStyle(lb);
-      console.log('8. AFTER OPEN — lightbox computed: opacity=', cs.opacity, '| display=', cs.display, '| z-index=', cs.zIndex);
+      console.log('8. AFTER OPEN — lightbox className=', JSON.stringify(lb.className), '| classList=', lb.classList.toString());
+      console.log('8a. lightbox computed: opacity=', cs.opacity, '| display=', cs.display, '| z-index=', cs.zIndex, '| pointer-events=', cs.pointerEvents);
       if (lbCol.classList.contains('show')) {
         const ccs = getComputedStyle(lbCol);
         const rect = lbCol.getBoundingClientRect();
