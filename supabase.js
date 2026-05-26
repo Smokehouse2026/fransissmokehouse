@@ -16,19 +16,14 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 */
 const EDITOR_PASSWORD = "2172";
 
+/* Storage bucket name (created in Supabase Storage — see SETUP.md) */
+const SB_BUCKET = "menu-images";
+
 /* ═══════════════════════════════════════════════════════════
    Below this line: don't edit unless you know what you're doing
 ═══════════════════════════════════════════════════════════ */
 
-/* Headers — works with both legacy anon JWT and new sb_publishable_ keys.
-   Legacy keys (eyJ...) need Bearer auth; new keys don't. */
-const _isLegacyKey = SUPABASE_ANON_KEY.startsWith('eyJ');
-const SB_HEADERS = _isLegacyKey ? {
-  apikey:        SUPABASE_ANON_KEY,
-  Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-  'Content-Type':'application/json',
-  Prefer:        'return=representation'
-} : {
+const SB_HEADERS = {
   apikey:        SUPABASE_ANON_KEY,
   Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
   'Content-Type':'application/json',
@@ -80,8 +75,97 @@ async function sbDelete(table, match) {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   STORAGE — upload & delete image files
+═══════════════════════════════════════════════════════════ */
+
+/**
+ * Upload a File/Blob to the storage bucket.
+ * Returns { path, url } where url is the public URL.
+ * folder is optional — e.g. "menu", "market", "special".
+ */
+async function sbUpload(file, folder = 'menu') {
+  if (!file) throw new Error('sbUpload: no file given');
+  // sanitize filename — strip path, replace non-safe chars
+  const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const stamp = Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+  const path = `${folder}/${stamp}_${safe}`;
+
+  const r = await fetch(
+    `${SUPABASE_URL}/storage/v1/object/${SB_BUCKET}/${path}`,
+    {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': file.type || 'application/octet-stream',
+        'x-upsert': 'false'
+      },
+      body: file
+    }
+  );
+  if (!r.ok) {
+    const err = await r.text();
+    throw new Error(`Storage upload failed (${r.status}): ${err}`);
+  }
+  const url = `${SUPABASE_URL}/storage/v1/object/public/${SB_BUCKET}/${path}`;
+  return { path, url };
+}
+
+/**
+ * Delete a file from the storage bucket by its public URL or storage path.
+ * Safe to call on URLs that aren't from our bucket — just no-ops.
+ */
+async function sbDeleteFile(urlOrPath) {
+  if (!urlOrPath) return;
+  let path = urlOrPath;
+  // Extract the path from a public URL
+  const publicPrefix = `${SUPABASE_URL}/storage/v1/object/public/${SB_BUCKET}/`;
+  if (path.startsWith(publicPrefix)) {
+    path = path.slice(publicPrefix.length);
+  } else if (path.startsWith('http')) {
+    // External URL — not ours, skip
+    return;
+  }
+  const r = await fetch(
+    `${SUPABASE_URL}/storage/v1/object/${SB_BUCKET}/${path}`,
+    {
+      method: 'DELETE',
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    }
+  );
+  // 200 OK or 404 (already gone) — both fine. Anything else, log but don't throw.
+  if (!r.ok && r.status !== 404) {
+    console.warn(`sbDeleteFile ${path}: ${r.status} ${await r.text()}`);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   IMAGE HELPERS — normalize old/new image data
+═══════════════════════════════════════════════════════════ */
+
+/**
+ * Normalize the images field. Accepts the new `images` jsonb array OR
+ * the legacy single `img` string. Returns always an array of
+ * { url, crop:{x,y,zoom,rotation} } objects.
+ */
+function normalizeImages(images, legacyImg) {
+  if (Array.isArray(images) && images.length) {
+    return images.map(im => ({
+      url: im.url || im,
+      crop: im.crop || { x: 0, y: 0, zoom: 1, rotation: 0 }
+    }));
+  }
+  if (legacyImg) {
+    return [{ url: legacyImg, crop: { x: 0, y: 0, zoom: 1, rotation: 0 } }];
+  }
+  return [];
+}
+
+/* ═══════════════════════════════════════════════════════════
    LOAD MENU (categories + items grouped + special + scarcity)
-   Uses localStorage cache for instant render; refreshes in background.
 ═══════════════════════════════════════════════════════════ */
 async function loadMenuData() {
   const [cats, items, special, scarcity] = await Promise.all([
@@ -100,15 +184,22 @@ async function loadMenuData() {
         .filter(i => i.category_id === c.id && !i.hidden)
         .map(i => ({
           name: i.name, price: i.price, priceLg: i.price_lg,
-          img: i.img, desc: i.description, note: i.note,
+          img: i.img,
+          images: normalizeImages(i.images, i.img),
+          imageLayout: i.image_layout || 'collage',
+          desc: i.description, note: i.note,
           pairs: i.pairs, badge: i.badge, badgeStyle: i.badge_style
         }))
     };
   });
 
-  const SITE_SPECIAL = special[0] ? {
-    name: special[0].name, price: special[0].price, desc: special[0].description,
-    type: special[0].type, image: special[0].image, hidden: special[0].hidden
+  const sp = special[0];
+  const SITE_SPECIAL = sp ? {
+    name: sp.name, price: sp.price, desc: sp.description,
+    type: sp.type, image: sp.image,
+    images: normalizeImages(sp.images, sp.image),
+    imageLayout: sp.image_layout || 'collage',
+    hidden: sp.hidden
   } : { hidden: true };
 
   const sold = scarcity.find(s => s.id==='sold_out')?.items || [];
@@ -133,7 +224,10 @@ async function loadMarketData() {
         .filter(i => i.category_id === c.id && !i.hidden)
         .map(i => ({
           name: i.name, price: i.price, unit: i.unit,
-          img: i.img, desc: i.description, note: i.note,
+          img: i.img,
+          images: normalizeImages(i.images, i.img),
+          imageLayout: i.image_layout || 'collage',
+          desc: i.description, note: i.note,
           badge: i.badge, badgeStyle: i.badge_style
         }))
     };
