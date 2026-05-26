@@ -706,47 +706,107 @@ let _galleryImgs = [];
 let _galleryIdx = 0;
 
 function openItemLightbox(regKey){
-  const item = ITEM_REGISTRY.get(regKey);
-  if (!item) return;
-  const imgs = (item.images && item.images.length) ? item.images : (item.img ? [{url:item.img}] : []);
-  if (!imgs.length) return;
-  const layout = item.imageLayout || 'collage';
-  const name = item.name || '';
-  // Reset all panels
-  const lbImg = document.getElementById('lb-img');
-  const lbCol = document.getElementById('lb-collage');
-  const lbGal = document.getElementById('lb-gallery');
-  lbImg.style.display = 'none';
-  lbCol.classList.remove('show');
-  lbGal.classList.remove('show');
-  lbCol.innerHTML = '';
+  try {
+    console.log('━━━ LIGHTBOX DEBUG ━━━');
+    console.log('1. regKey:', regKey);
 
-  if (imgs.length === 1) {
-    lbImg.src = imgs[0].url;
-    lbImg.alt = name;
-    lbImg.style.display = 'block';
-  } else if (layout === 'slideshow') {
-    _galleryImgs = imgs;
-    _galleryIdx = 0;
-    const dots = imgs.map((_,i) => `<span class="${i===0?'on':''}" onclick="event.stopPropagation();galleryGo(${i})"></span>`).join('');
-    document.getElementById('lb-dots').innerHTML = dots;
-    galleryGo(0, true);
-    lbGal.classList.add('show');
-  } else {
-    const cells = imgs.map(im => {
-      const pos = im.pos || { x:0, y:0, w:100, h:100 };
-      const url = im.url || '';
-      const fit = fitStyle(im.fit);
-      return `<div class="mi-collage-cell" style="left:${pos.x}%;top:${pos.y}%;width:${pos.w}%;height:${pos.h}%">
-        <img src="${url}" alt="${name.replace(/"/g,'&quot;')}" style="${fit}" onerror="this.style.background='#2a1a0e';">
-      </div>`;
-    }).join('');
-    lbCol.innerHTML = cells;
-    lbCol.classList.add('show');
+    const item = ITEM_REGISTRY.get(regKey);
+    console.log('2. item from registry:', item);
+    if (!item) { showLbError('No item found for key: ' + regKey); return; }
+
+    const imgs = (item.images && item.images.length) ? item.images : (item.img ? [{url:item.img}] : []);
+    console.log('3. imgs array:', imgs);
+    console.log('3a. imgs.length:', imgs.length);
+    console.log('3b. item.imageLayout:', item.imageLayout);
+    if (!imgs.length) { showLbError('Item has no images'); return; }
+
+    const layout = item.imageLayout || 'collage';
+    const name = item.name || '';
+    console.log('4. layout chosen:', layout, '| name:', name);
+
+    const lbImg = document.getElementById('lb-img');
+    const lbCol = document.getElementById('lb-collage');
+    const lbGal = document.getElementById('lb-gallery');
+    console.log('5. elements found?', { lbImg: !!lbImg, lbCol: !!lbCol, lbGal: !!lbGal });
+
+    lbImg.style.display = 'none';
+    lbCol.classList.remove('show');
+    lbGal.classList.remove('show');
+    lbCol.innerHTML = '';
+
+    if (imgs.length === 1) {
+      console.log('6. → SINGLE IMAGE branch, src:', imgs[0].url);
+      lbImg.src = imgs[0].url;
+      lbImg.alt = name;
+      lbImg.style.display = 'block';
+    } else if (layout === 'slideshow') {
+      console.log('6. → SLIDESHOW branch, count:', imgs.length);
+      _galleryImgs = imgs;
+      _galleryIdx = 0;
+      const dots = imgs.map((_,i) => `<span class="${i===0?'on':''}" onclick="event.stopPropagation();galleryGo(${i})"></span>`).join('');
+      document.getElementById('lb-dots').innerHTML = dots;
+      galleryGo(0, true);
+      lbGal.classList.add('show');
+    } else {
+      console.log('6. → COLLAGE branch, count:', imgs.length);
+      imgs.forEach((im, idx) => {
+        console.log(`   image ${idx}: url=${im.url} | pos=${JSON.stringify(im.pos)} | fit=${JSON.stringify(im.fit)}`);
+      });
+      const cells = imgs.map(im => {
+        const pos = im.pos || { x:0, y:0, w:100, h:100 };
+        const url = im.url || '';
+        const fit = fitStyle(im.fit);
+        return `<div class="mi-collage-cell" style="left:${pos.x}%;top:${pos.y}%;width:${pos.w}%;height:${pos.h}%">
+          <img src="${url}" alt="${name.replace(/"/g,'&quot;')}" style="${fit}" onerror="this.style.background='#5a1a0e';this.style.opacity='0.5';console.warn('[lightbox] image failed to load:',this.src)">
+        </div>`;
+      }).join('');
+      console.log('7. cells HTML length:', cells.length, ' (first 200 chars):', cells.slice(0,200));
+      lbCol.innerHTML = cells;
+      lbCol.classList.add('show');
+    }
+    document.getElementById('lb-caption').textContent = name;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    // After opening, log computed sizes/visibility
+    setTimeout(() => {
+      const lb = document.getElementById('lightbox');
+      const cs = getComputedStyle(lb);
+      console.log('8. AFTER OPEN — lightbox computed: opacity=', cs.opacity, '| display=', cs.display, '| z-index=', cs.zIndex);
+      if (lbCol.classList.contains('show')) {
+        const ccs = getComputedStyle(lbCol);
+        const rect = lbCol.getBoundingClientRect();
+        console.log('9. lb-collage computed: display=', ccs.display, '| width=', ccs.width, '| height=', ccs.height);
+        console.log('9a. lb-collage bounding rect:', { w: rect.width, h: rect.height, x: rect.x, y: rect.y });
+        const cellCount = lbCol.querySelectorAll('.mi-collage-cell').length;
+        const imgCount = lbCol.querySelectorAll('img').length;
+        console.log('9b. cells rendered in DOM:', cellCount, '| imgs rendered:', imgCount);
+        if (cellCount > 0) {
+          const firstCell = lbCol.querySelector('.mi-collage-cell');
+          const fcRect = firstCell.getBoundingClientRect();
+          console.log('9c. first cell rect:', { w: fcRect.width, h: fcRect.height, x: fcRect.x, y: fcRect.y });
+        }
+      }
+    }, 50);
+  } catch (err) {
+    console.error('[lightbox] FATAL ERROR:', err);
+    showLbError('Crashed: ' + err.message + '\n\n' + err.stack);
   }
-  document.getElementById('lb-caption').textContent = name;
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
+}
+
+/** Visible error overlay so the user can see what failed even with no console. */
+function showLbError(msg) {
+  console.error('[lightbox]', msg);
+  let div = document.getElementById('lb-error-overlay');
+  if (!div) {
+    div = document.createElement('div');
+    div.id = 'lb-error-overlay';
+    div.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#2a0808;color:#ff6b6b;border:2px solid #ff6b6b;padding:16px 22px;border-radius:6px;font-family:monospace;font-size:13px;line-height:1.5;z-index:99999;max-width:90vw;white-space:pre-wrap;box-shadow:0 8px 30px rgba(0,0,0,.8);cursor:pointer;';
+    div.onclick = () => div.remove();
+    document.body.appendChild(div);
+  }
+  div.textContent = '⚠ LIGHTBOX ERROR (tap to dismiss):\n\n' + msg;
+  setTimeout(() => { if (div.parentNode) div.remove(); }, 12000);
 }
 
 /* Back-compat shim if anything still calls openLightbox(src,name) */
