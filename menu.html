@@ -706,44 +706,61 @@ let _galleryImgs = [];
 let _galleryIdx = 0;
 
 function openItemLightbox(regKey){
+  console.log('[lightbox] open called with regKey=', regKey);
   const item = ITEM_REGISTRY.get(regKey);
-  if (!item) return;
+  console.log('[lightbox] item from registry=', item);
+  if (!item) {
+    console.warn('[lightbox] no item found for key', regKey);
+    return;
+  }
   const imgs = (item.images && item.images.length) ? item.images : (item.img ? [{url:item.img}] : []);
-  if (!imgs.length) return;
+  console.log('[lightbox] imgs=', imgs, 'layout=', item.imageLayout);
+  if (!imgs.length) {
+    console.warn('[lightbox] no images on item');
+    return;
+  }
   const layout = item.imageLayout || 'collage';
   const name = item.name || '';
   // Reset all panels
-  document.getElementById('lb-img').style.display = 'none';
-  document.getElementById('lb-collage').classList.remove('show');
-  document.getElementById('lb-gallery').classList.remove('show');
+  const lbImg = document.getElementById('lb-img');
+  const lbCol = document.getElementById('lb-collage');
+  const lbGal = document.getElementById('lb-gallery');
+  lbImg.style.display = 'none';
+  lbCol.classList.remove('show');
+  lbGal.classList.remove('show');
+  lbCol.innerHTML = '';
+
   if (imgs.length === 1) {
-    const im = document.getElementById('lb-img');
-    im.src = imgs[0].url;
-    im.alt = name;
-    im.style.display = '';
+    console.log('[lightbox] single-image branch, src=', imgs[0].url);
+    lbImg.src = imgs[0].url;
+    lbImg.alt = name;
+    lbImg.style.display = 'block';
   } else if (layout === 'slideshow') {
-    // Gallery mode
+    console.log('[lightbox] slideshow branch, count=', imgs.length);
     _galleryImgs = imgs;
     _galleryIdx = 0;
     const dots = imgs.map((_,i) => `<span class="${i===0?'on':''}" onclick="event.stopPropagation();galleryGo(${i})"></span>`).join('');
     document.getElementById('lb-dots').innerHTML = dots;
     galleryGo(0, true);
-    document.getElementById('lb-gallery').classList.add('show');
+    lbGal.classList.add('show');
   } else {
-    // Collage mode — replicate tile layout at lightbox scale
+    console.log('[lightbox] collage branch, count=', imgs.length);
     const cells = imgs.map(im => {
       const pos = im.pos || { x:0, y:0, w:100, h:100 };
+      const url = im.url || '';
+      const fit = fitStyle(im.fit);
       return `<div class="mi-collage-cell" style="left:${pos.x}%;top:${pos.y}%;width:${pos.w}%;height:${pos.h}%">
-        <img src="${im.url}" alt="${name}" style="${fitStyle(im.fit)}">
+        <img src="${url}" alt="${name.replace(/"/g,'&quot;')}" style="${fit}" onerror="this.style.background='#2a1a0e';this.alt='⚠ '+this.alt;">
       </div>`;
     }).join('');
-    const lbc = document.getElementById('lb-collage');
-    lbc.innerHTML = cells;
-    lbc.classList.add('show');
+    console.log('[lightbox] collage HTML length=', cells.length);
+    lbCol.innerHTML = cells;
+    lbCol.classList.add('show');
   }
   document.getElementById('lb-caption').textContent = name;
   document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
+  console.log('[lightbox] opened. lb-img display=', lbImg.style.display, '| lb-col show=', lbCol.classList.contains('show'), '| lb-gal show=', lbGal.classList.contains('show'));
 }
 
 /* Back-compat shim if anything still calls openLightbox(src,name) */
