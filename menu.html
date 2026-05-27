@@ -1114,7 +1114,9 @@ function buildSpecials(){
 /* ── TABS ── */
 let TAB_ORDER=[],currentTab='';
 function buildTabs(){
-  TAB_ORDER=[...Object.keys(MENU),'specials'];currentTab=TAB_ORDER[0]||'';
+  const specialHidden = typeof SITE_SPECIAL !== 'undefined' && SITE_SPECIAL && SITE_SPECIAL.hidden;
+  TAB_ORDER = specialHidden ? [...Object.keys(MENU)] : [...Object.keys(MENU),'specials'];
+  currentTab=TAB_ORDER[0]||'';
   document.getElementById('tabs').innerHTML=TAB_ORDER.map(key=>{const isSpec=key==='specials';const cat=isSpec?null:MENU[key];return`<button class="tab${key===currentTab?' active':''}" onclick="switchTab('${key}',this)"><span>${isSpec?'✦':cat.icon||'🍽'} ${isSpec?'Specials':cat.title}</span></button>`;}).join('');
 }
 function buildAll(){ITEM_REGISTRY.clear();let html='';Object.keys(MENU).forEach(k=>{html+=buildSection(k,MENU[k]);});html+=buildSpecials();document.getElementById('left-col').innerHTML=html;startSlideshows(document.getElementById('left-col'));}
