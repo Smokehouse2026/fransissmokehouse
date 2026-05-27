@@ -98,6 +98,7 @@ const TABLE_RENAMES = {
   daily_special: 'menu_daily_special',
   scarcity:      'menu_scarcity',
   homepage:      'site_homepage',
+  business:      'site_business',
   editor_users:  'site_editor_users'
 };
 function resolveTable(name){ return TABLE_RENAMES[name] || name; }
@@ -432,4 +433,121 @@ async function saveHomepage(data) {
   // serve stale data after a save.
   invalidateHomepageCache();
   return result;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUSINESS INFO — phone, address, hours, email, socials.
+   Shared across every page. Single row.
+═══════════════════════════════════════════════════════════ */
+
+/** Empty shape so callers can always read fields without "undefined" crashes. */
+function emptyBusiness() {
+  return {
+    name: '',
+    phone: '',
+    address_line: '',
+    city: '',
+    state: '',
+    zip: '',
+    email: '',
+    cash_note: '',
+    hours_label: '',
+    hours: { mon:'', tue:'', wed:'', thu:'', fri:'', sat:'', sun:'' },
+    socials: { facebook:'', instagram:'' },
+    ratings: {},
+    custom_fields: []
+  };
+}
+
+/** Same shape-merging pattern as homepage: preserve extra fields. */
+function mergeBusiness(fetched) {
+  const empty = emptyBusiness();
+  const f = fetched || {};
+  return {
+    ...f,
+    name:         f.name         ?? empty.name,
+    phone:        f.phone        ?? empty.phone,
+    address_line: f.address_line ?? empty.address_line,
+    city:         f.city         ?? empty.city,
+    state:        f.state        ?? empty.state,
+    zip:          f.zip          ?? empty.zip,
+    email:        f.email        ?? empty.email,
+    cash_note:    f.cash_note    ?? empty.cash_note,
+    hours_label:  f.hours_label  ?? empty.hours_label,
+    hours:        { ...empty.hours,   ...(f.hours   || {}) },
+    socials:      { ...empty.socials, ...(f.socials || {}) },
+    ratings:      f.ratings      ?? empty.ratings,
+    custom_fields: Array.isArray(f.custom_fields) ? f.custom_fields : []
+  };
+}
+
+/** Load business info from Supabase. Returns merged shape. */
+async function loadBusiness() {
+  try {
+    const rows = await sbSelect('business', 'id=eq.current');
+    if (rows && rows.length && rows[0].data) {
+      return mergeBusiness(rows[0].data);
+    }
+  } catch (e) {
+    console.warn('loadBusiness failed:', e.message);
+  }
+  return mergeBusiness(null);
+}
+
+async function saveBusiness(data) {
+  const result = await sbUpsert('business', { id: 'current', data });
+  invalidateBusinessCache();
+  return result;
+}
+
+function invalidateBusinessCache() {
+  try { localStorage.removeItem('francis_business'); } catch {}
+}
+
+/** Build a one-line address string from the parts (used in footers). */
+function formatBusinessAddress(b) {
+  if (!b) return '';
+  const parts = [b.address_line, b.city, b.state].filter(Boolean);
+  return parts.join(', ');
+}
+
+/** Format hours nicely. If hours_label is set, use it. Otherwise build from per-day. */
+function formatBusinessHours(b) {
+  if (!b) return '';
+  if (b.hours_label) return b.hours_label;
+  // Could expand later to render per-day rows
+  return '';
+}
+
+/** Apply business info into a page's footer. Pages call this from their boot script.
+ *  Selects: #footer-phone, #footer-address, #footer-email, #footer-hours,
+ *           #footer-facebook, #footer-instagram, #footer-cash-note
+ *  Any of these can be missing — the function only updates what it finds. */
+function applyBusinessToFooter(b) {
+  if (!b) return;
+  const setText = (id, val) => { const el = document.getElementById(id); if (el && val != null) el.textContent = val; };
+  const setHref = (id, val) => { const el = document.getElementById(id); if (el && val) el.href = val; };
+  const showHide = (id, show) => { const el = document.getElementById(id); if (el) el.style.display = show ? '' : 'none'; };
+
+  setText('footer-phone',     b.phone);
+  setText('footer-address',   formatBusinessAddress(b));
+  setText('footer-email',     b.email);
+  setText('footer-hours',     formatBusinessHours(b));
+  setText('footer-cash-note', b.cash_note);
+
+  // Phone "tel:" link version
+  const phoneLink = document.getElementById('footer-phone-link');
+  if (phoneLink && b.phone) phoneLink.href = 'tel:' + b.phone.replace(/[^0-9+]/g, '');
+
+  // Socials — hide the whole link if URL is empty
+  const fb = document.getElementById('footer-facebook');
+  if (fb) {
+    if (b.socials?.facebook) { fb.href = b.socials.facebook; fb.style.display = ''; }
+    else fb.style.display = 'none';
+  }
+  const ig = document.getElementById('footer-instagram');
+  if (ig) {
+    if (b.socials?.instagram) { ig.href = b.socials.instagram; ig.style.display = ''; }
+    else ig.style.display = 'none';
+  }
 }
