@@ -458,6 +458,9 @@ body{cursor:none;}
   <div id="tabs"></div>
 </div>
 
+<!-- CHROME TOP — rendered from site_pages.menu.chrome_top -->
+<div id="page-chrome-top"></div>
+
 <div id="layout">
   <div id="left-col"></div>
   <div id="sidebar">
@@ -515,6 +518,9 @@ body{cursor:none;}
   </div>
 </div>
 
+<!-- CHROME BOTTOM — rendered from site_pages.menu.chrome_bottom -->
+<div id="page-chrome-bottom"></div>
+
 <div id="ftr">
   <span class="ft" id="ftr-name">The Francis Smokehouse &amp; Specialty Meats</span>
   <div class="ffs"><span class="ff">🔥</span><span class="ff">🔥</span><span class="ff">🔥</span></div>
@@ -523,6 +529,10 @@ body{cursor:none;}
 
 <script src="Scripts/supabase.js"></script>
 <script src="Scripts/site-data.js" onerror="menuDataMissing()"></script>
+<script>window.PAGE_ID = 'menu';</script>
+<script src="Scripts/page-engine.js"></script>
+<script src="Scripts/chrome-renderer.js"></script>
+<script>if (window.__fsBootChrome) window.__fsBootChrome();</script>
 <script>
 /* ════════════════════════════════════════════
    FIRE CANVAS
