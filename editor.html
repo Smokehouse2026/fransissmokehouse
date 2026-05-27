@@ -1087,7 +1087,7 @@ body::before{
             <p>Edit the front-door of your site — title, tagline, the six nav cards (with images), footer info and the whole color scheme.</p>
           </div>
           <div style="display:flex;gap:8px">
-            <button class="btn btn-secondary" id="hp-reset">Reset Defaults</button>
+            <button class="btn btn-secondary" id="hp-reset">Reload</button>
             <button class="btn btn-primary" id="hp-save">Save Homepage</button>
           </div>
         </div>
@@ -2178,7 +2178,7 @@ async function loadHomepageIntoEditor(){
     HP_DATA = typeof loadHomepage === 'function' ? await loadHomepage() : null;
   } catch(e) {
     console.warn('Homepage load failed:', e);
-    HP_DATA = typeof HOMEPAGE_DEFAULTS !== 'undefined' ? JSON.parse(JSON.stringify(HOMEPAGE_DEFAULTS)) : null;
+    HP_DATA = typeof emptyHomepage === 'function' ? emptyHomepage() : null;
   }
   if (!HP_DATA) {
     block.innerHTML = '<div class="empty">Homepage editor needs supabase.js to be loaded.</div>';
@@ -2439,10 +2439,10 @@ async function saveHomepageHandler(){
 }
 
 async function resetHomepageHandler(){
-  if (!confirm('Reset all homepage settings to defaults? This will not delete uploaded images from storage.')) return;
-  HP_DATA = typeof HOMEPAGE_DEFAULTS !== 'undefined' ? JSON.parse(JSON.stringify(HOMEPAGE_DEFAULTS)) : HP_DATA;
-  renderHomepageEditor();
-  toast('Reset to defaults — tap Save to commit');
+  if (!confirm('Discard your unsaved changes and reload from Supabase?')) return;
+  HP_DATA = null;
+  await loadHomepageIntoEditor();
+  toast('Reloaded from Supabase');
 }
 
 // Wire up the buttons + lazy-load when pane is opened
