@@ -804,7 +804,140 @@ body::before{
 }
 .scarcity-add input:focus{outline:none;border-color:var(--flame)}
 
-/* ═══ EMPTY STATE ═══ */
+/* ═══ HOMEPAGE EDITOR ═══ */
+.hp-section{
+  background:linear-gradient(180deg,var(--panel),var(--bg) 85%);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  padding:28px;
+  margin-bottom:20px;
+  box-shadow:var(--shadow-sm);
+}
+.hp-section h3{
+  font-family:var(--serif);
+  font-size:22px;line-height:1.1;
+  color:var(--ink);
+  margin-bottom:4px;
+}
+.hp-section h3 em{font-style:italic;color:var(--flame)}
+.hp-section .hp-desc{
+  font-family:var(--sans);
+  font-size:13px;color:var(--ink-4);
+  margin-bottom:20px;
+  line-height:1.55;
+}
+.hp-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.hp-card{
+  background:rgba(20,12,6,.45);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:14px;
+  display:flex;flex-direction:column;gap:10px;
+  transition:border-color .2s;
+}
+.hp-card:hover{border-color:var(--line-2)}
+.hp-card.featured{border-color:rgba(255,153,48,.4);background:rgba(255,153,48,.06)}
+.hp-card-num{
+  font-family:var(--sans);font-weight:700;
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--flame);
+}
+.hp-card-thumb{
+  width:100%;aspect-ratio:1.4/1;
+  background:#0a0402;
+  border:1px solid var(--line);
+  border-radius:6px;
+  overflow:hidden;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.hp-card-thumb img{width:100%;height:100%;object-fit:cover}
+.hp-card-thumb-empty{
+  font-family:var(--sans);font-size:11px;
+  color:var(--ink-5);letter-spacing:.1em;text-transform:uppercase;
+  text-align:center;padding:8px;
+}
+.hp-card-thumb-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.7) 100%);
+  pointer-events:none;
+}
+.hp-card-thumb-label{
+  position:absolute;left:8px;bottom:6px;right:8px;
+  font-family:var(--serif);font-size:14px;color:#fff;line-height:1.1;
+  text-shadow:0 2px 6px rgba(0,0,0,.8);
+  z-index:1;
+}
+.hp-card-thumb-label small{
+  display:block;font-family:var(--sans);font-size:10px;
+  font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  opacity:.85;margin-top:2px;
+}
+.hp-card .field{margin-bottom:0}
+.hp-card .field label{font-size:10px;letter-spacing:.18em;margin-bottom:5px}
+.hp-card .field input{padding:8px 11px;font-size:13px}
+.hp-card-img-btns{display:flex;gap:6px}
+.hp-card-img-btns .btn{flex:1;justify-content:center}
+
+.hp-theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.hp-color{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(20,12,6,.45);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:10px 12px;
+  transition:border-color .2s;
+}
+.hp-color:hover{border-color:var(--line-2)}
+.hp-color-swatch{
+  width:44px;height:44px;
+  border-radius:6px;
+  border:1px solid rgba(255,255,255,.12);
+  cursor:pointer;
+  flex-shrink:0;
+  background:var(--swatch);
+  position:relative;
+  overflow:hidden;
+}
+.hp-color-swatch input[type=color]{
+  position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);
+  opacity:0;cursor:pointer;
+}
+.hp-color-info{flex:1;min-width:0}
+.hp-color-label{
+  font-family:var(--sans);font-weight:700;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+.hp-color-val{
+  font-family:var(--mono);font-size:12px;
+  color:var(--ink-2);margin-top:2px;
+}
+
+.hp-preview{
+  margin-top:16px;
+  background:var(--hp-prev-bg, #0d0805);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:28px 20px;
+  text-align:center;
+  color:var(--hp-prev-text, #faedd2);
+}
+.hp-preview-eyebrow{
+  font-family:var(--sans);font-weight:600;
+  font-size:10px;letter-spacing:.5em;text-transform:uppercase;
+  color:var(--hp-prev-eyebrow, #dcbe94);
+  margin-bottom:10px;
+}
+.hp-preview-title{
+  font-family:var(--serif);font-size:38px;line-height:1.05;
+}
+.hp-preview-title em{font-style:italic;color:var(--hp-prev-flame, #ff9930)}
+.hp-preview-tagline{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  color:var(--hp-prev-eyebrow, #dcbe94);opacity:.85;margin-top:6px;
+}
+
 .empty{
   padding:48px 24px;text-align:center;
   font-family:var(--sans);
@@ -878,6 +1011,11 @@ body::before{
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 5 3h14l2 6"/><path d="M3 9v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9"/><path d="M3 9h18"/><path d="M9 14h6"/></svg></span>
         <span>Smokehouse Market</span>
       </button>
+      <div class="sb-nav-lbl">Site</div>
+      <button class="tab" data-pane="homepage">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M10 21v-6h4v6"/></svg></span>
+        <span>Homepage</span>
+      </button>
     </nav>
     <div class="sb-foot">
       <div class="sb-status" id="status">Ready</div>
@@ -939,6 +1077,21 @@ body::before{
           <button class="btn btn-secondary" id="add-mkt-cat">+ New Category</button>
         </div>
         <div id="market-cats" class="loading">Loading market…</div>
+      </section>
+
+      <!-- HOMEPAGE PANE -->
+      <section class="pane" id="pane-homepage">
+        <div class="pane-hdr">
+          <div>
+            <h2>Home <em>Page</em></h2>
+            <p>Edit the front-door of your site — title, tagline, the six nav cards (with images), footer info and the whole color scheme.</p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-secondary" id="hp-reset">Reset Defaults</button>
+            <button class="btn btn-primary" id="hp-save">Save Homepage</button>
+          </div>
+        </div>
+        <div id="homepage-block" class="loading">Loading…</div>
       </section>
     </main>
   </div>
@@ -2002,6 +2155,309 @@ function imgmgrAddUrl(key){
   inp.value = '';
   imgmgrRender(key);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   HOMEPAGE EDITOR
+═══════════════════════════════════════════════════════════ */
+let HP_DATA = null;
+const HP_COLOR_FIELDS = [
+  { key:'bg',      label:'Background' },
+  { key:'text',    label:'Body Text' },
+  { key:'eyebrow', label:'Sub-text' },
+  { key:'ember',   label:'Ember (deep)' },
+  { key:'fire',    label:'Fire (mid)' },
+  { key:'flame',   label:'Flame (main)' },
+  { key:'glow',    label:'Glow (highlight)' },
+  { key:'overlay', label:'Image Overlay' }
+];
+
+async function loadHomepageIntoEditor(){
+  const block = document.getElementById('homepage-block');
+  if (!block) return;
+  try {
+    HP_DATA = typeof loadHomepage === 'function' ? await loadHomepage() : null;
+  } catch(e) {
+    console.warn('Homepage load failed:', e);
+    HP_DATA = typeof HOMEPAGE_DEFAULTS !== 'undefined' ? JSON.parse(JSON.stringify(HOMEPAGE_DEFAULTS)) : null;
+  }
+  if (!HP_DATA) {
+    block.innerHTML = '<div class="empty">Homepage editor needs supabase.js to be loaded.</div>';
+    return;
+  }
+  renderHomepageEditor();
+}
+
+function renderHomepageEditor(){
+  const d = HP_DATA;
+  const block = document.getElementById('homepage-block');
+  block.className = '';
+  block.innerHTML = `
+    <!-- IDENTITY -->
+    <div class="hp-section">
+      <h3>Identity</h3>
+      <div class="hp-desc">The headline at the top of your homepage.</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Title (left)</label>
+          <input id="hp-title" value="${escapeHtml(d.title)}" placeholder="The Francis">
+        </div>
+        <div class="field">
+          <label>Title (italic, right)</label>
+          <input id="hp-title-em" value="${escapeHtml(d.title_em)}" placeholder="Smokehouse">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Eyebrow Text</label>
+          <input id="hp-eyebrow" value="${escapeHtml(d.eyebrow)}" placeholder="St. Francisville · Louisiana">
+        </div>
+        <div class="field">
+          <label>Tagline</label>
+          <input id="hp-tagline" value="${escapeHtml(d.tagline)}" placeholder="&amp; Specialty Meats">
+        </div>
+      </div>
+      <div class="hp-preview" id="hp-identity-preview">
+        <div class="hp-preview-eyebrow" id="hp-pv-eyebrow">${escapeHtml(d.eyebrow)}</div>
+        <div class="hp-preview-title" id="hp-pv-title">${escapeHtml(d.title)} <em>${escapeHtml(d.title_em)}</em></div>
+        <div class="hp-preview-tagline" id="hp-pv-tagline">${escapeHtml(d.tagline)}</div>
+      </div>
+    </div>
+
+    <!-- NAV CARDS -->
+    <div class="hp-section">
+      <h3>Nav <em>Cards</em></h3>
+      <div class="hp-desc">The six buttons on the homepage. Upload an image for any card and it'll fill the whole tile with the text overlaid. Use *italics* (asterisks) around any word in the label to style it like "Find <em>Us</em>".</div>
+      <div class="hp-cards-grid" id="hp-cards-grid">
+        ${d.cards.map((c,i) => hpCardHtml(c, i)).join('')}
+      </div>
+    </div>
+
+    <!-- THEME -->
+    <div class="hp-section">
+      <h3>Theme <em>Colors</em></h3>
+      <div class="hp-desc">Tap a swatch to pick a new color. Changes preview live above.</div>
+      <div class="hp-theme-grid">
+        ${HP_COLOR_FIELDS.map(f => hpColorHtml(f, d.theme[f.key])).join('')}
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="hp-section">
+      <h3>Footer</h3>
+      <div class="hp-desc">Contact info shown at the bottom of the homepage.</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Phone</label>
+          <input id="hp-phone" value="${escapeHtml(d.footer.phone||'')}" placeholder="(225) 245-5046">
+        </div>
+        <div class="field">
+          <label>Address</label>
+          <input id="hp-address" value="${escapeHtml(d.footer.address||'')}" placeholder="6779 US Hwy 61...">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Facebook URL</label>
+          <input id="hp-facebook" value="${escapeHtml(d.footer.facebook||'')}" placeholder="https://...">
+        </div>
+        <div class="field">
+          <label>Instagram URL</label>
+          <input id="hp-instagram" value="${escapeHtml(d.footer.instagram||'')}" placeholder="https://...">
+        </div>
+      </div>
+    </div>
+  `;
+  // Wire up live preview for identity fields
+  ['hp-title','hp-title-em','hp-eyebrow','hp-tagline'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateIdentityPreview);
+  });
+  // Wire up color pickers
+  HP_COLOR_FIELDS.forEach(f => {
+    const picker = document.getElementById('hp-color-' + f.key);
+    if (picker) picker.addEventListener('input', e => hpColorChange(f.key, e.target.value));
+  });
+  applyEditorPreviewTheme();
+}
+
+function hpCardHtml(c, i){
+  const featCls = c.featured ? ' featured' : '';
+  const hasImg = !!c.image;
+  return `
+    <div class="hp-card${featCls}" data-idx="${i}">
+      <div class="hp-card-num">Card ${i+1}${c.featured ? ' · Featured' : ''}</div>
+      <div class="hp-card-thumb" id="hp-thumb-${i}">
+        ${hasImg
+          ? `<img src="${escapeHtml(c.image)}" alt=""><div class="hp-card-thumb-overlay"></div>`
+          : `<div class="hp-card-thumb-empty">No image · Tap "Upload" below</div>`}
+        <div class="hp-card-thumb-label">${escapeHtml(c.label||'')}${c.sub?`<small>${escapeHtml(c.sub)}</small>`:''}</div>
+      </div>
+      <div class="field">
+        <label>Label</label>
+        <input id="hp-c-label-${i}" value="${escapeHtml(c.label||'')}" oninput="hpCardField(${i},'label',this.value)">
+      </div>
+      <div class="field">
+        <label>Subtitle</label>
+        <input id="hp-c-sub-${i}" value="${escapeHtml(c.sub||'')}" oninput="hpCardField(${i},'sub',this.value)">
+      </div>
+      <div class="field">
+        <label>Link Target</label>
+        <input id="hp-c-href-${i}" value="${escapeHtml(c.href||'')}" oninput="hpCardField(${i},'href',this.value)">
+      </div>
+      <div class="hp-card-img-btns">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="hpCardPickImage(${i})">
+          ${hasImg ? 'Replace Image' : '+ Upload Image'}
+        </button>
+        ${hasImg ? `<button type="button" class="btn btn-danger btn-sm" onclick="hpCardClearImage(${i})">Remove</button>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function hpColorHtml(field, val){
+  return `
+    <div class="hp-color" id="hp-color-row-${field.key}">
+      <label class="hp-color-swatch" style="--swatch:${escapeHtml(val||'#000')}">
+        <input type="color" id="hp-color-${field.key}" value="${hpColorToHex(val)}">
+      </label>
+      <div class="hp-color-info">
+        <div class="hp-color-label">${field.label}</div>
+        <div class="hp-color-val" id="hp-color-val-${field.key}">${escapeHtml(val||'')}</div>
+      </div>
+    </div>
+  `;
+}
+
+/** Color picker only accepts hex. Strip rgba() to a hex if needed. */
+function hpColorToHex(val){
+  if (!val) return '#000000';
+  if (val.startsWith('#')) return val.length===7 ? val : '#000000';
+  // rgba/rgb → take just the rgb part
+  const m = val.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (m) {
+    const h = n => Math.max(0,Math.min(255,parseInt(n))).toString(16).padStart(2,'0');
+    return '#' + h(m[1]) + h(m[2]) + h(m[3]);
+  }
+  return '#000000';
+}
+
+function hpCardField(idx, field, value){
+  HP_DATA.cards[idx][field] = value;
+  // Update preview label in the thumb
+  const thumb = document.querySelector(`#hp-thumb-${idx} .hp-card-thumb-label`);
+  if (thumb) {
+    const c = HP_DATA.cards[idx];
+    thumb.innerHTML = escapeHtml(c.label||'') + (c.sub?`<small>${escapeHtml(c.sub)}</small>`:'');
+  }
+}
+
+function hpColorChange(key, value){
+  HP_DATA.theme[key] = value;
+  // Update swatch & value text
+  const row = document.getElementById('hp-color-row-'+key);
+  if (row) row.querySelector('.hp-color-swatch').style.setProperty('--swatch', value);
+  const val = document.getElementById('hp-color-val-'+key);
+  if (val) val.textContent = value;
+  applyEditorPreviewTheme();
+}
+
+function applyEditorPreviewTheme(){
+  const t = HP_DATA.theme;
+  const preview = document.getElementById('hp-identity-preview');
+  if (!preview) return;
+  preview.style.setProperty('--hp-prev-bg', t.bg);
+  preview.style.setProperty('--hp-prev-text', t.text);
+  preview.style.setProperty('--hp-prev-eyebrow', t.eyebrow);
+  preview.style.setProperty('--hp-prev-flame', t.flame);
+}
+
+function updateIdentityPreview(){
+  HP_DATA.title    = document.getElementById('hp-title').value;
+  HP_DATA.title_em = document.getElementById('hp-title-em').value;
+  HP_DATA.eyebrow  = document.getElementById('hp-eyebrow').value;
+  HP_DATA.tagline  = document.getElementById('hp-tagline').value;
+  document.getElementById('hp-pv-eyebrow').textContent = HP_DATA.eyebrow;
+  document.getElementById('hp-pv-title').innerHTML = escapeHtml(HP_DATA.title) + ' <em>' + escapeHtml(HP_DATA.title_em) + '</em>';
+  document.getElementById('hp-pv-tagline').textContent = HP_DATA.tagline;
+}
+
+function hpCardPickImage(idx){
+  const inp = document.getElementById('img-file-input');
+  inp.value = '';
+  inp.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      setStatus('Uploading…', 'saving');
+      const { url } = await sbUpload(file, 'homepage');
+      // Delete old image if there was one
+      const old = HP_DATA.cards[idx].image;
+      if (old) sbDeleteFile(old).catch(()=>{});
+      HP_DATA.cards[idx].image = url;
+      // Re-render just the cards grid
+      const grid = document.getElementById('hp-cards-grid');
+      grid.innerHTML = HP_DATA.cards.map((c,i) => hpCardHtml(c, i)).join('');
+      toast('Image uploaded');
+      setStatus('Ready');
+    } catch(err) {
+      console.error(err);
+      toast('Upload failed: '+err.message, true);
+      setStatus('Upload failed', 'err');
+    }
+  };
+  inp.click();
+}
+
+function hpCardClearImage(idx){
+  if (!confirm('Remove this image?')) return;
+  const old = HP_DATA.cards[idx].image;
+  HP_DATA.cards[idx].image = '';
+  const grid = document.getElementById('hp-cards-grid');
+  grid.innerHTML = HP_DATA.cards.map((c,i) => hpCardHtml(c, i)).join('');
+  if (old) sbDeleteFile(old).catch(()=>{});
+}
+
+async function saveHomepageHandler(){
+  // Sync identity + footer fields into HP_DATA (cards/theme already sync live)
+  HP_DATA.title    = document.getElementById('hp-title').value.trim();
+  HP_DATA.title_em = document.getElementById('hp-title-em').value.trim();
+  HP_DATA.eyebrow  = document.getElementById('hp-eyebrow').value.trim();
+  HP_DATA.tagline  = document.getElementById('hp-tagline').value.trim();
+  HP_DATA.footer.phone     = document.getElementById('hp-phone').value.trim();
+  HP_DATA.footer.address   = document.getElementById('hp-address').value.trim();
+  HP_DATA.footer.facebook  = document.getElementById('hp-facebook').value.trim();
+  HP_DATA.footer.instagram = document.getElementById('hp-instagram').value.trim();
+  try {
+    setStatus('Saving…', 'saving');
+    await saveHomepage(HP_DATA);
+    toast('Homepage saved');
+    setStatus('Ready');
+  } catch(e) {
+    console.error(e);
+    toast('Save failed: '+e.message, true);
+    setStatus('Save failed', 'err');
+  }
+}
+
+async function resetHomepageHandler(){
+  if (!confirm('Reset all homepage settings to defaults? This will not delete uploaded images from storage.')) return;
+  HP_DATA = typeof HOMEPAGE_DEFAULTS !== 'undefined' ? JSON.parse(JSON.stringify(HOMEPAGE_DEFAULTS)) : HP_DATA;
+  renderHomepageEditor();
+  toast('Reset to defaults — tap Save to commit');
+}
+
+// Wire up the buttons + lazy-load when pane is opened
+document.addEventListener('DOMContentLoaded', () => {
+  const saveBtn = document.getElementById('hp-save');
+  const resetBtn = document.getElementById('hp-reset');
+  if (saveBtn) saveBtn.onclick = saveHomepageHandler;
+  if (resetBtn) resetBtn.onclick = resetHomepageHandler;
+  // Load homepage data the first time the pane is activated
+  document.querySelectorAll('.tab[data-pane="homepage"]').forEach(t => {
+    t.addEventListener('click', () => {
+      if (HP_DATA === null) loadHomepageIntoEditor();
+    });
+  });
+});
 
 /* ═══════════════════════════════════════════════════════════
    GO
