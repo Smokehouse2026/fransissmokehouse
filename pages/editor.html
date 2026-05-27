@@ -4250,6 +4250,7 @@ async function loadPageIntoEditor(){
 window.addEventListener('message', e => {
   const m = e.data;
   if (!m || m.source !== 'fs-page-editor') return;
+  console.log('[editor] received from iframe:', m.type);
   switch (m.type) {
     case 'ready':
       PG_IFRAME_READY = true;
