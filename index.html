@@ -133,6 +133,26 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
 .nav-btn-name em{font-style:italic;color:var(--flame)}
 .nav-btn:hover .nav-btn-name{text-shadow:0 0 30px rgba(255,153,48,.3)}
 
+/* Image-backed nav buttons (when an image URL is set) */
+.nav-btn.has-image{
+  background-image:var(--card-bg);
+  background-size:cover;
+  background-position:center;
+  background-color:#000;
+}
+.nav-btn.has-image::before{
+  /* Dark gradient overlay so text stays readable on any image */
+  background:linear-gradient(180deg,rgba(10,6,3,.25) 0%,rgba(10,6,3,.55) 55%,rgba(10,6,3,.88) 100%);
+  opacity:1;
+  z-index:1;
+}
+.nav-btn.has-image .nav-btn-name,
+.nav-btn.has-image .nav-btn-sub{
+  position:relative;z-index:2;
+  text-shadow:0 2px 12px rgba(0,0,0,.8);
+}
+.nav-btn.has-image:hover{box-shadow:0 8px 32px rgba(212,82,0,.35),0 0 0 1px rgba(255,153,48,.4) inset}
+
 .nav-btn-sub{
   position:relative;z-index:1;
   font-family:var(--cond);font-weight:500;
@@ -229,12 +249,12 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
 <div class="page">
 
   <header class="header">
-    <div class="eyebrow">St. Francisville · Louisiana</div>
-    <h1 class="title">The Francis <em>Smokehouse</em></h1>
-    <div class="subtitle">&amp; Specialty Meats</div>
+    <div class="eyebrow" id="eyebrow">St. Francisville · Louisiana</div>
+    <h1 class="title" id="title">The Francis <em>Smokehouse</em></h1>
+    <div class="subtitle" id="tagline">&amp; Specialty Meats</div>
   </header>
 
-  <nav class="nav">
+  <nav class="nav" id="nav-grid">
     <a href="menu.html" class="nav-btn">
       <span class="nav-btn-name">Menu</span>
       <span class="nav-btn-sub">BBQ &amp; Po-boys</span>
@@ -265,13 +285,13 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
     <div class="footer-info">
       <span class="status" id="status"><span class="live-dot"></span>Open Now</span>
       <span class="dot">·</span>
-      <a href="tel:+12252455046">(225) 245-5046</a>
+      <a id="footer-phone" href="tel:+12252455046">(225) 245-5046</a>
       <span class="dot">·</span>
       <a href="Pages/giftcards.html">Gift Cards</a>
       <span class="dot">·</span>
       <a href="Pages/editor.html">Staff</a>
       <span class="dot">·</span>
-      <a href="https://www.facebook.com/1547733028788117/" target="_blank">Facebook</a>
+      <a id="footer-facebook" href="https://www.facebook.com/1547733028788117/" target="_blank">Facebook</a>
     </div>
     <div class="credit">© 2025 · <a href="https://northstardigitalllc.com" target="_blank">NorthStar Digital</a></div>
   </footer>
@@ -280,6 +300,72 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
 
 <!-- Hidden editor trigger — tap top-left 18×18 corner 3 times to open editor -->
 <div id="editor-trigger" style="position:fixed;top:0;left:0;width:18px;height:18px;z-index:9999;cursor:default" title=""></div>
+
+<script src="supabase.js"></script>
+<script>
+/* ═══ HOMEPAGE: load editor settings from Supabase and apply ═══ */
+(async function loadAndApplyHomepage(){
+  if (typeof loadHomepage !== 'function') return; // supabase.js didn't load
+  let data;
+  try { data = await loadHomepage(); }
+  catch (e) { console.warn('Homepage load failed, using defaults:', e); return; }
+
+  // Apply theme via CSS variable overrides
+  const r = document.documentElement.style;
+  if (data.theme) {
+    if (data.theme.bg)      r.setProperty('--void', data.theme.bg);
+    if (data.theme.text)    { r.setProperty('--cream', data.theme.text); r.setProperty('--paper', data.theme.text); }
+    if (data.theme.eyebrow) r.setProperty('--sand', data.theme.eyebrow);
+    if (data.theme.ember)   r.setProperty('--ember', data.theme.ember);
+    if (data.theme.fire)    r.setProperty('--fire',  data.theme.fire);
+    if (data.theme.flame)   r.setProperty('--flame', data.theme.flame);
+    if (data.theme.glow)    r.setProperty('--glow',  data.theme.glow);
+  }
+
+  // Identity
+  if (data.eyebrow) document.getElementById('eyebrow').textContent = data.eyebrow;
+  if (data.title || data.title_em) {
+    const t = document.getElementById('title');
+    t.innerHTML = `${escapeHtml(data.title||'')} <em>${escapeHtml(data.title_em||'')}</em>`;
+  }
+  if (data.tagline) document.getElementById('tagline').innerHTML = data.tagline;
+
+  // Footer
+  if (data.footer) {
+    if (data.footer.phone) {
+      const fp = document.getElementById('footer-phone');
+      fp.textContent = data.footer.phone;
+      fp.href = 'tel:' + data.footer.phone.replace(/\D/g,'');
+    }
+    if (data.footer.facebook) document.getElementById('footer-facebook').href = data.footer.facebook;
+  }
+
+  // Nav cards — replace entirely
+  if (Array.isArray(data.cards) && data.cards.length) {
+    const nav = document.getElementById('nav-grid');
+    nav.innerHTML = data.cards.map(c => {
+      const hasImage = !!c.image;
+      const featCls  = c.featured ? ' featured' : '';
+      const imgCls   = hasImage ? ' has-image' : '';
+      const styleAttr = hasImage ? ` style="--card-bg:url('${escapeAttr(c.image)}')"` : '';
+      // Allow <em> in the label by treating it as HTML-safe markup we ourselves emit
+      const label = renderLabel(c.label||'');
+      return `<a href="${escapeAttr(c.href||'#')}" class="nav-btn${featCls}${imgCls}"${styleAttr}>
+        <span class="nav-btn-name">${label}</span>
+        <span class="nav-btn-sub">${escapeHtml(c.sub||'')}</span>
+      </a>`;
+    }).join('');
+  }
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+  function escapeAttr(s){ return escapeHtml(s); }
+  // Allow a single *...* pair in the label to render as italic emphasis
+  function renderLabel(s){
+    const safe = escapeHtml(s);
+    return safe.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  }
+})();
+</script>
 
 <script>
 (function(){
