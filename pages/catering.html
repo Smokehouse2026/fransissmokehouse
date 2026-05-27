@@ -833,8 +833,24 @@ async function renderPage(){
     const sc = document.getElementById('sticky-call');
     if (sc) sc.href = 'tel:' + biz.phone.replace(/[^0-9+]/g,'');
   }
-  // Re-trigger reveal observers if they're scroll-based
-  if (typeof setupReveal === 'function') setupReveal();
+  // Mark new .reveal elements visible. The original IntersectionObserver ran before
+  // these elements existed, so they'd stay opacity:0 forever otherwise.
+  // We attach a fresh observer here so the scroll-fade still works for elements
+  // below the fold.
+  if (typeof IntersectionObserver !== 'undefined') {
+    const fade = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }});
+    }, { threshold: .1, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.reveal:not(.in)').forEach(el => {
+      // Anything already in the viewport on first render should be visible immediately
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('in');
+      else fade.observe(el);
+    });
+  } else {
+    // No IntersectionObserver: just show everything
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
 }
 
 /* ── ADDITIONAL SECTION TYPES ────────────────────────── */
@@ -1022,9 +1038,10 @@ function postToParent(type, payload){
 }
 
 function setupEditMode(){
-  // Tell catering the section ids in render order. We re-render dynamically
-  // so the data-section-id attributes get applied here.
-  const sections = PG_LAST_DATA?.sections?.filter(s => !s.hidden) || [];
+  // Tag each rendered section with its id from PG_LAST_DATA, in the same order.
+  // We render ALL sections in edit mode (hidden ones are just dimmed) so the
+  // index aligns 1:1 with the data array.
+  const sections = PG_LAST_DATA?.sections || [];
   const sectionEls = document.querySelectorAll('#page-root > section');
   sections.forEach((s, i) => {
     const el = sectionEls[i];
@@ -1194,6 +1211,7 @@ let PG_LAST_DATA = null;
 window.addEventListener('message', e => {
   const m = e.data;
   if (!m || m.source !== 'fs-page-editor-parent') return;
+  console.log('[edit-iframe] received', m.type, m.payload?.page?.sections?.length, 'sections');
   if (m.type === 'load-page') {
     // Replace the entire page data and re-render
     PG_LAST_DATA = m.payload.page;
@@ -1227,6 +1245,10 @@ async function renderFromMessage(page, biz){
     el.style.position = 'relative';
     el.insertAdjacentHTML('afterbegin', '<div style="position:absolute;top:8px;left:8px;background:#1a1108;color:#dcbe94;padding:4px 10px;border:1px solid rgba(220,190,148,.25);border-radius:4px;font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;z-index:50">Hidden</div>');
   });
+  // CRITICAL: make all .reveal elements visible immediately (no scroll fade in edit mode)
+  // Without this, content stays at opacity:0 forever because the IntersectionObserver
+  // was set up before these elements existed.
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
   setupEditMode();
   if (biz?.phone) {
     const sc = document.getElementById('sticky-call');
@@ -1244,6 +1266,7 @@ if (IS_EDIT) {
   badge.textContent = 'Edit Mode';
   document.body.appendChild(badge);
   // Notify parent we're ready to receive data
+  console.log('[edit-iframe] ready — posting to parent');
   postToParent('ready', { page: PAGE_ID });
 } else {
   renderPage();
