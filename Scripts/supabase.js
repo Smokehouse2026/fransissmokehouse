@@ -387,11 +387,16 @@ function emptyHomepage() {
   };
 }
 
-/** Merge fetched data with the empty shape so all keys exist. */
+/** Merge fetched data with the empty shape so all keys exist.
+ *  Preserves any extra fields the editor may not know about (hours_label,
+ *  ratings, cash_note, etc.) so saving doesn't strip them. */
 function mergeHomepage(fetched) {
   const empty = emptyHomepage();
   const f = fetched || {};
   return {
+    // Start with everything in fetched so unknown fields survive a round-trip
+    ...f,
+    // Then override the structural keys to guarantee shape
     title:    f.title    ?? empty.title,
     title_em: f.title_em ?? empty.title_em,
     tagline:  f.tagline  ?? empty.tagline,
@@ -402,6 +407,11 @@ function mergeHomepage(fetched) {
     footer:   { ...empty.footer, ...(f.footer || {}) },
     theme:    { ...empty.theme,  ...(f.theme  || {}) }
   };
+}
+
+/** Clear the cached homepage in localStorage so the next page load fetches fresh. */
+function invalidateHomepageCache() {
+  try { localStorage.removeItem('francis_homepage'); } catch {}
 }
 
 async function loadHomepage() {
@@ -417,5 +427,9 @@ async function loadHomepage() {
 }
 
 async function saveHomepage(data) {
-  return await sbUpsert('homepage', { id: 'current', data });
+  const result = await sbUpsert('homepage', { id: 'current', data });
+  // Make sure any cached homepage on the live site / other pages doesn't
+  // serve stale data after a save.
+  invalidateHomepageCache();
+  return result;
 }
