@@ -272,3 +272,73 @@ async function loadCachedThenRefresh(cacheKey, loader, onRefresh) {
   // Return cached if we have it, otherwise wait for network
   return cached || networkPromise;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   HOMEPAGE — load and save the homepage settings row.
+   The whole homepage config lives in one jsonb column for simplicity.
+═══════════════════════════════════════════════════════════ */
+
+/** Default homepage settings. Used as the fallback if Supabase
+ *  has no row yet, AND as the seed when the editor first loads. */
+const HOMEPAGE_DEFAULTS = {
+  title: 'The Francis',
+  title_em: 'Smokehouse',
+  tagline: '& Specialty Meats',
+  eyebrow: 'St. Francisville · Louisiana',
+  cards: [
+    { label: 'Menu',           sub: 'BBQ & Po-boys',       href: 'menu.html',             image: '' },
+    { label: 'Daily Special',  sub: 'Posted at 6am',       href: 'menu.html#specials',    image: '' },
+    { label: 'Market',         sub: 'Smokehouse Market',   href: 'Pages/market.html',     image: '' },
+    { label: 'Catering',       sub: 'Book Your Event →',   href: 'Pages/catering.html',   image: '', featured: true },
+    { label: 'About',          sub: 'Since 2015',          href: 'Pages/about.html',      image: '' },
+    { label: 'Find Us',        sub: '6779 US Hwy 61',      href: 'Pages/findus.html',     image: '' }
+  ],
+  footer: {
+    phone: '(225) 245-5046',
+    facebook: 'https://www.facebook.com/1547733028788117/',
+    instagram: '',
+    address: '6779 US Hwy 61, St. Francisville, LA'
+  },
+  theme: {
+    bg:      '#0d0805',
+    text:    '#faedd2',
+    eyebrow: '#dcbe94',
+    ember:   '#d45200',
+    fire:    '#ed6e14',
+    flame:   '#ff9930',
+    glow:    '#ffc24a',
+    overlay: 'rgba(10,6,3,.55)'
+  }
+};
+
+/** Merge fetched data over defaults so missing fields don't break the page. */
+function mergeHomepage(fetched) {
+  const f = fetched || {};
+  return {
+    title:    f.title    ?? HOMEPAGE_DEFAULTS.title,
+    title_em: f.title_em ?? HOMEPAGE_DEFAULTS.title_em,
+    tagline:  f.tagline  ?? HOMEPAGE_DEFAULTS.tagline,
+    eyebrow:  f.eyebrow  ?? HOMEPAGE_DEFAULTS.eyebrow,
+    cards:    Array.isArray(f.cards) && f.cards.length === HOMEPAGE_DEFAULTS.cards.length
+              ? f.cards.map((c, i) => ({ ...HOMEPAGE_DEFAULTS.cards[i], ...c }))
+              : HOMEPAGE_DEFAULTS.cards.map(c => ({ ...c })),
+    footer:   { ...HOMEPAGE_DEFAULTS.footer, ...(f.footer || {}) },
+    theme:    { ...HOMEPAGE_DEFAULTS.theme,  ...(f.theme  || {}) }
+  };
+}
+
+async function loadHomepage() {
+  try {
+    const rows = await sbSelect('homepage', 'id=eq.current');
+    if (rows && rows.length && rows[0].data) {
+      return mergeHomepage(rows[0].data);
+    }
+  } catch (e) {
+    console.warn('loadHomepage failed:', e.message);
+  }
+  return mergeHomepage(null);
+}
+
+async function saveHomepage(data) {
+  return await sbUpsert('homepage', { id: 'current', data });
+}
