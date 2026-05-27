@@ -1039,8 +1039,42 @@ body::before{
   border:1px dashed rgba(255,153,48,.18);
   border-radius:6px;
   overflow:hidden;
+  /* Grid overlay — subtle dots at 5% intervals */
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1.2px);
+  background-size:5% 5%;
+  background-position:0 0;
 }
 .hp-device[data-mode="mobile"] .hp-canvas{top:14%;bottom:8%;left:4%;right:4%}
+/* When snap is off, show fewer/no grid dots */
+.hp-canvas.no-snap{
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.03) 1px, transparent 1.2px);
+}
+
+/* Fullscreen mode — device frame covers the viewport */
+body.hp-fullscreen{overflow:hidden}
+.hp-section.hp-fs{
+  position:fixed;inset:0;z-index:9000;
+  margin:0;border-radius:0;
+  background:var(--void);
+  padding:14px;
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+}
+.hp-section.hp-fs .hp-layout-wrap{flex:1;display:flex;flex-direction:column;min-height:0}
+.hp-section.hp-fs .hp-canvas-shell{flex:1;display:flex;flex-direction:column;min-height:0}
+.hp-section.hp-fs .hp-device{
+  flex:1;height:auto;
+  aspect-ratio:auto !important;
+  max-width:none !important;
+  margin:0 !important;
+}
+.hp-section.hp-fs .hp-side-panel{
+  position:fixed;left:14px;right:14px;bottom:14px;
+  margin:0;max-height:42vh;overflow-y:auto;
+  z-index:9001;
+}
 
 /* Mock footer */
 .hp-mock-footer{
@@ -1136,22 +1170,16 @@ body::before{
 .hp-h-se{bottom:-7px;right:-7px;cursor:nwse-resize;border-radius:3px}
 .hp-h-sw{bottom:-7px;left:-7px;cursor:nesw-resize;border-radius:3px}
 
-/* Side panel — floats as an overlay when a tile is selected */
+/* Side panel — sits below the canvas in normal flow, doesn't overlap */
 .hp-side-panel{
   background:linear-gradient(180deg, var(--panel-2), var(--panel));
   border:1px solid var(--flame);
   border-radius:var(--r-lg);
   padding:18px;
   margin-top:16px;
-  box-shadow:0 12px 40px rgba(0,0,0,.5), 0 0 0 1px rgba(255,153,48,.2);
+  box-shadow:0 6px 24px rgba(0,0,0,.4);
 }
 .hp-side-panel.hidden{display:none}
-@media(min-width:900px){
-  .hp-side-panel{
-    position:sticky;bottom:20px;
-    max-width:560px;margin:16px auto 0;
-  }
-}
 .hp-side-empty{
   font-family:var(--sans);font-style:italic;
   color:var(--ink-4);
@@ -2516,8 +2544,10 @@ function renderHomepageEditor(){
             <button type="button" data-mode="desktop" class="on" onclick="hpSetMode('desktop')">Desktop</button>
             <button type="button" data-mode="mobile" onclick="hpSetMode('mobile')">Mobile</button>
           </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="hp-snap-btn" onclick="hpToggleSnap()" title="Snap tiles to grid">⊞ Snap: On</button>
           <button type="button" class="btn btn-secondary btn-sm" onclick="hpAddCard()">+ Add Card</button>
           <button type="button" class="btn btn-secondary btn-sm" onclick="hpAutoArrange()">Auto-Arrange</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="hp-fs-btn" onclick="hpToggleFullscreen()" title="Fullscreen edit">⛶ Fullscreen</button>
         </div>
       </div>
 
@@ -2595,6 +2625,32 @@ function renderHomepageEditor(){
 let HP_MODE = 'desktop';           // 'desktop' | 'mobile'
 let HP_SEL = -1;                   // index of selected card, -1 = none
 let HP_DRAG = null;                // {mode, dir, sx, sy, cw, ch, orig}
+let HP_SNAP = true;                // snap to 5% grid
+let HP_FS = false;                 // fullscreen mode
+
+/** Snap a percentage value to the nearest 5% if snapping is enabled. */
+function hpSnap(v){ return HP_SNAP ? Math.round(v / 5) * 5 : v; }
+
+function hpToggleSnap(){
+  HP_SNAP = !HP_SNAP;
+  const btn = document.getElementById('hp-snap-btn');
+  if (btn) btn.textContent = '⊞ Snap: ' + (HP_SNAP ? 'On' : 'Off');
+  const canvas = document.getElementById('hp-canvas');
+  if (canvas) canvas.classList.toggle('no-snap', !HP_SNAP);
+}
+
+function hpToggleFullscreen(){
+  HP_FS = !HP_FS;
+  // Find the hp-section containing the canvas (the "Nav Cards" section)
+  const canvas = document.getElementById('hp-canvas');
+  if (!canvas) return;
+  const section = canvas.closest('.hp-section');
+  if (!section) return;
+  section.classList.toggle('hp-fs', HP_FS);
+  document.body.classList.toggle('hp-fullscreen', HP_FS);
+  const btn = document.getElementById('hp-fs-btn');
+  if (btn) btn.textContent = HP_FS ? '⛶ Exit Fullscreen' : '⛶ Fullscreen';
+}
 
 /** Return the layout key for the current mode. */
 function hpModeKey(){ return HP_MODE === 'mobile' ? 'posMobile' : 'pos'; }
@@ -2811,10 +2867,10 @@ function hpDeleteCard(i){
 function hpTileMouseDown(e, idx){
   if (e.target.classList.contains('hp-h')) return;
   e.preventDefault(); e.stopPropagation();
+  // Select on first click AND start the drag in the same gesture
   if (HP_SEL !== idx) {
     HP_SEL = idx;
     hpRenderCanvas();
-    return;
   }
   hpStartDrag(idx, e.clientX, e.clientY, 'move');
 }
@@ -2824,7 +2880,6 @@ function hpTileTouchStart(e, idx){
   if (HP_SEL !== idx) {
     HP_SEL = idx;
     hpRenderCanvas();
-    return;
   }
   e.preventDefault();
   hpStartDrag(idx, t.clientX, t.clientY, 'move');
@@ -2865,8 +2920,8 @@ function hpDragMove(cx, cy){
   const c = HP_DATA.cards[d.idx];
   if (d.mode === 'move') {
     c[d.key] = {
-      x: Math.max(0, Math.min(100 - d.orig.w, d.orig.x + dx)),
-      y: Math.max(0, Math.min(100 - d.orig.h, d.orig.y + dy)),
+      x: Math.max(0, Math.min(100 - d.orig.w, hpSnap(d.orig.x + dx))),
+      y: Math.max(0, Math.min(100 - d.orig.h, hpSnap(d.orig.y + dy))),
       w: d.orig.w, h: d.orig.h
     };
   } else {
@@ -2875,6 +2930,11 @@ function hpDragMove(cx, cy){
     if (d.dir.includes('s')) { h = d.orig.h + dy; }
     if (d.dir.includes('w')) { x = d.orig.x + dx; w = d.orig.w - dx; }
     if (d.dir.includes('e')) { w = d.orig.w + dx; }
+    // Snap each edge to 5%
+    if (d.dir.includes('n')) { const ny = hpSnap(y); h += (y - ny); y = ny; }
+    if (d.dir.includes('s')) { h = hpSnap(h); }
+    if (d.dir.includes('w')) { const nx = hpSnap(x); w += (x - nx); x = nx; }
+    if (d.dir.includes('e')) { w = hpSnap(w); }
     if (w < 5)  { if (d.dir.includes('w')) x = d.orig.x + d.orig.w - 5; w = 5; }
     if (h < 5)  { if (d.dir.includes('n')) y = d.orig.y + d.orig.h - 5; h = 5; }
     if (x < 0)  { w += x; x = 0; }
