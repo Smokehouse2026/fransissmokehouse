@@ -596,6 +596,32 @@ body::before{
   transition:transform .35s var(--ease-out),opacity .25s;
 }
 .modal-bg.show .modal{transform:translateY(0) scale(1);opacity:1}
+.modal-hdr{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:18px;padding-bottom:14px;
+  border-bottom:1px solid var(--line);
+}
+.modal-hdr h3{
+  font-family:var(--serif);font-weight:700;
+  font-size:22px;letter-spacing:-.01em;
+  color:var(--ink);
+}
+.modal-x{
+  background:transparent;border:none;
+  color:var(--ink-3);
+  width:32px;height:32px;
+  font-size:22px;line-height:1;
+  cursor:pointer;
+  border-radius:6px;
+  transition:background .15s,color .15s;
+}
+.modal-x:hover{background:rgba(255,153,48,.1);color:var(--flame)}
+.modal-body{margin-bottom:18px}
+.modal-foot{
+  display:flex;gap:10px;justify-content:flex-end;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+}
 .modal-title{
   font-family:var(--serif);
   font-size:28px;line-height:1.05;
@@ -751,7 +777,8 @@ body::before{
 .pg-dev-btn:hover{color:var(--ink);background:rgba(255,153,48,.08)}
 .pg-dev-btn.active{background:var(--flame);color:#1a1108}
 
-.pane-pages{padding:0 !important;display:flex;flex-direction:column;height:100%}
+.pane-pages{padding:0 !important;flex-direction:column;height:100%}
+.pane-pages.active{display:flex}
 .pane-pages .pane-hdr{padding:18px 24px;flex-shrink:0;border-bottom:1px solid var(--line)}
 
 .pg-workspace{
@@ -1711,7 +1738,23 @@ body.hp-fullscreen{overflow:hidden}
   background:rgba(20,12,6,.45);
   border:1px solid var(--line);
   border-radius:var(--r);
+  cursor:pointer;
+  transition:border-color .15s,background .15s;
 }
+.staff-row:hover{border-color:rgba(255,153,48,.35);background:rgba(255,153,48,.05)}
+.staff-row:hover .staff-edit-hint{opacity:1;color:var(--flame)}
+.staff-edit-hint{
+  flex-shrink:0;
+  width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink-3);
+  opacity:.4;
+  font-size:14px;
+  border:1px solid var(--line);
+  border-radius:5px;
+  transition:opacity .15s,color .15s,border-color .15s;
+}
+.staff-row:hover .staff-edit-hint{border-color:rgba(255,153,48,.4)}
 .staff-row.me{
   border-color:rgba(255,153,48,.4);
   background:rgba(255,153,48,.08);
@@ -2041,10 +2084,24 @@ window.addEventListener('error', e => {
 function unlock(){
   document.getElementById('gate').classList.add('hide');
   document.getElementById('app').classList.add('show');
-  // Show logged-in user's email in the sidebar
+  // Show logged-in user's display name (or email if no name set) in the sidebar
   const u = sbCurrentUser();
   const emailEl = document.getElementById('sb-user-email');
-  if (emailEl && u) emailEl.textContent = u.email || '';
+  if (emailEl && u) {
+    emailEl.textContent = u.email || '';
+    // Try to fetch display name and substitute if available
+    if (typeof sbSelect === 'function') {
+      sbSelect('staff_profiles', `user_id=eq.${u.id}&select=display_name`)
+        .then(rows => {
+          const name = rows?.[0]?.display_name;
+          if (name) {
+            emailEl.textContent = name;
+            emailEl.title = `Signed in as ${u.email}`;
+          }
+        })
+        .catch(() => {});
+    }
+  }
   try { bootApp(); } catch(e) {
     console.error('bootApp error:', e);
     setStatus('Setup needed', 'err');
@@ -5546,23 +5603,95 @@ async function loadStaffUsers(){
   }
   block.innerHTML = `
     <div class="staff-info">
-      <p>${users.length} user${users.length===1?'':'s'} can sign in to this editor. To add or remove users, go to Supabase Dashboard → Authentication → Users.</p>
+      <p>${users.length} user${users.length===1?'':'s'} can sign in to this editor. Click any row to edit their display name. Add or remove users in Supabase Dashboard → Authentication → Users.</p>
     </div>
     <div class="staff-list">
       ${users.map(u => {
         const isMe = me && u.id === me.id;
         const created = u.created_at ? new Date(u.created_at).toLocaleDateString() : '—';
         const lastSeen = u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString() : 'Never';
+        const displayName = u.display_name || '';
+        const primaryLabel = displayName || u.email || '(no email)';
+        const avatarChar = (displayName || u.email || '?')[0].toUpperCase();
         return `
-          <div class="staff-row${isMe ? ' me' : ''}">
-            <div class="staff-avatar">${(u.email||'?')[0].toUpperCase()}</div>
+          <div class="staff-row${isMe ? ' me' : ''}" data-staff-row data-user-id="${escapeHtml(u.id)}" data-email="${escapeHtml(u.email||'')}" data-display-name="${escapeHtml(displayName)}">
+            <div class="staff-avatar">${escapeHtml(avatarChar)}</div>
             <div class="staff-info-col">
-              <div class="staff-email">${escapeHtml(u.email||'(no email)')}${isMe ? ' <span class="staff-me-tag">You</span>' : ''}</div>
-              <div class="staff-meta">Added ${created} · Last signed in ${lastSeen}</div>
+              <div class="staff-email">${escapeHtml(primaryLabel)}${isMe ? ' <span class="staff-me-tag">You</span>' : ''}</div>
+              <div class="staff-meta">${displayName ? '<em style="opacity:.7">Click to see email</em> · ' : ''}Added ${created} · Last signed in ${lastSeen}</div>
             </div>
+            <div class="staff-edit-hint">✎</div>
           </div>`;
       }).join('')}
     </div>`;
+
+  // Wire row clicks → open name editor modal
+  block.querySelectorAll('[data-staff-row]').forEach(row => {
+    row.onclick = () => openStaffNameModal({
+      userId: row.dataset.userId,
+      email: row.dataset.email,
+      displayName: row.dataset.displayName
+    });
+  });
+}
+
+/** Modal to view/edit a user's display name. Email shown read-only. */
+function openStaffNameModal({ userId, email, displayName }){
+  const modalBg = document.getElementById('modal-bg');
+  const modal = document.getElementById('modal');
+  if (!modal || !modalBg) return;
+  modal.innerHTML = `
+    <div class="modal-hdr">
+      <h3>Staff User</h3>
+      <button class="modal-x" onclick="closeStaffModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Email (sign-in address — set in Supabase)</label>
+        <input type="text" value="${escapeHtml(email||'')}" readonly style="opacity:.7;cursor:default">
+      </div>
+      <div class="field">
+        <label>Display Name (what other staff see in the editor)</label>
+        <input type="text" id="staff-name-input" value="${escapeHtml(displayName||'')}" placeholder="e.g. Westyn" autofocus>
+        <div class="field-help">Leave blank to show the email instead.</div>
+      </div>
+      <div id="staff-name-err" style="color:#dc5046;font-size:12px;margin-top:8px;display:none"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" onclick="closeStaffModal()">Cancel</button>
+      <button class="btn btn-primary" id="staff-name-save">Save</button>
+    </div>
+  `;
+  modalBg.classList.add('show');
+  const input = document.getElementById('staff-name-input');
+  const err = document.getElementById('staff-name-err');
+  const save = document.getElementById('staff-name-save');
+  input?.select();
+  if (save) save.onclick = async () => {
+    const newName = (input?.value || '').trim();
+    err.style.display = 'none';
+    save.disabled = true; save.textContent = 'Saving…';
+    try {
+      await sbUpdateStaffDisplayName(userId, newName);
+      closeStaffModal();
+      if (typeof toast === 'function') toast('Name updated'); else alert('Saved');
+      loadStaffUsers();
+    } catch(e) {
+      err.textContent = e.message || 'Failed to save.';
+      err.style.display = '';
+      save.disabled = false; save.textContent = 'Save';
+    }
+  };
+  // Save on Enter
+  if (input) input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); save.click(); }
+    if (e.key === 'Escape') { e.preventDefault(); closeStaffModal(); }
+  });
+}
+
+function closeStaffModal(){
+  const modalBg = document.getElementById('modal-bg');
+  if (modalBg) modalBg.classList.remove('show');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
