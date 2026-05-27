@@ -116,6 +116,21 @@ async function sbListUsers(){
   } catch { return []; }
 }
 
+/** Upsert a display name for a user in staff_profiles. Requires being signed in. */
+async function sbUpdateStaffDisplayName(userId, displayName){
+  const url = `${SUPABASE_URL}/rest/v1/staff_profiles?on_conflict=user_id`;
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { ...sbHeaders(), 'Prefer': 'resolution=merge-duplicates,return=representation' },
+    body: JSON.stringify({ user_id: userId, display_name: displayName || null, updated_at: new Date().toISOString() })
+  });
+  if (!r.ok) {
+    const t = await r.text().catch(() => '');
+    throw new Error(`Failed to save name (${r.status}): ${t}`);
+  }
+  return r.json();
+}
+
 /* Keep the old SB_HEADERS constant working for any code that imported it. */
 const SB_HEADERS = new Proxy({}, {
   get(_, prop) { return sbHeaders()[prop]; },
