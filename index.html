@@ -89,13 +89,13 @@
     {
       "@type": "Store",
       "name": "The Francis Smokehouse Market",
-      "url": "https://thefrancismokehouse.com/pages/market.html",
+      "url": "https://thefrancismokehouse.com/Pages/market.html",
       "description": "Take-home smoked meats, specialty cuts, boudin and sausage."
     },
     {
       "@type": "Service",
       "name": "Catering",
-      "url": "https://thefrancismokehouse.com/pages/catering.html",
+      "url": "https://thefrancismokehouse.com/Pages/catering.html",
       "description": "Event catering for weddings, corporate gatherings, and parties in the St. Francisville and Baton Rouge area."
     }
   ]
@@ -378,9 +378,9 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
       <span class="dot">·</span>
       <a id="footer-phone" href="#"></a>
       <span class="dot">·</span>
-      <a href="pages/giftcards.html">Gift Cards</a>
+      <a href="Pages/giftcards.html">Gift Cards</a>
       <span class="dot">·</span>
-      <a href="pages/editor.html">Staff</a>
+      <a href="Pages/editor.html">Staff</a>
       <span class="dot">·</span>
       <a id="footer-facebook" href="#" target="_blank">Facebook</a>
     </div>
@@ -426,8 +426,24 @@ async function applyHomepage(){
   }
   if (data.tagline) document.getElementById('tagline').innerHTML = data.tagline;
 
-  // Footer
-  if (data.footer) {
+  // Footer — now reads from site_business (single source of truth)
+  if (typeof loadBusiness === 'function') {
+    try {
+      const biz = await loadBusiness();
+      if (typeof applyBusinessToFooter === 'function') {
+        applyBusinessToFooter(biz);
+      } else {
+        // Inline fallback if helper missing
+        const fp = document.getElementById('footer-phone');
+        if (fp && biz.phone) { fp.textContent = biz.phone; fp.href = 'tel:' + biz.phone.replace(/\D/g,''); }
+        const fb = document.getElementById('footer-facebook');
+        if (fb && biz.socials?.facebook) fb.href = biz.socials.facebook;
+      }
+    } catch(e) {
+      console.warn('[homepage] business info load failed:', e);
+    }
+  } else if (data.footer) {
+    // Fallback to old homepage-embedded footer if business helper not loaded
     if (data.footer.phone) {
       const fp = document.getElementById('footer-phone');
       fp.textContent = data.footer.phone;
@@ -501,7 +517,7 @@ applyHomepage();
     timer = setTimeout(() => { taps = 0; }, 1200);
     if (taps >= 3) {
       taps = 0;
-      location.href = 'pages/editor.html';
+      location.href = 'Pages/editor.html';
     }
   });
 })();
