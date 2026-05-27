@@ -980,30 +980,79 @@ body::before{
 .hp-mode-toggle button:not(.on):hover{color:var(--flame)}
 
 .hp-layout-wrap{
-  display:grid;
-  grid-template-columns:1fr 280px;
-  gap:18px;
   margin-top:18px;
-}
-@media(max-width:900px){
-  .hp-layout-wrap{grid-template-columns:1fr}
+  position:relative;
 }
 
-.hp-canvas-shell{display:flex;flex-direction:column;gap:8px}
-.hp-canvas{
+/* The "device frame" — shows the WHOLE homepage at scale, not just the nav */
+.hp-canvas-shell{display:flex;flex-direction:column;gap:10px}
+.hp-device{
   position:relative;
   width:100%;
   background:
-    radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,153,48,.06),transparent 60%),
+    radial-gradient(ellipse 80% 60% at 50% 0%,rgba(255,153,48,.06),transparent 60%),
     var(--hp-prev-bg, #0d0805);
   border:1px solid var(--line-2);
-  border-radius:var(--r);
+  border-radius:var(--r-lg);
   overflow:hidden;
   user-select:none;
   touch-action:none;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
 }
-.hp-canvas[data-mode="desktop"]{aspect-ratio:21/9}
-.hp-canvas[data-mode="mobile"]{aspect-ratio:9/19;max-width:260px;margin:0 auto}
+.hp-device[data-mode="desktop"]{aspect-ratio:16/9}
+.hp-device[data-mode="mobile"]{aspect-ratio:9/19;max-width:340px;margin:0 auto}
+
+/* Mock header inside the preview */
+.hp-mock-header{
+  position:absolute;top:0;left:0;right:0;height:18%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:0 5%;
+  pointer-events:none;
+  text-align:center;
+}
+.hp-device[data-mode="mobile"] .hp-mock-header{height:14%}
+.hp-mock-eyebrow{
+  font-family:var(--sans);font-weight:600;
+  font-size:clamp(7px,1vw,10px);
+  letter-spacing:.4em;text-transform:uppercase;
+  color:var(--hp-prev-eyebrow, #dcbe94);
+  opacity:.8;margin-bottom:4px;
+}
+.hp-mock-title{
+  font-family:var(--serif);
+  font-size:clamp(18px,3.5vw,38px);
+  line-height:1.05;
+  color:var(--hp-prev-text, #faedd2);
+}
+.hp-mock-title em{font-style:italic;color:var(--hp-prev-flame, #ff9930)}
+.hp-mock-tagline{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(8px,1.1vw,12px);
+  color:var(--hp-prev-eyebrow, #dcbe94);
+  opacity:.7;margin-top:3px;
+}
+
+/* The drag canvas — sits between mock header and mock footer */
+.hp-canvas{
+  position:absolute;
+  top:18%;left:2%;right:2%;bottom:8%;
+  border:1px dashed rgba(255,153,48,.18);
+  border-radius:6px;
+  overflow:hidden;
+}
+.hp-device[data-mode="mobile"] .hp-canvas{top:14%;bottom:8%;left:4%;right:4%}
+
+/* Mock footer */
+.hp-mock-footer{
+  position:absolute;bottom:0;left:0;right:0;height:6%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--sans);font-size:clamp(7px,.8vw,10px);
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--hp-prev-eyebrow, #dcbe94);
+  opacity:.6;
+  border-top:1px solid rgba(255,255,255,.04);
+}
+
 .hp-canvas-empty{
   position:absolute;inset:0;
   display:flex;align-items:center;justify-content:center;
@@ -1017,7 +1066,10 @@ body::before{
   text-align:center;
   font-style:italic;
   letter-spacing:.02em;
+  padding:0 10px;
 }
+
+/* Tile styles unchanged but reposition inside the inner .hp-canvas */
 
 .hp-tile{
   position:absolute;
@@ -1084,16 +1136,21 @@ body::before{
 .hp-h-se{bottom:-7px;right:-7px;cursor:nwse-resize;border-radius:3px}
 .hp-h-sw{bottom:-7px;left:-7px;cursor:nesw-resize;border-radius:3px}
 
-/* Side panel */
+/* Side panel — floats as an overlay when a tile is selected */
 .hp-side-panel{
-  background:rgba(20,12,6,.55);
-  border:1px solid var(--line-2);
-  border-radius:var(--r);
+  background:linear-gradient(180deg, var(--panel-2), var(--panel));
+  border:1px solid var(--flame);
+  border-radius:var(--r-lg);
   padding:18px;
-  align-self:start;
-  position:sticky;top:18px;
-  max-height:calc(100vh - 80px);
-  overflow-y:auto;
+  margin-top:16px;
+  box-shadow:0 12px 40px rgba(0,0,0,.5), 0 0 0 1px rgba(255,153,48,.2);
+}
+.hp-side-panel.hidden{display:none}
+@media(min-width:900px){
+  .hp-side-panel{
+    position:sticky;bottom:20px;
+    max-width:560px;margin:16px auto 0;
+  }
 }
 .hp-side-empty{
   font-family:var(--sans);font-style:italic;
@@ -2466,10 +2523,18 @@ function renderHomepageEditor(){
 
       <div class="hp-layout-wrap">
         <div class="hp-canvas-shell">
-          <div class="hp-canvas" id="hp-canvas" data-mode="desktop"></div>
-          <div class="hp-canvas-help" id="hp-canvas-help">Click a tile to select it. Drag the body to move, drag handles to resize.</div>
+          <div class="hp-device" id="hp-device" data-mode="desktop">
+            <div class="hp-mock-header">
+              <div class="hp-mock-eyebrow" id="hp-mock-eyebrow">${escapeHtml(d.eyebrow)}</div>
+              <div class="hp-mock-title" id="hp-mock-title">${escapeHtml(d.title)} <em>${escapeHtml(d.title_em)}</em></div>
+              <div class="hp-mock-tagline" id="hp-mock-tagline">${escapeHtml(d.tagline)}</div>
+            </div>
+            <div class="hp-canvas" id="hp-canvas"></div>
+            <div class="hp-mock-footer">Open Now · ${escapeHtml(d.footer.phone||'')}</div>
+          </div>
+          <div class="hp-canvas-help">Click a tile to select. Drag body to move, drag handles to resize. Drag positions are stored as % of the dashed inner area.</div>
         </div>
-        <div class="hp-side-panel" id="hp-side-panel">
+        <div class="hp-side-panel hidden" id="hp-side-panel">
           <div class="hp-side-empty">Click a tile to edit it.</div>
         </div>
       </div>
@@ -2606,8 +2671,8 @@ function hpSetMode(mode){
   document.querySelectorAll('#hp-mode-toggle button').forEach(b => {
     b.classList.toggle('on', b.dataset.mode === mode);
   });
-  const canvas = document.getElementById('hp-canvas');
-  if (canvas) canvas.dataset.mode = mode;
+  const device = document.getElementById('hp-device');
+  if (device) device.dataset.mode = mode;
   HP_SEL = -1;
   hpRenderCanvas();
 }
@@ -2654,9 +2719,11 @@ function hpRenderSidePanel(){
   const panel = document.getElementById('hp-side-panel');
   if (!panel) return;
   if (HP_SEL < 0 || !HP_DATA?.cards?.[HP_SEL]) {
+    panel.classList.add('hidden');
     panel.innerHTML = '<div class="hp-side-empty">Click a tile to edit it.</div>';
     return;
   }
+  panel.classList.remove('hidden');
   const c = HP_DATA.cards[HP_SEL];
   const hasImg = !!c.image;
   panel.innerHTML = `
@@ -2919,9 +2986,17 @@ function updateIdentityPreview(){
   HP_DATA.title_em = document.getElementById('hp-title-em').value;
   HP_DATA.eyebrow  = document.getElementById('hp-eyebrow').value;
   HP_DATA.tagline  = document.getElementById('hp-tagline').value;
+  // The small identity preview block
   document.getElementById('hp-pv-eyebrow').textContent = HP_DATA.eyebrow;
   document.getElementById('hp-pv-title').innerHTML = escapeHtml(HP_DATA.title) + ' <em>' + escapeHtml(HP_DATA.title_em) + '</em>';
   document.getElementById('hp-pv-tagline').textContent = HP_DATA.tagline;
+  // The big device-frame mock header
+  const me = document.getElementById('hp-mock-eyebrow');
+  const mt = document.getElementById('hp-mock-title');
+  const mg = document.getElementById('hp-mock-tagline');
+  if (me) me.textContent = HP_DATA.eyebrow;
+  if (mt) mt.innerHTML = escapeHtml(HP_DATA.title) + ' <em>' + escapeHtml(HP_DATA.title_em) + '</em>';
+  if (mg) mg.textContent = HP_DATA.tagline;
 }
 
 function hpCardPickImage(idx){
