@@ -1002,8 +1002,8 @@ body::before{
   user-select:none;
   touch-action:none;
 }
-.hp-canvas[data-mode="desktop"]{aspect-ratio:16/10}
-.hp-canvas[data-mode="mobile"]{aspect-ratio:9/16;max-width:300px;margin:0 auto}
+.hp-canvas[data-mode="desktop"]{aspect-ratio:21/9}
+.hp-canvas[data-mode="mobile"]{aspect-ratio:9/19;max-width:260px;margin:0 auto}
 .hp-canvas-empty{
   position:absolute;inset:0;
   display:flex;align-items:center;justify-content:center;
@@ -1382,6 +1382,12 @@ document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
   document.getElementById('pane-'+t.dataset.pane).classList.add('active');
   // Close mobile drawer if it's open
   document.getElementById('sidebar').classList.remove('open');
+  // Lazy-load homepage data the first time that pane is opened
+  if (t.dataset.pane === 'homepage' && typeof loadHomepageIntoEditor === 'function') {
+    if (typeof HP_DATA === 'undefined' || HP_DATA === null) {
+      loadHomepageIntoEditor();
+    }
+  }
 });
 
 /* ═══════════════════════════════════════════════════════════
@@ -2366,16 +2372,42 @@ const HP_COLOR_FIELDS = [
 async function loadHomepageIntoEditor(){
   const block = document.getElementById('homepage-block');
   if (!block) return;
-  try {
-    HP_DATA = typeof loadHomepage === 'function' ? await loadHomepage() : null;
-  } catch(e) {
-    console.warn('Homepage load failed:', e);
-    HP_DATA = typeof emptyHomepage === 'function' ? emptyHomepage() : null;
-  }
-  if (!HP_DATA) {
-    block.innerHTML = '<div class="empty">Homepage editor needs supabase.js to be loaded.</div>';
+  block.className = 'loading';
+  block.textContent = 'Loading homepage from Supabase…';
+
+  if (typeof loadHomepage !== 'function') {
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>supabase.js isn't loaded.</strong><br>
+      The homepage editor needs the new supabase.js with <code>loadHomepage</code> defined.
+      Hard-refresh the page (Ctrl+Shift+R) and try again.</div>`;
     return;
   }
+
+  try {
+    const fetched = await loadHomepage();
+    HP_DATA = fetched;
+    console.log('[homepage-editor] Loaded from Supabase:', HP_DATA);
+    console.log('[homepage-editor] Cards count:', HP_DATA?.cards?.length || 0);
+  } catch(e) {
+    console.error('[homepage-editor] Load failed:', e);
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>Couldn't load homepage from Supabase.</strong><br>
+      Error: ${escapeHtml(e.message)}<br><br>
+      Check that the <code>homepage</code> table exists and has a row with id='current'.
+      See HOMEPAGE_SETUP.md.</div>`;
+    return;
+  }
+
+  if (!HP_DATA) {
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>No data returned from Supabase.</strong><br>
+      Run the seed SQL (SEED_HOMEPAGE.md) to populate the homepage row.</div>`;
+    return;
+  }
+
   renderHomepageEditor();
 }
 
@@ -2960,12 +2992,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetBtn = document.getElementById('hp-reset');
   if (saveBtn) saveBtn.onclick = saveHomepageHandler;
   if (resetBtn) resetBtn.onclick = resetHomepageHandler;
-  // Load homepage data the first time the pane is activated
-  document.querySelectorAll('.tab[data-pane="homepage"]').forEach(t => {
-    t.addEventListener('click', () => {
-      if (HP_DATA === null) loadHomepageIntoEditor();
-    });
-  });
+  // Homepage data is now loaded lazily by the main tab click handler above.
 });
 
 /* ═══════════════════════════════════════════════════════════
