@@ -837,7 +837,417 @@ async function renderPage(){
   if (typeof setupReveal === 'function') setupReveal();
 }
 
-renderPage();
+/* ── ADDITIONAL SECTION TYPES ────────────────────────── */
+
+SECTION_RENDERERS.hero_image = function(p, biz){
+  const titleHtml = (Array.isArray(p.title_lines) ? p.title_lines : []).map(l => emFormat(l)).join('<br>');
+  return `
+    <section class="hero-image-section" data-section-id="">
+      <div class="hi-bg" style="${p.image ? `background-image:url('${escHtml(p.image)}')` : ''}"></div>
+      <div class="hi-overlay"></div>
+      <div class="hi-content">
+        ${p.eyebrow ? `<div class="hi-eyebrow" data-edit="eyebrow">${escHtml(p.eyebrow)}</div>` : '<div class="hi-eyebrow" data-edit="eyebrow"></div>'}
+        <h1 class="hi-title" data-edit="title_lines">${titleHtml || '<span style="opacity:.4">(add a title)</span>'}</h1>
+        ${p.lead ? `<p class="hi-lead" data-edit="lead">${escHtml(p.lead)}</p>` : '<p class="hi-lead" data-edit="lead"></p>'}
+      </div>
+    </section>
+  `;
+};
+
+SECTION_RENDERERS.image_text = function(p){
+  const reversed = p.image_side === 'right';
+  return `
+    <section class="section">
+      <div class="sec-inner it-wrap${reversed ? ' it-rev' : ''}">
+        <div class="it-image">
+          ${p.image ? `<img src="${escHtml(p.image)}" alt="${escHtml(p.image_alt||'')}">` : '<div class="it-image-empty">(add an image)</div>'}
+        </div>
+        <div class="it-text">
+          ${p.eyebrow ? `<div class="sec-eyebrow" data-edit="eyebrow">${escHtml(p.eyebrow)}</div>` : '<div class="sec-eyebrow" data-edit="eyebrow"></div>'}
+          <h2 class="sec-title" data-edit="title">${emFormat(p.title || '')}</h2>
+          <div class="it-body" data-edit="body">${escHtml(p.body || '').replace(/\n/g, '<br>')}</div>
+        </div>
+      </div>
+    </section>
+  `;
+};
+
+SECTION_RENDERERS.gallery = function(p){
+  const items = (p.items || []).map((it) => `
+    <div class="gal-item">
+      ${it.image ? `<img src="${escHtml(it.image)}" alt="${escHtml(it.caption||'')}" loading="lazy">` : '<div class="gal-item-empty">image</div>'}
+      ${it.caption ? `<div class="gal-cap">${escHtml(it.caption)}</div>` : ''}
+    </div>
+  `).join('');
+  return `
+    <section class="section">
+      <div class="sec-inner">
+        ${p.eyebrow ? `<div class="sec-eyebrow" data-edit="eyebrow">${escHtml(p.eyebrow)}</div>` : '<div class="sec-eyebrow" data-edit="eyebrow"></div>'}
+        ${p.title ? `<h2 class="sec-title" data-edit="title">${emFormat(p.title)}</h2>` : '<h2 class="sec-title" data-edit="title"></h2>'}
+        ${p.subtitle ? `<p class="sec-sub" data-edit="subtitle">${escHtml(p.subtitle)}</p>` : ''}
+        <div class="gallery-grid">${items || '<div class="gal-item-empty" style="padding:60px;text-align:center;width:100%">No images yet</div>'}</div>
+      </div>
+    </section>
+  `;
+};
+
+SECTION_RENDERERS.faq = function(p){
+  const items = (p.items || []).map((it, i) => `
+    <details class="faq-item" ${i === 0 ? 'open' : ''}>
+      <summary class="faq-q">${escHtml(it.q || '')}</summary>
+      <div class="faq-a">${escHtml(it.a || '').replace(/\n/g, '<br>')}</div>
+    </details>
+  `).join('');
+  return `
+    <section class="section">
+      <div class="sec-inner">
+        ${p.eyebrow ? `<div class="sec-eyebrow" data-edit="eyebrow">${escHtml(p.eyebrow)}</div>` : '<div class="sec-eyebrow" data-edit="eyebrow"></div>'}
+        ${p.title ? `<h2 class="sec-title" data-edit="title">${emFormat(p.title)}</h2>` : '<h2 class="sec-title" data-edit="title"></h2>'}
+        ${p.subtitle ? `<p class="sec-sub" data-edit="subtitle">${escHtml(p.subtitle)}</p>` : ''}
+        <div class="faq-list">${items}</div>
+      </div>
+    </section>
+  `;
+};
+
+SECTION_RENDERERS.video = function(p){
+  // Accept full YouTube URL, full Vimeo URL, or just the ID
+  let embedUrl = '';
+  if (p.url) {
+    const url = String(p.url).trim();
+    // YouTube
+    let m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if (m) embedUrl = `https://www.youtube.com/embed/${m[1]}`;
+    else if (/^[a-zA-Z0-9_-]{11}$/.test(url)) embedUrl = `https://www.youtube.com/embed/${url}`;
+    // Vimeo
+    else {
+      m = url.match(/vimeo\.com\/(\d+)/);
+      if (m) embedUrl = `https://player.vimeo.com/video/${m[1]}`;
+    }
+  }
+  return `
+    <section class="section">
+      <div class="sec-inner">
+        ${p.eyebrow ? `<div class="sec-eyebrow" data-edit="eyebrow">${escHtml(p.eyebrow)}</div>` : '<div class="sec-eyebrow" data-edit="eyebrow"></div>'}
+        ${p.title ? `<h2 class="sec-title" data-edit="title">${emFormat(p.title)}</h2>` : '<h2 class="sec-title" data-edit="title"></h2>'}
+        ${p.subtitle ? `<p class="sec-sub" data-edit="subtitle">${escHtml(p.subtitle)}</p>` : ''}
+        <div class="video-wrap">
+          ${embedUrl
+            ? `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+            : '<div class="video-empty">(paste a YouTube or Vimeo URL)</div>'}
+        </div>
+      </div>
+    </section>
+  `;
+};
+
+SECTION_RENDERERS.divider = function(p){
+  return `
+    <section class="divider-section">
+      <div class="sec-inner">
+        <div class="divider-line"></div>
+        ${p.label ? `<div class="divider-label" data-edit="label">${escHtml(p.label)}</div><div class="divider-line"></div>` : ''}
+      </div>
+    </section>
+  `;
+};
+
+/* ─── Extra CSS for new section types — injected once at boot ─── */
+function injectExtraSectionStyles(){
+  if (document.getElementById('extra-section-styles')) return;
+  const css = `
+    /* Hero with image */
+    .hero-image-section{position:relative;z-index:10;min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:clamp(60px,10vh,100px) clamp(24px,8vw,120px);overflow:hidden}
+    .hi-bg{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0}
+    .hi-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,7,4,.55),rgba(9,7,4,.8));z-index:1}
+    .hi-content{position:relative;z-index:2;max-width:900px}
+    .hi-eyebrow{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--flame);margin-bottom:16px}
+    .hi-title{font-family:var(--serif);font-weight:900;font-size:clamp(40px,8vw,90px);letter-spacing:-.03em;line-height:.95;color:var(--cream);margin-bottom:20px}
+    .hi-title em{font-style:italic;font-weight:300;color:var(--flame)}
+    .hi-lead{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(15px,1.7vw,21px);line-height:1.6;color:rgba(196,160,112,.85);max-width:640px;margin:0 auto}
+    /* Image + text two-column */
+    .it-wrap{display:grid;grid-template-columns:1fr;gap:clamp(28px,4vw,56px);align-items:center}
+    @media(min-width:768px){.it-wrap{grid-template-columns:1fr 1fr}}
+    .it-rev .it-image{order:2}@media(max-width:767px){.it-rev .it-image{order:0}}
+    .it-image{position:relative;overflow:hidden;border-radius:8px;background:rgba(22,12,4,.4);border:1px solid rgba(196,160,112,.1)}
+    .it-image img{display:block;width:100%;height:auto}
+    .it-image-empty{padding:80px 24px;text-align:center;color:rgba(196,160,112,.5);font-style:italic;font-family:var(--cond);letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+    .it-text .sec-eyebrow{margin-bottom:10px}
+    .it-text .sec-title{margin-bottom:18px}
+    .it-body{font-family:var(--body);font-weight:300;font-size:clamp(14px,1.4vw,16px);line-height:1.75;color:rgba(196,160,112,.85)}
+    /* Gallery */
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:clamp(8px,1.2vw,14px)}
+    .gal-item{background:rgba(22,12,4,.5);border:1px solid rgba(196,160,112,.1);border-radius:6px;overflow:hidden;transition:border-color .25s}
+    .gal-item:hover{border-color:rgba(255,153,48,.3)}
+    .gal-item img{display:block;width:100%;height:200px;object-fit:cover}
+    .gal-item-empty{padding:40px;text-align:center;color:rgba(196,160,112,.4);font-style:italic;font-family:var(--cond);font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+    .gal-cap{padding:10px 14px;font-family:var(--cond);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(196,160,112,.75)}
+    /* FAQ */
+    .faq-list{display:flex;flex-direction:column;gap:8px;max-width:820px;margin:0 auto}
+    .faq-item{background:rgba(22,14,6,.6);border:1px solid rgba(196,160,112,.1);border-radius:6px;overflow:hidden;transition:border-color .25s}
+    .faq-item:hover{border-color:rgba(255,153,48,.18)}
+    .faq-item[open]{border-color:rgba(255,153,48,.3)}
+    .faq-q{padding:18px 24px;font-family:var(--serif);font-weight:700;font-size:clamp(15px,1.5vw,18px);color:var(--cream);cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;align-items:center}
+    .faq-q::after{content:'+';font-family:var(--cond);font-weight:300;font-size:24px;color:var(--flame);transition:transform .25s}
+    .faq-item[open] .faq-q::after{transform:rotate(45deg)}
+    .faq-q::-webkit-details-marker{display:none}
+    .faq-a{padding:0 24px 22px;font-family:var(--body);font-weight:300;font-size:clamp(13px,1.2vw,15px);line-height:1.7;color:rgba(196,160,112,.85)}
+    /* Video */
+    .video-wrap{position:relative;width:100%;padding-top:56.25%;background:rgba(22,12,4,.6);border:1px solid rgba(196,160,112,.1);border-radius:8px;overflow:hidden;max-width:960px;margin:0 auto}
+    .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+    .video-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(196,160,112,.4);font-style:italic;font-family:var(--cond);letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+    /* Divider */
+    .divider-section{padding:40px clamp(24px,8vw,120px)}
+    .divider-section .sec-inner{display:flex;align-items:center;gap:18px;max-width:1100px;margin:0 auto}
+    .divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(196,160,112,.25),transparent)}
+    .divider-label{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--flame);opacity:.7}
+  `;
+  const style = document.createElement('style');
+  style.id = 'extra-section-styles';
+  style.textContent = css;
+  document.head.appendChild(style);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EDIT MODE — activated via ?edit=1 URL param
+   When active: sections become clickable, text becomes editable,
+   "+" buttons appear between sections. Talks to the parent editor
+   via window.postMessage.
+═══════════════════════════════════════════════════════════ */
+const IS_EDIT = new URLSearchParams(location.search).get('edit') === '1';
+
+function postToParent(type, payload){
+  if (!window.parent || window.parent === window) return;
+  try { window.parent.postMessage({ source: 'fs-page-editor', type, payload }, '*'); } catch {}
+}
+
+function setupEditMode(){
+  // Tell catering the section ids in render order. We re-render dynamically
+  // so the data-section-id attributes get applied here.
+  const sections = PG_LAST_DATA?.sections?.filter(s => !s.hidden) || [];
+  const sectionEls = document.querySelectorAll('#page-root > section');
+  sections.forEach((s, i) => {
+    const el = sectionEls[i];
+    if (!el) return;
+    el.setAttribute('data-section-id', s.id);
+    el.setAttribute('data-section-type', s.type);
+    // Wrap into an editable shell
+    el.classList.add('fs-edit-section');
+  });
+
+  injectEditChrome();
+  wireEditableText();
+  wireSectionInteractions();
+}
+
+function injectEditChrome(){
+  if (document.getElementById('fs-edit-styles')) return;
+  const css = `
+    body.fs-edit{cursor:auto !important}
+    body.fs-edit #cursor,body.fs-edit #sticky-call{display:none !important}
+    .fs-edit-section{position:relative;outline:2px solid transparent;outline-offset:-2px;transition:outline-color .15s}
+    body.fs-edit .fs-edit-section:hover{outline-color:rgba(255,153,48,.5)}
+    body.fs-edit .fs-edit-section.selected{outline-color:var(--flame);outline-width:3px;outline-offset:-3px}
+    [data-edit]{transition:background .15s,outline .15s}
+    body.fs-edit [data-edit]{cursor:text;outline:1px dashed transparent;outline-offset:3px;border-radius:3px}
+    body.fs-edit [data-edit]:hover{outline-color:rgba(255,194,74,.4);background:rgba(255,153,48,.05)}
+    body.fs-edit [data-edit]:focus{outline:2px solid var(--flame);background:rgba(255,153,48,.08);box-shadow:0 0 0 4px rgba(255,153,48,.15)}
+    .fs-section-toolbar{position:absolute;top:-1px;right:-1px;display:flex;gap:1px;background:#1a1108;border:1px solid var(--flame);border-radius:0 0 0 6px;padding:4px;z-index:100;opacity:0;pointer-events:none;transition:opacity .12s}
+    .fs-edit-section.selected .fs-section-toolbar,.fs-edit-section:hover .fs-section-toolbar{opacity:1;pointer-events:auto}
+    .fs-tb-btn{background:transparent;border:1px solid transparent;color:#dcbe94;width:28px;height:28px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;font-family:var(--cond)}
+    .fs-tb-btn:hover{background:rgba(255,153,48,.18);border-color:rgba(255,153,48,.45);color:#fff}
+    .fs-tb-btn.danger:hover{background:rgba(220,80,70,.25);border-color:#dc5046;color:#fff}
+    .fs-tb-label{padding:0 10px;display:flex;align-items:center;color:var(--flame);font-family:var(--cond);font-weight:700;font-size:9px;letter-spacing:.22em;text-transform:uppercase;border-right:1px solid rgba(255,153,48,.25);margin-right:4px}
+    /* Drop zone between sections */
+    .fs-drop-zone{position:relative;height:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:50}
+    .fs-drop-zone::before{content:'';position:absolute;left:5%;right:5%;height:2px;background:transparent;border-radius:1px;transition:background .15s}
+    .fs-drop-zone:hover::before{background:rgba(255,153,48,.5)}
+    .fs-drop-btn{position:relative;width:28px;height:28px;border-radius:50%;background:#1a1108;border:1.5px solid var(--flame);color:var(--flame);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:300;cursor:pointer;opacity:.5;transition:opacity .15s,transform .15s}
+    .fs-drop-zone:hover .fs-drop-btn{opacity:1;transform:scale(1.15)}
+    .fs-edit-hidden{position:fixed;top:14px;left:14px;background:#1a1108;color:#dcbe94;padding:8px 14px;border:1px solid rgba(220,190,148,.25);border-radius:6px;font-family:var(--cond);font-size:11px;letter-spacing:.18em;text-transform:uppercase;z-index:1000;display:flex;align-items:center;gap:8px}
+    .fs-edit-hidden::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--flame);box-shadow:0 0 6px var(--flame)}
+  `;
+  const style = document.createElement('style');
+  style.id = 'fs-edit-styles';
+  style.textContent = css;
+  document.head.appendChild(style);
+}
+
+function wireEditableText(){
+  document.querySelectorAll('[data-edit]').forEach(el => {
+    const field = el.getAttribute('data-edit');
+    el.setAttribute('contenteditable', 'plaintext-only');
+    el.spellcheck = false;
+
+    // Special handling for multi-line title fields (title_lines)
+    const isLines = (field === 'title_lines');
+    if (isLines) {
+      // Render as plain text with newlines; on save, split by newline
+      // Convert the <br> visualisation to actual newlines for editing
+      const html = el.innerHTML;
+      el.dataset.editLines = '1';
+      el.textContent = html
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<em>([^<]+)<\/em>/g, '*$1*')
+        .replace(/<[^>]+>/g, '');
+    } else {
+      // Strip <em>...</em> back to *...* so the user sees the syntax they typed
+      const html = el.innerHTML;
+      if (html.includes('<em>')) {
+        el.textContent = html.replace(/<em>([^<]+)<\/em>/g, '*$1*').replace(/<[^>]+>/g, '');
+        el.dataset.hasEm = '1';
+      }
+    }
+
+    el.addEventListener('focus', () => {
+      const sec = el.closest('.fs-edit-section');
+      if (sec) {
+        document.querySelectorAll('.fs-edit-section.selected').forEach(s => s.classList.remove('selected'));
+        sec.classList.add('selected');
+        postToParent('section-selected', { id: sec.dataset.sectionId, type: sec.dataset.sectionType });
+      }
+    });
+
+    let saveTimer;
+    const commit = () => {
+      const sec = el.closest('.fs-edit-section');
+      if (!sec) return;
+      let value = el.innerText;
+      if (isLines) {
+        value = value.split(/\n/).map(s => s.trim()).filter(s => s);
+      }
+      postToParent('field-changed', {
+        sectionId: sec.dataset.sectionId,
+        field,
+        value
+      });
+    };
+    el.addEventListener('input', () => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(commit, 250);
+    });
+    el.addEventListener('blur', () => { clearTimeout(saveTimer); commit(); });
+
+    // Enter behavior for non-line fields: prevent newlines
+    el.addEventListener('keydown', e => {
+      if (!isLines && e.key === 'Enter') { e.preventDefault(); el.blur(); }
+    });
+  });
+}
+
+function wireSectionInteractions(){
+  document.querySelectorAll('.fs-edit-section').forEach((sec, idx, all) => {
+    // Toolbar
+    const tb = document.createElement('div');
+    tb.className = 'fs-section-toolbar';
+    const typeLabel = (sec.dataset.sectionType || '').replace(/_/g,' ');
+    tb.innerHTML = `
+      <span class="fs-tb-label">${typeLabel}</span>
+      <button class="fs-tb-btn" data-act="up"   title="Move up"     ${idx===0?'disabled':''}>↑</button>
+      <button class="fs-tb-btn" data-act="down" title="Move down"   ${idx===all.length-1?'disabled':''}>↓</button>
+      <button class="fs-tb-btn" data-act="dup"  title="Duplicate">⎘</button>
+      <button class="fs-tb-btn" data-act="hide" title="Hide">⊘</button>
+      <button class="fs-tb-btn" data-act="props" title="More settings">⚙</button>
+      <button class="fs-tb-btn danger" data-act="del" title="Delete">×</button>
+    `;
+    sec.appendChild(tb);
+    tb.querySelectorAll('[data-act]').forEach(btn => {
+      btn.onclick = e => {
+        e.stopPropagation();
+        const act = btn.dataset.act;
+        postToParent('section-action', { id: sec.dataset.sectionId, action: act });
+      };
+    });
+
+    // Click anywhere on the section selects it
+    sec.addEventListener('click', e => {
+      // Don't grab editable text clicks
+      if (e.target.closest('[data-edit]')) return;
+      if (e.target.closest('.fs-tb-btn')) return;
+      document.querySelectorAll('.fs-edit-section.selected').forEach(s => s.classList.remove('selected'));
+      sec.classList.add('selected');
+      postToParent('section-selected', { id: sec.dataset.sectionId, type: sec.dataset.sectionType });
+    });
+  });
+
+  // Drop zones between sections (and at top + bottom)
+  const root = document.getElementById('page-root');
+  const sections = Array.from(root.children).filter(c => c.classList.contains('fs-edit-section'));
+  sections.forEach((sec, i) => {
+    const dz = mkDropZone(i);
+    root.insertBefore(dz, sec);
+  });
+  // Final drop zone after the last section
+  root.appendChild(mkDropZone(sections.length));
+}
+
+function mkDropZone(index){
+  const dz = document.createElement('div');
+  dz.className = 'fs-drop-zone';
+  dz.innerHTML = `<button class="fs-drop-btn" title="Add section here">+</button>`;
+  dz.onclick = () => postToParent('insert-here', { index });
+  return dz;
+}
+
+/* Listen for messages from the parent editor */
+let PG_LAST_DATA = null;
+window.addEventListener('message', e => {
+  const m = e.data;
+  if (!m || m.source !== 'fs-page-editor-parent') return;
+  if (m.type === 'load-page') {
+    // Replace the entire page data and re-render
+    PG_LAST_DATA = m.payload.page;
+    renderFromMessage(m.payload.page, m.payload.business);
+  }
+});
+
+async function renderFromMessage(page, biz){
+  const root = document.getElementById('page-root');
+  if (!root) return;
+  // In edit mode, render ALL sections including hidden ones, with a "hidden" badge
+  const list = page.sections || [];
+  root.innerHTML = list.map(s => {
+    const fn = SECTION_RENDERERS[s.type];
+    if (!fn) return `<div style="padding:40px;text-align:center;color:#dcbe94;background:rgba(22,12,4,.4);margin:14px 0;border:1px dashed rgba(196,160,112,.25);" class="fs-edit-section" data-section-id="${escHtml(s.id)}" data-section-type="${escHtml(s.type)}">Unknown section type: ${escHtml(s.type)}</div>`;
+    try {
+      let html = fn(s.props || {}, biz);
+      // If this section is hidden, dim it
+      if (s.hidden) {
+        html = html.replace(/^(<section[^>]*)/, '$1 data-hidden="1"');
+      }
+      return html;
+    } catch(e) {
+      console.error(e);
+      return '';
+    }
+  }).join('');
+  // Mark hidden sections visually
+  document.querySelectorAll('[data-hidden="1"]').forEach(el => {
+    el.style.opacity = '.4';
+    el.style.position = 'relative';
+    el.insertAdjacentHTML('afterbegin', '<div style="position:absolute;top:8px;left:8px;background:#1a1108;color:#dcbe94;padding:4px 10px;border:1px solid rgba(220,190,148,.25);border-radius:4px;font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;z-index:50">Hidden</div>');
+  });
+  setupEditMode();
+  if (biz?.phone) {
+    const sc = document.getElementById('sticky-call');
+    if (sc) sc.href = 'tel:' + biz.phone.replace(/[^0-9+]/g,'');
+  }
+}
+
+/* Boot */
+injectExtraSectionStyles();
+if (IS_EDIT) {
+  document.body.classList.add('fs-edit');
+  // Show "EDIT MODE" badge
+  const badge = document.createElement('div');
+  badge.className = 'fs-edit-hidden';
+  badge.textContent = 'Edit Mode';
+  document.body.appendChild(badge);
+  // Notify parent we're ready to receive data
+  postToParent('ready', { page: PAGE_ID });
+} else {
+  renderPage();
+}
 </script>
 </body>
 </html>
