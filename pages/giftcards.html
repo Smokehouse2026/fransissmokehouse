@@ -3,18 +3,74 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Gift Cards — The Francis Smokehouse | St. Francisville, LA</title>
-<meta name="description" content="Give the gift of slow-smoked BBQ. The Francis Smokehouse gift cards are available in-store at 6779 US Highway 61, St. Francisville, LA. Load any amount." />
-<link rel="icon" type="image/png" href="Images/Smokehouselogo.png" />
-<link rel="apple-touch-icon" href="Images/Smokehouselogo.png" />
+
+<!-- ═══ PRIMARY META ═══ -->
+<title>Gift Cards · Any Amount, In-Store | The Francis Smokehouse</title>
+<meta name="description" content="The Francis Smokehouse gift cards make the perfect gift for any Louisiana BBQ lover. Load any amount in-store at 6779 US Highway 61, St. Francisville, LA. Call (225) 245-5046." />
+<meta name="keywords" content="Francis Smokehouse gift card, restaurant gift card St Francisville, BBQ gift card Louisiana, Louisiana foodie gift" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<link rel="canonical" href="https://thefrancismokehouse.com/Pages/giftcards.html" />
+
+<!-- ═══ OPEN GRAPH ═══ -->
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="The Francis Smokehouse" />
+<meta property="og:title" content="Gift Cards · The Francis Smokehouse" />
+<meta property="og:description" content="The perfect gift for any Louisiana BBQ lover. Available in-store." />
+<meta property="og:url" content="https://thefrancismokehouse.com/Pages/giftcards.html" />
+<meta property="og:image" content="https://thefrancismokehouse.com/Images/Giftcard.jpg" />
+<meta property="og:locale" content="en_US" />
+
+<!-- ═══ TWITTER CARD ═══ -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Gift Cards · The Francis Smokehouse" />
+<meta name="twitter:description" content="The perfect gift for any Louisiana BBQ lover." />
+<meta name="twitter:image" content="https://thefrancismokehouse.com/Images/Giftcard.jpg" />
+
+<!-- ═══ FAVICON & THEME ═══ -->
+<link rel="icon" type="image/png" href="../Images/Smokehouselogo.png" />
+<link rel="apple-touch-icon" href="../Images/Smokehouselogo.png" />
 <meta name="theme-color" content="#090704" />
+
+<!-- ═══ STRUCTURED DATA ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "The Francis Smokehouse Gift Card",
+  "url": "https://thefrancismokehouse.com/Pages/giftcards.html",
+  "image": "https://thefrancismokehouse.com/Images/Giftcard.jpg",
+  "description": "Load any amount onto a Francis Smokehouse gift card. The perfect gift for any Louisiana BBQ lover. Available in-store.",
+  "brand": { "@type": "Brand", "name": "The Francis Smokehouse" },
+  "offers": {
+    "@type": "Offer",
+    "availability": "https://schema.org/InStoreOnly",
+    "priceCurrency": "USD",
+    "seller": {
+      "@type": "Restaurant",
+      "@id": "https://thefrancismokehouse.com/#restaurant",
+      "name": "The Francis Smokehouse"
+    }
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://thefrancismokehouse.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Gift Cards", "item": "https://thefrancismokehouse.com/Pages/giftcards.html" }
+  ]
+}
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,300;1,400;1,700&family=Barlow+Condensed:wght@300;400;500;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --void:#090704;--deep:#120d07;--coal:#1a1108;
-  --ember:#c04800;--fire:#e06010;--flame:#f08820;--glow:#f5a830;
-  --cream:#f5e8cc;--parch:#e8d4a8;--sand:#c4a070;
+  --ember:#d45200;--fire:#ed6e14;--flame:#ff9930;--glow:#ffc24a;
+  --cream:#faedd2;--parch:#e8d4a8;--sand:#c4a070;
   --serif:'Playfair Display',Georgia,serif;
   --cond:'Barlow Condensed',sans-serif;
   --body:'Barlow',sans-serif;
@@ -30,9 +86,9 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   background:radial-gradient(ellipse at 50% 20%,transparent 30%,rgba(9,7,4,.65) 100%);}
 #cursor{position:fixed;z-index:9999;pointer-events:none;top:0;left:0;}
 #c-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--flame);
-  transform:translate(-50%,-50%);box-shadow:0 0 8px var(--flame),0 0 16px rgba(240,136,32,.25);
+  transform:translate(-50%,-50%);box-shadow:0 0 8px var(--flame),0 0 16px rgba(255,153,48,.25);
   animation:cursor-breathe 2.5s ease-in-out infinite;}
-@keyframes cursor-breathe{0%,100%{box-shadow:0 0 6px var(--flame),0 0 12px rgba(240,136,32,.2)}50%{box-shadow:0 0 12px var(--flame),0 0 24px rgba(240,136,32,.4)}}
+@keyframes cursor-breathe{0%,100%{box-shadow:0 0 6px var(--flame),0 0 12px rgba(255,153,48,.2)}50%{box-shadow:0 0 12px var(--flame),0 0 24px rgba(255,153,48,.4)}}
 @media(hover:none){#cursor{display:none;}}
 
 /* HEADER */
@@ -41,14 +97,14 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   background:rgba(9,7,4,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid rgba(196,160,112,.09);}
 #hdr-brand{font-family:var(--serif);font-weight:700;font-size:clamp(14px,2vw,22px);
-  letter-spacing:.01em;color:var(--cream);text-decoration:none;text-shadow:0 0 30px rgba(240,136,32,.15);}
+  letter-spacing:.01em;color:var(--cream);text-decoration:none;text-shadow:0 0 30px rgba(255,153,48,.15);}
 #hdr-brand em{font-style:italic;font-weight:400;color:var(--flame);}
 .hdr-sub{font-family:var(--cond);font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(196,160,112,.28);margin-top:2px;}
 #back-btn{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.22em;
   text-transform:uppercase;color:rgba(196,160,112,.45);border:1px solid rgba(196,160,112,.18);
   padding:7px 16px;border-radius:2px;background:none;cursor:none;-webkit-tap-highlight-color:transparent;
   transition:all .3s;text-decoration:none;}
-#back-btn:hover{border-color:rgba(240,136,32,.45);color:var(--flame);}
+#back-btn:hover{border-color:rgba(255,153,48,.45);color:var(--flame);}
 
 /* ══ HERO ══ */
 #hero{
@@ -63,7 +119,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   font-family:var(--cond);font-weight:800;
   font-size:clamp(90px,16vw,210px);
   letter-spacing:-.06em;line-height:1;
-  color:rgba(192,72,0,.04);pointer-events:none;user-select:none;white-space:nowrap;
+  color:rgba(212,82,0,.04);pointer-events:none;user-select:none;white-space:nowrap;
 }
 .h-eyebrow{font-family:var(--cond);font-weight:600;font-size:10px;letter-spacing:.4em;
   text-transform:uppercase;color:var(--flame);opacity:.75;margin-bottom:clamp(14px,2.5vh,24px);
@@ -98,7 +154,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
 #card-mockup img{
   width:100%;
   border-radius:16px;
-  box-shadow:0 24px 80px rgba(192,72,0,.25),0 4px 20px rgba(0,0,0,.6);
+  box-shadow:0 24px 80px rgba(212,82,0,.25),0 4px 20px rgba(0,0,0,.6);
   display:block;
 }
 
@@ -122,7 +178,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   border-top:1px solid rgba(196,160,112,.07);
 }
 #how-section::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 100%,rgba(192,72,0,.06),transparent 65%);}
+  background:radial-gradient(ellipse at 50% 100%,rgba(212,82,0,.06),transparent 65%);}
 .sec-eyebrow{font-family:var(--cond);font-weight:600;font-size:9px;letter-spacing:.35em;
   text-transform:uppercase;color:var(--flame);opacity:.75;margin-bottom:10px;
   display:flex;align-items:center;gap:10px;}
@@ -138,11 +194,11 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   border-radius:8px;padding:clamp(18px,2.8vh,28px);
   display:flex;flex-direction:column;gap:10px;
   transition:border-color .3s,transform .35s cubic-bezier(.16,1,.3,1);}
-.step:hover{border-color:rgba(240,136,32,.2);transform:translateY(-3px);}
+.step:hover{border-color:rgba(255,153,48,.2);transform:translateY(-3px);}
 .step-num{font-family:var(--cond);font-weight:800;
   font-size:clamp(40px,6vw,60px);letter-spacing:-.04em;line-height:1;
-  color:rgba(192,72,0,.15);transition:color .4s;}
-.step:hover .step-num{color:rgba(240,136,32,.22);}
+  color:rgba(212,82,0,.15);transition:color .4s;}
+.step:hover .step-num{color:rgba(255,153,48,.22);}
 .step-title{font-family:var(--serif);font-weight:700;font-size:clamp(16px,1.7vw,20px);color:var(--cream);}
 .step-desc{font-family:var(--body);font-weight:300;font-size:clamp(12px,1.1vw,14px);
   line-height:1.65;color:rgba(196,160,112,.48);}
@@ -159,8 +215,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   padding:clamp(14px,2vh,20px);
   background:rgba(18,10,4,.7);border:1px solid rgba(196,160,112,.09);border-radius:6px;
   transition:border-color .3s,background .3s;}
-.occ:hover{border-color:rgba(240,136,32,.18);background:rgba(26,14,6,.8);}
-.occ-icon{font-size:clamp(20px,2.8vw,28px);filter:drop-shadow(0 0 6px rgba(240,136,32,.3));flex-shrink:0;}
+.occ:hover{border-color:rgba(255,153,48,.18);background:rgba(26,14,6,.8);}
+.occ-icon{font-size:clamp(20px,2.8vw,28px);filter:drop-shadow(0 0 6px rgba(255,153,48,.3));flex-shrink:0;}
 .occ-text{font-family:var(--serif);font-weight:700;font-size:clamp(14px,1.5vw,17px);color:rgba(232,212,176,.85);}
 
 /* ══ CTA ══ */
@@ -170,7 +226,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   border-top:1px solid rgba(196,160,112,.07);
 }
 #cta-section::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 50%,rgba(192,72,0,.09),transparent 65%);}
+  background:radial-gradient(ellipse at 50% 50%,rgba(212,82,0,.09),transparent 65%);}
 .cta-title{font-family:var(--serif);font-weight:900;
   font-size:clamp(36px,7vw,80px);letter-spacing:-.03em;line-height:.92;
   color:var(--cream);margin-bottom:clamp(12px,2vh,18px);position:relative;z-index:1;}
@@ -186,8 +242,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   background:rgba(22,14,6,.75);border:1px solid rgba(196,160,112,.1);
   border-radius:8px;padding:clamp(14px,2.2vh,22px) clamp(16px,2.5vw,28px);
   min-width:clamp(130px,16vw,180px);transition:border-color .3s;}
-.info-card:hover{border-color:rgba(240,136,32,.22);}
-.ic-icon{font-size:clamp(22px,3vw,30px);filter:drop-shadow(0 0 7px rgba(240,136,32,.3));}
+.info-card:hover{border-color:rgba(255,153,48,.22);}
+.ic-icon{font-size:clamp(22px,3vw,30px);filter:drop-shadow(0 0 7px rgba(255,153,48,.3));}
 .ic-label{font-family:var(--cond);font-weight:600;font-size:8px;letter-spacing:.22em;
   text-transform:uppercase;color:rgba(196,160,112,.32);}
 .ic-val{font-family:var(--cond);font-weight:700;font-size:clamp(12px,1.4vw,15px);
@@ -197,16 +253,16 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
   color:#fff;text-decoration:none;
   background:linear-gradient(90deg,var(--ember),var(--fire),var(--flame));
-  padding:14px 30px;border-radius:2px;box-shadow:0 6px 28px rgba(192,72,0,.4);
+  padding:14px 30px;border-radius:2px;box-shadow:0 6px 28px rgba(212,82,0,.4);
   transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,letter-spacing .3s;
   cursor:none;-webkit-tap-highlight-color:transparent;}
-.btn-fire:hover{transform:scale(1.05);box-shadow:0 10px 40px rgba(192,72,0,.55);letter-spacing:.26em;}
+.btn-fire:hover{transform:scale(1.05);box-shadow:0 10px 40px rgba(212,82,0,.55);letter-spacing:.26em;}
 .btn-ghost{display:inline-flex;align-items:center;gap:8px;
   font-family:var(--cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
   color:rgba(196,160,112,.55);text-decoration:none;
   border:1px solid rgba(196,160,112,.2);padding:13px 28px;border-radius:2px;
   transition:all .3s;cursor:none;-webkit-tap-highlight-color:transparent;}
-.btn-ghost:hover{border-color:rgba(240,136,32,.4);color:var(--flame);}
+.btn-ghost:hover{border-color:rgba(255,153,48,.4);color:var(--flame);}
 
 /* FOOTER */
 #ftr{position:relative;z-index:10;border-top:1px solid rgba(196,160,112,.08);
@@ -214,7 +270,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .ftr-t{font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,160,112,.22);}
 .ftr-flames{display:flex;gap:4px;align-items:flex-end;}
-.ff{font-size:13px;animation:flkr 2s ease-in-out infinite;filter:drop-shadow(0 0 4px rgba(240,136,32,.4));}
+.ff{font-size:13px;animation:flkr 2s ease-in-out infinite;filter:drop-shadow(0 0 4px rgba(255,153,48,.4));}
 .ff:nth-child(2){animation-delay:.3s;font-size:.8em;}
 .ff:nth-child(3){animation-delay:.65s;}
 @keyframes flkr{0%,100%{opacity:.6;transform:scaleY(1)}40%{opacity:1;transform:scaleY(1.1) translateY(-1px)}}
@@ -232,12 +288,12 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
 
 <!-- HEADER -->
 <header id="hdr">
-  <a href="index.html" id="back-btn">← Back</a>
+  <a href="../index.html" id="back-btn">← Back</a>
   <div style="text-align:center;">
-    <a href="index.html" id="hdr-brand">The Francis <em>Smokehouse</em></a>
+    <a href="../index.html" id="hdr-brand">The Francis <em>Smokehouse</em></a>
     <div class="hdr-sub">& Specialty Meats · St. Francisville, LA</div>
   </div>
-  <a href="menu.html" class="btn-ghost" style="font-size:10px;padding:7px 14px;">See Menu →</a>
+  <a href="../menu.html" class="btn-ghost" style="font-size:10px;padding:7px 14px;">See Menu →</a>
 </header>
 
 <!-- HERO -->
@@ -253,7 +309,7 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
 <section id="card-section">
   <div id="card-mockup">
     <img
-      src="Images/Giftcard.jpg"
+      src="../Images/Giftcard.jpg"
       alt="The Francis Smokehouse Gift Card"
       onerror="this.style.opacity='.3'"
     />
@@ -335,7 +391,7 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
   <div class="cta-btns reveal">
     <a href="https://www.google.com/maps/dir/?api=1&destination=The+Francis+Smokehouse%2C+6779+US-61%2C+St.+Francisville%2C+LA+70775" target="_blank" class="btn-fire">🧭 Get Directions</a>
     <a href="tel:2252455046" class="btn-ghost">📞 Call Us</a>
-    <a href="menu.html" class="btn-ghost">See The Menu →</a>
+    <a href="../menu.html" class="btn-ghost">See The Menu →</a>
   </div>
 </section>
 
