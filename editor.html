@@ -842,6 +842,33 @@ body::before{
   font-size:10px;letter-spacing:.22em;text-transform:uppercase;
   color:var(--flame);
 }
+.hp-card-toolbar{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.hp-card-toolbar-btns{display:flex;gap:4px}
+.hp-card-iconbtn{
+  width:26px;height:26px;
+  background:rgba(20,12,6,.4);
+  border:1px solid var(--line-2);
+  color:var(--ink-3);
+  border-radius:4px;
+  font-size:13px;line-height:1;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+  padding:0;
+}
+.hp-card-iconbtn:hover:not([disabled]){
+  color:var(--flame);
+  border-color:var(--flame);
+  background:rgba(255,153,48,.1);
+}
+.hp-card-iconbtn.danger:hover:not([disabled]){
+  color:var(--red);
+  border-color:var(--red);
+  background:rgba(236,110,96,.12);
+}
+.hp-card-iconbtn[disabled]{opacity:.3;cursor:not-allowed}
 .hp-card-thumb{
   width:100%;aspect-ratio:1.4/1;
   background:#0a0402;
@@ -2225,8 +2252,13 @@ function renderHomepageEditor(){
 
     <!-- NAV CARDS -->
     <div class="hp-section">
-      <h3>Nav <em>Cards</em></h3>
-      <div class="hp-desc">The six buttons on the homepage. Upload an image for any card and it'll fill the whole tile with the text overlaid. Use *italics* (asterisks) around any word in the label to style it like "Find <em>Us</em>".</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap">
+        <div style="flex:1;min-width:0">
+          <h3>Nav <em>Cards</em></h3>
+          <div class="hp-desc">The buttons on the homepage. Upload an image for any card and it'll fill the whole tile with the text overlaid. Use *italics* (asterisks) around any word in the label to style it like "Find <em>Us</em>". Drag to reorder, tap × to remove.</div>
+        </div>
+        <button class="btn btn-secondary" onclick="hpAddCard()">+ Add Card</button>
+      </div>
       <div class="hp-cards-grid" id="hp-cards-grid">
         ${d.cards.map((c,i) => hpCardHtml(c, i)).join('')}
       </div>
@@ -2282,9 +2314,18 @@ function renderHomepageEditor(){
 function hpCardHtml(c, i){
   const featCls = c.featured ? ' featured' : '';
   const hasImg = !!c.image;
+  const total = HP_DATA?.cards?.length || 0;
   return `
     <div class="hp-card${featCls}" data-idx="${i}">
-      <div class="hp-card-num">Card ${i+1}${c.featured ? ' · Featured' : ''}</div>
+      <div class="hp-card-toolbar">
+        <div class="hp-card-num">Card ${i+1}${c.featured ? ' · Featured' : ''}</div>
+        <div class="hp-card-toolbar-btns">
+          <button type="button" class="hp-card-iconbtn" title="Move up" onclick="hpMoveCard(${i},-1)" ${i===0?'disabled':''}>↑</button>
+          <button type="button" class="hp-card-iconbtn" title="Move down" onclick="hpMoveCard(${i},1)" ${i===total-1?'disabled':''}>↓</button>
+          <button type="button" class="hp-card-iconbtn" title="${c.featured ? 'Unmark featured' : 'Mark as featured'}" onclick="hpToggleFeatured(${i})">${c.featured ? '★' : '☆'}</button>
+          <button type="button" class="hp-card-iconbtn danger" title="Delete this card" onclick="hpDeleteCard(${i})">×</button>
+        </div>
+      </div>
       <div class="hp-card-thumb" id="hp-thumb-${i}">
         ${hasImg
           ? `<img src="${escapeHtml(c.image)}" alt=""><div class="hp-card-thumb-overlay"></div>`
@@ -2307,10 +2348,39 @@ function hpCardHtml(c, i){
         <button type="button" class="btn btn-secondary btn-sm" onclick="hpCardPickImage(${i})">
           ${hasImg ? 'Replace Image' : '+ Upload Image'}
         </button>
-        ${hasImg ? `<button type="button" class="btn btn-danger btn-sm" onclick="hpCardClearImage(${i})">Remove</button>` : ''}
+        ${hasImg ? `<button type="button" class="btn btn-danger btn-sm" onclick="hpCardClearImage(${i})">Remove Image</button>` : ''}
       </div>
     </div>
   `;
+}
+
+/* Card management helpers */
+function hpAddCard(){
+  if (!HP_DATA) return;
+  HP_DATA.cards.push({ label:'New Card', sub:'', href:'#', image:'' });
+  refreshHpCards();
+}
+function hpDeleteCard(i){
+  if (!confirm('Delete this nav card?')) return;
+  const old = HP_DATA.cards[i];
+  HP_DATA.cards.splice(i, 1);
+  refreshHpCards();
+  // Best-effort: remove the uploaded image too
+  if (old && old.image) sbDeleteFile(old.image).catch(()=>{});
+}
+function hpMoveCard(i, dir){
+  const j = i + dir;
+  if (j < 0 || j >= HP_DATA.cards.length) return;
+  [HP_DATA.cards[i], HP_DATA.cards[j]] = [HP_DATA.cards[j], HP_DATA.cards[i]];
+  refreshHpCards();
+}
+function hpToggleFeatured(i){
+  HP_DATA.cards[i].featured = !HP_DATA.cards[i].featured;
+  refreshHpCards();
+}
+function refreshHpCards(){
+  const grid = document.getElementById('hp-cards-grid');
+  if (grid) grid.innerHTML = HP_DATA.cards.map((c, idx) => hpCardHtml(c, idx)).join('');
 }
 
 function hpColorHtml(field, val){
@@ -2393,9 +2463,7 @@ function hpCardPickImage(idx){
       const old = HP_DATA.cards[idx].image;
       if (old) sbDeleteFile(old).catch(()=>{});
       HP_DATA.cards[idx].image = url;
-      // Re-render just the cards grid
-      const grid = document.getElementById('hp-cards-grid');
-      grid.innerHTML = HP_DATA.cards.map((c,i) => hpCardHtml(c, i)).join('');
+      refreshHpCards();
       toast('Image uploaded');
       setStatus('Ready');
     } catch(err) {
@@ -2411,8 +2479,7 @@ function hpCardClearImage(idx){
   if (!confirm('Remove this image?')) return;
   const old = HP_DATA.cards[idx].image;
   HP_DATA.cards[idx].image = '';
-  const grid = document.getElementById('hp-cards-grid');
-  grid.innerHTML = HP_DATA.cards.map((c,i) => hpCardHtml(c, i)).join('');
+  refreshHpCards();
   if (old) sbDeleteFile(old).catch(()=>{});
 }
 
