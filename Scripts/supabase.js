@@ -99,6 +99,7 @@ const TABLE_RENAMES = {
   scarcity:      'menu_scarcity',
   homepage:      'site_homepage',
   business:      'site_business',
+  pages:         'site_pages',
   editor_users:  'site_editor_users'
 };
 function resolveTable(name){ return TABLE_RENAMES[name] || name; }
@@ -550,4 +551,57 @@ function applyBusinessToFooter(b) {
     if (b.socials?.instagram) { ig.href = b.socials.instagram; ig.style.display = ''; }
     else ig.style.display = 'none';
   }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE BUILDER — generic page loader & saver
+   Each page (catering, findus, about, etc.) is stored as one row
+   in site_pages with a jsonb { seo, sections: [...] } structure.
+═══════════════════════════════════════════════════════════ */
+
+/** Empty page shape — callers get this if the row doesn't exist yet. */
+function emptyPage() {
+  return {
+    seo: { title:'', description:'', keywords:'' },
+    sections: []
+  };
+}
+
+/** Merge fetched data with empty shape so all keys exist. */
+function mergePage(fetched) {
+  const empty = emptyPage();
+  const f = fetched || {};
+  return {
+    ...f,
+    seo: { ...empty.seo, ...(f.seo || {}) },
+    sections: Array.isArray(f.sections) ? f.sections : empty.sections
+  };
+}
+
+/** Load a single page row (e.g. 'catering'). */
+async function loadPage(id) {
+  try {
+    const rows = await sbSelect('pages', `id=eq.${encodeURIComponent(id)}`);
+    if (rows && rows.length && rows[0].data) {
+      return mergePage(rows[0].data);
+    }
+  } catch (e) {
+    console.warn(`loadPage(${id}) failed:`, e.message);
+  }
+  return mergePage(null);
+}
+
+async function savePage(id, data) {
+  const result = await sbUpsert('pages', { id, data });
+  invalidatePageCache(id);
+  return result;
+}
+
+function invalidatePageCache(id) {
+  try { localStorage.removeItem(`francis_page_${id}`); } catch {}
+}
+
+/** Generate a stable-ish unique id for a new section. */
+function newSectionId() {
+  return 's_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 }
