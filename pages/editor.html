@@ -1957,6 +1957,8 @@ body.hp-fullscreen{overflow:hidden}
               <option value="about">About</option>
               <option value="story">Story</option>
               <option value="giftcards">Gift Cards</option>
+              <option value="menu">Menu (chrome)</option>
+              <option value="market">Market (chrome)</option>
             </select>
             <div class="pg-device-toggle">
               <button class="pg-dev-btn active" data-dev="desktop" title="Desktop view">🖥</button>
@@ -4355,6 +4357,15 @@ const SECTION_DEFAULTS = {
 };
 
 /* Boot the WYSIWYG editor (called from tab handler) */
+/** Pages that use chrome_top + chrome_bottom instead of a single sections array */
+const CHROME_PAGES = new Set(['menu', 'market']);
+
+/** Build the iframe URL — menu.html is at site root, all others are in Pages/. */
+function getPagePreviewUrl(id){
+  if (id === 'menu') return `../menu.html?edit=1&t=${Date.now()}`;
+  return `./${id}.html?edit=1&t=${Date.now()}`;
+}
+
 async function loadPageIntoEditor(){
   // Load fresh page data + business info, then point the iframe at the page
   try {
@@ -4364,17 +4375,41 @@ async function loadPageIntoEditor(){
     ]);
   } catch(e) {
     console.error('loadPage failed:', e);
-    alert('Could not load page: ' + e.message + '\n\nMake sure you ran RESEED_CATERING.md SQL.');
+    alert('Could not load page: ' + e.message);
     return;
+  }
+  // For chrome pages, combine chrome_top + chrome_bottom into the sections array
+  // for editor display. We'll split them back on save.
+  if (CHROME_PAGES.has(PG_ID)) {
+    const top = Array.isArray(PG_DATA.chrome_top) ? PG_DATA.chrome_top : [];
+    const bot = Array.isArray(PG_DATA.chrome_bottom) ? PG_DATA.chrome_bottom : [];
+    // Tag each section so we know which bucket it belongs to
+    top.forEach(s => s._bucket = 'top');
+    bot.forEach(s => s._bucket = 'bottom');
+    PG_DATA.sections = [...top, ...bot];
   }
   PG_SELECTED_ID = null;
   PG_IFRAME_READY = false;
-  // Point the iframe at the page in edit mode
   const iframe = document.getElementById('pg-iframe');
   if (iframe) {
-    iframe.src = `./${PG_ID}.html?edit=1&t=${Date.now()}`;
+    iframe.src = getPagePreviewUrl(PG_ID);
   }
   renderSidePanel();
+}
+
+/** Before save, split the sections array back into chrome_top/chrome_bottom by bucket tag. */
+function prepareSavePayload(){
+  if (!PG_DATA) return PG_DATA;
+  if (!CHROME_PAGES.has(PG_ID)) return PG_DATA;
+  const arr = PG_DATA.sections || [];
+  const top = arr.filter(s => s._bucket !== 'bottom').map(s => { const c = {...s}; delete c._bucket; return c; });
+  const bot = arr.filter(s => s._bucket === 'bottom').map(s => { const c = {...s}; delete c._bucket; return c; });
+  return {
+    ...PG_DATA,
+    chrome_top: top,
+    chrome_bottom: bot,
+    sections: []
+  };
 }
 
 /* Receive messages from the iframe */
@@ -4404,7 +4439,21 @@ window.addEventListener('message', e => {
       handleSectionAction(m.payload);
       break;
     case 'insert-here':
-      openLibrary(m.payload.index);
+      if (CHROME_PAGES.has(PG_ID)) {
+        // For chrome pages, translate (rootId, localIndex) into a flat sections index
+        const rid = m.payload.rootId || 'page-chrome-top';
+        const localIdx = m.payload.index;
+        const topCount = (PG_DATA.sections || []).filter(s => s._bucket !== 'bottom').length;
+        if (rid === 'page-chrome-bottom') {
+          // Insert in bottom bucket — flat index = topCount + localIdx
+          openLibrary(topCount + localIdx, 'bottom');
+        } else {
+          // Top bucket — flat index = localIdx
+          openLibrary(localIdx, 'top');
+        }
+      } else {
+        openLibrary(m.payload.index);
+      }
       break;
   }
 });
@@ -4413,10 +4462,14 @@ function pushDataToIframe(){
   if (!PG_IFRAME_READY) return;
   const iframe = document.getElementById('pg-iframe');
   if (!iframe || !iframe.contentWindow) return;
+  // For chrome pages, send the split version (chrome_top/chrome_bottom) so the
+  // page can render correctly with the menu grid in between. The editor itself
+  // still uses the flat sections array internally.
+  const pagePayload = CHROME_PAGES.has(PG_ID) ? prepareSavePayload() : PG_DATA;
   iframe.contentWindow.postMessage({
     source: 'fs-page-editor-parent',
     type: 'load-page',
-    payload: { page: PG_DATA, business: PG_BIZ }
+    payload: { page: pagePayload, business: PG_BIZ }
   }, '*');
 }
 
@@ -4431,6 +4484,9 @@ function handleFieldChange({ sectionId, field, value }){
 function handleSectionAction({ id, action }){
   const idx = PG_DATA.sections.findIndex(s => s.id === id);
   if (idx === -1) return;
+  if (PG_DATA.sections[idx]._locked) {
+    if (action !== 'props') return; // locked sections are immovable/undeletable
+  }
   switch (action) {
     case 'up':
       if (idx > 0) {
@@ -4470,8 +4526,10 @@ function handleSectionAction({ id, action }){
 
 /* Library — insert a new section at index */
 let PG_LIB_INSERT_INDEX = null;
-function openLibrary(index){
+let PG_LIB_INSERT_BUCKET = null; // 'top' | 'bottom' for chrome pages
+function openLibrary(index, bucket){
   PG_LIB_INSERT_INDEX = index;
+  PG_LIB_INSERT_BUCKET = bucket || null;
   const grid = document.getElementById('pg-library-grid');
   grid.innerHTML = SECTION_LIB.map(s => `
     <button class="pg-lib-type" data-type="${s.type}">
@@ -4490,6 +4548,7 @@ function closeLibrary(){
   document.getElementById('pg-library').style.display = 'none';
   document.getElementById('pg-library-backdrop').style.display = 'none';
   PG_LIB_INSERT_INDEX = null;
+  PG_LIB_INSERT_BUCKET = null;
 }
 function insertSection(type){
   const def = SECTION_DEFAULTS[type] || (() => ({}));
@@ -4497,9 +4556,23 @@ function insertSection(type){
     id: newSectionId(),
     type,
     hidden: false,
-    props: def()
+    props: def(),
+    section_style: {},
+    element_styles: {}
   };
   const idx = PG_LIB_INSERT_INDEX ?? PG_DATA.sections.length;
+  // For chrome pages, figure out which bucket the new section belongs to
+  if (CHROME_PAGES.has(PG_ID)) {
+    if (PG_LIB_INSERT_BUCKET) {
+      // Explicit hint from a drop-zone in a specific chrome root
+      newSec._bucket = PG_LIB_INSERT_BUCKET;
+    } else {
+      // Infer from surrounding sections
+      const before = idx > 0 ? PG_DATA.sections[idx - 1] : null;
+      const after  = idx < PG_DATA.sections.length ? PG_DATA.sections[idx] : null;
+      newSec._bucket = before?._bucket || after?._bucket || 'top';
+    }
+  }
   PG_DATA.sections.splice(idx, 0, newSec);
   closeLibrary();
   PG_SELECTED_ID = newSec.id;
@@ -5392,7 +5465,7 @@ async function savePageHandler(){
   btn.textContent = 'Saving…';
   setStatus('Saving', 'saving');
   try {
-    await savePage(PG_ID, PG_DATA);
+    await savePage(PG_ID, prepareSavePayload());
     setStatus('Saved', 'ok');
     btn.textContent = 'Saved ✓';
     setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 1200);
