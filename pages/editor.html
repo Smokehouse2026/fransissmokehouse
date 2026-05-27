@@ -1218,7 +1218,7 @@ body.hp-fullscreen{overflow:hidden}
   line-height:1.1;
   text-shadow:0 2px 6px rgba(0,0,0,.7);
 }
-.hp-tile-label em{font-style:italic;color:var(--flame)}
+.hp-tile-label em{font-style:italic;color:var(--hp-prev-flame, var(--flame))}
 .hp-tile-sub{
   font-family:var(--sans);font-weight:600;
   font-size:clamp(8px, 0.85vw, 10px);
@@ -3313,13 +3313,20 @@ function hpColorChange(key, value){
 }
 
 function applyEditorPreviewTheme(){
+  if (!HP_DATA || !HP_DATA.theme) return;
   const t = HP_DATA.theme;
-  const preview = document.getElementById('hp-identity-preview');
-  if (!preview) return;
-  preview.style.setProperty('--hp-prev-bg', t.bg);
-  preview.style.setProperty('--hp-prev-text', t.text);
-  preview.style.setProperty('--hp-prev-eyebrow', t.eyebrow);
-  preview.style.setProperty('--hp-prev-flame', t.flame);
+  // Apply to BOTH preview elements: the small identity card AND the big device frame
+  // (which contains the mock header, footer, and all the tile labels).
+  ['hp-identity-preview', 'hp-device'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (t.bg)      el.style.setProperty('--hp-prev-bg', t.bg);
+    if (t.text)    el.style.setProperty('--hp-prev-text', t.text);
+    if (t.eyebrow) el.style.setProperty('--hp-prev-eyebrow', t.eyebrow);
+    if (t.flame)   el.style.setProperty('--hp-prev-flame', t.flame);
+    if (t.ember)   el.style.setProperty('--hp-prev-ember', t.ember);
+    if (t.glow)    el.style.setProperty('--hp-prev-glow', t.glow);
+  });
 }
 
 function updateIdentityPreview(){
