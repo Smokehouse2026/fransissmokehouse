@@ -275,55 +275,45 @@ async function loadCachedThenRefresh(cacheKey, loader, onRefresh) {
 
 /* ═══════════════════════════════════════════════════════════
    HOMEPAGE — load and save the homepage settings row.
-   The whole homepage config lives in one jsonb column for simplicity.
+   The whole homepage config lives in one jsonb column.
+   NO defaults in JS — all defaults live in the Supabase row.
 ═══════════════════════════════════════════════════════════ */
 
-/** Default homepage settings. Used as the fallback if Supabase
- *  has no row yet, AND as the seed when the editor first loads. */
-const HOMEPAGE_DEFAULTS = {
-  title: 'The Francis',
-  title_em: 'Smokehouse',
-  tagline: '& Specialty Meats',
-  eyebrow: 'St. Francisville · Louisiana',
-  cards: [
-    { label: 'Menu',           sub: 'BBQ & Po-boys',       href: 'menu.html',             image: '' },
-    { label: 'Daily Special',  sub: 'Posted at 6am',       href: 'menu.html#specials',    image: '' },
-    { label: 'Market',         sub: 'Smokehouse Market',   href: 'Pages/market.html',     image: '' },
-    { label: 'Catering',       sub: 'Book Your Event →',   href: 'Pages/catering.html',   image: '', featured: true },
-    { label: 'About',          sub: 'Since 2015',          href: 'Pages/about.html',      image: '' },
-    { label: 'Find Us',        sub: '6779 US Hwy 61',      href: 'Pages/findus.html',     image: '' }
-  ],
-  footer: {
-    phone: '(225) 245-5046',
-    facebook: 'https://www.facebook.com/1547733028788117/',
-    instagram: '',
-    address: '6779 US Hwy 61, St. Francisville, LA'
-  },
-  theme: {
-    bg:      '#0d0805',
-    text:    '#faedd2',
-    eyebrow: '#dcbe94',
-    ember:   '#d45200',
-    fire:    '#ed6e14',
-    flame:   '#ff9930',
-    glow:    '#ffc24a',
-    overlay: 'rgba(10,6,3,.55)'
-  }
-};
+/** Minimal structural shape so missing fields don't crash callers.
+ *  These are NOT visible defaults — they're empty containers. */
+function emptyHomepage() {
+  return {
+    title: '',
+    title_em: '',
+    tagline: '',
+    eyebrow: '',
+    cards: [
+      { label:'', sub:'', href:'', image:'' },
+      { label:'', sub:'', href:'', image:'' },
+      { label:'', sub:'', href:'', image:'' },
+      { label:'', sub:'', href:'', image:'', featured:true },
+      { label:'', sub:'', href:'', image:'' },
+      { label:'', sub:'', href:'', image:'' }
+    ],
+    footer: { phone:'', address:'', facebook:'', instagram:'' },
+    theme:  { bg:'', text:'', eyebrow:'', ember:'', fire:'', flame:'', glow:'', overlay:'' }
+  };
+}
 
-/** Merge fetched data over defaults so missing fields don't break the page. */
+/** Merge fetched data with the empty shape so all keys exist. */
 function mergeHomepage(fetched) {
+  const empty = emptyHomepage();
   const f = fetched || {};
   return {
-    title:    f.title    ?? HOMEPAGE_DEFAULTS.title,
-    title_em: f.title_em ?? HOMEPAGE_DEFAULTS.title_em,
-    tagline:  f.tagline  ?? HOMEPAGE_DEFAULTS.tagline,
-    eyebrow:  f.eyebrow  ?? HOMEPAGE_DEFAULTS.eyebrow,
-    cards:    Array.isArray(f.cards) && f.cards.length === HOMEPAGE_DEFAULTS.cards.length
-              ? f.cards.map((c, i) => ({ ...HOMEPAGE_DEFAULTS.cards[i], ...c }))
-              : HOMEPAGE_DEFAULTS.cards.map(c => ({ ...c })),
-    footer:   { ...HOMEPAGE_DEFAULTS.footer, ...(f.footer || {}) },
-    theme:    { ...HOMEPAGE_DEFAULTS.theme,  ...(f.theme  || {}) }
+    title:    f.title    ?? empty.title,
+    title_em: f.title_em ?? empty.title_em,
+    tagline:  f.tagline  ?? empty.tagline,
+    eyebrow:  f.eyebrow  ?? empty.eyebrow,
+    cards:    Array.isArray(f.cards) && f.cards.length === empty.cards.length
+              ? f.cards.map((c, i) => ({ ...empty.cards[i], ...c }))
+              : empty.cards,
+    footer:   { ...empty.footer, ...(f.footer || {}) },
+    theme:    { ...empty.theme,  ...(f.theme  || {}) }
   };
 }
 
