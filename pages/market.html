@@ -286,14 +286,8 @@ body{cursor:none;}
   </div>
 </div>
 
-<!-- HERO -->
-<section id="hero">
-  <div id="hero-ghost">MARKET</div>
-  <div class="hero-eyebrow">In-Store · 6779 US Hwy 61</div>
-  <h1 id="hero-title">The Smokehouse<br><em>Market.</em></h1>
-  <div id="hero-rule"></div>
-  <p id="hero-lead">Specialty meats, house-made boudin and sausage, smoked meats by the pound, and family-size sides. Available at the counter during business hours.</p>
-</section>
+<!-- CHROME TOP — rendered from site_pages.market.chrome_top -->
+<div id="page-chrome-top"></div>
 
 <!-- MARKET CONTENT -->
 <div id="layout">
@@ -302,17 +296,8 @@ body{cursor:none;}
   </div>
 </div>
 
-<!-- IN-STORE CTA -->
-<div id="cta-strip">
-  <div class="cta-text">
-    <div class="cta-text-title">Everything's <em>In-Store.</em></div>
-    <div class="cta-text-sub">Mon–Sat 10am–6pm · Sun 10am–3pm · 6779 US Highway 61, St. Francisville, LA</div>
-  </div>
-  <div class="cta-btns">
-    <a href="https://www.google.com/maps/dir/?api=1&destination=The+Francis+Smokehouse%2C+6779+US-61%2C+St.+Francisville%2C+LA+70775" target="_blank" class="btn-fire">🧭 Get Directions</a>
-    <a href="tel:2252455046" class="btn-ghost">📞 (225) 245-5046</a>
-  </div>
-</div>
+<!-- CHROME BOTTOM — rendered from site_pages.market.chrome_bottom -->
+<div id="page-chrome-bottom"></div>
 
 <!-- FOOTER -->
 <div id="ftr">
@@ -323,6 +308,10 @@ body{cursor:none;}
 
 <script src="../Scripts/supabase.js"></script>
 <script src="../Scripts/market-data.js" onerror="marketDataMissing()"></script>
+<script>window.PAGE_ID = 'market';</script>
+<script src="../Scripts/page-engine.js"></script>
+<script src="../Scripts/chrome-renderer.js"></script>
+<script>if (window.__fsBootChrome) window.__fsBootChrome();</script>
 <script>
 /* FIRE */
 const FCV=document.getElementById('fire-cv'),FCX=FCV.getContext('2d'),FW=144,FH=80;
