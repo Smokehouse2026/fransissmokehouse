@@ -305,10 +305,15 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
 <script>
 /* ═══ HOMEPAGE: load editor settings from Supabase and apply ═══ */
 (async function loadAndApplyHomepage(){
-  if (typeof loadHomepage !== 'function') return; // supabase.js didn't load
+  if (typeof loadHomepage !== 'function') {
+    console.warn('[homepage] supabase.js not loaded — using static defaults from HTML');
+    return;
+  }
   let data;
   try { data = await loadHomepage(); }
-  catch (e) { console.warn('Homepage load failed, using defaults:', e); return; }
+  catch (e) { console.warn('[homepage] load failed, using defaults:', e); return; }
+  console.log('[homepage] loaded data:', data);
+  console.log('[homepage] cards images:', data.cards?.map(c => ({label: c.label, image: c.image || '(none)'})));
 
   // Apply theme via CSS variable overrides
   const r = document.documentElement.style;
@@ -343,18 +348,21 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
   // Nav cards — replace entirely
   if (Array.isArray(data.cards) && data.cards.length) {
     const nav = document.getElementById('nav-grid');
+    console.log('[homepage] rendering', data.cards.length, 'cards');
     nav.innerHTML = data.cards.map(c => {
       const hasImage = !!c.image;
       const featCls  = c.featured ? ' featured' : '';
       const imgCls   = hasImage ? ' has-image' : '';
       const styleAttr = hasImage ? ` style="--card-bg:url('${escapeAttr(c.image)}')"` : '';
-      // Allow <em> in the label by treating it as HTML-safe markup we ourselves emit
+      if (hasImage) console.log('[homepage] card', c.label, '→ image:', c.image);
       const label = renderLabel(c.label||'');
       return `<a href="${escapeAttr(c.href||'#')}" class="nav-btn${featCls}${imgCls}"${styleAttr}>
         <span class="nav-btn-name">${label}</span>
         <span class="nav-btn-sub">${escapeHtml(c.sub||'')}</span>
       </a>`;
     }).join('');
+  } else {
+    console.warn('[homepage] no cards in data, keeping static fallback HTML');
   }
 
   function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
