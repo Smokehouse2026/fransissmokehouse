@@ -537,17 +537,8 @@ body{opacity:0;transition:opacity .8s;}body.on{opacity:1;}
 <canvas id="cv-bg"></canvas><canvas id="cv-smoke"></canvas><canvas id="cv-ember"></canvas>
 <div id="vignette"></div>
 
-<!-- HEADER -->
-<header id="hdr">
-  <a href="../index.html" id="back-btn">← Back</a>
-  <div style="text-align:center;">
-    <a href="../index.html" id="hdr-brand">The Francis <em>Smokehouse</em></a>
-    <div class="hdr-sub">& Specialty Meats · St. Francisville, LA</div>
-  </div>
-  <a href="../menu.html" class="btn-ghost" style="font-size:10px;padding:7px 14px;display:inline-flex;align-items:center;gap:6px;justify-content:center;border:1px solid rgba(196,160,112,.34);text-decoration:none;color:rgba(196,160,112,.78);border-radius:2px;letter-spacing:.2em;font-family:var(--cond);font-weight:600;text-transform:uppercase;transition:all .3s;">See Menu →</a>
-</header>
+<!-- Header is now a page_header section rendered from Supabase -->
 
-<!-- HERO -->
 <!-- Page content rendered from Supabase by the script at the bottom -->
 <main id="page-root"></main>
 
@@ -659,7 +650,179 @@ function escHtml(s){ return String(s||'').replace(/[&<>"']/g, c => ({ '&':'&amp;
 /** Convert *word* to <em>word</em> within already-escaped text. */
 function emFormat(s){ return escHtml(s).replace(/\*([^*]+)\*/g, '<em>$1</em>'); }
 
+/* ═══════════════════════════════════════════════════════════
+   STYLE ENGINE — turns step-based values + colors into CSS vars
+═══════════════════════════════════════════════════════════ */
+const COLOR_PALETTE = {
+  default:  '',                       // no override
+  bg:       'var(--void)',
+  panel:    'rgba(22,12,4,.85)',
+  dark:     '#0a0604',
+  text:     'var(--cream)',
+  parch:    'var(--parch)',
+  sand:     'var(--sand)',
+  flame:    'var(--flame)',
+  ember:    'var(--ember)',
+  glow:     'var(--glow)',
+  fire:     'var(--fire)',
+  white:    '#ffffff',
+  transparent: 'transparent'
+};
+const SIZE_MAP_TEXT = {
+  xs:  'clamp(10px, 0.9vw, 12px)',
+  sm:  'clamp(12px, 1.1vw, 14px)',
+  md:  'clamp(14px, 1.4vw, 17px)',
+  lg:  'clamp(17px, 2vw, 22px)',
+  xl:  'clamp(22px, 3vw, 32px)',
+  '2xl':'clamp(32px, 5vw, 56px)',
+  '3xl':'clamp(44px, 7vw, 80px)',
+  '4xl':'clamp(56px, 9vw, 110px)'
+};
+const PAD_MAP = {
+  none:'0', sm:'clamp(20px,3vh,30px)', md:'clamp(40px,6vh,60px)',
+  lg:'clamp(60px,10vh,100px)', xl:'clamp(80px,14vh,140px)'
+};
+const RADIUS_MAP = { none:'0', sm:'4px', md:'8px', lg:'14px', pill:'9999px', circle:'50%' };
+const BORDER_MAP = { none:'none', subtle:'1px solid rgba(196,160,112,.18)', strong:'2px solid rgba(196,160,112,.42)' };
+const WIDTH_MAP  = { default:'1100px', narrow:'720px', medium:'900px', wide:'1300px', full:'100%' };
+const ALIGN_MAP  = { left:'left', center:'center', right:'right' };
+const GAP_MAP    = { tight:'8px', normal:'14px', loose:'24px' };
+
+/** Resolve a palette key OR a custom hex/rgba into a CSS color value. */
+function resolveColor(v){
+  if (!v) return '';
+  if (COLOR_PALETTE[v] !== undefined) return COLOR_PALETTE[v];
+  return v; // assume raw color value (hex, rgba, etc.)
+}
+
+/** Build a CSS variable declaration string from an element style object.
+ *  Returns "--fs-text-size:...; --fs-text-color:...;" etc. Used inline on the element. */
+function elementStyleVars(style){
+  if (!style || typeof style !== 'object') return '';
+  const parts = [];
+  if (style.size && SIZE_MAP_TEXT[style.size])      parts.push(`--fs-text-size:${SIZE_MAP_TEXT[style.size]}`);
+  if (style.color)                                   parts.push(`--fs-text-color:${resolveColor(style.color)}`);
+  if (style.align && ALIGN_MAP[style.align])         parts.push(`--fs-text-align:${ALIGN_MAP[style.align]}`);
+  if (style.bg)                                      parts.push(`--fs-bg:${resolveColor(style.bg)}`);
+  if (style.pad_top   && PAD_MAP[style.pad_top]   !== undefined) parts.push(`--fs-pad-top:${PAD_MAP[style.pad_top]}`);
+  if (style.pad_bot   && PAD_MAP[style.pad_bot]   !== undefined) parts.push(`--fs-pad-bot:${PAD_MAP[style.pad_bot]}`);
+  if (style.pad_left  && PAD_MAP[style.pad_left]  !== undefined) parts.push(`--fs-pad-left:${PAD_MAP[style.pad_left]}`);
+  if (style.pad_right && PAD_MAP[style.pad_right] !== undefined) parts.push(`--fs-pad-right:${PAD_MAP[style.pad_right]}`);
+  if (style.radius && RADIUS_MAP[style.radius] !== undefined)   parts.push(`--fs-radius:${RADIUS_MAP[style.radius]}`);
+  if (style.border && BORDER_MAP[style.border] !== undefined)   parts.push(`--fs-border:${BORDER_MAP[style.border]}`);
+  if (style.max_width && WIDTH_MAP[style.max_width] !== undefined) parts.push(`--fs-max-width:${WIDTH_MAP[style.max_width]}`);
+  if (style.gap && GAP_MAP[style.gap] !== undefined)            parts.push(`--fs-gap:${GAP_MAP[style.gap]}`);
+  if (style.width_pct)                                          parts.push(`--fs-width:${style.width_pct}%`);
+  if (style.height_mode === 'short')      parts.push(`--fs-height:200px`);
+  else if (style.height_mode === 'tall')  parts.push(`--fs-height:480px`);
+  else if (style.height_mode === 'cover') parts.push(`--fs-height:100vh`);
+  return parts.length ? parts.join(';') + ';' : '';
+}
+
+/** Inject the CSS that makes the --fs-* variables actually do something. Idempotent. */
+function injectStyleEngineCss(){
+  if (document.getElementById('fs-style-engine-css')) return;
+  const css = `
+  [data-style-id]{
+    font-size:var(--fs-text-size,inherit);
+    color:var(--fs-text-color,inherit);
+    text-align:var(--fs-text-align,inherit);
+    background:var(--fs-bg,transparent);
+    padding-top:var(--fs-pad-top,0);
+    padding-bottom:var(--fs-pad-bot,0);
+    padding-left:var(--fs-pad-left,0);
+    padding-right:var(--fs-pad-right,0);
+    border-radius:var(--fs-radius,inherit);
+    border:var(--fs-border,initial);
+    width:var(--fs-width,auto);
+    max-width:var(--fs-max-width,none);
+  }
+  /* Section-level styling */
+  [data-section-style]{
+    background:var(--fs-sec-bg,transparent);
+    padding-top:var(--fs-sec-pad-top,clamp(60px,10vh,100px));
+    padding-bottom:var(--fs-sec-pad-bot,clamp(60px,10vh,100px));
+    background-image:var(--fs-sec-bg-image,none);
+    background-size:cover;
+    background-position:center;
+  }
+  [data-section-style] .sec-inner{
+    max-width:var(--fs-sec-width,1100px);
+  }
+  /* Section-style overrides for top-divider visibility */
+  [data-section-style][data-divider="off"]{border-top:none !important}
+  /* Image element width pct + height mode */
+  img[data-style-id]{
+    width:var(--fs-width,100%);
+    height:var(--fs-height,auto);
+    object-fit:cover;
+  }
+  `;
+  const s = document.createElement('style');
+  s.id = 'fs-style-engine-css';
+  s.textContent = css;
+  document.head.appendChild(s);
+}
+
+/** Build an attribute string `data-style-id="x" style="--fs-...:..."` for an element.
+ *  styles object is the section's element_styles. */
+function styleAttrs(key, styles){
+  const s = styles?.[key];
+  const styleStr = elementStyleVars(s);
+  return `data-style-id="${key}"${styleStr ? ` style="${styleStr}"` : ''}`;
+}
+
+/** Build the section-level style string for the outer <section> element. */
+function sectionStyleAttrs(sectionStyle){
+  if (!sectionStyle || typeof sectionStyle !== 'object') return 'data-section-style';
+  const parts = [];
+  if (sectionStyle.bg)        parts.push(`--fs-sec-bg:${resolveColor(sectionStyle.bg)}`);
+  if (sectionStyle.bg_image)  parts.push(`--fs-sec-bg-image:url('${String(sectionStyle.bg_image).replace(/'/g,"\\'")}')`);
+  if (sectionStyle.padding_top    && PAD_MAP[sectionStyle.padding_top]    !== undefined) parts.push(`--fs-sec-pad-top:${PAD_MAP[sectionStyle.padding_top]}`);
+  if (sectionStyle.padding_bottom && PAD_MAP[sectionStyle.padding_bottom] !== undefined) parts.push(`--fs-sec-pad-bot:${PAD_MAP[sectionStyle.padding_bottom]}`);
+  if (sectionStyle.width      && WIDTH_MAP[sectionStyle.width]   !== undefined) parts.push(`--fs-sec-width:${WIDTH_MAP[sectionStyle.width]}`);
+  const styleStr = parts.length ? ` style="${parts.join(';')}"` : '';
+  const divider = sectionStyle.divider_top === false ? ' data-divider="off"' : '';
+  return `data-section-style${divider}${styleStr}`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SECTION RENDERERS — each takes (props, biz, styles) and returns HTML
+   Styles is the section's element_styles object — keyed by element id.
+═══════════════════════════════════════════════════════════ */
 const SECTION_RENDERERS = {
+  page_header(p, biz){
+    const useBrand = p.use_business_brand !== false;
+    const brandName  = useBrand ? (biz?.name || 'The Francis Smokehouse')  : (p.brand_text || '');
+    const brandEm    = useBrand ? 'Smokehouse'                              : (p.brand_text_em || '');
+    // For "Smokehouse" emphasis on the auto brand, split known business names
+    let brandHtml = '';
+    if (useBrand && brandName) {
+      // Split at the last word, italicize it
+      const parts = brandName.trim().split(/\s+/);
+      if (parts.length > 1) {
+        brandHtml = parts.slice(0, -1).join(' ') + ' <em>' + parts[parts.length - 1] + '</em>';
+      } else {
+        brandHtml = escHtml(brandName);
+      }
+    } else if (p.brand_text || p.brand_text_em) {
+      brandHtml = escHtml(p.brand_text || '') + (p.brand_text_em ? ' <em>' + escHtml(p.brand_text_em) + '</em>' : '');
+    }
+    const tagline = (p.use_business_tagline !== false)
+      ? '& Specialty Meats · St. Francisville, LA'
+      : (p.tagline_text || '');
+    return `
+      <section class="page-header-sec">
+        <a class="ph-back" href="${escHtml(p.back_href||'../index.html')}" ${styleAttrs('back_text', p.__styles)}>${escHtml(p.back_text||'← Back')}</a>
+        <div class="ph-center">
+          <a class="ph-brand" href="${escHtml(p.back_href||'../index.html')}" ${styleAttrs('brand', p.__styles)}>${brandHtml || '<span style="opacity:.4">(brand)</span>'}</a>
+          ${tagline ? `<div class="ph-sub" ${styleAttrs('tagline', p.__styles)}>${escHtml(tagline)}</div>` : ''}
+        </div>
+        <a class="ph-right" href="${escHtml(p.right_href||'../menu.html')}" ${styleAttrs('right_text', p.__styles)}>${escHtml(p.right_text||'See Menu →')}</a>
+      </section>
+    `;
+  },
+
   hero(p, biz){
     const phone = biz?.phone || '';
     const fbUrl = biz?.socials?.facebook || '';
@@ -667,46 +830,64 @@ const SECTION_RENDERERS = {
     const titleHtml = (Array.isArray(p.title_lines) ? p.title_lines : []).map(l => emFormat(l)).join('<br>');
     const primaryHref = p.cta_primary_use_phone && phone ? `tel:${phone.replace(/[^0-9+]/g,'')}` : (p.cta_primary_href || '#');
     const secondaryHref = p.cta_secondary_use_facebook && fbUrl ? fbUrl : (p.cta_secondary_href || '#');
+    const styles = p.__styles || {};
     return `
       <section id="hero">
-        ${p.ghost ? `<div id="hero-ghost">${escHtml(p.ghost)}</div>` : ''}
+        ${p.ghost ? `<div id="hero-ghost" ${styleAttrs('ghost', styles)}>${escHtml(p.ghost)}</div>` : ''}
         <div id="hero-left">
-          ${p.eyebrow ? `<div id="hero-eyebrow">${escHtml(p.eyebrow)}</div>` : ''}
-          <h1 id="hero-title">${titleHtml}</h1>
+          ${p.eyebrow ? `<div id="hero-eyebrow" ${styleAttrs('eyebrow', styles)}>${escHtml(p.eyebrow)}</div>` : ''}
+          <h1 id="hero-title" ${styleAttrs('title_lines', styles)}>${titleHtml}</h1>
           <div id="hero-rule"></div>
-          ${p.lead ? `<p id="hero-lead">${escHtml(p.lead)}</p>` : ''}
+          ${p.lead ? `<p id="hero-lead" ${styleAttrs('lead', styles)}>${escHtml(p.lead)}</p>` : ''}
         </div>
         <div id="hero-right">
-          ${p.card_label ? `<div class="hc-label">${escHtml(p.card_label)}</div>` : ''}
-          ${p.card_title ? `<div class="hc-title">${escHtml(p.card_title)}</div>` : ''}
-          ${p.card_sub ? `<div class="hc-sub">${escHtml(p.card_sub)}</div>` : ''}
+          ${p.card_label ? `<div class="hc-label" ${styleAttrs('card_label', styles)}>${escHtml(p.card_label)}</div>` : ''}
+          ${p.card_title ? `<div class="hc-title" ${styleAttrs('card_title', styles)}>${escHtml(p.card_title)}</div>` : ''}
+          ${p.card_sub ? `<div class="hc-sub" ${styleAttrs('card_sub', styles)}>${escHtml(p.card_sub)}</div>` : ''}
           <div class="hc-contact-row">
             ${phone ? `<div class="hc-row"><div class="hc-icon">📞</div><div class="hc-info"><span class="hc-info-label">Phone</span><span class="hc-info-val">${escHtml(phone)}</span></div></div>` : ''}
             ${fbUrl ? `<div class="hc-row"><div class="hc-icon">📘</div><div class="hc-info"><span class="hc-info-label">Facebook</span><span class="hc-info-val">${escHtml(biz?.name || 'Message us')}</span></div></div>` : ''}
             ${hoursLabel ? `<div class="hc-row"><div class="hc-icon">🕙</div><div class="hc-info"><span class="hc-info-label">Hours</span><span class="hc-info-val">${escHtml(hoursLabel)}</span></div></div>` : ''}
           </div>
-          ${p.cta_primary_text ? `<a href="${escHtml(primaryHref)}" class="btn-fire">${escHtml(p.cta_primary_text)}${p.cta_primary_use_phone && phone ? ` — ${escHtml(phone)}` : ''}</a>` : ''}
-          ${p.cta_secondary_text ? `<a href="${escHtml(secondaryHref)}" target="_blank" rel="noopener" class="btn-ghost">${escHtml(p.cta_secondary_text)}</a>` : ''}
+          ${p.cta_primary_text ? `<a href="${escHtml(primaryHref)}" class="btn-fire" ${styleAttrs('cta_primary_text', styles)}>${escHtml(p.cta_primary_text)}${p.cta_primary_use_phone && phone ? ` — ${escHtml(phone)}` : ''}</a>` : ''}
+          ${p.cta_secondary_text ? `<a href="${escHtml(secondaryHref)}" target="_blank" rel="noopener" class="btn-ghost" ${styleAttrs('cta_secondary_text', styles)}>${escHtml(p.cta_secondary_text)}</a>` : ''}
+        </div>
+      </section>
+    `;
+  },
+
+  hero_image(p, biz){
+    const styles = p.__styles || {};
+    const titleHtml = (Array.isArray(p.title_lines) ? p.title_lines : []).map(l => emFormat(l)).join('<br>');
+    return `
+      <section class="hero-image-section">
+        <div class="hi-bg" style="${p.image ? `background-image:url('${escHtml(p.image)}')` : ''}"></div>
+        <div class="hi-overlay"></div>
+        <div class="hi-content">
+          ${p.eyebrow ? `<div class="hi-eyebrow" ${styleAttrs('eyebrow', styles)}>${escHtml(p.eyebrow)}</div>` : `<div class="hi-eyebrow" ${styleAttrs('eyebrow', styles)}></div>`}
+          <h1 class="hi-title" ${styleAttrs('title_lines', styles)}>${titleHtml || '<span style="opacity:.4">(add a title)</span>'}</h1>
+          ${p.lead ? `<p class="hi-lead" ${styleAttrs('lead', styles)}>${escHtml(p.lead)}</p>` : `<p class="hi-lead" ${styleAttrs('lead', styles)}></p>`}
         </div>
       </section>
     `;
   },
 
   feature_grid(p){
+    const styles = p.__styles || {};
     const items = (p.items || []).map((it, i) => `
-      <div class="offer-card reveal"${i ? ` style="transition-delay:.${(i*7).toString().padStart(2,'0')}s"` : ''}>
-        ${it.icon ? `<div class="oc-icon">${escHtml(it.icon)}</div>` : ''}
-        <div class="oc-title">${escHtml(it.title)}</div>
-        ${it.desc ? `<div class="oc-desc">${escHtml(it.desc)}</div>` : ''}
-        ${it.tag ? `<div class="oc-tag">${escHtml(it.tag)}</div>` : ''}
+      <div class="offer-card reveal">
+        ${it.icon ? `<div class="oc-icon" ${styleAttrs(`items.${i}.icon`, styles)}>${escHtml(it.icon)}</div>` : ''}
+        <div class="oc-title" ${styleAttrs(`items.${i}.title`, styles)}>${escHtml(it.title)}</div>
+        ${it.desc ? `<div class="oc-desc" ${styleAttrs(`items.${i}.desc`, styles)}>${escHtml(it.desc)}</div>` : ''}
+        ${it.tag ? `<div class="oc-tag" ${styleAttrs(`items.${i}.tag`, styles)}>${escHtml(it.tag)}</div>` : ''}
       </div>
     `).join('');
     return `
       <section class="section">
         <div class="sec-inner">
-          ${p.eyebrow ? `<div class="sec-eyebrow reveal">${escHtml(p.eyebrow)}</div>` : ''}
-          ${p.title ? `<h2 class="sec-title reveal">${emFormat(p.title)}</h2>` : ''}
-          ${p.subtitle ? `<p class="sec-sub reveal">${escHtml(p.subtitle)}</p>` : ''}
+          ${p.eyebrow ? `<div class="sec-eyebrow reveal" ${styleAttrs('eyebrow', styles)}>${escHtml(p.eyebrow)}</div>` : ''}
+          ${p.title ? `<h2 class="sec-title reveal" ${styleAttrs('title', styles)}>${emFormat(p.title)}</h2>` : ''}
+          ${p.subtitle ? `<p class="sec-sub reveal" ${styleAttrs('subtitle', styles)}>${escHtml(p.subtitle)}</p>` : ''}
           <div class="offer-grid">${items}</div>
         </div>
       </section>
@@ -714,21 +895,22 @@ const SECTION_RENDERERS = {
   },
 
   dotted_list(p){
+    const styles = p.__styles || {};
     const items = (p.items || []).map((it, i) => `
-      <div class="mo-item reveal"${i ? ` style="transition-delay:.${(i*6).toString().padStart(2,'0')}s"` : ''}>
+      <div class="mo-item reveal">
         <div class="mo-dot"></div>
         <div class="mo-text">
-          <div class="mo-name">${escHtml(it.name)}</div>
-          ${it.desc ? `<div class="mo-desc">${escHtml(it.desc)}</div>` : ''}
+          <div class="mo-name" ${styleAttrs(`items.${i}.name`, styles)}>${escHtml(it.name)}</div>
+          ${it.desc ? `<div class="mo-desc" ${styleAttrs(`items.${i}.desc`, styles)}>${escHtml(it.desc)}</div>` : ''}
         </div>
       </div>
     `).join('');
     return `
       <section class="section">
         <div class="sec-inner">
-          ${p.eyebrow ? `<div class="sec-eyebrow reveal">${escHtml(p.eyebrow)}</div>` : ''}
-          ${p.title ? `<h2 class="sec-title reveal">${emFormat(p.title)}</h2>` : ''}
-          ${p.subtitle ? `<p class="sec-sub reveal">${escHtml(p.subtitle)}</p>` : ''}
+          ${p.eyebrow ? `<div class="sec-eyebrow reveal" ${styleAttrs('eyebrow', styles)}>${escHtml(p.eyebrow)}</div>` : ''}
+          ${p.title ? `<h2 class="sec-title reveal" ${styleAttrs('title', styles)}>${emFormat(p.title)}</h2>` : ''}
+          ${p.subtitle ? `<p class="sec-sub reveal" ${styleAttrs('subtitle', styles)}>${escHtml(p.subtitle)}</p>` : ''}
           <div class="menu-opts">${items}</div>
         </div>
       </section>
@@ -736,19 +918,20 @@ const SECTION_RENDERERS = {
   },
 
   steps(p){
+    const styles = p.__styles || {};
     const items = (p.items || []).map((it, i) => `
-      <div class="step-item reveal"${i ? ` style="transition-delay:.${(i+1)}s"` : ''}>
+      <div class="step-item reveal">
         <div class="step-num">${String(i+1).padStart(2,'0')}</div>
-        <div class="step-title">${escHtml(it.title)}</div>
-        ${it.desc ? `<div class="step-desc">${escHtml(it.desc)}</div>` : ''}
+        <div class="step-title" ${styleAttrs(`items.${i}.title`, styles)}>${escHtml(it.title)}</div>
+        ${it.desc ? `<div class="step-desc" ${styleAttrs(`items.${i}.desc`, styles)}>${escHtml(it.desc)}</div>` : ''}
       </div>
     `).join('');
     return `
       <section class="section">
         <div class="sec-inner">
-          ${p.eyebrow ? `<div class="sec-eyebrow reveal">${escHtml(p.eyebrow)}</div>` : ''}
-          ${p.title ? `<h2 class="sec-title reveal">${emFormat(p.title)}</h2>` : ''}
-          ${p.subtitle ? `<p class="sec-sub reveal">${escHtml(p.subtitle)}</p>` : ''}
+          ${p.eyebrow ? `<div class="sec-eyebrow reveal" ${styleAttrs('eyebrow', styles)}>${escHtml(p.eyebrow)}</div>` : ''}
+          ${p.title ? `<h2 class="sec-title reveal" ${styleAttrs('title', styles)}>${emFormat(p.title)}</h2>` : ''}
+          ${p.subtitle ? `<p class="sec-sub reveal" ${styleAttrs('subtitle', styles)}>${escHtml(p.subtitle)}</p>` : ''}
           <div class="steps">${items}</div>
         </div>
       </section>
@@ -756,53 +939,185 @@ const SECTION_RENDERERS = {
   },
 
   testimonials(p){
+    const styles = p.__styles || {};
     const stars5 = n => '★'.repeat(Math.max(0, Math.min(5, n||5)));
     const items = (p.items || []).map((it, i) => `
-      <div class="t-card reveal"${i ? ` style="transition-delay:.${(i*8).toString().padStart(2,'0')}s"` : ''}>
+      <div class="t-card reveal">
         <div class="t-stars">${stars5(it.stars)}</div>
-        ${it.quote ? `<p class="t-quote">${escHtml(it.quote)}</p>` : ''}
-        ${it.source ? `<div class="t-src">${escHtml(it.source)}</div>` : ''}
+        ${it.quote ? `<p class="t-quote" ${styleAttrs(`items.${i}.quote`, styles)}>${escHtml(it.quote)}</p>` : ''}
+        ${it.source ? `<div class="t-src" ${styleAttrs(`items.${i}.source`, styles)}>${escHtml(it.source)}</div>` : ''}
       </div>
     `).join('');
     return `
       <section class="section">
         <div class="sec-inner">
-          ${p.eyebrow ? `<div class="sec-eyebrow reveal">${escHtml(p.eyebrow)}</div>` : ''}
-          ${p.title ? `<h2 class="sec-title reveal">${emFormat(p.title)}</h2>` : ''}
-          ${p.subtitle ? `<p class="sec-sub reveal">${escHtml(p.subtitle)}</p>` : ''}
+          ${p.eyebrow ? `<div class="sec-eyebrow reveal" ${styleAttrs('eyebrow', styles)}>${escHtml(p.eyebrow)}</div>` : ''}
+          ${p.title ? `<h2 class="sec-title reveal" ${styleAttrs('title', styles)}>${emFormat(p.title)}</h2>` : ''}
+          ${p.subtitle ? `<p class="sec-sub reveal" ${styleAttrs('subtitle', styles)}>${escHtml(p.subtitle)}</p>` : ''}
           <div class="testimonials">${items}</div>
         </div>
       </section>
     `;
   },
 
+  image_text(p){
+    const styles = p.__styles || {};
+    const reversed = p.image_side === 'right';
+    return `
+      <section class="section">
+        <div class="sec-inner it-wrap${reversed ? ' it-rev' : ''}">
+          <div class="it-image">
+            ${p.image ? `<img src="${escHtml(p.image)}" alt="${escHtml(p.image_alt||'')}" ${styleAttrs('image', styles)}>` : '<div class="it-image-empty">(add an image)</div>'}
+          </div>
+          <div class="it-text">
+            ${p.eyebrow ? `<div class="sec-eyebrow" ${styleAttrs('eyebrow', styles)}>${escHtml(p.eyebrow)}</div>` : `<div class="sec-eyebrow" ${styleAttrs('eyebrow', styles)}></div>`}
+            <h2 class="sec-title" ${styleAttrs('title', styles)}>${emFormat(p.title || '')}</h2>
+            <div class="it-body" ${styleAttrs('body', styles)}>${escHtml(p.body || '').replace(/\n/g, '<br>')}</div>
+          </div>
+        </div>
+      </section>
+    `;
+  },
+
+  gallery(p){
+    const styles = p.__styles || {};
+    const items = (p.items || []).map((it, i) => `
+      <div class="gal-item">
+        ${it.image ? `<img src="${escHtml(it.image)}" alt="${escHtml(it.caption||'')}" loading="lazy" ${styleAttrs(`items.${i}.image`, styles)}>` : '<div class="gal-item-empty">image</div>'}
+        ${it.caption ? `<div class="gal-cap" ${styleAttrs(`items.${i}.caption`, styles)}>${escHtml(it.caption)}</div>` : ''}
+      </div>
+    `).join('');
+    return `
+      <section class="section">
+        <div class="sec-inner">
+          ${p.eyebrow ? `<div class="sec-eyebrow" ${styleAttrs('eyebrow', styles)}>${escHtml(p.eyebrow)}</div>` : `<div class="sec-eyebrow" ${styleAttrs('eyebrow', styles)}></div>`}
+          ${p.title ? `<h2 class="sec-title" ${styleAttrs('title', styles)}>${emFormat(p.title)}</h2>` : `<h2 class="sec-title" ${styleAttrs('title', styles)}></h2>`}
+          ${p.subtitle ? `<p class="sec-sub" ${styleAttrs('subtitle', styles)}>${escHtml(p.subtitle)}</p>` : ''}
+          <div class="gallery-grid">${items || '<div class="gal-item-empty" style="padding:60px;text-align:center;width:100%">No images yet</div>'}</div>
+        </div>
+      </section>
+    `;
+  },
+
+  faq(p){
+    const styles = p.__styles || {};
+    const items = (p.items || []).map((it, i) => `
+      <details class="faq-item" ${i === 0 ? 'open' : ''}>
+        <summary class="faq-q" ${styleAttrs(`items.${i}.q`, styles)}>${escHtml(it.q || '')}</summary>
+        <div class="faq-a" ${styleAttrs(`items.${i}.a`, styles)}>${escHtml(it.a || '').replace(/\n/g, '<br>')}</div>
+      </details>
+    `).join('');
+    return `
+      <section class="section">
+        <div class="sec-inner">
+          ${p.eyebrow ? `<div class="sec-eyebrow" ${styleAttrs('eyebrow', styles)}>${escHtml(p.eyebrow)}</div>` : `<div class="sec-eyebrow" ${styleAttrs('eyebrow', styles)}></div>`}
+          ${p.title ? `<h2 class="sec-title" ${styleAttrs('title', styles)}>${emFormat(p.title)}</h2>` : `<h2 class="sec-title" ${styleAttrs('title', styles)}></h2>`}
+          ${p.subtitle ? `<p class="sec-sub" ${styleAttrs('subtitle', styles)}>${escHtml(p.subtitle)}</p>` : ''}
+          <div class="faq-list">${items}</div>
+        </div>
+      </section>
+    `;
+  },
+
+  video(p){
+    const styles = p.__styles || {};
+    let embedUrl = '';
+    if (p.url) {
+      const url = String(p.url).trim();
+      let m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      if (m) embedUrl = `https://www.youtube.com/embed/${m[1]}`;
+      else if (/^[a-zA-Z0-9_-]{11}$/.test(url)) embedUrl = `https://www.youtube.com/embed/${url}`;
+      else {
+        m = url.match(/vimeo\.com\/(\d+)/);
+        if (m) embedUrl = `https://player.vimeo.com/video/${m[1]}`;
+      }
+    }
+    return `
+      <section class="section">
+        <div class="sec-inner">
+          ${p.eyebrow ? `<div class="sec-eyebrow" ${styleAttrs('eyebrow', styles)}>${escHtml(p.eyebrow)}</div>` : `<div class="sec-eyebrow" ${styleAttrs('eyebrow', styles)}></div>`}
+          ${p.title ? `<h2 class="sec-title" ${styleAttrs('title', styles)}>${emFormat(p.title)}</h2>` : `<h2 class="sec-title" ${styleAttrs('title', styles)}></h2>`}
+          ${p.subtitle ? `<p class="sec-sub" ${styleAttrs('subtitle', styles)}>${escHtml(p.subtitle)}</p>` : ''}
+          <div class="video-wrap">
+            ${embedUrl
+              ? `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+              : '<div class="video-empty">(paste a YouTube or Vimeo URL)</div>'}
+          </div>
+        </div>
+      </section>
+    `;
+  },
+
+  divider(p){
+    const styles = p.__styles || {};
+    return `
+      <section class="divider-section">
+        <div class="sec-inner">
+          <div class="divider-line"></div>
+          ${p.label ? `<div class="divider-label" ${styleAttrs('label', styles)}>${escHtml(p.label)}</div><div class="divider-line"></div>` : ''}
+        </div>
+      </section>
+    `;
+  },
+
   cta_phone(p, biz){
+    const styles = p.__styles || {};
     const phone = biz?.phone || '';
     const fbUrl = biz?.socials?.facebook || '';
     const hoursLabel = biz?.hours_label || '';
     const titleHtml = (Array.isArray(p.title_lines) ? p.title_lines : []).map(l => emFormat(l)).join('<br>');
     const phoneHref = p.use_business_phone && phone ? `tel:${phone.replace(/[^0-9+]/g,'')}` : (p.phone_href || '#');
-    const prepItems = Array.isArray(p.prep_items) ? p.prep_items : [
-      'Event date — and a backup date if you have one',
-      'Headcount — even a rough estimate helps us quote',
-      "What you're thinking — brisket, pulled pork, ribs, sides",
-      'Pickup or delivery — and where the event is'
-    ];
+    const prepItems = Array.isArray(p.prep_items) ? p.prep_items : [];
     return `
       <section id="cta-section">
         <div class="cta-wrap">
-          ${p.eyebrow ? `<div class="cta-eyebrow reveal">${escHtml(p.eyebrow)}</div>` : ''}
-          <h2 class="cta-title reveal">${titleHtml}</h2>
-          ${p.subtitle ? `<p class="cta-sub reveal">${escHtml(p.subtitle)}</p>` : ''}
+          ${p.eyebrow ? `<div class="cta-eyebrow reveal" ${styleAttrs('eyebrow', styles)}>${escHtml(p.eyebrow)}</div>` : ''}
+          <h2 class="cta-title reveal" ${styleAttrs('title_lines', styles)}>${titleHtml}</h2>
+          ${p.subtitle ? `<p class="cta-sub reveal" ${styleAttrs('subtitle', styles)}>${escHtml(p.subtitle)}</p>` : ''}
           ${phone ? `<a href="${escHtml(phoneHref)}" class="big-call-btn reveal"><span class="phone-emoji">${escHtml(p.button_emoji||'📞')}</span><span>${escHtml(phone)}</span></a>` : ''}
           ${hoursLabel ? `<div class="cta-hours reveal"><span class="cta-hours-dot"></span><span>${escHtml(hoursLabel)}</span></div>` : ''}
-          ${prepItems.length ? `<div class="cta-prep reveal"><div class="cta-prep-title">Have this ready when you call</div><ul class="cta-prep-list">${prepItems.map(it => `<li>${escHtml(it)}</li>`).join('')}</ul></div>` : ''}
-          ${p.use_business_facebook && fbUrl ? `<div class="cta-or-fb reveal">or</div><a href="${escHtml(fbUrl)}" target="_blank" rel="noopener" class="cta-fb-btn reveal"><span>📘</span><span>${escHtml(p.facebook_text||'Message us on Facebook')}</span></a>` : ''}
+          ${prepItems.length ? `<div class="cta-prep reveal"><div class="cta-prep-title">Have this ready when you call</div><ul class="cta-prep-list">${prepItems.map((it,i) => `<li ${styleAttrs(`prep_items.${i}`, styles)}>${escHtml(it)}</li>`).join('')}</ul></div>` : ''}
+          ${p.use_business_facebook && fbUrl ? `<div class="cta-or-fb reveal">or</div><a href="${escHtml(fbUrl)}" target="_blank" rel="noopener" class="cta-fb-btn reveal" ${styleAttrs('facebook_text', styles)}><span>📘</span><span>${escHtml(p.facebook_text||'Message us on Facebook')}</span></a>` : ''}
         </div>
       </section>
     `;
   }
 };
+
+/* ─── Section wrapper — applies section_style to outer <section> ─── */
+function renderSection(s, biz){
+  const fn = SECTION_RENDERERS[s.type];
+  if (!fn) return '';
+  // Pass element_styles via __styles on the props (avoids changing renderer signature)
+  const propsWithStyles = { ...(s.props || {}), __styles: s.element_styles || {} };
+  let html = '';
+  try { html = fn(propsWithStyles, biz); } catch(e) { console.error(e); return ''; }
+  // Inject section_style attributes onto the outer <section>
+  const sa = sectionStyleAttrs(s.section_style);
+  html = html.replace(/^(\s*<section)/, `$1 ${sa}`);
+  return html;
+}
+
+/* ─── CSS for page_header section ─── */
+function injectPageHeaderCss(){
+  if (document.getElementById('fs-page-header-css')) return;
+  const css = `
+  .page-header-sec{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:clamp(12px,1.8vh,18px) clamp(20px,5vw,60px);background:rgba(9,7,4,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(196,160,112,.09)}
+  .page-header-sec .ph-back{font-family:var(--cond);font-weight:600;font-size:var(--fs-text-size,10px);letter-spacing:.22em;text-transform:uppercase;color:var(--fs-text-color,rgba(196,160,112,.68));border:var(--fs-border,1px solid rgba(196,160,112,.32));padding:7px 16px;border-radius:var(--fs-radius,2px);text-decoration:none;transition:all .3s}
+  .page-header-sec .ph-back:hover{border-color:rgba(255,153,48,.45);color:var(--flame)}
+  .page-header-sec .ph-center{text-align:center}
+  .page-header-sec .ph-brand{font-family:var(--serif);font-weight:700;font-size:var(--fs-text-size,clamp(14px,2vw,22px));color:var(--fs-text-color,var(--cream));text-decoration:none;text-shadow:0 0 30px rgba(255,153,48,.15)}
+  .page-header-sec .ph-brand em{font-style:italic;font-weight:400;color:var(--flame)}
+  .page-header-sec .ph-sub{font-family:var(--cond);font-size:var(--fs-text-size,8px);letter-spacing:.28em;text-transform:uppercase;color:var(--fs-text-color,rgba(196,160,112,.45));margin-top:2px}
+  .page-header-sec .ph-right{font-family:var(--cond);font-weight:600;font-size:var(--fs-text-size,10px);letter-spacing:.22em;text-transform:uppercase;color:var(--fs-text-color,rgba(196,160,112,.68));border:var(--fs-border,1px solid rgba(196,160,112,.32));padding:7px 16px;border-radius:var(--fs-radius,2px);text-decoration:none;transition:all .3s}
+  .page-header-sec .ph-right:hover{border-color:rgba(255,153,48,.45);color:var(--flame)}
+  `;
+  const s = document.createElement('style');
+  s.id = 'fs-page-header-css';
+  s.textContent = css;
+  document.head.appendChild(s);
+}
+
 
 async function renderPage(){
   const root = document.getElementById('page-root');
@@ -818,155 +1133,25 @@ async function renderPage(){
     return;
   }
   const sections = (page.sections || []).filter(s => !s.hidden);
-  root.innerHTML = sections.map(s => {
-    const fn = SECTION_RENDERERS[s.type];
-    if (!fn) {
-      console.warn(`Unknown section type: ${s.type}`);
-      return '';
-    }
-    try { return fn(s.props || {}, biz); }
-    catch(e) { console.error(`Render error in section ${s.id} (${s.type}):`, e); return ''; }
-  }).join('');
+  root.innerHTML = sections.map(s => renderSection(s, biz)).join('');
 
-  // After render, also update the sticky call button + footer (uses business info)
   if (biz?.phone) {
     const sc = document.getElementById('sticky-call');
     if (sc) sc.href = 'tel:' + biz.phone.replace(/[^0-9+]/g,'');
   }
-  // Mark new .reveal elements visible. The original IntersectionObserver ran before
-  // these elements existed, so they'd stay opacity:0 forever otherwise.
-  // We attach a fresh observer here so the scroll-fade still works for elements
-  // below the fold.
   if (typeof IntersectionObserver !== 'undefined') {
     const fade = new IntersectionObserver((entries, obs) => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }});
     }, { threshold: .1, rootMargin: '0px 0px -30px 0px' });
     document.querySelectorAll('.reveal:not(.in)').forEach(el => {
-      // Anything already in the viewport on first render should be visible immediately
       const r = el.getBoundingClientRect();
       if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('in');
       else fade.observe(el);
     });
   } else {
-    // No IntersectionObserver: just show everything
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
   }
 }
-
-/* ── ADDITIONAL SECTION TYPES ────────────────────────── */
-
-SECTION_RENDERERS.hero_image = function(p, biz){
-  const titleHtml = (Array.isArray(p.title_lines) ? p.title_lines : []).map(l => emFormat(l)).join('<br>');
-  return `
-    <section class="hero-image-section" data-section-id="">
-      <div class="hi-bg" style="${p.image ? `background-image:url('${escHtml(p.image)}')` : ''}"></div>
-      <div class="hi-overlay"></div>
-      <div class="hi-content">
-        ${p.eyebrow ? `<div class="hi-eyebrow" data-edit="eyebrow">${escHtml(p.eyebrow)}</div>` : '<div class="hi-eyebrow" data-edit="eyebrow"></div>'}
-        <h1 class="hi-title" data-edit="title_lines">${titleHtml || '<span style="opacity:.4">(add a title)</span>'}</h1>
-        ${p.lead ? `<p class="hi-lead" data-edit="lead">${escHtml(p.lead)}</p>` : '<p class="hi-lead" data-edit="lead"></p>'}
-      </div>
-    </section>
-  `;
-};
-
-SECTION_RENDERERS.image_text = function(p){
-  const reversed = p.image_side === 'right';
-  return `
-    <section class="section">
-      <div class="sec-inner it-wrap${reversed ? ' it-rev' : ''}">
-        <div class="it-image">
-          ${p.image ? `<img src="${escHtml(p.image)}" alt="${escHtml(p.image_alt||'')}">` : '<div class="it-image-empty">(add an image)</div>'}
-        </div>
-        <div class="it-text">
-          ${p.eyebrow ? `<div class="sec-eyebrow" data-edit="eyebrow">${escHtml(p.eyebrow)}</div>` : '<div class="sec-eyebrow" data-edit="eyebrow"></div>'}
-          <h2 class="sec-title" data-edit="title">${emFormat(p.title || '')}</h2>
-          <div class="it-body" data-edit="body">${escHtml(p.body || '').replace(/\n/g, '<br>')}</div>
-        </div>
-      </div>
-    </section>
-  `;
-};
-
-SECTION_RENDERERS.gallery = function(p){
-  const items = (p.items || []).map((it) => `
-    <div class="gal-item">
-      ${it.image ? `<img src="${escHtml(it.image)}" alt="${escHtml(it.caption||'')}" loading="lazy">` : '<div class="gal-item-empty">image</div>'}
-      ${it.caption ? `<div class="gal-cap">${escHtml(it.caption)}</div>` : ''}
-    </div>
-  `).join('');
-  return `
-    <section class="section">
-      <div class="sec-inner">
-        ${p.eyebrow ? `<div class="sec-eyebrow" data-edit="eyebrow">${escHtml(p.eyebrow)}</div>` : '<div class="sec-eyebrow" data-edit="eyebrow"></div>'}
-        ${p.title ? `<h2 class="sec-title" data-edit="title">${emFormat(p.title)}</h2>` : '<h2 class="sec-title" data-edit="title"></h2>'}
-        ${p.subtitle ? `<p class="sec-sub" data-edit="subtitle">${escHtml(p.subtitle)}</p>` : ''}
-        <div class="gallery-grid">${items || '<div class="gal-item-empty" style="padding:60px;text-align:center;width:100%">No images yet</div>'}</div>
-      </div>
-    </section>
-  `;
-};
-
-SECTION_RENDERERS.faq = function(p){
-  const items = (p.items || []).map((it, i) => `
-    <details class="faq-item" ${i === 0 ? 'open' : ''}>
-      <summary class="faq-q">${escHtml(it.q || '')}</summary>
-      <div class="faq-a">${escHtml(it.a || '').replace(/\n/g, '<br>')}</div>
-    </details>
-  `).join('');
-  return `
-    <section class="section">
-      <div class="sec-inner">
-        ${p.eyebrow ? `<div class="sec-eyebrow" data-edit="eyebrow">${escHtml(p.eyebrow)}</div>` : '<div class="sec-eyebrow" data-edit="eyebrow"></div>'}
-        ${p.title ? `<h2 class="sec-title" data-edit="title">${emFormat(p.title)}</h2>` : '<h2 class="sec-title" data-edit="title"></h2>'}
-        ${p.subtitle ? `<p class="sec-sub" data-edit="subtitle">${escHtml(p.subtitle)}</p>` : ''}
-        <div class="faq-list">${items}</div>
-      </div>
-    </section>
-  `;
-};
-
-SECTION_RENDERERS.video = function(p){
-  // Accept full YouTube URL, full Vimeo URL, or just the ID
-  let embedUrl = '';
-  if (p.url) {
-    const url = String(p.url).trim();
-    // YouTube
-    let m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-    if (m) embedUrl = `https://www.youtube.com/embed/${m[1]}`;
-    else if (/^[a-zA-Z0-9_-]{11}$/.test(url)) embedUrl = `https://www.youtube.com/embed/${url}`;
-    // Vimeo
-    else {
-      m = url.match(/vimeo\.com\/(\d+)/);
-      if (m) embedUrl = `https://player.vimeo.com/video/${m[1]}`;
-    }
-  }
-  return `
-    <section class="section">
-      <div class="sec-inner">
-        ${p.eyebrow ? `<div class="sec-eyebrow" data-edit="eyebrow">${escHtml(p.eyebrow)}</div>` : '<div class="sec-eyebrow" data-edit="eyebrow"></div>'}
-        ${p.title ? `<h2 class="sec-title" data-edit="title">${emFormat(p.title)}</h2>` : '<h2 class="sec-title" data-edit="title"></h2>'}
-        ${p.subtitle ? `<p class="sec-sub" data-edit="subtitle">${escHtml(p.subtitle)}</p>` : ''}
-        <div class="video-wrap">
-          ${embedUrl
-            ? `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
-            : '<div class="video-empty">(paste a YouTube or Vimeo URL)</div>'}
-        </div>
-      </div>
-    </section>
-  `;
-};
-
-SECTION_RENDERERS.divider = function(p){
-  return `
-    <section class="divider-section">
-      <div class="sec-inner">
-        <div class="divider-line"></div>
-        ${p.label ? `<div class="divider-label" data-edit="label">${escHtml(p.label)}</div><div class="divider-line"></div>` : ''}
-      </div>
-    </section>
-  `;
-};
 
 /* ─── Extra CSS for new section types — injected once at boot ─── */
 function injectExtraSectionStyles(){
@@ -1069,6 +1254,9 @@ function injectEditChrome(){
     body.fs-edit [data-edit]{cursor:text;outline:1px dashed transparent;outline-offset:3px;border-radius:3px}
     body.fs-edit [data-edit]:hover{outline-color:rgba(255,194,74,.4);background:rgba(255,153,48,.05)}
     body.fs-edit [data-edit]:focus{outline:2px solid var(--flame);background:rgba(255,153,48,.08);box-shadow:0 0 0 4px rgba(255,153,48,.15)}
+    body.fs-edit [data-style-id].fs-elem-selected{outline:2px solid var(--flame) !important;outline-offset:3px;box-shadow:0 0 0 5px rgba(255,153,48,.15)}
+    body.fs-edit img[data-style-id]{cursor:pointer}
+    body.fs-edit img[data-style-id]:hover{outline:1px dashed rgba(255,194,74,.6);outline-offset:3px}
     .fs-section-toolbar{position:absolute;top:-1px;right:-1px;display:flex;gap:1px;background:#1a1108;border:1px solid var(--flame);border-radius:0 0 0 6px;padding:4px;z-index:100;opacity:0;pointer-events:none;transition:opacity .12s}
     .fs-edit-section.selected .fs-section-toolbar,.fs-edit-section:hover .fs-section-toolbar{opacity:1;pointer-events:auto}
     .fs-tb-btn{background:transparent;border:1px solid transparent;color:#dcbe94;width:28px;height:28px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;font-family:var(--cond)}
@@ -1123,6 +1311,13 @@ function wireEditableText(){
         sec.classList.add('selected');
         postToParent('section-selected', { id: sec.dataset.sectionId, type: sec.dataset.sectionType });
       }
+      // Also tell parent which specific element is selected, so it can show per-element styling
+      document.querySelectorAll('[data-style-id].fs-elem-selected').forEach(e => e.classList.remove('fs-elem-selected'));
+      el.classList.add('fs-elem-selected');
+      postToParent('element-selected', {
+        sectionId: sec?.dataset.sectionId,
+        styleId: el.getAttribute('data-style-id') || field
+      });
     });
 
     let saveTimer;
@@ -1196,6 +1391,24 @@ function wireSectionInteractions(){
   });
   // Final drop zone after the last section
   root.appendChild(mkDropZone(sections.length));
+
+  // Image element selection — non-text elements with [data-style-id] are clickable
+  document.querySelectorAll('img[data-style-id], [data-style-id]:not([data-edit])').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      const sec = el.closest('.fs-edit-section');
+      if (!sec) return;
+      document.querySelectorAll('.fs-edit-section.selected').forEach(s => s.classList.remove('selected'));
+      sec.classList.add('selected');
+      document.querySelectorAll('[data-style-id].fs-elem-selected').forEach(e => e.classList.remove('fs-elem-selected'));
+      el.classList.add('fs-elem-selected');
+      postToParent('section-selected', { id: sec.dataset.sectionId, type: sec.dataset.sectionType });
+      postToParent('element-selected', {
+        sectionId: sec.dataset.sectionId,
+        styleId: el.getAttribute('data-style-id')
+      });
+    });
+  });
 }
 
 function mkDropZone(index){
@@ -1225,19 +1438,14 @@ async function renderFromMessage(page, biz){
   // In edit mode, render ALL sections including hidden ones, with a "hidden" badge
   const list = page.sections || [];
   root.innerHTML = list.map(s => {
-    const fn = SECTION_RENDERERS[s.type];
-    if (!fn) return `<div style="padding:40px;text-align:center;color:#dcbe94;background:rgba(22,12,4,.4);margin:14px 0;border:1px dashed rgba(196,160,112,.25);" class="fs-edit-section" data-section-id="${escHtml(s.id)}" data-section-type="${escHtml(s.type)}">Unknown section type: ${escHtml(s.type)}</div>`;
-    try {
-      let html = fn(s.props || {}, biz);
-      // If this section is hidden, dim it
-      if (s.hidden) {
-        html = html.replace(/^(<section[^>]*)/, '$1 data-hidden="1"');
-      }
-      return html;
-    } catch(e) {
-      console.error(e);
-      return '';
+    if (!SECTION_RENDERERS[s.type]) {
+      return `<div style="padding:40px;text-align:center;color:#dcbe94;background:rgba(22,12,4,.4);margin:14px 0;border:1px dashed rgba(196,160,112,.25);" class="fs-edit-section" data-section-id="${escHtml(s.id)}" data-section-type="${escHtml(s.type)}">Unknown section type: ${escHtml(s.type)}</div>`;
     }
+    let html = renderSection(s, biz);
+    if (s.hidden) {
+      html = html.replace(/^(\s*<section[^>]*)/, '$1 data-hidden="1"');
+    }
+    return html;
   }).join('');
   // Mark hidden sections visually
   document.querySelectorAll('[data-hidden="1"]').forEach(el => {
@@ -1245,9 +1453,7 @@ async function renderFromMessage(page, biz){
     el.style.position = 'relative';
     el.insertAdjacentHTML('afterbegin', '<div style="position:absolute;top:8px;left:8px;background:#1a1108;color:#dcbe94;padding:4px 10px;border:1px solid rgba(220,190,148,.25);border-radius:4px;font-family:var(--cond);font-size:9px;letter-spacing:.2em;text-transform:uppercase;z-index:50">Hidden</div>');
   });
-  // CRITICAL: make all .reveal elements visible immediately (no scroll fade in edit mode)
-  // Without this, content stays at opacity:0 forever because the IntersectionObserver
-  // was set up before these elements existed.
+  // Make all .reveal elements visible immediately in edit mode
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
   setupEditMode();
   if (biz?.phone) {
@@ -1257,6 +1463,8 @@ async function renderFromMessage(page, biz){
 }
 
 /* Boot */
+injectStyleEngineCss();
+injectPageHeaderCss();
 injectExtraSectionStyles();
 if (IS_EDIT) {
   document.body.classList.add('fs-edit');
