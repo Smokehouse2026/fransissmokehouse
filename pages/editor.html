@@ -716,6 +716,191 @@ body::before{
 }
 .btn-ghost:hover{border-color:var(--flame);color:var(--ink)}
 
+/* ═══ PAGE BUILDER ═══ */
+.pane-hdr-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pg-picker{
+  background:rgba(20,12,6,.6);
+  color:var(--ink);
+  border:1px solid var(--line-2);
+  border-radius:5px;
+  padding:8px 12px;
+  font-family:var(--sans);
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+}
+.pg-picker:focus{outline:none;border-color:var(--flame)}
+
+.pg-info{
+  background:rgba(255,153,48,.05);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:14px 18px;
+  margin-bottom:18px;
+  color:var(--ink-3);
+  font-size:13px;
+  line-height:1.5;
+}
+.pg-info strong{color:var(--flame)}
+
+.pg-section-list{
+  display:flex;flex-direction:column;gap:10px;
+  margin-bottom:18px;
+}
+
+.pg-section{
+  background:linear-gradient(180deg,var(--panel),var(--bg) 90%);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  overflow:hidden;
+}
+.pg-section.editing{
+  border-color:var(--flame);
+  box-shadow:0 0 0 2px rgba(255,153,48,.2);
+}
+.pg-section.hidden-section{opacity:.55}
+.pg-section.hidden-section .pg-sec-type::before{content:'HIDDEN · '; color:var(--ink-4); font-weight:500}
+
+.pg-sec-hdr{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;
+  cursor:pointer;
+  user-select:none;
+}
+.pg-sec-hdr:hover{background:rgba(255,153,48,.04)}
+
+.pg-sec-grip{
+  font-family:var(--mono);
+  font-size:14px;
+  color:var(--ink-4);
+  cursor:grab;
+}
+
+.pg-sec-info{flex:1;min-width:0}
+.pg-sec-type{
+  font-family:var(--sans);font-weight:700;
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--flame);
+}
+.pg-sec-summary{
+  font-family:var(--serif);
+  font-size:15px;
+  color:var(--ink);
+  margin-top:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.pg-sec-actions{display:flex;align-items:center;gap:4px}
+.pg-sec-btn{
+  background:transparent;border:1px solid transparent;
+  color:var(--ink-3);
+  width:28px;height:28px;
+  border-radius:4px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;
+  transition:all .15s;
+}
+.pg-sec-btn:hover{background:rgba(255,153,48,.1);border-color:var(--line-2);color:var(--ink)}
+.pg-sec-btn:disabled{opacity:.3;cursor:not-allowed}
+.pg-sec-btn.danger:hover{background:rgba(214,84,71,.15);border-color:var(--red);color:var(--red)}
+
+.pg-sec-body{
+  padding:18px;
+  border-top:1px solid var(--line);
+  background:rgba(20,12,6,.3);
+}
+
+.pg-add-btn{
+  width:100%;
+  background:transparent;
+  border:2px dashed var(--line-2);
+  color:var(--ink-3);
+  padding:18px;
+  border-radius:8px;
+  cursor:pointer;
+  font-family:var(--sans);font-weight:700;
+  font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  transition:all .2s;
+}
+.pg-add-btn:hover{
+  border-color:var(--flame);
+  color:var(--flame);
+  background:rgba(255,153,48,.05);
+}
+
+.pg-add-menu{
+  margin-top:10px;
+  background:linear-gradient(180deg,var(--panel),var(--bg) 90%);
+  border:1px solid var(--flame);
+  border-radius:8px;
+  padding:10px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:8px;
+}
+.pg-add-type{
+  background:rgba(20,12,6,.4);
+  border:1px solid var(--line);
+  color:var(--ink);
+  padding:14px;
+  border-radius:6px;
+  cursor:pointer;
+  text-align:left;
+  transition:all .15s;
+}
+.pg-add-type:hover{border-color:var(--flame);background:rgba(255,153,48,.06)}
+.pg-add-type-name{
+  font-family:var(--serif);
+  font-size:14px;
+  color:var(--ink);
+  margin-bottom:4px;
+}
+.pg-add-type-desc{
+  font-family:var(--sans);
+  font-size:11px;
+  color:var(--ink-4);
+  line-height:1.4;
+}
+
+.pg-array-item{
+  background:rgba(20,12,6,.5);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:14px;
+  margin-bottom:10px;
+}
+.pg-array-item-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--line);
+}
+.pg-array-item-title{
+  font-family:var(--sans);font-weight:700;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+.pg-array-item-actions{display:flex;gap:4px}
+
+.pg-array-add{
+  background:transparent;
+  border:1px dashed var(--line-2);
+  color:var(--ink-3);
+  padding:10px;
+  border-radius:5px;
+  cursor:pointer;
+  font-family:var(--sans);font-weight:600;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  width:100%;
+  margin-top:4px;
+  transition:all .15s;
+}
+.pg-array-add:hover{border-color:var(--flame);color:var(--flame)}
+
+.pg-lines-input{
+  display:flex;flex-direction:column;gap:6px;
+}
+.pg-lines-input input{margin:0}
+
 .modal-actions{
   display:flex;justify-content:space-between;gap:10px;
   margin-top:26px;padding-top:22px;
@@ -1508,6 +1693,10 @@ body.hp-fullscreen{overflow:hidden}
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
         <span>Business Info</span>
       </button>
+      <button class="tab" data-pane="pages">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/></svg></span>
+        <span>Pages</span>
+      </button>
       <button class="tab" data-pane="staff">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.8"/><path d="M15 20c0-2 .8-3.8 2-5 1.2 1.2 2 3 2 5"/></svg></span>
         <span>Staff Users</span>
@@ -1615,6 +1804,24 @@ body.hp-fullscreen{overflow:hidden}
           <button class="btn btn-primary" id="biz-save">Save</button>
         </div>
         <div id="business-block" class="loading">Loading…</div>
+      </section>
+
+      <!-- PAGES PANE -->
+      <section class="pane" id="pane-pages">
+        <div class="pane-hdr">
+          <div>
+            <h2>Pages</h2>
+            <p>Build pages from section blocks. Add, reorder, edit, hide.</p>
+          </div>
+          <div class="pane-hdr-r">
+            <select id="pg-picker" class="pg-picker">
+              <option value="catering">Catering</option>
+            </select>
+            <button class="btn btn-secondary" id="pg-preview">Preview ↗</button>
+            <button class="btn btn-primary" id="pg-save">Save</button>
+          </div>
+        </div>
+        <div id="pages-block" class="loading">Loading…</div>
       </section>
 
       <!-- STAFF USERS PANE -->
@@ -1765,6 +1972,10 @@ document.querySelectorAll('.tab:not(.tab-link)').forEach(t => t.onclick = () => 
     if (typeof BIZ_DATA === 'undefined' || BIZ_DATA === null) {
       loadBusinessIntoEditor();
     }
+  }
+  // Lazy-load pages the first time that pane is opened
+  if (t.dataset.pane === 'pages' && typeof loadPageIntoEditor === 'function') {
+    loadPageIntoEditor();
   }
 });
 
@@ -3772,6 +3983,614 @@ async function saveBusinessHandler(){
 document.addEventListener('DOMContentLoaded', () => {
   const saveBtn = document.getElementById('biz-save');
   if (saveBtn) saveBtn.onclick = saveBusinessHandler;
+});
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE BUILDER
+═══════════════════════════════════════════════════════════ */
+let PG_DATA = null;
+let PG_ID = 'catering';
+let PG_EDITING_IDX = -1;  // which section is currently expanded for editing
+
+/** Catalog of section types — name, description, default props, and the editor renderer. */
+const SECTION_TYPES = {
+  hero: {
+    label: 'Hero',
+    desc: 'Big top section with title, lead text, and a contact card.',
+    defaults: () => ({
+      ghost: 'PAGE',
+      eyebrow: 'New Section',
+      title_lines: ['Title', '*Line.*'],
+      lead: 'A brief paragraph that introduces the page.',
+      card_label: 'Call Us',
+      card_title: 'Get in Touch',
+      card_sub: 'Quick line about why someone should call.',
+      cta_primary_text: '🔥 Call Now',
+      cta_primary_use_phone: true,
+      cta_secondary_text: '📘 Message on Facebook',
+      cta_secondary_use_facebook: true
+    }),
+    summary: p => (Array.isArray(p.title_lines) ? p.title_lines.join(' ') : '') || p.eyebrow || 'Hero section'
+  },
+  feature_grid: {
+    label: 'Feature Grid',
+    desc: '2x3 cards with icon, title, description, optional tag.',
+    defaults: () => ({
+      eyebrow: 'What We Offer',
+      title: 'Heading *here.*',
+      subtitle: 'Optional subtitle below the heading.',
+      items: [
+        { icon: '🔥', title: 'Feature One',   desc: 'A short description of this feature.', tag: '' },
+        { icon: '⚡', title: 'Feature Two',   desc: 'A short description of this feature.', tag: '' },
+        { icon: '🌟', title: 'Feature Three', desc: 'A short description of this feature.', tag: '' }
+      ]
+    }),
+    summary: p => p.title || p.eyebrow || 'Feature grid'
+  },
+  dotted_list: {
+    label: 'Dotted List',
+    desc: 'Vertical list of items with a bullet dot, name, and description.',
+    defaults: () => ({
+      eyebrow: 'Who We Serve',
+      title: 'Any occasion, *any size.*',
+      subtitle: '',
+      items: [
+        { name: 'Item One',   desc: 'Description.' },
+        { name: 'Item Two',   desc: 'Description.' },
+        { name: 'Item Three', desc: 'Description.' }
+      ]
+    }),
+    summary: p => p.title || p.eyebrow || 'Dotted list'
+  },
+  steps: {
+    label: 'Steps',
+    desc: 'Numbered process steps (01, 02, 03, ...).',
+    defaults: () => ({
+      eyebrow: 'How It Works',
+      title: 'Simple *process.*',
+      subtitle: '',
+      items: [
+        { title: 'Step One',   desc: 'Description of this step.' },
+        { title: 'Step Two',   desc: 'Description of this step.' },
+        { title: 'Step Three', desc: 'Description of this step.' }
+      ]
+    }),
+    summary: p => p.title || p.eyebrow || 'Steps'
+  },
+  testimonials: {
+    label: 'Testimonials',
+    desc: 'Quote cards with stars, quote text, and a source line.',
+    defaults: () => ({
+      eyebrow: 'What People Say',
+      title: 'Straight from *the crowd.*',
+      subtitle: '',
+      items: [
+        { stars: 5, quote: 'Honest review of your business.',   source: 'Customer Name · Event' },
+        { stars: 5, quote: 'Another honest review.',            source: 'Customer Name · Event' }
+      ]
+    }),
+    summary: p => p.title || p.eyebrow || 'Testimonials'
+  },
+  cta_phone: {
+    label: 'CTA — Phone',
+    desc: 'Big call-to-action with phone button and Facebook link.',
+    defaults: () => ({
+      eyebrow: 'Ready to Book?',
+      title_lines: ['Pick up the', '*phone.*'],
+      subtitle: 'Short paragraph encouraging the reader to call.',
+      button_emoji: '📞',
+      use_business_phone: true,
+      use_business_facebook: true,
+      facebook_text: 'Or message on Facebook',
+      prep_items: []
+    }),
+    summary: p => (Array.isArray(p.title_lines) ? p.title_lines.join(' ') : '') || p.eyebrow || 'CTA'
+  }
+};
+
+async function loadPageIntoEditor(){
+  const block = document.getElementById('pages-block');
+  if (!block) return;
+  block.className = 'loading';
+  block.textContent = 'Loading page…';
+  if (typeof loadPage !== 'function') {
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>supabase.js needs updating.</strong> The loadPage helper is missing — hard-refresh.</div>`;
+    return;
+  }
+  try {
+    PG_DATA = await loadPage(PG_ID);
+    PG_EDITING_IDX = -1;
+    renderPageEditor();
+  } catch(e) {
+    console.error('loadPage failed:', e);
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>Couldn't load page.</strong><br>${escapeHtml(e.message)}<br><br>
+      Run the SQL in ADD_PAGE_BUILDER.md to create the table and seed the catering page.</div>`;
+  }
+}
+
+function renderPageEditor(){
+  const block = document.getElementById('pages-block');
+  if (!block || !PG_DATA) return;
+  block.className = '';
+  const sections = PG_DATA.sections || [];
+  block.innerHTML = `
+    <div class="pg-info">
+      Editing the <strong>${escapeHtml(PG_ID)}</strong> page.
+      ${sections.length} section${sections.length===1?'':'s'} ·
+      ${sections.filter(s => !s.hidden).length} visible.
+      Use the buttons on each section to reorder, hide, edit, duplicate, or delete.
+    </div>
+    <div class="pg-section-list" id="pg-section-list">
+      ${sections.map((s, i) => renderSectionRow(s, i, sections.length)).join('')}
+    </div>
+    <button class="pg-add-btn" id="pg-add-btn">+ Add Section</button>
+    <div id="pg-add-menu" style="display:none"></div>
+  `;
+  wirePageEditorButtons();
+}
+
+function renderSectionRow(s, i, total){
+  const type = SECTION_TYPES[s.type];
+  const label = type ? type.label : s.type;
+  const summary = type ? type.summary(s.props || {}) : '(unknown type)';
+  const isEditing = i === PG_EDITING_IDX;
+  return `
+    <div class="pg-section${isEditing ? ' editing' : ''}${s.hidden ? ' hidden-section' : ''}" data-idx="${i}">
+      <div class="pg-sec-hdr" data-action="toggle-edit">
+        <span class="pg-sec-grip">⋮⋮</span>
+        <div class="pg-sec-info">
+          <div class="pg-sec-type">${escapeHtml(label)}</div>
+          <div class="pg-sec-summary">${escapeHtml(summary).replace(/\*([^*]+)\*/g, '<em>$1</em>')}</div>
+        </div>
+        <div class="pg-sec-actions" onclick="event.stopPropagation()">
+          <button class="pg-sec-btn" data-action="up"        ${i===0?'disabled':''} title="Move up">↑</button>
+          <button class="pg-sec-btn" data-action="down"      ${i===total-1?'disabled':''} title="Move down">↓</button>
+          <button class="pg-sec-btn" data-action="hide"      title="${s.hidden?'Show':'Hide'}">${s.hidden?'👁':'⊘'}</button>
+          <button class="pg-sec-btn" data-action="duplicate" title="Duplicate">⎘</button>
+          <button class="pg-sec-btn danger" data-action="delete" title="Delete">×</button>
+        </div>
+      </div>
+      ${isEditing ? `<div class="pg-sec-body">${renderSectionEditForm(s, i)}</div>` : ''}
+    </div>
+  `;
+}
+
+function wirePageEditorButtons(){
+  // Add Section button
+  const addBtn = document.getElementById('pg-add-btn');
+  if (addBtn) addBtn.onclick = togglePgAddMenu;
+  // Section row buttons (using event delegation on the list)
+  const list = document.getElementById('pg-section-list');
+  if (list) list.onclick = handleSectionListClick;
+}
+
+function handleSectionListClick(e){
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const sec = btn.closest('.pg-section');
+  if (!sec) return;
+  const idx = parseInt(sec.dataset.idx, 10);
+  const action = btn.dataset.action;
+  switch (action) {
+    case 'toggle-edit': pgToggleEdit(idx); break;
+    case 'up':        pgMoveSection(idx, idx - 1); break;
+    case 'down':      pgMoveSection(idx, idx + 1); break;
+    case 'hide':      pgToggleHidden(idx); break;
+    case 'duplicate': pgDuplicateSection(idx); break;
+    case 'delete':    pgDeleteSection(idx); break;
+  }
+}
+
+function pgToggleEdit(idx){
+  if (PG_EDITING_IDX === idx) {
+    // Closing — collect form first
+    collectSectionFromForm(idx);
+    PG_EDITING_IDX = -1;
+  } else {
+    // Switching — collect old one first
+    if (PG_EDITING_IDX !== -1) collectSectionFromForm(PG_EDITING_IDX);
+    PG_EDITING_IDX = idx;
+  }
+  renderPageEditor();
+}
+
+function pgMoveSection(from, to){
+  if (PG_EDITING_IDX !== -1) collectSectionFromForm(PG_EDITING_IDX);
+  if (to < 0 || to >= PG_DATA.sections.length) return;
+  const arr = PG_DATA.sections;
+  [arr[from], arr[to]] = [arr[to], arr[from]];
+  // Track editing through the move
+  if (PG_EDITING_IDX === from) PG_EDITING_IDX = to;
+  else if (PG_EDITING_IDX === to) PG_EDITING_IDX = from;
+  renderPageEditor();
+}
+
+function pgToggleHidden(idx){
+  PG_DATA.sections[idx].hidden = !PG_DATA.sections[idx].hidden;
+  renderPageEditor();
+}
+
+function pgDuplicateSection(idx){
+  if (PG_EDITING_IDX !== -1) collectSectionFromForm(PG_EDITING_IDX);
+  const orig = PG_DATA.sections[idx];
+  const copy = JSON.parse(JSON.stringify(orig));
+  copy.id = newSectionId();
+  PG_DATA.sections.splice(idx + 1, 0, copy);
+  if (PG_EDITING_IDX > idx) PG_EDITING_IDX++;
+  renderPageEditor();
+}
+
+function pgDeleteSection(idx){
+  const s = PG_DATA.sections[idx];
+  const type = SECTION_TYPES[s.type];
+  if (!confirm(`Delete the "${type ? type.label : s.type}" section? This can't be undone (until you save — until then refresh to restore).`)) return;
+  PG_DATA.sections.splice(idx, 1);
+  if (PG_EDITING_IDX === idx) PG_EDITING_IDX = -1;
+  else if (PG_EDITING_IDX > idx) PG_EDITING_IDX--;
+  renderPageEditor();
+}
+
+function togglePgAddMenu(){
+  const m = document.getElementById('pg-add-menu');
+  if (!m) return;
+  if (m.style.display === 'none' || !m.innerHTML) {
+    m.innerHTML = `
+      <div class="pg-add-menu">
+        ${Object.entries(SECTION_TYPES).map(([key, t]) => `
+          <button class="pg-add-type" data-add-type="${key}">
+            <div class="pg-add-type-name">${escapeHtml(t.label)}</div>
+            <div class="pg-add-type-desc">${escapeHtml(t.desc)}</div>
+          </button>
+        `).join('')}
+      </div>
+    `;
+    m.style.display = '';
+    m.querySelectorAll('[data-add-type]').forEach(btn => {
+      btn.onclick = () => pgAddSection(btn.dataset.addType);
+    });
+  } else {
+    m.style.display = 'none';
+  }
+}
+
+function pgAddSection(type){
+  const def = SECTION_TYPES[type];
+  if (!def) return;
+  if (PG_EDITING_IDX !== -1) collectSectionFromForm(PG_EDITING_IDX);
+  PG_DATA.sections.push({
+    id: newSectionId(),
+    type,
+    hidden: false,
+    props: def.defaults()
+  });
+  PG_EDITING_IDX = PG_DATA.sections.length - 1;
+  renderPageEditor();
+}
+
+/* ─── EDIT FORM RENDERERS PER SECTION TYPE ─── */
+
+function renderSectionEditForm(s, idx){
+  const renderer = SECTION_EDIT_FORMS[s.type];
+  if (!renderer) return `<div class="empty">No editor for type "${escapeHtml(s.type)}"</div>`;
+  return renderer(s.props || {}, idx);
+}
+
+// Helpers for forms
+function fld(label, id, value, placeholder, type='text'){
+  return `
+    <div class="field">
+      <label>${escapeHtml(label)}</label>
+      <input type="${type}" id="${id}" value="${escapeHtml(value||'')}" placeholder="${escapeHtml(placeholder||'')}">
+    </div>
+  `;
+}
+function fldArea(label, id, value, placeholder){
+  return `
+    <div class="field">
+      <label>${escapeHtml(label)}</label>
+      <textarea id="${id}" placeholder="${escapeHtml(placeholder||'')}" rows="3">${escapeHtml(value||'')}</textarea>
+    </div>
+  `;
+}
+function fldCheck(label, id, value, helpText){
+  return `
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="${id}" ${value ? 'checked' : ''} style="width:auto">
+        <span>${escapeHtml(label)}</span>
+      </label>
+      ${helpText ? `<div class="field-help">${escapeHtml(helpText)}</div>` : ''}
+    </div>
+  `;
+}
+function fldLines(label, id, lines, helpText){
+  const arr = Array.isArray(lines) ? lines : [''];
+  return `
+    <div class="field">
+      <label>${escapeHtml(label)}</label>
+      <div class="pg-lines-input" id="${id}">
+        ${arr.map(l => `<input type="text" class="pg-line" value="${escapeHtml(l)}" placeholder="One line...">`).join('')}
+        <input type="text" class="pg-line" value="" placeholder="(add another line)">
+      </div>
+      ${helpText ? `<div class="field-help">${escapeHtml(helpText)}</div>` : ''}
+    </div>
+  `;
+}
+function arrayItemHdr(title, idx, total, prefix){
+  return `
+    <div class="pg-array-item-hdr">
+      <div class="pg-array-item-title">${escapeHtml(title)} ${idx+1}</div>
+      <div class="pg-array-item-actions">
+        <button class="pg-sec-btn" type="button" data-arr-action="up"        data-arr="${prefix}" data-i="${idx}" ${idx===0?'disabled':''} title="Move up">↑</button>
+        <button class="pg-sec-btn" type="button" data-arr-action="down"      data-arr="${prefix}" data-i="${idx}" ${idx===total-1?'disabled':''} title="Move down">↓</button>
+        <button class="pg-sec-btn danger" type="button" data-arr-action="del" data-arr="${prefix}" data-i="${idx}" title="Remove">×</button>
+      </div>
+    </div>
+  `;
+}
+
+const SECTION_EDIT_FORMS = {
+  hero(p){
+    return `
+      <div class="hp-desc" style="margin-bottom:14px">Wrap a word in <code>*asterisks*</code> for italic emphasis in titles.</div>
+      ${fld('Ghost Text (faded background word)', 'pg-ghost', p.ghost, 'CATERING')}
+      ${fld('Eyebrow', 'pg-eyebrow', p.eyebrow, 'Small text above title')}
+      ${fldLines('Title Lines (one per line)', 'pg-title-lines', p.title_lines, 'Each line renders as its own <br>. Last line is usually the *italic* one.')}
+      ${fldArea('Lead Paragraph', 'pg-lead', p.lead, 'The intro paragraph below the title')}
+      <h4 style="margin:20px 0 10px;font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)">Contact Card (right side)</h4>
+      <div class="field-row">
+        ${fld('Card Label', 'pg-card-label', p.card_label, 'Call Us')}
+        ${fld('Card Title', 'pg-card-title', p.card_title, 'Ready to Book?')}
+      </div>
+      ${fldArea('Card Subtitle', 'pg-card-sub', p.card_sub, 'A line or two of intro for the card')}
+      <h4 style="margin:20px 0 10px;font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)">Buttons</h4>
+      <div class="field-row">
+        ${fld('Primary Button Text', 'pg-cta-prim', p.cta_primary_text, '🔥 Call Now')}
+        ${fld('Secondary Button Text', 'pg-cta-sec', p.cta_secondary_text, '📘 Message on Facebook')}
+      </div>
+      ${fldCheck('Use business phone for primary button', 'pg-cta-prim-phone', p.cta_primary_use_phone, 'When checked, button links to your business phone. Uncheck to manually set a link.')}
+      ${fldCheck('Use business Facebook for secondary button', 'pg-cta-sec-fb', p.cta_secondary_use_facebook)}
+    `;
+  },
+  feature_grid(p){
+    const items = (p.items || []).map((it, i) => `
+      <div class="pg-array-item" data-arr-item="items" data-i="${i}">
+        ${arrayItemHdr('Card', i, p.items.length, 'items')}
+        <div class="field-row">
+          ${fld('Icon (emoji)', `pg-it-icon-${i}`, it.icon, '🔥')}
+          ${fld('Title',        `pg-it-title-${i}`, it.title, 'Card title')}
+        </div>
+        ${fldArea('Description', `pg-it-desc-${i}`, it.desc, 'Card description')}
+        ${fld('Tag (optional)', `pg-it-tag-${i}`, it.tag, 'Most Popular')}
+      </div>
+    `).join('');
+    return `
+      ${fld('Eyebrow', 'pg-eyebrow', p.eyebrow, 'What We Offer')}
+      ${fld('Section Title (use *word* for italic)', 'pg-title', p.title, 'Heading *here.*')}
+      ${fldArea('Section Subtitle', 'pg-subtitle', p.subtitle, '')}
+      <h4 style="margin:20px 0 10px;font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)">Cards (${(p.items||[]).length})</h4>
+      ${items}
+      <button class="pg-array-add" type="button" data-arr-add="items">+ Add Card</button>
+    `;
+  },
+  dotted_list(p){
+    const items = (p.items || []).map((it, i) => `
+      <div class="pg-array-item" data-arr-item="items" data-i="${i}">
+        ${arrayItemHdr('Item', i, p.items.length, 'items')}
+        ${fld('Name',        `pg-it-name-${i}`, it.name, 'Item name')}
+        ${fldArea('Description', `pg-it-desc-${i}`, it.desc, '')}
+      </div>
+    `).join('');
+    return `
+      ${fld('Eyebrow', 'pg-eyebrow', p.eyebrow, 'Who We Serve')}
+      ${fld('Section Title (use *word* for italic)', 'pg-title', p.title, 'Title *here.*')}
+      ${fldArea('Section Subtitle', 'pg-subtitle', p.subtitle, '')}
+      <h4 style="margin:20px 0 10px;font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)">Items (${(p.items||[]).length})</h4>
+      ${items}
+      <button class="pg-array-add" type="button" data-arr-add="items">+ Add Item</button>
+    `;
+  },
+  steps(p){
+    const items = (p.items || []).map((it, i) => `
+      <div class="pg-array-item" data-arr-item="items" data-i="${i}">
+        ${arrayItemHdr('Step', i, p.items.length, 'items')}
+        ${fld('Step Title',       `pg-it-title-${i}`, it.title, 'Step title')}
+        ${fldArea('Description',  `pg-it-desc-${i}`, it.desc, '')}
+      </div>
+    `).join('');
+    return `
+      ${fld('Eyebrow', 'pg-eyebrow', p.eyebrow, 'How It Works')}
+      ${fld('Section Title (use *word* for italic)', 'pg-title', p.title, '')}
+      ${fldArea('Section Subtitle', 'pg-subtitle', p.subtitle, '')}
+      <h4 style="margin:20px 0 10px;font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)">Steps (${(p.items||[]).length}) — auto-numbered 01, 02, 03…</h4>
+      ${items}
+      <button class="pg-array-add" type="button" data-arr-add="items">+ Add Step</button>
+    `;
+  },
+  testimonials(p){
+    const items = (p.items || []).map((it, i) => `
+      <div class="pg-array-item" data-arr-item="items" data-i="${i}">
+        ${arrayItemHdr('Quote', i, p.items.length, 'items')}
+        ${fld('Stars (1-5)',  `pg-it-stars-${i}`, it.stars, '5', 'number')}
+        ${fldArea('Quote',    `pg-it-quote-${i}`, it.quote, '')}
+        ${fld('Source',       `pg-it-source-${i}`, it.source, 'Google Review · Wedding')}
+      </div>
+    `).join('');
+    return `
+      ${fld('Eyebrow', 'pg-eyebrow', p.eyebrow, 'What People Say')}
+      ${fld('Section Title (use *word* for italic)', 'pg-title', p.title, '')}
+      ${fldArea('Section Subtitle', 'pg-subtitle', p.subtitle, '')}
+      <h4 style="margin:20px 0 10px;font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)">Quotes (${(p.items||[]).length})</h4>
+      ${items}
+      <button class="pg-array-add" type="button" data-arr-add="items">+ Add Quote</button>
+    `;
+  },
+  cta_phone(p){
+    const prepItems = Array.isArray(p.prep_items) ? p.prep_items : [];
+    const prepHtml = prepItems.map((it, i) => `
+      <div class="pg-array-item" data-arr-item="prep_items" data-i="${i}">
+        ${arrayItemHdr('Bullet', i, prepItems.length, 'prep_items')}
+        ${fld('Text', `pg-it-prep-${i}`, it, '')}
+      </div>
+    `).join('');
+    return `
+      ${fld('Eyebrow', 'pg-eyebrow', p.eyebrow, 'Ready to Book?')}
+      ${fldLines('Title Lines (one per line)', 'pg-title-lines', p.title_lines, 'Renders with <br> between. Use *word* for italic emphasis on a line.')}
+      ${fldArea('Subtitle', 'pg-subtitle', p.subtitle, '')}
+      ${fld('Button Emoji', 'pg-button-emoji', p.button_emoji, '📞')}
+      ${fldCheck('Use business phone number', 'pg-use-phone', p.use_business_phone)}
+      ${fldCheck('Show Facebook button below', 'pg-use-fb', p.use_business_facebook)}
+      ${fld('Facebook Button Text', 'pg-fb-text', p.facebook_text, 'Or message on Facebook')}
+      <h4 style="margin:20px 0 10px;font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)">"Have this ready" Bullets (optional)</h4>
+      ${prepHtml || '<div class="hp-desc">No bullets — defaults will be used. Add some to override.</div>'}
+      <button class="pg-array-add" type="button" data-arr-add="prep_items">+ Add Bullet</button>
+    `;
+  }
+};
+
+/* Read the currently-edited section's form fields back into PG_DATA. */
+function collectSectionFromForm(idx){
+  if (idx < 0 || idx >= PG_DATA.sections.length) return;
+  const s = PG_DATA.sections[idx];
+  const p = s.props || {};
+  const $ = id => document.getElementById(id);
+  const val = id => $(id)?.value ?? '';
+  const chk = id => !!$(id)?.checked;
+  const lines = id => {
+    const el = $(id);
+    if (!el) return [];
+    return Array.from(el.querySelectorAll('.pg-line')).map(i => i.value).filter(v => v !== '');
+  };
+
+  switch (s.type) {
+    case 'hero':
+      p.ghost = val('pg-ghost');
+      p.eyebrow = val('pg-eyebrow');
+      p.title_lines = lines('pg-title-lines');
+      p.lead = val('pg-lead');
+      p.card_label = val('pg-card-label');
+      p.card_title = val('pg-card-title');
+      p.card_sub = val('pg-card-sub');
+      p.cta_primary_text = val('pg-cta-prim');
+      p.cta_secondary_text = val('pg-cta-sec');
+      p.cta_primary_use_phone = chk('pg-cta-prim-phone');
+      p.cta_secondary_use_facebook = chk('pg-cta-sec-fb');
+      break;
+    case 'feature_grid':
+    case 'dotted_list':
+    case 'steps':
+      p.eyebrow = val('pg-eyebrow');
+      p.title = val('pg-title');
+      p.subtitle = val('pg-subtitle');
+      p.items = (p.items || []).map((it, i) => ({
+        ...it,
+        icon:  $(`pg-it-icon-${i}`)?.value ?? it.icon,
+        title: $(`pg-it-title-${i}`)?.value ?? it.title,
+        name:  $(`pg-it-name-${i}`)?.value ?? it.name,
+        desc:  $(`pg-it-desc-${i}`)?.value ?? it.desc,
+        tag:   $(`pg-it-tag-${i}`)?.value ?? it.tag
+      }));
+      break;
+    case 'testimonials':
+      p.eyebrow = val('pg-eyebrow');
+      p.title = val('pg-title');
+      p.subtitle = val('pg-subtitle');
+      p.items = (p.items || []).map((it, i) => ({
+        stars:  parseInt($(`pg-it-stars-${i}`)?.value, 10) || it.stars || 5,
+        quote:  $(`pg-it-quote-${i}`)?.value ?? it.quote,
+        source: $(`pg-it-source-${i}`)?.value ?? it.source
+      }));
+      break;
+    case 'cta_phone':
+      p.eyebrow = val('pg-eyebrow');
+      p.title_lines = lines('pg-title-lines');
+      p.subtitle = val('pg-subtitle');
+      p.button_emoji = val('pg-button-emoji');
+      p.use_business_phone = chk('pg-use-phone');
+      p.use_business_facebook = chk('pg-use-fb');
+      p.facebook_text = val('pg-fb-text');
+      p.prep_items = (p.prep_items || []).map((_, i) => $(`pg-it-prep-${i}`)?.value || '').filter(v => v);
+      break;
+  }
+  s.props = p;
+}
+
+/* Array-item actions inside an edit form (up/down/delete, add) */
+document.addEventListener('click', e => {
+  // Array item up/down/delete
+  const arrBtn = e.target.closest('[data-arr-action]');
+  if (arrBtn) {
+    const sec = arrBtn.closest('.pg-section');
+    if (!sec) return;
+    const idx = parseInt(sec.dataset.idx, 10);
+    const arrName = arrBtn.dataset.arr;
+    const i = parseInt(arrBtn.dataset.i, 10);
+    const action = arrBtn.dataset.arrAction;
+    collectSectionFromForm(idx);
+    const arr = PG_DATA.sections[idx].props[arrName];
+    if (!Array.isArray(arr)) return;
+    if (action === 'del') arr.splice(i, 1);
+    else if (action === 'up' && i > 0) { [arr[i-1], arr[i]] = [arr[i], arr[i-1]]; }
+    else if (action === 'down' && i < arr.length - 1) { [arr[i], arr[i+1]] = [arr[i+1], arr[i]]; }
+    renderPageEditor();
+    return;
+  }
+  // Array "add" buttons
+  const addBtn = e.target.closest('[data-arr-add]');
+  if (addBtn) {
+    const sec = addBtn.closest('.pg-section');
+    if (!sec) return;
+    const idx = parseInt(sec.dataset.idx, 10);
+    const arrName = addBtn.dataset.arrAdd;
+    collectSectionFromForm(idx);
+    const s = PG_DATA.sections[idx];
+    s.props[arrName] = s.props[arrName] || [];
+    // Add a sensible blank item based on the section type
+    const blanks = {
+      feature_grid: { icon:'', title:'New Card', desc:'', tag:'' },
+      dotted_list:  { name:'New Item', desc:'' },
+      steps:        { title:'New Step', desc:'' },
+      testimonials: { stars:5, quote:'', source:'' },
+      cta_phone:    ''  // prep_items is array of strings
+    };
+    s.props[arrName].push(blanks[s.type] !== undefined ? (typeof blanks[s.type] === 'object' ? {...blanks[s.type]} : blanks[s.type]) : {});
+    renderPageEditor();
+  }
+});
+
+async function savePageHandler(){
+  if (!PG_DATA) return;
+  if (PG_EDITING_IDX !== -1) collectSectionFromForm(PG_EDITING_IDX);
+  const btn = document.getElementById('pg-save');
+  const orig = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+  setStatus('Saving', 'saving');
+  try {
+    await savePage(PG_ID, PG_DATA);
+    setStatus('Saved', 'ok');
+    btn.textContent = 'Saved ✓';
+    setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 1200);
+  } catch(e) {
+    console.error('savePage failed:', e);
+    setStatus('Save failed', 'err');
+    btn.textContent = orig;
+    btn.disabled = false;
+    alert('Save failed: ' + e.message);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const saveBtn = document.getElementById('pg-save');
+  if (saveBtn) saveBtn.onclick = savePageHandler;
+  const picker = document.getElementById('pg-picker');
+  if (picker) picker.onchange = e => { PG_ID = e.target.value; loadPageIntoEditor(); };
+  const prev = document.getElementById('pg-preview');
+  if (prev) prev.onclick = () => window.open(`./${PG_ID}.html`, '_blank');
 });
 
 /* ═══════════════════════════════════════════════════════════
