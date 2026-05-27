@@ -280,21 +280,15 @@ async function loadCachedThenRefresh(cacheKey, loader, onRefresh) {
 ═══════════════════════════════════════════════════════════ */
 
 /** Minimal structural shape so missing fields don't crash callers.
- *  These are NOT visible defaults — they're empty containers. */
+ *  These are NOT visible defaults — they're empty containers.
+ *  cards = []  → truly empty, nothing renders if Supabase is unset. */
 function emptyHomepage() {
   return {
     title: '',
     title_em: '',
     tagline: '',
     eyebrow: '',
-    cards: [
-      { label:'', sub:'', href:'', image:'' },
-      { label:'', sub:'', href:'', image:'' },
-      { label:'', sub:'', href:'', image:'' },
-      { label:'', sub:'', href:'', image:'', featured:true },
-      { label:'', sub:'', href:'', image:'' },
-      { label:'', sub:'', href:'', image:'' }
-    ],
+    cards: [],
     footer: { phone:'', address:'', facebook:'', instagram:'' },
     theme:  { bg:'', text:'', eyebrow:'', ember:'', fire:'', flame:'', glow:'', overlay:'' }
   };
