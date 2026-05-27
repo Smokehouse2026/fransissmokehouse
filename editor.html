@@ -256,6 +256,31 @@ body::before{
 .sb-foot{
   padding:14px 16px 18px;
   border-top:1px solid var(--line);
+  display:flex;flex-direction:column;gap:10px;
+}
+.sb-user{
+  display:flex;align-items:center;gap:9px;
+  padding:8px 10px;
+  background:rgba(255,153,48,.05);
+  border:1px solid var(--line);
+  border-radius:6px;
+}
+.sb-user-icon{
+  width:22px;height:22px;flex-shrink:0;
+  color:var(--flame);
+  display:flex;align-items:center;justify-content:center;
+}
+.sb-user-icon svg{width:100%;height:100%}
+.sb-user-email{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--ink-2);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  flex:1;
+}
+.sb-foot-row{
   display:flex;align-items:center;justify-content:space-between;gap:10px;
 }
 .sb-status{
@@ -1240,6 +1265,70 @@ body.hp-fullscreen{overflow:hidden}
   display:flex;justify-content:flex-end;
 }
 
+/* ═══ STAFF USERS PANE ═══ */
+.staff-info{
+  background:linear-gradient(180deg,var(--panel),var(--bg) 85%);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  padding:22px 26px;
+  margin-bottom:18px;
+  color:var(--ink-2);
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.6;
+}
+.staff-info p{margin-bottom:8px}
+.staff-info ol{margin:8px 0 0 20px;color:var(--ink-3)}
+.staff-info ol li{margin-bottom:4px}
+.staff-info strong{color:var(--flame);font-weight:700}
+.staff-list{
+  background:linear-gradient(180deg,var(--panel),var(--bg) 85%);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  padding:8px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.staff-row{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;
+  background:rgba(20,12,6,.45);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+}
+.staff-row.me{
+  border-color:rgba(255,153,48,.4);
+  background:rgba(255,153,48,.08);
+}
+.staff-avatar{
+  width:40px;height:40px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--ember),var(--fire));
+  color:#fff;
+  font-family:var(--serif);
+  font-size:18px;
+  border-radius:50%;
+}
+.staff-info-col{flex:1;min-width:0}
+.staff-email{
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:15px;
+  color:var(--ink);
+  display:flex;align-items:center;gap:8px;
+}
+.staff-me-tag{
+  font-family:var(--sans);font-weight:700;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  background:var(--flame);color:#fff;
+  padding:2px 6px;border-radius:3px;
+}
+.staff-meta{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--ink-4);
+  margin-top:3px;
+}
+
 .empty{
   padding:48px 24px;text-align:center;
   font-family:var(--sans);
@@ -1279,9 +1368,10 @@ body.hp-fullscreen{overflow:hidden}
 <div id="gate">
   <div class="gate-card">
     <div class="gate-title">The Francis <em>Smokehouse</em></div>
-    <div class="gate-sub">Editor Access</div>
-    <input type="password" class="gate-input" id="gate-pw" placeholder="Enter password" autofocus>
-    <button class="gate-btn" id="gate-btn">Unlock Editor</button>
+    <div class="gate-sub">Staff Sign In</div>
+    <input type="email" class="gate-input" id="gate-email" placeholder="your@email.com" autocomplete="email" autofocus>
+    <input type="password" class="gate-input" id="gate-pw" placeholder="Password" autocomplete="current-password" style="margin-top:10px">
+    <button class="gate-btn" id="gate-btn">Sign In</button>
     <div class="gate-err" id="gate-err"></div>
   </div>
 </div>
@@ -1318,10 +1408,24 @@ body.hp-fullscreen{overflow:hidden}
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M10 21v-6h4v6"/></svg></span>
         <span>Homepage</span>
       </button>
+      <button class="tab" data-pane="staff">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.8"/><path d="M15 20c0-2 .8-3.8 2-5 1.2 1.2 2 3 2 5"/></svg></span>
+        <span>Staff Users</span>
+      </button>
     </nav>
     <div class="sb-foot">
-      <div class="sb-status" id="status">Ready</div>
-      <button class="sb-logout" id="logout">Lock</button>
+      <div class="sb-user" id="sb-user-row">
+        <div class="sb-user-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+          </svg>
+        </div>
+        <div class="sb-user-email" id="sb-user-email" title="Signed in as">—</div>
+      </div>
+      <div class="sb-foot-row">
+        <div class="sb-status" id="status">Ready</div>
+        <button class="sb-logout" id="logout">Sign Out</button>
+      </div>
     </div>
   </aside>
 
@@ -1395,6 +1499,18 @@ body.hp-fullscreen{overflow:hidden}
         </div>
         <div id="homepage-block" class="loading">Loading…</div>
       </section>
+
+      <!-- STAFF USERS PANE -->
+      <section class="pane" id="pane-staff">
+        <div class="pane-hdr">
+          <div>
+            <h2>Staff <em>Users</em></h2>
+            <p>People who can sign in to this editor. Add new users in the Supabase Dashboard → Authentication → Users.</p>
+          </div>
+          <button class="btn btn-secondary" id="staff-refresh">Refresh</button>
+        </div>
+        <div id="staff-block" class="loading">Loading users…</div>
+      </section>
     </main>
   </div>
 </div>
@@ -1426,41 +1542,66 @@ window.addEventListener('error', e => {
   console.error('Page error:', e.error || e.message);
 });
 
-/* Fallback if supabase.js didn't load — make sure password check still works */
-if (typeof EDITOR_PASSWORD === 'undefined') {
-  window.EDITOR_PASSWORD = '2172';
-  console.warn('supabase.js did not load — using fallback password');
-}
-
 /* ═══════════════════════════════════════════════════════════
-   GATE
+   AUTH — real Supabase email + password sign in
 ═══════════════════════════════════════════════════════════ */
-const SESSION_KEY = 'francis_editor_unlocked';
 function unlock(){
   document.getElementById('gate').classList.add('hide');
   document.getElementById('app').classList.add('show');
-  sessionStorage.setItem(SESSION_KEY, '1');
-  // bootApp may fail if Supabase isn't set up — wrap it
+  // Show logged-in user's email in the sidebar
+  const u = sbCurrentUser();
+  const emailEl = document.getElementById('sb-user-email');
+  if (emailEl && u) emailEl.textContent = u.email || '';
   try { bootApp(); } catch(e) {
     console.error('bootApp error:', e);
     setStatus('Setup needed', 'err');
   }
 }
+
 function checkGate(){
-  if (sessionStorage.getItem(SESSION_KEY) === '1') unlock();
+  // If we have a valid (unexpired) session, skip the login form
+  if (typeof sbGetSession === 'function' && sbGetSession()) {
+    unlock();
+  }
 }
-document.getElementById('gate-btn').onclick = () => {
-  const pw = document.getElementById('gate-pw').value;
-  const err = document.getElementById('gate-err');
-  const expected = (typeof EDITOR_PASSWORD !== 'undefined') ? EDITOR_PASSWORD : '2172';
-  if (pw === expected) { err.textContent=''; unlock(); }
-  else { err.textContent = 'Wrong password.'; document.getElementById('gate-pw').select(); }
-};
+
+async function attemptSignIn(){
+  const emailEl = document.getElementById('gate-email');
+  const pwEl    = document.getElementById('gate-pw');
+  const errEl   = document.getElementById('gate-err');
+  const btn     = document.getElementById('gate-btn');
+  const email = emailEl.value.trim();
+  const pw    = pwEl.value;
+  if (!email || !pw) {
+    errEl.textContent = 'Enter email and password.';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  errEl.textContent = '';
+  try {
+    if (typeof sbSignIn !== 'function') throw new Error('supabase.js not loaded — refresh the page');
+    await sbSignIn(email, pw);
+    unlock();
+  } catch(e) {
+    console.error('Sign in failed:', e);
+    errEl.textContent = e.message || 'Sign in failed.';
+    pwEl.select();
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+  }
+}
+
+document.getElementById('gate-btn').onclick = attemptSignIn;
 document.getElementById('gate-pw').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('gate-btn').click();
+  if (e.key === 'Enter') attemptSignIn();
 });
-document.getElementById('logout').onclick = () => {
-  sessionStorage.removeItem(SESSION_KEY);
+document.getElementById('gate-email').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('gate-pw').focus();
+});
+document.getElementById('logout').onclick = async () => {
+  if (typeof sbSignOut === 'function') await sbSignOut();
   location.reload();
 };
 
@@ -1497,6 +1638,10 @@ document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
     if (typeof HP_DATA === 'undefined' || HP_DATA === null) {
       loadHomepageIntoEditor();
     }
+  }
+  // Lazy-load staff users the first time that pane is opened
+  if (t.dataset.pane === 'staff' && typeof loadStaffUsers === 'function') {
+    loadStaffUsers();
   }
 });
 
@@ -3232,6 +3377,76 @@ document.addEventListener('DOMContentLoaded', () => {
   if (saveBtn) saveBtn.onclick = saveHomepageHandler;
   if (resetBtn) resetBtn.onclick = resetHomepageHandler;
   // Homepage data is now loaded lazily by the main tab click handler above.
+});
+
+/* ═══════════════════════════════════════════════════════════
+   STAFF USERS PANE
+═══════════════════════════════════════════════════════════ */
+async function loadStaffUsers(){
+  const block = document.getElementById('staff-block');
+  if (!block) return;
+  block.className = 'loading';
+  block.textContent = 'Loading users…';
+
+  if (typeof sbListUsers !== 'function') {
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>supabase.js needs updating.</strong> The sbListUsers helper is missing — hard-refresh the page.</div>`;
+    return;
+  }
+
+  let users;
+  try { users = await sbListUsers(); }
+  catch(e) {
+    console.error('loadStaffUsers failed:', e);
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>Couldn't load users.</strong><br>
+      ${escapeHtml(e.message)}<br><br>
+      Make sure you've run the SQL in AUTH_SETUP.md to create the <code>editor_users</code> view.</div>`;
+    return;
+  }
+
+  block.className = '';
+  const me = sbCurrentUser();
+  if (!users || users.length === 0) {
+    block.innerHTML = `
+      <div class="staff-info">
+        <p>No staff users found. Add your first user in the Supabase Dashboard:</p>
+        <ol>
+          <li>Open <strong>Authentication → Users</strong></li>
+          <li>Click <strong>Add user → Create new user</strong></li>
+          <li>Enter their email + password</li>
+          <li>Check <strong>Auto Confirm User</strong></li>
+          <li>Click <strong>Create user</strong></li>
+        </ol>
+      </div>`;
+    return;
+  }
+  block.innerHTML = `
+    <div class="staff-info">
+      <p>${users.length} user${users.length===1?'':'s'} can sign in to this editor. To add or remove users, go to Supabase Dashboard → Authentication → Users.</p>
+    </div>
+    <div class="staff-list">
+      ${users.map(u => {
+        const isMe = me && u.id === me.id;
+        const created = u.created_at ? new Date(u.created_at).toLocaleDateString() : '—';
+        const lastSeen = u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString() : 'Never';
+        return `
+          <div class="staff-row${isMe ? ' me' : ''}">
+            <div class="staff-avatar">${(u.email||'?')[0].toUpperCase()}</div>
+            <div class="staff-info-col">
+              <div class="staff-email">${escapeHtml(u.email||'(no email)')}${isMe ? ' <span class="staff-me-tag">You</span>' : ''}</div>
+              <div class="staff-meta">Added ${created} · Last signed in ${lastSeen}</div>
+            </div>
+          </div>`;
+      }).join('')}
+    </div>`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const refreshBtn = document.getElementById('staff-refresh');
+  if (refreshBtn) refreshBtn.onclick = loadStaffUsers;
 });
 
 /* ═══════════════════════════════════════════════════════════
