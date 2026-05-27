@@ -1,0 +1,3458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Editor — The Francis Smokehouse</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="../Images/Smokehouselogo.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Barlow+Condensed:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   THE FRANCIS SMOKEHOUSE — EDITOR
+   Aesthetic: "The Pit Boss's Office"
+   Warm dark, ember accents, generous whitespace, typography-led.
+═══════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+:root{
+  /* Surfaces — warm leather/sand, much lighter than before */
+  --void:#2a1d12;
+  --bg:#322317;
+  --panel:#3d2c1c;
+  --panel-2:#473423;
+  --panel-3:#523d29;
+  --line:rgba(232,212,168,.18);
+  --line-2:rgba(232,212,168,.3);
+
+  /* Text — near-white cream for max readability */
+  --ink:#fdf6e8;
+  --ink-2:#f3e4c3;
+  --ink-3:#dcc59a;
+  --ink-4:#b59f78;
+  --ink-5:#8a7855;
+
+  /* Ember accents — kept warm, tuned for new brighter background */
+  --ember:#d45200;
+  --fire:#ed6e14;
+  --flame:#ff9930;
+  --glow:#ffc24a;
+  --gold:#e8b85c;
+
+  /* Status */
+  --green:#7ec98a;
+  --red:#ec6e60;
+  --amber:#e8b85c;
+
+  /* Typography */
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Barlow Condensed',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+
+  /* Layout */
+  --sidebar-w:240px;
+  --sidebar-w-collapsed:64px;
+  --r:8px;
+  --r-lg:12px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+
+  /* Shadows */
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3);
+  --shadow:0 4px 16px rgba(0,0,0,.35);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.45);
+  --glow-flame:0 0 0 1px rgba(255,153,48,.18),0 4px 24px rgba(212,82,0,.22);
+}
+
+html,body{
+  background:var(--void);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.5;
+  min-height:100vh;
+}
+body{
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%,rgba(255,153,48,.05),transparent 60%),
+    radial-gradient(ellipse 70% 50% at 0% 100%,rgba(255,153,48,.04),transparent 60%),
+    var(--void);
+}
+a{color:var(--flame);text-decoration:none;transition:color .2s}
+a:hover{color:var(--glow)}
+
+/* Subtle grain overlay for warmth */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+
+/* ═══ LOGIN GATE ═══ */
+#gate{
+  position:fixed;inset:0;z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%,rgba(212,82,0,.1),transparent 70%),
+    var(--void);
+}
+#gate.hide{display:none}
+.gate-card{
+  max-width:420px;width:100%;
+  background:linear-gradient(180deg,var(--panel),var(--bg));
+  border:1px solid var(--line-2);
+  border-radius:var(--r-lg);
+  padding:48px 36px 36px;
+  text-align:center;
+  box-shadow:var(--shadow-lg);
+  position:relative;overflow:hidden;
+}
+.gate-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--ember),var(--flame),var(--glow),var(--flame),var(--ember),transparent);
+}
+.gate-title{
+  font-family:var(--serif);
+  font-size:36px;
+  line-height:1.05;
+  color:var(--ink);
+  margin-bottom:10px;
+}
+.gate-title em{font-style:italic;color:var(--flame)}
+.gate-sub{
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.36em;
+  text-transform:uppercase;
+  color:var(--ink-4);
+  margin-bottom:32px;
+}
+.gate-input{
+  width:100%;
+  background:rgba(20,12,6,.55);
+  border:1px solid var(--line-2);
+  color:var(--ink);
+  font-family:var(--mono);
+  font-size:18px;
+  padding:16px;
+  border-radius:var(--r);
+  text-align:center;
+  letter-spacing:.15em;
+  transition:border-color .2s,box-shadow .2s;
+}
+.gate-input:focus{
+  outline:none;
+  border-color:var(--flame);
+  box-shadow:0 0 0 3px rgba(255,153,48,.12);
+}
+.gate-btn{
+  margin-top:14px;width:100%;
+  background:linear-gradient(135deg,var(--ember),var(--fire));
+  border:none;
+  color:#fff;
+  font-family:var(--sans);
+  font-weight:700;
+  font-size:13px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  padding:15px;
+  border-radius:var(--r);
+  cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .25s;
+  box-shadow:0 4px 14px rgba(212,82,0,.3);
+}
+.gate-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,82,0,.45)}
+.gate-btn:active{transform:translateY(0)}
+.gate-err{
+  color:var(--red);font-size:13px;margin-top:12px;min-height:18px;
+  font-family:var(--sans);letter-spacing:.04em;
+}
+
+/* ═══ APP SHELL ═══ */
+#app{display:none;min-height:100vh;position:relative;z-index:1}
+#app.show{display:grid;grid-template-columns:var(--sidebar-w) 1fr}
+
+/* ───── SIDEBAR ───── */
+#sidebar{
+  position:sticky;top:0;height:100vh;
+  background:linear-gradient(180deg,var(--panel),var(--bg) 70%);
+  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;
+  z-index:10;
+}
+.sb-brand{
+  padding:24px 22px 18px;
+  border-bottom:1px solid var(--line);
+}
+.sb-brand-name{
+  font-family:var(--serif);
+  font-size:22px;
+  line-height:1;
+  color:var(--ink);
+}
+.sb-brand-name em{font-style:italic;color:var(--flame)}
+.sb-brand-sub{
+  font-family:var(--sans);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:var(--ink-4);
+  margin-top:6px;
+}
+
+.sb-nav{
+  flex:1;
+  padding:18px 12px;
+  display:flex;flex-direction:column;gap:4px;
+  overflow-y:auto;
+}
+.sb-nav-lbl{
+  font-family:var(--sans);
+  font-size:10px;font-weight:700;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--ink-5);
+  padding:14px 12px 8px;
+}
+.tab{
+  position:relative;
+  display:flex;align-items:center;gap:12px;
+  padding:11px 14px;
+  background:transparent;border:none;
+  color:var(--ink-3);
+  font-family:var(--sans);
+  font-size:14px;font-weight:600;
+  letter-spacing:.04em;
+  text-align:left;
+  border-radius:var(--r);
+  cursor:pointer;
+  transition:color .2s,background .2s;
+  width:100%;
+}
+.tab .ic{
+  width:20px;height:20px;flex-shrink:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  color:var(--ink-4);
+  transition:color .2s;
+}
+.tab .ic svg{width:100%;height:100%}
+.tab:hover{color:var(--ink);background:rgba(255,153,48,.06)}
+.tab:hover .ic{color:var(--flame)}
+.tab.active{
+  color:var(--ink);
+  background:linear-gradient(90deg,rgba(255,153,48,.22),rgba(255,153,48,.05));
+  box-shadow:inset 3px 0 0 var(--flame);
+}
+.tab.active .ic{color:var(--flame)}
+.tab.active::after{
+  content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  width:6px;height:6px;border-radius:50%;
+  background:var(--glow);
+  box-shadow:0 0 8px var(--glow);
+}
+
+.sb-foot{
+  padding:14px 16px 18px;
+  border-top:1px solid var(--line);
+  display:flex;flex-direction:column;gap:10px;
+}
+.sb-user{
+  display:flex;align-items:center;gap:9px;
+  padding:8px 10px;
+  background:rgba(255,153,48,.05);
+  border:1px solid var(--line);
+  border-radius:6px;
+}
+.sb-user-icon{
+  width:22px;height:22px;flex-shrink:0;
+  color:var(--flame);
+  display:flex;align-items:center;justify-content:center;
+}
+.sb-user-icon svg{width:100%;height:100%}
+.sb-user-email{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--ink-2);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  flex:1;
+}
+.sb-foot-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.sb-status{
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--green);
+}
+.sb-status::before{
+  content:'';width:7px;height:7px;border-radius:50%;
+  background:currentColor;
+  box-shadow:0 0 6px currentColor;
+}
+.sb-status.saving{color:var(--amber)}
+.sb-status.err{color:var(--red)}
+.sb-logout{
+  background:transparent;
+  border:1px solid var(--line-2);
+  color:var(--ink-3);
+  font-family:var(--sans);font-weight:700;
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  padding:7px 12px;border-radius:5px;cursor:pointer;
+  transition:all .2s;
+}
+.sb-logout:hover{color:var(--ink);border-color:var(--flame);background:rgba(255,153,48,.08)}
+
+/* Old #tabs/#status/#logout selectors stay valid via the actual elements above */
+
+/* ───── MOBILE TOPBAR + DRAWER ───── */
+#mobile-bar{display:none}
+@media(max-width:860px){
+  #app.show{grid-template-columns:1fr}
+  #sidebar{
+    position:fixed;top:0;left:0;bottom:0;
+    width:280px;height:100vh;
+    transform:translateX(-100%);
+    transition:transform .35s var(--ease);
+    box-shadow:none;
+  }
+  #sidebar.open{transform:translateX(0);box-shadow:var(--shadow-lg)}
+  #sidebar.open + #panes-wrap::before{
+    content:'';position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9;
+    animation:fadeIn .25s var(--ease);
+  }
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  #mobile-bar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 18px;
+    background:rgba(50,35,23,.94);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:5;
+    gap:12px;
+  }
+  .mb-burger{
+    width:38px;height:38px;
+    background:transparent;border:1px solid var(--line-2);
+    color:var(--ink-2);
+    border-radius:6px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .2s,color .2s;
+  }
+  .mb-burger:hover{border-color:var(--flame);color:var(--flame)}
+  .mb-title{
+    flex:1;text-align:center;
+    font-family:var(--serif);font-size:18px;line-height:1;
+    color:var(--ink);
+  }
+  .mb-title em{font-style:italic;color:var(--flame)}
+  .mb-spacer{width:38px}
+}
+
+/* ───── PANES ───── */
+#panes-wrap{position:relative;min-height:100vh}
+#panes{
+  padding:32px clamp(20px,3.5vw,44px) 64px;
+  max-width:1200px;
+  margin:0 auto;
+}
+.pane{display:none;animation:paneIn .4s var(--ease-out) both}
+.pane.active{display:block}
+@keyframes paneIn{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.pane-hdr{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:20px;
+  padding-bottom:24px;margin-bottom:28px;
+  border-bottom:1px solid var(--line);
+  flex-wrap:wrap;
+}
+.pane-hdr h2{
+  font-family:var(--serif);
+  font-size:clamp(28px,3.5vw,42px);
+  line-height:1.05;
+  color:var(--ink);
+  margin:0;
+  letter-spacing:-.01em;
+}
+.pane-hdr h2 em{font-style:italic;color:var(--flame)}
+.pane-hdr p{
+  font-family:var(--sans);
+  font-size:14px;
+  color:var(--ink-3);
+  margin-top:8px;
+  max-width:560px;
+  line-height:1.55;
+}
+
+/* ───── BUTTONS ───── */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--sans);
+  font-weight:700;
+  font-size:12px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  padding:11px 18px;
+  border-radius:var(--r);
+  cursor:pointer;
+  transition:all .22s var(--ease);
+  border:1px solid transparent;
+  white-space:nowrap;
+  line-height:1;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--ember),var(--fire));
+  color:#fff;
+  box-shadow:0 3px 10px rgba(212,82,0,.3);
+}
+.btn-primary:hover{box-shadow:0 6px 18px rgba(212,82,0,.45);transform:translateY(-1px)}
+.btn-secondary{
+  background:rgba(255,153,48,.06);
+  color:var(--ink-2);
+  border-color:var(--line-2);
+}
+.btn-secondary:hover{color:var(--ink);border-color:var(--flame);background:rgba(255,153,48,.12)}
+.btn-danger{background:transparent;color:var(--red);border-color:rgba(214,84,71,.4)}
+.btn-danger:hover{background:rgba(214,84,71,.15);border-color:var(--red)}
+.btn-sm{padding:7px 12px;font-size:10px;letter-spacing:.14em}
+.btn-icon{padding:7px 11px;font-size:14px;letter-spacing:0}
+
+/* ───── CATEGORIES & ITEMS ───── */
+#menu-cats,#market-cats{display:flex;flex-direction:column;gap:18px}
+.loading{
+  padding:60px 20px;text-align:center;
+  font-family:var(--sans);
+  color:var(--ink-4);
+  font-style:italic;font-size:14px;
+  letter-spacing:.04em;
+}
+.cat-block{
+  background:linear-gradient(180deg,var(--panel),var(--bg) 85%);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  transition:border-color .25s,box-shadow .25s;
+}
+.cat-block:hover{border-color:var(--line-2)}
+.cat-hdr{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:18px 22px;
+  background:linear-gradient(90deg,rgba(255,153,48,.08),transparent 60%);
+  border-bottom:1px solid var(--line);
+  flex-wrap:wrap;
+}
+.cat-hdr-info{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
+.cat-icon{
+  width:38px;height:38px;flex-shrink:0;
+  background:rgba(255,153,48,.08);
+  border:1px solid rgba(255,153,48,.2);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+}
+.cat-title-block{flex:1;min-width:0}
+.cat-title{
+  font-family:var(--serif);
+  font-size:22px;line-height:1.1;
+  color:var(--ink);
+  letter-spacing:-.005em;
+}
+.cat-title em{font-style:italic;color:var(--flame)}
+.cat-sub{
+  font-family:var(--sans);
+  font-size:11px;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-4);
+  margin-top:4px;
+}
+.cat-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap}
+
+.items-list{padding:14px 18px 18px;display:flex;flex-direction:column;gap:8px}
+
+.item-row{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  align-items:center;gap:18px;
+  padding:14px 16px;
+  background:rgba(20,12,6,.45);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  transition:all .2s var(--ease);
+}
+.item-row:hover{
+  border-color:var(--flame);
+  background:rgba(255,153,48,.08);
+  transform:translateX(2px);
+}
+.item-main{min-width:0;flex:1}
+.item-name{
+  font-family:var(--serif);
+  font-size:17px;
+  color:var(--ink);
+  line-height:1.3;
+}
+.item-desc{
+  font-family:var(--sans);
+  font-size:13px;
+  color:var(--ink-3);
+  margin-top:3px;
+  line-height:1.45;
+  overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+}
+.item-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.meta-pill{
+  font-family:var(--sans);
+  font-weight:700;
+  font-size:9px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;
+  background:rgba(196,168,130,.08);
+  color:var(--ink-3);
+  border:1px solid var(--line);
+}
+.meta-pill.pop{background:rgba(255,107,53,.18);color:#ff8c5a;border-color:rgba(255,107,53,.32)}
+.meta-pill.sig{background:rgba(255,153,48,.16);color:var(--flame);border-color:rgba(255,153,48,.32)}
+.meta-pill.new{background:rgba(92,176,116,.16);color:var(--green);border-color:rgba(92,176,116,.32)}
+.meta-pill.out{background:rgba(120,80,50,.16);color:#a08060;border-color:rgba(120,80,50,.32);text-decoration:line-through}
+
+.item-price{
+  font-family:var(--mono);
+  font-weight:600;
+  font-size:16px;
+  color:var(--glow);
+  text-align:right;
+  white-space:nowrap;
+}
+.item-price.ask{font-style:italic;color:var(--ink-4);font-weight:500;font-size:13px}
+.item-price small{display:block;margin-top:2px}
+
+.item-actions{display:flex;gap:6px;flex-shrink:0}
+
+@media(max-width:680px){
+  .item-row{grid-template-columns:1fr auto;gap:12px;padding:12px 14px}
+  .item-row .item-actions{grid-column:1/-1;justify-content:flex-end;border-top:1px solid var(--line);padding-top:10px;margin-top:4px}
+  .cat-hdr{padding:14px 16px;flex-direction:column;align-items:flex-start;gap:10px}
+  .cat-actions{width:100%;justify-content:flex-end}
+  .items-list{padding:12px 14px 14px}
+}
+
+/* ───── MODAL ───── */
+.modal-bg{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:none;align-items:center;justify-content:center;
+  padding:20px;
+  opacity:0;
+  transition:opacity .25s;
+}
+.modal-bg.show{display:flex;opacity:1}
+.modal{
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  border:1px solid var(--line-2);
+  border-radius:var(--r-lg);
+  width:100%;max-width:580px;max-height:92vh;
+  overflow-y:auto;
+  padding:32px;
+  box-shadow:var(--shadow-lg);
+  transform:translateY(12px) scale(.98);
+  opacity:0;
+  transition:transform .35s var(--ease-out),opacity .25s;
+}
+.modal-bg.show .modal{transform:translateY(0) scale(1);opacity:1}
+.modal-title{
+  font-family:var(--serif);
+  font-size:28px;line-height:1.05;
+  color:var(--ink);
+  margin-bottom:4px;
+}
+.modal-title em{font-style:italic;color:var(--flame)}
+.modal-sub{
+  font-family:var(--sans);
+  font-size:11px;font-weight:600;
+  letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ink-4);
+  margin-bottom:24px;
+}
+
+.field{margin-bottom:18px}
+.field label{
+  display:block;
+  font-family:var(--sans);
+  font-weight:700;
+  font-size:11px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--ink-3);
+  margin-bottom:8px;
+}
+.field input:not([type=checkbox]),.field select,.field textarea{
+  width:100%;
+  background:rgba(20,12,6,.55);
+  border:1px solid var(--line-2);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:15px;
+  padding:11px 14px;
+  border-radius:var(--r);
+  transition:border-color .2s,box-shadow .2s;
+}
+.field textarea{min-height:78px;resize:vertical;line-height:1.5}
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none;
+  border-color:var(--flame);
+  box-shadow:0 0 0 3px rgba(255,153,48,.12);
+}
+.field-hint{
+  font-family:var(--sans);
+  font-size:11px;
+  color:var(--ink-4);
+  margin-top:6px;
+  letter-spacing:.02em;
+}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.modal-actions{
+  display:flex;justify-content:space-between;gap:10px;
+  margin-top:26px;padding-top:22px;
+  border-top:1px solid var(--line);
+  flex-wrap:wrap;
+}
+.modal-actions-r{display:flex;gap:8px;margin-left:auto}
+
+/* ═══ IMAGE MANAGER ═══ */
+.imgmgr{margin-bottom:18px}
+.imgmgr-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-bottom:10px;flex-wrap:wrap;
+}
+.imgmgr-head label{
+  font-family:var(--sans);
+  font-weight:700;
+  font-size:11px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--ink-3);
+  margin:0;
+}
+.imgmgr-layout{
+  display:flex;gap:0;
+  border:1px solid var(--line-2);
+  border-radius:6px;overflow:hidden;
+}
+.imgmgr-layout button{
+  background:transparent;border:none;
+  color:var(--ink-3);
+  font-family:var(--sans);
+  font-size:10px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-weight:700;
+  padding:7px 14px;cursor:pointer;
+  transition:all .2s;
+}
+.imgmgr-layout button.on{background:linear-gradient(135deg,var(--ember),var(--fire));color:#fff}
+.imgmgr-layout button:not(.on):hover{color:var(--flame)}
+
+.collage-stage-wrap{
+  background:rgba(20,12,6,.5);
+  border:1px dashed rgba(196,168,130,.2);
+  border-radius:var(--r);
+  padding:16px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+}
+.collage-stage{
+  position:relative;
+  width:100%;max-width:360px;
+  aspect-ratio:1/1;
+  background:#0a0402;
+  border:1px solid var(--line-2);
+  border-radius:6px;
+  overflow:hidden;
+  user-select:none;
+  touch-action:none;
+}
+.collage-stage.empty{
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink-4);
+  font-family:var(--sans);font-style:italic;
+  font-size:13px;letter-spacing:.04em;
+  text-align:center;padding:24px;
+}
+
+.ctile{position:absolute;overflow:hidden;cursor:move;background:#0a0402;outline:1px solid rgba(255,255,255,.06)}
+.ctile.selected{outline:2px solid var(--flame);outline-offset:-2px;z-index:10}
+.ctile img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none;user-select:none}
+.ctile-num{position:absolute;top:4px;left:4px;background:rgba(0,0,0,.7);color:#fff;font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:3px;letter-spacing:.05em;pointer-events:none;opacity:0;transition:opacity .15s;z-index:2}
+.ctile:hover .ctile-num,.ctile.selected .ctile-num{opacity:1}
+
+.ctile-handle{position:absolute;width:14px;height:14px;background:var(--flame);border:1.5px solid #fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.6);z-index:3;opacity:0;pointer-events:none;transition:opacity .15s}
+.ctile.selected .ctile-handle{opacity:1;pointer-events:auto}
+.ctile-h-n{top:-7px;left:50%;margin-left:-7px;cursor:ns-resize}
+.ctile-h-s{bottom:-7px;left:50%;margin-left:-7px;cursor:ns-resize}
+.ctile-h-e{right:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
+.ctile-h-w{left:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
+.ctile-h-ne{top:-7px;right:-7px;cursor:nesw-resize;border-radius:2px}
+.ctile-h-nw{top:-7px;left:-7px;cursor:nwse-resize;border-radius:2px}
+.ctile-h-se{bottom:-7px;right:-7px;cursor:nwse-resize;border-radius:2px}
+.ctile-h-sw{bottom:-7px;left:-7px;cursor:nesw-resize;border-radius:2px}
+
+.ctile.panning{cursor:grab}
+.ctile.panning.dragging{cursor:grabbing}
+.ctile-pan-hint{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,.75);color:var(--glow);font-family:var(--sans);font-size:9px;padding:3px 6px;border-radius:3px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;pointer-events:none;opacity:0;transition:opacity .15s}
+.ctile.selected .ctile-pan-hint{opacity:1}
+
+.collage-tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;width:100%}
+.collage-tools button{
+  background:transparent;
+  border:1px solid var(--line-2);
+  color:var(--ink-2);
+  font-family:var(--sans);font-weight:700;
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  padding:7px 12px;border-radius:5px;cursor:pointer;
+  transition:all .2s;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.collage-tools button:hover{color:var(--flame);border-color:var(--flame)}
+.collage-tools button.primary{background:linear-gradient(135deg,var(--ember),var(--fire));color:#fff;border-color:transparent}
+.collage-tools button.primary:hover{box-shadow:0 3px 12px rgba(212,82,0,.4)}
+.collage-tools button.danger:hover{color:var(--red);border-color:var(--red)}
+.collage-tools button[disabled]{opacity:.35;cursor:not-allowed;pointer-events:none}
+
+.collage-help{
+  font-family:var(--sans);
+  font-size:11px;
+  color:var(--ink-4);
+  text-align:center;
+  font-style:italic;
+  letter-spacing:.02em;
+  line-height:1.5;
+  max-width:340px;
+}
+
+.slideshow-preview{
+  width:100%;max-width:360px;aspect-ratio:1/1;
+  background:#0a0402;border:1px solid var(--line-2);
+  border-radius:6px;position:relative;overflow:hidden;
+}
+.slideshow-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease}
+.slideshow-preview img.active{opacity:1}
+.slideshow-preview-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-4);font-family:var(--sans);font-style:italic;font-size:13px;letter-spacing:.04em}
+.slideshow-thumbs{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;justify-content:center;width:100%;max-width:360px}
+.slideshow-thumb{position:relative;width:56px;height:56px;border-radius:5px;overflow:hidden;border:1px solid var(--line-2);background:#0a0402;cursor:grab}
+.slideshow-thumb.dragging{opacity:.4}
+.slideshow-thumb.drop-target{outline:2px dashed var(--flame);outline-offset:-2px}
+.slideshow-thumb img{width:100%;height:100%;object-fit:cover;pointer-events:none}
+.slideshow-thumb-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.75);border:none;color:#fff;width:18px;height:18px;border-radius:50%;font-size:12px;line-height:16px;cursor:pointer;padding:0;opacity:0;transition:opacity .15s}
+.slideshow-thumb:hover .slideshow-thumb-del{opacity:1}
+
+.imgmgr-url-fallback{margin-top:10px;width:100%;max-width:360px}
+.imgmgr-url-fallback summary{
+  font-family:var(--sans);
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-4);
+  cursor:pointer;padding:5px 0;text-align:center;
+}
+.imgmgr-url-fallback summary:hover{color:var(--flame)}
+.imgmgr-url-fallback input{margin-top:8px}
+
+/* ═══ SPECIAL & SCARCITY PANES ═══ */
+.special-block{
+  background:linear-gradient(180deg,var(--panel),var(--bg) 80%);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  padding:32px;
+  max-width:780px;
+  box-shadow:var(--shadow-sm);
+}
+.scarcity-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:980px}
+@media(max-width:680px){
+  .scarcity-grid{grid-template-columns:1fr}
+  .field-row{grid-template-columns:1fr}
+  .modal{padding:24px}
+  #panes{padding:20px 16px 56px}
+  .pane-hdr{padding-bottom:18px;margin-bottom:20px}
+}
+.scarcity-card{
+  background:linear-gradient(180deg,var(--panel),var(--bg) 80%);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  padding:26px;
+  box-shadow:var(--shadow-sm);
+}
+.scarcity-card h3{
+  font-family:var(--serif);
+  font-size:22px;line-height:1.1;
+  margin-bottom:6px;
+  color:var(--ink);
+}
+.scarcity-card h3 em{font-style:italic;color:var(--flame)}
+.scarcity-card .sc-desc{
+  font-family:var(--sans);
+  font-size:13px;color:var(--ink-4);
+  margin-bottom:18px;
+}
+.scarcity-list{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px}
+.scarcity-tag{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(212,82,0,.12);
+  border:1px solid rgba(255,153,48,.32);
+  color:var(--flame);
+  font-family:var(--sans);font-size:13px;font-weight:600;
+  padding:6px 12px;border-radius:5px;
+}
+.scarcity-tag button{
+  background:none;border:none;
+  color:var(--ink-4);
+  cursor:pointer;font-size:15px;line-height:1;padding:0;margin-left:3px;
+  transition:color .15s;
+}
+.scarcity-tag button:hover{color:var(--red)}
+.scarcity-add{display:flex;gap:8px;margin-top:10px}
+.scarcity-add input{
+  flex:1;
+  background:rgba(20,12,6,.55);
+  border:1px solid var(--line-2);
+  color:var(--ink);
+  font-family:var(--sans);font-size:14px;
+  padding:9px 12px;border-radius:6px;
+  transition:border-color .2s;
+}
+.scarcity-add input:focus{outline:none;border-color:var(--flame)}
+
+/* ═══ HOMEPAGE EDITOR ═══ */
+.hp-section{
+  background:linear-gradient(180deg,var(--panel),var(--bg) 85%);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  padding:28px;
+  margin-bottom:20px;
+  box-shadow:var(--shadow-sm);
+}
+.hp-section h3{
+  font-family:var(--serif);
+  font-size:22px;line-height:1.1;
+  color:var(--ink);
+  margin-bottom:4px;
+}
+.hp-section h3 em{font-style:italic;color:var(--flame)}
+.hp-section .hp-desc{
+  font-family:var(--sans);
+  font-size:13px;color:var(--ink-4);
+  margin-bottom:20px;
+  line-height:1.55;
+}
+.hp-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.hp-card{
+  background:rgba(20,12,6,.45);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:14px;
+  display:flex;flex-direction:column;gap:10px;
+  transition:border-color .2s;
+}
+.hp-card:hover{border-color:var(--line-2)}
+.hp-card.featured{border-color:rgba(255,153,48,.4);background:rgba(255,153,48,.06)}
+.hp-card-num{
+  font-family:var(--sans);font-weight:700;
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--flame);
+}
+.hp-card-toolbar{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.hp-card-toolbar-btns{display:flex;gap:4px}
+.hp-card-iconbtn{
+  width:26px;height:26px;
+  background:rgba(20,12,6,.4);
+  border:1px solid var(--line-2);
+  color:var(--ink-3);
+  border-radius:4px;
+  font-size:13px;line-height:1;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+  padding:0;
+}
+.hp-card-iconbtn:hover:not([disabled]){
+  color:var(--flame);
+  border-color:var(--flame);
+  background:rgba(255,153,48,.1);
+}
+.hp-card-iconbtn.danger:hover:not([disabled]){
+  color:var(--red);
+  border-color:var(--red);
+  background:rgba(236,110,96,.12);
+}
+.hp-card-iconbtn[disabled]{opacity:.3;cursor:not-allowed}
+.hp-card-thumb{
+  width:100%;aspect-ratio:1.4/1;
+  background:#0a0402;
+  border:1px solid var(--line);
+  border-radius:6px;
+  overflow:hidden;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.hp-card-thumb img{width:100%;height:100%;object-fit:cover}
+.hp-card-thumb-empty{
+  font-family:var(--sans);font-size:11px;
+  color:var(--ink-5);letter-spacing:.1em;text-transform:uppercase;
+  text-align:center;padding:8px;
+}
+.hp-card-thumb-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.7) 100%);
+  pointer-events:none;
+}
+.hp-card-thumb-label{
+  position:absolute;left:8px;bottom:6px;right:8px;
+  font-family:var(--serif);font-size:14px;color:#fff;line-height:1.1;
+  text-shadow:0 2px 6px rgba(0,0,0,.8);
+  z-index:1;
+}
+.hp-card-thumb-label small{
+  display:block;font-family:var(--sans);font-size:10px;
+  font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  opacity:.85;margin-top:2px;
+}
+.hp-card .field{margin-bottom:0}
+.hp-card .field label{font-size:10px;letter-spacing:.18em;margin-bottom:5px}
+.hp-card .field input{padding:8px 11px;font-size:13px}
+.hp-card-img-btns{display:flex;gap:6px}
+.hp-card-img-btns .btn{flex:1;justify-content:center}
+
+.hp-theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.hp-color{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(20,12,6,.45);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:10px 12px;
+  transition:border-color .2s;
+}
+.hp-color:hover{border-color:var(--line-2)}
+.hp-color-swatch{
+  width:44px;height:44px;
+  border-radius:6px;
+  border:1px solid rgba(255,255,255,.12);
+  cursor:pointer;
+  flex-shrink:0;
+  background:var(--swatch);
+  position:relative;
+  overflow:hidden;
+}
+.hp-color-swatch input[type=color]{
+  position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);
+  opacity:0;cursor:pointer;
+}
+.hp-color-info{flex:1;min-width:0}
+.hp-color-label{
+  font-family:var(--sans);font-weight:700;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+.hp-color-val{
+  font-family:var(--mono);font-size:12px;
+  color:var(--ink-2);margin-top:2px;
+}
+
+.hp-preview{
+  margin-top:16px;
+  background:var(--hp-prev-bg, #0d0805);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:28px 20px;
+  text-align:center;
+  color:var(--hp-prev-text, #faedd2);
+}
+.hp-preview-eyebrow{
+  font-family:var(--sans);font-weight:600;
+  font-size:10px;letter-spacing:.5em;text-transform:uppercase;
+  color:var(--hp-prev-eyebrow, #dcbe94);
+  margin-bottom:10px;
+}
+.hp-preview-title{
+  font-family:var(--serif);font-size:38px;line-height:1.05;
+}
+.hp-preview-title em{font-style:italic;color:var(--hp-prev-flame, #ff9930)}
+.hp-preview-tagline{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  color:var(--hp-prev-eyebrow, #dcbe94);opacity:.85;margin-top:6px;
+}
+
+/* ═══ HOMEPAGE LAYOUT EDITOR ═══ */
+.hp-layout-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hp-mode-toggle{display:flex;border:1px solid var(--line-2);border-radius:6px;overflow:hidden}
+.hp-mode-toggle button{
+  background:transparent;border:none;
+  color:var(--ink-3);
+  font-family:var(--sans);font-weight:700;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  padding:8px 14px;cursor:pointer;
+  transition:all .2s;
+}
+.hp-mode-toggle button.on{background:linear-gradient(135deg,var(--ember),var(--fire));color:#fff}
+.hp-mode-toggle button:not(.on):hover{color:var(--flame)}
+
+.hp-layout-wrap{
+  margin-top:18px;
+  position:relative;
+}
+
+/* The "device frame" — shows the WHOLE homepage at scale, not just the nav */
+.hp-canvas-shell{display:flex;flex-direction:column;gap:10px}
+.hp-device{
+  position:relative;
+  width:100%;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%,rgba(255,153,48,.06),transparent 60%),
+    var(--hp-prev-bg, #0d0805);
+  border:1px solid var(--line-2);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  user-select:none;
+  touch-action:none;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+.hp-device[data-mode="desktop"]{aspect-ratio:16/9}
+.hp-device[data-mode="mobile"]{aspect-ratio:9/19;max-width:340px;margin:0 auto}
+
+/* Mock header inside the preview */
+.hp-mock-header{
+  position:absolute;top:0;left:0;right:0;height:18%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:0 5%;
+  pointer-events:none;
+  text-align:center;
+}
+.hp-device[data-mode="mobile"] .hp-mock-header{height:14%}
+.hp-mock-eyebrow{
+  font-family:var(--sans);font-weight:600;
+  font-size:clamp(7px,1vw,10px);
+  letter-spacing:.4em;text-transform:uppercase;
+  color:var(--hp-prev-eyebrow, #dcbe94);
+  opacity:.8;margin-bottom:4px;
+}
+.hp-mock-title{
+  font-family:var(--serif);
+  font-size:clamp(18px,3.5vw,38px);
+  line-height:1.05;
+  color:var(--hp-prev-text, #faedd2);
+}
+.hp-mock-title em{font-style:italic;color:var(--hp-prev-flame, #ff9930)}
+.hp-mock-tagline{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(8px,1.1vw,12px);
+  color:var(--hp-prev-eyebrow, #dcbe94);
+  opacity:.7;margin-top:3px;
+}
+
+/* The drag canvas — sits between mock header and mock footer */
+.hp-canvas{
+  position:absolute;
+  top:18%;left:2%;right:2%;bottom:8%;
+  border:1px dashed rgba(255,153,48,.18);
+  border-radius:6px;
+  overflow:hidden;
+  /* Grid overlay: lines every 5%, dots every 1% */
+  background-image:
+    linear-gradient(rgba(255,153,48,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,153,48,.08) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,.06) 0.5px, transparent 0.7px);
+  background-size:5% 5%, 5% 5%, 1% 1%;
+  background-position:0 0, 0 0, 0 0;
+}
+.hp-device[data-mode="mobile"] .hp-canvas{top:14%;bottom:8%;left:4%;right:4%}
+.hp-canvas.no-snap{
+  background-image:none;
+}
+/* While in match-size mode, show pointer cursor on tiles and highlight */
+.hp-canvas.matching .hp-tile{cursor:crosshair;outline:2px dashed rgba(255,194,74,.4);outline-offset:-3px}
+.hp-canvas.matching .hp-tile.match-source{outline-color:var(--glow);outline-style:solid;box-shadow:0 0 0 3px rgba(255,194,74,.3),0 8px 24px rgba(255,153,48,.4)}
+
+/* Match-size banner */
+.hp-match-banner{
+  background:linear-gradient(135deg, rgba(212,82,0,.18), rgba(255,153,48,.12));
+  border:1px solid var(--flame);
+  color:var(--glow);
+  font-family:var(--sans);font-weight:700;
+  font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  padding:11px 16px;
+  border-radius:6px;
+  margin-top:12px;
+  text-align:center;
+  animation:pulseGlow 1.6s ease-in-out infinite;
+}
+.hp-match-banner.hidden{display:none}
+@keyframes pulseGlow{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,153,48,.3)}
+  50%{box-shadow:0 0 0 6px rgba(255,153,48,0)}
+}
+
+/* The "on" state for the match button */
+#hp-match-btn.on{background:linear-gradient(135deg,var(--ember),var(--fire));color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(212,82,0,.4)}
+
+/* Fullscreen mode — device frame covers the viewport */
+body.hp-fullscreen{overflow:hidden}
+.hp-section.hp-fs{
+  position:fixed;inset:0;z-index:9000;
+  margin:0;border-radius:0;
+  background:var(--void);
+  padding:14px;
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+}
+.hp-section.hp-fs .hp-layout-wrap{flex:1;display:flex;flex-direction:column;min-height:0}
+.hp-section.hp-fs .hp-canvas-shell{flex:1;display:flex;flex-direction:column;min-height:0}
+.hp-section.hp-fs .hp-device{
+  flex:1;height:auto;
+  aspect-ratio:auto !important;
+  max-width:none !important;
+  margin:0 !important;
+}
+.hp-section.hp-fs .hp-side-panel{
+  position:fixed;left:14px;right:14px;bottom:14px;
+  margin:0;max-height:42vh;overflow-y:auto;
+  z-index:9001;
+}
+
+/* Mock footer */
+.hp-mock-footer{
+  position:absolute;bottom:0;left:0;right:0;height:6%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--sans);font-size:clamp(7px,.8vw,10px);
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--hp-prev-eyebrow, #dcbe94);
+  opacity:.6;
+  border-top:1px solid rgba(255,255,255,.04);
+}
+
+.hp-canvas-empty{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink-4);
+  font-family:var(--sans);font-style:italic;font-size:13px;
+}
+.hp-canvas-help{
+  font-family:var(--sans);
+  font-size:11px;
+  color:var(--ink-4);
+  text-align:center;
+  font-style:italic;
+  letter-spacing:.02em;
+  padding:0 10px;
+}
+
+/* Tile styles unchanged but reposition inside the inner .hp-canvas */
+
+.hp-tile{
+  position:absolute;
+  background-color:rgba(31,20,9,.6);
+  border:1.5px solid rgba(220,190,148,.42);
+  border-radius:6px;
+  overflow:hidden;
+  cursor:move;
+  transition:border-color .2s,box-shadow .2s;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  padding:6px;
+}
+.hp-tile:hover:not(.selected){border-color:var(--flame)}
+.hp-tile.featured{border-color:rgba(255,153,48,.7);box-shadow:0 0 0 1px rgba(255,194,74,.2)}
+.hp-tile.selected{
+  border-color:var(--flame);
+  box-shadow:0 0 0 2px rgba(255,153,48,.4),0 8px 24px rgba(212,82,0,.3);
+  z-index:10;
+}
+.hp-tile-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(10,6,3,.15) 0%,rgba(10,6,3,.5) 100%);
+  pointer-events:none;
+}
+.hp-tile-text{
+  position:relative;z-index:1;
+  pointer-events:none;
+  color:#faedd2;
+  max-width:100%;
+}
+.hp-tile-label{
+  font-family:var(--serif);
+  font-size:clamp(11px, 1.2vw, 16px);
+  line-height:1.1;
+  text-shadow:0 2px 6px rgba(0,0,0,.7);
+}
+.hp-tile-label em{font-style:italic;color:var(--flame)}
+.hp-tile-sub{
+  font-family:var(--sans);font-weight:600;
+  font-size:clamp(8px, 0.85vw, 10px);
+  letter-spacing:.16em;text-transform:uppercase;
+  opacity:.8;margin-top:3px;
+  text-shadow:0 1px 4px rgba(0,0,0,.8);
+}
+
+/* Resize handles */
+.hp-h{
+  position:absolute;
+  width:13px;height:13px;
+  background:var(--flame);
+  border:1.5px solid #fff;
+  border-radius:50%;
+  box-shadow:0 1px 4px rgba(0,0,0,.6);
+  z-index:11;
+  cursor:nwse-resize;
+}
+.hp-h-n{top:-7px;left:50%;margin-left:-7px;cursor:ns-resize}
+.hp-h-s{bottom:-7px;left:50%;margin-left:-7px;cursor:ns-resize}
+.hp-h-e{right:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
+.hp-h-w{left:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
+.hp-h-ne{top:-7px;right:-7px;cursor:nesw-resize;border-radius:3px}
+.hp-h-nw{top:-7px;left:-7px;cursor:nwse-resize;border-radius:3px}
+.hp-h-se{bottom:-7px;right:-7px;cursor:nwse-resize;border-radius:3px}
+.hp-h-sw{bottom:-7px;left:-7px;cursor:nesw-resize;border-radius:3px}
+
+/* Side panel — sits below the canvas in normal flow, doesn't overlap */
+.hp-side-panel{
+  background:linear-gradient(180deg, var(--panel-2), var(--panel));
+  border:1px solid var(--flame);
+  border-radius:var(--r-lg);
+  padding:18px;
+  margin-top:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.4);
+}
+.hp-side-panel.hidden{display:none}
+.hp-side-empty{
+  font-family:var(--sans);font-style:italic;
+  color:var(--ink-4);
+  font-size:13px;text-align:center;padding:30px 10px;
+}
+.hp-side-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;padding-bottom:12px;
+  border-bottom:1px solid var(--line);
+}
+.hp-side-title{
+  font-family:var(--sans);font-weight:700;
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--flame);
+}
+.hp-side-img{margin:14px 0 10px}
+.hp-side-img-thumb{
+  width:100%;aspect-ratio:16/10;
+  border-radius:6px;overflow:hidden;
+  background:#0a0402;border:1px solid var(--line);
+}
+.hp-side-img-thumb img{width:100%;height:100%;object-fit:cover}
+.hp-side-img-empty{
+  width:100%;aspect-ratio:16/10;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(10,6,3,.4);border:1px dashed var(--line-2);border-radius:6px;
+  font-family:var(--sans);font-style:italic;font-size:12px;
+  color:var(--ink-4);
+}
+.hp-side-actions{
+  margin-top:14px;padding-top:14px;
+  border-top:1px solid var(--line);
+  display:flex;justify-content:flex-end;
+}
+
+/* ═══ STAFF USERS PANE ═══ */
+.staff-info{
+  background:linear-gradient(180deg,var(--panel),var(--bg) 85%);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  padding:22px 26px;
+  margin-bottom:18px;
+  color:var(--ink-2);
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.6;
+}
+.staff-info p{margin-bottom:8px}
+.staff-info ol{margin:8px 0 0 20px;color:var(--ink-3)}
+.staff-info ol li{margin-bottom:4px}
+.staff-info strong{color:var(--flame);font-weight:700}
+.staff-list{
+  background:linear-gradient(180deg,var(--panel),var(--bg) 85%);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  padding:8px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.staff-row{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;
+  background:rgba(20,12,6,.45);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+}
+.staff-row.me{
+  border-color:rgba(255,153,48,.4);
+  background:rgba(255,153,48,.08);
+}
+.staff-avatar{
+  width:40px;height:40px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--ember),var(--fire));
+  color:#fff;
+  font-family:var(--serif);
+  font-size:18px;
+  border-radius:50%;
+}
+.staff-info-col{flex:1;min-width:0}
+.staff-email{
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:15px;
+  color:var(--ink);
+  display:flex;align-items:center;gap:8px;
+}
+.staff-me-tag{
+  font-family:var(--sans);font-weight:700;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  background:var(--flame);color:#fff;
+  padding:2px 6px;border-radius:3px;
+}
+.staff-meta{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--ink-4);
+  margin-top:3px;
+}
+
+.empty{
+  padding:48px 24px;text-align:center;
+  font-family:var(--sans);
+  color:var(--ink-4);
+  font-style:italic;letter-spacing:.04em;
+  font-size:14px;
+}
+.empty-icon{font-size:32px;opacity:.4;margin-bottom:10px;display:block}
+
+/* ═══ TOAST ═══ */
+#toast{
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  border:1px solid var(--flame);
+  color:var(--glow);
+  font-family:var(--sans);font-weight:700;
+  font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  padding:13px 22px;border-radius:8px;
+  box-shadow:var(--shadow-lg),0 0 0 1px rgba(255,153,48,.2);
+  z-index:9999;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .35s var(--ease-out);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{border-color:var(--red);color:var(--red)}
+
+/* ═══ Scrollbar polish ═══ */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--panel-3);border-radius:5px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--ink-5)}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN GATE ═══ -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-title">The Francis <em>Smokehouse</em></div>
+    <div class="gate-sub">Staff Sign In</div>
+    <input type="email" class="gate-input" id="gate-email" placeholder="your@email.com" autocomplete="email" autofocus>
+    <input type="password" class="gate-input" id="gate-pw" placeholder="Password" autocomplete="current-password" style="margin-top:10px">
+    <button class="gate-btn" id="gate-btn">Sign In</button>
+    <div class="gate-err" id="gate-err"></div>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app">
+
+  <aside id="sidebar">
+    <div class="sb-brand">
+      <div class="sb-brand-name">The Francis <em>Smokehouse</em></div>
+      <div class="sb-brand-sub">Editor · The Pit Board</div>
+    </div>
+    <nav class="sb-nav" id="tabs">
+      <div class="sb-nav-lbl">Today</div>
+      <button class="tab active" data-pane="menu">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h10a4 4 0 0 1 0 8H4z"/><path d="M4 12v8"/><path d="M18 4v16"/><path d="M18 12h2a2 2 0 0 1 0 4h-2"/></svg></span>
+        <span>Menu</span>
+      </button>
+      <button class="tab" data-pane="special">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 14.5 8.5 21 9.3 16.2 13.9 17.6 21 12 17.5 6.4 21 7.8 13.9 3 9.3 9.5 8.5z"/></svg></span>
+        <span>Daily Special</span>
+      </button>
+      <button class="tab" data-pane="scarcity">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M5.5 8.5 9 12"/><path d="M18.5 8.5 15 12"/><path d="M3 14h18l-1.5 7H4.5z"/></svg></span>
+        <span>Sold Out · Selling Fast</span>
+      </button>
+      <div class="sb-nav-lbl">Store</div>
+      <button class="tab" data-pane="market">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 5 3h14l2 6"/><path d="M3 9v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9"/><path d="M3 9h18"/><path d="M9 14h6"/></svg></span>
+        <span>Smokehouse Market</span>
+      </button>
+      <div class="sb-nav-lbl">Site</div>
+      <button class="tab" data-pane="homepage">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M10 21v-6h4v6"/></svg></span>
+        <span>Homepage</span>
+      </button>
+      <button class="tab" data-pane="staff">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.8"/><path d="M15 20c0-2 .8-3.8 2-5 1.2 1.2 2 3 2 5"/></svg></span>
+        <span>Staff Users</span>
+      </button>
+    </nav>
+    <div class="sb-foot">
+      <div class="sb-user" id="sb-user-row">
+        <div class="sb-user-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+          </svg>
+        </div>
+        <div class="sb-user-email" id="sb-user-email" title="Signed in as">—</div>
+      </div>
+      <div class="sb-foot-row">
+        <div class="sb-status" id="status">Ready</div>
+        <button class="sb-logout" id="logout">Sign Out</button>
+      </div>
+    </div>
+  </aside>
+
+  <div id="panes-wrap">
+    <header id="mobile-bar">
+      <button class="mb-burger" id="mb-toggle" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+      <div class="mb-title">Editor · <em>Pit Board</em></div>
+      <div class="mb-spacer"></div>
+    </header>
+
+    <main id="panes">
+      <!-- MENU PANE -->
+      <section class="pane active" id="pane-menu">
+        <div class="pane-hdr">
+          <div>
+            <h2>The <em>Menu</em></h2>
+            <p>Edit BBQ plates, po-boys, sandwiches and sides. Changes go live the moment you save.</p>
+          </div>
+          <button class="btn btn-secondary" id="add-menu-cat">+ New Category</button>
+        </div>
+        <div id="menu-cats" class="loading">Loading menu…</div>
+      </section>
+
+      <!-- SPECIAL PANE -->
+      <section class="pane" id="pane-special">
+        <div class="pane-hdr">
+          <div>
+            <h2>Today's <em>Special</em></h2>
+            <p>One plate that takes the spotlight on the menu page. Update it each morning.</p>
+          </div>
+        </div>
+        <div id="special-block" class="special-block loading">Loading…</div>
+      </section>
+
+      <!-- SCARCITY PANE -->
+      <section class="pane" id="pane-scarcity">
+        <div class="pane-hdr">
+          <div>
+            <h2>Sold Out · <em>Selling Fast</em></h2>
+            <p>Drives the banner at the top of the menu page. Add items as they run low through the day.</p>
+          </div>
+        </div>
+        <div id="scarcity-block" class="loading">Loading…</div>
+      </section>
+
+      <!-- MARKET PANE -->
+      <section class="pane" id="pane-market">
+        <div class="pane-hdr">
+          <div>
+            <h2>Smokehouse <em>Market</em></h2>
+            <p>Take-home items — smoked meats by the pound, boudin, sausage, sides.</p>
+          </div>
+          <button class="btn btn-secondary" id="add-mkt-cat">+ New Category</button>
+        </div>
+        <div id="market-cats" class="loading">Loading market…</div>
+      </section>
+
+      <!-- HOMEPAGE PANE -->
+      <section class="pane" id="pane-homepage">
+        <div class="pane-hdr">
+          <div>
+            <h2>Home <em>Page</em></h2>
+            <p>Edit the front-door of your site — title, tagline, the six nav cards (with images), footer info and the whole color scheme.</p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-secondary" id="hp-reset">Reload</button>
+            <button class="btn btn-primary" id="hp-save">Save Homepage</button>
+          </div>
+        </div>
+        <div id="homepage-block" class="loading">Loading…</div>
+      </section>
+
+      <!-- STAFF USERS PANE -->
+      <section class="pane" id="pane-staff">
+        <div class="pane-hdr">
+          <div>
+            <h2>Staff <em>Users</em></h2>
+            <p>People who can sign in to this editor. Add new users in the Supabase Dashboard → Authentication → Users.</p>
+          </div>
+          <button class="btn btn-secondary" id="staff-refresh">Refresh</button>
+        </div>
+        <div id="staff-block" class="loading">Loading users…</div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ═══ MODAL ═══ -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal" id="modal"></div>
+</div>
+
+<!-- Hidden file input used by image manager -->
+<input type="file" id="img-file-input" accept="image/*" style="display:none" />
+
+<!-- ═══ TOAST ═══ -->
+<div id="toast">Saved</div>
+
+<script src="../supabase.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════ */
+let DATA = { menu:null, market:null, special:null, sold:[], fast:[] };
+
+/* Catch any error and show it on screen so we can see what's failing */
+window.addEventListener('error', e => {
+  const err = document.getElementById('gate-err');
+  if (err && document.getElementById('gate') && !document.getElementById('gate').classList.contains('hide')) {
+    err.textContent = 'Page error: ' + (e.message || 'unknown');
+  }
+  console.error('Page error:', e.error || e.message);
+});
+
+/* ═══════════════════════════════════════════════════════════
+   AUTH — real Supabase email + password sign in
+═══════════════════════════════════════════════════════════ */
+function unlock(){
+  document.getElementById('gate').classList.add('hide');
+  document.getElementById('app').classList.add('show');
+  // Show logged-in user's email in the sidebar
+  const u = sbCurrentUser();
+  const emailEl = document.getElementById('sb-user-email');
+  if (emailEl && u) emailEl.textContent = u.email || '';
+  try { bootApp(); } catch(e) {
+    console.error('bootApp error:', e);
+    setStatus('Setup needed', 'err');
+  }
+}
+
+function checkGate(){
+  // If we have a valid (unexpired) session, skip the login form
+  if (typeof sbGetSession === 'function' && sbGetSession()) {
+    unlock();
+  }
+}
+
+async function attemptSignIn(){
+  const emailEl = document.getElementById('gate-email');
+  const pwEl    = document.getElementById('gate-pw');
+  const errEl   = document.getElementById('gate-err');
+  const btn     = document.getElementById('gate-btn');
+  const email = emailEl.value.trim();
+  const pw    = pwEl.value;
+  if (!email || !pw) {
+    errEl.textContent = 'Enter email and password.';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  errEl.textContent = '';
+  try {
+    if (typeof sbSignIn !== 'function') throw new Error('supabase.js not loaded — refresh the page');
+    await sbSignIn(email, pw);
+    unlock();
+  } catch(e) {
+    console.error('Sign in failed:', e);
+    errEl.textContent = e.message || 'Sign in failed.';
+    pwEl.select();
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+  }
+}
+
+document.getElementById('gate-btn').onclick = attemptSignIn;
+document.getElementById('gate-pw').addEventListener('keydown', e => {
+  if (e.key === 'Enter') attemptSignIn();
+});
+document.getElementById('gate-email').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('gate-pw').focus();
+});
+document.getElementById('logout').onclick = async () => {
+  if (typeof sbSignOut === 'function') await sbSignOut();
+  location.reload();
+};
+
+/* ═══════════════════════════════════════════════════════════
+   STATUS + TOAST
+═══════════════════════════════════════════════════════════ */
+const statusEl = document.getElementById('status');
+function setStatus(msg, kind='ok'){
+  statusEl.textContent = msg;
+  statusEl.className = 'sb-status' + (kind==='err'?' err':kind==='saving'?' saving':'');
+}
+const toastEl = document.getElementById('toast');
+let toastTimer;
+function toast(msg, err=false){
+  toastEl.textContent = msg;
+  toastEl.classList.toggle('err', err);
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2400);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════════════════════ */
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.pane').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById('pane-'+t.dataset.pane).classList.add('active');
+  // Close mobile drawer if it's open
+  document.getElementById('sidebar').classList.remove('open');
+  // Lazy-load homepage data the first time that pane is opened
+  if (t.dataset.pane === 'homepage' && typeof loadHomepageIntoEditor === 'function') {
+    if (typeof HP_DATA === 'undefined' || HP_DATA === null) {
+      loadHomepageIntoEditor();
+    }
+  }
+  // Lazy-load staff users the first time that pane is opened
+  if (t.dataset.pane === 'staff' && typeof loadStaffUsers === 'function') {
+    loadStaffUsers();
+  }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE DRAWER
+═══════════════════════════════════════════════════════════ */
+const mbToggle = document.getElementById('mb-toggle');
+const sidebar  = document.getElementById('sidebar');
+if (mbToggle && sidebar) {
+  mbToggle.onclick = () => sidebar.classList.toggle('open');
+  // Click outside the sidebar (on the backdrop overlay) closes it
+  document.addEventListener('click', e => {
+    if (!sidebar.classList.contains('open')) return;
+    if (sidebar.contains(e.target) || mbToggle.contains(e.target)) return;
+    sidebar.classList.remove('open');
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════════════════ */
+const modalBg = document.getElementById('modal-bg');
+const modalEl = document.getElementById('modal');
+function openModal(html){
+  modalEl.innerHTML = html;
+  modalBg.classList.add('show');
+}
+function closeModal(){ modalBg.classList.remove('show'); }
+modalBg.addEventListener('click', e => { if(e.target===modalBg) closeModal(); });
+
+/* ═══════════════════════════════════════════════════════════
+   BOOT
+═══════════════════════════════════════════════════════════ */
+async function bootApp(){
+  setStatus('Loading…', 'saving');
+  // Initialize empty so renderAll doesn't crash even if Supabase fails
+  DATA.menu = DATA.menu || {};
+  DATA.market = DATA.market || {};
+  DATA.special = DATA.special || {};
+  DATA.sold = DATA.sold || [];
+  DATA.fast = DATA.fast || [];
+  renderAll();
+
+  // ── Diagnostic test: hit Supabase directly and show the raw response ──
+  const diagInfo = await runDiagnostic();
+
+  try {
+    const [menu, market] = await Promise.all([loadMenuData(), loadMarketData()]);
+    DATA.menu = menu.MENU;
+    DATA.special = menu.SITE_SPECIAL;
+    DATA.sold = menu.SOLD_OUT;
+    DATA.fast = menu.SELLING_FAST;
+    DATA.market = market.MARKET;
+    renderAll();
+    setStatus('Ready');
+  } catch(e) {
+    console.error(e);
+    setStatus('Connection failed', 'err');
+    const msg = `<div class="empty" style="line-height:1.7;text-align:left;max-width:680px;margin:0 auto">
+      <strong style="color:var(--flame);font-size:15px">Can't reach Supabase. Here's what it told us:</strong>
+      <pre style="background:rgba(20,12,6,.65);border:1px solid rgba(196,168,130,.2);padding:14px;margin-top:14px;border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--paper);white-space:pre-wrap;word-break:break-all;line-height:1.5">${escapeHtml(diagInfo)}</pre>
+      <div style="margin-top:14px;font-family:var(--cond);font-size:13px;color:rgba(196,168,130,.7)">
+        Copy this whole message and send it to Westyn so he can fix it.
+      </div>
+    </div>`;
+    const mc = document.getElementById('menu-cats');   if (mc) mc.innerHTML = msg;
+    const kc = document.getElementById('market-cats'); if (kc) kc.innerHTML = msg;
+    const sb = document.getElementById('special-block'); if (sb) sb.innerHTML = msg;
+    const scb = document.getElementById('scarcity-block'); if (scb) scb.innerHTML = msg;
+  }
+}
+
+async function runDiagnostic(){
+  const lines = [];
+  lines.push('URL:  ' + (typeof SUPABASE_URL !== 'undefined' ? SUPABASE_URL : '(not set)'));
+  lines.push('KEY:  ' + (typeof SUPABASE_ANON_KEY !== 'undefined' ? (SUPABASE_ANON_KEY.slice(0,20)+'...') : '(not set)'));
+  lines.push('FROM: ' + location.origin);
+  lines.push('');
+  try {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/menu_categories?select=id&limit=1', { headers: SB_HEADERS });
+    lines.push('HTTP Status: ' + r.status + ' ' + r.statusText);
+    const body = await r.text();
+    lines.push('Response body:');
+    lines.push(body.slice(0, 500));
+  } catch(e) {
+    lines.push('Network error: ' + e.message);
+  }
+  return lines.join('\n');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER ALL
+═══════════════════════════════════════════════════════════ */
+function renderAll(){
+  renderCategories('menu',   DATA.menu,   document.getElementById('menu-cats'));
+  renderCategories('market', DATA.market, document.getElementById('market-cats'));
+  renderSpecial();
+  renderScarcity();
+}
+
+/* ═══ render category list (works for menu & market) ═══ */
+function renderCategories(type, data, container){
+  if (!data || Object.keys(data).length === 0) {
+    container.innerHTML = `<div class="empty">No categories yet. Click "+ New Category" to add one.</div>`;
+    return;
+  }
+  let html = '';
+  Object.entries(data).forEach(([catId, cat]) => {
+    html += `
+      <div class="cat-block">
+        <div class="cat-hdr">
+          <div class="cat-hdr-info">
+            <span class="cat-icon">${cat.icon || '•'}</span>
+            <div class="cat-title-block">
+              <div class="cat-title">${escapeHtml(cat.title)}</div>
+              ${cat.subtitle ? `<div class="cat-sub">${escapeHtml(cat.subtitle)}</div>` : ''}
+            </div>
+          </div>
+          <div class="cat-actions">
+            <button class="btn btn-secondary btn-sm" onclick="addItem('${type}','${catId}')">+ Item</button>
+            <button class="btn btn-secondary btn-sm" onclick="editCategory('${type}','${catId}')">Edit Category</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteCategory('${type}','${catId}')">Delete</button>
+          </div>
+        </div>
+        <div class="items-list">
+          ${cat.items.length === 0
+            ? `<div class="empty">No items yet.</div>`
+            : cat.items.map((it, i) => itemRow(type, catId, it, i)).join('')}
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function itemRow(type, catId, it, idx){
+  const priceTxt = (it.price === null || it.price === undefined || it.price === '')
+    ? '<span class="item-price ask">Ask</span>'
+    : `<span class="item-price">$${Number(it.price).toFixed(2)}${it.unit?'<small style="opacity:.6;font-size:.75em">/'+escapeHtml(it.unit)+'</small>':''}</span>`;
+  const badge = it.badge
+    ? `<span class="meta-pill ${it.badgeStyle||''}">${escapeHtml(it.badge)}</span>` : '';
+  const note  = it.note ? `<span class="meta-pill">${escapeHtml(it.note)}</span>` : '';
+  return `
+    <div class="item-row">
+      <div class="item-main">
+        <div class="item-name">${escapeHtml(it.name)}</div>
+        ${it.desc ? `<div class="item-desc">${escapeHtml(it.desc)}</div>` : ''}
+        ${(badge||note) ? `<div class="item-meta">${badge}${note}</div>` : ''}
+      </div>
+      ${priceTxt}
+      <div class="item-actions">
+        <button class="btn btn-secondary btn-icon" onclick="editItem('${type}','${catId}',${idx})" title="Edit">✎</button>
+        <button class="btn btn-danger btn-icon" onclick="deleteItem('${type}','${catId}',${idx})" title="Delete">×</button>
+      </div>
+    </div>
+  `;
+}
+
+function escapeHtml(s){
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CATEGORY EDITORS
+═══════════════════════════════════════════════════════════ */
+document.getElementById('add-menu-cat').onclick = () => editCategoryModal('menu', null);
+document.getElementById('add-mkt-cat').onclick  = () => editCategoryModal('market', null);
+
+function editCategory(type, catId){ editCategoryModal(type, catId); }
+
+function editCategoryModal(type, catId){
+  const isNew = !catId;
+  const cat = isNew ? {title:'', subtitle:'', icon: type==='menu'?'🔥':'🥩'} :
+                       (type==='menu' ? DATA.menu : DATA.market)[catId];
+  openModal(`
+    <div class="modal-title">${isNew?'New':'Edit'} <em>Category</em></div>
+    <div class="modal-sub">${type==='menu'?'Menu':'Market'} Category</div>
+    ${isNew ? `
+      <div class="field">
+        <label>ID (no spaces, lowercase, no quotes)</label>
+        <input id="m-id" placeholder="e.g. bbq_plates" />
+        <div class="field-hint">Used internally. Can't change later. Letters, numbers, underscores only.</div>
+      </div>` : `<input type="hidden" id="m-id" value="${escapeHtml(catId)}" />`}
+    <div class="field"><label>Title</label><input id="m-title" value="${escapeHtml(cat.title)}" placeholder="BBQ Plates" /></div>
+    <div class="field-row">
+      <div class="field"><label>Subtitle</label><input id="m-sub" value="${escapeHtml(cat.subtitle||'')}" placeholder="With Two Sides" /></div>
+      <div class="field"><label>Icon (emoji)</label><input id="m-icon" value="${escapeHtml(cat.icon||'')}" placeholder="🔥" /></div>
+    </div>
+    <div class="modal-actions">
+      <div></div>
+      <div class="modal-actions-r">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveCategory('${type}',${isNew})">${isNew?'Create':'Save'}</button>
+      </div>
+    </div>
+  `);
+}
+
+async function saveCategory(type, isNew){
+  const id    = document.getElementById('m-id').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'_');
+  const title = document.getElementById('m-title').value.trim();
+  if (!id || !title) { toast('ID and Title are required', true); return; }
+  const row = {
+    id, title,
+    subtitle: document.getElementById('m-sub').value.trim(),
+    icon:     document.getElementById('m-icon').value.trim() || '•'
+  };
+  const table = type==='menu' ? 'menu_categories' : 'market_categories';
+  try {
+    setStatus('Saving…', 'saving');
+    if (isNew) {
+      // Find next sort_order
+      const list = Object.values(type==='menu' ? DATA.menu : DATA.market);
+      row.sort_order = list.length;
+      await sbInsert(table, row);
+    } else {
+      await sbUpdate(table, {id}, row);
+    }
+    await reloadAndRender(type);
+    closeModal();
+    toast('Saved');
+    setStatus('Ready');
+  } catch(e){ console.error(e); toast('Save failed: '+e.message, true); setStatus('Save failed','err'); }
+}
+
+async function deleteCategory(type, catId){
+  if (!confirm(`Delete category "${catId}" and all its items? This can't be undone.`)) return;
+  const table = type==='menu' ? 'menu_categories' : 'market_categories';
+  try {
+    setStatus('Deleting…','saving');
+    await sbDelete(table, {id: catId});
+    await reloadAndRender(type);
+    toast('Deleted');
+    setStatus('Ready');
+  } catch(e){ console.error(e); toast('Delete failed: '+e.message, true); setStatus('Delete failed','err'); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ITEM EDITOR
+═══════════════════════════════════════════════════════════ */
+let _editingItemRef = null;
+
+function addItem(type, catId){ openItemModal(type, catId, null); }
+
+function editItem(type, catId, idx){
+  const cat = (type==='menu' ? DATA.menu : DATA.market)[catId];
+  openItemModal(type, catId, cat.items[idx]);
+}
+
+async function openItemModal(type, catId, item){
+  const isNew = !item;
+  // For editing, we need the actual DB id of the item — fetch fresh by name+category since we strip ids on load
+  let dbId = null;
+  if (!isNew) {
+    const table = type==='menu' ? 'menu_items' : 'market_items';
+    const rows = await sbSelect(table, `category_id=eq.${encodeURIComponent(catId)}&name=eq.${encodeURIComponent(item.name)}`);
+    if (rows[0]) dbId = rows[0].id;
+  }
+  const it = item || {name:'',price:'',img:'',desc:'',note:'',pairs:'',badge:'',badgeStyle:'',unit:''};
+  const isMarket = type === 'market';
+  openModal(`
+    <div class="modal-title">${isNew?'New':'Edit'} <em>Item</em></div>
+    <div class="modal-sub">${(type==='menu'?DATA.menu:DATA.market)[catId].title}</div>
+    <input type="hidden" id="i-dbid" value="${dbId||''}" />
+    <input type="hidden" id="i-catid" value="${escapeHtml(catId)}" />
+    <input type="hidden" id="i-type" value="${type}" />
+
+    <div class="field"><label>Name</label><input id="i-name" value="${escapeHtml(it.name)}" placeholder="Brisket Plate" /></div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Price ($)</label>
+        <input id="i-price" type="number" step="0.01" min="0" value="${it.price ?? ''}" placeholder="16.66" />
+        <div class="field-hint">Leave blank for "Ask" / market price</div>
+      </div>
+      ${isMarket
+        ? `<div class="field"><label>Unit (optional)</label><input id="i-unit" value="${escapeHtml(it.unit||'')}" placeholder="lb, each, pack" /></div>`
+        : `<div class="field"><label>2nd Price (optional)</label><input id="i-priceLg" type="number" step="0.01" min="0" value="${it.priceLg ?? ''}" placeholder="large size" /></div>`
+      }
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+      <textarea id="i-desc" placeholder="Short description shown under the name">${escapeHtml(it.desc||'')}</textarea>
+    </div>
+
+    <div class="field-row">
+      <div class="field"><label>Note (fine print)</label><input id="i-note" value="${escapeHtml(it.note||'')}" placeholder="+ 2 Sides" /></div>
+      ${!isMarket ? `<div class="field"><label>Pairs With</label><input id="i-pairs" value="${escapeHtml(it.pairs||'')}" placeholder="sweet tea, cornbread" /></div>` : '<div></div>'}
+    </div>
+
+    <div class="field-row">
+      <div class="field"><label>Badge Text</label><input id="i-badge" value="${escapeHtml(it.badge||'')}" placeholder="Most Ordered" /></div>
+      <div class="field">
+        <label>Badge Color</label>
+        <select id="i-badgeStyle">
+          <option value="" ${!it.badgeStyle?'selected':''}>None</option>
+          <option value="pop" ${it.badgeStyle==='pop'?'selected':''}>Orange (pop)</option>
+          <option value="sig" ${it.badgeStyle==='sig'?'selected':''}>Amber (signature)</option>
+          <option value="new" ${it.badgeStyle==='new'?'selected':''}>Green (new)</option>
+          <option value="out" ${it.badgeStyle==='out'?'selected':''}>Grey (sold out)</option>
+        </select>
+      </div>
+    </div>
+
+    ${imgmgrHtml('item', it.images || [], it.imageLayout || 'collage', it.img || '')}
+
+    <div class="modal-actions">
+      <div></div>
+      <div class="modal-actions-r">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveItem(${isNew})">${isNew?'Add Item':'Save'}</button>
+      </div>
+    </div>
+  `);
+  imgmgrAttach('item');
+}
+
+async function saveItem(isNew){
+  const type  = document.getElementById('i-type').value;
+  const catId = document.getElementById('i-catid').value;
+  const dbId  = document.getElementById('i-dbid').value;
+  const isMarket = type === 'market';
+
+  const name = document.getElementById('i-name').value.trim();
+  if (!name) { toast('Name is required', true); return; }
+
+  const priceVal = document.getElementById('i-price').value.trim();
+  const imgState = imgmgrState['item'] || { images: [], layout: 'collage', urlOverride: '' };
+  const firstUrl = imgState.images[0]?.url || imgState.urlOverride || '';
+  const row = {
+    category_id: catId,
+    name,
+    price: priceVal === '' ? null : Number(priceVal),
+    img:         firstUrl, // legacy fallback — kept in sync
+    images:      imgState.images,
+    image_layout: imgState.layout,
+    description: document.getElementById('i-desc').value.trim(),
+    note:        document.getElementById('i-note').value.trim(),
+    badge:       document.getElementById('i-badge').value.trim(),
+    badge_style: document.getElementById('i-badgeStyle').value
+  };
+  if (isMarket) row.unit = document.getElementById('i-unit').value.trim();
+  else {
+    const pl = document.getElementById('i-priceLg').value.trim();
+    row.price_lg = pl === '' ? null : Number(pl);
+    row.pairs    = document.getElementById('i-pairs').value.trim();
+  }
+
+  const table = isMarket ? 'market_items' : 'menu_items';
+  try {
+    setStatus('Saving…','saving');
+    if (isNew) {
+      // Find next sort_order for this category
+      const cat = (isMarket ? DATA.market : DATA.menu)[catId];
+      row.sort_order = cat.items.length;
+      await sbInsert(table, row);
+    } else {
+      await sbUpdate(table, {id: dbId}, row);
+    }
+    await reloadAndRender(type);
+    closeModal();
+    toast('Saved');
+    setStatus('Ready');
+  } catch(e){ console.error(e); toast('Save failed: '+e.message, true); setStatus('Save failed','err'); }
+}
+
+async function deleteItem(type, catId, idx){
+  const cat = (type==='menu' ? DATA.menu : DATA.market)[catId];
+  const item = cat.items[idx];
+  if (!confirm(`Delete "${item.name}"?`)) return;
+  const table = type==='menu' ? 'menu_items' : 'market_items';
+  try {
+    setStatus('Deleting…','saving');
+    // Look up by name+cat since cached items don't have ids
+    const rows = await sbSelect(table, `category_id=eq.${encodeURIComponent(catId)}&name=eq.${encodeURIComponent(item.name)}`);
+    if (rows[0]) await sbDelete(table, {id: rows[0].id});
+    await reloadAndRender(type);
+    toast('Deleted');
+    setStatus('Ready');
+  } catch(e){ console.error(e); toast('Delete failed: '+e.message, true); setStatus('Delete failed','err'); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DAILY SPECIAL
+═══════════════════════════════════════════════════════════ */
+function renderSpecial(){
+  const s = DATA.special || {};
+  const block = document.getElementById('special-block');
+  block.classList.remove('loading');
+  block.innerHTML = `
+    <div class="field"><label>Plate Name</label><input id="sp-name" value="${escapeHtml(s.name||'')}" placeholder="Backyard BBQ Plate" /></div>
+    <div class="field-row">
+      <div class="field"><label>Price ($)</label><input id="sp-price" type="number" step="0.01" value="${s.price ?? ''}" placeholder="15.02" /></div>
+      <div class="field"><label>Type</label><input id="sp-type" value="${escapeHtml(s.type||'')}" placeholder="Lunch Special" /></div>
+    </div>
+    <div class="field"><label>Description</label><textarea id="sp-desc" placeholder="BBQ chicken, smoked sausage, dirty rice, green beans...">${escapeHtml(s.desc||'')}</textarea></div>
+    ${imgmgrHtml('sp', s.images || [], s.imageLayout || 'collage', s.image || '')}
+    <div class="field">
+      <label><input type="checkbox" id="sp-hidden" ${s.hidden?'checked':''} style="width:auto;margin-right:8px;vertical-align:middle"> Hide today (no special running)</label>
+    </div>
+    <div style="margin-top:18px;padding-top:18px;border-top:1px solid rgba(196,168,130,.12);text-align:right">
+      <button class="btn btn-primary" onclick="saveSpecial()">Save Special</button>
+    </div>
+  `;
+  imgmgrAttach('sp');
+}
+
+async function saveSpecial(){
+  const imgState = imgmgrState['sp'] || { images: [], layout: 'collage', urlOverride: '' };
+  const firstUrl = imgState.images[0]?.url || imgState.urlOverride || '';
+  const row = {
+    id: 'current',
+    name:        document.getElementById('sp-name').value.trim(),
+    price:       document.getElementById('sp-price').value.trim() === '' ? null : Number(document.getElementById('sp-price').value),
+    description: document.getElementById('sp-desc').value.trim(),
+    type:        document.getElementById('sp-type').value.trim(),
+    image:       firstUrl,
+    images:      imgState.images,
+    image_layout: imgState.layout,
+    hidden:      document.getElementById('sp-hidden').checked
+  };
+  try {
+    setStatus('Saving…','saving');
+    await sbUpsert('daily_special', row);
+    DATA.special = { name: row.name, price: row.price, desc: row.description, type: row.type, image: row.image, images: row.images, imageLayout: row.image_layout, hidden: row.hidden };
+    renderSpecial();
+    toast('Special saved');
+    setStatus('Ready');
+  } catch(e){ console.error(e); toast('Save failed: '+e.message, true); setStatus('Save failed','err'); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCARCITY (sold out / selling fast)
+═══════════════════════════════════════════════════════════ */
+function renderScarcity(){
+  const block = document.getElementById('scarcity-block');
+  block.classList.remove('loading');
+  block.innerHTML = `
+    <div class="scarcity-grid">
+      ${scarcityCard('Sold Out', 'sold', DATA.sold)}
+      ${scarcityCard('Selling Fast', 'fast', DATA.fast)}
+    </div>
+  `;
+}
+function scarcityCard(title, key, items){
+  return `
+    <div class="scarcity-card">
+      <h3>${title.replace(/(Sold|Selling)/, '<em>$1</em>')}</h3>
+      <div class="scarcity-list" id="sc-list-${key}">
+        ${items.length === 0
+          ? `<div style="color:rgba(196,168,130,.5);font-style:italic;font-size:13px">Nothing here.</div>`
+          : items.map(name => `<span class="scarcity-tag">${escapeHtml(name)}<button onclick="removeScarcity('${key}','${escapeHtml(name).replace(/'/g,"\\'")}')">×</button></span>`).join('')}
+      </div>
+      <div class="scarcity-add">
+        <input id="sc-in-${key}" placeholder="Add item name…" onkeydown="if(event.key==='Enter')addScarcity('${key}')">
+        <button class="btn btn-primary btn-sm" onclick="addScarcity('${key}')">Add</button>
+      </div>
+    </div>
+  `;
+}
+async function addScarcity(key){
+  const inp = document.getElementById('sc-in-'+key);
+  const name = inp.value.trim();
+  if (!name) return;
+  const arr = (key==='sold' ? DATA.sold : DATA.fast).slice();
+  if (!arr.includes(name)) arr.push(name);
+  await saveScarcity(key, arr);
+  inp.value = '';
+}
+async function removeScarcity(key, name){
+  const arr = (key==='sold' ? DATA.sold : DATA.fast).filter(n => n !== name);
+  await saveScarcity(key, arr);
+}
+async function saveScarcity(key, arr){
+  const dbId = key === 'sold' ? 'sold_out' : 'selling_fast';
+  try {
+    setStatus('Saving…','saving');
+    await sbUpsert('scarcity', { id: dbId, items: arr });
+    if (key==='sold') DATA.sold = arr; else DATA.fast = arr;
+    renderScarcity();
+    toast('Saved');
+    setStatus('Ready');
+  } catch(e){ console.error(e); toast('Save failed: '+e.message, true); setStatus('Save failed','err'); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RELOAD HELPER
+═══════════════════════════════════════════════════════════ */
+async function reloadAndRender(type){
+  if (type === 'menu') {
+    const m = await loadMenuData();
+    DATA.menu = m.MENU;
+    DATA.special = m.SITE_SPECIAL;
+    DATA.sold = m.SOLD_OUT;
+    DATA.fast = m.SELLING_FAST;
+  } else if (type === 'market') {
+    const m = await loadMarketData();
+    DATA.market = m.MARKET;
+  }
+  renderAll();
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   IMAGE MANAGER  — freeform collage editor + slideshow
+   ───────────────────────────────────────────────────────────
+   Per image: { url, pos:{x,y,w,h}, fit:{offsetX,offsetY,scale} }
+     pos = tile rect in % of canvas (0-100)
+     fit = image pan/zoom inside its tile (offsetX/Y in %, scale multiplier)
+   Item-level: imageLayout = 'collage' | 'slideshow'
+═══════════════════════════════════════════════════════════ */
+const imgmgrState = {}; // { item:{images,layout,selected,urlOverride}, sp:{...} }
+
+function imgmgrHtml(key, images, layout, legacyUrl){
+  // Migrate any incoming data (old crop format → new pos/fit format)
+  const seeded = (images && images.length)
+    ? images.map(im => migrateImage(im))
+    : (legacyUrl ? [migrateImage({ url: legacyUrl })] : []);
+  // If anything is missing pos, auto-arrange now
+  if (seeded.some(im => !im.pos)) autoArrange(seeded);
+  imgmgrState[key] = {
+    images: seeded,
+    layout: layout || 'collage',
+    selected: -1,
+    urlOverride: ''
+  };
+  return `
+    <div class="imgmgr" id="imgmgr-${key}">
+      <div class="imgmgr-head">
+        <label>Images</label>
+        <div class="imgmgr-layout">
+          <button type="button" data-layout="collage" onclick="imgmgrSetLayout('${key}','collage')">Collage</button>
+          <button type="button" data-layout="slideshow" onclick="imgmgrSetLayout('${key}','slideshow')">Slideshow</button>
+        </div>
+      </div>
+      <div id="imgmgr-body-${key}"></div>
+      <details class="imgmgr-url-fallback">
+        <summary>Paste an image URL instead</summary>
+        <div class="field" style="margin:0">
+          <input type="url" id="imgmgr-url-${key}" placeholder="https://...">
+          <div class="field-hint">For external images (Instagram, Facebook, etc).</div>
+          <button type="button" class="btn btn-secondary btn-sm" style="margin-top:6px" onclick="imgmgrAddUrl('${key}')">+ Add URL</button>
+        </div>
+      </details>
+    </div>
+  `;
+}
+
+/** Convert any old image shape to the new {url, pos, fit} shape. */
+function migrateImage(im){
+  const out = { url: im.url || im };
+  // Old crop {x,y,zoom,rotation} — port translate/zoom into fit, drop rotation
+  if (im.crop && !im.pos && !im.fit) {
+    out.fit = {
+      offsetX: im.crop.x || 0,
+      offsetY: im.crop.y || 0,
+      scale:   im.crop.zoom || 1
+    };
+  }
+  out.pos = im.pos || null;        // assigned by autoArrange if missing
+  out.fit = im.fit || out.fit || { offsetX:0, offsetY:0, scale:1 };
+  return out;
+}
+
+/** Auto-arrange images into a sensible grid layout based on count. */
+function autoArrange(images){
+  const n = images.length;
+  if (n === 0) return;
+  if (n === 1) {
+    images[0].pos = { x:0, y:0, w:100, h:100 };
+  } else if (n === 2) {
+    images[0].pos = { x:0,  y:0, w:50, h:100 };
+    images[1].pos = { x:50, y:0, w:50, h:100 };
+  } else if (n === 3) {
+    images[0].pos = { x:0,  y:0,  w:50, h:100 };
+    images[1].pos = { x:50, y:0,  w:50, h:50  };
+    images[2].pos = { x:50, y:50, w:50, h:50  };
+  } else if (n === 4) {
+    images[0].pos = { x:0,  y:0,  w:50, h:50 };
+    images[1].pos = { x:50, y:0,  w:50, h:50 };
+    images[2].pos = { x:0,  y:50, w:50, h:50 };
+    images[3].pos = { x:50, y:50, w:50, h:50 };
+  } else {
+    // 5+ → top row 2/3 split, bottom row equally divided
+    const top = Math.ceil(n / 2);
+    const bot = n - top;
+    const tw = 100 / top;
+    const bw = bot ? 100 / bot : 100;
+    for (let i = 0; i < top; i++) images[i].pos = { x: i*tw, y:0,  w:tw, h:bot?50:100 };
+    for (let i = 0; i < bot; i++) images[top+i].pos = { x: i*bw, y:50, w:bw, h:50 };
+  }
+}
+
+function imgmgrAttach(key){
+  imgmgrRender(key);
+  // Layout toggle visual state
+  const head = document.querySelector(`#imgmgr-${key} .imgmgr-layout`);
+  if (head) head.querySelectorAll('button').forEach(b => {
+    b.classList.toggle('on', b.dataset.layout === imgmgrState[key].layout);
+  });
+}
+
+function imgmgrSetLayout(key, layout){
+  imgmgrState[key].layout = layout;
+  document.querySelectorAll(`#imgmgr-${key} .imgmgr-layout button`).forEach(b => {
+    b.classList.toggle('on', b.dataset.layout === layout);
+  });
+  imgmgrRender(key);
+}
+
+function imgmgrRender(key){
+  const body = document.getElementById(`imgmgr-body-${key}`);
+  if (!body) return;
+  const st = imgmgrState[key];
+  if (st.layout === 'slideshow') {
+    renderSlideshowUI(key, body);
+  } else {
+    renderCollageUI(key, body);
+  }
+}
+
+/* ─── COLLAGE UI ───────────────────────────────────────── */
+
+function renderCollageUI(key, body){
+  const st = imgmgrState[key];
+  if (!st.images.length) {
+    body.innerHTML = `
+      <div class="collage-stage-wrap">
+        <div class="collage-stage empty">No images yet — tap "Add Image" below to start your collage.</div>
+        <div class="collage-tools">
+          <button type="button" class="primary" onclick="imgmgrPick('${key}')">+ Add Image</button>
+        </div>
+        <div class="collage-help">Auto-arranges into a nice grid as you add. Drag tiles, drag corner/edge handles to resize and crop. Click a tile to select.</div>
+      </div>`;
+    return;
+  }
+  const tiles = st.images.map((im, idx) => `
+    <div class="ctile ${idx===st.selected?'selected':''} ${st.panMode?'panning':''}"
+         data-idx="${idx}"
+         style="left:${im.pos.x}%;top:${im.pos.y}%;width:${im.pos.w}%;height:${im.pos.h}%;z-index:${idx===st.selected?10:1}"
+         onmousedown="ctileMouseDown(event,'${key}',${idx})"
+         ontouchstart="ctileTouchStart(event,'${key}',${idx})">
+      <img src="${escapeHtml(im.url)}" alt="" style="${fitStyle(im.fit)}">
+      <span class="ctile-num">${idx+1}</span>
+      <span class="ctile-pan-hint">${st.panMode?'PAN':'TAP TO PAN'}</span>
+      <span class="ctile-handle ctile-h-n"  data-h="n"  onmousedown="ctileHandleDown(event,'${key}',${idx},'n')"  ontouchstart="ctileHandleTouch(event,'${key}',${idx},'n')"></span>
+      <span class="ctile-handle ctile-h-s"  data-h="s"  onmousedown="ctileHandleDown(event,'${key}',${idx},'s')"  ontouchstart="ctileHandleTouch(event,'${key}',${idx},'s')"></span>
+      <span class="ctile-handle ctile-h-e"  data-h="e"  onmousedown="ctileHandleDown(event,'${key}',${idx},'e')"  ontouchstart="ctileHandleTouch(event,'${key}',${idx},'e')"></span>
+      <span class="ctile-handle ctile-h-w"  data-h="w"  onmousedown="ctileHandleDown(event,'${key}',${idx},'w')"  ontouchstart="ctileHandleTouch(event,'${key}',${idx},'w')"></span>
+      <span class="ctile-handle ctile-h-ne" data-h="ne" onmousedown="ctileHandleDown(event,'${key}',${idx},'ne')" ontouchstart="ctileHandleTouch(event,'${key}',${idx},'ne')"></span>
+      <span class="ctile-handle ctile-h-nw" data-h="nw" onmousedown="ctileHandleDown(event,'${key}',${idx},'nw')" ontouchstart="ctileHandleTouch(event,'${key}',${idx},'nw')"></span>
+      <span class="ctile-handle ctile-h-se" data-h="se" onmousedown="ctileHandleDown(event,'${key}',${idx},'se')" ontouchstart="ctileHandleTouch(event,'${key}',${idx},'se')"></span>
+      <span class="ctile-handle ctile-h-sw" data-h="sw" onmousedown="ctileHandleDown(event,'${key}',${idx},'sw')" ontouchstart="ctileHandleTouch(event,'${key}',${idx},'sw')"></span>
+    </div>
+  `).join('');
+  const selected = st.selected >= 0 && st.selected < st.images.length;
+  body.innerHTML = `
+    <div class="collage-stage-wrap">
+      <div class="collage-stage" id="cstage-${key}" data-key="${key}" onclick="ctileStageClick(event,'${key}')">
+        ${tiles}
+      </div>
+      <div class="collage-tools">
+        <button type="button" class="primary" onclick="imgmgrPick('${key}')">+ Add Image</button>
+        <button type="button" onclick="autoArrangeKey('${key}')">Auto-Arrange</button>
+        <button type="button" onclick="togglePanMode('${key}')" ${!selected?'disabled':''}>${st.panMode?'Done Panning':'Pan Image'}</button>
+        <button type="button" onclick="bringForward('${key}')" ${!selected?'disabled':''}>Forward</button>
+        <button type="button" onclick="sendBackward('${key}')" ${!selected?'disabled':''}>Back</button>
+        <button type="button" class="danger" onclick="deleteSelected('${key}')" ${!selected?'disabled':''}>Delete</button>
+      </div>
+      <div class="collage-help">${st.panMode
+        ? 'Drag the selected image to reposition what shows inside its tile.'
+        : 'Tap a tile to select it. Drag the body to move it, drag handles to resize/crop. "Pan Image" lets you reposition the image inside the tile.'}</div>
+    </div>
+  `;
+}
+
+function fitStyle(fit){
+  const f = fit || {offsetX:0,offsetY:0,scale:1};
+  const ox = f.offsetX || 0, oy = f.offsetY || 0, s = f.scale || 1;
+  if (ox===0 && oy===0 && s===1) return '';
+  return `transform:translate(${ox}%,${oy}%) scale(${s});transform-origin:center;`;
+}
+
+/* ─── tile mouse/touch interactions ─────────────────────── */
+let _drag = null;
+
+function ctileStageClick(e, key){
+  // Click on empty stage = deselect
+  if (e.target.id === `cstage-${key}` || e.target.classList.contains('collage-stage')) {
+    imgmgrState[key].selected = -1;
+    imgmgrState[key].panMode = false;
+    imgmgrRender(key);
+  }
+}
+
+function ctileMouseDown(e, key, idx){
+  if (e.target.classList.contains('ctile-handle')) return;
+  e.preventDefault(); e.stopPropagation();
+  const st = imgmgrState[key];
+  if (st.selected !== idx) {
+    st.selected = idx;
+    st.panMode = false;
+    imgmgrRender(key);
+    return;
+  }
+  startDrag(key, idx, e.clientX, e.clientY, st.panMode ? 'pan' : 'move');
+}
+function ctileTouchStart(e, key, idx){
+  if (e.target.classList.contains('ctile-handle')) return;
+  const t = e.touches[0];
+  const st = imgmgrState[key];
+  if (st.selected !== idx) {
+    st.selected = idx; st.panMode = false;
+    imgmgrRender(key);
+    return;
+  }
+  e.preventDefault();
+  startDrag(key, idx, t.clientX, t.clientY, st.panMode ? 'pan' : 'move');
+}
+function ctileHandleDown(e, key, idx, dir){
+  e.preventDefault(); e.stopPropagation();
+  imgmgrState[key].selected = idx;
+  startDrag(key, idx, e.clientX, e.clientY, 'resize', dir);
+}
+function ctileHandleTouch(e, key, idx, dir){
+  e.preventDefault(); e.stopPropagation();
+  const t = e.touches[0];
+  imgmgrState[key].selected = idx;
+  startDrag(key, idx, t.clientX, t.clientY, 'resize', dir);
+}
+
+function startDrag(key, idx, cx, cy, mode, dir){
+  const stage = document.getElementById(`cstage-${key}`);
+  if (!stage) return;
+  const r = stage.getBoundingClientRect();
+  const im = imgmgrState[key].images[idx];
+  _drag = {
+    key, idx, mode, dir,
+    sx: cx, sy: cy,
+    stageW: r.width, stageH: r.height,
+    origPos: { ...im.pos },
+    origFit: { ...im.fit }
+  };
+}
+
+document.addEventListener('mousemove', e => { if (_drag) onDragMove(e.clientX, e.clientY); });
+document.addEventListener('mouseup',   () => { if (_drag) { _drag = null; }});
+document.addEventListener('touchmove', e => {
+  if (!_drag) return;
+  const t = e.touches[0]; onDragMove(t.clientX, t.clientY);
+  e.preventDefault();
+}, {passive:false});
+document.addEventListener('touchend', () => { if (_drag) _drag = null; });
+
+function onDragMove(cx, cy){
+  const d = _drag;
+  const dx = (cx - d.sx) / d.stageW * 100;
+  const dy = (cy - d.sy) / d.stageH * 100;
+  const im = imgmgrState[d.key].images[d.idx];
+  if (d.mode === 'move') {
+    im.pos = {
+      x: clamp(d.origPos.x + dx, 0, 100 - d.origPos.w),
+      y: clamp(d.origPos.y + dy, 0, 100 - d.origPos.h),
+      w: d.origPos.w, h: d.origPos.h
+    };
+  } else if (d.mode === 'resize') {
+    let { x, y, w, h } = d.origPos;
+    if (d.dir.includes('n')) { y = d.origPos.y + dy; h = d.origPos.h - dy; }
+    if (d.dir.includes('s')) { h = d.origPos.h + dy; }
+    if (d.dir.includes('w')) { x = d.origPos.x + dx; w = d.origPos.w - dx; }
+    if (d.dir.includes('e')) { w = d.origPos.w + dx; }
+    // enforce minimum 8% size
+    if (w < 8) { if (d.dir.includes('w')) x = d.origPos.x + d.origPos.w - 8; w = 8; }
+    if (h < 8) { if (d.dir.includes('n')) y = d.origPos.y + d.origPos.h - 8; h = 8; }
+    // clamp to canvas
+    if (x < 0) { w += x; x = 0; }
+    if (y < 0) { h += y; y = 0; }
+    if (x + w > 100) w = 100 - x;
+    if (y + h > 100) h = 100 - y;
+    im.pos = { x, y, w, h };
+  } else if (d.mode === 'pan') {
+    im.fit = {
+      ...d.origFit,
+      offsetX: d.origFit.offsetX + dx,
+      offsetY: d.origFit.offsetY + dy
+    };
+  }
+  // Light, in-place update (don't re-render whole tree, just update the one tile)
+  const tile = document.querySelector(`#cstage-${d.key} .ctile[data-idx="${d.idx}"]`);
+  if (tile) {
+    tile.style.left   = im.pos.x + '%';
+    tile.style.top    = im.pos.y + '%';
+    tile.style.width  = im.pos.w + '%';
+    tile.style.height = im.pos.h + '%';
+    if (d.mode === 'pan') {
+      const img = tile.querySelector('img');
+      if (img) img.style.cssText = fitStyle(im.fit);
+    }
+  }
+}
+
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+/* ─── tool buttons ─── */
+function autoArrangeKey(key){
+  const st = imgmgrState[key];
+  // Reset all positions to fresh auto layout
+  st.images.forEach(im => im.pos = null);
+  autoArrange(st.images);
+  // Reset fits too
+  st.images.forEach(im => im.fit = { offsetX:0, offsetY:0, scale:1 });
+  imgmgrRender(key);
+}
+function togglePanMode(key){
+  const st = imgmgrState[key];
+  if (st.selected < 0) return;
+  st.panMode = !st.panMode;
+  imgmgrRender(key);
+}
+function bringForward(key){
+  const st = imgmgrState[key];
+  if (st.selected < 0 || st.selected >= st.images.length - 1) return;
+  const i = st.selected;
+  [st.images[i], st.images[i+1]] = [st.images[i+1], st.images[i]];
+  st.selected = i + 1;
+  imgmgrRender(key);
+}
+function sendBackward(key){
+  const st = imgmgrState[key];
+  if (st.selected <= 0) return;
+  const i = st.selected;
+  [st.images[i], st.images[i-1]] = [st.images[i-1], st.images[i]];
+  st.selected = i - 1;
+  imgmgrRender(key);
+}
+function deleteSelected(key){
+  const st = imgmgrState[key];
+  if (st.selected < 0) return;
+  const im = st.images[st.selected];
+  if (!confirm('Remove this image?')) return;
+  st.images.splice(st.selected, 1);
+  st.selected = -1;
+  st.panMode = false;
+  imgmgrRender(key);
+  if (im && im.url) sbDeleteFile(im.url).catch(()=>{});
+}
+
+/* ─── SLIDESHOW UI ──────────────────────────────────────── */
+let _slideshowTimer = null;
+function renderSlideshowUI(key, body){
+  const st = imgmgrState[key];
+  if (_slideshowTimer) { clearInterval(_slideshowTimer); _slideshowTimer = null; }
+  if (!st.images.length) {
+    body.innerHTML = `
+      <div class="collage-stage-wrap">
+        <div class="slideshow-preview"><div class="slideshow-preview-empty">No images yet — tap "Add Image" to start.</div></div>
+        <div class="collage-tools">
+          <button type="button" class="primary" onclick="imgmgrPick('${key}')">+ Add Image</button>
+        </div>
+        <div class="collage-help">Slideshow mode shows your images one at a time, cross-fading every 4 seconds.</div>
+      </div>`;
+    return;
+  }
+  const slides = st.images.map((im, i) => `<img src="${escapeHtml(im.url)}" class="${i===0?'active':''}" alt="">`).join('');
+  const thumbs = st.images.map((im, idx) => `
+    <div class="slideshow-thumb" draggable="true" data-idx="${idx}"
+         ondragstart="thumbDragStart(event,'${key}',${idx})"
+         ondragover="thumbDragOver(event)"
+         ondragleave="thumbDragLeave(event)"
+         ondrop="thumbDrop(event,'${key}',${idx})"
+         ondragend="thumbDragEnd(event)">
+      <img src="${escapeHtml(im.url)}" alt="">
+      <button type="button" class="slideshow-thumb-del" onclick="deleteSlideshowImg('${key}',${idx})">×</button>
+    </div>`).join('');
+  body.innerHTML = `
+    <div class="collage-stage-wrap">
+      <div class="slideshow-preview" id="sspv-${key}">${slides}</div>
+      <div class="slideshow-thumbs">${thumbs}</div>
+      <div class="collage-tools">
+        <button type="button" class="primary" onclick="imgmgrPick('${key}')">+ Add Image</button>
+      </div>
+      <div class="collage-help">Drag thumbnails to reorder. Tap × to remove an image.</div>
+    </div>
+  `;
+  // Start preview rotation
+  const pv = document.getElementById(`sspv-${key}`);
+  if (pv && st.images.length > 1) {
+    const imgs = pv.querySelectorAll('img');
+    let idx = 0;
+    _slideshowTimer = setInterval(() => {
+      imgs[idx].classList.remove('active');
+      idx = (idx + 1) % imgs.length;
+      imgs[idx].classList.add('active');
+    }, 2500);
+  }
+}
+
+let _thumbDrag = null;
+function thumbDragStart(e, key, idx){ _thumbDrag = {key, idx}; e.target.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+function thumbDragOver(e){ if (_thumbDrag) { e.preventDefault(); e.currentTarget.classList.add('drop-target'); }}
+function thumbDragLeave(e){ e.currentTarget.classList.remove('drop-target'); }
+function thumbDrop(e, key, idx){
+  e.preventDefault(); e.currentTarget.classList.remove('drop-target');
+  if (!_thumbDrag || _thumbDrag.key !== key || _thumbDrag.idx === idx) return;
+  const arr = imgmgrState[key].images;
+  const [m] = arr.splice(_thumbDrag.idx, 1);
+  arr.splice(idx, 0, m);
+  imgmgrRender(key);
+}
+function thumbDragEnd(e){ e.target.classList.remove('dragging'); document.querySelectorAll('.slideshow-thumb').forEach(t=>t.classList.remove('drop-target')); _thumbDrag = null; }
+
+function deleteSlideshowImg(key, idx){
+  if (!confirm('Remove this image?')) return;
+  const im = imgmgrState[key].images[idx];
+  imgmgrState[key].images.splice(idx, 1);
+  imgmgrRender(key);
+  if (im && im.url) sbDeleteFile(im.url).catch(()=>{});
+}
+
+/* ─── add image flow (file + URL) ──────────────────────── */
+function imgmgrPick(key){
+  const inp = document.getElementById('img-file-input');
+  inp.value = '';
+  inp.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    await imgmgrUpload(key, file);
+  };
+  inp.click();
+}
+
+async function imgmgrUpload(key, file){
+  const btns = document.querySelectorAll(`#imgmgr-body-${key} .collage-tools button.primary`);
+  btns.forEach(b => { b.classList.add('uploading'); b.textContent = 'Uploading…'; });
+  try {
+    const folder = key === 'sp' ? 'special' : (document.getElementById('i-type')?.value === 'market' ? 'market' : 'menu');
+    const { url } = await sbUpload(file, folder);
+    const newImg = { url, fit: { offsetX:0, offsetY:0, scale:1 } };
+    imgmgrState[key].images.push(newImg);
+    // Re-auto-arrange so the new image fits in nicely
+    if (imgmgrState[key].layout === 'collage') {
+      imgmgrState[key].images.forEach(im => im.pos = null);
+      autoArrange(imgmgrState[key].images);
+    }
+    imgmgrRender(key);
+    toast('Image added');
+  } catch(err) {
+    console.error(err);
+    toast('Upload failed: ' + (err.message || 'unknown'), true);
+    btns.forEach(b => { b.classList.remove('uploading'); b.textContent = '+ Add Image'; });
+  }
+}
+
+function imgmgrAddUrl(key){
+  const inp = document.getElementById(`imgmgr-url-${key}`);
+  const url = (inp?.value || '').trim();
+  if (!url) { toast('Paste a URL first', true); return; }
+  imgmgrState[key].images.push({ url, fit: { offsetX:0, offsetY:0, scale:1 } });
+  if (imgmgrState[key].layout === 'collage') {
+    imgmgrState[key].images.forEach(im => im.pos = null);
+    autoArrange(imgmgrState[key].images);
+  }
+  inp.value = '';
+  imgmgrRender(key);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HOMEPAGE EDITOR
+═══════════════════════════════════════════════════════════ */
+let HP_DATA = null;
+const HP_COLOR_FIELDS = [
+  { key:'bg',      label:'Background' },
+  { key:'text',    label:'Body Text' },
+  { key:'eyebrow', label:'Sub-text' },
+  { key:'ember',   label:'Ember (deep)' },
+  { key:'fire',    label:'Fire (mid)' },
+  { key:'flame',   label:'Flame (main)' },
+  { key:'glow',    label:'Glow (highlight)' },
+  { key:'overlay', label:'Image Overlay' }
+];
+
+async function loadHomepageIntoEditor(){
+  const block = document.getElementById('homepage-block');
+  if (!block) return;
+  block.className = 'loading';
+  block.textContent = 'Loading homepage from Supabase…';
+
+  if (typeof loadHomepage !== 'function') {
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>supabase.js isn't loaded.</strong><br>
+      The homepage editor needs the new supabase.js with <code>loadHomepage</code> defined.
+      Hard-refresh the page (Ctrl+Shift+R) and try again.</div>`;
+    return;
+  }
+
+  try {
+    const fetched = await loadHomepage();
+    HP_DATA = fetched;
+    console.log('[homepage-editor] Loaded from Supabase:', HP_DATA);
+    console.log('[homepage-editor] Cards count:', HP_DATA?.cards?.length || 0);
+  } catch(e) {
+    console.error('[homepage-editor] Load failed:', e);
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>Couldn't load homepage from Supabase.</strong><br>
+      Error: ${escapeHtml(e.message)}<br><br>
+      Check that the <code>homepage</code> table exists and has a row with id='current'.
+      See HOMEPAGE_SETUP.md.</div>`;
+    return;
+  }
+
+  if (!HP_DATA) {
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>No data returned from Supabase.</strong><br>
+      Run the seed SQL (SEED_HOMEPAGE.md) to populate the homepage row.</div>`;
+    return;
+  }
+
+  renderHomepageEditor();
+}
+
+function renderHomepageEditor(){
+  const d = HP_DATA;
+  const block = document.getElementById('homepage-block');
+  block.className = '';
+  block.innerHTML = `
+    <!-- IDENTITY -->
+    <div class="hp-section">
+      <h3>Identity</h3>
+      <div class="hp-desc">The headline at the top of your homepage.</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Title (left)</label>
+          <input id="hp-title" value="${escapeHtml(d.title)}" placeholder="The Francis">
+        </div>
+        <div class="field">
+          <label>Title (italic, right)</label>
+          <input id="hp-title-em" value="${escapeHtml(d.title_em)}" placeholder="Smokehouse">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Eyebrow Text</label>
+          <input id="hp-eyebrow" value="${escapeHtml(d.eyebrow)}" placeholder="St. Francisville · Louisiana">
+        </div>
+        <div class="field">
+          <label>Tagline</label>
+          <input id="hp-tagline" value="${escapeHtml(d.tagline)}" placeholder="&amp; Specialty Meats">
+        </div>
+      </div>
+      <div class="hp-preview" id="hp-identity-preview">
+        <div class="hp-preview-eyebrow" id="hp-pv-eyebrow">${escapeHtml(d.eyebrow)}</div>
+        <div class="hp-preview-title" id="hp-pv-title">${escapeHtml(d.title)} <em>${escapeHtml(d.title_em)}</em></div>
+        <div class="hp-preview-tagline" id="hp-pv-tagline">${escapeHtml(d.tagline)}</div>
+      </div>
+    </div>
+
+    <!-- NAV CARDS LAYOUT EDITOR -->
+    <div class="hp-section">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap">
+        <div style="flex:1;min-width:0">
+          <h3>Nav <em>Cards</em></h3>
+          <div class="hp-desc">Drag tiles to move, drag handles to resize. Tap a tile to edit its text and link in the side panel. Use *asterisks* around a word to italicize it. Switch between Desktop and Mobile layouts with the toggle.</div>
+        </div>
+        <div class="hp-layout-tools">
+          <div class="hp-mode-toggle" id="hp-mode-toggle">
+            <button type="button" data-mode="desktop" class="on" onclick="hpSetMode('desktop')">Desktop</button>
+            <button type="button" data-mode="mobile" onclick="hpSetMode('mobile')">Mobile</button>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="hp-snap-btn" onclick="hpToggleSnap()" title="Snap tiles to grid">⊞ Snap: On</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="hp-match-btn" onclick="HP_MATCH ? hpCancelMatchSize() : hpStartMatchSize()" title="Copy size from one tile to another">⇆ Match Size</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="hpAddCard()">+ Add Card</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="hpAutoArrange()">Auto-Arrange</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="hp-fs-btn" onclick="hpToggleFullscreen()" title="Fullscreen edit">⛶ Fullscreen</button>
+        </div>
+      </div>
+
+      <div class="hp-match-banner hidden" id="hp-match-banner"></div>
+
+      <div class="hp-layout-wrap">
+        <div class="hp-canvas-shell">
+          <div class="hp-device" id="hp-device" data-mode="desktop">
+            <div class="hp-mock-header">
+              <div class="hp-mock-eyebrow" id="hp-mock-eyebrow">${escapeHtml(d.eyebrow)}</div>
+              <div class="hp-mock-title" id="hp-mock-title">${escapeHtml(d.title)} <em>${escapeHtml(d.title_em)}</em></div>
+              <div class="hp-mock-tagline" id="hp-mock-tagline">${escapeHtml(d.tagline)}</div>
+            </div>
+            <div class="hp-canvas" id="hp-canvas"></div>
+            <div class="hp-mock-footer">Open Now · ${escapeHtml(d.footer.phone||'')}</div>
+          </div>
+          <div class="hp-canvas-help">Click a tile to select. Drag body to move, drag handles to resize. Drag positions are stored as % of the dashed inner area.</div>
+        </div>
+        <div class="hp-side-panel hidden" id="hp-side-panel">
+          <div class="hp-side-empty">Click a tile to edit it.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THEME -->
+    <div class="hp-section">
+      <h3>Theme <em>Colors</em></h3>
+      <div class="hp-desc">Tap a swatch to pick a new color. Changes preview live above.</div>
+      <div class="hp-theme-grid">
+        ${HP_COLOR_FIELDS.map(f => hpColorHtml(f, d.theme[f.key])).join('')}
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="hp-section">
+      <h3>Footer</h3>
+      <div class="hp-desc">Contact info shown at the bottom of the homepage.</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Phone</label>
+          <input id="hp-phone" value="${escapeHtml(d.footer.phone||'')}" placeholder="(225) 245-5046">
+        </div>
+        <div class="field">
+          <label>Address</label>
+          <input id="hp-address" value="${escapeHtml(d.footer.address||'')}" placeholder="6779 US Hwy 61...">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Facebook URL</label>
+          <input id="hp-facebook" value="${escapeHtml(d.footer.facebook||'')}" placeholder="https://...">
+        </div>
+        <div class="field">
+          <label>Instagram URL</label>
+          <input id="hp-instagram" value="${escapeHtml(d.footer.instagram||'')}" placeholder="https://...">
+        </div>
+      </div>
+    </div>
+  `;
+  // Wire up live preview for identity fields
+  ['hp-title','hp-title-em','hp-eyebrow','hp-tagline'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateIdentityPreview);
+  });
+  // Wire up color pickers
+  HP_COLOR_FIELDS.forEach(f => {
+    const picker = document.getElementById('hp-color-' + f.key);
+    if (picker) picker.addEventListener('input', e => hpColorChange(f.key, e.target.value));
+  });
+  applyEditorPreviewTheme();
+  // Initialize the canvas after the DOM is in place
+  setTimeout(() => hpRenderCanvas(), 0);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HOMEPAGE LAYOUT EDITOR — desktop & mobile canvases
+═══════════════════════════════════════════════════════════ */
+let HP_MODE = 'desktop';           // 'desktop' | 'mobile'
+let HP_SEL = -1;                   // index of selected card, -1 = none
+let HP_DRAG = null;                // {mode, dir, sx, sy, cw, ch, orig}
+let HP_SNAP = true;                // snap to grid
+let HP_SNAP_SIZE = 1;              // grid quantum in % (1% = fine, 5% = coarse)
+let HP_FS = false;                 // fullscreen mode
+let HP_MATCH = null;               // null | 'awaiting-source' | 'awaiting-target', with source idx stored on object
+
+/** Snap a percentage value to the nearest grid line if snapping is enabled. */
+function hpSnap(v){ return HP_SNAP ? Math.round(v / HP_SNAP_SIZE) * HP_SNAP_SIZE : v; }
+
+function hpToggleSnap(){
+  HP_SNAP = !HP_SNAP;
+  const btn = document.getElementById('hp-snap-btn');
+  if (btn) btn.textContent = '⊞ Snap: ' + (HP_SNAP ? 'On' : 'Off');
+  const canvas = document.getElementById('hp-canvas');
+  if (canvas) canvas.classList.toggle('no-snap', !HP_SNAP);
+}
+
+function hpToggleFullscreen(){
+  HP_FS = !HP_FS;
+  const canvas = document.getElementById('hp-canvas');
+  if (!canvas) return;
+  const section = canvas.closest('.hp-section');
+  if (!section) return;
+  section.classList.toggle('hp-fs', HP_FS);
+  document.body.classList.toggle('hp-fullscreen', HP_FS);
+  const btn = document.getElementById('hp-fs-btn');
+  if (btn) btn.textContent = HP_FS ? '⛶ Exit Fullscreen' : '⛶ Fullscreen';
+}
+
+/* ─── Match Size feature ─── */
+function hpStartMatchSize(){
+  HP_MATCH = { stage: 'awaiting-source', sourceIdx: null };
+  hpUpdateMatchUI();
+}
+function hpCancelMatchSize(){
+  HP_MATCH = null;
+  hpUpdateMatchUI();
+  hpRenderCanvas();
+}
+function hpHandleMatchClick(idx){
+  if (!HP_MATCH) return false;
+  if (HP_MATCH.stage === 'awaiting-source') {
+    HP_MATCH.sourceIdx = idx;
+    HP_MATCH.stage = 'awaiting-target';
+    hpUpdateMatchUI();
+    hpRenderCanvas();
+    return true;
+  }
+  if (HP_MATCH.stage === 'awaiting-target') {
+    if (idx === HP_MATCH.sourceIdx) {
+      toast('Pick a different tile as the target', true);
+      return true;
+    }
+    const key = hpModeKey();
+    const src = HP_DATA.cards[HP_MATCH.sourceIdx][key];
+    const tgt = HP_DATA.cards[idx][key];
+    if (!src || !tgt) return true;
+    tgt.w = src.w;
+    tgt.h = src.h;
+    // Clamp inside canvas
+    if (tgt.x + tgt.w > 100) tgt.x = Math.max(0, 100 - tgt.w);
+    if (tgt.y + tgt.h > 100) tgt.y = Math.max(0, 100 - tgt.h);
+    HP_MATCH = null;
+    hpUpdateMatchUI();
+    hpRenderCanvas();
+    toast('Size matched');
+    return true;
+  }
+  return false;
+}
+function hpUpdateMatchUI(){
+  const btn = document.getElementById('hp-match-btn');
+  const banner = document.getElementById('hp-match-banner');
+  if (!btn || !banner) return;
+  if (!HP_MATCH) {
+    btn.textContent = '⇆ Match Size';
+    btn.classList.remove('on');
+    banner.classList.add('hidden');
+    return;
+  }
+  btn.classList.add('on');
+  if (HP_MATCH.stage === 'awaiting-source') {
+    btn.textContent = '⇆ Cancel';
+    banner.classList.remove('hidden');
+    banner.textContent = '1/2 — Tap the tile whose size you want to COPY';
+  } else {
+    btn.textContent = '⇆ Cancel';
+    banner.classList.remove('hidden');
+    const srcLabel = HP_DATA.cards[HP_MATCH.sourceIdx]?.label || `#${HP_MATCH.sourceIdx+1}`;
+    banner.textContent = `2/2 — Tap the tile to resize to match "${srcLabel}"`;
+  }
+}
+
+/** Return the layout key for the current mode. */
+function hpModeKey(){ return HP_MODE === 'mobile' ? 'posMobile' : 'pos'; }
+
+/** Ensure each card has a pos object for both desktop and mobile.
+ *  Returns true if anything was added. */
+function hpEnsurePositions(){
+  if (!HP_DATA) return false;
+  const needsAny = HP_DATA.cards.some(c => !c.pos || !c.posMobile);
+  if (needsAny) hpArrangeBoth();
+  return needsAny;
+}
+
+/** Internal: fill positions for any mode that's missing them.
+ *  Does NOT call render — caller decides. */
+function hpArrangeBoth(){
+  hpArrangeFor('desktop');
+  hpArrangeFor('mobile');
+}
+function hpArrangeFor(mode){
+  if (!HP_DATA || !HP_DATA.cards.length) return;
+  const key = mode === 'mobile' ? 'posMobile' : 'pos';
+  const n = HP_DATA.cards.length;
+  if (mode === 'desktop') {
+    const featuredIdx = HP_DATA.cards.findIndex(c => c.featured);
+    if (n === 1) {
+      HP_DATA.cards[0][key] = { x:10, y:10, w:80, h:80 };
+    } else if (n <= 4) {
+      const cols = Math.ceil(n / 2);
+      const cw = 96/cols, ch = (n<=2?96:48);
+      HP_DATA.cards.forEach((c, i) => {
+        const r = Math.floor(i/cols), col = i%cols;
+        c[key] = { x: 2 + col*cw, y: 2 + r*(ch+2), w: cw-2, h: ch };
+      });
+    } else if (n <= 6) {
+      if (featuredIdx >= 0 && n === 6) {
+        const others = HP_DATA.cards.map((_,i)=>i).filter(i=>i!==featuredIdx);
+        const top = others.slice(0,3), bot = others.slice(3);
+        top.forEach((i, col) => HP_DATA.cards[i][key] = { x:2+col*32.67, y:2, w:30.67, h:30 });
+        HP_DATA.cards[featuredIdx][key] = { x:2, y:35, w:96, h:30 };
+        bot.forEach((i, col) => HP_DATA.cards[i][key] = { x:2+col*32.67, y:68, w:30.67, h:30 });
+      } else {
+        const cw = 96/3;
+        HP_DATA.cards.forEach((c, i) => {
+          const r = Math.floor(i/3), col = i%3;
+          c[key] = { x: 2 + col*cw, y: 2 + r*49, w: cw-1, h: 47 };
+        });
+      }
+    } else {
+      const cols = 4, rows = Math.ceil(n/cols);
+      const cw = 96/cols, ch = Math.min(40, 94/rows);
+      HP_DATA.cards.forEach((c, i) => {
+        const r = Math.floor(i/cols), col = i%cols;
+        c[key] = { x: 2 + col*cw, y: 2 + r*(ch+1), w: cw-1, h: ch };
+      });
+    }
+  } else {
+    const cardH = 100 / n;
+    HP_DATA.cards.forEach((c, i) => {
+      const h = c.featured ? Math.min(cardH * 1.4, 28) : cardH;
+      c[key] = { x: 5, y: i * cardH + 1, w: 90, h: h - 2 };
+    });
+  }
+}
+
+/** Auto-arrange for the current mode (button handler). */
+function hpAutoArrange(){
+  hpArrangeFor(HP_MODE);
+  hpRenderCanvas();
+}
+
+function hpSetMode(mode){
+  HP_MODE = mode;
+  document.querySelectorAll('#hp-mode-toggle button').forEach(b => {
+    b.classList.toggle('on', b.dataset.mode === mode);
+  });
+  const device = document.getElementById('hp-device');
+  if (device) device.dataset.mode = mode;
+  HP_SEL = -1;
+  hpRenderCanvas();
+}
+
+function hpRenderCanvas(){
+  const canvas = document.getElementById('hp-canvas');
+  if (!canvas || !HP_DATA) return;
+  hpEnsurePositions();
+  // Toggle matching class on the canvas
+  canvas.classList.toggle('matching', !!HP_MATCH);
+  const key = hpModeKey();
+  const matchSrc = HP_MATCH?.sourceIdx;
+  const tiles = HP_DATA.cards.map((c, i) => {
+    const pos = c[key] || { x:5, y:5, w:30, h:20 };
+    const isSel = i === HP_SEL;
+    const isMatchSrc = (i === matchSrc);
+    const bgImg = c.image ? `background-image:url('${escapeHtml(c.image)}');background-size:cover;background-position:center` : '';
+    const featCls = c.featured ? ' featured' : '';
+    const selCls  = isSel ? ' selected' : '';
+    const matchCls = isMatchSrc ? ' match-source' : '';
+    const labelHtml = (c.label||'').replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    // While matching, don't render resize handles (clicks need to flow through)
+    const showHandles = isSel && !HP_MATCH;
+    return `
+      <div class="hp-tile${featCls}${selCls}${matchCls}" data-idx="${i}"
+           style="left:${pos.x}%;top:${pos.y}%;width:${pos.w}%;height:${pos.h}%;${bgImg}"
+           onmousedown="hpTileMouseDown(event,${i})"
+           ontouchstart="hpTileTouchStart(event,${i})">
+        <div class="hp-tile-overlay"></div>
+        <div class="hp-tile-text">
+          <div class="hp-tile-label">${labelHtml || '<span style="opacity:.4">Untitled</span>'}</div>
+          ${c.sub ? `<div class="hp-tile-sub">${escapeHtml(c.sub)}</div>` : ''}
+        </div>
+        ${showHandles ? `
+          <span class="hp-h hp-h-n"  onmousedown="hpHandleDown(event,${i},'n')"  ontouchstart="hpHandleTouch(event,${i},'n')"></span>
+          <span class="hp-h hp-h-s"  onmousedown="hpHandleDown(event,${i},'s')"  ontouchstart="hpHandleTouch(event,${i},'s')"></span>
+          <span class="hp-h hp-h-e"  onmousedown="hpHandleDown(event,${i},'e')"  ontouchstart="hpHandleTouch(event,${i},'e')"></span>
+          <span class="hp-h hp-h-w"  onmousedown="hpHandleDown(event,${i},'w')"  ontouchstart="hpHandleTouch(event,${i},'w')"></span>
+          <span class="hp-h hp-h-ne" onmousedown="hpHandleDown(event,${i},'ne')" ontouchstart="hpHandleTouch(event,${i},'ne')"></span>
+          <span class="hp-h hp-h-nw" onmousedown="hpHandleDown(event,${i},'nw')" ontouchstart="hpHandleTouch(event,${i},'nw')"></span>
+          <span class="hp-h hp-h-se" onmousedown="hpHandleDown(event,${i},'se')" ontouchstart="hpHandleTouch(event,${i},'se')"></span>
+          <span class="hp-h hp-h-sw" onmousedown="hpHandleDown(event,${i},'sw')" ontouchstart="hpHandleTouch(event,${i},'sw')"></span>
+        ` : ''}
+      </div>`;
+  }).join('');
+  canvas.innerHTML = tiles || '<div class="hp-canvas-empty">No cards yet — tap "+ Add Card" above.</div>';
+  hpRenderSidePanel();
+}
+
+function hpRenderSidePanel(){
+  const panel = document.getElementById('hp-side-panel');
+  if (!panel) return;
+  if (HP_SEL < 0 || !HP_DATA?.cards?.[HP_SEL]) {
+    panel.classList.add('hidden');
+    panel.innerHTML = '<div class="hp-side-empty">Click a tile to edit it.</div>';
+    return;
+  }
+  panel.classList.remove('hidden');
+  const c = HP_DATA.cards[HP_SEL];
+  const hasImg = !!c.image;
+  panel.innerHTML = `
+    <div class="hp-side-head">
+      <div class="hp-side-title">Card ${HP_SEL+1}${c.featured ? ' · Featured' : ''}</div>
+      <button type="button" class="hp-card-iconbtn" onclick="HP_SEL=-1;hpRenderCanvas()" title="Deselect">×</button>
+    </div>
+    <div class="field">
+      <label>Label</label>
+      <input value="${escapeHtml(c.label||'')}" oninput="hpFieldUpdate('label',this.value)">
+      <div class="field-hint">Wrap *a word* in asterisks to italicize it.</div>
+    </div>
+    <div class="field">
+      <label>Subtitle</label>
+      <input value="${escapeHtml(c.sub||'')}" oninput="hpFieldUpdate('sub',this.value)">
+    </div>
+    <div class="field">
+      <label>Link Target</label>
+      <input value="${escapeHtml(c.href||'')}" oninput="hpFieldUpdate('href',this.value)">
+      <div class="field-hint">e.g. menu.html or Pages/about.html</div>
+    </div>
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" ${c.featured?'checked':''} onchange="hpFieldUpdate('featured',this.checked)" style="width:auto">
+        Featured (bigger glow)
+      </label>
+    </div>
+    <div class="hp-side-img">
+      ${hasImg
+        ? `<div class="hp-side-img-thumb"><img src="${escapeHtml(c.image)}" alt=""></div>`
+        : `<div class="hp-side-img-empty">No image — tap below to add</div>`}
+    </div>
+    <div class="hp-card-img-btns">
+      <button type="button" class="btn btn-secondary btn-sm" onclick="hpCardPickImage(${HP_SEL})">${hasImg?'Replace Image':'+ Upload Image'}</button>
+      ${hasImg ? `<button type="button" class="btn btn-danger btn-sm" onclick="hpCardClearImage(${HP_SEL})">Remove</button>` : ''}
+    </div>
+    <div class="hp-side-actions">
+      <button type="button" class="btn btn-danger btn-sm" onclick="hpDeleteCard(${HP_SEL})">Delete Card</button>
+    </div>
+  `;
+}
+
+function hpFieldUpdate(field, value){
+  if (HP_SEL < 0) return;
+  HP_DATA.cards[HP_SEL][field] = value;
+  // Update the tile label/sub on the canvas without full re-render
+  const tile = document.querySelector(`.hp-tile[data-idx="${HP_SEL}"]`);
+  if (tile && (field === 'label' || field === 'sub')) {
+    const c = HP_DATA.cards[HP_SEL];
+    const labelHtml = (c.label||'').replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    tile.querySelector('.hp-tile-text').innerHTML =
+      `<div class="hp-tile-label">${labelHtml || '<span style="opacity:.4">Untitled</span>'}</div>` +
+      (c.sub ? `<div class="hp-tile-sub">${escapeHtml(c.sub)}</div>` : '');
+  }
+  if (field === 'featured') {
+    if (tile) tile.classList.toggle('featured', !!value);
+    // Re-render side panel head label
+    const head = document.querySelector('.hp-side-title');
+    if (head) head.textContent = `Card ${HP_SEL+1}${value ? ' · Featured' : ''}`;
+  }
+}
+
+/* ─── Add / Delete / Pick image ─── */
+function hpAddCard(){
+  if (!HP_DATA) return;
+  const key = hpModeKey();
+  const newCard = { label:'New Card', sub:'', href:'#', image:'' };
+  // Find an empty spot — use a small default tile near top-left
+  newCard[key === 'pos' ? 'pos' : 'posMobile'] = { x:5, y:5, w:30, h:25 };
+  newCard[key === 'pos' ? 'posMobile' : 'pos'] = { x:5, y:5, w:90, h:15 };
+  HP_DATA.cards.push(newCard);
+  HP_SEL = HP_DATA.cards.length - 1;
+  hpRenderCanvas();
+}
+function hpDeleteCard(i){
+  if (!confirm('Delete this card?')) return;
+  const old = HP_DATA.cards[i];
+  HP_DATA.cards.splice(i, 1);
+  HP_SEL = -1;
+  hpRenderCanvas();
+  if (old && old.image) sbDeleteFile(old.image).catch(()=>{});
+}
+
+/* ─── Tile drag (move) ─── */
+function hpTileMouseDown(e, idx){
+  if (e.target.classList.contains('hp-h')) return;
+  e.preventDefault(); e.stopPropagation();
+  // Match-Size mode intercepts clicks
+  if (HP_MATCH && hpHandleMatchClick(idx)) return;
+  // Select on first click AND start the drag in the same gesture
+  if (HP_SEL !== idx) {
+    HP_SEL = idx;
+    hpRenderCanvas();
+  }
+  hpStartDrag(idx, e.clientX, e.clientY, 'move');
+}
+function hpTileTouchStart(e, idx){
+  if (e.target.classList.contains('hp-h')) return;
+  const t = e.touches[0];
+  if (HP_MATCH && hpHandleMatchClick(idx)) {
+    e.preventDefault();
+    return;
+  }
+  if (HP_SEL !== idx) {
+    HP_SEL = idx;
+    hpRenderCanvas();
+  }
+  e.preventDefault();
+  hpStartDrag(idx, t.clientX, t.clientY, 'move');
+}
+function hpHandleDown(e, idx, dir){
+  e.preventDefault(); e.stopPropagation();
+  HP_SEL = idx;
+  hpStartDrag(idx, e.clientX, e.clientY, 'resize', dir);
+}
+function hpHandleTouch(e, idx, dir){
+  e.preventDefault(); e.stopPropagation();
+  const t = e.touches[0];
+  HP_SEL = idx;
+  hpStartDrag(idx, t.clientX, t.clientY, 'resize', dir);
+}
+function hpStartDrag(idx, cx, cy, mode, dir){
+  const canvas = document.getElementById('hp-canvas');
+  if (!canvas) return;
+  const r = canvas.getBoundingClientRect();
+  const c = HP_DATA.cards[idx];
+  const key = hpModeKey();
+  HP_DRAG = { idx, mode, dir, sx:cx, sy:cy, cw:r.width, ch:r.height, orig:{...c[key]}, key };
+}
+
+document.addEventListener('mousemove', e => { if (HP_DRAG) hpDragMove(e.clientX, e.clientY); });
+document.addEventListener('mouseup',   () => { HP_DRAG = null; });
+document.addEventListener('touchmove', e => {
+  if (!HP_DRAG) return;
+  const t = e.touches[0]; hpDragMove(t.clientX, t.clientY);
+  e.preventDefault();
+}, {passive:false});
+document.addEventListener('touchend', () => { HP_DRAG = null; });
+
+function hpDragMove(cx, cy){
+  const d = HP_DRAG;
+  const dx = (cx - d.sx) / d.cw * 100;
+  const dy = (cy - d.sy) / d.ch * 100;
+  const c = HP_DATA.cards[d.idx];
+  if (d.mode === 'move') {
+    // Snap the LEFT and TOP edges to the grid; size stays exactly the same.
+    let nx = hpSnap(d.orig.x + dx);
+    let ny = hpSnap(d.orig.y + dy);
+    nx = Math.max(0, Math.min(100 - d.orig.w, nx));
+    ny = Math.max(0, Math.min(100 - d.orig.h, ny));
+    c[d.key] = { x: nx, y: ny, w: d.orig.w, h: d.orig.h };
+  } else {
+    // Resize: snap whichever edges are moving, not w/h independently.
+    let x = d.orig.x, y = d.orig.y;
+    let r = d.orig.x + d.orig.w;       // right edge
+    let b = d.orig.y + d.orig.h;       // bottom edge
+    if (d.dir.includes('n')) y = hpSnap(d.orig.y + dy);
+    if (d.dir.includes('s')) b = hpSnap(d.orig.y + d.orig.h + dy);
+    if (d.dir.includes('w')) x = hpSnap(d.orig.x + dx);
+    if (d.dir.includes('e')) r = hpSnap(d.orig.x + d.orig.w + dx);
+    // Clamp to bounds
+    x = Math.max(0, Math.min(95, x));
+    y = Math.max(0, Math.min(95, y));
+    r = Math.max(x + 5, Math.min(100, r));
+    b = Math.max(y + 5, Math.min(100, b));
+    c[d.key] = { x, y, w: r - x, h: b - y };
+  }
+  const tile = document.querySelector(`.hp-tile[data-idx="${d.idx}"]`);
+  if (tile) {
+    const p = c[d.key];
+    tile.style.left   = p.x + '%';
+    tile.style.top    = p.y + '%';
+    tile.style.width  = p.w + '%';
+    tile.style.height = p.h + '%';
+  }
+}
+
+function hpCardPickImage(idx){
+  const inp = document.getElementById('img-file-input');
+  inp.value = '';
+  inp.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      setStatus('Uploading…', 'saving');
+      const { url } = await sbUpload(file, 'homepage');
+      const old = HP_DATA.cards[idx].image;
+      if (old) sbDeleteFile(old).catch(()=>{});
+      HP_DATA.cards[idx].image = url;
+      hpRenderCanvas();
+      toast('Image uploaded');
+      setStatus('Ready');
+    } catch(err) {
+      console.error(err);
+      toast('Upload failed: '+err.message, true);
+      setStatus('Upload failed', 'err');
+    }
+  };
+  inp.click();
+}
+function hpCardClearImage(idx){
+  if (!confirm('Remove this image?')) return;
+  const old = HP_DATA.cards[idx].image;
+  HP_DATA.cards[idx].image = '';
+  hpRenderCanvas();
+  if (old) sbDeleteFile(old).catch(()=>{});
+}
+
+function hpColorHtml(field, val){
+  return `
+    <div class="hp-color" id="hp-color-row-${field.key}">
+      <label class="hp-color-swatch" style="--swatch:${escapeHtml(val||'#000')}">
+        <input type="color" id="hp-color-${field.key}" value="${hpColorToHex(val)}">
+      </label>
+      <div class="hp-color-info">
+        <div class="hp-color-label">${field.label}</div>
+        <div class="hp-color-val" id="hp-color-val-${field.key}">${escapeHtml(val||'')}</div>
+      </div>
+    </div>
+  `;
+}
+
+/** Color picker only accepts hex. Strip rgba() to a hex if needed. */
+function hpColorToHex(val){
+  if (!val) return '#000000';
+  if (val.startsWith('#')) return val.length===7 ? val : '#000000';
+  // rgba/rgb → take just the rgb part
+  const m = val.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (m) {
+    const h = n => Math.max(0,Math.min(255,parseInt(n))).toString(16).padStart(2,'0');
+    return '#' + h(m[1]) + h(m[2]) + h(m[3]);
+  }
+  return '#000000';
+}
+
+function hpCardField(idx, field, value){
+  HP_DATA.cards[idx][field] = value;
+  // Update preview label in the thumb
+  const thumb = document.querySelector(`#hp-thumb-${idx} .hp-card-thumb-label`);
+  if (thumb) {
+    const c = HP_DATA.cards[idx];
+    thumb.innerHTML = escapeHtml(c.label||'') + (c.sub?`<small>${escapeHtml(c.sub)}</small>`:'');
+  }
+}
+
+function hpColorChange(key, value){
+  HP_DATA.theme[key] = value;
+  // Update swatch & value text
+  const row = document.getElementById('hp-color-row-'+key);
+  if (row) row.querySelector('.hp-color-swatch').style.setProperty('--swatch', value);
+  const val = document.getElementById('hp-color-val-'+key);
+  if (val) val.textContent = value;
+  applyEditorPreviewTheme();
+}
+
+function applyEditorPreviewTheme(){
+  const t = HP_DATA.theme;
+  const preview = document.getElementById('hp-identity-preview');
+  if (!preview) return;
+  preview.style.setProperty('--hp-prev-bg', t.bg);
+  preview.style.setProperty('--hp-prev-text', t.text);
+  preview.style.setProperty('--hp-prev-eyebrow', t.eyebrow);
+  preview.style.setProperty('--hp-prev-flame', t.flame);
+}
+
+function updateIdentityPreview(){
+  HP_DATA.title    = document.getElementById('hp-title').value;
+  HP_DATA.title_em = document.getElementById('hp-title-em').value;
+  HP_DATA.eyebrow  = document.getElementById('hp-eyebrow').value;
+  HP_DATA.tagline  = document.getElementById('hp-tagline').value;
+  // The small identity preview block
+  document.getElementById('hp-pv-eyebrow').textContent = HP_DATA.eyebrow;
+  document.getElementById('hp-pv-title').innerHTML = escapeHtml(HP_DATA.title) + ' <em>' + escapeHtml(HP_DATA.title_em) + '</em>';
+  document.getElementById('hp-pv-tagline').textContent = HP_DATA.tagline;
+  // The big device-frame mock header
+  const me = document.getElementById('hp-mock-eyebrow');
+  const mt = document.getElementById('hp-mock-title');
+  const mg = document.getElementById('hp-mock-tagline');
+  if (me) me.textContent = HP_DATA.eyebrow;
+  if (mt) mt.innerHTML = escapeHtml(HP_DATA.title) + ' <em>' + escapeHtml(HP_DATA.title_em) + '</em>';
+  if (mg) mg.textContent = HP_DATA.tagline;
+}
+
+function hpCardPickImage(idx){
+  const inp = document.getElementById('img-file-input');
+  inp.value = '';
+  inp.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      setStatus('Uploading…', 'saving');
+      const { url } = await sbUpload(file, 'homepage');
+      // Delete old image if there was one
+      const old = HP_DATA.cards[idx].image;
+      if (old) sbDeleteFile(old).catch(()=>{});
+      HP_DATA.cards[idx].image = url;
+      refreshHpCards();
+      toast('Image uploaded');
+      setStatus('Ready');
+    } catch(err) {
+      console.error(err);
+      toast('Upload failed: '+err.message, true);
+      setStatus('Upload failed', 'err');
+    }
+  };
+  inp.click();
+}
+
+function hpCardClearImage(idx){
+  if (!confirm('Remove this image?')) return;
+  const old = HP_DATA.cards[idx].image;
+  HP_DATA.cards[idx].image = '';
+  refreshHpCards();
+  if (old) sbDeleteFile(old).catch(()=>{});
+}
+
+async function saveHomepageHandler(){
+  // Sync identity + footer fields into HP_DATA (cards/theme already sync live)
+  HP_DATA.title    = document.getElementById('hp-title').value.trim();
+  HP_DATA.title_em = document.getElementById('hp-title-em').value.trim();
+  HP_DATA.eyebrow  = document.getElementById('hp-eyebrow').value.trim();
+  HP_DATA.tagline  = document.getElementById('hp-tagline').value.trim();
+  HP_DATA.footer.phone     = document.getElementById('hp-phone').value.trim();
+  HP_DATA.footer.address   = document.getElementById('hp-address').value.trim();
+  HP_DATA.footer.facebook  = document.getElementById('hp-facebook').value.trim();
+  HP_DATA.footer.instagram = document.getElementById('hp-instagram').value.trim();
+  try {
+    setStatus('Saving…', 'saving');
+    await saveHomepage(HP_DATA);
+    toast('Homepage saved');
+    setStatus('Ready');
+  } catch(e) {
+    console.error(e);
+    toast('Save failed: '+e.message, true);
+    setStatus('Save failed', 'err');
+  }
+}
+
+async function resetHomepageHandler(){
+  if (!confirm('Discard your unsaved changes and reload from Supabase?')) return;
+  HP_DATA = null;
+  await loadHomepageIntoEditor();
+  toast('Reloaded from Supabase');
+}
+
+// Wire up the buttons + lazy-load when pane is opened
+document.addEventListener('DOMContentLoaded', () => {
+  const saveBtn = document.getElementById('hp-save');
+  const resetBtn = document.getElementById('hp-reset');
+  if (saveBtn) saveBtn.onclick = saveHomepageHandler;
+  if (resetBtn) resetBtn.onclick = resetHomepageHandler;
+  // Homepage data is now loaded lazily by the main tab click handler above.
+});
+
+/* ═══════════════════════════════════════════════════════════
+   STAFF USERS PANE
+═══════════════════════════════════════════════════════════ */
+async function loadStaffUsers(){
+  const block = document.getElementById('staff-block');
+  if (!block) return;
+  block.className = 'loading';
+  block.textContent = 'Loading users…';
+
+  if (typeof sbListUsers !== 'function') {
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>supabase.js needs updating.</strong> The sbListUsers helper is missing — hard-refresh the page.</div>`;
+    return;
+  }
+
+  let users;
+  try { users = await sbListUsers(); }
+  catch(e) {
+    console.error('loadStaffUsers failed:', e);
+    block.className = '';
+    block.innerHTML = `<div class="empty"><span class="empty-icon">⚠</span>
+      <strong>Couldn't load users.</strong><br>
+      ${escapeHtml(e.message)}<br><br>
+      Make sure you've run the SQL in AUTH_SETUP.md to create the <code>editor_users</code> view.</div>`;
+    return;
+  }
+
+  block.className = '';
+  const me = sbCurrentUser();
+  if (!users || users.length === 0) {
+    block.innerHTML = `
+      <div class="staff-info">
+        <p>No staff users found. Add your first user in the Supabase Dashboard:</p>
+        <ol>
+          <li>Open <strong>Authentication → Users</strong></li>
+          <li>Click <strong>Add user → Create new user</strong></li>
+          <li>Enter their email + password</li>
+          <li>Check <strong>Auto Confirm User</strong></li>
+          <li>Click <strong>Create user</strong></li>
+        </ol>
+      </div>`;
+    return;
+  }
+  block.innerHTML = `
+    <div class="staff-info">
+      <p>${users.length} user${users.length===1?'':'s'} can sign in to this editor. To add or remove users, go to Supabase Dashboard → Authentication → Users.</p>
+    </div>
+    <div class="staff-list">
+      ${users.map(u => {
+        const isMe = me && u.id === me.id;
+        const created = u.created_at ? new Date(u.created_at).toLocaleDateString() : '—';
+        const lastSeen = u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString() : 'Never';
+        return `
+          <div class="staff-row${isMe ? ' me' : ''}">
+            <div class="staff-avatar">${(u.email||'?')[0].toUpperCase()}</div>
+            <div class="staff-info-col">
+              <div class="staff-email">${escapeHtml(u.email||'(no email)')}${isMe ? ' <span class="staff-me-tag">You</span>' : ''}</div>
+              <div class="staff-meta">Added ${created} · Last signed in ${lastSeen}</div>
+            </div>
+          </div>`;
+      }).join('')}
+    </div>`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const refreshBtn = document.getElementById('staff-refresh');
+  if (refreshBtn) refreshBtn.onclick = loadStaffUsers;
+});
+
+/* ═══════════════════════════════════════════════════════════
+   GO
+═══════════════════════════════════════════════════════════ */
+checkGate();
+</script>
+</body>
+</html>
