@@ -71,11 +71,18 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
 /* ═══ NAV GRID ═══ */
 .nav{
   flex:1;
+  position:relative;
+  min-height:0;
+}
+/* Fallback grid for when JS hasn't run yet or no positions are set */
+.nav:not(.has-layout){
   display:grid;
   grid-template-columns:repeat(3,1fr);
   grid-template-rows:repeat(2,1fr);
   gap:max(10px,1.4vw);
-  min-height:0;
+}
+.nav.has-layout .nav-btn{
+  position:absolute;
 }
 
 /* ═══ NAV BUTTON ═══ */
@@ -279,7 +286,7 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
 <script src="supabase.js"></script>
 <script>
 /* ═══ HOMEPAGE: load editor settings from Supabase and apply ═══ */
-(async function loadAndApplyHomepage(){
+async function applyHomepage(){
   if (typeof loadHomepage !== 'function') {
     console.warn('[homepage] supabase.js not loaded — using static defaults from HTML');
     return;
@@ -323,21 +330,37 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
   // Nav cards — replace entirely
   if (Array.isArray(data.cards) && data.cards.length) {
     const nav = document.getElementById('nav-grid');
-    console.log('[homepage] rendering', data.cards.length, 'cards');
+    // Decide which layout to use based on viewport width
+    const isMobile = window.matchMedia('(max-width:680px)').matches;
+    const posKey = isMobile ? 'posMobile' : 'pos';
+    // Layout mode requires ALL cards to have positions (not just some).
+    // If even one is missing, fall back to the grid so nothing is invisible.
+    const allHavePositions = data.cards.every(c => c[posKey] && typeof c[posKey].x === 'number');
+    nav.classList.toggle('has-layout', allHavePositions);
+    console.log('[homepage] viewport mobile?', isMobile, '| using key:', posKey, '| layout mode:', allHavePositions);
+    console.log('[homepage] cards positions:', data.cards.map(c => ({
+      label: c.label,
+      pos: c[posKey] || '(missing)'
+    })));
     nav.innerHTML = data.cards.map(c => {
       const hasImage = !!c.image;
       const featCls  = c.featured ? ' featured' : '';
       const imgCls   = hasImage ? ' has-image' : '';
-      const styleAttr = hasImage ? ` style="--card-bg:url('${escapeAttr(c.image)}')"` : '';
+      const pos = c[posKey];
+      const posStyle = allHavePositions && pos
+        ? `left:${pos.x}%;top:${pos.y}%;width:${pos.w}%;height:${pos.h}%;`
+        : '';
+      const bgStyle = hasImage ? `--card-bg:url('${escapeAttr(c.image)}');` : '';
+      const style = (posStyle || bgStyle) ? ` style="${posStyle}${bgStyle}"` : '';
       if (hasImage) console.log('[homepage] card', c.label, '→ image:', c.image);
       const label = renderLabel(c.label||'');
-      return `<a href="${escapeAttr(c.href||'#')}" class="nav-btn${featCls}${imgCls}"${styleAttr}>
+      return `<a href="${escapeAttr(c.href||'#')}" class="nav-btn${featCls}${imgCls}"${style}>
         <span class="nav-btn-name">${label}</span>
         <span class="nav-btn-sub">${escapeHtml(c.sub||'')}</span>
       </a>`;
     }).join('');
   } else {
-    console.warn('[homepage] no cards in data, keeping static fallback HTML');
+    console.warn('[homepage] no cards in data');
   }
 
   function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
@@ -347,6 +370,15 @@ body::after{content:'';position:fixed;inset:0;z-index:100;pointer-events:none;ba
     const safe = escapeHtml(s);
     return safe.replace(/\*([^*]+)\*/g, '<em>$1</em>');
   }
+}
+applyHomepage();
+// Re-apply on viewport changes so the layout switches between desktop and mobile
+(function(){
+  let _t;
+  window.addEventListener('resize', () => {
+    clearTimeout(_t);
+    _t = setTimeout(applyHomepage, 220);
+  });
 })();
 </script>
 
