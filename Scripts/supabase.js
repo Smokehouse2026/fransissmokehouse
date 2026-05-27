@@ -290,7 +290,7 @@ function normalizeImages(images, legacyImg) {
 /* ═══════════════════════════════════════════════════════════
    LOAD MENU (categories + items grouped + special + scarcity)
 ═══════════════════════════════════════════════════════════ */
-async function loadMenuData() {
+async function loadMenuData(includeHidden = false) {
   const [cats, items, special, scarcity] = await Promise.all([
     sbSelect('menu_categories', 'order=sort_order.asc'),
     sbSelect('menu_items',      'order=sort_order.asc'),
@@ -300,18 +300,21 @@ async function loadMenuData() {
 
   // Group items into their categories
   const MENU = {};
-  cats.filter(c => !c.hidden).forEach(c => {
+  const catList = includeHidden ? cats : cats.filter(c => !c.hidden);
+  catList.forEach(c => {
     MENU[c.id] = {
       title: c.title, subtitle: c.subtitle, icon: c.icon,
+      hidden: !!c.hidden,
       items: items
-        .filter(i => i.category_id === c.id && !i.hidden)
+        .filter(i => i.category_id === c.id && (includeHidden || !i.hidden))
         .map(i => ({
           name: i.name, price: i.price, priceLg: i.price_lg,
           img: i.img,
           images: normalizeImages(i.images, i.img),
           imageLayout: i.image_layout || 'collage',
           desc: i.description, note: i.note,
-          pairs: i.pairs, badge: i.badge, badgeStyle: i.badge_style
+          pairs: i.pairs, badge: i.badge, badgeStyle: i.badge_style,
+          hidden: !!i.hidden
         }))
     };
   });
@@ -334,24 +337,27 @@ async function loadMenuData() {
 /* ═══════════════════════════════════════════════════════════
    LOAD MARKET (categories + items grouped)
 ═══════════════════════════════════════════════════════════ */
-async function loadMarketData() {
+async function loadMarketData(includeHidden = false) {
   const [cats, items] = await Promise.all([
     sbSelect('market_categories', 'order=sort_order.asc'),
     sbSelect('market_items',      'order=sort_order.asc')
   ]);
   const MARKET = {};
-  cats.filter(c => !c.hidden).forEach(c => {
+  const catList = includeHidden ? cats : cats.filter(c => !c.hidden);
+  catList.forEach(c => {
     MARKET[c.id] = {
       title: c.title, subtitle: c.subtitle, icon: c.icon,
+      hidden: !!c.hidden,
       items: items
-        .filter(i => i.category_id === c.id && !i.hidden)
+        .filter(i => i.category_id === c.id && (includeHidden || !i.hidden))
         .map(i => ({
           name: i.name, price: i.price, unit: i.unit,
           img: i.img,
           images: normalizeImages(i.images, i.img),
           imageLayout: i.image_layout || 'collage',
           desc: i.description, note: i.note,
-          badge: i.badge, badgeStyle: i.badge_style
+          badge: i.badge, badgeStyle: i.badge_style,
+          hidden: !!i.hidden
         }))
     };
   });
@@ -429,6 +435,16 @@ function mergeHomepage(fetched) {
 /** Clear the cached homepage in localStorage so the next page load fetches fresh. */
 function invalidateHomepageCache() {
   try { localStorage.removeItem('francis_homepage'); } catch {}
+}
+
+/** Clear cached menu data so the menu page reflects edits on next load. */
+function invalidateMenuCache() {
+  try { localStorage.removeItem('francis_menu_full'); } catch {}
+}
+
+/** Clear cached market data so the market page reflects edits on next load. */
+function invalidateMarketCache() {
+  try { localStorage.removeItem('francis_market_full'); } catch {}
 }
 
 async function loadHomepage() {
