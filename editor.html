@@ -1039,18 +1039,43 @@ body::before{
   border:1px dashed rgba(255,153,48,.18);
   border-radius:6px;
   overflow:hidden;
-  /* Grid overlay — subtle dots at 5% intervals */
+  /* Grid overlay: lines every 5%, dots every 1% */
   background-image:
-    radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1.2px);
-  background-size:5% 5%;
-  background-position:0 0;
+    linear-gradient(rgba(255,153,48,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,153,48,.08) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,.06) 0.5px, transparent 0.7px);
+  background-size:5% 5%, 5% 5%, 1% 1%;
+  background-position:0 0, 0 0, 0 0;
 }
 .hp-device[data-mode="mobile"] .hp-canvas{top:14%;bottom:8%;left:4%;right:4%}
-/* When snap is off, show fewer/no grid dots */
 .hp-canvas.no-snap{
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,.03) 1px, transparent 1.2px);
+  background-image:none;
 }
+/* While in match-size mode, show pointer cursor on tiles and highlight */
+.hp-canvas.matching .hp-tile{cursor:crosshair;outline:2px dashed rgba(255,194,74,.4);outline-offset:-3px}
+.hp-canvas.matching .hp-tile.match-source{outline-color:var(--glow);outline-style:solid;box-shadow:0 0 0 3px rgba(255,194,74,.3),0 8px 24px rgba(255,153,48,.4)}
+
+/* Match-size banner */
+.hp-match-banner{
+  background:linear-gradient(135deg, rgba(212,82,0,.18), rgba(255,153,48,.12));
+  border:1px solid var(--flame);
+  color:var(--glow);
+  font-family:var(--sans);font-weight:700;
+  font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  padding:11px 16px;
+  border-radius:6px;
+  margin-top:12px;
+  text-align:center;
+  animation:pulseGlow 1.6s ease-in-out infinite;
+}
+.hp-match-banner.hidden{display:none}
+@keyframes pulseGlow{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,153,48,.3)}
+  50%{box-shadow:0 0 0 6px rgba(255,153,48,0)}
+}
+
+/* The "on" state for the match button */
+#hp-match-btn.on{background:linear-gradient(135deg,var(--ember),var(--fire));color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(212,82,0,.4)}
 
 /* Fullscreen mode — device frame covers the viewport */
 body.hp-fullscreen{overflow:hidden}
@@ -2545,11 +2570,14 @@ function renderHomepageEditor(){
             <button type="button" data-mode="mobile" onclick="hpSetMode('mobile')">Mobile</button>
           </div>
           <button type="button" class="btn btn-secondary btn-sm" id="hp-snap-btn" onclick="hpToggleSnap()" title="Snap tiles to grid">⊞ Snap: On</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="hp-match-btn" onclick="HP_MATCH ? hpCancelMatchSize() : hpStartMatchSize()" title="Copy size from one tile to another">⇆ Match Size</button>
           <button type="button" class="btn btn-secondary btn-sm" onclick="hpAddCard()">+ Add Card</button>
           <button type="button" class="btn btn-secondary btn-sm" onclick="hpAutoArrange()">Auto-Arrange</button>
           <button type="button" class="btn btn-secondary btn-sm" id="hp-fs-btn" onclick="hpToggleFullscreen()" title="Fullscreen edit">⛶ Fullscreen</button>
         </div>
       </div>
+
+      <div class="hp-match-banner hidden" id="hp-match-banner"></div>
 
       <div class="hp-layout-wrap">
         <div class="hp-canvas-shell">
@@ -2625,11 +2653,13 @@ function renderHomepageEditor(){
 let HP_MODE = 'desktop';           // 'desktop' | 'mobile'
 let HP_SEL = -1;                   // index of selected card, -1 = none
 let HP_DRAG = null;                // {mode, dir, sx, sy, cw, ch, orig}
-let HP_SNAP = true;                // snap to 5% grid
+let HP_SNAP = true;                // snap to grid
+let HP_SNAP_SIZE = 1;              // grid quantum in % (1% = fine, 5% = coarse)
 let HP_FS = false;                 // fullscreen mode
+let HP_MATCH = null;               // null | 'awaiting-source' | 'awaiting-target', with source idx stored on object
 
-/** Snap a percentage value to the nearest 5% if snapping is enabled. */
-function hpSnap(v){ return HP_SNAP ? Math.round(v / 5) * 5 : v; }
+/** Snap a percentage value to the nearest grid line if snapping is enabled. */
+function hpSnap(v){ return HP_SNAP ? Math.round(v / HP_SNAP_SIZE) * HP_SNAP_SIZE : v; }
 
 function hpToggleSnap(){
   HP_SNAP = !HP_SNAP;
@@ -2641,7 +2671,6 @@ function hpToggleSnap(){
 
 function hpToggleFullscreen(){
   HP_FS = !HP_FS;
-  // Find the hp-section containing the canvas (the "Nav Cards" section)
   const canvas = document.getElementById('hp-canvas');
   if (!canvas) return;
   const section = canvas.closest('.hp-section');
@@ -2650,6 +2679,70 @@ function hpToggleFullscreen(){
   document.body.classList.toggle('hp-fullscreen', HP_FS);
   const btn = document.getElementById('hp-fs-btn');
   if (btn) btn.textContent = HP_FS ? '⛶ Exit Fullscreen' : '⛶ Fullscreen';
+}
+
+/* ─── Match Size feature ─── */
+function hpStartMatchSize(){
+  HP_MATCH = { stage: 'awaiting-source', sourceIdx: null };
+  hpUpdateMatchUI();
+}
+function hpCancelMatchSize(){
+  HP_MATCH = null;
+  hpUpdateMatchUI();
+  hpRenderCanvas();
+}
+function hpHandleMatchClick(idx){
+  if (!HP_MATCH) return false;
+  if (HP_MATCH.stage === 'awaiting-source') {
+    HP_MATCH.sourceIdx = idx;
+    HP_MATCH.stage = 'awaiting-target';
+    hpUpdateMatchUI();
+    hpRenderCanvas();
+    return true;
+  }
+  if (HP_MATCH.stage === 'awaiting-target') {
+    if (idx === HP_MATCH.sourceIdx) {
+      toast('Pick a different tile as the target', true);
+      return true;
+    }
+    const key = hpModeKey();
+    const src = HP_DATA.cards[HP_MATCH.sourceIdx][key];
+    const tgt = HP_DATA.cards[idx][key];
+    if (!src || !tgt) return true;
+    tgt.w = src.w;
+    tgt.h = src.h;
+    // Clamp inside canvas
+    if (tgt.x + tgt.w > 100) tgt.x = Math.max(0, 100 - tgt.w);
+    if (tgt.y + tgt.h > 100) tgt.y = Math.max(0, 100 - tgt.h);
+    HP_MATCH = null;
+    hpUpdateMatchUI();
+    hpRenderCanvas();
+    toast('Size matched');
+    return true;
+  }
+  return false;
+}
+function hpUpdateMatchUI(){
+  const btn = document.getElementById('hp-match-btn');
+  const banner = document.getElementById('hp-match-banner');
+  if (!btn || !banner) return;
+  if (!HP_MATCH) {
+    btn.textContent = '⇆ Match Size';
+    btn.classList.remove('on');
+    banner.classList.add('hidden');
+    return;
+  }
+  btn.classList.add('on');
+  if (HP_MATCH.stage === 'awaiting-source') {
+    btn.textContent = '⇆ Cancel';
+    banner.classList.remove('hidden');
+    banner.textContent = '1/2 — Tap the tile whose size you want to COPY';
+  } else {
+    btn.textContent = '⇆ Cancel';
+    banner.classList.remove('hidden');
+    const srcLabel = HP_DATA.cards[HP_MATCH.sourceIdx]?.label || `#${HP_MATCH.sourceIdx+1}`;
+    banner.textContent = `2/2 — Tap the tile to resize to match "${srcLabel}"`;
+  }
 }
 
 /** Return the layout key for the current mode. */
@@ -2737,16 +2830,23 @@ function hpRenderCanvas(){
   const canvas = document.getElementById('hp-canvas');
   if (!canvas || !HP_DATA) return;
   hpEnsurePositions();
+  // Toggle matching class on the canvas
+  canvas.classList.toggle('matching', !!HP_MATCH);
   const key = hpModeKey();
+  const matchSrc = HP_MATCH?.sourceIdx;
   const tiles = HP_DATA.cards.map((c, i) => {
     const pos = c[key] || { x:5, y:5, w:30, h:20 };
     const isSel = i === HP_SEL;
+    const isMatchSrc = (i === matchSrc);
     const bgImg = c.image ? `background-image:url('${escapeHtml(c.image)}');background-size:cover;background-position:center` : '';
     const featCls = c.featured ? ' featured' : '';
     const selCls  = isSel ? ' selected' : '';
+    const matchCls = isMatchSrc ? ' match-source' : '';
     const labelHtml = (c.label||'').replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    // While matching, don't render resize handles (clicks need to flow through)
+    const showHandles = isSel && !HP_MATCH;
     return `
-      <div class="hp-tile${featCls}${selCls}" data-idx="${i}"
+      <div class="hp-tile${featCls}${selCls}${matchCls}" data-idx="${i}"
            style="left:${pos.x}%;top:${pos.y}%;width:${pos.w}%;height:${pos.h}%;${bgImg}"
            onmousedown="hpTileMouseDown(event,${i})"
            ontouchstart="hpTileTouchStart(event,${i})">
@@ -2755,7 +2855,7 @@ function hpRenderCanvas(){
           <div class="hp-tile-label">${labelHtml || '<span style="opacity:.4">Untitled</span>'}</div>
           ${c.sub ? `<div class="hp-tile-sub">${escapeHtml(c.sub)}</div>` : ''}
         </div>
-        ${isSel ? `
+        ${showHandles ? `
           <span class="hp-h hp-h-n"  onmousedown="hpHandleDown(event,${i},'n')"  ontouchstart="hpHandleTouch(event,${i},'n')"></span>
           <span class="hp-h hp-h-s"  onmousedown="hpHandleDown(event,${i},'s')"  ontouchstart="hpHandleTouch(event,${i},'s')"></span>
           <span class="hp-h hp-h-e"  onmousedown="hpHandleDown(event,${i},'e')"  ontouchstart="hpHandleTouch(event,${i},'e')"></span>
@@ -2867,6 +2967,8 @@ function hpDeleteCard(i){
 function hpTileMouseDown(e, idx){
   if (e.target.classList.contains('hp-h')) return;
   e.preventDefault(); e.stopPropagation();
+  // Match-Size mode intercepts clicks
+  if (HP_MATCH && hpHandleMatchClick(idx)) return;
   // Select on first click AND start the drag in the same gesture
   if (HP_SEL !== idx) {
     HP_SEL = idx;
@@ -2877,6 +2979,10 @@ function hpTileMouseDown(e, idx){
 function hpTileTouchStart(e, idx){
   if (e.target.classList.contains('hp-h')) return;
   const t = e.touches[0];
+  if (HP_MATCH && hpHandleMatchClick(idx)) {
+    e.preventDefault();
+    return;
+  }
   if (HP_SEL !== idx) {
     HP_SEL = idx;
     hpRenderCanvas();
@@ -2919,29 +3025,27 @@ function hpDragMove(cx, cy){
   const dy = (cy - d.sy) / d.ch * 100;
   const c = HP_DATA.cards[d.idx];
   if (d.mode === 'move') {
-    c[d.key] = {
-      x: Math.max(0, Math.min(100 - d.orig.w, hpSnap(d.orig.x + dx))),
-      y: Math.max(0, Math.min(100 - d.orig.h, hpSnap(d.orig.y + dy))),
-      w: d.orig.w, h: d.orig.h
-    };
+    // Snap the LEFT and TOP edges to the grid; size stays exactly the same.
+    let nx = hpSnap(d.orig.x + dx);
+    let ny = hpSnap(d.orig.y + dy);
+    nx = Math.max(0, Math.min(100 - d.orig.w, nx));
+    ny = Math.max(0, Math.min(100 - d.orig.h, ny));
+    c[d.key] = { x: nx, y: ny, w: d.orig.w, h: d.orig.h };
   } else {
-    let { x, y, w, h } = d.orig;
-    if (d.dir.includes('n')) { y = d.orig.y + dy; h = d.orig.h - dy; }
-    if (d.dir.includes('s')) { h = d.orig.h + dy; }
-    if (d.dir.includes('w')) { x = d.orig.x + dx; w = d.orig.w - dx; }
-    if (d.dir.includes('e')) { w = d.orig.w + dx; }
-    // Snap each edge to 5%
-    if (d.dir.includes('n')) { const ny = hpSnap(y); h += (y - ny); y = ny; }
-    if (d.dir.includes('s')) { h = hpSnap(h); }
-    if (d.dir.includes('w')) { const nx = hpSnap(x); w += (x - nx); x = nx; }
-    if (d.dir.includes('e')) { w = hpSnap(w); }
-    if (w < 5)  { if (d.dir.includes('w')) x = d.orig.x + d.orig.w - 5; w = 5; }
-    if (h < 5)  { if (d.dir.includes('n')) y = d.orig.y + d.orig.h - 5; h = 5; }
-    if (x < 0)  { w += x; x = 0; }
-    if (y < 0)  { h += y; y = 0; }
-    if (x + w > 100) w = 100 - x;
-    if (y + h > 100) h = 100 - y;
-    c[d.key] = { x, y, w, h };
+    // Resize: snap whichever edges are moving, not w/h independently.
+    let x = d.orig.x, y = d.orig.y;
+    let r = d.orig.x + d.orig.w;       // right edge
+    let b = d.orig.y + d.orig.h;       // bottom edge
+    if (d.dir.includes('n')) y = hpSnap(d.orig.y + dy);
+    if (d.dir.includes('s')) b = hpSnap(d.orig.y + d.orig.h + dy);
+    if (d.dir.includes('w')) x = hpSnap(d.orig.x + dx);
+    if (d.dir.includes('e')) r = hpSnap(d.orig.x + d.orig.w + dx);
+    // Clamp to bounds
+    x = Math.max(0, Math.min(95, x));
+    y = Math.max(0, Math.min(95, y));
+    r = Math.max(x + 5, Math.min(100, r));
+    b = Math.max(y + 5, Math.min(100, b));
+    c[d.key] = { x, y, w: r - x, h: b - y };
   }
   const tile = document.querySelector(`.hp-tile[data-idx="${d.idx}"]`);
   if (tile) {
