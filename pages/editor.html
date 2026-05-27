@@ -469,6 +469,19 @@ body::before{
   transition:border-color .25s,box-shadow .25s;
 }
 .cat-block:hover{border-color:var(--line-2)}
+.cat-block.cat-hidden{opacity:.55;background:linear-gradient(180deg,#1a1108,#0a0604 85%)}
+.cat-block.cat-hidden .cat-hdr{background:linear-gradient(90deg,rgba(196,160,112,.05),transparent 60%)}
+.hidden-pill{
+  display:inline-block;
+  margin-left:8px;
+  font-family:var(--sans);font-weight:700;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:#c4a070;
+  background:rgba(196,160,112,.12);
+  border:1px solid rgba(196,160,112,.3);
+  padding:3px 9px;border-radius:3px;
+  vertical-align:middle;
+}
 .cat-hdr{
   display:flex;align-items:center;justify-content:space-between;gap:14px;
   padding:18px 22px;
@@ -2249,7 +2262,7 @@ async function bootApp(){
   const diagInfo = await runDiagnostic();
 
   try {
-    const [menu, market] = await Promise.all([loadMenuData(), loadMarketData()]);
+    const [menu, market] = await Promise.all([loadMenuData(true), loadMarketData(true)]);
     DATA.menu = menu.MENU;
     DATA.special = menu.SITE_SPECIAL;
     DATA.sold = menu.SOLD_OUT;
@@ -2309,19 +2322,22 @@ function renderCategories(type, data, container){
   }
   let html = '';
   Object.entries(data).forEach(([catId, cat]) => {
+    const isHidden = !!cat.hidden;
+    const hiddenItems = cat.items.filter(it => it.hidden).length;
     html += `
-      <div class="cat-block">
+      <div class="cat-block${isHidden?' cat-hidden':''}">
         <div class="cat-hdr">
           <div class="cat-hdr-info">
             <span class="cat-icon">${cat.icon || '•'}</span>
             <div class="cat-title-block">
-              <div class="cat-title">${escapeHtml(cat.title)}</div>
+              <div class="cat-title">${escapeHtml(cat.title)}${isHidden?'<span class="hidden-pill">Hidden</span>':''}</div>
               ${cat.subtitle ? `<div class="cat-sub">${escapeHtml(cat.subtitle)}</div>` : ''}
             </div>
           </div>
           <div class="cat-actions">
             <button class="btn btn-secondary btn-sm" onclick="addItem('${type}','${catId}')">+ Item</button>
-            <button class="btn btn-secondary btn-sm" onclick="editCategory('${type}','${catId}')">Edit Category</button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleCategoryHidden('${type}','${catId}')" title="${isHidden?'Show this whole category on the live site':'Hide this whole category from the live site'}">${isHidden?'Show':'Hide'} Tab</button>
+            <button class="btn btn-secondary btn-sm" onclick="editCategory('${type}','${catId}')">Edit</button>
             <button class="btn btn-danger btn-sm" onclick="deleteCategory('${type}','${catId}')">Delete</button>
           </div>
         </div>
@@ -2334,6 +2350,26 @@ function renderCategories(type, data, container){
     `;
   });
   container.innerHTML = html;
+}
+
+async function toggleCategoryHidden(type, catId){
+  const data = type === 'menu' ? DATA.menu : DATA.market;
+  const cat = data[catId];
+  if (!cat) return;
+  const newHidden = !cat.hidden;
+  const table = type === 'menu' ? 'menu_categories' : 'market_categories';
+  setStatus('Saving…', 'saving');
+  try {
+    await sbUpdate(table, { id: catId }, { hidden: newHidden });
+    if (type === 'menu') invalidateMenuCache(); else invalidateMarketCache();
+    await reloadAndRender(type);
+    toast(newHidden ? 'Tab hidden from live site' : 'Tab is now visible');
+    setStatus('Ready');
+  } catch(e){
+    console.error(e);
+    toast('Save failed: '+e.message, true);
+    setStatus('Save failed','err');
+  }
 }
 
 function itemRow(type, catId, it, idx){
@@ -2373,7 +2409,7 @@ function editCategory(type, catId){ editCategoryModal(type, catId); }
 
 function editCategoryModal(type, catId){
   const isNew = !catId;
-  const cat = isNew ? {title:'', subtitle:'', icon: type==='menu'?'🔥':'🥩'} :
+  const cat = isNew ? {title:'', subtitle:'', icon: type==='menu'?'🔥':'🥩', hidden:false} :
                        (type==='menu' ? DATA.menu : DATA.market)[catId];
   openModal(`
     <div class="modal-title">${isNew?'New':'Edit'} <em>Category</em></div>
@@ -2389,6 +2425,10 @@ function editCategoryModal(type, catId){
       <div class="field"><label>Subtitle</label><input id="m-sub" value="${escapeHtml(cat.subtitle||'')}" placeholder="With Two Sides" /></div>
       <div class="field"><label>Icon (emoji)</label><input id="m-icon" value="${escapeHtml(cat.icon||'')}" placeholder="🔥" /></div>
     </div>
+    <label class="check-row" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(20,12,6,.45);border:1px solid var(--line);border-radius:var(--r);cursor:pointer;margin-top:8px">
+      <input type="checkbox" id="m-hidden" ${cat.hidden?'checked':''} style="width:auto;margin:0;transform:scale(1.2);accent-color:var(--flame)">
+      <span style="font-size:13px">Hide this entire tab from the live ${type==='menu'?'menu':'market'} page</span>
+    </label>
     <div class="modal-actions">
       <div></div>
       <div class="modal-actions-r">
@@ -2406,7 +2446,8 @@ async function saveCategory(type, isNew){
   const row = {
     id, title,
     subtitle: document.getElementById('m-sub').value.trim(),
-    icon:     document.getElementById('m-icon').value.trim() || '•'
+    icon:     document.getElementById('m-icon').value.trim() || '•',
+    hidden:   document.getElementById('m-hidden').checked
   };
   const table = type==='menu' ? 'menu_categories' : 'market_categories';
   try {
@@ -2419,6 +2460,7 @@ async function saveCategory(type, isNew){
     } else {
       await sbUpdate(table, {id}, row);
     }
+    if (type === 'menu') invalidateMenuCache(); else invalidateMarketCache();
     await reloadAndRender(type);
     closeModal();
     toast('Saved');
@@ -2626,6 +2668,7 @@ async function saveSpecial(){
   try {
     setStatus('Saving…','saving');
     await sbUpsert('daily_special', row);
+    invalidateMenuCache();
     DATA.special = { name: row.name, price: row.price, desc: row.description, type: row.type, image: row.image, images: row.images, imageLayout: row.image_layout, hidden: row.hidden };
     renderSpecial();
     toast('Special saved');
@@ -2680,6 +2723,7 @@ async function saveScarcity(key, arr){
   try {
     setStatus('Saving…','saving');
     await sbUpsert('scarcity', { id: dbId, items: arr });
+    invalidateMenuCache();
     if (key==='sold') DATA.sold = arr; else DATA.fast = arr;
     renderScarcity();
     toast('Saved');
@@ -2691,14 +2735,16 @@ async function saveScarcity(key, arr){
    RELOAD HELPER
 ═══════════════════════════════════════════════════════════ */
 async function reloadAndRender(type){
+  // Bust the live page's cache so visitors see the change on next load
+  if (type === 'menu') invalidateMenuCache(); else if (type === 'market') invalidateMarketCache();
   if (type === 'menu') {
-    const m = await loadMenuData();
+    const m = await loadMenuData(true);
     DATA.menu = m.MENU;
     DATA.special = m.SITE_SPECIAL;
     DATA.sold = m.SOLD_OUT;
     DATA.fast = m.SELLING_FAST;
   } else if (type === 'market') {
-    const m = await loadMarketData();
+    const m = await loadMarketData(true);
     DATA.market = m.MARKET;
   }
   renderAll();
@@ -5698,6 +5744,67 @@ document.addEventListener('DOMContentLoaded', () => {
   const refreshBtn = document.getElementById('staff-refresh');
   if (refreshBtn) refreshBtn.onclick = loadStaffUsers;
 });
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE REDIRECT — offer to switch to mobile editor on phones
+═══════════════════════════════════════════════════════════ */
+(function offerMobileEditor(){
+  // Skip if user explicitly chose desktop (via ?desktop=1 or sessionStorage)
+  const qs = new URLSearchParams(location.search);
+  if (qs.get('desktop') === '1') {
+    sessionStorage.setItem('fs-force-desktop', '1');
+    return;
+  }
+  if (sessionStorage.getItem('fs-force-desktop') === '1') return;
+  // Detect phone — narrow viewport + touch
+  const isPhone = window.innerWidth <= 720 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  if (!isPhone) return;
+  // Show a banner
+  const banner = document.createElement('div');
+  banner.style.cssText = `
+    position:fixed;top:0;left:0;right:0;z-index:2000;
+    background:linear-gradient(180deg,#1a1108,#0f0a06);
+    border-bottom:2px solid #ff9930;
+    padding:16px 18px;
+    display:flex;flex-direction:column;gap:10px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    color:#e8d4b0;
+    box-shadow:0 8px 32px rgba(0,0,0,.6);
+    text-align:center;
+  `;
+  banner.innerHTML = `
+    <div style="font-size:15px;font-weight:600;line-height:1.4">
+      Looks like you're on a phone. Use the <span style="color:#ff9930">mobile editor</span> for menu updates?
+    </div>
+    <div style="font-size:12px;color:#8a755a;line-height:1.4">
+      The full editor needs a wider screen. Mobile editor handles menu, specials, scarcity, market, business info and staff.
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button id="fs-mb-yes" style="
+        flex:1;padding:12px;
+        background:linear-gradient(135deg,#d45200,#ed6e14);
+        color:#fff;border:none;border-radius:8px;
+        font-weight:700;font-size:14px;letter-spacing:.04em;
+        cursor:pointer;
+      ">Switch to Mobile →</button>
+      <button id="fs-mb-no" style="
+        flex:1;padding:12px;
+        background:transparent;
+        color:#c4a070;border:1px solid rgba(196,160,112,.3);border-radius:8px;
+        font-weight:600;font-size:14px;
+        cursor:pointer;
+      ">Stay Here</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+  document.getElementById('fs-mb-yes').onclick = () => {
+    location.href = './mobile.html';
+  };
+  document.getElementById('fs-mb-no').onclick = () => {
+    sessionStorage.setItem('fs-force-desktop', '1');
+    banner.remove();
+  };
+})();
 
 /* ═══════════════════════════════════════════════════════════
    GO
