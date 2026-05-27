@@ -91,11 +91,22 @@ function sbHeaders(extra){
   }, extra || {});
 }
 
-/** Fetch list of staff users (reads from the editor_users view created in AUTH_SETUP.md).
+/** Map old table names to the renamed ones. Lets editor.html and the loaders
+ *  keep using the original names; we translate at request time. Any name not
+ *  in the map is passed through unchanged. */
+const TABLE_RENAMES = {
+  daily_special: 'menu_daily_special',
+  scarcity:      'menu_scarcity',
+  homepage:      'site_homepage',
+  editor_users:  'site_editor_users'
+};
+function resolveTable(name){ return TABLE_RENAMES[name] || name; }
+
+/** Fetch list of staff users (reads from the site_editor_users view).
  *  Only works if you're logged in. Returns [] on error so the UI doesn't crash. */
 async function sbListUsers(){
   try {
-    const r = await fetch(`${SUPABASE_URL}/rest/v1/editor_users?select=*`, {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${resolveTable('editor_users')}?select=*`, {
       headers: sbHeaders()
     });
     if (!r.ok) return [];
@@ -103,8 +114,7 @@ async function sbListUsers(){
   } catch { return []; }
 }
 
-/* Keep the old SB_HEADERS constant working for any code that imported it.
- * It returns the *current* headers each time it's read. */
+/* Keep the old SB_HEADERS constant working for any code that imported it. */
 const SB_HEADERS = new Proxy({}, {
   get(_, prop) { return sbHeaders()[prop]; },
   ownKeys() { return Object.keys(sbHeaders()); },
@@ -112,46 +122,51 @@ const SB_HEADERS = new Proxy({}, {
 });
 
 /* Generic REST helpers (no SDK needed — keeps it lightweight) */
-async function sbSelect(table, query = '') {
+async function sbSelect(name, query = '') {
+  const table = resolveTable(name);
   const url = `${SUPABASE_URL}/rest/v1/${table}?${query}`;
   const r = await fetch(url, { headers: sbHeaders() });
-  if (!r.ok) throw new Error(`Supabase select ${table}: ${r.status} ${await r.text()}`);
+  if (!r.ok) throw new Error(`Supabase select ${name}: ${r.status} ${await r.text()}`);
   return r.json();
 }
 
-async function sbInsert(table, row) {
+async function sbInsert(name, row) {
+  const table = resolveTable(name);
   const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
     method: 'POST', headers: sbHeaders(), body: JSON.stringify(row)
   });
-  if (!r.ok) throw new Error(`Supabase insert ${table}: ${r.status} ${await r.text()}`);
+  if (!r.ok) throw new Error(`Supabase insert ${name}: ${r.status} ${await r.text()}`);
   return r.json();
 }
 
-async function sbUpdate(table, match, patch) {
+async function sbUpdate(name, match, patch) {
+  const table = resolveTable(name);
   const q = Object.entries(match).map(([k,v]) => `${k}=eq.${encodeURIComponent(v)}`).join('&');
   const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${q}`, {
     method: 'PATCH', headers: sbHeaders(), body: JSON.stringify(patch)
   });
-  if (!r.ok) throw new Error(`Supabase update ${table}: ${r.status} ${await r.text()}`);
+  if (!r.ok) throw new Error(`Supabase update ${name}: ${r.status} ${await r.text()}`);
   return r.json();
 }
 
-async function sbUpsert(table, row) {
+async function sbUpsert(name, row) {
+  const table = resolveTable(name);
   const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
     method: 'POST',
-    headers: { ...sbHeaders(), Prefer: 'resolution=merge-duplicates,return=representation' },
+    headers: sbHeaders({ Prefer: 'resolution=merge-duplicates,return=representation' }),
     body: JSON.stringify(row)
   });
-  if (!r.ok) throw new Error(`Supabase upsert ${table}: ${r.status} ${await r.text()}`);
+  if (!r.ok) throw new Error(`Supabase upsert ${name}: ${r.status} ${await r.text()}`);
   return r.json();
 }
 
-async function sbDelete(table, match) {
+async function sbDelete(name, match) {
+  const table = resolveTable(name);
   const q = Object.entries(match).map(([k,v]) => `${k}=eq.${encodeURIComponent(v)}`).join('&');
   const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${q}`, {
     method: 'DELETE', headers: sbHeaders()
   });
-  if (!r.ok) throw new Error(`Supabase delete ${table}: ${r.status} ${await r.text()}`);
+  if (!r.ok) throw new Error(`Supabase delete ${name}: ${r.status} ${await r.text()}`);
   return r.status === 204 ? null : r.json();
 }
 
