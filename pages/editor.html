@@ -860,6 +860,32 @@ body::before{
   color:var(--ink-3);
   margin-bottom:10px;
 }
+.pg-side-section h4 em{font-style:italic;color:var(--flame);font-weight:600;text-transform:none;letter-spacing:.04em;font-size:12px}
+
+.pg-side-tabs{
+  display:flex;
+  background:rgba(20,12,6,.5);
+  border:1px solid var(--line);
+  border-radius:5px;
+  padding:3px;
+  gap:2px;
+  margin-bottom:14px;
+}
+.pg-side-tab{
+  flex:1;
+  background:transparent;border:none;
+  color:var(--ink-3);
+  padding:8px 12px;
+  border-radius:3px;
+  cursor:pointer;
+  font-family:var(--sans);font-weight:700;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  transition:all .15s;
+}
+.pg-side-tab:hover{color:var(--ink)}
+.pg-side-tab.active{background:var(--flame);color:#1a1108}
+.pg-side-tab em{font-style:italic;text-transform:none;letter-spacing:.04em;font-weight:500}
+.pg-side-tab-body{}
 
 .pg-img-picker{
   display:flex;align-items:center;gap:10px;
@@ -4129,11 +4155,13 @@ let PG_DATA = null;
 let PG_ID = 'catering';
 let PG_DEVICE = 'desktop';    // 'desktop' | 'mobile'
 let PG_SELECTED_ID = null;    // currently selected section id
+let PG_SELECTED_ELEMENT = null; // currently selected element style-id (e.g. "title", "items.0.title")
 let PG_IFRAME_READY = false;
 let PG_BIZ = null;            // business info cache for pushing to iframe
 
 /* Section catalog — used by Library picker + property panel */
 const SECTION_LIB = [
+  { type:'page_header',   icon:'⌐', name:'Page Header',            desc:'Sticky top bar with back link, brand, and a right-side button.' },
   { type:'hero',          icon:'★', name:'Hero (text)',          desc:'Big top section with title, lead text, and a contact card.' },
   { type:'hero_image',    icon:'🖼', name:'Hero with Image',      desc:'Full-bleed background image with title + lead overlay.' },
   { type:'feature_grid',  icon:'⊞', name:'Feature Grid',         desc:'Grid of cards with icon, title, description and optional tag.' },
@@ -4150,6 +4178,12 @@ const SECTION_LIB = [
 
 /* Sensible blank state for each new section type */
 const SECTION_DEFAULTS = {
+  page_header: () => ({
+    back_text:'← Back', back_href:'../index.html',
+    use_business_brand:true, brand_text:'', brand_text_em:'',
+    use_business_tagline:true, tagline_text:'',
+    right_text:'See Menu →', right_href:'../menu.html'
+  }),
   hero: () => ({
     ghost:'CATERING', eyebrow:'New Section',
     title_lines:['Big','*Title*'], lead:'Lead paragraph.',
@@ -4258,6 +4292,12 @@ window.addEventListener('message', e => {
       break;
     case 'section-selected':
       PG_SELECTED_ID = m.payload.id;
+      PG_SELECTED_ELEMENT = null;
+      renderSidePanel();
+      break;
+    case 'element-selected':
+      PG_SELECTED_ID = m.payload.sectionId;
+      PG_SELECTED_ELEMENT = m.payload.styleId;
       renderSidePanel();
       break;
     case 'field-changed':
@@ -4379,21 +4419,226 @@ function renderSidePanel(){
       <div class="pg-side-empty">
         <div class="pg-side-empty-icon">↖</div>
         <div class="pg-side-empty-title">Click any section</div>
-        <div class="pg-side-empty-sub">Click any section in the preview to see its settings here. Click any text to edit it directly. Use the toolbar that appears for move/hide/duplicate/delete.</div>
+        <div class="pg-side-empty-sub">Click any section in the preview to see its settings. Click any text to edit it directly, or click images/cards to style them.</div>
       </div>
     `;
     return;
   }
   const idx = PG_DATA.sections.findIndex(s => s.id === PG_SELECTED_ID);
-  if (idx === -1) { PG_SELECTED_ID = null; renderSidePanel(); return; }
+  if (idx === -1) { PG_SELECTED_ID = null; PG_SELECTED_ELEMENT = null; renderSidePanel(); return; }
   const s = PG_DATA.sections[idx];
   const libEntry = SECTION_LIB.find(x => x.type === s.type) || { name: s.type };
+
+  // Tab state — default to Style when an element is selected, Content otherwise
+  const activeTab = PG_SIDE_TAB || (PG_SELECTED_ELEMENT ? 'style' : 'content');
+
   side.innerHTML = `
     <div class="pg-side-type">Section ${idx+1} of ${PG_DATA.sections.length}</div>
     <h3>${libEntry.name}</h3>
-    ${renderSideFields(s)}
+    <div class="pg-side-tabs">
+      <button class="pg-side-tab ${activeTab==='content'?'active':''}" data-tab="content">Content</button>
+      <button class="pg-side-tab ${activeTab==='style'?'active':''}" data-tab="style">Style ${PG_SELECTED_ELEMENT ? `· <em>${escapeHtml(PG_SELECTED_ELEMENT.split('.').pop())}</em>` : ''}</button>
+    </div>
+    <div class="pg-side-tab-body">
+      ${activeTab === 'content' ? renderSideFields(s) : renderStylePanel(s)}
+    </div>
   `;
-  wireSideFields(s);
+  side.querySelectorAll('.pg-side-tab').forEach(btn => {
+    btn.onclick = () => { PG_SIDE_TAB = btn.dataset.tab; renderSidePanel(); };
+  });
+  if (activeTab === 'content') wireSideFields(s);
+  else wireStylePanel(s);
+}
+
+let PG_SIDE_TAB = null;  // 'content' | 'style' (null = auto)
+
+/* ───────────────────────────────────────────────────────────
+   STYLE PANEL — per-element + section-level styling controls
+─────────────────────────────────────────────────────────── */
+const STYLE_OPTS = {
+  size:    [['',  'Default'], ['xs','XS'], ['sm','S'], ['md','M'], ['lg','L'], ['xl','XL'], ['2xl','2XL'], ['3xl','3XL'], ['4xl','4XL']],
+  align:   [['',  'Default'], ['left','Left'], ['center','Center'], ['right','Right']],
+  color:   [['',  'Default'], ['flame','Flame'], ['ember','Ember'], ['glow','Glow'], ['fire','Fire'], ['text','Cream'], ['parch','Parch'], ['sand','Sand'], ['white','White'], ['__custom','Custom hex…']],
+  bg:      [['',  'Transparent'], ['bg','Page BG'], ['panel','Panel'], ['dark','Dark'], ['flame','Flame'], ['ember','Ember'], ['__custom','Custom hex…']],
+  pad:     [['',  'Default'], ['none','None'], ['sm','S'], ['md','M'], ['lg','L'], ['xl','XL']],
+  radius:  [['',  'Default'], ['none','None'], ['sm','S'], ['md','M'], ['lg','L'], ['pill','Pill'], ['circle','Circle']],
+  border:  [['',  'Default'], ['none','None'], ['subtle','Subtle'], ['strong','Strong']],
+  width:   [['',  'Default'], ['narrow','Narrow'], ['medium','Medium'], ['default','Default'], ['wide','Wide'], ['full','Full']],
+  gap:     [['',  'Default'], ['tight','Tight'], ['normal','Normal'], ['loose','Loose']],
+  width_pct: [['', 'Auto'], ['25','25%'], ['50','50%'], ['75','75%'], ['100','100%']],
+  height_mode: [['', 'Auto'], ['short','Short (200px)'], ['tall','Tall (480px)'], ['cover','Full screen']]
+};
+
+function selectOpts(opts, val){
+  return opts.map(([v,l]) => `<option value="${escapeHtml(v)}" ${String(val||'')===v?'selected':''}>${escapeHtml(l)}</option>`).join('');
+}
+
+function styleDropdown(label, prop, opts, val){
+  return `
+    <div class="field">
+      <label>${escapeHtml(label)}</label>
+      <select data-style-prop="${prop}">${selectOpts(opts, val)}</select>
+    </div>
+  `;
+}
+
+function renderStylePanel(s){
+  const sel = PG_SELECTED_ELEMENT;
+  const sectionStyle = s.section_style || (s.section_style = {});
+  const elementStyles = s.element_styles || (s.element_styles = {});
+  const elemStyle = sel ? (elementStyles[sel] || {}) : null;
+
+  return `
+    ${sel ? `
+      <div class="pg-side-section">
+        <h4>Selected: <em style="color:var(--flame)">${escapeHtml(sel)}</em></h4>
+        ${styleDropdown('Text Size',      'size',   STYLE_OPTS.size,   elemStyle.size)}
+        ${styleDropdown('Text Color',     'color',  STYLE_OPTS.color,  elemStyle.color)}
+        ${elemStyle.color === '__custom' ? `
+          <div class="field"><label>Custom Color (hex)</label><input type="text" data-style-prop="color_custom" value="${escapeHtml(elemStyle.color_custom || '#ff9930')}" placeholder="#ff9930"></div>
+        ` : ''}
+        ${styleDropdown('Text Align',     'align',  STYLE_OPTS.align,  elemStyle.align)}
+        ${styleDropdown('Background',     'bg',     STYLE_OPTS.bg,     elemStyle.bg)}
+        ${elemStyle.bg === '__custom' ? `
+          <div class="field"><label>Custom Background (hex)</label><input type="text" data-style-prop="bg_custom" value="${escapeHtml(elemStyle.bg_custom || '#1a1108')}"></div>
+        ` : ''}
+        <div class="field-row">
+          ${styleDropdown('Padding Top',    'pad_top',   STYLE_OPTS.pad, elemStyle.pad_top)}
+          ${styleDropdown('Padding Bottom', 'pad_bot',   STYLE_OPTS.pad, elemStyle.pad_bot)}
+        </div>
+        <div class="field-row">
+          ${styleDropdown('Padding Left',   'pad_left',  STYLE_OPTS.pad, elemStyle.pad_left)}
+          ${styleDropdown('Padding Right',  'pad_right', STYLE_OPTS.pad, elemStyle.pad_right)}
+        </div>
+        ${styleDropdown('Border Radius',  'radius', STYLE_OPTS.radius, elemStyle.radius)}
+        ${styleDropdown('Border',         'border', STYLE_OPTS.border, elemStyle.border)}
+        ${styleDropdown('Max Width',      'max_width', STYLE_OPTS.width, elemStyle.max_width)}
+        ${sel.endsWith('image') || sel === 'image' ? `
+          ${styleDropdown('Image Width',  'width_pct',   STYLE_OPTS.width_pct, elemStyle.width_pct)}
+          ${styleDropdown('Image Height', 'height_mode', STYLE_OPTS.height_mode, elemStyle.height_mode)}
+        ` : ''}
+        ${(sel.includes('items') || sel === 'prep_items') ? styleDropdown('Item Spacing', 'gap', STYLE_OPTS.gap, elemStyle.gap) : ''}
+        <button class="pg-array-add" data-style-reset>Reset to Default</button>
+      </div>
+    ` : `
+      <div class="pg-side-section">
+        <p style="font-family:var(--sans);font-size:12px;color:var(--ink-4);line-height:1.5;margin-bottom:0">
+          Click any element in the preview (text, image, card) to style it individually.
+          Or use the section-level settings below.
+        </p>
+      </div>
+    `}
+
+    <div class="pg-side-section">
+      <h4>This Section</h4>
+      ${styleDropdown('Background',     'sec_bg',    STYLE_OPTS.bg,    sectionStyle.bg)}
+      ${sectionStyle.bg === '__custom' ? `
+        <div class="field"><label>Custom Background (hex)</label><input type="text" data-section-style-prop="bg_custom" value="${escapeHtml(sectionStyle.bg_custom || '#1a1108')}"></div>
+      ` : ''}
+      <div class="field">
+        <label>Background Image</label>
+        <div class="pg-img-picker">
+          <div class="pg-img-preview" style="${sectionStyle.bg_image?`background-image:url('${escapeHtml(sectionStyle.bg_image)}')`:''}">${sectionStyle.bg_image?'':'🖼'}</div>
+          <div class="pg-img-actions">
+            <button class="pg-img-btn" data-section-img-upload>Upload</button>
+            ${sectionStyle.bg_image?`<button class="pg-img-btn danger" data-section-img-clear>Remove</button>`:''}
+          </div>
+        </div>
+      </div>
+      <div class="field-row">
+        ${styleDropdown('Padding Top',     'sec_padding_top',    STYLE_OPTS.pad, sectionStyle.padding_top)}
+        ${styleDropdown('Padding Bottom',  'sec_padding_bottom', STYLE_OPTS.pad, sectionStyle.padding_bottom)}
+      </div>
+      ${styleDropdown('Content Width',  'sec_width', STYLE_OPTS.width, sectionStyle.width)}
+      <label class="pg-check">
+        <input type="checkbox" data-section-style-prop="divider_top_off" ${sectionStyle.divider_top === false ? 'checked' : ''}>
+        <span>Hide top divider line</span>
+      </label>
+      <button class="pg-array-add" data-section-style-reset>Reset Section Style</button>
+    </div>
+  `;
+}
+
+function wireStylePanel(s){
+  const side = document.getElementById('pg-side');
+  if (!side) return;
+
+  // Element-level style changes
+  side.querySelectorAll('[data-style-prop]').forEach(el => {
+    el.oninput = () => {
+      if (!PG_SELECTED_ELEMENT) return;
+      const styles = s.element_styles || (s.element_styles = {});
+      const cur = styles[PG_SELECTED_ELEMENT] || (styles[PG_SELECTED_ELEMENT] = {});
+      const prop = el.dataset.styleProp;
+      const val = el.value;
+      // Map custom color: when user picks "__custom" + types hex, store the hex itself
+      if (prop === 'color_custom') { cur.color = val || ''; }
+      else if (prop === 'bg_custom') { cur.bg = val || ''; }
+      else { cur[prop] = val; if (val === '__custom') { cur[prop + '_custom'] = ''; } }
+      // Clean up empty
+      if (!val) delete cur[prop];
+      schedulePush();
+      // Re-render side after dropdown changes that toggle subfields
+      if (prop === 'color' || prop === 'bg') renderSidePanel();
+    };
+    el.onchange = el.oninput;
+  });
+  const reset = side.querySelector('[data-style-reset]');
+  if (reset) reset.onclick = () => {
+    if (!PG_SELECTED_ELEMENT) return;
+    if (s.element_styles) delete s.element_styles[PG_SELECTED_ELEMENT];
+    pushDataToIframe();
+    renderSidePanel();
+  };
+
+  // Section-level style changes
+  side.querySelectorAll('[data-section-style-prop]').forEach(el => {
+    el.oninput = () => {
+      const ss = s.section_style || (s.section_style = {});
+      const prop = el.dataset.sectionStyleProp;
+      if (prop === 'divider_top_off') { ss.divider_top = el.checked ? false : true; }
+      else if (prop === 'bg_custom') { ss.bg = el.value || ''; }
+      else { ss[prop] = el.value; }
+      if (!el.value && prop !== 'divider_top_off') delete ss[prop];
+      schedulePush();
+    };
+    el.onchange = el.oninput;
+  });
+  // Map sec_X dropdowns to section_style.X
+  side.querySelectorAll('[data-style-prop^="sec_"]').forEach(el => {
+    el.oninput = () => {
+      const ss = s.section_style || (s.section_style = {});
+      const prop = el.dataset.styleProp.replace(/^sec_/, '');
+      const val = el.value;
+      if (val) ss[prop] = val; else delete ss[prop];
+      schedulePush();
+      if (prop === 'bg') renderSidePanel();
+    };
+    el.onchange = el.oninput;
+  });
+  const secReset = side.querySelector('[data-section-style-reset]');
+  if (secReset) secReset.onclick = () => {
+    s.section_style = {};
+    pushDataToIframe();
+    renderSidePanel();
+  };
+
+  // Section background image
+  const secImgUp = side.querySelector('[data-section-img-upload]');
+  if (secImgUp) secImgUp.onclick = () => pickImage(url => {
+    s.section_style = s.section_style || {};
+    s.section_style.bg_image = url;
+    pushDataToIframe();
+    renderSidePanel();
+  });
+  const secImgClr = side.querySelector('[data-section-img-clear]');
+  if (secImgClr) secImgClr.onclick = () => {
+    const old = s.section_style?.bg_image;
+    if (s.section_style) s.section_style.bg_image = '';
+    if (old && typeof sbDeleteFile === 'function') sbDeleteFile(old).catch(()=>{});
+    pushDataToIframe();
+    renderSidePanel();
+  };
 }
 
 /* Field renderers per section type — focus on things NOT exposed via inline text edit:
@@ -4402,6 +4647,37 @@ function renderSideFields(s){
   const p = s.props || {};
   const sec = renderArrayManager;  // shortcut
   switch (s.type) {
+    case 'page_header':
+      return `
+        <div class="pg-side-section">
+          <h4>Back Link (Left)</h4>
+          <div class="field-row">
+            <div class="field"><label>Text</label><input data-prop="back_text" value="${escapeHtml(p.back_text||'')}" placeholder="← Back"></div>
+            <div class="field"><label>Link URL</label><input data-prop="back_href" value="${escapeHtml(p.back_href||'')}" placeholder="../index.html"></div>
+          </div>
+        </div>
+        <div class="pg-side-section">
+          <h4>Brand (Center)</h4>
+          ${pgCheckHTML('Use business name (from Business Info)', 'use_business_brand', p.use_business_brand)}
+          ${!p.use_business_brand ? `
+            <div class="field-row">
+              <div class="field"><label>Brand Text</label><input data-prop="brand_text" value="${escapeHtml(p.brand_text||'')}" placeholder="The Francis"></div>
+              <div class="field"><label>Italic Word</label><input data-prop="brand_text_em" value="${escapeHtml(p.brand_text_em||'')}" placeholder="Smokehouse"></div>
+            </div>
+          ` : ''}
+          ${pgCheckHTML('Show tagline below brand', 'use_business_tagline', p.use_business_tagline)}
+          ${!p.use_business_tagline ? `
+            <div class="field"><label>Custom Tagline</label><input data-prop="tagline_text" value="${escapeHtml(p.tagline_text||'')}" placeholder="& Specialty Meats · ..."></div>
+          ` : ''}
+        </div>
+        <div class="pg-side-section">
+          <h4>Right Button</h4>
+          <div class="field-row">
+            <div class="field"><label>Text</label><input data-prop="right_text" value="${escapeHtml(p.right_text||'')}" placeholder="See Menu →"></div>
+            <div class="field"><label>Link URL</label><input data-prop="right_href" value="${escapeHtml(p.right_href||'')}" placeholder="../menu.html"></div>
+          </div>
+        </div>
+      `;
     case 'hero':
       return `
         <div class="pg-side-section">
