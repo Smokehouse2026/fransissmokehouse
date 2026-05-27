@@ -309,8 +309,8 @@ function mergeHomepage(fetched) {
     title_em: f.title_em ?? empty.title_em,
     tagline:  f.tagline  ?? empty.tagline,
     eyebrow:  f.eyebrow  ?? empty.eyebrow,
-    cards:    Array.isArray(f.cards) && f.cards.length === empty.cards.length
-              ? f.cards.map((c, i) => ({ ...empty.cards[i], ...c }))
+    cards:    Array.isArray(f.cards)
+              ? f.cards.map(c => ({ label:'', sub:'', href:'', image:'', ...c }))
               : empty.cards,
     footer:   { ...empty.footer, ...(f.footer || {}) },
     theme:    { ...empty.theme,  ...(f.theme  || {}) }
