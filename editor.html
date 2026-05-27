@@ -965,6 +965,171 @@ body::before{
   color:var(--hp-prev-eyebrow, #dcbe94);opacity:.85;margin-top:6px;
 }
 
+/* ═══ HOMEPAGE LAYOUT EDITOR ═══ */
+.hp-layout-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hp-mode-toggle{display:flex;border:1px solid var(--line-2);border-radius:6px;overflow:hidden}
+.hp-mode-toggle button{
+  background:transparent;border:none;
+  color:var(--ink-3);
+  font-family:var(--sans);font-weight:700;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  padding:8px 14px;cursor:pointer;
+  transition:all .2s;
+}
+.hp-mode-toggle button.on{background:linear-gradient(135deg,var(--ember),var(--fire));color:#fff}
+.hp-mode-toggle button:not(.on):hover{color:var(--flame)}
+
+.hp-layout-wrap{
+  display:grid;
+  grid-template-columns:1fr 280px;
+  gap:18px;
+  margin-top:18px;
+}
+@media(max-width:900px){
+  .hp-layout-wrap{grid-template-columns:1fr}
+}
+
+.hp-canvas-shell{display:flex;flex-direction:column;gap:8px}
+.hp-canvas{
+  position:relative;
+  width:100%;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,153,48,.06),transparent 60%),
+    var(--hp-prev-bg, #0d0805);
+  border:1px solid var(--line-2);
+  border-radius:var(--r);
+  overflow:hidden;
+  user-select:none;
+  touch-action:none;
+}
+.hp-canvas[data-mode="desktop"]{aspect-ratio:16/10}
+.hp-canvas[data-mode="mobile"]{aspect-ratio:9/16;max-width:300px;margin:0 auto}
+.hp-canvas-empty{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink-4);
+  font-family:var(--sans);font-style:italic;font-size:13px;
+}
+.hp-canvas-help{
+  font-family:var(--sans);
+  font-size:11px;
+  color:var(--ink-4);
+  text-align:center;
+  font-style:italic;
+  letter-spacing:.02em;
+}
+
+.hp-tile{
+  position:absolute;
+  background-color:rgba(31,20,9,.6);
+  border:1.5px solid rgba(220,190,148,.42);
+  border-radius:6px;
+  overflow:hidden;
+  cursor:move;
+  transition:border-color .2s,box-shadow .2s;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  padding:6px;
+}
+.hp-tile:hover:not(.selected){border-color:var(--flame)}
+.hp-tile.featured{border-color:rgba(255,153,48,.7);box-shadow:0 0 0 1px rgba(255,194,74,.2)}
+.hp-tile.selected{
+  border-color:var(--flame);
+  box-shadow:0 0 0 2px rgba(255,153,48,.4),0 8px 24px rgba(212,82,0,.3);
+  z-index:10;
+}
+.hp-tile-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(10,6,3,.15) 0%,rgba(10,6,3,.5) 100%);
+  pointer-events:none;
+}
+.hp-tile-text{
+  position:relative;z-index:1;
+  pointer-events:none;
+  color:#faedd2;
+  max-width:100%;
+}
+.hp-tile-label{
+  font-family:var(--serif);
+  font-size:clamp(11px, 1.2vw, 16px);
+  line-height:1.1;
+  text-shadow:0 2px 6px rgba(0,0,0,.7);
+}
+.hp-tile-label em{font-style:italic;color:var(--flame)}
+.hp-tile-sub{
+  font-family:var(--sans);font-weight:600;
+  font-size:clamp(8px, 0.85vw, 10px);
+  letter-spacing:.16em;text-transform:uppercase;
+  opacity:.8;margin-top:3px;
+  text-shadow:0 1px 4px rgba(0,0,0,.8);
+}
+
+/* Resize handles */
+.hp-h{
+  position:absolute;
+  width:13px;height:13px;
+  background:var(--flame);
+  border:1.5px solid #fff;
+  border-radius:50%;
+  box-shadow:0 1px 4px rgba(0,0,0,.6);
+  z-index:11;
+  cursor:nwse-resize;
+}
+.hp-h-n{top:-7px;left:50%;margin-left:-7px;cursor:ns-resize}
+.hp-h-s{bottom:-7px;left:50%;margin-left:-7px;cursor:ns-resize}
+.hp-h-e{right:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
+.hp-h-w{left:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
+.hp-h-ne{top:-7px;right:-7px;cursor:nesw-resize;border-radius:3px}
+.hp-h-nw{top:-7px;left:-7px;cursor:nwse-resize;border-radius:3px}
+.hp-h-se{bottom:-7px;right:-7px;cursor:nwse-resize;border-radius:3px}
+.hp-h-sw{bottom:-7px;left:-7px;cursor:nesw-resize;border-radius:3px}
+
+/* Side panel */
+.hp-side-panel{
+  background:rgba(20,12,6,.55);
+  border:1px solid var(--line-2);
+  border-radius:var(--r);
+  padding:18px;
+  align-self:start;
+  position:sticky;top:18px;
+  max-height:calc(100vh - 80px);
+  overflow-y:auto;
+}
+.hp-side-empty{
+  font-family:var(--sans);font-style:italic;
+  color:var(--ink-4);
+  font-size:13px;text-align:center;padding:30px 10px;
+}
+.hp-side-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;padding-bottom:12px;
+  border-bottom:1px solid var(--line);
+}
+.hp-side-title{
+  font-family:var(--sans);font-weight:700;
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--flame);
+}
+.hp-side-img{margin:14px 0 10px}
+.hp-side-img-thumb{
+  width:100%;aspect-ratio:16/10;
+  border-radius:6px;overflow:hidden;
+  background:#0a0402;border:1px solid var(--line);
+}
+.hp-side-img-thumb img{width:100%;height:100%;object-fit:cover}
+.hp-side-img-empty{
+  width:100%;aspect-ratio:16/10;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(10,6,3,.4);border:1px dashed var(--line-2);border-radius:6px;
+  font-family:var(--sans);font-style:italic;font-size:12px;
+  color:var(--ink-4);
+}
+.hp-side-actions{
+  margin-top:14px;padding-top:14px;
+  border-top:1px solid var(--line);
+  display:flex;justify-content:flex-end;
+}
+
 .empty{
   padding:48px 24px;text-align:center;
   font-family:var(--sans);
@@ -2250,17 +2415,31 @@ function renderHomepageEditor(){
       </div>
     </div>
 
-    <!-- NAV CARDS -->
+    <!-- NAV CARDS LAYOUT EDITOR -->
     <div class="hp-section">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap">
         <div style="flex:1;min-width:0">
           <h3>Nav <em>Cards</em></h3>
-          <div class="hp-desc">The buttons on the homepage. Upload an image for any card and it'll fill the whole tile with the text overlaid. Use *italics* (asterisks) around any word in the label to style it like "Find <em>Us</em>". Drag to reorder, tap × to remove.</div>
+          <div class="hp-desc">Drag tiles to move, drag handles to resize. Tap a tile to edit its text and link in the side panel. Use *asterisks* around a word to italicize it. Switch between Desktop and Mobile layouts with the toggle.</div>
         </div>
-        <button class="btn btn-secondary" onclick="hpAddCard()">+ Add Card</button>
+        <div class="hp-layout-tools">
+          <div class="hp-mode-toggle" id="hp-mode-toggle">
+            <button type="button" data-mode="desktop" class="on" onclick="hpSetMode('desktop')">Desktop</button>
+            <button type="button" data-mode="mobile" onclick="hpSetMode('mobile')">Mobile</button>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="hpAddCard()">+ Add Card</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="hpAutoArrange()">Auto-Arrange</button>
+        </div>
       </div>
-      <div class="hp-cards-grid" id="hp-cards-grid">
-        ${d.cards.map((c,i) => hpCardHtml(c, i)).join('')}
+
+      <div class="hp-layout-wrap">
+        <div class="hp-canvas-shell">
+          <div class="hp-canvas" id="hp-canvas" data-mode="desktop"></div>
+          <div class="hp-canvas-help" id="hp-canvas-help">Click a tile to select it. Drag the body to move, drag handles to resize.</div>
+        </div>
+        <div class="hp-side-panel" id="hp-side-panel">
+          <div class="hp-side-empty">Click a tile to edit it.</div>
+        </div>
       </div>
     </div>
 
@@ -2309,78 +2488,341 @@ function renderHomepageEditor(){
     if (picker) picker.addEventListener('input', e => hpColorChange(f.key, e.target.value));
   });
   applyEditorPreviewTheme();
+  // Initialize the canvas after the DOM is in place
+  setTimeout(() => hpRenderCanvas(), 0);
 }
 
-function hpCardHtml(c, i){
-  const featCls = c.featured ? ' featured' : '';
-  const hasImg = !!c.image;
-  const total = HP_DATA?.cards?.length || 0;
-  return `
-    <div class="hp-card${featCls}" data-idx="${i}">
-      <div class="hp-card-toolbar">
-        <div class="hp-card-num">Card ${i+1}${c.featured ? ' · Featured' : ''}</div>
-        <div class="hp-card-toolbar-btns">
-          <button type="button" class="hp-card-iconbtn" title="Move up" onclick="hpMoveCard(${i},-1)" ${i===0?'disabled':''}>↑</button>
-          <button type="button" class="hp-card-iconbtn" title="Move down" onclick="hpMoveCard(${i},1)" ${i===total-1?'disabled':''}>↓</button>
-          <button type="button" class="hp-card-iconbtn" title="${c.featured ? 'Unmark featured' : 'Mark as featured'}" onclick="hpToggleFeatured(${i})">${c.featured ? '★' : '☆'}</button>
-          <button type="button" class="hp-card-iconbtn danger" title="Delete this card" onclick="hpDeleteCard(${i})">×</button>
+/* ═══════════════════════════════════════════════════════════
+   HOMEPAGE LAYOUT EDITOR — desktop & mobile canvases
+═══════════════════════════════════════════════════════════ */
+let HP_MODE = 'desktop';           // 'desktop' | 'mobile'
+let HP_SEL = -1;                   // index of selected card, -1 = none
+let HP_DRAG = null;                // {mode, dir, sx, sy, cw, ch, orig}
+
+/** Return the layout key for the current mode. */
+function hpModeKey(){ return HP_MODE === 'mobile' ? 'posMobile' : 'pos'; }
+
+/** Ensure each card has a pos object for both desktop and mobile.
+ *  Returns true if anything was added. */
+function hpEnsurePositions(){
+  if (!HP_DATA) return false;
+  const needsAny = HP_DATA.cards.some(c => !c.pos || !c.posMobile);
+  if (needsAny) hpArrangeBoth();
+  return needsAny;
+}
+
+/** Internal: fill positions for any mode that's missing them.
+ *  Does NOT call render — caller decides. */
+function hpArrangeBoth(){
+  hpArrangeFor('desktop');
+  hpArrangeFor('mobile');
+}
+function hpArrangeFor(mode){
+  if (!HP_DATA || !HP_DATA.cards.length) return;
+  const key = mode === 'mobile' ? 'posMobile' : 'pos';
+  const n = HP_DATA.cards.length;
+  if (mode === 'desktop') {
+    const featuredIdx = HP_DATA.cards.findIndex(c => c.featured);
+    if (n === 1) {
+      HP_DATA.cards[0][key] = { x:10, y:10, w:80, h:80 };
+    } else if (n <= 4) {
+      const cols = Math.ceil(n / 2);
+      const cw = 96/cols, ch = (n<=2?96:48);
+      HP_DATA.cards.forEach((c, i) => {
+        const r = Math.floor(i/cols), col = i%cols;
+        c[key] = { x: 2 + col*cw, y: 2 + r*(ch+2), w: cw-2, h: ch };
+      });
+    } else if (n <= 6) {
+      if (featuredIdx >= 0 && n === 6) {
+        const others = HP_DATA.cards.map((_,i)=>i).filter(i=>i!==featuredIdx);
+        const top = others.slice(0,3), bot = others.slice(3);
+        top.forEach((i, col) => HP_DATA.cards[i][key] = { x:2+col*32.67, y:2, w:30.67, h:30 });
+        HP_DATA.cards[featuredIdx][key] = { x:2, y:35, w:96, h:30 };
+        bot.forEach((i, col) => HP_DATA.cards[i][key] = { x:2+col*32.67, y:68, w:30.67, h:30 });
+      } else {
+        const cw = 96/3;
+        HP_DATA.cards.forEach((c, i) => {
+          const r = Math.floor(i/3), col = i%3;
+          c[key] = { x: 2 + col*cw, y: 2 + r*49, w: cw-1, h: 47 };
+        });
+      }
+    } else {
+      const cols = 4, rows = Math.ceil(n/cols);
+      const cw = 96/cols, ch = Math.min(40, 94/rows);
+      HP_DATA.cards.forEach((c, i) => {
+        const r = Math.floor(i/cols), col = i%cols;
+        c[key] = { x: 2 + col*cw, y: 2 + r*(ch+1), w: cw-1, h: ch };
+      });
+    }
+  } else {
+    const cardH = 100 / n;
+    HP_DATA.cards.forEach((c, i) => {
+      const h = c.featured ? Math.min(cardH * 1.4, 28) : cardH;
+      c[key] = { x: 5, y: i * cardH + 1, w: 90, h: h - 2 };
+    });
+  }
+}
+
+/** Auto-arrange for the current mode (button handler). */
+function hpAutoArrange(){
+  hpArrangeFor(HP_MODE);
+  hpRenderCanvas();
+}
+
+function hpSetMode(mode){
+  HP_MODE = mode;
+  document.querySelectorAll('#hp-mode-toggle button').forEach(b => {
+    b.classList.toggle('on', b.dataset.mode === mode);
+  });
+  const canvas = document.getElementById('hp-canvas');
+  if (canvas) canvas.dataset.mode = mode;
+  HP_SEL = -1;
+  hpRenderCanvas();
+}
+
+function hpRenderCanvas(){
+  const canvas = document.getElementById('hp-canvas');
+  if (!canvas || !HP_DATA) return;
+  hpEnsurePositions();
+  const key = hpModeKey();
+  const tiles = HP_DATA.cards.map((c, i) => {
+    const pos = c[key] || { x:5, y:5, w:30, h:20 };
+    const isSel = i === HP_SEL;
+    const bgImg = c.image ? `background-image:url('${escapeHtml(c.image)}');background-size:cover;background-position:center` : '';
+    const featCls = c.featured ? ' featured' : '';
+    const selCls  = isSel ? ' selected' : '';
+    const labelHtml = (c.label||'').replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    return `
+      <div class="hp-tile${featCls}${selCls}" data-idx="${i}"
+           style="left:${pos.x}%;top:${pos.y}%;width:${pos.w}%;height:${pos.h}%;${bgImg}"
+           onmousedown="hpTileMouseDown(event,${i})"
+           ontouchstart="hpTileTouchStart(event,${i})">
+        <div class="hp-tile-overlay"></div>
+        <div class="hp-tile-text">
+          <div class="hp-tile-label">${labelHtml || '<span style="opacity:.4">Untitled</span>'}</div>
+          ${c.sub ? `<div class="hp-tile-sub">${escapeHtml(c.sub)}</div>` : ''}
         </div>
-      </div>
-      <div class="hp-card-thumb" id="hp-thumb-${i}">
-        ${hasImg
-          ? `<img src="${escapeHtml(c.image)}" alt=""><div class="hp-card-thumb-overlay"></div>`
-          : `<div class="hp-card-thumb-empty">No image · Tap "Upload" below</div>`}
-        <div class="hp-card-thumb-label">${escapeHtml(c.label||'')}${c.sub?`<small>${escapeHtml(c.sub)}</small>`:''}</div>
-      </div>
-      <div class="field">
-        <label>Label</label>
-        <input id="hp-c-label-${i}" value="${escapeHtml(c.label||'')}" oninput="hpCardField(${i},'label',this.value)">
-      </div>
-      <div class="field">
-        <label>Subtitle</label>
-        <input id="hp-c-sub-${i}" value="${escapeHtml(c.sub||'')}" oninput="hpCardField(${i},'sub',this.value)">
-      </div>
-      <div class="field">
-        <label>Link Target</label>
-        <input id="hp-c-href-${i}" value="${escapeHtml(c.href||'')}" oninput="hpCardField(${i},'href',this.value)">
-      </div>
-      <div class="hp-card-img-btns">
-        <button type="button" class="btn btn-secondary btn-sm" onclick="hpCardPickImage(${i})">
-          ${hasImg ? 'Replace Image' : '+ Upload Image'}
-        </button>
-        ${hasImg ? `<button type="button" class="btn btn-danger btn-sm" onclick="hpCardClearImage(${i})">Remove Image</button>` : ''}
-      </div>
+        ${isSel ? `
+          <span class="hp-h hp-h-n"  onmousedown="hpHandleDown(event,${i},'n')"  ontouchstart="hpHandleTouch(event,${i},'n')"></span>
+          <span class="hp-h hp-h-s"  onmousedown="hpHandleDown(event,${i},'s')"  ontouchstart="hpHandleTouch(event,${i},'s')"></span>
+          <span class="hp-h hp-h-e"  onmousedown="hpHandleDown(event,${i},'e')"  ontouchstart="hpHandleTouch(event,${i},'e')"></span>
+          <span class="hp-h hp-h-w"  onmousedown="hpHandleDown(event,${i},'w')"  ontouchstart="hpHandleTouch(event,${i},'w')"></span>
+          <span class="hp-h hp-h-ne" onmousedown="hpHandleDown(event,${i},'ne')" ontouchstart="hpHandleTouch(event,${i},'ne')"></span>
+          <span class="hp-h hp-h-nw" onmousedown="hpHandleDown(event,${i},'nw')" ontouchstart="hpHandleTouch(event,${i},'nw')"></span>
+          <span class="hp-h hp-h-se" onmousedown="hpHandleDown(event,${i},'se')" ontouchstart="hpHandleTouch(event,${i},'se')"></span>
+          <span class="hp-h hp-h-sw" onmousedown="hpHandleDown(event,${i},'sw')" ontouchstart="hpHandleTouch(event,${i},'sw')"></span>
+        ` : ''}
+      </div>`;
+  }).join('');
+  canvas.innerHTML = tiles || '<div class="hp-canvas-empty">No cards yet — tap "+ Add Card" above.</div>';
+  hpRenderSidePanel();
+}
+
+function hpRenderSidePanel(){
+  const panel = document.getElementById('hp-side-panel');
+  if (!panel) return;
+  if (HP_SEL < 0 || !HP_DATA?.cards?.[HP_SEL]) {
+    panel.innerHTML = '<div class="hp-side-empty">Click a tile to edit it.</div>';
+    return;
+  }
+  const c = HP_DATA.cards[HP_SEL];
+  const hasImg = !!c.image;
+  panel.innerHTML = `
+    <div class="hp-side-head">
+      <div class="hp-side-title">Card ${HP_SEL+1}${c.featured ? ' · Featured' : ''}</div>
+      <button type="button" class="hp-card-iconbtn" onclick="HP_SEL=-1;hpRenderCanvas()" title="Deselect">×</button>
+    </div>
+    <div class="field">
+      <label>Label</label>
+      <input value="${escapeHtml(c.label||'')}" oninput="hpFieldUpdate('label',this.value)">
+      <div class="field-hint">Wrap *a word* in asterisks to italicize it.</div>
+    </div>
+    <div class="field">
+      <label>Subtitle</label>
+      <input value="${escapeHtml(c.sub||'')}" oninput="hpFieldUpdate('sub',this.value)">
+    </div>
+    <div class="field">
+      <label>Link Target</label>
+      <input value="${escapeHtml(c.href||'')}" oninput="hpFieldUpdate('href',this.value)">
+      <div class="field-hint">e.g. menu.html or Pages/about.html</div>
+    </div>
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" ${c.featured?'checked':''} onchange="hpFieldUpdate('featured',this.checked)" style="width:auto">
+        Featured (bigger glow)
+      </label>
+    </div>
+    <div class="hp-side-img">
+      ${hasImg
+        ? `<div class="hp-side-img-thumb"><img src="${escapeHtml(c.image)}" alt=""></div>`
+        : `<div class="hp-side-img-empty">No image — tap below to add</div>`}
+    </div>
+    <div class="hp-card-img-btns">
+      <button type="button" class="btn btn-secondary btn-sm" onclick="hpCardPickImage(${HP_SEL})">${hasImg?'Replace Image':'+ Upload Image'}</button>
+      ${hasImg ? `<button type="button" class="btn btn-danger btn-sm" onclick="hpCardClearImage(${HP_SEL})">Remove</button>` : ''}
+    </div>
+    <div class="hp-side-actions">
+      <button type="button" class="btn btn-danger btn-sm" onclick="hpDeleteCard(${HP_SEL})">Delete Card</button>
     </div>
   `;
 }
 
-/* Card management helpers */
+function hpFieldUpdate(field, value){
+  if (HP_SEL < 0) return;
+  HP_DATA.cards[HP_SEL][field] = value;
+  // Update the tile label/sub on the canvas without full re-render
+  const tile = document.querySelector(`.hp-tile[data-idx="${HP_SEL}"]`);
+  if (tile && (field === 'label' || field === 'sub')) {
+    const c = HP_DATA.cards[HP_SEL];
+    const labelHtml = (c.label||'').replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    tile.querySelector('.hp-tile-text').innerHTML =
+      `<div class="hp-tile-label">${labelHtml || '<span style="opacity:.4">Untitled</span>'}</div>` +
+      (c.sub ? `<div class="hp-tile-sub">${escapeHtml(c.sub)}</div>` : '');
+  }
+  if (field === 'featured') {
+    if (tile) tile.classList.toggle('featured', !!value);
+    // Re-render side panel head label
+    const head = document.querySelector('.hp-side-title');
+    if (head) head.textContent = `Card ${HP_SEL+1}${value ? ' · Featured' : ''}`;
+  }
+}
+
+/* ─── Add / Delete / Pick image ─── */
 function hpAddCard(){
   if (!HP_DATA) return;
-  HP_DATA.cards.push({ label:'New Card', sub:'', href:'#', image:'' });
-  refreshHpCards();
+  const key = hpModeKey();
+  const newCard = { label:'New Card', sub:'', href:'#', image:'' };
+  // Find an empty spot — use a small default tile near top-left
+  newCard[key === 'pos' ? 'pos' : 'posMobile'] = { x:5, y:5, w:30, h:25 };
+  newCard[key === 'pos' ? 'posMobile' : 'pos'] = { x:5, y:5, w:90, h:15 };
+  HP_DATA.cards.push(newCard);
+  HP_SEL = HP_DATA.cards.length - 1;
+  hpRenderCanvas();
 }
 function hpDeleteCard(i){
-  if (!confirm('Delete this nav card?')) return;
+  if (!confirm('Delete this card?')) return;
   const old = HP_DATA.cards[i];
   HP_DATA.cards.splice(i, 1);
-  refreshHpCards();
-  // Best-effort: remove the uploaded image too
+  HP_SEL = -1;
+  hpRenderCanvas();
   if (old && old.image) sbDeleteFile(old.image).catch(()=>{});
 }
-function hpMoveCard(i, dir){
-  const j = i + dir;
-  if (j < 0 || j >= HP_DATA.cards.length) return;
-  [HP_DATA.cards[i], HP_DATA.cards[j]] = [HP_DATA.cards[j], HP_DATA.cards[i]];
-  refreshHpCards();
+
+/* ─── Tile drag (move) ─── */
+function hpTileMouseDown(e, idx){
+  if (e.target.classList.contains('hp-h')) return;
+  e.preventDefault(); e.stopPropagation();
+  if (HP_SEL !== idx) {
+    HP_SEL = idx;
+    hpRenderCanvas();
+    return;
+  }
+  hpStartDrag(idx, e.clientX, e.clientY, 'move');
 }
-function hpToggleFeatured(i){
-  HP_DATA.cards[i].featured = !HP_DATA.cards[i].featured;
-  refreshHpCards();
+function hpTileTouchStart(e, idx){
+  if (e.target.classList.contains('hp-h')) return;
+  const t = e.touches[0];
+  if (HP_SEL !== idx) {
+    HP_SEL = idx;
+    hpRenderCanvas();
+    return;
+  }
+  e.preventDefault();
+  hpStartDrag(idx, t.clientX, t.clientY, 'move');
 }
-function refreshHpCards(){
-  const grid = document.getElementById('hp-cards-grid');
-  if (grid) grid.innerHTML = HP_DATA.cards.map((c, idx) => hpCardHtml(c, idx)).join('');
+function hpHandleDown(e, idx, dir){
+  e.preventDefault(); e.stopPropagation();
+  HP_SEL = idx;
+  hpStartDrag(idx, e.clientX, e.clientY, 'resize', dir);
+}
+function hpHandleTouch(e, idx, dir){
+  e.preventDefault(); e.stopPropagation();
+  const t = e.touches[0];
+  HP_SEL = idx;
+  hpStartDrag(idx, t.clientX, t.clientY, 'resize', dir);
+}
+function hpStartDrag(idx, cx, cy, mode, dir){
+  const canvas = document.getElementById('hp-canvas');
+  if (!canvas) return;
+  const r = canvas.getBoundingClientRect();
+  const c = HP_DATA.cards[idx];
+  const key = hpModeKey();
+  HP_DRAG = { idx, mode, dir, sx:cx, sy:cy, cw:r.width, ch:r.height, orig:{...c[key]}, key };
+}
+
+document.addEventListener('mousemove', e => { if (HP_DRAG) hpDragMove(e.clientX, e.clientY); });
+document.addEventListener('mouseup',   () => { HP_DRAG = null; });
+document.addEventListener('touchmove', e => {
+  if (!HP_DRAG) return;
+  const t = e.touches[0]; hpDragMove(t.clientX, t.clientY);
+  e.preventDefault();
+}, {passive:false});
+document.addEventListener('touchend', () => { HP_DRAG = null; });
+
+function hpDragMove(cx, cy){
+  const d = HP_DRAG;
+  const dx = (cx - d.sx) / d.cw * 100;
+  const dy = (cy - d.sy) / d.ch * 100;
+  const c = HP_DATA.cards[d.idx];
+  if (d.mode === 'move') {
+    c[d.key] = {
+      x: Math.max(0, Math.min(100 - d.orig.w, d.orig.x + dx)),
+      y: Math.max(0, Math.min(100 - d.orig.h, d.orig.y + dy)),
+      w: d.orig.w, h: d.orig.h
+    };
+  } else {
+    let { x, y, w, h } = d.orig;
+    if (d.dir.includes('n')) { y = d.orig.y + dy; h = d.orig.h - dy; }
+    if (d.dir.includes('s')) { h = d.orig.h + dy; }
+    if (d.dir.includes('w')) { x = d.orig.x + dx; w = d.orig.w - dx; }
+    if (d.dir.includes('e')) { w = d.orig.w + dx; }
+    if (w < 5)  { if (d.dir.includes('w')) x = d.orig.x + d.orig.w - 5; w = 5; }
+    if (h < 5)  { if (d.dir.includes('n')) y = d.orig.y + d.orig.h - 5; h = 5; }
+    if (x < 0)  { w += x; x = 0; }
+    if (y < 0)  { h += y; y = 0; }
+    if (x + w > 100) w = 100 - x;
+    if (y + h > 100) h = 100 - y;
+    c[d.key] = { x, y, w, h };
+  }
+  const tile = document.querySelector(`.hp-tile[data-idx="${d.idx}"]`);
+  if (tile) {
+    const p = c[d.key];
+    tile.style.left   = p.x + '%';
+    tile.style.top    = p.y + '%';
+    tile.style.width  = p.w + '%';
+    tile.style.height = p.h + '%';
+  }
+}
+
+function hpCardPickImage(idx){
+  const inp = document.getElementById('img-file-input');
+  inp.value = '';
+  inp.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      setStatus('Uploading…', 'saving');
+      const { url } = await sbUpload(file, 'homepage');
+      const old = HP_DATA.cards[idx].image;
+      if (old) sbDeleteFile(old).catch(()=>{});
+      HP_DATA.cards[idx].image = url;
+      hpRenderCanvas();
+      toast('Image uploaded');
+      setStatus('Ready');
+    } catch(err) {
+      console.error(err);
+      toast('Upload failed: '+err.message, true);
+      setStatus('Upload failed', 'err');
+    }
+  };
+  inp.click();
+}
+function hpCardClearImage(idx){
+  if (!confirm('Remove this image?')) return;
+  const old = HP_DATA.cards[idx].image;
+  HP_DATA.cards[idx].image = '';
+  hpRenderCanvas();
+  if (old) sbDeleteFile(old).catch(()=>{});
 }
 
 function hpColorHtml(field, val){
