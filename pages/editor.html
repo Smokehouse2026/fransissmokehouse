@@ -1877,6 +1877,10 @@ body.hp-fullscreen{overflow:hidden}
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 5 3h14l2 6"/><path d="M3 9v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9"/><path d="M3 9h18"/><path d="M9 14h6"/></svg></span>
         <span>Smokehouse Market</span>
       </button>
+      <button class="tab" data-pane="catering">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M5 18a7 7 0 0 1 14 0"/><circle cx="12" cy="7" r="2"/><path d="M12 9v2"/></svg></span>
+        <span>Catering</span>
+      </button>
       <div class="sb-nav-lbl">Site</div>
       <button class="tab" data-pane="homepage">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M10 21v-6h4v6"/></svg></span>
@@ -1972,6 +1976,18 @@ body.hp-fullscreen{overflow:hidden}
         <div id="market-cats" class="loading">Loading market…</div>
       </section>
 
+      <!-- CATERING PANE -->
+      <section class="pane" id="pane-catering">
+        <div class="pane-hdr">
+          <div>
+            <h2>Catering <em>Menu</em></h2>
+            <p>Edit catering categories and prices — meats by the pound, sides by the pan, burger bar, salads. The "Large Price" field is used for full-pan pricing on sides.</p>
+          </div>
+          <button class="btn btn-secondary" id="add-cat-cat">+ New Category</button>
+        </div>
+        <div id="catering-cats" class="loading">Loading catering…</div>
+      </section>
+
       <!-- HOMEPAGE PANE -->
       <section class="pane" id="pane-homepage">
         <div class="pane-hdr">
@@ -2008,7 +2024,6 @@ body.hp-fullscreen{overflow:hidden}
           </div>
           <div class="pane-hdr-r">
             <select id="pg-picker" class="pg-picker">
-              <option value="catering">Catering</option>
               <option value="findus">Find Us</option>
               <option value="about">About</option>
               <option value="story">Story</option>
@@ -2080,7 +2095,20 @@ body.hp-fullscreen{overflow:hidden}
 /* ═══════════════════════════════════════════════════════════
    STATE
 ═══════════════════════════════════════════════════════════ */
-let DATA = { menu:null, market:null, special:null, sold:[], fast:[] };
+let DATA = { menu:null, market:null, catering:null, special:null, sold:[], fast:[] };
+
+/* Helper: get the data bucket for a given category-managing type */
+function dataFor(type) {
+  if (type === 'menu')     return DATA.menu;
+  if (type === 'market')   return DATA.market;
+  if (type === 'catering') return DATA.catering;
+  return null;
+}
+function tableFor(type, what) {
+  // what: 'cat' or 'item'
+  const base = type === 'menu' ? 'menu' : (type === 'market' ? 'market' : 'catering');
+  return base + '_' + (what === 'cat' ? 'categories' : 'items');
+}
 
 /* Catch any error and show it on screen so we can see what's failing */
 window.addEventListener('error', e => {
@@ -2253,6 +2281,7 @@ async function bootApp(){
   // Initialize empty so renderAll doesn't crash even if Supabase fails
   DATA.menu = DATA.menu || {};
   DATA.market = DATA.market || {};
+  DATA.catering = DATA.catering || {};
   DATA.special = DATA.special || {};
   DATA.sold = DATA.sold || [];
   DATA.fast = DATA.fast || [];
@@ -2262,12 +2291,17 @@ async function bootApp(){
   const diagInfo = await runDiagnostic();
 
   try {
-    const [menu, market] = await Promise.all([loadMenuData(true), loadMarketData(true)]);
+    const [menu, market, catering] = await Promise.all([
+      loadMenuData(true),
+      loadMarketData(true),
+      (typeof loadCateringData === 'function') ? loadCateringData(true) : Promise.resolve({CATERING:{}})
+    ]);
     DATA.menu = menu.MENU;
     DATA.special = menu.SITE_SPECIAL;
     DATA.sold = menu.SOLD_OUT;
     DATA.fast = menu.SELLING_FAST;
     DATA.market = market.MARKET;
+    DATA.catering = catering.CATERING || {};
     renderAll();
     setStatus('Ready');
   } catch(e) {
@@ -2282,6 +2316,7 @@ async function bootApp(){
     </div>`;
     const mc = document.getElementById('menu-cats');   if (mc) mc.innerHTML = msg;
     const kc = document.getElementById('market-cats'); if (kc) kc.innerHTML = msg;
+    const cc = document.getElementById('catering-cats'); if (cc) cc.innerHTML = msg;
     const sb = document.getElementById('special-block'); if (sb) sb.innerHTML = msg;
     const scb = document.getElementById('scarcity-block'); if (scb) scb.innerHTML = msg;
   }
@@ -2310,6 +2345,7 @@ async function runDiagnostic(){
 function renderAll(){
   renderCategories('menu',   DATA.menu,   document.getElementById('menu-cats'));
   renderCategories('market', DATA.market, document.getElementById('market-cats'));
+  renderCategories('catering', DATA.catering, document.getElementById('catering-cats'));
   renderSpecial();
   renderScarcity();
 }
@@ -2353,11 +2389,11 @@ function renderCategories(type, data, container){
 }
 
 async function toggleCategoryHidden(type, catId){
-  const data = type === 'menu' ? DATA.menu : DATA.market;
+  const data = dataFor(type);
   const cat = data[catId];
   if (!cat) return;
   const newHidden = !cat.hidden;
-  const table = type === 'menu' ? 'menu_categories' : 'market_categories';
+  const table = tableFor(type, 'cat');
   setStatus('Saving…', 'saving');
   try {
     await sbUpdate(table, { id: catId }, { hidden: newHidden });
@@ -2373,9 +2409,20 @@ async function toggleCategoryHidden(type, catId){
 }
 
 function itemRow(type, catId, it, idx){
-  const priceTxt = (it.price === null || it.price === undefined || it.price === '')
-    ? '<span class="item-price ask">Ask</span>'
-    : `<span class="item-price">$${Number(it.price).toFixed(2)}${it.unit?'<small style="opacity:.6;font-size:.75em">/'+escapeHtml(it.unit)+'</small>':''}</span>`;
+  // Smart unit: don't prepend slash if user already typed one (e.g. "/lb").
+  // Also support "Pint / Qt" style multi-label.
+  const unitTxt = it.unit
+    ? ' <small style="opacity:.6;font-size:.75em">' + escapeHtml((it.unit||'').trim().startsWith('/') ? it.unit : '/'+it.unit) + '</small>'
+    : '';
+  let priceTxt;
+  if (it.price === null || it.price === undefined || it.price === '') {
+    priceTxt = '<span class="item-price ask">Ask</span>';
+  } else if (it.priceLg !== null && it.priceLg !== undefined && it.priceLg !== '') {
+    // Two-price item (catering sides half/full, BBQ sauce pint/qt, etc.)
+    priceTxt = '<span class="item-price">$' + Number(it.price).toFixed(2) + ' / $' + Number(it.priceLg).toFixed(2) + unitTxt + '</span>';
+  } else {
+    priceTxt = '<span class="item-price">$' + Number(it.price).toFixed(2) + unitTxt + '</span>';
+  }
   const badge = it.badge
     ? `<span class="meta-pill ${it.badgeStyle||''}">${escapeHtml(it.badge)}</span>` : '';
   const note  = it.note ? `<span class="meta-pill">${escapeHtml(it.note)}</span>` : '';
@@ -2404,13 +2451,15 @@ function escapeHtml(s){
 ═══════════════════════════════════════════════════════════ */
 document.getElementById('add-menu-cat').onclick = () => editCategoryModal('menu', null);
 document.getElementById('add-mkt-cat').onclick  = () => editCategoryModal('market', null);
+const _cateringAddBtn = document.getElementById('add-cat-cat');
+if (_cateringAddBtn) _cateringAddBtn.onclick = () => editCategoryModal('catering', null);
 
 function editCategory(type, catId){ editCategoryModal(type, catId); }
 
 function editCategoryModal(type, catId){
   const isNew = !catId;
   const cat = isNew ? {title:'', subtitle:'', icon: type==='menu'?'🔥':'🥩', hidden:false} :
-                       (type==='menu' ? DATA.menu : DATA.market)[catId];
+                       (dataFor(type))[catId];
   openModal(`
     <div class="modal-title">${isNew?'New':'Edit'} <em>Category</em></div>
     <div class="modal-sub">${type==='menu'?'Menu':'Market'} Category</div>
@@ -2449,12 +2498,12 @@ async function saveCategory(type, isNew){
     icon:     document.getElementById('m-icon').value.trim() || '•',
     hidden:   document.getElementById('m-hidden').checked
   };
-  const table = type==='menu' ? 'menu_categories' : 'market_categories';
+  const table = tableFor(type, 'cat');
   try {
     setStatus('Saving…', 'saving');
     if (isNew) {
       // Find next sort_order
-      const list = Object.values(type==='menu' ? DATA.menu : DATA.market);
+      const list = Object.values(dataFor(type));
       row.sort_order = list.length;
       await sbInsert(table, row);
     } else {
@@ -2470,7 +2519,7 @@ async function saveCategory(type, isNew){
 
 async function deleteCategory(type, catId){
   if (!confirm(`Delete category "${catId}" and all its items? This can't be undone.`)) return;
-  const table = type==='menu' ? 'menu_categories' : 'market_categories';
+  const table = tableFor(type, 'cat');
   try {
     setStatus('Deleting…','saving');
     await sbDelete(table, {id: catId});
@@ -2488,7 +2537,7 @@ let _editingItemRef = null;
 function addItem(type, catId){ openItemModal(type, catId, null); }
 
 function editItem(type, catId, idx){
-  const cat = (type==='menu' ? DATA.menu : DATA.market)[catId];
+  const cat = (dataFor(type))[catId];
   openItemModal(type, catId, cat.items[idx]);
 }
 
@@ -2497,21 +2546,41 @@ async function openItemModal(type, catId, item){
   // For editing, we need the actual DB id of the item — fetch fresh by name+category since we strip ids on load
   let dbId = null;
   if (!isNew) {
-    const table = type==='menu' ? 'menu_items' : 'market_items';
+    const table = tableFor(type, 'item');
     const rows = await sbSelect(table, `category_id=eq.${encodeURIComponent(catId)}&name=eq.${encodeURIComponent(item.name)}`);
     if (rows[0]) dbId = rows[0].id;
   }
   const it = item || {name:'',price:'',img:'',desc:'',note:'',pairs:'',badge:'',badgeStyle:'',unit:''};
-  const isMarket = type === 'market';
+  const isMarket   = type === 'market';
+  const isCatering = type === 'catering';
   openModal(`
     <div class="modal-title">${isNew?'New':'Edit'} <em>Item</em></div>
-    <div class="modal-sub">${(type==='menu'?DATA.menu:DATA.market)[catId].title}</div>
+    <div class="modal-sub">${(dataFor(type))[catId].title}</div>
     <input type="hidden" id="i-dbid" value="${dbId||''}" />
     <input type="hidden" id="i-catid" value="${escapeHtml(catId)}" />
     <input type="hidden" id="i-type" value="${type}" />
 
-    <div class="field"><label>Name</label><input id="i-name" value="${escapeHtml(it.name)}" placeholder="Brisket Plate" /></div>
+    <div class="field"><label>Name</label><input id="i-name" value="${escapeHtml(it.name)}" placeholder="Brisket" /></div>
 
+    ${isCatering ? `
+    <div class="field-row">
+      <div class="field">
+        <label>Price ($)</label>
+        <input id="i-price" type="number" step="0.01" min="0" value="${it.price ?? ''}" placeholder="19.78" />
+        <div class="field-hint">Per pound, per piece, half-pan, etc.</div>
+      </div>
+      <div class="field">
+        <label>Large Price ($) — optional</label>
+        <input id="i-priceLg" type="number" step="0.01" min="0" value="${it.priceLg ?? ''}" placeholder="89.58" />
+        <div class="field-hint">Use for full-pan price on sides</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Unit Label (optional)</label>
+      <input id="i-unit" value="${escapeHtml(it.unit||'')}" placeholder="/lb, /person, /piece, Pint / Qt" />
+      <div class="field-hint">Shows next to the price (e.g. "$19.78 /lb")</div>
+    </div>
+    ` : `
     <div class="field-row">
       <div class="field">
         <label>Price ($)</label>
@@ -2523,6 +2592,7 @@ async function openItemModal(type, catId, item){
         : `<div class="field"><label>2nd Price (optional)</label><input id="i-priceLg" type="number" step="0.01" min="0" value="${it.priceLg ?? ''}" placeholder="large size" /></div>`
       }
     </div>
+    `}
 
     <div class="field">
       <label>Description</label>
@@ -2531,7 +2601,7 @@ async function openItemModal(type, catId, item){
 
     <div class="field-row">
       <div class="field"><label>Note (fine print)</label><input id="i-note" value="${escapeHtml(it.note||'')}" placeholder="+ 2 Sides" /></div>
-      ${!isMarket ? `<div class="field"><label>Pairs With</label><input id="i-pairs" value="${escapeHtml(it.pairs||'')}" placeholder="sweet tea, cornbread" /></div>` : '<div></div>'}
+      ${(!isMarket && !isCatering) ? `<div class="field"><label>Pairs With</label><input id="i-pairs" value="${escapeHtml(it.pairs||'')}" placeholder="sweet tea, cornbread" /></div>` : '<div></div>'}
     </div>
 
     <div class="field-row">
@@ -2548,7 +2618,7 @@ async function openItemModal(type, catId, item){
       </div>
     </div>
 
-    ${imgmgrHtml('item', it.images || [], it.imageLayout || 'collage', it.img || '')}
+    ${!isCatering ? imgmgrHtml('item', it.images || [], it.imageLayout || 'collage', it.img || '') : ''}
 
     <div class="modal-actions">
       <div></div>
@@ -2558,14 +2628,15 @@ async function openItemModal(type, catId, item){
       </div>
     </div>
   `);
-  imgmgrAttach('item');
+  if (!isCatering) imgmgrAttach('item');
 }
 
 async function saveItem(isNew){
   const type  = document.getElementById('i-type').value;
   const catId = document.getElementById('i-catid').value;
   const dbId  = document.getElementById('i-dbid').value;
-  const isMarket = type === 'market';
+  const isMarket   = type === 'market';
+  const isCatering = type === 'catering';
 
   const name = document.getElementById('i-name').value.trim();
   if (!name) { toast('Name is required', true); return; }
@@ -2577,27 +2648,42 @@ async function saveItem(isNew){
     category_id: catId,
     name,
     price: priceVal === '' ? null : Number(priceVal),
-    img:         firstUrl, // legacy fallback — kept in sync
-    images:      imgState.images,
-    image_layout: imgState.layout,
     description: document.getElementById('i-desc').value.trim(),
-    note:        document.getElementById('i-note').value.trim(),
-    badge:       document.getElementById('i-badge').value.trim(),
-    badge_style: document.getElementById('i-badgeStyle').value
+    note:        document.getElementById('i-note').value.trim()
   };
-  if (isMarket) row.unit = document.getElementById('i-unit').value.trim();
-  else {
+
+  // Catering uses a simpler schema (no images JSON, no badge_style requirement)
+  // but follows the menu pattern of having a price_lg + unit free-text.
+  if (isCatering) {
     const pl = document.getElementById('i-priceLg').value.trim();
     row.price_lg = pl === '' ? null : Number(pl);
-    row.pairs    = document.getElementById('i-pairs').value.trim();
+    row.unit     = document.getElementById('i-unit').value.trim();
+    row.img      = firstUrl || null;
+    const bEl  = document.getElementById('i-badge');
+    const bsEl = document.getElementById('i-badgeStyle');
+    if (bEl)  row.badge       = bEl.value.trim();
+    if (bsEl) row.badge_style = bsEl.value;
+  } else {
+    // Existing menu/market logic untouched
+    row.img         = firstUrl;
+    row.images      = imgState.images;
+    row.image_layout = imgState.layout;
+    row.badge       = document.getElementById('i-badge').value.trim();
+    row.badge_style = document.getElementById('i-badgeStyle').value;
+    if (isMarket) row.unit = document.getElementById('i-unit').value.trim();
+    else {
+      const pl = document.getElementById('i-priceLg').value.trim();
+      row.price_lg = pl === '' ? null : Number(pl);
+      row.pairs    = document.getElementById('i-pairs').value.trim();
+    }
   }
 
-  const table = isMarket ? 'market_items' : 'menu_items';
+  const table = tableFor(type, 'item');
   try {
     setStatus('Saving…','saving');
     if (isNew) {
       // Find next sort_order for this category
-      const cat = (isMarket ? DATA.market : DATA.menu)[catId];
+      const cat = (dataFor(type))[catId];
       row.sort_order = cat.items.length;
       await sbInsert(table, row);
     } else {
@@ -2611,10 +2697,10 @@ async function saveItem(isNew){
 }
 
 async function deleteItem(type, catId, idx){
-  const cat = (type==='menu' ? DATA.menu : DATA.market)[catId];
+  const cat = (dataFor(type))[catId];
   const item = cat.items[idx];
   if (!confirm(`Delete "${item.name}"?`)) return;
-  const table = type==='menu' ? 'menu_items' : 'market_items';
+  const table = tableFor(type, 'item');
   try {
     setStatus('Deleting…','saving');
     // Look up by name+cat since cached items don't have ids
@@ -2736,7 +2822,10 @@ async function saveScarcity(key, arr){
 ═══════════════════════════════════════════════════════════ */
 async function reloadAndRender(type){
   // Bust the live page's cache so visitors see the change on next load
-  if (type === 'menu') invalidateMenuCache(); else if (type === 'market') invalidateMarketCache();
+  if (type === 'menu') invalidateMenuCache();
+  else if (type === 'market') invalidateMarketCache();
+  else if (type === 'catering' && typeof invalidateCateringCache === 'function') invalidateCateringCache();
+
   if (type === 'menu') {
     const m = await loadMenuData(true);
     DATA.menu = m.MENU;
@@ -2746,6 +2835,9 @@ async function reloadAndRender(type){
   } else if (type === 'market') {
     const m = await loadMarketData(true);
     DATA.market = m.MARKET;
+  } else if (type === 'catering' && typeof loadCateringData === 'function') {
+    const c = await loadCateringData(true);
+    DATA.catering = c.CATERING || {};
   }
   renderAll();
 }
@@ -4261,7 +4353,7 @@ document.addEventListener('DOMContentLoaded', () => {
    PAGE BUILDER — WYSIWYG via iframe + postMessage
 ═══════════════════════════════════════════════════════════ */
 let PG_DATA = null;
-let PG_ID = 'catering';
+let PG_ID = 'findus';
 let PG_DEVICE = 'desktop';    // 'desktop' | 'mobile'
 let PG_SELECTED_ID = null;    // currently selected section id
 let PG_SELECTED_ELEMENT = null; // currently selected element style-id (e.g. "title", "items.0.title")
