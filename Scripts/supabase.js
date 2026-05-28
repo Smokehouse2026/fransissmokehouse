@@ -365,6 +365,39 @@ async function loadMarketData(includeHidden = false) {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   LOAD CATERING (categories + items grouped) — same shape as menu
+═══════════════════════════════════════════════════════════ */
+async function loadCateringData(includeHidden = false) {
+  const [cats, items] = await Promise.all([
+    sbSelect('catering_categories', 'order=sort_order.asc'),
+    sbSelect('catering_items',      'order=sort_order.asc')
+  ]);
+  const CATERING = {};
+  const catList = includeHidden ? cats : cats.filter(c => !c.hidden);
+  catList.forEach(c => {
+    CATERING[c.id] = {
+      title: c.title, subtitle: c.subtitle, icon: c.icon,
+      hidden: !!c.hidden,
+      items: items
+        .filter(i => i.category_id === c.id && (includeHidden || !i.hidden))
+        .map(i => ({
+          name: i.name,
+          price: i.price,
+          priceLg: i.price_lg,      // doubles as full-pan price for "Sides by the Pan"
+          unit: i.unit,             // "/lb", "/person", "/piece", "Pint / Qt", etc.
+          img: i.img,
+          desc: i.description,
+          note: i.note,
+          badge: i.badge,
+          badgeStyle: i.badge_style,
+          hidden: !!i.hidden
+        }))
+    };
+  });
+  return { CATERING };
+}
+
+/* ═══════════════════════════════════════════════════════════
    CACHE HELPERS — localStorage so pages render instantly,
    then refresh in background.
 ═══════════════════════════════════════════════════════════ */
@@ -445,6 +478,11 @@ function invalidateMenuCache() {
 /** Clear cached market data so the market page reflects edits on next load. */
 function invalidateMarketCache() {
   try { localStorage.removeItem('francis_market_full'); } catch {}
+}
+
+/** Clear cached catering data so the catering page reflects edits on next load. */
+function invalidateCateringCache() {
+  try { localStorage.removeItem('francis_catering_full'); } catch {}
 }
 
 async function loadHomepage() {
