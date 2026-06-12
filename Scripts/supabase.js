@@ -7,8 +7,8 @@
    The anon key is SAFE to expose publicly — that's its purpose.
 */
 
-const SUPABASE_URL      = "https://ydosjnjuemgfahjilavq.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlkb3Nqbmp1ZW1nZmFoamlsYXZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3OTYyMzYsImV4cCI6MjA5MzM3MjIzNn0.0qdt6LnHjAtiS-EqLMvrFcTfm1fw2lEhZdNT6Ko7MNI";
+const SUPABASE_URL      = "https://vncecutxggodthugxgeu.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuY2VjdXR4Z2dvZHRodWd4Z2V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1OTgwNTQsImV4cCI6MjA5MjE3NDA1NH0.g0ZGAOzg_Iu5XyAz_StxlNgT0P5Dg0ReebEUbFP8ByY";
 
 /* ═══ EDITOR PASSWORD ═══════════════════════════════════════
    REMOVED — replaced by real Supabase Auth (email + password).
