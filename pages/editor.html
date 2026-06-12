@@ -4025,7 +4025,7 @@ function hpCardPickImage(idx){
       const old = HP_DATA.cards[idx].image;
       if (old) sbDeleteFile(old).catch(()=>{});
       HP_DATA.cards[idx].image = url;
-      refreshHpCards();
+      hpRenderCanvas();
       toast('Image uploaded');
       setStatus('Ready');
     } catch(err) {
@@ -4041,7 +4041,7 @@ function hpCardClearImage(idx){
   if (!confirm('Remove this image?')) return;
   const old = HP_DATA.cards[idx].image;
   HP_DATA.cards[idx].image = '';
-  refreshHpCards();
+  hpRenderCanvas();
   if (old) sbDeleteFile(old).catch(()=>{});
 }
 
